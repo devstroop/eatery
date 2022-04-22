@@ -6,7 +6,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:restaurant_pos/components/food_type_badge.dart';
 import 'package:restaurant_pos/components/low_qty_label_widget.dart';
 import 'package:restaurant_pos/database/linker.dart';
-import 'package:restaurant_pos/models/food_type.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class ProductCard extends StatelessWidget {
@@ -21,20 +20,22 @@ class ProductCard extends StatelessWidget {
       this.foodType,
       this.themeColor,
       required this.id,
-      this.warningQuantity, this.onRemove, this.onAdd})
+      this.warningQuantity, this.onRemove, this.onAdd, this.onTap})
       : super(key: key);
-  final int id;
-  final String name;
-  final String? description;
-  final double mrp;
-  final double? salePrice;
-  final double? quantity;
-  final double? warningQuantity;
-  final String? image;
-  final FoodType? foodType;
+  final dynamic id; // int
+  final dynamic name; // String
+  final dynamic description; // String?
+  final dynamic mrp; // double
+  final dynamic salePrice; // double?
+  final dynamic quantity; // double?
+  final dynamic warningQuantity; // double?
+  final dynamic image; // String?
+  final dynamic foodType; // FoodType? // FoodType.values.firstWhere((e) => e.toString() == product['foodType']),
   final Color? themeColor;
   final Function()? onRemove;
   final Function()? onAdd;
+  final Function()? onTap;
+
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +141,7 @@ class ProductCard extends StatelessWidget {
                                     style: TextStyle(
                                         fontSize: 16.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
                                   ),
-                                  Container(
+                                  onAdd != null && onRemove != null ? Container(
                                     decoration: BoxDecoration(
                                       borderRadius: BorderRadius.circular(4),
                                       border: Border.all(
@@ -183,7 +184,7 @@ class ProductCard extends StatelessWidget {
                                         ],
                                       ),
                                     ),
-                                  )
+                                  ) : Container()
                                 ],
                               )
                             ],

@@ -35,7 +35,7 @@ class CreateAccount4Page extends StatefulWidget {
 }
 
 class _CreateAccount4PageState extends State<CreateAccount4Page> {
-  int selectedIndex = 1;
+  int selectedIndex = 0;
   var controllerPurchaseCode = TextEditingController();
   late String? deviceSerial = 'Fetching';
 
@@ -183,7 +183,7 @@ class _CreateAccount4PageState extends State<CreateAccount4Page> {
             backgroundColor: ColorStyle.primary,
             color: ColorStyle.background100,
             height: 50.0,
-            onTap: () {
+            onTap: () async {
               if (selectedIndex == 1 && controllerPurchaseCode.text != '') {
                 String? raw = Encryption.decrypt(controllerPurchaseCode.text);
                 if (raw != null) {
@@ -213,8 +213,7 @@ class _CreateAccount4PageState extends State<CreateAccount4Page> {
                           'validTill': _validTill.microsecondsSinceEpoch,
                         };
 
-                        accountData = Linker.createAccount(accountData);
-                        if(accountData != null){
+                        if(await Linker.createAccount(accountData)){
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(builder: (context) => const CreateAccountResultPage(createAccountStatus: true)),
@@ -255,8 +254,7 @@ class _CreateAccount4PageState extends State<CreateAccount4Page> {
                   'validTill': null,
                 };
 
-                accountData = Linker.createAccount(accountData);
-                if(accountData != null){
+                if(await Linker.createAccount(accountData)){
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => const CreateAccountResultPage(createAccountStatus: true)),

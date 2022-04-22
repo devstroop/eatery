@@ -129,8 +129,8 @@ class _LoginPageState extends State<LoginPage> {
             backgroundColor: ColorStyle.primary,
             color: ColorStyle.background100,
             height: 50.0,
-            onTap: () {
-              Map<String, dynamic>? account = Linker.loginAccount(_controllerEmail.text, _controllerPassword.text);
+            onTap: () async {
+              Map<String, dynamic>? account = await Linker.loginAccount(_controllerEmail.text, _controllerPassword.text);
               if(account != null){
                 Navigator.push(
                   context,

@@ -226,7 +226,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       iconData: FontAwesomeIcons.itchIo,
                       title: 'Kitchen',
                       subtitle: 'Manage your dishes here',
-                      color: const Color(0xFF50EF6A),
+                      color: const Color(0xFF2FC289),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -271,7 +271,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       iconData: Icons.emoji_people,
                       title: 'Waiters',
                       subtitle: 'Manage your waiters here',
-                      color: const Color(0xFF2FC289),
+                      color: const Color(0xFFC2592F),
                       onTap: () {
                         Navigator.push(
                           context,
@@ -289,7 +289,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
                     MenuWidget(
-                      iconData: Icons.emoji_people,
+                      iconData: Icons.history,
                       title: 'History',
                       subtitle: 'All sales are here',
                       color: const Color(0xFFF5B942),

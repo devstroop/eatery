@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_pos/models/food_type.dart';
 
 class FoodTypeBadge extends StatelessWidget {
   const FoodTypeBadge({Key? key, required this.foodType}) : super(key: key);
-  final FoodType? foodType;
+  final String? foodType;
 
   @override
   Widget build(BuildContext context) {
     if(foodType != null){
-      if (foodType == FoodType.veg) {
+      if (foodType == 'veg') {
         return Container(
           width: 18,
           height: 18,
@@ -30,7 +29,7 @@ class FoodTypeBadge extends StatelessWidget {
             ),
           ),
         );
-      } else if (foodType == FoodType.nonVeg) {
+      } else if (foodType == 'nonveg') {
         return Container(
           width: 18,
           height: 18,
@@ -52,7 +51,7 @@ class FoodTypeBadge extends StatelessWidget {
             ),
           ),
         );
-      } else if (foodType == FoodType.semiVeg) {
+      } else if (foodType == 'semiveg') {
         return Container(
           width: 18,
           height: 18,

@@ -15,13 +15,28 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    List<Map<String, dynamic>> accounts = Linker.getAccounts();
+    Linker.getAccounts().then((accounts) {
+
+    });
     return MaterialApp(
       title: 'Restaurant POS',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: accounts.isNotEmpty ? const LoginPage() : const CreateAccount1Page(),
+      //home: accounts.isNotEmpty ? const LoginPage() : const CreateAccount1Page(),
+      home: FutureBuilder<List<Map<String, dynamic>>>(
+        future: Linker.getAccounts(),
+        builder: (BuildContext context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot){
+          if(!snapshot.hasData){
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+          else{
+            return snapshot.data!.isNotEmpty ? const LoginPage() : const CreateAccount1Page();
+          }
+        },
+      ),
     );
   }
 }

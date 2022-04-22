@@ -8,7 +8,6 @@ import 'package:restaurant_pos/components/pos_order_type_selection_button.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/components/product_card.dart';
 import 'package:restaurant_pos/database/linker.dart';
-import 'package:restaurant_pos/models/food_type.dart';
 import 'package:restaurant_pos/models/order_type.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
@@ -22,6 +21,7 @@ class PointOfSalePage extends StatefulWidget {
 class _PointOfSalePageState extends State<PointOfSalePage> {
   late OrderType orderType;
   late int? selectedCategory;
+  final TextEditingController _controllerSearch = TextEditingController();
 
   @override
   void initState() {
@@ -141,27 +141,27 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
         child: Wrap(
           alignment: WrapAlignment.center,
           children: [
-            for(var product in Linker.getProducts())
-              ProductCard(
-                id: product['id'] as int,
-                name: product['name'] as String,
-                description: product['description'] as String,
-                mrp: product['mrp'] as double,
-                salePrice: product['salePrice'] as double,
-                quantity: product['quantity'] as double,
-                warningQuantity: product['warningQuantity'] != null ? double.parse((product['warningQuantity']).toString()) : null,
-                image: product['image'] as String,
-                themeColor: getThemeColor(),
-                foodType: FoodType.values.firstWhere((e) => e.toString() == product['foodType']),
-                onAdd: () {
-                  setState(() {
-                    Linker.cart.add({'id': 1, 'customization': ''});
-                  });
+            for(var product in Linker.getProducts(query: _controllerSearch.text, category: selectedCategory))
+            ProductCard(
+              id: product['id'],
+              name: product['name'],
+              description: product['description'],
+              mrp: product['mrp'],
+              salePrice: product['salePrice'],
+              quantity: product['quantity'],
+              warningQuantity: product['warningQuantity'],
+              image: product['image'],
+              foodType:  product['foodType'],
+              themeColor: getThemeColor(),
+              onAdd: () {
+                setState(() {
+                  Linker.cart.add({'id': product['id'], 'customization': ''});
+                });
               },
               onRemove: (){
                 setState(() {
                   Linker.cart.remove(Linker.cart
-                      .where((product) => product['id'] == 1)
+                      .where((product) => product['id'] == product['id'])
                       .last);
                 });
               },
@@ -224,7 +224,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
           children: [
             Row(
               children: [
-                Text('${Linker.cart.length} Item', style: TextStyle(fontWeight: FontWeight.bold, color: ColorStyle.background200),)
+                Text('${Linker.cart.length} Item | ${Linker.getCurrencySymbol()}${Linker.calculateCartSubtotal()}', style: TextStyle(fontWeight: FontWeight.bold, color: ColorStyle.background200),)
               ],
             ),
             Row(
