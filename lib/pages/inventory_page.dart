@@ -8,6 +8,8 @@ import 'package:restaurant_pos/components/pos_order_type_selection_button.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/components/product_card.dart';
 import 'package:restaurant_pos/database/linker.dart';
+import 'package:restaurant_pos/database/product.dart';
+import 'package:restaurant_pos/database/product_category.dart';
 import 'package:restaurant_pos/models/order_type.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
@@ -115,18 +117,28 @@ class _InventoryPageState extends State<InventoryPage> {
                       },
                     );
                   }),
-              for (var category in Linker.getCategories())
-                PosCategoryWidget(
-                    active: selectedCategory == category['id'],
-                    image: File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
-                    label: category['name'],
-                    onTap: () {
-                      setState(
-                            () {
-                          selectedCategory = category['id'];
-                        },
-                      );
-                    })
+              FutureBuilder(
+                  future: ProductCategory.getAll(),
+                  builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      for (var category in snapshot.data){
+                        PosCategoryWidget(
+                            active: selectedCategory == category['id'],
+                            image: File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
+                            label: category['name'],
+                            onTap: () {
+                              setState(
+                                    () {
+                                  selectedCategory = category['id'];
+                                },
+                              );
+                            });
+                      }
+                    }
+                    return const Center(child: CircularProgressIndicator(),);
+                  }
+              ),
+
             ],
           ),
         ),
@@ -141,20 +153,28 @@ class _InventoryPageState extends State<InventoryPage> {
         child: Wrap(
           alignment: WrapAlignment.center,
           children: [
-            for(var product in Linker.getProducts(query: _controllerSearch.text, category: selectedCategory))
-              ProductCard(
-                id: product['id'],
-                name: product['name'],
-                description: product['description'],
-                mrp: product['mrp'],
-                salePrice: product['salePrice'],
-                quantity: product['quantity'],
-                warningQuantity: product['warningQuantity'],
-                image: product['image'],
-                foodType:  product['foodType'],
-                themeColor: getThemeColor(),
-              ),
-
+            FutureBuilder(
+              future: Product.getAll(),
+                builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot){
+                  if (snapshot.connectionState == ConnectionState.done) {
+                    for (var product in snapshot.data){
+                      ProductCard(
+                        id: product['id'],
+                        name: product['name'],
+                        description: product['description'],
+                        mrp: product['mrp'],
+                        salePrice: product['salePrice'],
+                        quantity: product['quantity'],
+                        warningQuantity: product['warningQuantity'],
+                        image: product['image'],
+                        foodType: product['foodType'],
+                        themeColor: getThemeColor(),
+                      );
+                    }
+                  }
+                  return const Center(child: CircularProgressIndicator(),);
+                }
+            ),
           ],
         ),
       ),
@@ -173,7 +193,11 @@ class _InventoryPageState extends State<InventoryPage> {
             right: 0.0,
             child: categoryBar,
           ),
-          Positioned(top: 60.0, left: 0.0, right: 0.0, bottom: 72, child: productsPanel),
+          Positioned(top: 60.0,
+              left: 0.0,
+              right: 0.0,
+              bottom: 72,
+              child: productsPanel),
           Positioned(bottom: 0.0, left: 0.0, right: 0.0, child: detailedProduct),
 
         ],

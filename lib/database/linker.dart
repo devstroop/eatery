@@ -1,3 +1,4 @@
+/*
 import 'package:json_store/json_store.dart';
 import 'package:restaurant_pos/services/utility/generate.dart';
 
@@ -139,3 +140,4 @@ class Linker {
 
 
 }
+*/

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:move_to_background/move_to_background.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
+import 'package:restaurant_pos/database/account.dart';
 import 'package:restaurant_pos/database/linker.dart';
 import 'package:restaurant_pos/pages/create_account_3_page.dart';
 import 'package:restaurant_pos/pages/dashboard_page.dart';
@@ -130,7 +131,7 @@ class _LoginPageState extends State<LoginPage> {
             color: ColorStyle.background100,
             height: 50.0,
             onTap: () async {
-              Map<String, dynamic>? account = await Linker.loginAccount(_controllerEmail.text, _controllerPassword.text);
+              Map<String, dynamic>? account = await Account.login(_controllerEmail.text, _controllerPassword.text);
               if(account != null){
                 Navigator.push(
                   context,

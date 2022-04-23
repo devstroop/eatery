@@ -3,6 +3,7 @@ import 'package:platform_device_id/platform_device_id.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/components/selectable_card.dart';
+import 'package:restaurant_pos/database/account.dart';
 import 'package:restaurant_pos/database/linker.dart';
 import 'package:restaurant_pos/pages/create_account_result_page.dart';
 import 'package:restaurant_pos/services/utility/encryption.dart';
@@ -211,9 +212,10 @@ class _CreateAccount4PageState extends State<CreateAccount4Page> {
                           'purchaseCode': purchaseCode,
                           'validFrom': _validFrom.microsecondsSinceEpoch,
                           'validTill': _validTill.microsecondsSinceEpoch,
+                          'lowBatteryLevel': 20
                         };
-
-                        if(await Linker.createAccount(accountData)){
+                        var id = await Account.add(accountData);
+                        if(id != null){
                           Navigator.pushAndRemoveUntil(
                             context,
                             MaterialPageRoute(builder: (context) => const CreateAccountResultPage(createAccountStatus: true)),
@@ -252,9 +254,11 @@ class _CreateAccount4PageState extends State<CreateAccount4Page> {
                   'purchaseCode': null,
                   'validFrom': null,
                   'validTill': null,
+                  'lowBatteryLevel': 20
                 };
 
-                if(await Linker.createAccount(accountData)){
+                var id = await Account.add(accountData);
+                if(id != null){
                   Navigator.pushAndRemoveUntil(
                     context,
                     MaterialPageRoute(builder: (context) => const CreateAccountResultPage(createAccountStatus: true)),

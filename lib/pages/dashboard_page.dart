@@ -88,7 +88,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   ],
                 ),
               ),
-              Padding(
+              /*Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 12),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
@@ -171,12 +171,11 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                   ],
                 ),
-              ),
+              ),*/
               FutureBuilder(
                 future: getBatteryLevel(),
                 builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                  Widget widget;
-                  if (snapshot.connectionState == ConnectionState.done && snapshot.data <= Linker.getBatteryWarningLevel()) {
+                  if (snapshot.connectionState == ConnectionState.done && snapshot.data <= widget.account['lowBatteryLevel']) {
                     return NotificationWidget(message: 'Battery level is ${snapshot.data}% in need of charging.');
                   } else {
                     return Container();
