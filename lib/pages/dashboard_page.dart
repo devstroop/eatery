@@ -22,7 +22,7 @@ import 'package:restaurant_pos/pages/kitchen_page.dart';
 import 'package:restaurant_pos/pages/logout_page.dart';
 import 'package:restaurant_pos/pages/point_of_sale_page.dart';
 import 'package:restaurant_pos/pages/setting_page.dart';
-import 'package:restaurant_pos/pages/tables_page.dart';
+import 'package:restaurant_pos/pages/dining_tables_page.dart';
 import 'package:restaurant_pos/pages/waiters_page.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
@@ -262,7 +262,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const TablesPage()),
+                          MaterialPageRoute(builder: (context) => const DiningTablesPage()),
                         );
                       },
                     ),

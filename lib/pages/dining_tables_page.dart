@@ -1,26 +1,20 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:restaurant_pos/components/custom_text_from_field.dart';
-import 'package:restaurant_pos/components/food_type_badge.dart';
 import 'package:restaurant_pos/components/pos_category_widget.dart';
-import 'package:restaurant_pos/components/pos_order_type_selection_button.dart';
-import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/components/product_card.dart';
-import 'package:restaurant_pos/database/linker.dart';
-import 'package:restaurant_pos/database/product.dart';
-import 'package:restaurant_pos/database/product_category.dart';
-import 'package:restaurant_pos/models/order_type.dart';
+import 'package:restaurant_pos/database/dining_table.dart';
+import 'package:restaurant_pos/database/dining_table_category.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
-class InventoryPage extends StatefulWidget {
-  const InventoryPage({Key? key}) : super(key: key);
+class DiningTablesPage extends StatefulWidget {
+  const DiningTablesPage({Key? key}) : super(key: key);
 
   @override
-  State<InventoryPage> createState() => _InventoryPageState();
+  State<DiningTablesPage> createState() => _DiningTablesPageState();
 }
 
-class _InventoryPageState extends State<InventoryPage> {
+class _DiningTablesPageState extends State<DiningTablesPage> {
   late int? selectedCategory;
   final TextEditingController _controllerSearch = TextEditingController();
 
@@ -40,45 +34,7 @@ class _InventoryPageState extends State<InventoryPage> {
   Widget build(BuildContext context) {
     final appBar = AppBar(
       backgroundColor: getThemeColor(),
-      title: SizedBox(
-        width: double.maxFinite,
-        child: TextFormField(
-          keyboardType: TextInputType.text,
-          controller: _controllerSearch,
-          decoration: InputDecoration(
-            hintText: 'Search an item...',
-            hintStyle: TextStyle(
-              color: ColorStyle.text400,
-              fontSize: 14,
-              fontWeight: FontWeight.normal,
-            ),
-            //prefixIcon: const Icon(Icons.search),
-            //prefixIconColor: ColorStyle.text100,
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: ColorStyle.text400,
-                width: 1,
-              ),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: getThemeColor().withOpacity(0.5),
-                width: 2,
-              ),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            filled: true,
-            fillColor: Colors.white,
-            contentPadding: const EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
-          ),
-          style: TextStyle(
-            color: ColorStyle.text200,
-            fontSize: 14,
-            fontWeight: FontWeight.normal,
-          ),
-        ),
-      ),
+      title: const Text('Dining Tables'),
     );
 
     final categoryBar = SizedBox(
@@ -108,7 +64,7 @@ class _InventoryPageState extends State<InventoryPage> {
                     );
                   }),
               FutureBuilder(
-                  future: ProductCategory.getAll(),
+                  future: DiningTableCategory.getAll(),
                   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
                       if(snapshot.hasData){
@@ -149,7 +105,7 @@ class _InventoryPageState extends State<InventoryPage> {
           alignment: WrapAlignment.center,
           children: [
             FutureBuilder(
-                future: Product.getAll(),
+                future: DiningTable.getAll(),
                 builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot){
                   if (snapshot.connectionState == ConnectionState.done) {
                     if(snapshot.hasData){
