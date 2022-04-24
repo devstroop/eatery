@@ -6,6 +6,8 @@ import 'package:restaurant_pos/pages/create_account_1_page.dart';
 import 'package:restaurant_pos/pages/login_page.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
+import 'database/account.dart';
+
 void main() {
   runApp(const MyApp());
 }
@@ -15,9 +17,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Linker.getAccounts().then((accounts) {
-
-    });
     return MaterialApp(
       title: 'Restaurant POS',
       theme: ThemeData(
@@ -25,11 +24,13 @@ class MyApp extends StatelessWidget {
       ),
       //home: accounts.isNotEmpty ? const LoginPage() : const CreateAccount1Page(),
       home: FutureBuilder<List<Map<String, dynamic>>>(
-        future: Linker.getAccounts(),
+        future: Account.getAll(),
         builder: (BuildContext context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot){
           if(!snapshot.hasData){
-            return const Center(
-              child: CircularProgressIndicator(),
+            return const Scaffold(
+              body: Center(
+                child: CircularProgressIndicator(),
+              ),
             );
           }
           else{

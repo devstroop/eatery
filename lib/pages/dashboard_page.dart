@@ -13,7 +13,7 @@ import 'package:restaurant_pos/components/menu_widget.dart';
 import 'package:restaurant_pos/components/notification_widget.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/database/linker.dart';
-import 'package:restaurant_pos/pages/categories_page.dart';
+import 'package:restaurant_pos/pages/product_categories_page.dart';
 import 'package:restaurant_pos/pages/create_account_3_page.dart';
 import 'package:restaurant_pos/pages/help_page.dart';
 import 'package:restaurant_pos/pages/history_page.dart';
@@ -208,7 +208,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const CategoriesPage()),
+                          MaterialPageRoute(builder: (context) => const ProductCategoriesPage()),
                         );
                       },
                     ),

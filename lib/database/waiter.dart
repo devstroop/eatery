@@ -1,8 +1,9 @@
 import 'package:json_store/json_store.dart';
 import 'package:restaurant_pos/services/utility/generate.dart';
-class Order{
+
+class Waiter{
   static JsonStore store = JsonStore();
-  static String name = "order";
+  static String name = "waiter";
 
   static Future<String?> add(Map<String, dynamic> data) async {
     try{

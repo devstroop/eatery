@@ -5,6 +5,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:restaurant_pos/components/food_type_badge.dart';
 import 'package:restaurant_pos/components/low_qty_label_widget.dart';
+import 'package:restaurant_pos/database/cart.dart';
 import 'package:restaurant_pos/database/linker.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
@@ -20,7 +21,11 @@ class ProductCard extends StatelessWidget {
       this.foodType,
       this.themeColor,
       required this.id,
-      this.warningQuantity, this.onRemove, this.onAdd, this.onTap})
+      this.warningQuantity,
+        this.currencySymbol,
+        this.onRemove,
+        this.onAdd,
+        this.onTap})
       : super(key: key);
   final dynamic id; // int
   final dynamic name; // String
@@ -31,6 +36,7 @@ class ProductCard extends StatelessWidget {
   final dynamic warningQuantity; // double?
   final dynamic image; // String?
   final dynamic foodType; // FoodType? // FoodType.values.firstWhere((e) => e.toString() == product['foodType']),
+  final dynamic currencySymbol;
   final Color? themeColor;
   final Function()? onRemove;
   final Function()? onAdd;
@@ -136,7 +142,7 @@ class ProductCard extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    '${Linker.getCurrencySymbol()}${salePrice}',
+                                    '$currencySymbol$salePrice',
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                         fontSize: 16.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
@@ -154,26 +160,40 @@ class ProductCard extends StatelessWidget {
                                       child: Row(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
-                                          Linker.cart.where((product) => product['id'] == id).isNotEmpty
-                                              ? InkWell(
-                                                  onTap: onRemove,
-                                                  child: Icon(
-                                                    Icons.remove,
-                                                    color: themeColor,
-                                                  ),
-                                                )
-                                              : Container(),
-                                          Linker.cart.where((product) => product['id'] == id).isNotEmpty
-                                              ? Padding(
-                                                  padding: const EdgeInsetsDirectional.fromSTEB(4, 0, 4, 0),
-                                                  child: Text(
-                                                    '${Linker.cart.where((product) => product['id'] == id).length}',
-                                                    style: const TextStyle(
-                                                      fontWeight: FontWeight.w600,
+                                          FutureBuilder(
+                                            future: Cart.getAll(),
+                                              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot){
+                                                if(snapshot.connectionState == ConnectionState.done && snapshot.data.isNotEmpty){
+                                                  return InkWell(
+                                                    onTap: onRemove,
+                                                    child: Icon(
+                                                      Icons.remove,
+                                                      color: themeColor,
                                                     ),
-                                                  ),
-                                                )
-                                              : Container(),
+                                                  );
+                                                }else{
+                                                  return Container();
+                                                }
+                                              }
+                                          ),
+                                          FutureBuilder(
+                                              future: Cart.getAll(),
+                                              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot){
+                                                if(snapshot.connectionState == ConnectionState.done && snapshot.data.isNotEmpty){
+                                                  return Padding(
+                                                    padding: const EdgeInsetsDirectional.fromSTEB(4, 0, 4, 0),
+                                                    child: Text(
+                                                      '${snapshot.data.length}',
+                                                      style: const TextStyle(
+                                                        fontWeight: FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  );
+                                                }else{
+                                                  return Container();
+                                                }
+                                              }
+                                          ),
                                           InkWell(
                                             onTap: onAdd,
                                             child: Icon(

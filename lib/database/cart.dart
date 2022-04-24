@@ -44,4 +44,11 @@ class Cart{
     }catch(_){}
     return false;
   }
+  static Future<bool> clear() async {
+    try {
+      await store.deleteLike('$name-%');
+      return true;
+    }catch(_){}
+    return false;
+  }
 }

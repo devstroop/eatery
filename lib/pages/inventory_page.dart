@@ -21,7 +21,6 @@ class InventoryPage extends StatefulWidget {
 }
 
 class _InventoryPageState extends State<InventoryPage> {
-  late OrderType orderType;
   late int? selectedCategory;
   final TextEditingController _controllerSearch = TextEditingController();
 
@@ -29,21 +28,12 @@ class _InventoryPageState extends State<InventoryPage> {
   void initState() {
     super.initState();
     setState(() {
-      orderType = OrderType.dineIn;
       selectedCategory = null;
     });
   }
 
   Color getThemeColor() {
-    if (orderType == OrderType.dineIn) {
-      return ColorStyle.tertiary;
-    } else if (orderType == OrderType.takeAway) {
-      return ColorStyle.secondary;
-    } else if (orderType == OrderType.delivery) {
-      return ColorStyle.alternate;
-    } else {
-      return ColorStyle.tertiary;
-    }
+    return ColorStyle.tertiary;
   }
 
   @override
@@ -121,21 +111,26 @@ class _InventoryPageState extends State<InventoryPage> {
                   future: ProductCategory.getAll(),
                   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
-                      for (var category in snapshot.data){
-                        PosCategoryWidget(
-                            active: selectedCategory == category['id'],
-                            image: File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
-                            label: category['name'],
-                            onTap: () {
-                              setState(
-                                    () {
-                                  selectedCategory = category['id'];
-                                },
-                              );
-                            });
+                      if(snapshot.hasData){
+                        for (var category in snapshot.data){
+                          PosCategoryWidget(
+                              active: selectedCategory == category['id'],
+                              image: File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
+                              label: category['name'],
+                              onTap: () {
+                                setState(
+                                      () {
+                                    selectedCategory = category['id'];
+                                  },
+                                );
+                              });
+                        }
                       }
+                      return Container();
                     }
-                    return const Center(child: CircularProgressIndicator(),);
+                    else{
+                      return const Center(child: CircularProgressIndicator(),);
+                    }
                   }
               ),
 
@@ -154,27 +149,33 @@ class _InventoryPageState extends State<InventoryPage> {
           alignment: WrapAlignment.center,
           children: [
             FutureBuilder(
-              future: Product.getAll(),
+                future: Product.getAll(),
                 builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot){
                   if (snapshot.connectionState == ConnectionState.done) {
-                    for (var product in snapshot.data){
-                      ProductCard(
-                        id: product['id'],
-                        name: product['name'],
-                        description: product['description'],
-                        mrp: product['mrp'],
-                        salePrice: product['salePrice'],
-                        quantity: product['quantity'],
-                        warningQuantity: product['warningQuantity'],
-                        image: product['image'],
-                        foodType: product['foodType'],
-                        themeColor: getThemeColor(),
-                      );
+                    if(snapshot.hasData){
+                      for (var product in snapshot.data){
+                        ProductCard(
+                          id: product['id'],
+                          name: product['name'],
+                          description: product['description'],
+                          mrp: product['mrp'],
+                          salePrice: product['salePrice'],
+                          quantity: product['quantity'],
+                          warningQuantity: product['warningQuantity'],
+                          image: product['image'],
+                          foodType: product['foodType'],
+                          themeColor: getThemeColor(),
+                        );
+                      }
                     }
+                    return Container();
                   }
-                  return const Center(child: CircularProgressIndicator(),);
+                  else{
+                    return const Center(child: CircularProgressIndicator(),);
+                  }
                 }
             ),
+
           ],
         ),
       ),
@@ -193,14 +194,26 @@ class _InventoryPageState extends State<InventoryPage> {
             right: 0.0,
             child: categoryBar,
           ),
-          Positioned(top: 60.0,
+          Positioned(
+              top: 60.0,
               left: 0.0,
               right: 0.0,
               bottom: 72,
-              child: productsPanel),
-          Positioned(bottom: 0.0, left: 0.0, right: 0.0, child: detailedProduct),
+              child: productsPanel
+          ),
+          Positioned(
+              bottom: 0.0,
+              left: 0.0,
+              right: 0.0,
+              child: detailedProduct
+          ),
 
         ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: getThemeColor(),
+        child: const Icon(Icons.add),
+        onPressed: () {  },
       ),
     );
   }
