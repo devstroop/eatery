@@ -93,6 +93,9 @@ class _CreateAccount2State extends State<CreateAccount2Page> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
+                const SizedBox(
+                  height: 3.0,
+                ),
                 CustomTextFromField(
                   controller: _controllerPassword,
                   labelText: 'Password',
@@ -110,6 +113,9 @@ class _CreateAccount2State extends State<CreateAccount2Page> {
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
+                ),
+                const SizedBox(
+                  height: 3.0,
                 ),
                 CustomTextFromField(
                   controller: _controllerConfirmPassword,

@@ -93,6 +93,9 @@ class _LoginPageState extends State<LoginPage> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
+                const SizedBox(
+                  height: 3.0,
+                ),
                 CustomTextFromField(
                   controller: _controllerEmail,
                   labelText: 'Email',
@@ -110,6 +113,9 @@ class _LoginPageState extends State<LoginPage> {
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
+                ),
+                const SizedBox(
+                  height: 3.0,
                 ),
                 CustomTextFromField(
                   controller: _controllerPassword,

@@ -155,7 +155,7 @@ class _CreateAccount4PageState extends State<CreateAccount4Page> {
                         ),
                       ),
                       const SizedBox(
-                        height: 8.0,
+                        height: 3.0,
                       ),
                       CustomTextFromField(
                         controller: controllerPurchaseCode,

@@ -96,6 +96,9 @@ class _CreateAccount3PageState extends State<CreateAccount3Page> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
+                const SizedBox(
+                  height: 3.0,
+                ),
                 CustomTextFromField(
                   controller: _controllerFssai,
                   labelText: 'eg. 12216912889355',
@@ -113,6 +116,9 @@ class _CreateAccount3PageState extends State<CreateAccount3Page> {
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
+                ),
+                const SizedBox(
+                  height: 3.0,
                 ),
                 CustomTextFromField(
                   controller: _controllerGstin,

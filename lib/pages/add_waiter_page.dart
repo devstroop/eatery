@@ -3,24 +3,24 @@ import 'package:flutter/material.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/components/upload_button.dart';
-import 'package:restaurant_pos/database/dining_table_category.dart';
+import 'package:restaurant_pos/database/waiter.dart';
 import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
-class AddDiningTableCategoryPage extends StatefulWidget {
-  const AddDiningTableCategoryPage({Key? key}) : super(key: key);
+class AddWaiterPage extends StatefulWidget {
+  const AddWaiterPage({Key? key}) : super(key: key);
 
   @override
-  State<AddDiningTableCategoryPage> createState() => _AddDiningTableCategoryPageState();
+  State<AddWaiterPage> createState() => _AddWaiterPageState();
 }
 
-class _AddDiningTableCategoryPageState extends State<AddDiningTableCategoryPage> {
+class _AddWaiterPageState extends State<AddWaiterPage> {
   String? pickedImagePath;
-  final TextEditingController _controllerCategoryName = TextEditingController();
+  final TextEditingController _controllerWaiterName = TextEditingController();
 
   clearFields(){
     setState(() {
       pickedImagePath = null;
-      _controllerCategoryName.text = '';
+      _controllerWaiterName.text = '';
     });
   }
   Color getThemeColor() {
@@ -28,9 +28,10 @@ class _AddDiningTableCategoryPageState extends State<AddDiningTableCategoryPage>
   }
   @override
   Widget build(BuildContext context) {
+
     final appBar = AppBar(
       backgroundColor: getThemeColor(),
-      title: const Text('Add Dining Table Category'),
+      title: const Text('Add Waiter'),
     );
     return Scaffold(
       appBar: appBar,
@@ -48,7 +49,7 @@ class _AddDiningTableCategoryPageState extends State<AddDiningTableCategoryPage>
               InkWell(
                 child: UploadButton(
                   title: '+ Upload Picture',
-                  subTitle: 'Dining Table Category Image',
+                  subTitle: 'Waiter Image',
                   primaryColor: getThemeColor(),
                   secondaryColor: ColorStyle.text200,
                   pickedImagePath: pickedImagePath,
@@ -75,7 +76,7 @@ class _AddDiningTableCategoryPageState extends State<AddDiningTableCategoryPage>
               ),
               Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(
-                  'Category Name',
+                  'Waiter Name',
                   style: TextStyle(
                     color: ColorStyle.text200,
                     fontSize: 12,
@@ -86,8 +87,8 @@ class _AddDiningTableCategoryPageState extends State<AddDiningTableCategoryPage>
                   height: 3.0,
                 ),
                 CustomTextFromField(
-                  controller: _controllerCategoryName,
-                  labelText: 'eg. Terrace',
+                  controller: _controllerWaiterName,
+                  labelText: 'Waiter Name',
                   obscureText: false,
                   themeColor: getThemeColor(),
                 ),
@@ -109,7 +110,7 @@ class _AddDiningTableCategoryPageState extends State<AddDiningTableCategoryPage>
             color: ColorStyle.background100,
             height: 50.0,
             onTap: () async {
-              var response = await DiningTableCategory.add({'image': pickedImagePath, 'name': _controllerCategoryName.text});
+              var response = await Waiter.add({'image': pickedImagePath, 'name': _controllerWaiterName.text});
               if(response != null){
                 showSnackBar(context, 'Successfully created');
                 clearFields();

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:restaurant_pos/components/dining_table_category_card.dart';
 import 'package:restaurant_pos/database/dining_table_category.dart';
+import 'package:restaurant_pos/pages/add_dining_table_category_page.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class DiningTableCategoriesPage extends StatefulWidget {
@@ -18,24 +20,39 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
   Widget build(BuildContext context) {
     final appBar = AppBar(
       backgroundColor: getThemeColor(),
-      title: const Text('Product Categories'),
+      title: const Text('Dining Table Categories'),
     );
     final categoriesPanel = SizedBox(
       width: double.maxFinite,
       height: double.maxFinite,
       child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          children: [
-            FutureBuilder(
-                future: DiningTableCategory.getAll(),
-                builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot){
-                  return Container();
+          scrollDirection: Axis.vertical,
+          child: FutureBuilder(
+              future: DiningTableCategory.getAll(),
+              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot){
+                if (snapshot.connectionState == ConnectionState.done) {
+                  if(snapshot.hasData && snapshot.data.isNotEmpty){
+                    return Wrap(
+                      alignment: WrapAlignment.center,
+                      children: [
+                        for (var category in snapshot.data)
+                          DiningTableCategoryCard(
+                            id: category['id'],
+                            name: category['name'],
+                            image: category['image'],
+                          )
+                      ],
+                    );
+                  }
+                  return const  Center(
+                      child: Text('No Categories Found')
+                  );
                 }
-            )
-          ],
-        ),
+                else{
+                  return const Center(child: CircularProgressIndicator(),);
+                }
+              }
+          )
       ),
     );
     return Scaffold(
@@ -43,7 +60,7 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
       body: Stack(
         children: [
           Positioned(
-              top: 60.0,
+              top: 12.0,
               left: 0.0,
               right: 0.0,
               bottom: 72,
@@ -54,7 +71,12 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: getThemeColor(),
         child: const Icon(Icons.add),
-        onPressed: () {  },
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddDiningTableCategoryPage()),
+          );
+        },
       ),
     );
   }

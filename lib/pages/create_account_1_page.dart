@@ -119,6 +119,9 @@ class _CreateAccount1PageState extends State<CreateAccount1Page> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
+                const SizedBox(
+                  height: 3.0,
+                ),
                 CustomTextFromField(
                   controller: _controllerRestaurantName,
                   labelText: 'eg. Food Plaza',
@@ -136,6 +139,9 @@ class _CreateAccount1PageState extends State<CreateAccount1Page> {
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
+                ),
+                const SizedBox(
+                  height: 3.0,
                 ),
                 CustomTextFromField(
                   controller: _controllerEmailAddress,
@@ -155,6 +161,9 @@ class _CreateAccount1PageState extends State<CreateAccount1Page> {
                     fontWeight: FontWeight.w500,
                   ),
                 ),
+                const SizedBox(
+                  height: 3.0,
+                ),
                 CustomTextFromField(
                   controller: _controllerPhoneNumber,
                   labelText: 'eg. +919999999999',
@@ -172,6 +181,9 @@ class _CreateAccount1PageState extends State<CreateAccount1Page> {
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
+                ),
+                const SizedBox(
+                  height: 3.0,
                 ),
                 CustomTextFromField(
                   controller: _controllerAddress,
