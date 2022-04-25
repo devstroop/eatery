@@ -15,14 +15,14 @@ import 'package:restaurant_pos/pages/add_kitchen_dish_page.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class KitchenPage extends StatefulWidget {
-  const KitchenPage({Key? key}) : super(key: key);
-
+  const KitchenPage({Key? key, required this.account}) : super(key: key);
+  final dynamic account;
   @override
   State<KitchenPage> createState() => _KitchenPageState();
 }
 
 class _KitchenPageState extends State<KitchenPage> {
-  late int? selectedCategory;
+  late String? selectedCategory;
   final TextEditingController _controllerSearch = TextEditingController();
 
   @override
@@ -103,7 +103,7 @@ class _KitchenPageState extends State<KitchenPage> {
                   label: 'All',
                   onTap: () {
                     setState(
-                          () {
+                      () {
                         selectedCategory = null;
                       },
                     );
@@ -112,29 +112,32 @@ class _KitchenPageState extends State<KitchenPage> {
                   future: ProductCategory.getAll(),
                   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
-                      if(snapshot.hasData){
-                        for (var category in snapshot.data){
-                          PosCategoryWidget(
-                              active: selectedCategory == category['id'],
-                              image: File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
-                              label: category['name'],
-                              onTap: () {
-                                setState(
+                      if (snapshot.hasData) {
+                        return Row(
+                          children: [
+                            for (var category in snapshot.data)
+                              PosCategoryWidget(
+                                  active: selectedCategory == category['id'],
+                                  image:
+                                      File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
+                                  label: category['name'],
+                                  onTap: () {
+                                    setState(
                                       () {
-                                    selectedCategory = category['id'];
-                                  },
-                                );
-                              });
-                        }
+                                        selectedCategory = category['id'];
+                                      },
+                                    );
+                                  })
+                          ],
+                        );
                       }
                       return Container();
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
                     }
-                    else{
-                      return const Center(child: CircularProgressIndicator(),);
-                    }
-                  }
-              ),
-
+                  }),
             ],
           ),
         ),
@@ -146,16 +149,17 @@ class _KitchenPageState extends State<KitchenPage> {
       height: double.maxFinite,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          children: [
-            FutureBuilder(
-                future: Product.getAll(),
-                builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot){
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    if(snapshot.hasData){
-                      for (var product in snapshot.data){
+        child: FutureBuilder(
+            future: Product.getAll(productAs: 'dish'),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasData) {
+                  return Wrap(
+                    alignment: WrapAlignment.center,
+                    children: [
+                      for (var product in snapshot.data)
                         ProductCard(
+                          currencySymbol: widget.account['currencySymbol'],
                           id: product['id'],
                           name: product['name'],
                           description: product['description'],
@@ -166,24 +170,21 @@ class _KitchenPageState extends State<KitchenPage> {
                           image: product['image'],
                           foodType: product['foodType'],
                           themeColor: getThemeColor(),
-                        );
-                      }
-                    }
-                    return Container();
-                  }
-                  else{
-                    return const Center(child: CircularProgressIndicator(),);
-                  }
+                        )
+                    ],
+                  );
                 }
-            ),
-
-          ],
-        ),
+                return Container();
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            }),
       ),
     );
 
     final detailedProduct = Container();
-
 
     return Scaffold(
       appBar: appBar,
@@ -195,20 +196,8 @@ class _KitchenPageState extends State<KitchenPage> {
             right: 0.0,
             child: categoryBar,
           ),
-          Positioned(
-              top: 60.0,
-              left: 0.0,
-              right: 0.0,
-              bottom: 72,
-              child: productsPanel
-          ),
-          Positioned(
-              bottom: 0.0,
-              left: 0.0,
-              right: 0.0,
-              child: detailedProduct
-          ),
-
+          Positioned(top: 60.0, left: 0.0, right: 0.0, bottom: 72, child: productsPanel),
+          Positioned(bottom: 0.0, left: 0.0, right: 0.0, child: detailedProduct),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -217,7 +206,7 @@ class _KitchenPageState extends State<KitchenPage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AddKitchenDish()),
+            MaterialPageRoute(builder: (context) => AddKitchenDish(account: widget.account,)),
           );
         },
       ),

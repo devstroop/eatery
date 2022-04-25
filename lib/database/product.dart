@@ -26,7 +26,10 @@ class Product{
     }catch(_){}
     return null;
   }
-  static Future<List<Map<String, dynamic>>> getAll() async {
+  static Future<List<Map<String, dynamic>>> getAll({String? productAs}) async {
+    if(productAs != null) {
+      return (await store.getListLike('$name-%') ?? []).where((element) => element['as'] == productAs).toList();
+    }
     return await store.getListLike('$name-%') ?? [];
   }
   static Future<bool> update(Map<String, dynamic> data) async {

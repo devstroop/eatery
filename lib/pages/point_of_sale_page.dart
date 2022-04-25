@@ -121,28 +121,32 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                   future: ProductCategory.getAll(),
                   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
-                      if(snapshot.hasData){
-                        for (var category in snapshot.data){
-                          PosCategoryWidget(
-                              active: selectedCategory == category['id'],
-                              image: File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
-                              label: category['name'],
-                              onTap: () {
-                                setState(
+                      if (snapshot.hasData) {
+                        return Row(
+                          children: [
+                            for (var category in snapshot.data)
+                              PosCategoryWidget(
+                                  active: selectedCategory == category['id'],
+                                  image:
+                                      File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
+                                  label: category['name'],
+                                  onTap: () {
+                                    setState(
                                       () {
-                                    selectedCategory = category['id'];
-                                  },
-                                );
-                              });
-                        }
+                                        selectedCategory = category['id'];
+                                      },
+                                    );
+                                  })
+                          ],
+                        );
                       }
                       return Container();
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
                     }
-                    else{
-                      return const Center(child: CircularProgressIndicator(),);
-                    }
-                  }
-              ),
+                  }),
             ],
           ),
         ),
@@ -154,15 +158,15 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
       height: double.maxFinite,
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
-        child: Wrap(
-          alignment: WrapAlignment.center,
-          children: [
-            FutureBuilder(
-                future: Product.getAll(),
-                builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot){
-                  if (snapshot.connectionState == ConnectionState.done) {
-                    if(snapshot.hasData){
-                      for (var product in snapshot.data){
+        child: FutureBuilder(
+            future: Product.getAll(),
+            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+              if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.hasData) {
+                  return Wrap(
+                    alignment: WrapAlignment.center,
+                    children: [
+                      for (var product in snapshot.data)
                         ProductCard(
                           id: product['id'],
                           name: product['name'],
@@ -174,19 +178,17 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                           image: product['image'],
                           foodType: product['foodType'],
                           themeColor: getThemeColor(),
-                        );
-                      }
-                    }
-                    return Container();
-                  }
-                  else{
-                    return const Center(child: CircularProgressIndicator(),);
-                  }
+                        )
+                    ],
+                  );
                 }
-            ),
-
-          ],
-        ),
+                return Container();
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            }),
       ),
     );
 
@@ -271,7 +273,6 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
           Positioned(bottom: 0.0, left: 0.0, right: 0.0, child: bottomAppBar),
           // Positioned(left: 0.0, right: 0.0, bottom: 72, child: cartStrip),
           Positioned(bottom: 0.0, left: 0.0, right: 0.0, child: detailedProduct),
-
         ],
       ),
     );

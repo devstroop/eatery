@@ -15,14 +15,14 @@ import 'package:restaurant_pos/pages/add_inventory_item_page.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class InventoryPage extends StatefulWidget {
-  const InventoryPage({Key? key}) : super(key: key);
-
+  const InventoryPage({Key? key, required this.account}) : super(key: key);
+  final dynamic account;
   @override
   State<InventoryPage> createState() => _InventoryPageState();
 }
 
 class _InventoryPageState extends State<InventoryPage> {
-  late int? selectedCategory;
+  late String? selectedCategory;
   final TextEditingController _controllerSearch = TextEditingController();
 
   @override
@@ -103,7 +103,7 @@ class _InventoryPageState extends State<InventoryPage> {
                   label: 'All',
                   onTap: () {
                     setState(
-                          () {
+                      () {
                         selectedCategory = null;
                       },
                     );
@@ -112,29 +112,32 @@ class _InventoryPageState extends State<InventoryPage> {
                   future: ProductCategory.getAll(),
                   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                     if (snapshot.connectionState == ConnectionState.done) {
-                      if(snapshot.hasData){
-                        for (var category in snapshot.data){
-                          PosCategoryWidget(
-                              active: selectedCategory == category['id'],
-                              image: File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
-                              label: category['name'],
-                              onTap: () {
-                                setState(
+                      if (snapshot.hasData) {
+                        return Row(
+                          children: [
+                            for (var category in snapshot.data)
+                              PosCategoryWidget(
+                                  active: selectedCategory == category['id'],
+                                  image:
+                                      File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
+                                  label: category['name'],
+                                  onTap: () {
+                                    setState(
                                       () {
-                                    selectedCategory = category['id'];
-                                  },
-                                );
-                              });
-                        }
+                                        selectedCategory = category['id'];
+                                      },
+                                    );
+                                  })
+                          ],
+                        );
                       }
                       return Container();
+                    } else {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
                     }
-                    else{
-                      return const Center(child: CircularProgressIndicator(),);
-                    }
-                  }
-              ),
-
+                  }),
             ],
           ),
         ),
@@ -150,40 +153,42 @@ class _InventoryPageState extends State<InventoryPage> {
           alignment: WrapAlignment.center,
           children: [
             FutureBuilder(
-                future: Product.getAll(),
-                builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot){
+                future: Product.getAll(productAs: 'item'),
+                builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
-                    if(snapshot.hasData){
-                      for (var product in snapshot.data){
-                        ProductCard(
-                          id: product['id'],
-                          name: product['name'],
-                          description: product['description'],
-                          mrp: product['mrp'],
-                          salePrice: product['salePrice'],
-                          quantity: product['quantity'],
-                          warningQuantity: product['warningQuantity'],
-                          image: product['image'],
-                          foodType: product['foodType'],
-                          themeColor: getThemeColor(),
-                        );
-                      }
+                    if (snapshot.hasData) {
+                      return Wrap(
+                        children: [
+                          for (var product in snapshot.data)
+                            ProductCard(
+                              currencySymbol: widget.account['currencySymbol'],
+                              id: product['id'],
+                              name: product['name'],
+                              description: product['description'],
+                              mrp: product['mrp'],
+                              salePrice: product['salePrice'],
+                              quantity: product['quantity'],
+                              warningQuantity: product['warningQuantity'],
+                              image: product['image'],
+                              foodType: product['foodType'],
+                              themeColor: getThemeColor(),
+                            )
+                        ],
+                      );
                     }
                     return Container();
+                  } else {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
                   }
-                  else{
-                    return const Center(child: CircularProgressIndicator(),);
-                  }
-                }
-            ),
-
+                }),
           ],
         ),
       ),
     );
 
     final detailedProduct = Container();
-
 
     return Scaffold(
       appBar: appBar,
@@ -195,20 +200,8 @@ class _InventoryPageState extends State<InventoryPage> {
             right: 0.0,
             child: categoryBar,
           ),
-          Positioned(
-              top: 60.0,
-              left: 0.0,
-              right: 0.0,
-              bottom: 72,
-              child: productsPanel
-          ),
-          Positioned(
-              bottom: 0.0,
-              left: 0.0,
-              right: 0.0,
-              child: detailedProduct
-          ),
-
+          Positioned(top: 60.0, left: 0.0, right: 0.0, bottom: 72, child: productsPanel),
+          Positioned(bottom: 0.0, left: 0.0, right: 0.0, child: detailedProduct),
         ],
       ),
       floatingActionButton: FloatingActionButton(
@@ -217,7 +210,7 @@ class _InventoryPageState extends State<InventoryPage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AddInventoryItemPage()),
+            MaterialPageRoute(builder: (context) => AddInventoryItemPage(account: widget.account,)),
           );
         },
       ),

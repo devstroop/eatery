@@ -44,7 +44,7 @@ class PosCategoryWidget extends StatelessWidget {
                 children: [
                   image != null
                       ? Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                          padding: const EdgeInsetsDirectional.fromSTEB(0, 6, 6, 6),
                           child: image,
                         )
                       : const Padding(

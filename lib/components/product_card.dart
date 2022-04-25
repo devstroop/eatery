@@ -142,7 +142,7 @@ class ProductCard extends StatelessWidget {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    '$currencySymbol$salePrice',
+                                    '${currencySymbol ?? ''}$salePrice',
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                         fontSize: 16.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
@@ -212,149 +212,6 @@ class ProductCard extends StatelessWidget {
                         )
                       ],
                     )),
-                /*Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(9, 0, 9, 0),
-                    child: Container(
-                      decoration: BoxDecoration(
-                        boxShadow: [
-                          BoxShadow(
-                            blurRadius: 5,
-                            color: Color(0xFF727272),
-                            offset: const Offset(0, 2),
-                            spreadRadius: 0,
-                          )
-                        ],
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Expanded(
-                            child: Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: ColorStyle.background200,
-                                borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(0),
-                                  bottomRight: Radius.circular(0),
-                                  topLeft: Radius.circular(6),
-                                  topRight: Radius.circular(6),
-                                ),
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Container(
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: ColorStyle.background100,
-                                borderRadius: const BorderRadius.only(
-                                  bottomLeft: Radius.circular(6),
-                                  bottomRight: Radius.circular(6),
-                                  topLeft: Radius.circular(0),
-                                  topRight: Radius.circular(0),
-                                ),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(8, 8, 8, 8),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Column(
-                                      mainAxisSize: MainAxisSize.max,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          name,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        Text(
-                                          description ?? '',
-                                          style: TextStyle(
-                                            color: ColorStyle.text200,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Text(
-                                          '$price',
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ),
-                                        Container(
-                                          decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(4),
-                                            border: Border.all(
-                                              color: themeColor!,
-                                              width: 2,
-                                            ),
-                                          ),
-                                          child: Padding(
-                                            padding: const EdgeInsetsDirectional.fromSTEB(
-                                                6, 4, 6, 4),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                FaIcon(
-                                                  FontAwesomeIcons.minus,
-                                                  color: themeColor,
-                                                  size: 12,
-                                                ),
-                                                const Padding(
-                                                  padding:
-                                                  EdgeInsetsDirectional.fromSTEB(
-                                                      6, 0, 6, 0),
-                                                  child: Text(
-                                                    '1',
-                                                    style: TextStyle(
-                                                      fontWeight: FontWeight.w600,
-                                                    ),
-                                                  ),
-                                                ),
-                                                FaIcon(
-                                                  FontAwesomeIcons.plus,
-                                                  color: themeColor,
-                                                  size: 12,
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0, 10, 0, 0),
-                    child: LowQtyLabelWidget(
-                      qty: 0,
-                    ),
-                  ),
-                  Align(
-                    alignment: const AlignmentDirectional(0.74, -0.87),
-                    child: Container(
-                      decoration: const BoxDecoration(
-                        color: Color(0xFFEEEEEE),
-                      ),
-                      child: FoodTypeBadge(foodType: foodType,),
-                    ),
-                  ),*/
               ],
             ),
           ),
@@ -362,8 +219,8 @@ class ProductCard extends StatelessWidget {
             top: 12.0,
             left: 0.0,
             child: quantity  != null && warningQuantity != null
-                ? quantity! <= warningQuantity!
-                    ? LowQtyLabelWidget(qty: quantity!)
+                ? double.parse(quantity) <= double.parse(warningQuantity)
+                    ? LowQtyLabelWidget(qty: double.parse(quantity))
                     : Container()
                 : Container(),
           ),

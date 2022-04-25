@@ -6,6 +6,7 @@ import 'package:restaurant_pos/components/custom_text_from_field.dart';
 import 'package:restaurant_pos/components/food_type_selection_widget.dart';
 import 'package:restaurant_pos/components/pos_category_widget.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
+import 'package:restaurant_pos/components/tax_type_selection_widget.dart';
 import 'package:restaurant_pos/components/upload_button.dart';
 import 'package:restaurant_pos/database/product.dart';
 import 'package:restaurant_pos/database/product_category.dart';
@@ -13,19 +14,22 @@ import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class AddKitchenDish extends StatefulWidget {
-  const AddKitchenDish({Key? key}) : super(key: key);
-
+  const AddKitchenDish({Key? key, required this.account}) : super(key: key);
+  final dynamic account;
   @override
   State<AddKitchenDish> createState() => _AddKitchenDishState();
 }
 
 class _AddKitchenDishState extends State<AddKitchenDish> {
   String? pickedImagePath;
-  int? selectedCategory;
-  String? selectedFoodType = 'veg';
+  String? selectedCategory;
+  String? selectedFoodType;
+  String? selectedTaxType;
   final TextEditingController _controllerProductName = TextEditingController();
   final TextEditingController _controllerQuantity = TextEditingController();
-  final TextEditingController _controllerUnitPrice = TextEditingController();
+  final TextEditingController _controllerWarningQuantity = TextEditingController();
+  final TextEditingController _controllerSalePrice = TextEditingController();
+  final TextEditingController _controllerMRP = TextEditingController();
   final TextEditingController _controllerFoodType = TextEditingController();
   final TextEditingController _controllerTax = TextEditingController();
   final TextEditingController _controllerDescription = TextEditingController();
@@ -36,6 +40,13 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
       selectedCategory = null;
       selectedFoodType = null;
       _controllerProductName.text = '';
+      _controllerQuantity.text = '';
+      _controllerWarningQuantity.text = '';
+      _controllerSalePrice.text = '';
+      _controllerMRP.text = '';
+      _controllerFoodType.text = '';
+      _controllerTax.text = '';
+      _controllerDescription.text = '';
     });
   }
 
@@ -75,12 +86,11 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                               label: category['name'],
                               onTap: () {
                                 setState(
-                                      () {
+                                  () {
                                     selectedCategory = category['id'];
                                   },
                                 );
                               })
-
                       ],
                     );
                   }
@@ -156,13 +166,138 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                     Flexible(
                       flex: 4,
                       child: CustomTextFromField(
+                        prefixWidget: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              widget.account['currencySymbol'] ?? '',
+                              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18.0),
+                            ),
+                          ],
+                        ),
                         controller: _controllerProductName,
-                        labelText: 'eg. Lays',
+                        labelText: '',
                         obscureText: false,
                         themeColor: getThemeColor(),
                       ),
                     ),
                   ],
+                ),
+                const SizedBox(
+                  height: 6.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      flex: 2,
+                      child: Text(
+                        'MRP',
+                        style: TextStyle(
+                          color: ColorStyle.text400,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    const Flexible(flex: 1, child: SizedBox()),
+                    Flexible(
+                      flex: 2,
+                      child: CustomTextFromField(
+                        prefixWidget: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              widget.account['currencySymbol'] ?? '',
+                              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18.0),
+                            ),
+                          ],
+                        ),
+                        controller: _controllerMRP,
+                        labelText: '0.00',
+                        obscureText: false,
+                        themeColor: getThemeColor(),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 6.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      flex: 2,
+                      child: Text(
+                        'Sale Price',
+                        style: TextStyle(
+                          color: ColorStyle.text400,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                    const Flexible(flex: 1, child: SizedBox()),
+                    Flexible(
+                      flex: 2,
+                      child: CustomTextFromField(
+                        prefixWidget: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              widget.account['currencySymbol'] ?? '',
+                              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18.0),
+                            ),
+                          ],
+                        ),
+                        controller: _controllerSalePrice,
+                        labelText: '0.00',
+                        obscureText: false,
+                        themeColor: getThemeColor(),
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 6.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Type',
+                      style: TextStyle(
+                        color: ColorStyle.text400,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    Flexible(
+                      child: InkWell(
+                          onTap: () {
+                            if (selectedFoodType == 'veg') {
+                              setState(() {
+                                selectedFoodType = 'nonVeg';
+                              });
+                            } else if (selectedFoodType == 'nonVeg') {
+                              setState(() {
+                                selectedFoodType = null;
+                              });
+                            } else {
+                              setState(() {
+                                selectedFoodType = 'veg';
+                              });
+                            }
+                          },
+                          child: FoodTypeSelectionWidget(
+                            foodType: selectedFoodType,
+                          )),
+                    ),
+                  ],
+                ),
+                const SizedBox(
+                  height: 6.0,
                 ),
                 const SizedBox(
                   height: 6.0,
@@ -185,8 +320,8 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                     Flexible(
                       flex: 2,
                       child: CustomTextFromField(
-                        controller: _controllerProductName,
-                        labelText: 'eg. Lays',
+                        controller: _controllerQuantity,
+                        labelText: '0',
                         obscureText: false,
                         themeColor: getThemeColor(),
                       ),
@@ -202,7 +337,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                     Flexible(
                       flex: 2,
                       child: Text(
-                        'Unit Price',
+                        'Warning Quantity',
                         style: TextStyle(
                           color: ColorStyle.text400,
                           fontSize: 18,
@@ -214,8 +349,8 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                     Flexible(
                       flex: 2,
                       child: CustomTextFromField(
-                        controller: _controllerProductName,
-                        labelText: 'eg. Lays',
+                        controller: _controllerWarningQuantity,
+                        labelText: '0',
                         obscureText: false,
                         themeColor: getThemeColor(),
                       ),
@@ -229,7 +364,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Type',
+                      'Tax Type',
                       style: TextStyle(
                         color: ColorStyle.text400,
                         fontSize: 18,
@@ -237,19 +372,29 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                       ),
                     ),
                     Flexible(
-                      child: InkWell(onTap: (){
-                        setState((){
-                          if(selectedFoodType == 'veg'){
-                            selectedFoodType = 'nonVeg';
-                          }else if(selectedFoodType == 'nonVeg'){
-                            selectedFoodType = null;
-                          }else{
-                            selectedFoodType = 'veg';
+                      child: InkWell(
+                        child: TaxTypeSelectionWidget(taxType: selectedTaxType),
+                        onTap: () {
+                          if (selectedTaxType == 'inclusive') {
+                            setState(() {
+                              selectedTaxType = 'exclusive';
+                            });
+                          } else if (selectedTaxType == 'exclusive') {
+                            setState(() {
+                              selectedTaxType = null;
+                            });
+                          } else {
+                            setState(() {
+                              selectedTaxType = 'inclusive';
+                            });
                           }
-                        });
-                      },child: FoodTypeSelectionWidget(foodType: selectedFoodType,)),
+                        },
+                      ),
                     ),
                   ],
+                ),
+                const SizedBox(
+                  height: 6.0,
                 ),
                 const SizedBox(
                   height: 6.0,
@@ -272,8 +417,18 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                     Flexible(
                       flex: 2,
                       child: CustomTextFromField(
-                        controller: _controllerProductName,
-                        labelText: 'eg. Lays',
+                        suffixWidget: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: const [
+                            Text(
+                              '%',
+                              style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18.0),
+                            ),
+                          ],
+                        ),
+                        enabled: selectedTaxType != null,
+                        controller: _controllerTax,
+                        labelText: '0.00',
                         obscureText: false,
                         themeColor: getThemeColor(),
                       ),
@@ -297,12 +452,6 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                   ),
                   categoryBar
                 ]),
-
-
-
-
-
-
                 const SizedBox(
                   height: 6.0,
                 ),
@@ -319,7 +468,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                     height: 3.0,
                   ),
                   CustomTextFromField(
-                    controller: _controllerProductName,
+                    controller: _controllerDescription,
                     labelText: 'eg. Lays',
                     obscureText: false,
                     themeColor: getThemeColor(),
@@ -342,14 +491,16 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
             color: ColorStyle.background100,
             height: 50.0,
             onTap: () async {
-              var response =
-              await Product.add({
+              var response = await Product.add({
                 'name': _controllerProductName.text,
                 'category': selectedCategory,
                 'description': _controllerDescription.text,
                 'quantity': _controllerQuantity.text,
-                'unitPrice': _controllerUnitPrice.text,
+                'warningQuantity': _controllerWarningQuantity.text,
+                'mrp': _controllerMRP.text,
+                'salePrice': _controllerSalePrice.text,
                 'foodType': _controllerFoodType.text,
+                'taxType': selectedTaxType,
                 'tax': _controllerTax.text,
                 'image': pickedImagePath,
                 'as': 'dish'

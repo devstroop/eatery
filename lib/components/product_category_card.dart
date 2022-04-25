@@ -54,7 +54,7 @@ class ProductCategoryCard extends StatelessWidget {
                             borderRadius:
                                 const BorderRadius.only(topLeft: Radius.circular(6), bottomLeft: Radius.circular(6)),
                             image: File(image ?? '').existsSync()
-                                ? DecorationImage(image: FileImage(File(image!)), fit: BoxFit.cover)
+                                ? DecorationImage(image: FileImage(File(image!)), fit: BoxFit.scaleDown)
                                 : const DecorationImage(
                                     image: AssetImage('assets/images/no-image.jpg'), fit: BoxFit.cover),
                           ),

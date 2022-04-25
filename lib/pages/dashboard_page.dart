@@ -229,7 +229,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const KitchenPage()),
+                          MaterialPageRoute(builder: (context) => KitchenPage(account: widget.account,)),
                         );
                       },
                     ),
@@ -241,7 +241,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const InventoryPage()),
+                          MaterialPageRoute(builder: (context) => InventoryPage(account: widget.account,)),
                         );
                       },
                     ),
