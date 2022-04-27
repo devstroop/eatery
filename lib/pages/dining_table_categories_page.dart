@@ -44,8 +44,13 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
                       ],
                     );
                   }
-                  return const  Center(
-                      child: Text('No Categories Found')
+                  return SizedBox(
+                    child: Padding(
+                      padding: EdgeInsets.only(top: (MediaQuery.of(context).size.width < MediaQuery.of(context).size.height ? MediaQuery.of(context).size.width: 0.0) * 0.5,),
+                      child: Center(
+                          child: Image.asset('assets/images/2748558.png', width: (MediaQuery.of(context).size.width < MediaQuery.of(context).size.height ? MediaQuery.of(context).size.width: MediaQuery.of(context).size.height) * 0.5,)
+                      ),
+                    ),
                   );
                 }
                 else{

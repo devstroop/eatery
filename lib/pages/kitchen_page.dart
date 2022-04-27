@@ -7,7 +7,7 @@ import 'package:restaurant_pos/components/pos_category_widget.dart';
 import 'package:restaurant_pos/components/pos_order_type_selection_button.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/components/product_card.dart';
-import 'package:restaurant_pos/database/linker.dart';
+
 import 'package:restaurant_pos/database/product.dart';
 import 'package:restaurant_pos/database/product_category.dart';
 import 'package:restaurant_pos/models/order_type.dart';
@@ -39,47 +39,52 @@ class _KitchenPageState extends State<KitchenPage> {
 
   @override
   Widget build(BuildContext context) {
-    final appBar = AppBar(
-      backgroundColor: getThemeColor(),
-      title: SizedBox(
-        width: double.maxFinite,
-        child: TextFormField(
-          keyboardType: TextInputType.text,
-          controller: _controllerSearch,
-          decoration: InputDecoration(
-            hintText: 'Search a dish...',
-            hintStyle: TextStyle(
-              color: ColorStyle.text400,
+    final appBar = PreferredSize(
+      child: AppBar(
+        title: const Text('Kitchen'),
+        backgroundColor: getThemeColor(),
+        flexibleSpace: Container(
+          margin: const EdgeInsets.only(top: 80, left: 16,right: 16),
+          width: double.maxFinite,
+          child: TextFormField(
+            keyboardType: TextInputType.text,
+            controller: null,
+            decoration: InputDecoration(
+              hintText: 'Search a dish...',
+              hintStyle: TextStyle(
+                color: ColorStyle.text400,
+                fontSize: 14,
+                fontWeight: FontWeight.normal,
+              ),
+              //prefixIcon: const Icon(Icons.search),
+              //prefixIconColor: ColorStyle.text100,
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: ColorStyle.text400,
+                  width: 1,
+                ),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(
+                  color: getThemeColor().withOpacity(0.5),
+                  width: 2,
+                ),
+                borderRadius: BorderRadius.circular(8),
+              ),
+              filled: true,
+              fillColor: Colors.white,
+              contentPadding: const EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
+            ),
+            style: TextStyle(
+              color: ColorStyle.text200,
               fontSize: 14,
               fontWeight: FontWeight.normal,
             ),
-            //prefixIcon: const Icon(Icons.search),
-            //prefixIconColor: ColorStyle.text100,
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: ColorStyle.text400,
-                width: 1,
-              ),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: getThemeColor().withOpacity(0.5),
-                width: 2,
-              ),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            filled: true,
-            fillColor: Colors.white,
-            contentPadding: const EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
-          ),
-          style: TextStyle(
-            color: ColorStyle.text200,
-            fontSize: 14,
-            fontWeight: FontWeight.normal,
           ),
         ),
       ),
+      preferredSize: const Size.fromHeight(116),
     );
 
     final categoryBar = SizedBox(
@@ -102,11 +107,9 @@ class _KitchenPageState extends State<KitchenPage> {
                   ),
                   label: 'All',
                   onTap: () {
-                    setState(
-                      () {
+                    setState(() {
                         selectedCategory = null;
-                      },
-                    );
+                    });
                   }),
               FutureBuilder(
                   future: ProductCategory.getAll(),
@@ -150,10 +153,10 @@ class _KitchenPageState extends State<KitchenPage> {
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: FutureBuilder(
-            future: Product.getAll(productAs: 'dish'),
+            future: Product.getAll(productAs: 'dish', category: selectedCategory),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasData) {
+                if (snapshot.hasData && snapshot.data.isNotEmpty) {
                   return Wrap(
                     alignment: WrapAlignment.center,
                     children: [
@@ -174,7 +177,14 @@ class _KitchenPageState extends State<KitchenPage> {
                     ],
                   );
                 }
-                return Container();
+                return SizedBox(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: (MediaQuery.of(context).size.width < MediaQuery.of(context).size.height ? MediaQuery.of(context).size.width: 0.0) * 0.5,),
+                    child: Center(
+                        child: Image.asset('assets/images/2748558.png', width: (MediaQuery.of(context).size.width < MediaQuery.of(context).size.height ? MediaQuery.of(context).size.width: MediaQuery.of(context).size.height) * 0.5,)
+                    ),
+                  ),
+                );
               } else {
                 return const Center(
                   child: CircularProgressIndicator(),
@@ -196,7 +206,7 @@ class _KitchenPageState extends State<KitchenPage> {
             right: 0.0,
             child: categoryBar,
           ),
-          Positioned(top: 60.0, left: 0.0, right: 0.0, bottom: 72, child: productsPanel),
+          Positioned(top: 60.0, left: 0.0, right: 0.0, bottom: 0, child: productsPanel),
           Positioned(bottom: 0.0, left: 0.0, right: 0.0, child: detailedProduct),
         ],
       ),

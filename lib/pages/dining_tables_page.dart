@@ -122,7 +122,7 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
             future: DiningTable.getAll(),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
-                if (snapshot.hasData) {
+                if (snapshot.hasData && snapshot.data.isNotEmpty) {
                   return Wrap(
                     alignment: WrapAlignment.center,
                     children: [
@@ -136,7 +136,14 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                     ],
                   );
                 }
-                return Container();
+                return SizedBox(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: (MediaQuery.of(context).size.width < MediaQuery.of(context).size.height ? MediaQuery.of(context).size.width: 0.0) * 0.5,),
+                    child: Center(
+                        child: Image.asset('assets/images/2748558.png', width: (MediaQuery.of(context).size.width < MediaQuery.of(context).size.height ? MediaQuery.of(context).size.width: MediaQuery.of(context).size.height) * 0.5,)
+                    ),
+                  ),
+                );
               } else {
                 return const Center(
                   child: CircularProgressIndicator(),

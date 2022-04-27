@@ -30,7 +30,6 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
   final TextEditingController _controllerWarningQuantity = TextEditingController();
   final TextEditingController _controllerSalePrice = TextEditingController();
   final TextEditingController _controllerMRP = TextEditingController();
-  final TextEditingController _controllerFoodType = TextEditingController();
   final TextEditingController _controllerTax = TextEditingController();
   final TextEditingController _controllerDescription = TextEditingController();
 
@@ -44,7 +43,6 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
       _controllerWarningQuantity.text = '';
       _controllerSalePrice.text = '';
       _controllerMRP.text = '';
-      _controllerFoodType.text = '';
       _controllerTax.text = '';
       _controllerDescription.text = '';
     });
@@ -485,7 +483,7 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
                     'warningQuantity': _controllerWarningQuantity.text,
                     'mrp': _controllerMRP.text,
                     'salePrice': _controllerSalePrice.text,
-                    'foodType': _controllerFoodType.text,
+                    'foodType': selectedFoodType,
                     'taxType': selectedTaxType,
                     'tax': _controllerTax.text,
                     'image': pickedImagePath,

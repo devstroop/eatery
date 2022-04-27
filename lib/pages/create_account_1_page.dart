@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/components/upload_button.dart';

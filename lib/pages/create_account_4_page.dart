@@ -4,7 +4,7 @@ import 'package:restaurant_pos/components/custom_text_from_field.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/components/selectable_card.dart';
 import 'package:restaurant_pos/database/account.dart';
-import 'package:restaurant_pos/database/linker.dart';
+
 import 'package:restaurant_pos/pages/create_account_result_page.dart';
 import 'package:restaurant_pos/services/utility/encryption.dart';
 import 'package:restaurant_pos/services/utility/show_snack_bar.dart';

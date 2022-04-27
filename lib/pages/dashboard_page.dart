@@ -12,7 +12,7 @@ import 'package:restaurant_pos/components/custom_text_from_field.dart';
 import 'package:restaurant_pos/components/menu_widget.dart';
 import 'package:restaurant_pos/components/notification_widget.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
-import 'package:restaurant_pos/database/linker.dart';
+
 import 'package:restaurant_pos/pages/product_categories_page.dart';
 import 'package:restaurant_pos/pages/create_account_3_page.dart';
 import 'package:restaurant_pos/pages/help_page.dart';
@@ -29,6 +29,7 @@ import 'package:restaurant_pos/style/color_style.dart';
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key, required this.account}) : super(key: key);
   final Map<String, dynamic> account;
+
   @override
   _DashboardPageState createState() => _DashboardPageState();
 }
@@ -56,126 +57,65 @@ class _DashboardPageState extends State<DashboardPage> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(24, 16, 24, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Text(
-                      widget.account['name'] ?? 'NA',
-                      style: TextStyle(
-                        color: Color(0xFF8B97A2),
-                        fontSize: 14,
-                        fontWeight: FontWeight.normal,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(24, 16, 24, 0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            Text(
+                              widget.account['name'] ?? 'NA',
+                              style: const TextStyle(
+                                color: Color(0xFF8B97A2),
+                                fontSize: 14,
+                                fontWeight: FontWeight.normal,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(24, 4, 24, 0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  children: const [
-                    Text(
-                      'Dashboard',
-                      style: TextStyle(
-                        color: Color(0xFF090F13),
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(24, 4, 24, 0),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: const [
+                            Text(
+                              'Dashboard',
+                              style: TextStyle(
+                                color: Color(0xFF090F13),
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
+                    ],
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 24.0, top: 16.0),
+                    child: SizedBox(
+                      height: 64,
+                      width: 64,
+                      child: Image(
+                          image: Image.file(
+                        File(widget.account['image']),
+                      ).image),
                     ),
-                  ],
-                ),
+                  )
+                ],
               ),
-              /*Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0, 20, 0, 12),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
-                          child: Text(
-                            'Sale',
-                            style: TextStyle(
-                              color: ColorStyle.text200,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          '${Linker.getTodaySales()['active']}/${Linker.getTodaySales()['total']}',
-                          style: TextStyle(
-                            color: ColorStyle.text100,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
-                          child: Text(
-                            'Due',
-                            style: TextStyle(
-                              color: ColorStyle.text200,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          '${Linker.getCurrencySymbol()}${Linker.getTodaySales()['due']}',
-                          style: TextStyle(
-                            color: ColorStyle.text100,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 0, 8),
-                          child: Text(
-                            'Paid',
-                            style: TextStyle(
-                              color: ColorStyle.text200,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          '${Linker.getCurrencySymbol()}${Linker.getTodaySales()['paid']}',
-                          style: TextStyle(
-                            color: ColorStyle.text100,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),*/
               FutureBuilder(
                 future: getBatteryLevel(),
                 builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                  if (snapshot.connectionState == ConnectionState.done && snapshot.data <= widget.account['lowBatteryLevel']) {
+                  if (snapshot.connectionState == ConnectionState.done &&
+                      snapshot.data <= widget.account['lowBatteryLevel']) {
                     return NotificationWidget(message: 'Battery level is ${snapshot.data}% in need of charging.');
                   } else {
                     return Container();
@@ -196,13 +136,13 @@ class _DashboardPageState extends State<DashboardPage> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const PointOfSalePage()),
+                          MaterialPageRoute(builder: (context) => PointOfSalePage(account: widget.account,)),
                         );
                       },
                     ),
                     MenuWidget(
                       iconData: Icons.category_rounded,
-                      title: 'Categories',
+                      title: 'Product Categories',
                       subtitle: 'Manage your item categories here',
                       color: ColorStyle.tertiary,
                       onTap: () {
@@ -229,7 +169,10 @@ class _DashboardPageState extends State<DashboardPage> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => KitchenPage(account: widget.account,)),
+                          MaterialPageRoute(
+                              builder: (context) => KitchenPage(
+                                    account: widget.account,
+                                  )),
                         );
                       },
                     ),
@@ -241,7 +184,10 @@ class _DashboardPageState extends State<DashboardPage> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => InventoryPage(account: widget.account,)),
+                          MaterialPageRoute(
+                              builder: (context) => InventoryPage(
+                                    account: widget.account,
+                                  )),
                         );
                       },
                     ),

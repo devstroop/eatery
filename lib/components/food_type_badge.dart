@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 class FoodTypeBadge extends StatelessWidget {
-  const FoodTypeBadge({Key? key, required this.foodType}) : super(key: key);
+  const FoodTypeBadge({Key? key, required this.foodType, this.backgroundColor}) : super(key: key);
   final String? foodType;
+  final Color? backgroundColor;
 
   @override
   Widget build(BuildContext context) {
@@ -12,6 +13,7 @@ class FoodTypeBadge extends StatelessWidget {
           width: 18,
           height: 18,
           decoration: BoxDecoration(
+            color: backgroundColor ?? Colors.white,
             borderRadius: BorderRadius.circular(3),
             border: Border.all(
               color: const Color(0xFF43A047),
@@ -29,11 +31,12 @@ class FoodTypeBadge extends StatelessWidget {
             ),
           ),
         );
-      } else if (foodType == 'nonveg') {
+      } else if (foodType == 'nonVeg') {
         return Container(
           width: 18,
           height: 18,
           decoration: BoxDecoration(
+            color: backgroundColor ?? Colors.white,
             borderRadius: BorderRadius.circular(3),
             border: Border.all(
               color: const Color(0xFFE53935),

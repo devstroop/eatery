@@ -2,7 +2,7 @@ import 'package:json_store/json_store.dart';
 import 'package:restaurant_pos/services/utility/generate.dart';
 class DiningTableCategory{
   static JsonStore store = JsonStore();
-  static String name = "dining-table-category";
+  static String name = "dining-table-category-ref";
 
   static Future<String?> add(Map<String, dynamic> data) async {
     try{

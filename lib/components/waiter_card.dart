@@ -6,7 +6,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:restaurant_pos/components/food_type_badge.dart';
 import 'package:restaurant_pos/components/low_qty_label_widget.dart';
 import 'package:restaurant_pos/database/cart.dart';
-import 'package:restaurant_pos/database/linker.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class WaiterCard extends StatelessWidget {

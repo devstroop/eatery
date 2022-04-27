@@ -6,7 +6,7 @@ import 'package:move_to_background/move_to_background.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/database/account.dart';
-import 'package:restaurant_pos/database/linker.dart';
+
 import 'package:restaurant_pos/pages/create_account_3_page.dart';
 import 'package:restaurant_pos/pages/dashboard_page.dart';
 import 'package:restaurant_pos/services/utility/show_snack_bar.dart';

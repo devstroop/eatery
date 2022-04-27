@@ -30,7 +30,6 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
   final TextEditingController _controllerWarningQuantity = TextEditingController();
   final TextEditingController _controllerSalePrice = TextEditingController();
   final TextEditingController _controllerMRP = TextEditingController();
-  final TextEditingController _controllerFoodType = TextEditingController();
   final TextEditingController _controllerTax = TextEditingController();
   final TextEditingController _controllerDescription = TextEditingController();
 
@@ -44,7 +43,6 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
       _controllerWarningQuantity.text = '';
       _controllerSalePrice.text = '';
       _controllerMRP.text = '';
-      _controllerFoodType.text = '';
       _controllerTax.text = '';
       _controllerDescription.text = '';
     });
@@ -166,15 +164,6 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                     Flexible(
                       flex: 4,
                       child: CustomTextFromField(
-                        prefixWidget: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              widget.account['currencySymbol'] ?? '',
-                              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18.0),
-                            ),
-                          ],
-                        ),
                         controller: _controllerProductName,
                         labelText: '',
                         obscureText: false,
@@ -499,7 +488,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                 'warningQuantity': _controllerWarningQuantity.text,
                 'mrp': _controllerMRP.text,
                 'salePrice': _controllerSalePrice.text,
-                'foodType': _controllerFoodType.text,
+                'foodType': selectedFoodType,
                 'taxType': selectedTaxType,
                 'tax': _controllerTax.text,
                 'image': pickedImagePath,

@@ -3,7 +3,7 @@ import 'package:restaurant_pos/services/utility/generate.dart';
 
 class Waiter{
   static JsonStore store = JsonStore();
-  static String name = "waiter";
+  static String name = "waiter-ref";
 
   static Future<String?> add(Map<String, dynamic> data) async {
     try{

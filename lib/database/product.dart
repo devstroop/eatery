@@ -2,7 +2,7 @@ import 'package:json_store/json_store.dart';
 import 'package:restaurant_pos/services/utility/generate.dart';
 class Product{
   static JsonStore store = JsonStore();
-  static String name = "product";
+  static String name = "product-ref";
 
   static Future<String?> add(Map<String, dynamic> data) async {
     try{
@@ -26,11 +26,21 @@ class Product{
     }catch(_){}
     return null;
   }
-  static Future<List<Map<String, dynamic>>> getAll({String? productAs}) async {
-    if(productAs != null) {
-      return (await store.getListLike('$name-%') ?? []).where((element) => element['as'] == productAs).toList();
+  static Future<List<Map<String, dynamic>>> getAll({String? productAs, String? category}) async {
+    List<Map<String, dynamic>> result = [];
+    if(productAs != null &&
+        category == null){
+      result = (await store.getListLike('$name-%') ?? []).where((element) => element['as'] == productAs).toList();
+    }else if(productAs != null
+        && category != null) {
+      result = (await store.getListLike('$name-%') ?? []).where((element) => element['as'] == productAs && element['category'] == category).toList();
+    }else if(productAs == null && category != null) {
+      result = (await store.getListLike('$name-%') ?? []).where((element) => element['category'] == category).toList();
     }
-    return await store.getListLike('$name-%') ?? [];
+    else{
+      result = await store.getListLike('$name-%') ?? [];
+    }
+    return result;
   }
   static Future<bool> update(Map<String, dynamic> data) async {
     try{

@@ -2,7 +2,7 @@ import 'package:json_store/json_store.dart';
 import 'package:restaurant_pos/services/utility/generate.dart';
 class Account{
   static JsonStore store = JsonStore();
-  static String name = "account";
+  static String name = "account-ref";
   static Future<Map<String, dynamic>?> login(String email, String password) async {
     var q = (await getAll()).where((element) => element['email'].toLowerCase() == email.toLowerCase() && element['password'] == password);
     if (q.isNotEmpty) {
