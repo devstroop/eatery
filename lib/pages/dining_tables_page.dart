@@ -87,7 +87,7 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                               PosCategoryWidget(
                                   active: selectedCategory == category['id'],
                                   image:
-                                      File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
+                                  category['image'] != null && File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
                                   label: category['name'],
                                   onTap: () {
                                     setState(
@@ -112,7 +112,7 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
       ),
     );
 
-    final productsPanel = SizedBox(
+    final diningTablesPanel = SizedBox(
       width: double.maxFinite,
       height: double.maxFinite,
       child: SingleChildScrollView(
@@ -165,7 +165,7 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
             right: 0.0,
             child: categoryBar,
           ),
-          Positioned(top: 60.0, left: 0.0, right: 0.0, bottom: 72, child: productsPanel),
+          Positioned(top: 60.0, left: 0.0, right: 0.0, bottom: 72, child: diningTablesPanel),
           Positioned(bottom: 0.0, left: 0.0, right: 0.0, child: detailedProduct),
         ],
       ),

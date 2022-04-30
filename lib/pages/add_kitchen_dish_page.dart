@@ -486,6 +486,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                 'description': _controllerDescription.text,
                 'quantity': _controllerQuantity.text,
                 'warningQuantity': _controllerWarningQuantity.text,
+                'unit': '',
                 'mrp': _controllerMRP.text,
                 'salePrice': _controllerSalePrice.text,
                 'foodType': selectedFoodType,

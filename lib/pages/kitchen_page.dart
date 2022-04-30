@@ -44,7 +44,7 @@ class _KitchenPageState extends State<KitchenPage> {
         title: const Text('Kitchen'),
         backgroundColor: getThemeColor(),
         flexibleSpace: Container(
-          margin: const EdgeInsets.only(top: 80, left: 16,right: 16),
+          margin: const EdgeInsets.only(top: 90, left: 12, right: 12),
           width: double.maxFinite,
           child: TextFormField(
             keyboardType: TextInputType.text,
@@ -166,8 +166,8 @@ class _KitchenPageState extends State<KitchenPage> {
                           id: product['id'],
                           name: product['name'],
                           description: product['description'],
-                          mrp: product['mrp'],
-                          salePrice: product['salePrice'],
+                          billingPrice: product['mrp'],
+                          otherPrice: product['salePrice'],
                           quantity: product['quantity'],
                           warningQuantity: product['warningQuantity'],
                           image: product['image'],

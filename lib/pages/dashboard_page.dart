@@ -142,8 +142,8 @@ class _DashboardPageState extends State<DashboardPage> {
                     ),
                     MenuWidget(
                       iconData: Icons.category_rounded,
-                      title: 'Product Categories',
-                      subtitle: 'Manage your item categories here',
+                      title: 'Categories',
+                      subtitle: 'Manage your product categories here',
                       color: ColorStyle.tertiary,
                       onTap: () {
                         Navigator.push(

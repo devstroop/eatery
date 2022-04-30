@@ -43,7 +43,6 @@ class _DetailedProductViewState extends State<DetailedProductView> {
 
   @override
   Widget build(BuildContext context) {
-    final cartQuantity = Cart.cart.where((element) => element['id'] == widget.id).length;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -155,7 +154,7 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                   ),
                 ],
               ),
-              widget.onAdd != null && widget.onRemove != null && cartQuantity != null
+              widget.onAdd != null && widget.onRemove != null
                   ? Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4),
@@ -166,11 +165,10 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                 ),
                 child: Padding(
                   padding: const EdgeInsetsDirectional.fromSTEB(2, 1, 2, 1),
-                  child: cartQuantity != null
-                      ? Row(
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      cartQuantity > 0
+                      Cart.cart.containsKey(widget.id) && Cart.cart[widget.id]!['quantity'] > 0
                           ? InkWell(
                         onTap: widget.onRemove,
                         child: Icon(
@@ -179,11 +177,11 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                         ),
                       )
                           : Container(),
-                      cartQuantity > 0
+                      Cart.cart.containsKey(widget.id) && Cart.cart[widget.id]!['quantity'] > 0
                           ? Padding(
                         padding: const EdgeInsetsDirectional.fromSTEB(4, 0, 4, 0),
                         child: Text(
-                          '$cartQuantity',
+                          '${Cart.cart.containsKey(widget.id) && Cart.cart[widget.id]!['quantity']}',
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                           ),
@@ -198,8 +196,7 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                         ),
                       ),
                     ],
-                  )
-                      : Container(),
+                  ),
                 ),
               )
                   : Container()

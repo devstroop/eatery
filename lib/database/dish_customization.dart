@@ -1,8 +1,8 @@
 import 'package:json_store/json_store.dart';
 import 'package:restaurant_pos/services/utility/generate.dart';
-class DiningTable{
+class DishCustomization{
   static JsonStore store = JsonStore();
-  static String name = "dining-table-ref";
+  static String name = "dish-customization-ref";
 
   static Future<String?> add(Map<String, dynamic> data) async {
     try{
@@ -26,12 +26,8 @@ class DiningTable{
     }catch(_){}
     return null;
   }
-  static Future<List<Map<String, dynamic>>> getAll({String? category}) async {
-    if(category != null){
-      return (await store.getListLike('$name-%') ?? []).where((element) => element['category'] == category).toList();
-    }else{
-      return await store.getListLike('$name-%') ?? [];
-    }
+  static Future<List<Map<String, dynamic>>> getAll() async {
+    return await store.getListLike('$name-%') ?? [];
   }
   static Future<bool> update(Map<String, dynamic> data) async {
     try{

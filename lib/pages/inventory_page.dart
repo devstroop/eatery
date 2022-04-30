@@ -44,7 +44,7 @@ class _InventoryPageState extends State<InventoryPage> {
         backgroundColor: getThemeColor(),
         title: const Text('Inventory'),
         flexibleSpace: Container(
-          margin: const EdgeInsets.only(top: 80, left: 16,right: 16),
+          margin: const EdgeInsets.only(top: 90, left: 12, right: 12),
           width: double.maxFinite,
           child: TextFormField(
             keyboardType: TextInputType.text,
@@ -170,8 +170,8 @@ class _InventoryPageState extends State<InventoryPage> {
                               id: product['id'],
                               name: product['name'],
                               description: product['description'],
-                              mrp: product['mrp'],
-                              salePrice: product['salePrice'],
+                              billingPrice: product['mrp'],
+                              otherPrice: product['salePrice'],
                               quantity: product['quantity'],
                               warningQuantity: product['warningQuantity'],
                               image: product['image'],

@@ -1,12 +1,7 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:restaurant_pos/components/food_type_badge.dart';
 import 'package:restaurant_pos/components/low_qty_label_widget.dart';
-import 'package:restaurant_pos/database/cart.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class ProductCard extends StatelessWidget {
@@ -14,8 +9,8 @@ class ProductCard extends StatelessWidget {
       {Key? key,
       required this.name,
       this.description,
-      required this.mrp,
-      required this.salePrice,
+      required this.billingPrice,
+      this.otherPrice,
       this.quantity,
       this.image,
       this.foodType,
@@ -31,8 +26,8 @@ class ProductCard extends StatelessWidget {
   final dynamic id; // int
   final dynamic name; // String
   final dynamic description; // String?
-  final dynamic mrp; // double
-  final dynamic salePrice; // double?
+  final dynamic billingPrice; // double
+  final dynamic otherPrice; // double?
   final dynamic quantity; // double?
   final dynamic warningQuantity; // double?
   final dynamic cartQuantity;
@@ -146,73 +141,32 @@ class ProductCard extends StatelessWidget {
                                   children: [
                                     Column(
                                       children: [
-                                        mrp != null && mrp != '' && salePrice != null && salePrice != ''
-                                            ? Column(
-                                                children: [
-                                                  double.parse(mrp) > double.parse(salePrice)
-                                                      ? Text(
-                                                          '${currencySymbol ?? ''}$mrp',
-                                                          overflow: TextOverflow.ellipsis,
-                                                          style: TextStyle(
-                                                              fontSize: 14.0,
-                                                              fontWeight: FontWeight.w500,
-                                                              color: ColorStyle.text400,
-                                                              decorationColor: ColorStyle.text400,
-                                                              decoration: TextDecoration.lineThrough,
-                                                              decorationStyle: TextDecorationStyle.solid,
-                                                              decorationThickness: 3.0),
-                                                        )
-                                                      : Container(),
-                                                  double.parse(mrp) > double.parse(salePrice)
-                                                      ? Text(
-                                                          '${currencySymbol ?? ''}$salePrice',
-                                                          overflow: TextOverflow.ellipsis,
-                                                          style: TextStyle(
-                                                              fontSize: 16.0,
-                                                              fontWeight: FontWeight.w600,
-                                                              color: ColorStyle.information),
-                                                        )
-                                                      : Container(),
-                                                ],
-                                              )
-                                            : const SizedBox(
-                                                height: 0,
-                                                width: 0,
-                                              ),
-                                        (mrp == null || mrp == '') && salePrice != null && salePrice != ''
-                                            ? Column(
-                                                children: [
-                                                  Text(
-                                                    '${currencySymbol ?? ''}$salePrice',
-                                                    overflow: TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        fontSize: 16.0,
-                                                        fontWeight: FontWeight.w600,
-                                                        color: ColorStyle.text200),
-                                                  ),
-                                                ],
-                                              )
-                                            : const SizedBox(
-                                                height: 0,
-                                                width: 0,
-                                              ),
-                                        (salePrice == null || salePrice == '') && mrp != null && mrp != ''
-                                            ? Column(
-                                                children: [
-                                                  Text(
-                                                    '${currencySymbol ?? ''}$mrp',
-                                                    overflow: TextOverflow.ellipsis,
-                                                    style: TextStyle(
-                                                        fontSize: 16.0,
-                                                        fontWeight: FontWeight.w600,
-                                                        color: ColorStyle.text200),
-                                                  ),
-                                                ],
-                                              )
-                                            : const SizedBox(
-                                                height: 0,
-                                                width: 0,
-                                              ),
+                                        otherPrice != null ?
+                                        Text(
+                                          '${currencySymbol ?? ''}$otherPrice',
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontSize: 14.0,
+                                              fontWeight: FontWeight.w500,
+                                              color: ColorStyle.text400,
+                                              decorationColor: ColorStyle.text400,
+                                              decoration: TextDecoration.lineThrough,
+                                              decorationStyle: TextDecorationStyle.solid,
+                                              decorationThickness: 3.0),
+                                        )
+                                            :
+                                        Container(),
+                                        billingPrice != null ?
+
+                                        Text(
+                                          '${currencySymbol ?? ''}$billingPrice',
+                                          overflow: TextOverflow.ellipsis,
+                                          style: TextStyle(
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.w600,
+                                              color: otherPrice != null ? ColorStyle.information : ColorStyle.text200
+                                          ),
+                                        ) : Container(),
                                       ],
                                     ),
                                     onAdd != null && onRemove != null && cartQuantity != null
@@ -220,7 +174,7 @@ class ProductCard extends StatelessWidget {
                                             decoration: BoxDecoration(
                                               borderRadius: BorderRadius.circular(4),
                                               border: Border.all(
-                                                color: themeColor!,
+                                                color: ColorStyle.primary/*themeColor!*/,
                                                 width: 2,
                                               ),
                                             ),
@@ -235,7 +189,7 @@ class ProductCard extends StatelessWidget {
                                                                 onTap: onRemove,
                                                                 child: Icon(
                                                                   Icons.remove,
-                                                                  color: themeColor,
+                                                                  color: ColorStyle.primary,
                                                                 ),
                                                               )
                                                             : Container(),
@@ -254,7 +208,7 @@ class ProductCard extends StatelessWidget {
                                                           onTap: onAdd,
                                                           child: Icon(
                                                             Icons.add,
-                                                            color: themeColor,
+                                                            color: ColorStyle.primary,
                                                           ),
                                                         ),
                                                       ],

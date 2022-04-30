@@ -1,9 +1,13 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
+import 'package:restaurant_pos/components/pos_category_widget.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/components/upload_button.dart';
 import 'package:restaurant_pos/database/dining_table.dart';
+import 'package:restaurant_pos/database/dining_table_category.dart';
 import 'package:restaurant_pos/pages/dining_table_categories_page.dart';
 import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
@@ -16,11 +20,13 @@ class AddDiningTablePage extends StatefulWidget {
 
 class _AddDiningTablePageState extends State<AddDiningTablePage> {
   String? pickedImagePath;
+  String? selectedDiningTableCategory;
   final TextEditingController _controllerCategoryName = TextEditingController();
 
   clearFields(){
     setState(() {
       pickedImagePath = null;
+      selectedDiningTableCategory = null;
       _controllerCategoryName.text = '';
     });
   }
@@ -96,6 +102,52 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
               const SizedBox(
                 height: 6.0,
               ),
+              SizedBox(
+                width: double.maxFinite,
+                height: 60,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        FutureBuilder(
+                            future: DiningTableCategory.getAll(),
+                            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+                              if (snapshot.connectionState == ConnectionState.done) {
+                                if (snapshot.hasData) {
+                                  return Row(
+                                    children: [
+                                      for (var category in snapshot.data)
+                                        PosCategoryWidget(
+                                            active: selectedDiningTableCategory == category['id'],
+                                            image: category['image'] != null && File(category['image']).existsSync()
+                                                ? Image.file(File(category['image']))
+                                                : null,
+                                            label: category['name'],
+                                            onTap: () {
+                                              setState(
+                                                    () {
+                                                      selectedDiningTableCategory = category['id'];
+                                                },
+                                              );
+                                            })
+                                    ],
+                                  );
+                                }
+                                return Container();
+                              } else {
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                            }),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),
@@ -110,7 +162,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
             color: ColorStyle.background100,
             height: 50.0,
             onTap: () async {
-              var response = await DiningTable.add({'image': pickedImagePath, 'name': _controllerCategoryName.text});
+              var response = await DiningTable.add({'image': pickedImagePath, 'name': _controllerCategoryName.text, 'category': selectedDiningTableCategory});
               if(response != null){
                 showSnackBar(context, 'Successfully created');
                 clearFields();
