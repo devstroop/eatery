@@ -257,7 +257,9 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                       'Subtotal',
                       style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w400, color: ColorStyle.text200),
                     ),
-                    const SizedBox(width: 6.0,),
+                    const SizedBox(
+                      width: 6.0,
+                    ),
                     Text(
                       '${widget.account['currencySymbol']}${Calculations.calculateSubtotal()}',
                       style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
@@ -274,33 +276,42 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                 id: id,
                 name: Cart.cart[id]!['name'],
                 description: Cart.cart[id]!['description'],
-                price: Cart.cart[id]!['price'] * Cart.cart[id]!['quantity'],
-                customizationPrice: Calculations.calculateCustomizationsTotal(Cart.cart[id]!['customizations']),
+                priceTotal: Cart.cart[id]!['price'] * Cart.cart[id]!['quantity'],
+                customizationPriceTotal: Calculations.calculateCustomizationsTotal(Cart.cart[id]!['customizations']) ?? 0,
                 image: Cart.cart[id]!['image'],
                 cartQuantity: Cart.cart[id]!['quantity'],
                 currencySymbol: widget.account['currencySymbol'],
                 onAdd: () {
-                  print(Cart.cart[id]);
-                  /*Cart.cart.add({
-                    'id': each['id'],
-                    'customization': 'NA',
-                    'price': each['price'],
-                    'name': each['name'],
-                    'description': each['description'],
-                    'image': each['image']
-                  });*/
-                  state(() {});
-                  setState(() {});
+                  if (Cart.cart.containsKey(id)) {
+                    Cart.cart[id]!['quantity'] += 1; // Unit value
+                    setState(() {});
+                    state(() {});
+                  }
                 },
                 onRemove: () {
-                  print(Cart.cart[id]);
-                  /*if (Cart.cart.where((element) => element['id'] == each['id']).isNotEmpty) {
-                    Cart.cart.remove(Cart.cart.where((element) => element['id'] == each['id']).last);
-                  }*/
+                  if(Cart.cart.containsKey(id) && Cart.cart[id]!['quantity'] > 1){
+                    Cart.cart[id]!['quantity'] -= 1; // Unit value
+                    setState(() {});
+                    state(() {});
+                  } else if(Cart.cart.containsKey(id) && Cart.cart[id]!['quantity'] <= 1){
+                    Cart.cart.remove(id);
+                    setState(() {});
+                    state(() {});
+                    if(Cart.cart.isEmpty){
+                      Navigator.of(context).pop();
+                    }
+                  }
                   state(() {});
                   setState(() {});
                 },
-                onDeleteAll: (){},
+                onDeleteAll: () {
+                  Cart.cart.remove(id);
+                  state(() {});
+                  setState(() {});
+                  if(Cart.cart.isEmpty){
+                    Navigator.of(context).pop();
+                  }
+                },
               ),
             ),
           const SizedBox(
@@ -341,32 +352,38 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
               id: product['id'],
               name: product['name'],
               description: product['description'],
-              mrp: product['mrp'],
-              salePrice: product['salePrice'],
-              quantity: product['quantity'],
-              warningQuantity: product['warningQuantity'],
+              mrp: product['mrp'] != null && product['mrp'] != '' ? double.parse(product['mrp']) : null,
+              salePrice: product['salePrice'] != null && product['salePrice'] != ''
+                  ? double.parse(product['salePrice'])
+                  : null,
+              quantity:
+                  product['quantity'] != null && product['quantity'] != '' ? double.parse(product['quantity']) : null,
+              warningQuantity: product['warningQuantity'] != null && product['warningQuantity'] != ''
+                  ? double.parse(product['warningQuantity'])
+                  : null,
               image: product['image'],
               foodType: product['foodType'],
               themeColor: orderType.color,
               onAdd: () {
-                if(Cart.cart.containsKey(product['id'])){
+                if (Cart.cart.containsKey(product['id'])) {
                   Cart.cart[product['id']]!['quantity'] += 1; // Unit value
                   setState(() {});
                   state(() {});
-                }
-                else{
+                } else {
                   Cart.cart[product['id']] = {
                     'name': product['name'],
                     'description': product['description'],
                     'price': Calculations.getProductBillingPrice(
-                        mrp: product['mrp'] != null ? double.parse(product['mrp']) : null, salePrice: product['salePrice'] != null ? double.parse(product['salePrice']) : null),
+                        mrp: product['mrp'] != null && product['mrp'] != '' ? double.parse(product['mrp']) : null,
+                        salePrice: product['salePrice'] != null && product['salePrice'] != ''
+                            ? double.parse(product['salePrice'])
+                            : null),
                     'image': product['image'],
                     'discount': product['discount'],
                     'tax': product['tax'],
                     'quantity': 1.0, // Unit value
                     'unit': product['unit'],
                     'customizations': [],
-
                   };
                   setState(() {});
                   state(() {});
@@ -378,7 +395,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                   setState(() {});
                   state(() {});
                 } else if(Cart.cart.containsKey(product['id']) && Cart.cart[product['id']]!['quantity'] <= 1){
-                  Cart.cart.remove([product['id']]);
+                  Cart.cart.remove(product['id']);
                   setState(() {});
                   state(() {});
                 }
@@ -512,49 +529,56 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                       id: product['id'],
                       name: product['name'],
                       description: product['description'],
-                      billingPrice:
-                      Calculations.getProductBillingPrice(
-                          mrp: product['mrp'] != null ? double.parse(product['mrp']) : null, salePrice: product['salePrice'] != null ? double.parse(product['salePrice']) : null),
-                      otherPrice:
-                      Calculations.getProductOtherPrice(
-                          mrp: product['mrp'] != null ? double.parse(product['mrp']) : null, salePrice: product['salePrice'] != null ? double.parse(product['salePrice']) : null),
-                      quantity: product['quantity'],
-                      warningQuantity: product['warningQuantity'],
+                      billingPrice: Calculations.getProductBillingPrice(
+                          mrp: product['mrp'] != null && product['mrp'] != '' ? double.parse(product['mrp']) : null,
+                          salePrice: product['salePrice'] != null && product['salePrice'] != ''
+                              ? double.parse(product['salePrice'])
+                              : null),
+                      otherPrice: Calculations.getProductOtherPrice(
+                          mrp: product['mrp'] != null && product['mrp'] != '' ? double.parse(product['mrp']) : null,
+                          salePrice: product['salePrice'] != null && product['salePrice'] != ''
+                              ? double.parse(product['salePrice'])
+                              : null),
+                      quantity: product['quantity'] != null && product['quantity'] != '' ? double.parse(product['quantity']) : null,
+                      warningQuantity: product['warningQuantity'] != null && product['warningQuantity'] != '' ? double.parse(product['warningQuantity']) : null,
                       image: product['image'],
                       foodType: product['foodType'],
                       themeColor: orderType.color,
                       cartQuantity: Cart.cart.containsKey(product['id']) ? Cart.cart[product['id']]!['quantity'] : 0,
                       onAdd: () {
-                        if(Cart.cart.containsKey(product['id'])){
-                          setState((){
+                        if (Cart.cart.containsKey(product['id'])) {
+                          setState(() {
                             Cart.cart[product['id']]!['quantity'] += 1; // Unit value
                           });
-                        }
-                        else{
-                          setState((){
+                        } else {
+                          setState(() {
                             Cart.cart[product['id']] = {
                               'name': product['name'],
                               'description': product['description'],
                               'price': Calculations.getProductBillingPrice(
-                                  mrp: product['mrp'] != null ? double.parse(product['mrp']) : null, salePrice: product['salePrice'] != null ? double.parse(product['salePrice']) : null),
+                                  mrp: product['mrp'] != null && product['mrp'] != ''
+                                      ? double.parse(product['mrp'])
+                                      : null,
+                                  salePrice: product['salePrice'] != null && product['salePrice'] != ''
+                                      ? double.parse(product['salePrice'])
+                                      : null),
                               'image': product['image'],
                               'discount': product['discount'],
                               'tax': product['tax'],
                               'quantity': 1.0, // Unit value
                               'unit': product['unit'],
                               'customizations': [],
-
                             };
                           });
                         }
                       },
                       onRemove: () async {
-                        if(Cart.cart.containsKey(product['id']) && Cart.cart[product['id']]!['quantity'] > 1){
-                          setState((){
+                        if (Cart.cart.containsKey(product['id']) && Cart.cart[product['id']]!['quantity'] > 1) {
+                          setState(() {
                             Cart.cart[product['id']]!['quantity'] -= 1; // Unit value
                           });
-                        } else if(Cart.cart.containsKey(product['id']) && Cart.cart[product['id']]!['quantity'] <= 1){
-                          setState((){
+                        } else if (Cart.cart.containsKey(product['id']) && Cart.cart[product['id']]!['quantity'] <= 1) {
+                          setState(() {
                             Cart.cart.remove([product['id']]);
                           });
                         }

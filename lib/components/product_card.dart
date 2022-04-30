@@ -2,20 +2,21 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:restaurant_pos/components/food_type_badge.dart';
 import 'package:restaurant_pos/components/low_qty_label_widget.dart';
+import 'package:restaurant_pos/extensions/calculations.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard(
       {Key? key,
+        required this.id,
       required this.name,
       this.description,
-      required this.billingPrice,
+      this.billingPrice,
       this.otherPrice,
       this.quantity,
       this.image,
       this.foodType,
       this.themeColor,
-      required this.id,
       this.warningQuantity,
       this.currencySymbol,
       this.cartQuantity,
@@ -23,17 +24,17 @@ class ProductCard extends StatelessWidget {
       this.onAdd,
       this.onTap})
       : super(key: key);
-  final dynamic id; // int
-  final dynamic name; // String
-  final dynamic description; // String?
-  final dynamic billingPrice; // double
-  final dynamic otherPrice; // double?
-  final dynamic quantity; // double?
-  final dynamic warningQuantity; // double?
-  final dynamic cartQuantity;
-  final dynamic image; // String?
-  final dynamic foodType; // FoodType? // FoodType.values.firstWhere((e) => e.toString() == product['foodType']),
-  final dynamic currencySymbol;
+  final String id; // int
+  final String name; // String
+  final String? description; // String?
+  final double? billingPrice; // double
+  final double? otherPrice; // double?
+  final double? quantity; // double?
+  final double? warningQuantity; // double?
+  final double? cartQuantity;
+  final String? image; // String?
+  final String? foodType; // FoodType? // FoodType.values.firstWhere((e) => e.toString() == product['foodType']),
+  final String? currencySymbol;
   final Color? themeColor;
   final Function()? onRemove;
   final Function()? onAdd;
@@ -184,7 +185,7 @@ class ProductCard extends StatelessWidget {
                                                   ? Row(
                                                       mainAxisSize: MainAxisSize.min,
                                                       children: [
-                                                        cartQuantity > 0
+                                                        cartQuantity! > 0
                                                             ? InkWell(
                                                                 onTap: onRemove,
                                                                 child: Icon(
@@ -193,11 +194,11 @@ class ProductCard extends StatelessWidget {
                                                                 ),
                                                               )
                                                             : Container(),
-                                                        cartQuantity > 0
+                                                        cartQuantity! > 0
                                                             ? Padding(
                                                                 padding: const EdgeInsetsDirectional.fromSTEB(4, 0, 4, 0),
                                                                 child: Text(
-                                                                  '$cartQuantity',
+                                                                  Calculations.compressDoubleToString(cartQuantity),
                                                                   style: const TextStyle(
                                                                     fontWeight: FontWeight.w600,
                                                                   ),
@@ -231,9 +232,9 @@ class ProductCard extends StatelessWidget {
           Positioned(
             top: 12.0,
             left: 0.0,
-            child: quantity != null && quantity.trim() != '' && warningQuantity != null && quantity.trim() != ''
-                ? double.parse(quantity) <= double.parse(warningQuantity)
-                    ? LowQtyLabelWidget(qty: double.parse(quantity))
+            child: quantity != null && warningQuantity != null
+                ? quantity! <= warningQuantity!
+                    ? LowQtyLabelWidget(qty: quantity!)
                     : Container()
                 : Container(),
           ),

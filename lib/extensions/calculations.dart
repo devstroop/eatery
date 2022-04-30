@@ -10,9 +10,9 @@ class Calculations{
     }
     return subtotal;
   }
-  static double? calculateCustomizationsTotal(List<Map<String, dynamic>> customizations){
+  static double? calculateCustomizationsTotal(dynamic customizations){
     double total = 0;
-    for(Map<String, dynamic> customization in customizations){
+    for(Map<dynamic, dynamic> customization in customizations){
       total += customization['price'];
     }
     return total;
@@ -34,10 +34,20 @@ class Calculations{
   }
   static double? getProductOtherPrice({required double? mrp, required double? salePrice}){
     if(mrp != null && salePrice != null){
-      if(mrp > mrp){
+      if(mrp > salePrice){
         return mrp;
       }
     }
     return null;
+  }
+  static String compressDoubleToString(double? value){
+    if(value != null){
+      if(value%1 == 0){
+        return '${value.round()}';
+      }else{
+        return value.toString();
+      }
+    }
+    return '';
   }
 }

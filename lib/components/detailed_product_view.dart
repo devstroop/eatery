@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:restaurant_pos/components/food_type_badge.dart';
 import 'package:restaurant_pos/database/cart.dart';
+import 'package:restaurant_pos/extensions/calculations.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class DetailedProductView extends StatefulWidget {
@@ -21,16 +22,16 @@ class DetailedProductView extends StatefulWidget {
     this.onRemove,
     this.onAdd})
       : super(key: key);
-  final dynamic id; // int
-  final dynamic name; // String
-  final dynamic description; // String?
-  final dynamic mrp; // double
-  final dynamic salePrice; // double?
-  final dynamic quantity; // double?
-  final dynamic warningQuantity;
-  final dynamic image; // String?
-  final dynamic foodType; // FoodType? // FoodType.values.firstWhere((e) => e.toString() == product['foodType']),
-  final dynamic currencySymbol;
+  final String id;
+  final String name;
+  final String? description;
+  final double? mrp;
+  final double? salePrice;
+  final double? quantity;
+  final double? warningQuantity;
+  final String? image;
+  final String? foodType; // FoodType? // FoodType.values.firstWhere((e) => e.toString() == product['foodType']),
+  final String? currencySymbol;
   final Color? themeColor;
   final Function()? onRemove;
   final Function()? onAdd;
@@ -82,10 +83,11 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                     style: TextStyle(
                         fontSize: 20.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
                   ),
-                  widget.mrp != null && widget.mrp != '' && widget.salePrice != null && widget.salePrice != ''
+
+                  widget.mrp != null && widget.salePrice != null
                       ? Row(
                     children: [
-                      double.parse(widget.mrp) > double.parse(widget.salePrice)
+                      widget.mrp!.compareTo(widget.salePrice!) == 1
                           ? Container(
                         margin: const EdgeInsets.only(right: 6.0),
                             child: Text(
@@ -102,7 +104,7 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                       ),
                           )
                           : Container(),
-                      double.parse(widget.mrp) > double.parse(widget.salePrice)
+                      widget.mrp!.compareTo(widget.salePrice!) == 1
                           ? Text(
                         '${widget.currencySymbol ?? ''}${widget.salePrice}',
                         overflow: TextOverflow.ellipsis,
@@ -118,7 +120,7 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                     height: 0,
                     width: 0,
                   ),
-                  (widget.mrp == null || widget.mrp == '') && widget.salePrice != null && widget.salePrice != ''
+                  widget.mrp == null && widget.salePrice != null
                       ? Column(
                     children: [
                       Text(
@@ -135,7 +137,7 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                     height: 0,
                     width: 0,
                   ),
-                  (widget.salePrice == null || widget.salePrice == '') && widget.mrp != null && widget.mrp != ''
+                  widget.salePrice == null && widget.mrp != null
                       ? Column(
                     children: [
                       Text(
@@ -159,7 +161,7 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(4),
                   border: Border.all(
-                    color: widget.themeColor!,
+                    color: ColorStyle.primary,
                     width: 2,
                   ),
                 ),
@@ -173,7 +175,7 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                         onTap: widget.onRemove,
                         child: Icon(
                           Icons.remove,
-                          color: widget.themeColor,
+                          color: ColorStyle.primary,
                         ),
                       )
                           : Container(),
@@ -181,7 +183,7 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                           ? Padding(
                         padding: const EdgeInsetsDirectional.fromSTEB(4, 0, 4, 0),
                         child: Text(
-                          '${Cart.cart.containsKey(widget.id) && Cart.cart[widget.id]!['quantity']}',
+                          Calculations.compressDoubleToString(Cart.cart[widget.id]!['quantity']),
                           style: const TextStyle(
                             fontWeight: FontWeight.w600,
                           ),
@@ -192,7 +194,7 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                         onTap: widget.onAdd,
                         child: Icon(
                           Icons.add,
-                          color: widget.themeColor,
+                          color: ColorStyle.primary,
                         ),
                       ),
                     ],
