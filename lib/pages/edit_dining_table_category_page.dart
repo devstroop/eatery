@@ -1,6 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
+import 'package:restaurant_pos/components/dialog_box.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/components/upload_button.dart';
 import 'package:restaurant_pos/database/dining_table.dart';
@@ -11,6 +12,7 @@ import 'package:restaurant_pos/style/color_style.dart';
 class EditDiningTableCategoryPage extends StatefulWidget {
   const EditDiningTableCategoryPage({Key? key, required this.id}) : super(key: key);
   final String id;
+
   @override
   State<EditDiningTableCategoryPage> createState() => _EditDiningTableCategoryPageState();
 }
@@ -18,6 +20,24 @@ class EditDiningTableCategoryPage extends StatefulWidget {
 class _EditDiningTableCategoryPageState extends State<EditDiningTableCategoryPage> {
   String? pickedImagePath;
   final TextEditingController _controllerCategoryName = TextEditingController();
+  late Map<String, dynamic>? diningTableCategory;
+
+  @override
+  initState() {
+    super.initState();
+    loadData();
+  }
+
+  loadData() async {
+    var diningTableCategory = await DiningTableCategory.get(widget.id);
+    if (diningTableCategory != null) {
+      setState(() {
+        this.diningTableCategory = diningTableCategory;
+        pickedImagePath = this.diningTableCategory!['image'];
+        _controllerCategoryName.text = this.diningTableCategory!['name'];
+      });
+    }
+  }
 
   clearFields() {
     setState(() {
@@ -37,17 +57,39 @@ class _EditDiningTableCategoryPageState extends State<EditDiningTableCategoryPag
       title: const Text('Edit Dining Table Category'),
       actions: [
         TextButton(
-          onPressed: () async {
-            // Delete safely // Not implemented
-            if((await DiningTable.getAll(category: widget.id)).isNotEmpty){
-              showSnackBar(context, 'Can\'t delete');
-              return;
-            }
-            DiningTableCategory.delete(widget.id);
-            showSnackBar(context, 'Deleted successfully');
-            Navigator.pop(context);
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return DialogBox(
+                  title: 'Delete',
+                  message: 'Are you sure?',
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Cancel')),
+                    TextButton(
+                        onPressed: () async {
+                          if ((await DiningTable.getAll(category: widget.id)).isNotEmpty) {
+                            showSnackBar(context, 'Can\'t delete');
+                            return;
+                          }
+                          DiningTableCategory.delete(widget.id);
+                          showSnackBar(context, 'Deleted successfully');
+                          Navigator.pop(context);
+                        },
+                        child: const Text('OK'))
+                  ],
+                );
+              },
+            );
           },
-          child: Text('Delete', style: TextStyle(color: ColorStyle.background100),),
+          child: Text(
+            'Delete',
+            style: TextStyle(color: ColorStyle.background100),
+          ),
         )
       ],
     );
@@ -132,11 +174,11 @@ class _EditDiningTableCategoryPageState extends State<EditDiningTableCategoryPag
                 showSnackBar(context, '* Category name required');
                 return;
               }
-              var response =
-                  await DiningTableCategory.add({'image': pickedImagePath, 'name': _controllerCategoryName.text});
-              if (response != null) {
+              var response = await DiningTableCategory.update(
+                  {'id': widget.id, 'image': pickedImagePath, 'name': _controllerCategoryName.text});
+              if (response) {
                 showSnackBar(context, 'Successfully updated');
-                clearFields();
+                Navigator.of(context).pop();
               } else {
                 showSnackBar(context, 'Failed to update');
               }

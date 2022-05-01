@@ -1,6 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
+import 'package:restaurant_pos/components/dialog_box.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/components/upload_button.dart';
 import 'package:restaurant_pos/database/product.dart';
@@ -19,6 +20,24 @@ class EditProductCategoryPage extends StatefulWidget {
 class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
   String? pickedImagePath;
   final TextEditingController _controllerCategoryName = TextEditingController();
+  late Map<String, dynamic>? productCategory;
+
+
+  @override
+  initState() {
+    super.initState();
+    loadData();
+  }
+  loadData() async {
+    var productCategory = await ProductCategory.get(widget.id);
+    if(productCategory != null){
+      setState((){
+        this.productCategory = productCategory;
+        pickedImagePath = this.productCategory!['image'];
+        _controllerCategoryName.text = this.productCategory!['name'];
+      });
+    }
+  }
 
   clearFields() {
     setState(() {
@@ -39,14 +58,33 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
       actions: [
         TextButton(
           onPressed: () async {
-            // Delete safely // Not Implemented
-            if ((await Product.getAll(category: widget.id)).isNotEmpty) {
-              showSnackBar(context, 'Can\'t delete');
-              return;
-            }
-            ProductCategory.delete(widget.id);
-            showSnackBar(context, 'Deleted successfully');
-            Navigator.pop(context);
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return DialogBox(
+                  title: 'Delete',
+                  message: 'Are you sure?',
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Cancel')),
+                    TextButton(
+                        onPressed: () async {
+                          if ((await Product.getAll(category: widget.id)).isNotEmpty) {
+                            showSnackBar(context, 'Can\'t delete');
+                            return;
+                          }
+                          ProductCategory.delete(widget.id);
+                          showSnackBar(context, 'Deleted successfully');
+                          Navigator.pop(context);
+                        },
+                        child: const Text('OK'))
+                  ],
+                );
+              },
+            );
           },
           child: Text(
             'Delete',
@@ -137,10 +175,10 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
                 return;
               }
               var response =
-                  await ProductCategory.add({'image': pickedImagePath, 'name': _controllerCategoryName.text});
-              if (response != null) {
+                  await ProductCategory.update({'id': widget.id, 'image': pickedImagePath, 'name': _controllerCategoryName.text});
+              if (response) {
                 showSnackBar(context, 'Successfully update');
-                clearFields();
+                Navigator.of(context).pop();
               } else {
                 showSnackBar(context, 'Failed to update');
               }

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
+import 'package:restaurant_pos/components/dialog_box.dart';
 import 'package:restaurant_pos/components/pos_category_widget.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/components/upload_button.dart';
@@ -22,13 +23,32 @@ class EditDiningTablePage extends StatefulWidget {
 class _EditDiningTablePageState extends State<EditDiningTablePage> {
   String? pickedImagePath;
   String? selectedDiningTableCategory;
-  final TextEditingController _controllerCategoryName = TextEditingController();
+  final TextEditingController _controllerName = TextEditingController();
+  late Map<String, dynamic>? diningTable;
+
+
+  @override
+  initState() {
+    super.initState();
+    loadData();
+  }
+  loadData() async {
+    var diningTable = await DiningTable.get(widget.id);
+    if(diningTable != null){
+      setState((){
+        this.diningTable = diningTable;
+        pickedImagePath = this.diningTable!['image'];
+        selectedDiningTableCategory = this.diningTable!['category'];
+        _controllerName.text = this.diningTable!['name'];
+      });
+    }
+  }
 
   clearFields() {
     setState(() {
       pickedImagePath = null;
       selectedDiningTableCategory = null;
-      _controllerCategoryName.text = '';
+      _controllerName.text = '';
     });
   }
 
@@ -44,10 +64,29 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
       actions: [
         TextButton(
           onPressed: () {
-            // Delete safely // Not Implemented
-            DiningTable.delete(widget.id);
-            showSnackBar(context, 'Deleted successfully');
-            Navigator.pop(context);
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return DialogBox(
+                  title: 'Delete',
+                  message: 'Are you sure?',
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Cancel')),
+                    TextButton(
+                        onPressed: () async {
+                          DiningTable.delete(widget.id);
+                          showSnackBar(context, 'Deleted successfully');
+                          Navigator.pop(context);
+                        },
+                        child: const Text('OK'))
+                  ],
+                );
+              },
+            );
           },
           child: Text('Delete', style: TextStyle(color: ColorStyle.background100),),
         )
@@ -107,7 +146,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                   height: 3.0,
                 ),
                 CustomTextFromField(
-                  controller: _controllerCategoryName,
+                  controller: _controllerName,
                   labelText: 'eg. Table 1 ',
                   obscureText: false,
                   themeColor: getThemeColor(),
@@ -176,7 +215,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
             color: ColorStyle.background100,
             height: 50.0,
             onTap: () async {
-              if (_controllerCategoryName.text.trim() == '') {
+              if (_controllerName.text.trim() == '') {
                 showSnackBar(context, '* Dining table name required');
                 return;
               }
@@ -184,14 +223,15 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                 showSnackBar(context, '* Select category');
                 return;
               }
-              var response = await DiningTable.add({
+              var response = await DiningTable.update({
+                'id': widget.id,
                 'image': pickedImagePath,
-                'name': _controllerCategoryName.text,
+                'name': _controllerName.text,
                 'category': selectedDiningTableCategory
               });
-              if (response != null) {
+              if (response) {
                 showSnackBar(context, 'Successfully update');
-                clearFields();
+                Navigator.of(context).pop();
               } else {
                 showSnackBar(context, 'Failed to update');
               }

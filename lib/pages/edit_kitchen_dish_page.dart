@@ -3,10 +3,11 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
+import 'package:restaurant_pos/components/dialog_box.dart';
 import 'package:restaurant_pos/components/food_type_selection_widget.dart';
 import 'package:restaurant_pos/components/pos_category_widget.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
-import 'package:restaurant_pos/components/tax_type_selection_widget.dart';
+import 'package:restaurant_pos/database/cart.dart';
 import 'package:restaurant_pos/components/upload_button.dart';
 import 'package:restaurant_pos/database/product.dart';
 import 'package:restaurant_pos/database/product_category.dart';
@@ -34,6 +35,33 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
   final TextEditingController _controllerMRP = TextEditingController();
   final TextEditingController _controllerTax = TextEditingController();
   final TextEditingController _controllerDescription = TextEditingController();
+  late Map<String, dynamic>? product;
+
+
+  @override
+  initState() {
+    super.initState();
+    loadData();
+  }
+  loadData() async {
+    var product = await Product.get(widget.id);
+    if(product != null){
+      setState((){
+        this.product = product;
+        pickedImagePath = this.product!['image'];
+        selectedCategory = this.product!['category'];
+        selectedFoodType = this.product!['foodType'];
+        selectedTaxType = this.product!['taxType'];
+        _controllerProductName.text = this.product!['name'];
+        _controllerQuantity.text = this.product!['quantity'];
+        _controllerWarningQuantity.text = this.product!['warningQuantity'];
+        _controllerSalePrice.text = this.product!['salePrice'];
+        _controllerMRP.text = this.product!['mrp'];
+        _controllerTax.text = this.product!['tax'];
+        _controllerDescription.text = this.product!['description'];
+      });
+    }
+  }
 
   clearFields() {
     setState(() {
@@ -66,10 +94,33 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
       actions: [
         TextButton(
           onPressed: () {
-            // Delete safely // Not Implemented
-            Product.delete(widget.id);
-            showSnackBar(context, 'Deleted successfully');
-            Navigator.pop(context);
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return DialogBox(
+                  title: 'Delete',
+                  message: 'Are you sure?',
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Cancel')),
+                    TextButton(
+                        onPressed: () async {
+                          if(Cart.cart.containsKey(widget.id)){
+                            showSnackBar(context, 'Can\' delete');
+                            return;
+                          }
+                          Product.delete(widget.id);
+                          showSnackBar(context, 'Deleted successfully');
+                          Navigator.pop(context);
+                        },
+                        child: const Text('OK'))
+                  ],
+                );
+              },
+            );
           },
           child: Text('Delete', style: TextStyle(color: ColorStyle.background100),),
         )
@@ -505,7 +556,8 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                 showSnackBar(context, '* Select category');
                 return;
               }
-              var response = await Product.add({
+              var response = await Product.update({
+                'id': widget.id,
                 'name': _controllerProductName.text,
                 'category': selectedCategory,
                 'description': _controllerDescription.text,
@@ -520,9 +572,9 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                 'image': pickedImagePath,
                 'as': 'dish'
               });
-              if (response != null) {
+              if (response) {
                 showSnackBar(context, 'Successfully update');
-                clearFields();
+                Navigator.of(context).pop();
               } else {
                 showSnackBar(context, 'Failed to update');
               }

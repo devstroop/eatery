@@ -1,6 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
+import 'package:restaurant_pos/components/dialog_box.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/components/upload_button.dart';
 import 'package:restaurant_pos/database/waiter.dart';
@@ -18,6 +19,25 @@ class EditWaiterPage extends StatefulWidget {
 class _EditWaiterPageState extends State<EditWaiterPage> {
   String? pickedImagePath;
   final TextEditingController _controllerWaiterName = TextEditingController();
+  late Map<String, dynamic>? waiter;
+
+
+  @override
+  initState() {
+    super.initState();
+    loadData();
+  }
+  loadData() async {
+    var waiter = await Waiter.get(widget.id);
+    if(waiter != null){
+      setState((){
+        this.waiter = waiter;
+        pickedImagePath = this.waiter!['image'];
+        _controllerWaiterName.text = this.waiter!['name'];
+      });
+    }
+  }
+
 
   clearFields() {
     setState(() {
@@ -38,10 +58,29 @@ class _EditWaiterPageState extends State<EditWaiterPage> {
       actions: [
         TextButton(
           onPressed: () {
-            // Delete safely
-            Waiter.delete(widget.id);
-            showSnackBar(context, 'Deleted successfully');
-            Navigator.pop(context);
+            showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return DialogBox(
+                  title: 'Delete',
+                  message: 'Are you sure?',
+                  actions: [
+                    TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Cancel')),
+                    TextButton(
+                        onPressed: () async {
+                          Waiter.delete(widget.id);
+                          showSnackBar(context, 'Deleted successfully');
+                          Navigator.pop(context);
+                        },
+                        child: const Text('OK'))
+                  ],
+                );
+              },
+            );
           },
           child: Text('Delete', style: TextStyle(color: ColorStyle.background100),),
         )
@@ -128,10 +167,10 @@ class _EditWaiterPageState extends State<EditWaiterPage> {
                 showSnackBar(context, '* Waiter name required');
                 return;
               }
-              var response = await Waiter.add({'image': pickedImagePath, 'name': _controllerWaiterName.text});
-              if (response != null) {
+              var response = await Waiter.update({'id':widget.id, 'image': pickedImagePath, 'name': _controllerWaiterName.text});
+              if (response) {
                 showSnackBar(context, 'Successfully update');
-                clearFields();
+                Navigator.of(context).pop();
               } else {
                 showSnackBar(context, 'Failed to update');
               }
