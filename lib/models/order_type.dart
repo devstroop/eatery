@@ -22,11 +22,11 @@ extension PosModeExtension on OrderType {
   String? get text {
     switch (this) {
       case OrderType.dineIn:
-        return 'Dine In';
+        return 'Dine in';
       case OrderType.delivery:
         return 'Delivery';
       case OrderType.takeAway:
-        return 'Take Away';
+        return 'Takeaway';
       default:
         return null;
     }

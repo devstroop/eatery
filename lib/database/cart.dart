@@ -1,5 +1,4 @@
 class Cart{
-  // static List<Map<String, dynamic>> cart = [];
   static Map<String, Map<String, dynamic>> cart = {};
 
   static Map<String, Map<String, dynamic>> sample = {

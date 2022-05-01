@@ -10,6 +10,7 @@ import 'package:restaurant_pos/components/product_card.dart';
 
 import 'package:restaurant_pos/database/product.dart';
 import 'package:restaurant_pos/database/product_category.dart';
+import 'package:restaurant_pos/extensions/calculations.dart';
 import 'package:restaurant_pos/models/order_type.dart';
 import 'package:restaurant_pos/pages/add_kitchen_dish_page.dart';
 import 'package:restaurant_pos/style/color_style.dart';
@@ -166,10 +167,22 @@ class _KitchenPageState extends State<KitchenPage> {
                           id: product['id'],
                           name: product['name'],
                           description: product['description'],
-                          billingPrice: product['mrp'],
-                          otherPrice: product['salePrice'],
-                          quantity: product['quantity'],
-                          warningQuantity: product['warningQuantity'],
+                          billingPrice: Calculations.getProductBillingPrice(
+                              mrp: product['mrp'] != null && product['mrp'] != '' ? double.parse(product['mrp']) : null,
+                              salePrice: product['salePrice'] != null && product['salePrice'] != ''
+                                  ? double.parse(product['salePrice'])
+                                  : null),
+                          otherPrice: Calculations.getProductOtherPrice(
+                              mrp: product['mrp'] != null && product['mrp'] != '' ? double.parse(product['mrp']) : null,
+                              salePrice: product['salePrice'] != null && product['salePrice'] != ''
+                                  ? double.parse(product['salePrice'])
+                                  : null),
+                          quantity: product['quantity'] != null && product['quantity'] != ''
+                              ? double.parse(product['quantity'])
+                              : null,
+                          warningQuantity: product['warningQuantity'] != null && product['warningQuantity'] != ''
+                              ? double.parse(product['warningQuantity'])
+                              : null,
                           image: product['image'],
                           foodType: product['foodType'],
                           themeColor: getThemeColor(),

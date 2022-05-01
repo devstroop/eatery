@@ -18,6 +18,7 @@ import 'package:restaurant_pos/database/product.dart';
 import 'package:restaurant_pos/database/product_category.dart';
 import 'package:restaurant_pos/extensions/calculations.dart';
 import 'package:restaurant_pos/models/order_type.dart';
+import 'package:restaurant_pos/pages/checkout_page.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class PointOfSalePage extends StatefulWidget {
@@ -277,10 +278,12 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                 name: Cart.cart[id]!['name'],
                 description: Cart.cart[id]!['description'],
                 priceTotal: Cart.cart[id]!['price'] * Cart.cart[id]!['quantity'],
-                customizationPriceTotal: Calculations.calculateCustomizationsTotal(Cart.cart[id]!['customizations']) ?? 0,
+                customizationPriceTotal:
+                    Calculations.calculateCustomizationsTotal(Cart.cart[id]!['customizations']) ?? 0,
                 image: Cart.cart[id]!['image'],
                 cartQuantity: Cart.cart[id]!['quantity'],
                 currencySymbol: widget.account['currencySymbol'],
+                mode: 0,
                 onAdd: () {
                   if (Cart.cart.containsKey(id)) {
                     Cart.cart[id]!['quantity'] += 1; // Unit value
@@ -289,15 +292,15 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                   }
                 },
                 onRemove: () {
-                  if(Cart.cart.containsKey(id) && Cart.cart[id]!['quantity'] > 1){
+                  if (Cart.cart.containsKey(id) && Cart.cart[id]!['quantity'] > 1) {
                     Cart.cart[id]!['quantity'] -= 1; // Unit value
                     setState(() {});
                     state(() {});
-                  } else if(Cart.cart.containsKey(id) && Cart.cart[id]!['quantity'] <= 1){
+                  } else if (Cart.cart.containsKey(id) && Cart.cart[id]!['quantity'] <= 1) {
                     Cart.cart.remove(id);
                     setState(() {});
                     state(() {});
-                    if(Cart.cart.isEmpty){
+                    if (Cart.cart.isEmpty) {
                       Navigator.of(context).pop();
                     }
                   }
@@ -308,7 +311,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                   Cart.cart.remove(id);
                   state(() {});
                   setState(() {});
-                  if(Cart.cart.isEmpty){
+                  if (Cart.cart.isEmpty) {
                     Navigator.of(context).pop();
                   }
                 },
@@ -390,11 +393,11 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                 }
               },
               onRemove: () async {
-                if(Cart.cart.containsKey(product['id']) && Cart.cart[product['id']]!['quantity'] > 1){
+                if (Cart.cart.containsKey(product['id']) && Cart.cart[product['id']]!['quantity'] > 1) {
                   Cart.cart[product['id']]!['quantity'] -= 1; // Unit value
                   setState(() {});
                   state(() {});
-                } else if(Cart.cart.containsKey(product['id']) && Cart.cart[product['id']]!['quantity'] <= 1){
+                } else if (Cart.cart.containsKey(product['id']) && Cart.cart[product['id']]!['quantity'] <= 1) {
                   Cart.cart.remove(product['id']);
                   setState(() {});
                   state(() {});
@@ -539,8 +542,12 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                           salePrice: product['salePrice'] != null && product['salePrice'] != ''
                               ? double.parse(product['salePrice'])
                               : null),
-                      quantity: product['quantity'] != null && product['quantity'] != '' ? double.parse(product['quantity']) : null,
-                      warningQuantity: product['warningQuantity'] != null && product['warningQuantity'] != '' ? double.parse(product['warningQuantity']) : null,
+                      quantity: product['quantity'] != null && product['quantity'] != ''
+                          ? double.parse(product['quantity'])
+                          : null,
+                      warningQuantity: product['warningQuantity'] != null && product['warningQuantity'] != ''
+                          ? double.parse(product['warningQuantity'])
+                          : null,
                       image: product['image'],
                       foodType: product['foodType'],
                       themeColor: orderType.color,
@@ -661,6 +668,19 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                 text: 'Checkout',
                 height: 50.0,
                 backgroundColor: orderType.color!,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => CheckoutPage(
+                              account: widget.account,
+                              orderType: orderType,
+                              cart: Cart.cart,
+                              diningTable: selectedDiningTable,
+                              diningTableName: selectedDiningTableName,
+                            )),
+                  );
+                },
               ),
             ),
           ],
@@ -747,43 +767,43 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
             color: Colors.green,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Text(
-                        '${Cart.cart.length} Item | ${widget.account['currencySymbol']}${Calculations.calculateSubtotal()}',
-                        style: TextStyle(fontWeight: FontWeight.bold, color: ColorStyle.background200),
-                      )
-                    ],
-                  ),
-                  InkWell(
-                    child: Row(
+              child: InkWell(
+                onTap: () => showModalBottomSheet(
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(24),
+                        topRight: Radius.circular(24),
+                        bottomLeft: Radius.circular(0),
+                        bottomRight: Radius.circular(0),
+                      ),
+                    ),
+                    context: context,
+                    builder: (context) => buildCartViewBottomSheet()),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          '${Cart.cart.length} Item | ${widget.account['currencySymbol']}${Calculations.calculateSubtotal()}',
+                          style: TextStyle(fontWeight: FontWeight.bold, color: ColorStyle.background200),
+                        )
+                      ],
+                    ),
+                    Row(
                       children: [
                         Text(
                           'Cart',
                           style: TextStyle(fontWeight: FontWeight.bold, color: ColorStyle.background200),
                         ),
                         Icon(
-                          Icons.arrow_drop_up_outlined,
+                          Icons.arrow_right,
                           color: ColorStyle.background200,
                         )
                       ],
                     ),
-                    onTap: () => showModalBottomSheet(
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(24),
-                            topRight: Radius.circular(24),
-                            bottomLeft: Radius.circular(0),
-                            bottomRight: Radius.circular(0),
-                          ),
-                        ),
-                        context: context,
-                        builder: (context) => buildCartViewBottomSheet()),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           )

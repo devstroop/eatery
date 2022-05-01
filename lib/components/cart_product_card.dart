@@ -16,7 +16,7 @@ class CartProductCard extends StatelessWidget {
       this.onDeleteAll,
       required this.priceTotal,
       required this.customizationPriceTotal,
-      this.currencySymbol})
+      this.currencySymbol, required this.mode})
       : super(key: key);
   final String id;
   final String name;
@@ -29,6 +29,7 @@ class CartProductCard extends StatelessWidget {
   final Function()? onRemove;
   final Function()? onAdd;
   final Function()? onDeleteAll;
+  final int mode;
 
   @override
   Widget build(BuildContext context) {
@@ -136,13 +137,13 @@ class CartProductCard extends StatelessWidget {
                         ),
                       )
                     : Container(),
-                InkWell(
+                onDeleteAll != null ? InkWell(
                   child: Icon(
                     Icons.delete_outline,
                     color: ColorStyle.error,
                   ),
                   onTap: onDeleteAll,
-                )
+                ) : Container()
               ],
             )),
       ],
