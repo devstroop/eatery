@@ -3,13 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/components/upload_button.dart';
+import 'package:restaurant_pos/database/dining_table.dart';
 import 'package:restaurant_pos/database/dining_table_category.dart';
 import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class EditDiningTableCategoryPage extends StatefulWidget {
-  const EditDiningTableCategoryPage({Key? key}) : super(key: key);
-
+  const EditDiningTableCategoryPage({Key? key, required this.id}) : super(key: key);
+  final String id;
   @override
   State<EditDiningTableCategoryPage> createState() => _EditDiningTableCategoryPageState();
 }
@@ -36,10 +37,17 @@ class _EditDiningTableCategoryPageState extends State<EditDiningTableCategoryPag
       title: const Text('Edit Dining Table Category'),
       actions: [
         TextButton(
-          onPressed: () {
-            // Delete safely
+          onPressed: () async {
+            // Delete safely // Not implemented
+            if((await DiningTable.getAll(category: widget.id)).isNotEmpty){
+              showSnackBar(context, 'Can\'t delete');
+              return;
+            }
+            DiningTableCategory.delete(widget.id);
+            showSnackBar(context, 'Deleted successfully');
+            Navigator.pop(context);
           },
-          child: const Text('Delete'),
+          child: Text('Delete', style: TextStyle(color: ColorStyle.background100),),
         )
       ],
     );

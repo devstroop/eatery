@@ -45,7 +45,7 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const EditProductCategoryPage()),
+                                  builder: (context) => EditProductCategoryPage(id: category['id'],)),
                             );
                           },
                         )

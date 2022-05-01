@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class ProductCategoryCard extends StatelessWidget {
-  const ProductCategoryCard(
-      {Key? key, required this.id, required this.name, this.image, this.onTap})
-      : super(key: key);
+  const ProductCategoryCard({Key? key, required this.id, required this.name, this.image, this.onTap}) : super(key: key);
   final dynamic id; // int
   final dynamic name; // String
   final dynamic image;
@@ -42,49 +40,51 @@ class ProductCategoryCard extends StatelessWidget {
                     48) /
                 2 *
                 (1 / 3),
-            child: Row(
-              children: [
-                Flexible(
-                    flex: 1,
-                    child: Stack(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: ColorStyle.background200,
-                            borderRadius:
-                                const BorderRadius.only(topLeft: Radius.circular(6), bottomLeft: Radius.circular(6)),
-                            image: File(image ?? '').existsSync()
-                                ? DecorationImage(image: FileImage(File(image!)), fit: BoxFit.scaleDown)
-                                : const DecorationImage(
-                                    image: AssetImage('assets/images/no-image.jpg'), fit: BoxFit.cover),
+            child: InkWell(
+              onTap: onTap,
+              child: Row(
+                children: [
+                  Flexible(
+                      flex: 1,
+                      child: Stack(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: ColorStyle.background200,
+                              borderRadius:
+                                  const BorderRadius.only(topLeft: Radius.circular(6), bottomLeft: Radius.circular(6)),
+                              image: File(image ?? '').existsSync()
+                                  ? DecorationImage(image: FileImage(File(image!)), fit: BoxFit.scaleDown)
+                                  : const DecorationImage(
+                                      image: AssetImage('assets/images/no-image.jpg'), fit: BoxFit.cover),
+                            ),
                           ),
-                        ),
-                      ],
-                    )),
-                Flexible(
-                    flex: 3,
-                    child: Stack(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: ColorStyle.background100,
-                            borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(6), bottomRight: Radius.circular(6)),
+                        ],
+                      )),
+                  Flexible(
+                      flex: 3,
+                      child: Stack(
+                        children: [
+                          Container(
+                            decoration: BoxDecoration(
+                              color: ColorStyle.background100,
+                              borderRadius: const BorderRadius.only(
+                                  topRight: Radius.circular(6), bottomRight: Radius.circular(6)),
+                            ),
                           ),
-                        ),
-                        Container(
-                          alignment: Alignment.centerLeft,
-                          margin: const EdgeInsets.all(12.0),
-                          child: Text(
-                            name,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                                fontSize: 16.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
-                          ),
-                        )
-                      ],
-                    )),
-              ],
+                          Container(
+                            alignment: Alignment.centerLeft,
+                            margin: const EdgeInsets.all(12.0),
+                            child: Text(
+                              name,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
+                            ),
+                          )
+                        ],
+                      )),
+                ],
+              ),
             ),
           ),
         ],

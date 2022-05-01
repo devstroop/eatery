@@ -136,7 +136,7 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const EditDiningTablePage()),
+                                  builder: (context) => EditDiningTablePage(id: product['id'])),
                             );
                           },
                         )

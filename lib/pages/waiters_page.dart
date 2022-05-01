@@ -57,7 +57,7 @@ class _WaitersPageState extends State<WaitersPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => const EditWaiterPage()),
+                                  builder: (context) => EditWaiterPage(id: waiter['id'])),
                             );
                           },
                         )

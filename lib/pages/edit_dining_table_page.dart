@@ -13,8 +13,8 @@ import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class EditDiningTablePage extends StatefulWidget {
-  const EditDiningTablePage({Key? key}) : super(key: key);
-
+  const EditDiningTablePage({Key? key, required this.id}) : super(key: key);
+  final String id;
   @override
   State<EditDiningTablePage> createState() => _EditDiningTablePageState();
 }
@@ -44,9 +44,12 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
       actions: [
         TextButton(
           onPressed: () {
-            // Delete safely
+            // Delete safely // Not Implemented
+            DiningTable.delete(widget.id);
+            showSnackBar(context, 'Deleted successfully');
+            Navigator.pop(context);
           },
-          child: const Text('Delete'),
+          child: Text('Delete', style: TextStyle(color: ColorStyle.background100),),
         )
       ],
     );

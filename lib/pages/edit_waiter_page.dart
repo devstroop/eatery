@@ -8,7 +8,8 @@ import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class EditWaiterPage extends StatefulWidget {
-  const EditWaiterPage({Key? key}) : super(key: key);
+  const EditWaiterPage({Key? key, required this.id}) : super(key: key);
+  final String id;
 
   @override
   State<EditWaiterPage> createState() => _EditWaiterPageState();
@@ -38,8 +39,11 @@ class _EditWaiterPageState extends State<EditWaiterPage> {
         TextButton(
           onPressed: () {
             // Delete safely
+            Waiter.delete(widget.id);
+            showSnackBar(context, 'Deleted successfully');
+            Navigator.pop(context);
           },
-          child: const Text('Delete'),
+          child: Text('Delete', style: TextStyle(color: ColorStyle.background100),),
         )
       ],
     );

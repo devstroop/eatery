@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/components/upload_button.dart';
+import 'package:restaurant_pos/database/product.dart';
 import 'package:restaurant_pos/database/product_category.dart';
 import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class EditProductCategoryPage extends StatefulWidget {
-  const EditProductCategoryPage({Key? key}) : super(key: key);
+  const EditProductCategoryPage({Key? key, required this.id}) : super(key: key);
+  final String id;
 
   @override
   State<EditProductCategoryPage> createState() => _EditProductCategoryPageState();
@@ -36,10 +38,20 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
       title: const Text('Edit Product Category'),
       actions: [
         TextButton(
-          onPressed: () {
-            // Delete safely
+          onPressed: () async {
+            // Delete safely // Not Implemented
+            if ((await Product.getAll(category: widget.id)).isNotEmpty) {
+              showSnackBar(context, 'Can\'t delete');
+              return;
+            }
+            ProductCategory.delete(widget.id);
+            showSnackBar(context, 'Deleted successfully');
+            Navigator.pop(context);
           },
-          child: const Text('Delete'),
+          child: Text(
+            'Delete',
+            style: TextStyle(color: ColorStyle.background100),
+          ),
         )
       ],
     );
