@@ -3,34 +3,45 @@ import 'package:flutter/material.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/components/upload_button.dart';
-import 'package:restaurant_pos/database/dining_table_category.dart';
+import 'package:restaurant_pos/database/waiter.dart';
 import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
-class AddDiningTableCategoryPage extends StatefulWidget {
-  const AddDiningTableCategoryPage({Key? key}) : super(key: key);
+
+class EditWaiterPage extends StatefulWidget {
+  const EditWaiterPage({Key? key}) : super(key: key);
 
   @override
-  State<AddDiningTableCategoryPage> createState() => _AddDiningTableCategoryPageState();
+  State<EditWaiterPage> createState() => _EditWaiterPageState();
 }
 
-class _AddDiningTableCategoryPageState extends State<AddDiningTableCategoryPage> {
+class _EditWaiterPageState extends State<EditWaiterPage> {
   String? pickedImagePath;
-  final TextEditingController _controllerCategoryName = TextEditingController();
+  final TextEditingController _controllerWaiterName = TextEditingController();
 
-  clearFields(){
+  clearFields() {
     setState(() {
       pickedImagePath = null;
-      _controllerCategoryName.text = '';
+      _controllerWaiterName.text = '';
     });
   }
+
   Color getThemeColor() {
     return ColorStyle.tertiary;
   }
+
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
       backgroundColor: getThemeColor(),
-      title: const Text('Add Dining Table Category'),
+      title: const Text('Edit Waiter'),
+      actions: [
+        TextButton(
+          onPressed: () {
+            // Delete safely
+          },
+          child: const Text('Delete'),
+        )
+      ],
     );
     return Scaffold(
       appBar: appBar,
@@ -48,7 +59,7 @@ class _AddDiningTableCategoryPageState extends State<AddDiningTableCategoryPage>
               InkWell(
                 child: UploadButton(
                   title: '+ Upload Picture',
-                  subTitle: 'Dining Table Category Image',
+                  subTitle: 'Waiter Image',
                   primaryColor: getThemeColor(),
                   secondaryColor: ColorStyle.text200,
                   pickedImagePath: pickedImagePath,
@@ -75,7 +86,7 @@ class _AddDiningTableCategoryPageState extends State<AddDiningTableCategoryPage>
               ),
               Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(
-                  'Category Name',
+                  'Waiter Name',
                   style: TextStyle(
                     color: ColorStyle.text200,
                     fontSize: 12,
@@ -86,8 +97,8 @@ class _AddDiningTableCategoryPageState extends State<AddDiningTableCategoryPage>
                   height: 3.0,
                 ),
                 CustomTextFromField(
-                  controller: _controllerCategoryName,
-                  labelText: 'eg. Terrace',
+                  controller: _controllerWaiterName,
+                  labelText: 'Waiter Name',
                   obscureText: false,
                   themeColor: getThemeColor(),
                 ),
@@ -104,22 +115,21 @@ class _AddDiningTableCategoryPageState extends State<AddDiningTableCategoryPage>
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: PrimaryButton(
-            text: 'Save',
+            text: 'Update',
             backgroundColor: getThemeColor(),
             color: ColorStyle.background100,
             height: 50.0,
             onTap: () async {
-              if(_controllerCategoryName.text.trim() == ''){
-                showSnackBar(context, '* Category name required');
+              if (_controllerWaiterName.text.trim() == '') {
+                showSnackBar(context, '* Waiter name required');
                 return;
               }
-              var response = await DiningTableCategory.add({'image': pickedImagePath, 'name': _controllerCategoryName.text});
-              if(response != null){
-                showSnackBar(context, 'Successfully created');
+              var response = await Waiter.add({'image': pickedImagePath, 'name': _controllerWaiterName.text});
+              if (response != null) {
+                showSnackBar(context, 'Successfully update');
                 clearFields();
-              }
-              else{
-                showSnackBar(context, 'Failed to create');
+              } else {
+                showSnackBar(context, 'Failed to update');
               }
             },
           ),

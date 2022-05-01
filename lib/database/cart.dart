@@ -5,7 +5,9 @@ class Cart{
     'id': {
       'name': '',
       'description': '',
-      'price': 0.0,
+      'billingPrice': 0.0,
+      'mrp': 0.0,
+      'salePrice': 0.0,
       'image': '',
       'discount': '',
       'tax': '',

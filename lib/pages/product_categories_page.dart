@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:restaurant_pos/components/product_category_card.dart';
 import 'package:restaurant_pos/database/product_category.dart';
 import 'package:restaurant_pos/pages/add_product_category_page.dart';
+import 'package:restaurant_pos/pages/edit_product_category_page.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class ProductCategoriesPage extends StatefulWidget {
@@ -40,6 +41,13 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
                           id: category['id'],
                           name: category['name'],
                           image: category['image'],
+                          onTap: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const EditProductCategoryPage()),
+                            );
+                          },
                         )
                     ],
                   );

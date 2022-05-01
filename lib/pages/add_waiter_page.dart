@@ -110,6 +110,10 @@ class _AddWaiterPageState extends State<AddWaiterPage> {
             color: ColorStyle.background100,
             height: 50.0,
             onTap: () async {
+              if(_controllerWaiterName.text.trim() == ''){
+                showSnackBar(context, '* Waiter name required');
+                return;
+              }
               var response = await Waiter.add({'image': pickedImagePath, 'name': _controllerWaiterName.text});
               if(response != null){
                 showSnackBar(context, 'Successfully created');

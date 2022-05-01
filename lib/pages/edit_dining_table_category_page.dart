@@ -6,31 +6,42 @@ import 'package:restaurant_pos/components/upload_button.dart';
 import 'package:restaurant_pos/database/dining_table_category.dart';
 import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
-class AddDiningTableCategoryPage extends StatefulWidget {
-  const AddDiningTableCategoryPage({Key? key}) : super(key: key);
+
+class EditDiningTableCategoryPage extends StatefulWidget {
+  const EditDiningTableCategoryPage({Key? key}) : super(key: key);
 
   @override
-  State<AddDiningTableCategoryPage> createState() => _AddDiningTableCategoryPageState();
+  State<EditDiningTableCategoryPage> createState() => _EditDiningTableCategoryPageState();
 }
 
-class _AddDiningTableCategoryPageState extends State<AddDiningTableCategoryPage> {
+class _EditDiningTableCategoryPageState extends State<EditDiningTableCategoryPage> {
   String? pickedImagePath;
   final TextEditingController _controllerCategoryName = TextEditingController();
 
-  clearFields(){
+  clearFields() {
     setState(() {
       pickedImagePath = null;
       _controllerCategoryName.text = '';
     });
   }
+
   Color getThemeColor() {
     return ColorStyle.tertiary;
   }
+
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
       backgroundColor: getThemeColor(),
-      title: const Text('Add Dining Table Category'),
+      title: const Text('Edit Dining Table Category'),
+      actions: [
+        TextButton(
+          onPressed: () {
+            // Delete safely
+          },
+          child: const Text('Delete'),
+        )
+      ],
     );
     return Scaffold(
       appBar: appBar,
@@ -104,22 +115,22 @@ class _AddDiningTableCategoryPageState extends State<AddDiningTableCategoryPage>
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: PrimaryButton(
-            text: 'Save',
+            text: 'Update',
             backgroundColor: getThemeColor(),
             color: ColorStyle.background100,
             height: 50.0,
             onTap: () async {
-              if(_controllerCategoryName.text.trim() == ''){
+              if (_controllerCategoryName.text.trim() == '') {
                 showSnackBar(context, '* Category name required');
                 return;
               }
-              var response = await DiningTableCategory.add({'image': pickedImagePath, 'name': _controllerCategoryName.text});
-              if(response != null){
-                showSnackBar(context, 'Successfully created');
+              var response =
+                  await DiningTableCategory.add({'image': pickedImagePath, 'name': _controllerCategoryName.text});
+              if (response != null) {
+                showSnackBar(context, 'Successfully updated');
                 clearFields();
-              }
-              else{
-                showSnackBar(context, 'Failed to create');
+              } else {
+                showSnackBar(context, 'Failed to update');
               }
             },
           ),

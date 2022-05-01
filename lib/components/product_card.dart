@@ -147,13 +147,13 @@ class ProductCard extends StatelessWidget {
                                           '${currencySymbol ?? ''}$otherPrice',
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
-                                              fontSize: 14.0,
-                                              fontWeight: FontWeight.w500,
-                                              color: ColorStyle.text400,
-                                              decorationColor: ColorStyle.text400,
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.w400,
+                                              color: ColorStyle.text300,
+                                              decorationColor: ColorStyle.text300,
                                               decoration: TextDecoration.lineThrough,
                                               decorationStyle: TextDecorationStyle.solid,
-                                              decorationThickness: 3.0),
+                                              decorationThickness: 2.0),
                                         )
                                             :
                                         Container(),

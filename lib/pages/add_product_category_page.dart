@@ -110,6 +110,10 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
             color: ColorStyle.background100,
             height: 50.0,
             onTap: () async {
+              if(_controllerCategoryName.text.trim() == ''){
+                showSnackBar(context, '* Category name required');
+                return;
+              }
               var response = await ProductCategory.add({'image': pickedImagePath, 'name': _controllerCategoryName.text});
               if(response != null){
                 showSnackBar(context, 'Successfully created');

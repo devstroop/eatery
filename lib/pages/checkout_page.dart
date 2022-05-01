@@ -1,11 +1,13 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:restaurant_pos/components/bottom_view_grip.dart';
 import 'package:restaurant_pos/components/cart_product_card.dart';
 import 'package:restaurant_pos/components/checkout_product_card.dart';
 import 'package:restaurant_pos/components/custom_button.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/components/upload_button.dart';
+import 'package:restaurant_pos/database/cart.dart';
 import 'package:restaurant_pos/database/dining_table_category.dart';
 import 'package:restaurant_pos/extensions/calculations.dart';
 import 'package:restaurant_pos/models/order_type.dart';
@@ -26,8 +28,56 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
+
+
+
+  Widget buildWaiterSelectionViewBottomSheet() => StatefulBuilder(builder: (context, state) {
+    return ListView(shrinkWrap: true, children: [
+      const Center(
+        child: BottomViewGrip(),
+      ),
+      Padding(
+        padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
+        child: Text(
+          'Select Waiter',
+          style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
+        ),
+      ),
+      const SizedBox(
+        height: 20.0,
+      ),
+    ]);
+  });
+
+  Widget buildCustomerDetailsFormBottomSheet() => StatefulBuilder(builder: (context, state) {
+    return ListView(shrinkWrap: true, children: [
+      const Center(
+        child: BottomViewGrip(),
+      ),
+      Padding(
+        padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
+        child: Text(
+          'Customer details',
+          style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
+        ),
+      ),
+      const SizedBox(
+        height: 20.0,
+      ),
+    ]);
+  });
   @override
   Widget build(BuildContext context) {
+    final double total = Calculations.calculateTotal(cart: widget.cart);
+    final double discountTotal = Calculations.calculateDiscountTotal(cart: widget.cart);
+    final double additionalDiscountTotal = Calculations.calculateAdditionalDiscountTotal(cart: widget.cart);
+    final double taxableTotal = Calculations.calculateTaxableTotal(cart: widget.cart);
+    final double taxTotal = Calculations.calculateTaxTotal(cart: widget.cart);
+    final double finalTotal = Calculations.calculateFinalTotal(cart: widget.cart);
+    final String? taxSlabs = Calculations.getAllTaxSlabsApplied(cart: widget.cart);
+    final int finalTotalAfterRoundOff = Calculations.calculateRoundOff(finalTotal: finalTotal);
+    final double roundOff = double.parse((finalTotalAfterRoundOff - finalTotal).toStringAsFixed(2));
+
     final appBar = AppBar(
       backgroundColor: widget.orderType.color,
       title: const Text('Checkout'),
@@ -54,7 +104,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     'Order type',
                     style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
                   ),
-                  SizedBox(height: 8.0,),
+                  const SizedBox(height: 8.0,),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -71,7 +121,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               widget.orderType.text!,
                               textAlign: TextAlign.start,
                               style: TextStyle(
-                                color: ColorStyle.text300,
+                                color: ColorStyle.text200,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -83,7 +133,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         padding: const EdgeInsetsDirectional.fromSTEB(6, 0, 0, 0),
                         child: TextButton(
                           onPressed: (){
-
+                            Navigator.pop(context, "changeOrderType");
                           },
                           child: Text(
                             'Change',
@@ -120,9 +170,17 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       ),
                       CustomButton(
                         text: 'Edit',
-                        onTap: (){
-
-                        },
+                        onTap: ()=> showModalBottomSheet(
+                            shape: const RoundedRectangleBorder(
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(24),
+                                topRight: Radius.circular(24),
+                                bottomLeft: Radius.circular(0),
+                                bottomRight: Radius.circular(0),
+                              ),
+                            ),
+                            context: context,
+                            builder: (context) => buildCustomerDetailsFormBottomSheet()),
                       )
                     ],
                   ),
@@ -144,14 +202,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 style: TextStyle(
                                   color: ColorStyle.text300,
                                   fontSize: 16,
-                                  fontWeight: FontWeight.w300,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
                               Text(
                                 'Cash',
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                  color: ColorStyle.text300,
+                                  color: ColorStyle.text200,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -179,14 +237,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 style: TextStyle(
                                   color: ColorStyle.text300,
                                   fontSize: 16,
-                                  fontWeight: FontWeight.w300,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
                               Text(
-                                'NA',
+                                'Not available',
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                  color: ColorStyle.text300,
+                                  color: ColorStyle.text200,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -214,14 +272,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 style: TextStyle(
                                   color: ColorStyle.text300,
                                   fontSize: 16,
-                                  fontWeight: FontWeight.w300,
+                                  fontWeight: FontWeight.w400,
                                 ),
                               ),
                               Text(
                                 widget.diningTableName!,
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                  color: ColorStyle.text300,
+                                  color: ColorStyle.text200,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -238,8 +296,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
               margin: const EdgeInsets.only(bottom: 12.0),
               color: ColorStyle.background100,
-              child: ListView(
-                shrinkWrap: true,
+              child: Column(
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -251,7 +308,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       CustomButton(
                         text: 'Edit',
                         onTap: (){
-
+                          Navigator.pop(context, "cartUpdate");
                         },
                       )
                     ],
@@ -263,7 +320,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       id: id,
                       name: widget.cart[id]!['name'],
                       description: widget.cart[id]!['description'],
-                      priceTotal: widget.cart[id]!['price'] * widget.cart[id]!['quantity'],
+                      priceTotal: widget.cart[id]!['billingPrice'] * widget.cart[id]!['quantity'],
                       customizationPriceTotal:
                       Calculations.calculateCustomizationsTotal(widget.cart[id]!['customizations']) ?? 0,
                       image: widget.cart[id]!['image'],
@@ -276,7 +333,335 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   ),
                 ],
               ),
-            )
+            ),
+
+            Container(
+              padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
+              margin: const EdgeInsets.only(bottom: 12.0),
+              color: ColorStyle.background100,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Waiter assigned',
+                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
+                  ),
+                  const SizedBox(height: 8.0,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                            child: Icon(Icons.person, color: ColorStyle.text300,),
+                          ),
+                          Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                            child: Text(
+                              'Not available',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                color: ColorStyle.text300,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(6, 0, 0, 0),
+                        child: TextButton(
+                          onPressed: () => showModalBottomSheet(
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(24),
+                                  topRight: Radius.circular(24),
+                                  bottomLeft: Radius.circular(0),
+                                  bottomRight: Radius.circular(0),
+                                ),
+                              ),
+                              context: context,
+                              builder: (context) => buildWaiterSelectionViewBottomSheet()),
+                          child: Text(
+                            'Change',
+                            textAlign: TextAlign.start,
+                            style: TextStyle(
+                              color: widget.orderType.color,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+            Container(
+              padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
+              margin: const EdgeInsets.only(bottom: 12.0),
+              color: ColorStyle.background100,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'Total summary',
+                    style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
+                  ),
+                  const SizedBox(height: 8.0,),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                        child: Text(
+                          'Total',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: ColorStyle.text300,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                        child: Text(
+                          '${widget.account['currencySymbol']}$total',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: ColorStyle.text200,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  discountTotal > 0 ? const SizedBox(height: 8.0,) : Container(),
+                  discountTotal > 0 ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                        child: Text(
+                          'Discount',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: ColorStyle.information,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                        child: Text(
+                          '- ${widget.account['currencySymbol']}$discountTotal',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: ColorStyle.information,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ) : Container(),
+                  additionalDiscountTotal > 0 ? const SizedBox(height: 8.0,) : Container(),
+                  additionalDiscountTotal > 0 ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                        child: Text(
+                          'Additional discount',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: ColorStyle.information,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                        child: Text(
+                          '- ${widget.account['currencySymbol']}$additionalDiscountTotal',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: ColorStyle.information,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ) : Container(),
+                  const SizedBox(height: 8.0,),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                        child: Text(
+                          'Taxable',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: ColorStyle.text300,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                        child: Text(
+                          '${widget.account['currencySymbol']}$taxableTotal',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: ColorStyle.text200,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  taxTotal > 0 ? const SizedBox(height: 8.0,) : Container(),
+                  taxTotal > 0 ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                        child: Row(
+                          children: [
+                            Text(
+                              "GST",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  color: ColorStyle.text300,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            Text(
+                              taxSlabs != null ? '($taxSlabs)' : "",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                  color: ColorStyle.text200,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                  overflow: TextOverflow.clip
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                        child: Text(
+                          '${widget.account['currencySymbol']}$taxTotal',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: ColorStyle.text200,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ) : Container(),
+                  roundOff != 0 ? const SizedBox(height: 8.0,) : Container(),
+                  roundOff != 0 ? Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                            child: Text(
+                              'Round off',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                color: ColorStyle.text300,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                            child: Text(
+                              '(+/-)',
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                color: ColorStyle.text200,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                        child: Text(
+                          roundOff < 0 ? '- ${widget.account['currencySymbol']}${roundOff.abs()}' : '${widget.account['currencySymbol']}$roundOff',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: ColorStyle.text200,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ) : Container(),
+                  const SizedBox(height: 12.0,),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                        child: Text(
+                          'Final total',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: ColorStyle.text200,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                        child: Text(
+                          '${widget.account['currencySymbol']}$finalTotalAfterRoundOff',
+                          textAlign: TextAlign.start,
+                          style: TextStyle(
+                            color: ColorStyle.text200,
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+            ),
+
           ],
         ),
       ),

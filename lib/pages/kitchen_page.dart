@@ -13,6 +13,7 @@ import 'package:restaurant_pos/database/product_category.dart';
 import 'package:restaurant_pos/extensions/calculations.dart';
 import 'package:restaurant_pos/models/order_type.dart';
 import 'package:restaurant_pos/pages/add_kitchen_dish_page.dart';
+import 'package:restaurant_pos/pages/edit_kitchen_dish_page.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class KitchenPage extends StatefulWidget {
@@ -186,6 +187,13 @@ class _KitchenPageState extends State<KitchenPage> {
                           image: product['image'],
                           foodType: product['foodType'],
                           themeColor: getThemeColor(),
+                          onTap: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EditKitchenDish(account: widget.account)),
+                            );
+                          },
                         )
                     ],
                   );

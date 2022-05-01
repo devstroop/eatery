@@ -16,6 +16,7 @@ import 'package:restaurant_pos/style/color_style.dart';
 class AddKitchenDish extends StatefulWidget {
   const AddKitchenDish({Key? key, required this.account}) : super(key: key);
   final dynamic account;
+
   @override
   State<AddKitchenDish> createState() => _AddKitchenDishState();
 }
@@ -349,7 +350,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                 const SizedBox(
                   height: 6.0,
                 ),
-                Row(
+                /*Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
@@ -384,7 +385,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                 ),
                 const SizedBox(
                   height: 6.0,
-                ),
+                ),*/
                 const SizedBox(
                   height: 6.0,
                 ),
@@ -415,7 +416,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                             ),
                           ],
                         ),
-                        enabled: selectedTaxType != null,
+                        /*enabled: selectedTaxType != null,*/
                         controller: _controllerTax,
                         labelText: '0.00',
                         obscureText: false,
@@ -458,7 +459,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                   ),
                   CustomTextFromField(
                     controller: _controllerDescription,
-                    labelText: 'eg. Lays',
+                    labelText: '- Describe your dish \n- Highlight ingredients used\n- Keep it simple',
                     obscureText: false,
                     themeColor: getThemeColor(),
                     minLines: 4,
@@ -480,6 +481,18 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
             color: ColorStyle.background100,
             height: 50.0,
             onTap: () async {
+              if (_controllerProductName.text.trim() == '') {
+                showSnackBar(context, '* Product name required');
+                return;
+              }
+              if (_controllerMRP.text.trim() == '' && _controllerSalePrice.text.trim() == '') {
+                showSnackBar(context, '* MRP or Sale Price required');
+                return;
+              }
+              if (selectedCategory == null) {
+                showSnackBar(context, '* Select category');
+                return;
+              }
               var response = await Product.add({
                 'name': _controllerProductName.text,
                 'category': selectedCategory,

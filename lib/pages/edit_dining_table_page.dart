@@ -11,33 +11,44 @@ import 'package:restaurant_pos/database/dining_table_category.dart';
 import 'package:restaurant_pos/pages/dining_table_categories_page.dart';
 import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
-class AddDiningTablePage extends StatefulWidget {
-  const AddDiningTablePage({Key? key}) : super(key: key);
+
+class EditDiningTablePage extends StatefulWidget {
+  const EditDiningTablePage({Key? key}) : super(key: key);
 
   @override
-  State<AddDiningTablePage> createState() => _AddDiningTablePageState();
+  State<EditDiningTablePage> createState() => _EditDiningTablePageState();
 }
 
-class _AddDiningTablePageState extends State<AddDiningTablePage> {
+class _EditDiningTablePageState extends State<EditDiningTablePage> {
   String? pickedImagePath;
   String? selectedDiningTableCategory;
   final TextEditingController _controllerCategoryName = TextEditingController();
 
-  clearFields(){
+  clearFields() {
     setState(() {
       pickedImagePath = null;
       selectedDiningTableCategory = null;
       _controllerCategoryName.text = '';
     });
   }
+
   Color getThemeColor() {
     return ColorStyle.tertiary;
   }
+
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
       backgroundColor: getThemeColor(),
-      title: const Text('Add Dining Table'),
+      title: const Text('Edit Dining Table'),
+      actions: [
+        TextButton(
+          onPressed: () {
+            // Delete safely
+          },
+          child: const Text('Delete'),
+        )
+      ],
     );
     return Scaffold(
       appBar: appBar,
@@ -128,8 +139,8 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                                             label: category['name'],
                                             onTap: () {
                                               setState(
-                                                    () {
-                                                      selectedDiningTableCategory = category['id'];
+                                                () {
+                                                  selectedDiningTableCategory = category['id'];
                                                 },
                                               );
                                             })
@@ -157,26 +168,29 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: PrimaryButton(
-            text: 'Save',
+            text: 'Update',
             backgroundColor: getThemeColor(),
             color: ColorStyle.background100,
             height: 50.0,
             onTap: () async {
-              if(_controllerCategoryName.text.trim() == ''){
+              if (_controllerCategoryName.text.trim() == '') {
                 showSnackBar(context, '* Dining table name required');
                 return;
               }
-              if(selectedDiningTableCategory != null){
+              if (selectedDiningTableCategory != null) {
                 showSnackBar(context, '* Select category');
                 return;
               }
-              var response = await DiningTable.add({'image': pickedImagePath, 'name': _controllerCategoryName.text, 'category': selectedDiningTableCategory});
-              if(response != null){
-                showSnackBar(context, 'Successfully created');
+              var response = await DiningTable.add({
+                'image': pickedImagePath,
+                'name': _controllerCategoryName.text,
+                'category': selectedDiningTableCategory
+              });
+              if (response != null) {
+                showSnackBar(context, 'Successfully update');
                 clearFields();
-              }
-              else{
-                showSnackBar(context, 'Failed to create');
+              } else {
+                showSnackBar(context, 'Failed to update');
               }
             },
           ),

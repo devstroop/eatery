@@ -262,7 +262,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                       width: 6.0,
                     ),
                     Text(
-                      '${widget.account['currencySymbol']}${Calculations.calculateSubtotal()}',
+                      '${widget.account['currencySymbol']}${Calculations.calculateTaxableTotal(cart: Cart.cart)}',
                       style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
                     )
                   ],
@@ -277,7 +277,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                 id: id,
                 name: Cart.cart[id]!['name'],
                 description: Cart.cart[id]!['description'],
-                priceTotal: Cart.cart[id]!['price'] * Cart.cart[id]!['quantity'],
+                priceTotal: Cart.cart[id]!['billingPrice'] * Cart.cart[id]!['quantity'],
                 customizationPriceTotal:
                     Calculations.calculateCustomizationsTotal(Cart.cart[id]!['customizations']) ?? 0,
                 image: Cart.cart[id]!['image'],
@@ -323,24 +323,6 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
         ]);
       });
 
-  Widget buildWaiterSelectionViewBottomSheet() => StatefulBuilder(builder: (context, state) {
-        return ListView(shrinkWrap: true, children: [
-          const Center(
-            child: BottomViewGrip(),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
-            child: Text(
-              'Select Waiter',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
-            ),
-          ),
-          const SizedBox(
-            height: 20.0,
-          ),
-        ]);
-      });
-
   Widget buildProductDetailedViewBottomSheet({required Map<String, dynamic> product}) =>
       StatefulBuilder(builder: (context, state) {
         return ListView(
@@ -376,14 +358,19 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                   Cart.cart[product['id']] = {
                     'name': product['name'],
                     'description': product['description'],
-                    'price': Calculations.getProductBillingPrice(
+                    'billingPrice': Calculations.getProductBillingPrice(
                         mrp: product['mrp'] != null && product['mrp'] != '' ? double.parse(product['mrp']) : null,
                         salePrice: product['salePrice'] != null && product['salePrice'] != ''
                             ? double.parse(product['salePrice'])
                             : null),
+                    'mrp': product['mrp'] != null && product['mrp'] != '' ? double.parse(product['mrp']) : null,
+                    'salePrice': product['salePrice'] != null && product['salePrice'] != ''
+                        ? double.parse(product['salePrice'])
+                        : null,
                     'image': product['image'],
-                    'discount': product['discount'],
-                    'tax': product['tax'],
+                    'discount': product['discount'] != null && product['discount'] != '' ? double.parse(product['discount']) : null,
+                    'tax': product['tax'] != null && product['tax'] != '' ? double.parse(product['tax']) : null,
+                    'taxType': product['taxType'],
                     'quantity': 1.0, // Unit value
                     'unit': product['unit'],
                     'customizations': [],
@@ -562,16 +549,22 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                             Cart.cart[product['id']] = {
                               'name': product['name'],
                               'description': product['description'],
-                              'price': Calculations.getProductBillingPrice(
+                              'billingPrice': Calculations.getProductBillingPrice(
                                   mrp: product['mrp'] != null && product['mrp'] != ''
                                       ? double.parse(product['mrp'])
                                       : null,
                                   salePrice: product['salePrice'] != null && product['salePrice'] != ''
                                       ? double.parse(product['salePrice'])
                                       : null),
+                              'mrp':
+                                  product['mrp'] != null && product['mrp'] != '' ? double.parse(product['mrp']) : null,
+                              'salePrice': product['salePrice'] != null && product['salePrice'] != ''
+                                  ? double.parse(product['salePrice'])
+                                  : null,
                               'image': product['image'],
-                              'discount': product['discount'],
-                              'tax': product['tax'],
+                              'discount': product['discount'] != null && product['discount'] != '' ? double.parse(product['discount']) : null,
+                              'tax': product['tax'] != null && product['tax'] != '' ? double.parse(product['tax']) : null,
+                              'taxType': product['taxType'],
                               'quantity': 1.0, // Unit value
                               'unit': product['unit'],
                               'customizations': [],
@@ -679,7 +672,33 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                               diningTable: selectedDiningTable,
                               diningTableName: selectedDiningTableName,
                             )),
-                  );
+                  ).then((value) {
+                    if (value == "changeOrderType") {
+                      showModalBottomSheet(
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(24),
+                              topRight: Radius.circular(24),
+                              bottomLeft: Radius.circular(0),
+                              bottomRight: Radius.circular(0),
+                            ),
+                          ),
+                          context: context,
+                          builder: (context) => buildPOSModeSelectionBottomSheet());
+                    } else if (value == 'cartUpdate') {
+                      showModalBottomSheet(
+                          shape: const RoundedRectangleBorder(
+                            borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(24),
+                              topRight: Radius.circular(24),
+                              bottomLeft: Radius.circular(0),
+                              bottomRight: Radius.circular(0),
+                            ),
+                          ),
+                          context: context,
+                          builder: (context) => buildCartViewBottomSheet());
+                    }
+                  });
                 },
               ),
             ),
@@ -692,7 +711,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
         ? selectedDiningTable != null
             ? FloatingActionButton.extended(
                 backgroundColor: orderType.color,
-                icon: const Icon(Icons.local_dining),
+                icon: const Icon(Icons.chair),
                 label: Text(selectedDiningTableName!),
                 onPressed: () => showModalBottomSheet(
                     shape: const RoundedRectangleBorder(
@@ -724,7 +743,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
               )
         : Container();
 
-    final waiterSelectionButton = orderType == OrderType.dineIn
+    /*final waiterSelectionButton = orderType == OrderType.dineIn
         ? selectedDiningTable != null
             ? FloatingActionButton.extended(
                 backgroundColor: orderType.color,
@@ -758,7 +777,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                     context: context,
                     builder: (context) => buildWaiterSelectionViewBottomSheet()),
               )
-        : Container();
+        : Container();*/
 
     final cartStrip = Cart.cart.isNotEmpty
         ? Container(
@@ -785,7 +804,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                     Row(
                       children: [
                         Text(
-                          '${Cart.cart.length} Item | ${widget.account['currencySymbol']}${Calculations.calculateSubtotal()}',
+                          '${Cart.cart.length} Item | ${widget.account['currencySymbol']}${Calculations.calculateTaxableTotal(cart: Cart.cart)}',
                           style: TextStyle(fontWeight: FontWeight.bold, color: ColorStyle.background200),
                         )
                       ],

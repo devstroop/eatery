@@ -8,6 +8,7 @@ import 'package:restaurant_pos/database/dining_table.dart';
 import 'package:restaurant_pos/database/dining_table_category.dart';
 import 'package:restaurant_pos/pages/add_dining_table_page.dart';
 import 'package:restaurant_pos/pages/dining_table_categories_page.dart';
+import 'package:restaurant_pos/pages/edit_dining_table_page.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class DiningTablesPage extends StatefulWidget {
@@ -131,6 +132,13 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                           id: product['id'],
                           name: product['name'],
                           image: product['image'],
+                          onTap: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const EditDiningTablePage()),
+                            );
+                          },
                         )
 
                     ],

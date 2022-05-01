@@ -13,14 +13,15 @@ import 'package:restaurant_pos/database/product_category.dart';
 import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
-class AddInventoryItemPage extends StatefulWidget {
-  const AddInventoryItemPage({Key? key, required this.account}) : super(key: key);
+class EditInventoryItemPage extends StatefulWidget {
+  const EditInventoryItemPage({Key? key, required this.account}) : super(key: key);
   final dynamic account;
+
   @override
-  State<AddInventoryItemPage> createState() => _AddInventoryItemPageState();
+  State<EditInventoryItemPage> createState() => _EditInventoryItemPageState();
 }
 
-class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
+class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
   String? pickedImagePath;
   String? selectedCategory;
   String? selectedFoodType;
@@ -60,7 +61,15 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
 
     final appBar = AppBar(
       backgroundColor: getThemeColor(),
-      title: const Text('Add Item'),
+      title: const Text('Edit Item'),
+      actions: [
+        TextButton(
+          onPressed: () {
+            // Delete safely
+          },
+          child: const Text('Delete'),
+        )
+      ],
     );
     final categoryBar = SizedBox(
       width: double.maxFinite,
@@ -75,21 +84,20 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
                     return Row(
-                        mainAxisSize: MainAxisSize.max,
+                      mainAxisSize: MainAxisSize.max,
                       children: [
                         for (var category in snapshot.data)
-                      PosCategoryWidget(
-                          active: selectedCategory == category['id'],
-                          image: File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
-                          label: category['name'],
-                          onTap: () {
-                            setState(
+                          PosCategoryWidget(
+                              active: selectedCategory == category['id'],
+                              image: File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
+                              label: category['name'],
+                              onTap: () {
+                                setState(
                                   () {
-                                selectedCategory = category['id'];
-                              },
-                            );
-                          })
-
+                                    selectedCategory = category['id'];
+                                  },
+                                );
+                              })
                       ],
                     );
                   }
@@ -264,21 +272,25 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
                       ),
                     ),
                     Flexible(
-                      child: InkWell(onTap: (){
-                        if(selectedFoodType == 'veg'){
-                          setState((){
-                            selectedFoodType = 'nonVeg';
-                          });
-                        }else if(selectedFoodType == 'nonVeg'){
-                          setState((){
-                            selectedFoodType = null;
-                          });
-                        }else{
-                          setState((){
-                            selectedFoodType = 'veg';
-                          });
-                        }
-                      },child: FoodTypeSelectionWidget(foodType: selectedFoodType,)),
+                      child: InkWell(
+                          onTap: () {
+                            if (selectedFoodType == 'veg') {
+                              setState(() {
+                                selectedFoodType = 'nonVeg';
+                              });
+                            } else if (selectedFoodType == 'nonVeg') {
+                              setState(() {
+                                selectedFoodType = null;
+                              });
+                            } else {
+                              setState(() {
+                                selectedFoodType = 'veg';
+                              });
+                            }
+                          },
+                          child: FoodTypeSelectionWidget(
+                            foodType: selectedFoodType,
+                          )),
                     ),
                   ],
                 ),
@@ -413,7 +425,6 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
                         labelText: '0.00',
                         obscureText: false,
                         themeColor: getThemeColor(),
-
                       ),
                     ),
                   ],
@@ -469,44 +480,43 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: PrimaryButton(
-            text: 'Save',
+            text: 'Update',
             backgroundColor: getThemeColor(),
             color: ColorStyle.background100,
             height: 50.0,
             onTap: () async {
-              if(_controllerProductName.text.trim() == ''){
+              if (_controllerProductName.text.trim() == '') {
                 showSnackBar(context, '* Product name required');
                 return;
               }
-              if(_controllerMRP.text.trim() == '' && _controllerSalePrice.text.trim() == ''){
+              if (_controllerMRP.text.trim() == '' && _controllerSalePrice.text.trim() == '') {
                 showSnackBar(context, '* MRP or Sale Price required');
                 return;
               }
-              if(selectedCategory == null){
+              if (selectedCategory == null) {
                 showSnackBar(context, '* Select category');
                 return;
               }
-              var response =
-                  await Product.add({
-                    'name': _controllerProductName.text,
-                    'category': selectedCategory,
-                    'description': _controllerDescription.text,
-                    'quantity': _controllerQuantity.text,
-                    'warningQuantity': _controllerWarningQuantity.text,
-                    'unit': '',
-                    'mrp': _controllerMRP.text,
-                    'salePrice': _controllerSalePrice.text,
-                    'foodType': selectedFoodType,
-                    'taxType': selectedTaxType,
-                    'tax': _controllerTax.text,
-                    'image': pickedImagePath,
-                    'as': 'item'
-                  });
+              var response = await Product.add({
+                'name': _controllerProductName.text,
+                'category': selectedCategory,
+                'description': _controllerDescription.text,
+                'quantity': _controllerQuantity.text,
+                'warningQuantity': _controllerWarningQuantity.text,
+                'unit': '',
+                'mrp': _controllerMRP.text,
+                'salePrice': _controllerSalePrice.text,
+                'foodType': selectedFoodType,
+                'taxType': selectedTaxType,
+                'tax': _controllerTax.text,
+                'image': pickedImagePath,
+                'as': 'item'
+              });
               if (response != null) {
-                showSnackBar(context, 'Successfully created');
+                showSnackBar(context, 'Successfully update');
                 clearFields();
               } else {
-                showSnackBar(context, 'Failed to create');
+                showSnackBar(context, 'Failed to update');
               }
             },
           ),

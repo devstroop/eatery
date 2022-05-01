@@ -41,7 +41,7 @@ class CheckoutProductCard extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Flexible(
-              flex: 6,
+              flex: 5,
               child: Row(
                 children: [
                   Container(
@@ -78,8 +78,7 @@ class CheckoutProductCard extends StatelessWidget {
                   ),
                 ],
               )),
-          Flexible(
-              flex: 3,
+          /*Flexible(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -88,7 +87,7 @@ class CheckoutProductCard extends StatelessWidget {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(4),
                       border: Border.all(
-                        color: ColorStyle.primary /*themeColor!*/,
+                        color: ColorStyle.primary *//*themeColor!*//*,
                         width: 2,
                       ),
                     ),
@@ -137,19 +136,30 @@ class CheckoutProductCard extends StatelessWidget {
                     onTap: onDeleteAll,
                   ) : Container()
                 ],
-              )),
+              )),*/
+          Flexible(
+            child: Column(
+              children: [
+                Text(
+                  'x ${Calculations.compressDoubleToString(cartQuantity)} ',
+                  overflow: TextOverflow.visible,
+                  style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500, color: ColorStyle.text200),
+                ),
+              ],
+            ),
+          ),
           Flexible(
             child: Column(
             children: [
               Text(
                 (currencySymbol ?? '') + '$priceTotal',
-                overflow: TextOverflow.ellipsis,
+                overflow: TextOverflow.visible,
                 style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500, color: ColorStyle.text200),
               ),
               customizationPriceTotal > 0
                   ? Text(
                 ' + ' + (currencySymbol ?? '') + '$customizationPriceTotal',
-                overflow: TextOverflow.ellipsis,
+                overflow: TextOverflow.visible,
                 style:
                 TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500, color: ColorStyle.information),
               )

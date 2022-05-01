@@ -8,6 +8,7 @@ import 'package:restaurant_pos/database/dining_table.dart';
 import 'package:restaurant_pos/database/dining_table_category.dart';
 import 'package:restaurant_pos/database/waiter.dart';
 import 'package:restaurant_pos/pages/add_waiter_page.dart';
+import 'package:restaurant_pos/pages/edit_waiter_page.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class WaitersPage extends StatefulWidget {
@@ -52,6 +53,13 @@ class _WaitersPageState extends State<WaitersPage> {
                           id: waiter['id'],
                           name: waiter['name'],
                           image: waiter['image'],
+                          onTap: (){
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => const EditWaiterPage()),
+                            );
+                          },
                         )
                     ],
                   );
