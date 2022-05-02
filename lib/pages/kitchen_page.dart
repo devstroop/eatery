@@ -192,7 +192,7 @@ class _KitchenPageState extends State<KitchenPage> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => EditKitchenDish(account: widget.account, id: product['id'])),
-                            );
+                            ).then((_) => setState(() {}));
                           },
                         )
                     ],
@@ -238,7 +238,7 @@ class _KitchenPageState extends State<KitchenPage> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => AddKitchenDish(account: widget.account,)),
-          );
+          ).then((_) => setState(() {}));
         },
       ),
     );

@@ -17,12 +17,6 @@ class _AddDiningTableCategoryPageState extends State<AddDiningTableCategoryPage>
   String? pickedImagePath;
   final TextEditingController _controllerCategoryName = TextEditingController();
 
-  clearFields(){
-    setState(() {
-      pickedImagePath = null;
-      _controllerCategoryName.text = '';
-    });
-  }
   Color getThemeColor() {
     return ColorStyle.tertiary;
   }
@@ -116,7 +110,7 @@ class _AddDiningTableCategoryPageState extends State<AddDiningTableCategoryPage>
               var response = await DiningTableCategory.add({'image': pickedImagePath, 'name': _controllerCategoryName.text});
               if(response != null){
                 showSnackBar(context, 'Successfully created');
-                clearFields();
+                Navigator.pop(context);
               }
               else{
                 showSnackBar(context, 'Failed to create');

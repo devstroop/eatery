@@ -33,21 +33,6 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
   final TextEditingController _controllerTax = TextEditingController();
   final TextEditingController _controllerDescription = TextEditingController();
 
-  clearFields() {
-    setState(() {
-      pickedImagePath = null;
-      selectedCategory = null;
-      selectedFoodType = null;
-      _controllerProductName.text = '';
-      _controllerQuantity.text = '';
-      _controllerWarningQuantity.text = '';
-      _controllerSalePrice.text = '';
-      _controllerMRP.text = '';
-      _controllerTax.text = '';
-      _controllerDescription.text = '';
-    });
-  }
-
   Color getThemeColor() {
     return ColorStyle.tertiary;
   }
@@ -504,7 +489,7 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
                   });
               if (response != null) {
                 showSnackBar(context, 'Successfully created');
-                clearFields();
+                Navigator.pop(context);
               } else {
                 showSnackBar(context, 'Failed to create');
               }

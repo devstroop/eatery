@@ -8,7 +8,6 @@ import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/components/upload_button.dart';
 import 'package:restaurant_pos/database/dining_table.dart';
 import 'package:restaurant_pos/database/dining_table_category.dart';
-import 'package:restaurant_pos/pages/dining_table_categories_page.dart';
 import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 class AddDiningTablePage extends StatefulWidget {
@@ -23,13 +22,6 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
   String? selectedDiningTableCategory;
   final TextEditingController _controllerCategoryName = TextEditingController();
 
-  clearFields(){
-    setState(() {
-      pickedImagePath = null;
-      selectedDiningTableCategory = null;
-      _controllerCategoryName.text = '';
-    });
-  }
   Color getThemeColor() {
     return ColorStyle.tertiary;
   }
@@ -173,7 +165,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
               var response = await DiningTable.add({'image': pickedImagePath, 'name': _controllerCategoryName.text, 'category': selectedDiningTableCategory});
               if(response != null){
                 showSnackBar(context, 'Successfully created');
-                clearFields();
+                Navigator.pop(context);
               }
               else{
                 showSnackBar(context, 'Failed to create');

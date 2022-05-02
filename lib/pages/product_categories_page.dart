@@ -46,7 +46,7 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => EditProductCategoryPage(id: category['id'],)),
-                            );
+                            ).then((_) => setState(() {}));
                           },
                         )
                     ],
@@ -89,7 +89,7 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const AddProductCategoryPage()),
-          );
+          ).then((_) => setState(() {}));
         },
       ),
     );

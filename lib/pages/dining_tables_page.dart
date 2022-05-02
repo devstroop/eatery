@@ -137,7 +137,7 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                               context,
                               MaterialPageRoute(
                                   builder: (context) => EditDiningTablePage(id: product['id'])),
-                            );
+                            ).then((_) => setState(() {}));
                           },
                         )
 
@@ -184,7 +184,7 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const AddDiningTablePage()),
-          );
+          ).then((_) => setState(() {}));
         },
       ),
     );

@@ -196,7 +196,7 @@ class _InventoryPageState extends State<InventoryPage> {
                                   context,
                                   MaterialPageRoute(
                                       builder: (context) => EditInventoryItemPage(account: widget.account, id: product['id'],)),
-                                );
+                                ).then((_) => setState(() {}));
                               },
                             )
                         ],
@@ -245,7 +245,7 @@ class _InventoryPageState extends State<InventoryPage> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => AddInventoryItemPage(account: widget.account,)),
-          );
+          ).then((_) => setState(() {}));
         },
       ),
     );

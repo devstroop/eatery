@@ -46,7 +46,7 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) => EditDiningTableCategoryPage(id: category['id'])),
-                              );
+                              ).then((_) => setState(() {}));
                             },
                           )
                       ],
@@ -88,7 +88,7 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const AddDiningTableCategoryPage()),
-          );
+          ).then((_) => setState(() {}));
         },
       ),
     );

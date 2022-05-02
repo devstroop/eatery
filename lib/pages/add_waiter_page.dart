@@ -17,12 +17,6 @@ class _AddWaiterPageState extends State<AddWaiterPage> {
   String? pickedImagePath;
   final TextEditingController _controllerWaiterName = TextEditingController();
 
-  clearFields(){
-    setState(() {
-      pickedImagePath = null;
-      _controllerWaiterName.text = '';
-    });
-  }
   Color getThemeColor() {
     return ColorStyle.tertiary;
   }
@@ -117,7 +111,7 @@ class _AddWaiterPageState extends State<AddWaiterPage> {
               var response = await Waiter.add({'image': pickedImagePath, 'name': _controllerWaiterName.text});
               if(response != null){
                 showSnackBar(context, 'Successfully created');
-                clearFields();
+                Navigator.pop(context);
               }
               else{
                 showSnackBar(context, 'Failed to create');

@@ -15,7 +15,8 @@ import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class CheckoutPage extends StatefulWidget {
-  const CheckoutPage({Key? key, required this.orderType, required this.cart, this.diningTable, this.diningTableName, this.account})
+  const CheckoutPage(
+      {Key? key, required this.orderType, required this.cart, this.diningTable, this.diningTableName, this.account})
       : super(key: key);
   final OrderType orderType;
   final Map<String, Map<String, dynamic>> cart;
@@ -28,44 +29,42 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
-
-
-
   Widget buildWaiterSelectionViewBottomSheet() => StatefulBuilder(builder: (context, state) {
-    return ListView(shrinkWrap: true, children: [
-      const Center(
-        child: BottomViewGrip(),
-      ),
-      Padding(
-        padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
-        child: Text(
-          'Select Waiter',
-          style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
-        ),
-      ),
-      const SizedBox(
-        height: 20.0,
-      ),
-    ]);
-  });
+        return ListView(shrinkWrap: true, children: [
+          const Center(
+            child: BottomViewGrip(),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
+            child: Text(
+              'Select Waiter',
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
+            ),
+          ),
+          const SizedBox(
+            height: 20.0,
+          ),
+        ]);
+      });
 
   Widget buildCustomerDetailsFormBottomSheet() => StatefulBuilder(builder: (context, state) {
-    return ListView(shrinkWrap: true, children: [
-      const Center(
-        child: BottomViewGrip(),
-      ),
-      Padding(
-        padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
-        child: Text(
-          'Customer details',
-          style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
-        ),
-      ),
-      const SizedBox(
-        height: 20.0,
-      ),
-    ]);
-  });
+        return ListView(shrinkWrap: true, children: [
+          const Center(
+            child: BottomViewGrip(),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
+            child: Text(
+              'Customer details',
+              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
+            ),
+          ),
+          const SizedBox(
+            height: 20.0,
+          ),
+        ]);
+      });
+
   @override
   Widget build(BuildContext context) {
     final double total = Calculations.calculateTotal(cart: widget.cart);
@@ -104,16 +103,20 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     'Order type',
                     style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
                   ),
-                  const SizedBox(height: 8.0,),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-
                       Row(
                         children: [
                           Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                            child: Icon(widget.orderType.icon, color: widget.orderType.color,),
+                            child: Icon(
+                              widget.orderType.icon,
+                              color: widget.orderType.color,
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
@@ -132,7 +135,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       Padding(
                         padding: const EdgeInsetsDirectional.fromSTEB(6, 0, 0, 0),
                         child: TextButton(
-                          onPressed: (){
+                          onPressed: () {
                             Navigator.pop(context, "changeOrderType");
                           },
                           child: Text(
@@ -151,7 +154,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ],
               ),
             ),
-
             Container(
               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
               margin: const EdgeInsets.only(bottom: 12.0),
@@ -170,7 +172,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       ),
                       CustomButton(
                         text: 'Edit',
-                        onTap: ()=> showModalBottomSheet(
+                        onTap: () => showModalBottomSheet(
                             shape: const RoundedRectangleBorder(
                               borderRadius: BorderRadius.only(
                                 topLeft: Radius.circular(24),
@@ -184,12 +186,17 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       )
                     ],
                   ),
-                  const SizedBox(height: 8.0,),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
                   Row(
                     children: [
                       Padding(
                         padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                        child: Icon(Icons.person, color: ColorStyle.text300,),
+                        child: Icon(
+                          Icons.person,
+                          color: ColorStyle.text300,
+                        ),
                       ),
                       Padding(
                           padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
@@ -215,16 +222,20 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 ),
                               ),
                             ],
-                          )
-                      ),
+                          )),
                     ],
                   ),
-                  const SizedBox(height: 8.0,),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
                   Row(
                     children: [
                       Padding(
                         padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                        child: Icon(Icons.call, color: ColorStyle.text300,),
+                        child: Icon(
+                          Icons.call,
+                          color: ColorStyle.text300,
+                        ),
                       ),
                       Padding(
                           padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
@@ -250,45 +261,50 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 ),
                               ),
                             ],
-                          )
-                      ),
+                          )),
                     ],
                   ),
-                  const SizedBox(height: 8.0,),
-                  widget.diningTableName != null ? Row(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                        child: Icon(Icons.chair_sharp, color: ColorStyle.text300,),
-                      ),
-                      Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Table No.',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  color: ColorStyle.text300,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                ),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                  widget.diningTableName != null
+                      ? Row(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                              child: Icon(
+                                Icons.chair_sharp,
+                                color: ColorStyle.text300,
                               ),
-                              Text(
-                                widget.diningTableName!,
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  color: ColorStyle.text200,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ],
-                          )
-                      ),
-                    ],
-                  ) : Container(),
+                            ),
+                            Padding(
+                                padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Table No.',
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        color: ColorStyle.text300,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w400,
+                                      ),
+                                    ),
+                                    Text(
+                                      widget.diningTableName!,
+                                      textAlign: TextAlign.start,
+                                      style: TextStyle(
+                                        color: ColorStyle.text200,
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ),
+                                  ],
+                                )),
+                          ],
+                        )
+                      : Container(),
                 ],
               ),
             ),
@@ -307,13 +323,15 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       ),
                       CustomButton(
                         text: 'Edit',
-                        onTap: (){
+                        onTap: () {
                           Navigator.pop(context, "cartUpdate");
                         },
                       )
                     ],
                   ),
-                  const SizedBox(height: 8.0,),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
                   for (var id in widget.cart.keys)
                     CheckoutProductCard(
                       padding: const EdgeInsets.only(bottom: 8.0),
@@ -322,7 +340,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       description: widget.cart[id]!['description'],
                       priceTotal: widget.cart[id]!['billingPrice'] * widget.cart[id]!['quantity'],
                       customizationPriceTotal:
-                      Calculations.calculateCustomizationsTotal(widget.cart[id]!['customizations']) ?? 0,
+                          Calculations.calculateCustomizationsTotal(widget.cart[id]!['customizations']) ?? 0,
                       image: widget.cart[id]!['image'],
                       cartQuantity: widget.cart[id]!['quantity'],
                       currencySymbol: widget.account['currencySymbol'],
@@ -334,7 +352,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ],
               ),
             ),
-
             Container(
               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
               margin: const EdgeInsets.only(bottom: 12.0),
@@ -345,24 +362,28 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Waiter assigned',
+                    'Waiter',
                     style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
                   ),
-                  const SizedBox(height: 8.0,),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-
                       Row(
                         children: [
                           Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                            child: Icon(Icons.person, color: ColorStyle.text300,),
+                            child: Icon(
+                              Icons.person,
+                              color: ColorStyle.text300,
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
                             child: Text(
-                              'Not available',
+                              'Not assigned',
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 color: ColorStyle.text300,
@@ -416,8 +437,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     'Total summary',
                     style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
                   ),
-                  const SizedBox(height: 8.0,),
-
+                  const SizedBox(
+                    height: 8.0,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -447,67 +469,81 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       ),
                     ],
                   ),
-                  discountTotal > 0 ? const SizedBox(height: 8.0,) : Container(),
-                  discountTotal > 0 ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                        child: Text(
-                          'Discount',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            color: ColorStyle.information,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                        child: Text(
-                          '- ${widget.account['currencySymbol']}$discountTotal',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            color: ColorStyle.information,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ) : Container(),
-                  additionalDiscountTotal > 0 ? const SizedBox(height: 8.0,) : Container(),
-                  additionalDiscountTotal > 0 ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                        child: Text(
-                          'Additional discount',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            color: ColorStyle.information,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                        child: Text(
-                          '- ${widget.account['currencySymbol']}$additionalDiscountTotal',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            color: ColorStyle.information,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ) : Container(),
-                  const SizedBox(height: 8.0,),
+                  discountTotal > 0
+                      ? const SizedBox(
+                          height: 8.0,
+                        )
+                      : Container(),
+                  discountTotal > 0
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                              child: Text(
+                                'Discount',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  color: ColorStyle.information,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                              child: Text(
+                                '- ${widget.account['currencySymbol']}$discountTotal',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  color: ColorStyle.information,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Container(),
+                  additionalDiscountTotal > 0
+                      ? const SizedBox(
+                          height: 8.0,
+                        )
+                      : Container(),
+                  additionalDiscountTotal > 0
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                              child: Text(
+                                'Additional discount',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  color: ColorStyle.information,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                              child: Text(
+                                '- ${widget.account['currencySymbol']}$additionalDiscountTotal',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  color: ColorStyle.information,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Container(),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -537,98 +573,112 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       ),
                     ],
                   ),
-                  taxTotal > 0 ? const SizedBox(height: 8.0,) : Container(),
-                  taxTotal > 0 ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                        child: Row(
+                  taxTotal > 0
+                      ? const SizedBox(
+                          height: 8.0,
+                        )
+                      : Container(),
+                  taxTotal > 0
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              "GST",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                  color: ColorStyle.text300,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
+                            Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                              child: Row(
+                                children: [
+                                  Text(
+                                    "GST",
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      color: ColorStyle.text300,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                  Text(
+                                    taxSlabs != null ? '($taxSlabs)' : "",
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                        color: ColorStyle.text200,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                        overflow: TextOverflow.clip),
+                                  )
+                                ],
                               ),
                             ),
-                            Text(
-                              taxSlabs != null ? '($taxSlabs)' : "",
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
+                            Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                              child: Text(
+                                '${widget.account['currencySymbol']}$taxTotal',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
                                   color: ColorStyle.text200,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                  overflow: TextOverflow.clip
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
-                            )
+                            ),
                           ],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                        child: Text(
-                          '${widget.account['currencySymbol']}$taxTotal',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            color: ColorStyle.text200,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ) : Container(),
-                  roundOff != 0 ? const SizedBox(height: 8.0,) : Container(),
-                  roundOff != 0 ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                            child: Text(
-                              'Round off',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                color: ColorStyle.text300,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w400,
+                        )
+                      : Container(),
+                  roundOff != 0
+                      ? const SizedBox(
+                          height: 8.0,
+                        )
+                      : Container(),
+                  roundOff != 0
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                                  child: Text(
+                                    'Round off',
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      color: ColorStyle.text300,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                                  child: Text(
+                                    '(+/-)',
+                                    textAlign: TextAlign.start,
+                                    style: TextStyle(
+                                      color: ColorStyle.text200,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                              child: Text(
+                                roundOff < 0
+                                    ? '- ${widget.account['currencySymbol']}${roundOff.abs()}'
+                                    : '${widget.account['currencySymbol']}$roundOff',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  color: ColorStyle.text200,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                            child: Text(
-                              '(+/-)',
-                              textAlign: TextAlign.start,
-                              style: TextStyle(
-                                color: ColorStyle.text200,
-                                fontSize: 12,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                        child: Text(
-                          roundOff < 0 ? '- ${widget.account['currencySymbol']}${roundOff.abs()}' : '${widget.account['currencySymbol']}$roundOff',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            color: ColorStyle.text200,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ) : Container(),
-                  const SizedBox(height: 12.0,),
-
+                          ],
+                        )
+                      : Container(),
+                  const SizedBox(
+                    height: 12.0,
+                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -661,7 +711,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ],
               ),
             ),
-
           ],
         ),
       ),

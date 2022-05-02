@@ -17,13 +17,6 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
   String? pickedImagePath;
   final TextEditingController _controllerCategoryName = TextEditingController();
 
-  clearFields(){
-    setState(() {
-      pickedImagePath = null;
-      _controllerCategoryName.text = '';
-    });
-  }
-
   Color getThemeColor() {
     return ColorStyle.tertiary;
   }
@@ -117,7 +110,7 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
               var response = await ProductCategory.add({'image': pickedImagePath, 'name': _controllerCategoryName.text});
               if(response != null){
                 showSnackBar(context, 'Successfully created');
-                clearFields();
+                Navigator.pop(context);
               }
               else{
                 showSnackBar(context, 'Failed to create');
