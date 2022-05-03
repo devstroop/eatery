@@ -23,7 +23,6 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      //home: accounts.isNotEmpty ? const LoginPage() : const CreateAccount1Page(),
       home: FutureBuilder<List<Map<String, dynamic>>>(
         future: Account.getAll(),
         builder: (BuildContext context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot){
