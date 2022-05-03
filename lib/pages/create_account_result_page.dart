@@ -18,26 +18,6 @@ class _CreateAccountResultPageState extends State<CreateAccountResultPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorStyle.background200,
-      /*appBar: AppBar(
-        backgroundColor: ColorStyle.background100,
-
-        actions: [
-          IconButton(
-            icon: Icon(
-              Icons.close,
-              size: 18,
-              color: ColorStyle.text200,
-            ),
-            onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => Login()),
-                    (Route<dynamic> route) => false,
-              );
-            },
-          )
-        ],
-      ),*/
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(12.0),
@@ -61,13 +41,14 @@ class _CreateAccountResultPageState extends State<CreateAccountResultPage> {
                     Text(
                       'Congratulations',
                       style: TextStyle(
-                        fontSize: 20,
+                        fontSize: 18,
                         fontWeight: FontWeight.w500,
                       ),
                     ),
                     Text(
                       'Restaurant account created successfully',
                       style: TextStyle(
+                        fontSize: 14,
                         fontWeight: FontWeight.normal,
                       ),
                     ),
@@ -88,9 +69,10 @@ class _CreateAccountResultPageState extends State<CreateAccountResultPage> {
           color: ColorStyle.background100,
           height: 50.0,
           onTap: () {
-            Navigator.push(
+            Navigator.pushAndRemoveUntil(
               context,
               MaterialPageRoute(builder: (context) => const LoginPage()),
+                  (Route<dynamic> route) => false,
             );
           },
         ),

@@ -4,7 +4,7 @@ import 'package:restaurant_pos/components/upload_button.dart';
 
 import 'package:restaurant_pos/pages/create_account_1_page.dart';
 import 'package:restaurant_pos/pages/login_page.dart';
-import 'package:restaurant_pos/pages/order_placed_page.dart';
+import 'package:restaurant_pos/pages/order_confirmation.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 import 'database/account.dart';

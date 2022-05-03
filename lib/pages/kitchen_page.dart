@@ -14,6 +14,7 @@ import 'package:restaurant_pos/extensions/calculations.dart';
 import 'package:restaurant_pos/models/order_type.dart';
 import 'package:restaurant_pos/pages/add_kitchen_dish_page.dart';
 import 'package:restaurant_pos/pages/edit_kitchen_dish_page.dart';
+import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class KitchenPage extends StatefulWidget {
@@ -49,9 +50,13 @@ class _KitchenPageState extends State<KitchenPage> {
           margin: const EdgeInsets.only(top: 90, left: 12, right: 12),
           width: double.maxFinite,
           child: TextFormField(
+            onChanged: (value){
+              setState((){});
+            },
             keyboardType: TextInputType.text,
-            controller: null,
+            controller: _controllerSearch,
             decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.search),
               hintText: 'Search a dish...',
               hintStyle: TextStyle(
                 color: ColorStyle.text400,
@@ -123,8 +128,7 @@ class _KitchenPageState extends State<KitchenPage> {
                             for (var category in snapshot.data)
                               PosCategoryWidget(
                                   active: selectedCategory == category['id'],
-                                  image:
-                                      File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
+                                  image: category['image'] != null && File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
                                   label: category['name'],
                                   onTap: () {
                                     setState(
@@ -155,7 +159,7 @@ class _KitchenPageState extends State<KitchenPage> {
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: FutureBuilder(
-            future: Product.getAll(productAs: 'dish', category: selectedCategory),
+            future: Product.getAll(productAs: 'dish', category: selectedCategory, query: _controllerSearch.text),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData && snapshot.data.isNotEmpty) {
@@ -234,7 +238,11 @@ class _KitchenPageState extends State<KitchenPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: getThemeColor(),
         child: const Icon(Icons.add),
-        onPressed: () {
+        onPressed: () async {
+          if((await ProductCategory.getAll()).isEmpty){
+            showSnackBar(context, '* Create product category first');
+            return;
+          }
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => AddKitchenDish(account: widget.account,)),

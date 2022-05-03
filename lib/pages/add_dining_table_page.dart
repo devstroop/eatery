@@ -85,6 +85,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                   height: 3.0,
                 ),
                 CustomTextFromField(
+                  keyboardType: TextInputType.text,
                   controller: _controllerCategoryName,
                   labelText: 'eg. Table 1 ',
                   obscureText: false,
@@ -158,7 +159,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                 showSnackBar(context, '* Dining table name required');
                 return;
               }
-              if(selectedDiningTableCategory != null){
+              if(selectedDiningTableCategory == null){
                 showSnackBar(context, '* Select category');
                 return;
               }

@@ -44,13 +44,6 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
     }
   }
 
-  clearFields() {
-    setState(() {
-      pickedImagePath = null;
-      selectedDiningTableCategory = null;
-      _controllerName.text = '';
-    });
-  }
 
   Color getThemeColor() {
     return ColorStyle.tertiary;
@@ -78,6 +71,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                         child: const Text('Cancel')),
                     TextButton(
                         onPressed: () async {
+                          Navigator.pop(context);
                           DiningTable.delete(widget.id);
                           showSnackBar(context, 'Deleted successfully');
                           Navigator.pop(context);
@@ -219,7 +213,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                 showSnackBar(context, '* Dining table name required');
                 return;
               }
-              if (selectedDiningTableCategory != null) {
+              if (selectedDiningTableCategory == null) {
                 showSnackBar(context, '* Select category');
                 return;
               }
@@ -230,7 +224,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                 'category': selectedDiningTableCategory
               });
               if (response) {
-                showSnackBar(context, 'Successfully update');
+                showSnackBar(context, 'Successfully updated');
                 Navigator.of(context).pop();
               } else {
                 showSnackBar(context, 'Failed to update');

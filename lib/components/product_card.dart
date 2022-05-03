@@ -69,7 +69,7 @@ class ProductCard extends StatelessWidget {
                         : MediaQuery.of(context).size.height) -
                     48) /
                 2 *
-                (230 / 181),
+                (230 / 165),
             child: InkWell(
               onTap: onTap,
               child: Column(

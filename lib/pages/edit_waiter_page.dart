@@ -38,14 +38,6 @@ class _EditWaiterPageState extends State<EditWaiterPage> {
     }
   }
 
-
-  clearFields() {
-    setState(() {
-      pickedImagePath = null;
-      _controllerWaiterName.text = '';
-    });
-  }
-
   Color getThemeColor() {
     return ColorStyle.tertiary;
   }
@@ -72,6 +64,7 @@ class _EditWaiterPageState extends State<EditWaiterPage> {
                         child: const Text('Cancel')),
                     TextButton(
                         onPressed: () async {
+                          Navigator.pop(context);
                           Waiter.delete(widget.id);
                           showSnackBar(context, 'Deleted successfully');
                           Navigator.pop(context);
@@ -169,7 +162,7 @@ class _EditWaiterPageState extends State<EditWaiterPage> {
               }
               var response = await Waiter.update({'id':widget.id, 'image': pickedImagePath, 'name': _controllerWaiterName.text});
               if (response) {
-                showSnackBar(context, 'Successfully update');
+                showSnackBar(context, 'Successfully updated');
                 Navigator.of(context).pop();
               } else {
                 showSnackBar(context, 'Failed to update');

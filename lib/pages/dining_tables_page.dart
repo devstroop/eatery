@@ -9,6 +9,7 @@ import 'package:restaurant_pos/database/dining_table_category.dart';
 import 'package:restaurant_pos/pages/add_dining_table_page.dart';
 import 'package:restaurant_pos/pages/dining_table_categories_page.dart';
 import 'package:restaurant_pos/pages/edit_dining_table_page.dart';
+import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class DiningTablesPage extends StatefulWidget {
@@ -120,7 +121,7 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
         scrollDirection: Axis.vertical,
         child:
         FutureBuilder(
-            future: DiningTable.getAll(),
+            future: DiningTable.getAll(category: selectedCategory),
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData && snapshot.data.isNotEmpty) {
@@ -180,7 +181,11 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: getThemeColor(),
         child: const Icon(Icons.add),
-        onPressed: () {
+        onPressed: () async {
+          if((await DiningTableCategory.getAll()).isEmpty){
+            showSnackBar(context, '* Create category first');
+            return;
+          }
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const AddDiningTablePage()),

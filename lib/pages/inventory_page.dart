@@ -1,19 +1,13 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:restaurant_pos/components/custom_text_from_field.dart';
-import 'package:restaurant_pos/components/food_type_badge.dart';
 import 'package:restaurant_pos/components/pos_category_widget.dart';
-import 'package:restaurant_pos/components/pos_order_type_selection_button.dart';
-import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/components/product_card.dart';
-
 import 'package:restaurant_pos/database/product.dart';
 import 'package:restaurant_pos/database/product_category.dart';
 import 'package:restaurant_pos/extensions/calculations.dart';
-import 'package:restaurant_pos/models/order_type.dart';
 import 'package:restaurant_pos/pages/add_inventory_item_page.dart';
 import 'package:restaurant_pos/pages/edit_inventory_item_page.dart';
+import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class InventoryPage extends StatefulWidget {
@@ -49,9 +43,13 @@ class _InventoryPageState extends State<InventoryPage> {
           margin: const EdgeInsets.only(top: 90, left: 12, right: 12),
           width: double.maxFinite,
           child: TextFormField(
+            onChanged: (value){
+              setState((){});
+            },
             keyboardType: TextInputType.text,
-            controller: null,
+            controller: _controllerSearch,
             decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.search),
               hintText: 'Search an item...',
               hintStyle: TextStyle(
                 color: ColorStyle.text400,
@@ -126,7 +124,7 @@ class _InventoryPageState extends State<InventoryPage> {
                               PosCategoryWidget(
                                   active: selectedCategory == category['id'],
                                   image:
-                                      File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
+                                  category['image'] != null && File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
                                   label: category['name'],
                                   onTap: () {
                                     setState(
@@ -160,7 +158,7 @@ class _InventoryPageState extends State<InventoryPage> {
           alignment: WrapAlignment.center,
           children: [
             FutureBuilder(
-                future: Product.getAll(productAs: 'item', category: selectedCategory),
+                future: Product.getAll(productAs: 'item', category: selectedCategory, query: _controllerSearch.text),
                 builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                   if (snapshot.connectionState == ConnectionState.done) {
                     if (snapshot.hasData && snapshot.data.isNotEmpty) {
@@ -241,7 +239,11 @@ class _InventoryPageState extends State<InventoryPage> {
       floatingActionButton: FloatingActionButton(
         backgroundColor: getThemeColor(),
         child: const Icon(Icons.add),
-        onPressed: () {
+        onPressed: () async {
+          if((await ProductCategory.getAll()).isEmpty){
+            showSnackBar(context, '* Create product category first');
+            return;
+          }
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => AddInventoryItemPage(account: widget.account,)),

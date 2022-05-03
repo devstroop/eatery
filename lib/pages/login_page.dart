@@ -139,9 +139,10 @@ class _LoginPageState extends State<LoginPage> {
             onTap: () async {
               Map<String, dynamic>? account = await Account.login(_controllerEmail.text, _controllerPassword.text);
               if(account != null){
-                Navigator.push(
+                Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => DashboardPage(account: account)),
+                      (Route<dynamic> route) => false,
                 );
               }
               else{

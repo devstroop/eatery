@@ -3,11 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
-class ProductCategoryCard extends StatelessWidget {
-  const ProductCategoryCard({Key? key, required this.id, required this.name, this.image, this.onTap}) : super(key: key);
+class PosWaiterCard extends StatelessWidget {
+  const PosWaiterCard({Key? key, required this.id, required this.name, this.image, this.onTap, this.active}) : super(key: key);
   final dynamic id; // int
   final dynamic name; // String
   final dynamic image;
+  final bool? active;
   final Function()? onTap;
 
   @override
@@ -30,14 +31,14 @@ class ProductCategoryCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(6),
             ),
             width: ((MediaQuery.of(context).size.width < MediaQuery.of(context).size.height
-                        ? MediaQuery.of(context).size.width
-                        : MediaQuery.of(context).size.height) -
-                    48) /
+                ? MediaQuery.of(context).size.width
+                : MediaQuery.of(context).size.height) -
+                48) /
                 2,
             height: ((MediaQuery.of(context).size.width < MediaQuery.of(context).size.height
-                        ? MediaQuery.of(context).size.width
-                        : MediaQuery.of(context).size.height) -
-                    48) /
+                ? MediaQuery.of(context).size.width
+                : MediaQuery.of(context).size.height) -
+                48) /
                 2 *
                 (1 / 3),
             child: InkWell(
@@ -52,11 +53,11 @@ class ProductCategoryCard extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: ColorStyle.background200,
                               borderRadius:
-                                  const BorderRadius.only(topLeft: Radius.circular(6), bottomLeft: Radius.circular(6)),
+                              const BorderRadius.only(topLeft: Radius.circular(6), bottomLeft: Radius.circular(6)),
                               image: File(image ?? '').existsSync()
                                   ? DecorationImage(image: FileImage(File(image!)), fit: BoxFit.cover)
                                   : const DecorationImage(
-                                      image: AssetImage('assets/images/no-image.jpg'), fit: BoxFit.cover),
+                                  image: AssetImage('assets/images/no-image.jpg'), fit: BoxFit.cover),
                             ),
                           ),
                         ],
@@ -67,7 +68,7 @@ class ProductCategoryCard extends StatelessWidget {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              color: ColorStyle.background100,
+                              color: active ?? false ? ColorStyle.text200 : ColorStyle.background100,
                               borderRadius: const BorderRadius.only(
                                   topRight: Radius.circular(6), bottomRight: Radius.circular(6)),
                             ),
@@ -78,7 +79,9 @@ class ProductCategoryCard extends StatelessWidget {
                             child: Text(
                               name,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
+                              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600,
+                                  color: active ?? false ? ColorStyle.background100 : ColorStyle.text200
+                              ),
                             ),
                           )
                         ],

@@ -39,12 +39,6 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
     }
   }
 
-  clearFields() {
-    setState(() {
-      pickedImagePath = null;
-      _controllerCategoryName.text = '';
-    });
-  }
 
   Color getThemeColor() {
     return ColorStyle.tertiary;
@@ -72,6 +66,7 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
                         child: const Text('Cancel')),
                     TextButton(
                         onPressed: () async {
+                          Navigator.pop(context);
                           if ((await Product.getAll(category: widget.id)).isNotEmpty) {
                             showSnackBar(context, 'Can\'t delete');
                             return;
@@ -177,7 +172,7 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
               var response =
                   await ProductCategory.update({'id': widget.id, 'image': pickedImagePath, 'name': _controllerCategoryName.text});
               if (response) {
-                showSnackBar(context, 'Successfully update');
+                showSnackBar(context, 'Successfully updated');
                 Navigator.of(context).pop();
               } else {
                 showSnackBar(context, 'Failed to update');

@@ -4,7 +4,6 @@ import 'package:restaurant_pos/style/color_style.dart';
 
 class LogoutPage extends StatefulWidget {
   const LogoutPage({Key? key}) : super(key: key);
-
   @override
   State<LogoutPage> createState() => _LogoutPageState();
 }
@@ -14,10 +13,11 @@ class _LogoutPageState extends State<LogoutPage> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(milliseconds: 1000),() {
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (BuildContext context) => const LoginPage()));
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => const LoginPage()),
+            (Route<dynamic> route) => false,
+      );
     });
   }
   @override

@@ -70,10 +70,10 @@ class Calculations{
     }
     return total;
   }
-  static double calculateDiscountTotal({required Map<String, Map<String, dynamic>> cart}){
+  static double calculateDiscountOnMRPTotal({required Map<String, Map<String, dynamic>> cart}){
     return (calculateTotal(cart: cart) - calculateTaxableTotal(cart: cart));
   }
-  static double calculateAdditionalDiscountTotal({required Map<String, Map<String, dynamic>> cart}){
+  static double calculateDiscountTotal({required Map<String, Map<String, dynamic>> cart}){
     double total = 0;
     for(String id in cart.keys){
       double billingPrice = cart[id]!['billingPrice'] ?? 0.0;

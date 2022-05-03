@@ -67,7 +67,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                         for (var category in snapshot.data)
                           PosCategoryWidget(
                               active: selectedCategory == category['id'],
-                              image: File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
+                              image: category['image'] != null &&  File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
                               label: category['name'],
                               onTap: () {
                                 setState(
@@ -151,6 +151,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                     Flexible(
                       flex: 4,
                       child: CustomTextFromField(
+                        keyboardType: TextInputType.text,
                         controller: _controllerProductName,
                         labelText: '',
                         obscureText: false,
@@ -180,6 +181,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                     Flexible(
                       flex: 2,
                       child: CustomTextFromField(
+                        keyboardType: TextInputType.number,
                         prefixWidget: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -218,6 +220,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                     Flexible(
                       flex: 2,
                       child: CustomTextFromField(
+                        keyboardType: TextInputType.number,
                         prefixWidget: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -275,10 +278,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                 const SizedBox(
                   height: 6.0,
                 ),
-                const SizedBox(
-                  height: 6.0,
-                ),
-                Row(
+                /*Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Flexible(
@@ -335,7 +335,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                 ),
                 const SizedBox(
                   height: 6.0,
-                ),
+                ),*/
                 /*Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -393,6 +393,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                     Flexible(
                       flex: 2,
                       child: CustomTextFromField(
+                        keyboardType: TextInputType.number,
                         suffixWidget: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
@@ -444,6 +445,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                     height: 3.0,
                   ),
                   CustomTextFromField(
+                    keyboardType: TextInputType.multiline,
                     controller: _controllerDescription,
                     labelText: '- Describe your dish \n- Highlight ingredients used\n- Keep it simple',
                     obscureText: false,
@@ -483,8 +485,8 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                 'name': _controllerProductName.text,
                 'category': selectedCategory,
                 'description': _controllerDescription.text,
-                'quantity': _controllerQuantity.text,
-                'warningQuantity': _controllerWarningQuantity.text,
+                /*'quantity': _controllerQuantity.text,
+                'warningQuantity': _controllerWarningQuantity.text,*/
                 'unit': '',
                 'mrp': _controllerMRP.text,
                 'salePrice': _controllerSalePrice.text,

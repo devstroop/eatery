@@ -39,13 +39,6 @@ class _EditDiningTableCategoryPageState extends State<EditDiningTableCategoryPag
     }
   }
 
-  clearFields() {
-    setState(() {
-      pickedImagePath = null;
-      _controllerCategoryName.text = '';
-    });
-  }
-
   Color getThemeColor() {
     return ColorStyle.tertiary;
   }
@@ -72,6 +65,7 @@ class _EditDiningTableCategoryPageState extends State<EditDiningTableCategoryPag
                         child: const Text('Cancel')),
                     TextButton(
                         onPressed: () async {
+                          Navigator.pop(context);
                           if ((await DiningTable.getAll(category: widget.id)).isNotEmpty) {
                             showSnackBar(context, 'Can\'t delete');
                             return;

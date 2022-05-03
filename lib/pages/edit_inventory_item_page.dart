@@ -63,21 +63,6 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
     }
   }
 
-  clearFields() {
-    setState(() {
-      pickedImagePath = null;
-      selectedCategory = null;
-      selectedFoodType = null;
-      _controllerProductName.text = '';
-      _controllerQuantity.text = '';
-      _controllerWarningQuantity.text = '';
-      _controllerSalePrice.text = '';
-      _controllerMRP.text = '';
-      _controllerTax.text = '';
-      _controllerDescription.text = '';
-    });
-  }
-
   Color getThemeColor() {
     return ColorStyle.tertiary;
   }
@@ -108,6 +93,7 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
                         child: const Text('Cancel')),
                     TextButton(
                         onPressed: () async {
+                          Navigator.pop(context);
                           if(Cart.cart.containsKey(widget.id)){
                             showSnackBar(context, 'Can\' delete');
                             return;
@@ -145,7 +131,7 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
                         for (var category in snapshot.data)
                           PosCategoryWidget(
                               active: selectedCategory == category['id'],
-                              image: File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
+                              image: category['image'] != null && File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
                               label: category['name'],
                               onTap: () {
                                 setState(
@@ -570,7 +556,7 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
                 'as': 'item'
               });
               if (response) {
-                showSnackBar(context, 'Successfully update');
+                showSnackBar(context, 'Successfully updated');
                 Navigator.of(context).pop();
               } else {
                 showSnackBar(context, 'Failed to update');

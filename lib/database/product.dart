@@ -26,19 +26,21 @@ class Product{
     }catch(_){}
     return null;
   }
-  static Future<List<Map<String, dynamic>>> getAll({String? productAs, String? category}) async {
+  static Future<List<Map<String, dynamic>>> getAll({String? productAs, String? category, String? query}) async {
     List<Map<String, dynamic>> result = [];
-    if(productAs != null &&
-        category == null){
+
+    if(productAs != null && category == null) {
       result = (await store.getListLike('$name-%') ?? []).where((element) => element['as'] == productAs).toList();
-    }else if(productAs != null
-        && category != null) {
+    } else if (productAs != null && category != null) {
       result = (await store.getListLike('$name-%') ?? []).where((element) => element['as'] == productAs && element['category'] == category).toList();
-    }else if(productAs == null && category != null) {
+    } else if (productAs == null && category != null) {
       result = (await store.getListLike('$name-%') ?? []).where((element) => element['category'] == category).toList();
-    }
-    else{
+    } else {
       result = await store.getListLike('$name-%') ?? [];
+    }
+
+    if(query != null){
+      result = result.where((element) => element['name'].toLowerCase().trim().contains(query.toLowerCase().trim())).toList();
     }
     return result;
   }

@@ -5,12 +5,17 @@ import 'package:restaurant_pos/components/cart_product_card.dart';
 import 'package:restaurant_pos/components/checkout_product_card.dart';
 import 'package:restaurant_pos/components/custom_button.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
+import 'package:restaurant_pos/components/pos_waiter_card.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/components/upload_button.dart';
+import 'package:restaurant_pos/components/waiter_card.dart';
 import 'package:restaurant_pos/database/cart.dart';
 import 'package:restaurant_pos/database/dining_table_category.dart';
+import 'package:restaurant_pos/database/order.dart';
+import 'package:restaurant_pos/database/waiter.dart';
 import 'package:restaurant_pos/extensions/calculations.dart';
 import 'package:restaurant_pos/models/order_type.dart';
+import 'package:restaurant_pos/pages/order_confirmation.dart';
 import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
@@ -29,8 +34,45 @@ class CheckoutPage extends StatefulWidget {
 }
 
 class _CheckoutPageState extends State<CheckoutPage> {
+  final TextEditingController _controllerCustomerName = TextEditingController();
+  final TextEditingController _controllerCustomerPhone = TextEditingController();
+  final TextEditingController _controllerCustomerAddress = TextEditingController();
+  late String customerName;
+  late String? customerPhone;
+  late String? customerAddress;
+  late List<Map<String, dynamic>> waitersData;
+  late String? selectedWaiter;
+  late String? selectedWaiterName;
+
+
+  void loadWaiters() async {
+    var waitersData = await Waiter.getAll();
+    setState(() {
+      this.waitersData = waitersData;
+    });
+  }
+
+  @override
+  initState(){
+    super.initState();
+    loadWaiters();
+    setState(() {
+      customerName = "Cash";
+      customerPhone = null;
+      customerAddress = null;
+      selectedWaiter = null;
+      selectedWaiterName = null;
+      _controllerCustomerName.text = customerName;
+      _controllerCustomerPhone.text = customerPhone ?? '';
+      _controllerCustomerAddress.text = customerAddress ?? '';
+    });
+  }
+
+
   Widget buildWaiterSelectionViewBottomSheet() => StatefulBuilder(builder: (context, state) {
-        return ListView(shrinkWrap: true, children: [
+        return ListView(
+            shrinkWrap: true,
+            children: [
           const Center(
             child: BottomViewGrip(),
           ),
@@ -41,6 +83,38 @@ class _CheckoutPageState extends State<CheckoutPage> {
               style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
             ),
           ),
+          Wrap(
+            alignment: WrapAlignment.center,
+            children: [
+              PosWaiterCard(
+                id: null,
+                name: 'None',
+                image: null,
+                active: selectedWaiter == null ,
+                onTap: (){
+                  selectedWaiter = null;
+                  selectedWaiterName = null;
+                  state((){});
+                  setState((){});
+                  Navigator.pop(context);
+                },
+              ),
+              for (var waiter in waitersData)
+                PosWaiterCard(
+                  id: waiter['id'],
+                  name: waiter['name'],
+                  image: waiter['image'],
+                  active: selectedWaiter == waiter['id'],
+                  onTap: (){
+                    selectedWaiter = waiter['id'];
+                    selectedWaiterName = waiter['name'];
+                    state((){});
+                    setState((){});
+                    Navigator.pop(context);
+                  },
+                ),
+            ],
+          ),
           const SizedBox(
             height: 20.0,
           ),
@@ -48,7 +122,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       });
 
   Widget buildCustomerDetailsFormBottomSheet() => StatefulBuilder(builder: (context, state) {
-        return ListView(shrinkWrap: true, children: [
+    return ListView(shrinkWrap: true, children: [
           const Center(
             child: BottomViewGrip(),
           ),
@@ -59,8 +133,102 @@ class _CheckoutPageState extends State<CheckoutPage> {
               style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
             ),
           ),
-          const SizedBox(
-            height: 20.0,
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 12.0),
+            child: Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(
+                'Customer name',
+                style: TextStyle(
+                  color: ColorStyle.text200,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(
+                height: 3.0,
+              ),
+              CustomTextFromField(
+                keyboardType: TextInputType.text,
+                controller: _controllerCustomerName,
+                themeColor: widget.orderType.color,
+                labelText: '',
+                obscureText: false,
+              ),
+            ]),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 12.0),
+            child: Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(
+                'Phone number',
+                style: TextStyle(
+                  color: ColorStyle.text200,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(
+                height: 3.0,
+              ),
+              CustomTextFromField(
+                keyboardType: TextInputType.phone,
+                controller: _controllerCustomerPhone,
+                themeColor: widget.orderType.color,
+                labelText: '',
+                obscureText: false,
+              ),
+            ]),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16.0, 0, 16.0, 12.0),
+            child: Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.start, children: [
+              Text(
+                'Address',
+                style: TextStyle(
+                  color: ColorStyle.text200,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+              const SizedBox(
+                height: 3.0,
+              ),
+              CustomTextFromField(
+                keyboardType: TextInputType.multiline,
+                controller: _controllerCustomerAddress,
+                themeColor: widget.orderType.color,
+                labelText: '',
+                obscureText: false,
+                minLines: 2,
+                maxLines: 4,
+              ),
+            ]),
+          ),
+          Padding(
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              children: [
+                PrimaryButton(
+                  flex: 1,
+                  text: 'Save',
+                  backgroundColor: widget.orderType.color!,
+                  color: ColorStyle.background100,
+                  height: 50.0,
+                  onTap: () {
+                    if(_controllerCustomerName.text.trim() == ''){
+                      showSnackBar(context, '* Customer name invalid');
+                      return;
+                    }
+                    customerName = _controllerCustomerName.text;
+                    customerPhone = _controllerCustomerPhone.text != '' ? _controllerCustomerPhone.text : null;
+                    customerAddress = _controllerCustomerAddress.text != '' ? _controllerCustomerAddress.text : null;
+                    state((){});
+                    setState((){});
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
           ),
         ]);
       });
@@ -68,8 +236,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   Widget build(BuildContext context) {
     final double total = Calculations.calculateTotal(cart: widget.cart);
-    final double discountTotal = Calculations.calculateDiscountTotal(cart: widget.cart);
-    final double additionalDiscountTotal = Calculations.calculateAdditionalDiscountTotal(cart: widget.cart);
+    final double discountOnMRP = Calculations.calculateDiscountOnMRPTotal(cart: widget.cart);
+    final double discount = Calculations.calculateDiscountTotal(cart: widget.cart);
     final double taxableTotal = Calculations.calculateTaxableTotal(cart: widget.cart);
     final double taxTotal = Calculations.calculateTaxTotal(cart: widget.cart);
     final double finalTotal = Calculations.calculateFinalTotal(cart: widget.cart);
@@ -213,22 +381,24 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 ),
                               ),
                               Text(
-                                'Cash',
+                                customerName,
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                   color: ColorStyle.text200,
                                   fontSize: 16,
-                                  fontWeight: FontWeight.w500,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ],
                           )),
                     ],
                   ),
-                  const SizedBox(
-                    height: 8.0,
-                  ),
-                  Row(
+
+                  customerPhone != null
+                      ? const SizedBox(height: 8.0,)
+                      : Container(),
+                  customerPhone != null
+                      ? Row(
                     children: [
                       Padding(
                         padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
@@ -252,21 +422,68 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 ),
                               ),
                               Text(
-                                'Not available',
+                                customerPhone!,
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                   color: ColorStyle.text200,
                                   fontSize: 16,
-                                  fontWeight: FontWeight.w500,
+                                  fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ],
                           )),
                     ],
-                  ),
-                  const SizedBox(
+                  )
+                      : Container(),
+
+                  customerAddress != null
+                      ? const SizedBox(height: 8.0,)
+                      : Container(),
+                  customerAddress != null
+                      ? Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                        child: Icon(
+                          Icons.pin_drop,
+                          color: ColorStyle.text300,
+                        ),
+                      ),
+                      Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                'Address',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  color: ColorStyle.text300,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                              Text(
+                                customerAddress!,
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  color: ColorStyle.text200,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                  overflow: TextOverflow.clip
+                                ),
+                              ),
+                            ],
+                          )),
+                    ],
+                  )
+                      : Container(),
+
+                  widget.diningTableName != null
+                      ? const SizedBox(
                     height: 8.0,
-                  ),
+                  )
+                      : Container(),
                   widget.diningTableName != null
                       ? Row(
                           children: [
@@ -297,7 +514,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       style: TextStyle(
                                         color: ColorStyle.text200,
                                         fontSize: 16,
-                                        fontWeight: FontWeight.w500,
+                                        fontWeight: FontWeight.w600,
                                       ),
                                     ),
                                   ],
@@ -352,7 +569,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ],
               ),
             ),
-            Container(
+            widget.orderType == OrderType.dineIn ? Container(
               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
               margin: const EdgeInsets.only(bottom: 12.0),
               color: ColorStyle.background100,
@@ -383,7 +600,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
                             child: Text(
-                              'Not assigned',
+                              selectedWaiterName ?? 'Not assigned',
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 color: ColorStyle.text300,
@@ -423,7 +640,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   )
                 ],
               ),
-            ),
+            ) : Container(),
             Container(
               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
               margin: const EdgeInsets.only(bottom: 12.0),
@@ -469,12 +686,48 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       ),
                     ],
                   ),
-                  discountTotal > 0
+                  discountOnMRP > 0
                       ? const SizedBox(
                           height: 8.0,
                         )
                       : Container(),
-                  discountTotal > 0
+                  discountOnMRP > 0
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                              child: Text(
+                                'Discount on MRP',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  color: ColorStyle.information,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                              child: Text(
+                                '- ${widget.account['currencySymbol']}$discountOnMRP',
+                                textAlign: TextAlign.start,
+                                style: TextStyle(
+                                  color: ColorStyle.information,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                          ],
+                        )
+                      : Container(),
+                  discount > 0
+                      ? const SizedBox(
+                          height: 8.0,
+                        )
+                      : Container(),
+                  discount > 0
                       ? Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
@@ -493,43 +746,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             Padding(
                               padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
                               child: Text(
-                                '- ${widget.account['currencySymbol']}$discountTotal',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  color: ColorStyle.information,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      : Container(),
-                  additionalDiscountTotal > 0
-                      ? const SizedBox(
-                          height: 8.0,
-                        )
-                      : Container(),
-                  additionalDiscountTotal > 0
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                              child: Text(
-                                'Additional discount',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  color: ColorStyle.information,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                              child: Text(
-                                '- ${widget.account['currencySymbol']}$additionalDiscountTotal',
+                                '- ${widget.account['currencySymbol']}$discount',
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
                                   color: ColorStyle.information,
@@ -724,8 +941,39 @@ class _CheckoutPageState extends State<CheckoutPage> {
             color: ColorStyle.background100,
             height: 50.0,
             onTap: () async {
-              Navigator.of(context).pop();
-              Navigator.of(context).pop();
+              try{
+                Map<String, dynamic> order = {
+                  'orderType': widget.orderType.name,
+                  'customerName': customerName,
+                  'customerPhone': customerPhone,
+                  'customerAddress': customerAddress,
+                  'timestamp': DateTime.now().microsecondsSinceEpoch,
+                  'tableName': widget.diningTableName,
+                  'cart': widget.cart,
+                  'waiter': selectedWaiterName,
+                  'total': total,
+                  'discountOnMRP': discountOnMRP,
+                  'discount': discount,
+                  'taxableTotal': taxableTotal,
+                  'taxSlabs': taxSlabs,
+                  'taxTotal': taxTotal,
+                  'roundOff': roundOff,
+                  'finalTotal': finalTotal
+                };
+                String? id = await Order.add(order);
+                order['id'] = id;
+                Cart.cart = {};
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => OrderConfirmation(order: order)),
+                ).then((_) {
+                  Navigator.pop(context, 'clear');
+                });
+              }catch(_){
+                showSnackBar(context, 'Failed');
+                return;
+              }
             },
           ),
         ),

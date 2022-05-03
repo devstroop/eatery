@@ -80,6 +80,7 @@ class _AddDiningTableCategoryPageState extends State<AddDiningTableCategoryPage>
                   height: 3.0,
                 ),
                 CustomTextFromField(
+                  keyboardType: TextInputType.text,
                   controller: _controllerCategoryName,
                   labelText: 'eg. Terrace',
                   obscureText: false,

@@ -19,6 +19,7 @@ import 'package:restaurant_pos/database/product_category.dart';
 import 'package:restaurant_pos/extensions/calculations.dart';
 import 'package:restaurant_pos/models/order_type.dart';
 import 'package:restaurant_pos/pages/checkout_page.dart';
+import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class PointOfSalePage extends StatefulWidget {
@@ -36,7 +37,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
   late String? selectedDiningTableCategory;
   late String? selectedDiningTable;
   late String? selectedDiningTableName;
-  late TextEditingController _controllerSearch;
+  final TextEditingController _controllerSearch = TextEditingController();
   late List<Map<String, dynamic>> productCategoriesData;
   late List<Map<String, dynamic>> productsData;
   bool posModeChangeExpanded = false;
@@ -44,7 +45,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
   @override
   void initState() {
     super.initState();
-    _controllerSearch = TextEditingController();
+
     setState(() {
       orderType = OrderType.dineIn;
       selectedProductCategory = null;
@@ -66,7 +67,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
   }
 
   void loadProducts() async {
-    var productsData = await Product.getAll(category: selectedProductCategory);
+    var productsData = await Product.getAll(category: selectedProductCategory, query: _controllerSearch.text);
     setState(() {
       this.productsData = productsData;
     });
@@ -410,9 +411,13 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
           margin: const EdgeInsets.only(top: 90, left: 12, right: 12),
           width: double.maxFinite,
           child: TextFormField(
+            onChanged: (value){
+              loadProducts();
+            },
             keyboardType: TextInputType.text,
             controller: _controllerSearch,
             decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.search),
               hintText: 'Search a product...',
               hintStyle: TextStyle(
                 color: ColorStyle.text400,
@@ -484,7 +489,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                       for (var category in productCategoriesData)
                         PosCategoryWidget(
                             active: selectedProductCategory == category['id'],
-                            image: File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
+                            image: category['image'] != null && File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
                             label: category['name'],
                             onTap: () {
                               setState(
@@ -579,7 +584,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                           });
                         } else if (Cart.cart.containsKey(product['id']) && Cart.cart[product['id']]!['quantity'] <= 1) {
                           setState(() {
-                            Cart.cart.remove([product['id']]);
+                            Cart.cart.remove(product['id']);
                           });
                         }
                       },
@@ -662,6 +667,14 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                 height: 50.0,
                 backgroundColor: orderType.color!,
                 onTap: () {
+                  if(Cart.cart.isEmpty){
+                    showSnackBar(context, '* Empty cart');
+                    return;
+                  }
+                  if(orderType == OrderType.dineIn && selectedDiningTable == null){
+                    showSnackBar(context, '* Select dining table');
+                    return;
+                  }
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -697,7 +710,13 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                           ),
                           context: context,
                           builder: (context) => buildCartViewBottomSheet());
+                    }else if (value == 'clear'){
+                      selectedDiningTableCategory = null;
+                      selectedDiningTable = null;
+                      selectedDiningTableName = null;
+                      selectedProductCategory = null;
                     }
+                    setState((){});
                   });
                 },
               ),
@@ -743,41 +762,6 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
               )
         : Container();
 
-    /*final waiterSelectionButton = orderType == OrderType.dineIn
-        ? selectedDiningTable != null
-            ? FloatingActionButton.extended(
-                backgroundColor: orderType.color,
-                icon: const Icon(Icons.local_dining),
-                label: Text(selectedDiningTableName!),
-                onPressed: () => showModalBottomSheet(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(24),
-                        topRight: Radius.circular(24),
-                        bottomLeft: Radius.circular(0),
-                        bottomRight: Radius.circular(0),
-                      ),
-                    ),
-                    context: context,
-                    builder: (context) => buildWaiterSelectionViewBottomSheet()),
-              )
-            : FloatingActionButton.extended(
-                backgroundColor: orderType.color,
-                icon: const Icon(Icons.add),
-                label: const Text('Select Waiter'),
-                onPressed: () => showModalBottomSheet(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(24),
-                        topRight: Radius.circular(24),
-                        bottomLeft: Radius.circular(0),
-                        bottomRight: Radius.circular(0),
-                      ),
-                    ),
-                    context: context,
-                    builder: (context) => buildWaiterSelectionViewBottomSheet()),
-              )
-        : Container();*/
 
     final cartStrip = Cart.cart.isNotEmpty
         ? Container(

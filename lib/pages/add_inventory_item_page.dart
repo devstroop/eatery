@@ -65,7 +65,7 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
                         for (var category in snapshot.data)
                       PosCategoryWidget(
                           active: selectedCategory == category['id'],
-                          image: File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
+                          image: category['image'] != null && File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
                           label: category['name'],
                           onTap: () {
                             setState(
@@ -150,6 +150,7 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
                     Flexible(
                       flex: 4,
                       child: CustomTextFromField(
+                        keyboardType: TextInputType.text,
                         controller: _controllerProductName,
                         labelText: '',
                         obscureText: false,
@@ -179,6 +180,7 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
                     Flexible(
                       flex: 2,
                       child: CustomTextFromField(
+                        keyboardType: TextInputType.number,
                         prefixWidget: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -217,6 +219,7 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
                     Flexible(
                       flex: 2,
                       child: CustomTextFromField(
+                        keyboardType: TextInputType.number,
                         prefixWidget: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
@@ -288,6 +291,7 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
                     Flexible(
                       flex: 2,
                       child: CustomTextFromField(
+                        keyboardType: TextInputType.number,
                         controller: _controllerQuantity,
                         labelText: '0',
                         obscureText: false,
@@ -317,6 +321,7 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
                     Flexible(
                       flex: 2,
                       child: CustomTextFromField(
+                        keyboardType: TextInputType.number,
                         controller: _controllerWarningQuantity,
                         labelText: '0',
                         obscureText: false,
@@ -384,6 +389,7 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
                     Flexible(
                       flex: 2,
                       child: CustomTextFromField(
+                        keyboardType: TextInputType.number,
                         suffixWidget: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: const [
@@ -436,6 +442,7 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
                     height: 3.0,
                   ),
                   CustomTextFromField(
+                    keyboardType: TextInputType.multiline,
                     controller: _controllerDescription,
                     labelText: '- Describe your dish \n- Highlight ingredients used\n- Keep it simple',
                     obscureText: false,

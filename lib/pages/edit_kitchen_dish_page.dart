@@ -63,21 +63,6 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
     }
   }
 
-  clearFields() {
-    setState(() {
-      pickedImagePath = null;
-      selectedCategory = null;
-      selectedFoodType = null;
-      _controllerProductName.text = '';
-      _controllerQuantity.text = '';
-      _controllerWarningQuantity.text = '';
-      _controllerSalePrice.text = '';
-      _controllerMRP.text = '';
-      _controllerTax.text = '';
-      _controllerDescription.text = '';
-    });
-  }
-
   Color getThemeColor() {
     return ColorStyle.tertiary;
   }
@@ -108,6 +93,7 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                         child: const Text('Cancel')),
                     TextButton(
                         onPressed: () async {
+                          Navigator.pop(context);
                           if(Cart.cart.containsKey(widget.id)){
                             showSnackBar(context, 'Can\' delete');
                             return;
@@ -144,7 +130,7 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                         for (var category in snapshot.data)
                           PosCategoryWidget(
                               active: selectedCategory == category['id'],
-                              image: File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
+                              image: category['image'] != null && File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
                               label: category['name'],
                               onTap: () {
                                 setState(
@@ -352,10 +338,7 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                 const SizedBox(
                   height: 6.0,
                 ),
-                const SizedBox(
-                  height: 6.0,
-                ),
-                Row(
+                /*Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Flexible(
@@ -412,7 +395,7 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                 ),
                 const SizedBox(
                   height: 6.0,
-                ),
+                ),*/
                 /*Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -561,8 +544,8 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                 'name': _controllerProductName.text,
                 'category': selectedCategory,
                 'description': _controllerDescription.text,
-                'quantity': _controllerQuantity.text,
-                'warningQuantity': _controllerWarningQuantity.text,
+                /*'quantity': _controllerQuantity.text,
+                'warningQuantity': _controllerWarningQuantity.text,*/
                 'unit': '',
                 'mrp': _controllerMRP.text,
                 'salePrice': _controllerSalePrice.text,
@@ -573,7 +556,7 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                 'as': 'dish'
               });
               if (response) {
-                showSnackBar(context, 'Successfully update');
+                showSnackBar(context, 'Successfully updated');
                 Navigator.of(context).pop();
               } else {
                 showSnackBar(context, 'Failed to update');
