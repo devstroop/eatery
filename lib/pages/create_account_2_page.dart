@@ -67,14 +67,14 @@ class _CreateAccount2State extends State<CreateAccount2Page> {
                 mainAxisSize: MainAxisSize.min,
                 children: const [
                   Text(
-                    'Setup Password',
+                    'Setup PIN',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                   Text(
-                    'Setup password to secure your account',
+                    'Setup PIN to secure your account',
                     style: TextStyle(
                       fontWeight: FontWeight.normal,
                     ),
@@ -86,7 +86,7 @@ class _CreateAccount2State extends State<CreateAccount2Page> {
               ),
               Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(
-                  'Password',
+                  'PIN',
                   style: TextStyle(
                     color: ColorStyle.text200,
                     fontSize: 12,
@@ -97,8 +97,9 @@ class _CreateAccount2State extends State<CreateAccount2Page> {
                   height: 3.0,
                 ),
                 CustomTextFromField(
+                  keyboardType: TextInputType.number,
                   controller: _controllerPassword,
-                  labelText: 'Password',
+                  labelText: 'PIN',
                   obscureText: true,
                 ),
               ]),
@@ -107,7 +108,7 @@ class _CreateAccount2State extends State<CreateAccount2Page> {
               ),
               Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(
-                  'Confirm Password',
+                  'Confirm PIN',
                   style: TextStyle(
                     color: ColorStyle.text200,
                     fontSize: 12,
@@ -118,8 +119,9 @@ class _CreateAccount2State extends State<CreateAccount2Page> {
                   height: 3.0,
                 ),
                 CustomTextFromField(
+                  keyboardType: TextInputType.number,
                   controller: _controllerConfirmPassword,
-                  labelText: 'Confirm Password',
+                  labelText: 'Confirm PIN',
                   obscureText: true,
                 ),
               ]),
@@ -149,7 +151,7 @@ class _CreateAccount2State extends State<CreateAccount2Page> {
                           image: widget.image, email: widget.email,)),
                 );
               } else {
-                showSnackBar(context, '*Confirm password didn\'t match');
+                showSnackBar(context, '*Confirm PIN didn\'t match');
               }
             },
           ),

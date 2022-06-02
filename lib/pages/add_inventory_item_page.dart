@@ -16,6 +16,7 @@ import 'package:restaurant_pos/style/color_style.dart';
 class AddInventoryItemPage extends StatefulWidget {
   const AddInventoryItemPage({Key? key, required this.account}) : super(key: key);
   final dynamic account;
+
   @override
   State<AddInventoryItemPage> createState() => _AddInventoryItemPageState();
 }
@@ -24,7 +25,7 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
   String? pickedImagePath;
   String? selectedCategory;
   String? selectedFoodType;
-  String? selectedTaxType;
+  String? selectedTaxType = "inclusive";
   final TextEditingController _controllerProductName = TextEditingController();
   final TextEditingController _controllerQuantity = TextEditingController();
   final TextEditingController _controllerWarningQuantity = TextEditingController();
@@ -34,7 +35,7 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
   final TextEditingController _controllerDescription = TextEditingController();
 
   Color getThemeColor() {
-    return ColorStyle.tertiary;
+    return const Color(0xFF6850EF)/*ColorStyle.tertiary*/;
   }
 
   @override
@@ -60,21 +61,33 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
                 if (snapshot.connectionState == ConnectionState.done) {
                   if (snapshot.hasData) {
                     return Row(
-                        mainAxisSize: MainAxisSize.max,
+                      mainAxisSize: MainAxisSize.max,
                       children: [
+                        PosCategoryWidget(
+                            active: selectedCategory == null,
+                            image: null,
+                            label: "Uncategorized",
+                            onTap: () {
+                              setState(
+                                    () {
+                                  selectedCategory = null;
+                                },
+                              );
+                            }),
                         for (var category in snapshot.data)
-                      PosCategoryWidget(
-                          active: selectedCategory == category['id'],
-                          image: category['image'] != null && File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
-                          label: category['name'],
-                          onTap: () {
-                            setState(
+                          PosCategoryWidget(
+                              active: selectedCategory == category['id'],
+                              image: category['image'] != null && File(category['image']).existsSync()
+                                  ? Image.file(File(category['image']))
+                                  : null,
+                              label: category['name'],
+                              onTap: () {
+                                setState(
                                   () {
-                                selectedCategory = category['id'];
-                              },
-                            );
-                          })
-
+                                    selectedCategory = category['id'];
+                                  },
+                                );
+                              })
                       ],
                     );
                   }
@@ -252,21 +265,25 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
                       ),
                     ),
                     Flexible(
-                      child: InkWell(onTap: (){
-                        if(selectedFoodType == 'veg'){
-                          setState((){
-                            selectedFoodType = 'nonVeg';
-                          });
-                        }else if(selectedFoodType == 'nonVeg'){
-                          setState((){
-                            selectedFoodType = null;
-                          });
-                        }else{
-                          setState((){
-                            selectedFoodType = 'veg';
-                          });
-                        }
-                      },child: FoodTypeSelectionWidget(foodType: selectedFoodType,)),
+                      child: InkWell(
+                          onTap: () {
+                            if (selectedFoodType == 'veg') {
+                              setState(() {
+                                selectedFoodType = 'nonVeg';
+                              });
+                            } else if (selectedFoodType == 'nonVeg') {
+                              setState(() {
+                                selectedFoodType = null;
+                              });
+                            } else {
+                              setState(() {
+                                selectedFoodType = 'veg';
+                              });
+                            }
+                          },
+                          child: FoodTypeSelectionWidget(
+                            foodType: selectedFoodType,
+                          )),
                     ),
                   ],
                 ),
@@ -333,7 +350,7 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
                 const SizedBox(
                   height: 6.0,
                 ),
-                /*Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
@@ -370,7 +387,7 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
                 ),
                 const SizedBox(
                   height: 6.0,
-                ),*/
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -399,12 +416,11 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
                             ),
                           ],
                         ),
-                        /*enabled: selectedTaxType != null,*/
+                        enabled: selectedTaxType != null,
                         controller: _controllerTax,
                         labelText: '0.00',
                         obscureText: false,
                         themeColor: getThemeColor(),
-
                       ),
                     ),
                   ],
@@ -466,34 +482,33 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
             color: ColorStyle.background100,
             height: 50.0,
             onTap: () async {
-              if(_controllerProductName.text.trim() == ''){
+              if (_controllerProductName.text.trim() == '') {
                 showSnackBar(context, '* Product name required');
                 return;
               }
-              if(_controllerMRP.text.trim() == '' && _controllerSalePrice.text.trim() == ''){
+              if (_controllerMRP.text.trim() == '' && _controllerSalePrice.text.trim() == '') {
                 showSnackBar(context, '* MRP or Sale Price required');
                 return;
               }
-              if(selectedCategory == null){
+              if (selectedCategory == null) {
                 showSnackBar(context, '* Select category');
                 return;
               }
-              var response =
-                  await Product.add({
-                    'name': _controllerProductName.text,
-                    'category': selectedCategory,
-                    'description': _controllerDescription.text,
-                    'quantity': _controllerQuantity.text,
-                    'warningQuantity': _controllerWarningQuantity.text,
-                    'unit': '',
-                    'mrp': _controllerMRP.text,
-                    'salePrice': _controllerSalePrice.text,
-                    'foodType': selectedFoodType,
-                    'taxType': selectedTaxType,
-                    'tax': _controllerTax.text,
-                    'image': pickedImagePath,
-                    'as': 'item'
-                  });
+              var response = await Product.add({
+                'name': _controllerProductName.text,
+                'category': selectedCategory,
+                'description': _controllerDescription.text,
+                'quantity': _controllerQuantity.text,
+                'warningQuantity': _controllerWarningQuantity.text,
+                'unit': '',
+                'mrp': _controllerMRP.text,
+                'salePrice': _controllerSalePrice.text,
+                'foodType': selectedFoodType,
+                'taxType': selectedTaxType,
+                'tax': _controllerTax.text,
+                'image': pickedImagePath,
+                'as': 'item'
+              });
               if (response != null) {
                 showSnackBar(context, 'Successfully created');
                 Navigator.pop(context);

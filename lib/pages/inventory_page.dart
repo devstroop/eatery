@@ -30,7 +30,7 @@ class _InventoryPageState extends State<InventoryPage> {
   }
 
   Color getThemeColor() {
-    return ColorStyle.tertiary;
+    return const Color(0xFF6850EF)/*ColorStyle.tertiary*/;
   }
 
   @override
@@ -240,10 +240,10 @@ class _InventoryPageState extends State<InventoryPage> {
         backgroundColor: getThemeColor(),
         child: const Icon(Icons.add),
         onPressed: () async {
-          if((await ProductCategory.getAll()).isEmpty){
+          /*if((await ProductCategory.getAll()).isEmpty){
             showSnackBar(context, '* Create product category first');
             return;
-          }
+          }*/
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => AddInventoryItemPage(account: widget.account,)),

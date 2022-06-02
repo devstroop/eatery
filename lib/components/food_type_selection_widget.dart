@@ -6,7 +6,7 @@ class FoodTypeSelectionWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if(foodType == 'veg'){
-      return Container(
+      return SizedBox(
           width: 149,
           height: 48,
           child: Stack(
@@ -17,7 +17,7 @@ class FoodTypeSelectionWidget extends StatelessWidget {
                     child: Container(
                         width: 149,
                         height: 48,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           borderRadius : BorderRadius.only(
                             topLeft: Radius.circular(8),
                             topRight: Radius.circular(8),
@@ -33,7 +33,7 @@ class FoodTypeSelectionWidget extends StatelessWidget {
                     child: Container(
                         width: 65,
                         height: 38,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           borderRadius : BorderRadius.only(
                             topLeft: Radius.circular(6),
                             topRight: Radius.circular(6),
@@ -48,7 +48,7 @@ class FoodTypeSelectionWidget extends StatelessWidget {
                           color : Color.fromRGBO(28, 201, 98, 1),
                         )
                     )
-                ),Positioned(
+                ),const Positioned(
                     top: 16,
                     left: 25,
                     child: Text('Veg', textAlign: TextAlign.left, style: TextStyle(
@@ -59,7 +59,7 @@ class FoodTypeSelectionWidget extends StatelessWidget {
                         fontWeight: FontWeight.normal,
                         height: 1.1428571428571428
                     ),)
-                ),Positioned(
+                ),const Positioned(
                     top: 16,
                     left: 82,
                     child: Text('Non Veg', textAlign: TextAlign.left, style: TextStyle(
@@ -75,7 +75,7 @@ class FoodTypeSelectionWidget extends StatelessWidget {
           )
       );
     }else if(foodType == 'nonVeg'){
-      return Container(
+      return SizedBox(
           width: 149,
           height: 48,
           child: Stack(
@@ -102,7 +102,7 @@ class FoodTypeSelectionWidget extends StatelessWidget {
                     child: Container(
                         width: 72,
                         height: 38,
-                        decoration: BoxDecoration(
+                        decoration: const BoxDecoration(
                           borderRadius : BorderRadius.only(
                             topLeft: Radius.circular(6),
                             topRight: Radius.circular(6),
@@ -117,7 +117,7 @@ class FoodTypeSelectionWidget extends StatelessWidget {
                           color : Color.fromRGBO(206, 48, 48, 1),
                         )
                     )
-                ),Positioned(
+                ),const Positioned(
                     top: 16,
                     left: 25,
                     child: Text('Veg', textAlign: TextAlign.left, style: TextStyle(
@@ -128,7 +128,7 @@ class FoodTypeSelectionWidget extends StatelessWidget {
                         fontWeight: FontWeight.normal,
                         height: 1.1428571428571428
                     ),)
-                ),Positioned(
+                ),const Positioned(
                     top: 16,
                     left: 82,
                     child: Text('Non Veg', textAlign: TextAlign.left, style: TextStyle(
@@ -144,7 +144,7 @@ class FoodTypeSelectionWidget extends StatelessWidget {
           )
       );
     }else{
-      return Container(
+      return SizedBox(
           width: 149,
           height: 48,
           child: Stack(

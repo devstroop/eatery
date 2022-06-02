@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dropdown/flutter_dropdown.dart';
 import 'package:move_to_background/move_to_background.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
@@ -20,12 +21,27 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  String? pickedImagePath;
-  final TextEditingController _controllerEmail = TextEditingController();
-  final TextEditingController _controllerPassword = TextEditingController();
+  //final TextEditingController _controllerEmail = TextEditingController();
+  final TextEditingController _controllerPin = TextEditingController();
+  late String selectedCompanyEmail = '';
+  late List<String> companies = [];
+  void loadCompanies() async {
+    List<Map<String, dynamic>> _companies = await Account.getAll();
+    for(Map<String, dynamic> company in _companies){
+      setState((){companies.add("${company['name']} (${company['email']})");});
+    }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    loadCompanies();
+  }
+
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: ColorStyle.background200,
       appBar: AppBar(
@@ -84,7 +100,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: 24.0,
               ),
-              Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.start, children: [
+              /*Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(
                   'Email',
                   style: TextStyle(
@@ -101,13 +117,34 @@ class _LoginPageState extends State<LoginPage> {
                   labelText: 'Email',
                   obscureText: false,
                 ),
-              ]),
+              ]),*/
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  DropDown(
+                    //isExpanded: true,
+                    initialValue: companies.isNotEmpty ? companies.first : null,
+                    items: companies,
+                    hint: const Text("Select Company"),
+                    icon: Icon(
+                      Icons.expand_more,
+                      color: ColorStyle.primary,
+                    ),
+                    onChanged: (value){
+                      setState((){
+                        selectedCompanyEmail = value.toString().split('(').last.replaceAll(')', '').trim();
+                      });
+                    },
+                  ),
+                ],
+              ),
+
               const SizedBox(
                 height: 6.0,
               ),
               Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(
-                  'Password',
+                /*Text(
+                  'PIN',
                   style: TextStyle(
                     color: ColorStyle.text200,
                     fontSize: 12,
@@ -116,10 +153,11 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 const SizedBox(
                   height: 3.0,
-                ),
+                ),*/
                 CustomTextFromField(
-                  controller: _controllerPassword,
-                  labelText: 'Password',
+                  keyboardType: TextInputType.number,
+                  controller: _controllerPin,
+                  labelText: 'PIN',
                   obscureText: true,
                 ),
               ]),
@@ -137,8 +175,9 @@ class _LoginPageState extends State<LoginPage> {
             color: ColorStyle.background100,
             height: 50.0,
             onTap: () async {
-              Map<String, dynamic>? account = await Account.login(_controllerEmail.text, _controllerPassword.text);
+              Map<String, dynamic>? account = await Account.login(selectedCompanyEmail, _controllerPin.text);
               if(account != null){
+                print(account);
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => DashboardPage(account: account)),

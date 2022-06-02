@@ -1,20 +1,12 @@
 import 'dart:io';
 import 'package:battery_info/battery_info_plugin.dart';
-import 'package:battery_info/model/android_battery_info.dart';
-import 'package:battery_info/enums/charging_status.dart';
-import 'package:battery_info/model/iso_battery_info.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:intl/intl.dart';
-import 'package:move_to_background/move_to_background.dart';
-import 'package:restaurant_pos/components/custom_text_from_field.dart';
 import 'package:restaurant_pos/components/menu_widget.dart';
 import 'package:restaurant_pos/components/notification_widget.dart';
-import 'package:restaurant_pos/components/primary_button.dart';
-
+import 'package:restaurant_pos/pages/backup_restore_page.dart';
+import 'package:restaurant_pos/pages/import_export_page.dart';
 import 'package:restaurant_pos/pages/product_categories_page.dart';
-import 'package:restaurant_pos/pages/create_account_3_page.dart';
 import 'package:restaurant_pos/pages/help_page.dart';
 import 'package:restaurant_pos/pages/history_page.dart';
 import 'package:restaurant_pos/pages/inventory_page.dart';
@@ -113,10 +105,10 @@ class _DashboardPageState extends State<DashboardPage> {
                       child: SizedBox(
                         height: 64,
                         width: 64,
-                        child: Image(
+                        child: widget.account['image'] != null ? Image(
                             image: Image.file(
                           File(widget.account['image']),
-                        ).image),
+                        ).image) : Container(),
                       ),
                     )
                   ],
@@ -264,6 +256,39 @@ class _DashboardPageState extends State<DashboardPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => const SettingPage()),
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      MenuWidget(
+                        iconData: Icons.import_export,
+                        title: 'Import / Export',
+                        subtitle: 'Import Products/Invoices here',
+                        color: const Color(0xFFEF9050),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => ImportExportPage(account: widget.account,)),
+                          );
+                        },
+                      ),
+                      MenuWidget(
+                        iconData: Icons.settings_backup_restore,
+                        title: 'Backup / Restore',
+                        subtitle: 'Backup and Restore is here',
+                        color: const Color(0xFF2FC289),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => BackupRestorePage(account: widget.account,)),
                           );
                         },
                       ),

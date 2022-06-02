@@ -36,7 +36,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
 
 
   Color getThemeColor() {
-    return ColorStyle.tertiary;
+    return const Color(0xFF2FC289)/*ColorStyle.tertiary*/;
   }
 
   @override
@@ -64,6 +64,17 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                     return Row(
                       mainAxisSize: MainAxisSize.max,
                       children: [
+                        PosCategoryWidget(
+                            active: selectedCategory == null,
+                            image: null,
+                            label: "Uncategorized",
+                            onTap: () {
+                              setState(
+                                    () {
+                                  selectedCategory = null;
+                                },
+                              );
+                            }),
                         for (var category in snapshot.data)
                           PosCategoryWidget(
                               active: selectedCategory == category['id'],
@@ -336,7 +347,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                 const SizedBox(
                   height: 6.0,
                 ),*/
-                /*Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
@@ -371,7 +382,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                 ),
                 const SizedBox(
                   height: 6.0,
-                ),*/
+                ),
                 const SizedBox(
                   height: 6.0,
                 ),
@@ -403,7 +414,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                             ),
                           ],
                         ),
-                        /*enabled: selectedTaxType != null,*/
+                        enabled: selectedTaxType != null,
                         controller: _controllerTax,
                         labelText: '0.00',
                         obscureText: false,

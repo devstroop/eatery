@@ -147,6 +147,7 @@ class _CreateAccount1PageState extends State<CreateAccount1Page> {
                   height: 3.0,
                 ),
                 CustomTextFromField(
+                  keyboardType: TextInputType.emailAddress,
                   controller: _controllerEmailAddress,
                   labelText: 'eg. delhi@foodplaza.in',
                   obscureText: false,
@@ -168,6 +169,7 @@ class _CreateAccount1PageState extends State<CreateAccount1Page> {
                   height: 3.0,
                 ),
                 CustomTextFromField(
+                  keyboardType: TextInputType.phone,
                   controller: _controllerPhoneNumber,
                   labelText: 'eg. +919999999999',
                   obscureText: false,
@@ -189,6 +191,7 @@ class _CreateAccount1PageState extends State<CreateAccount1Page> {
                   height: 3.0,
                 ),
                 CustomTextFromField(
+                  keyboardType: TextInputType.streetAddress,
                   controller: _controllerAddress,
                   labelText: 'Where are we?',
                   obscureText: false,

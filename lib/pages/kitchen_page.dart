@@ -37,7 +37,7 @@ class _KitchenPageState extends State<KitchenPage> {
   }
 
   Color getThemeColor() {
-    return ColorStyle.tertiary;
+    return const Color(0xFF2FC289)/*ColorStyle.tertiary*/;
   }
 
   @override
@@ -239,10 +239,10 @@ class _KitchenPageState extends State<KitchenPage> {
         backgroundColor: getThemeColor(),
         child: const Icon(Icons.add),
         onPressed: () async {
-          if((await ProductCategory.getAll()).isEmpty){
+          /*if((await ProductCategory.getAll()).isEmpty){
             showSnackBar(context, '* Create product category first');
             return;
-          }
+          }*/
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => AddKitchenDish(account: widget.account,)),
