@@ -27,9 +27,9 @@ class MyApp extends StatelessWidget {
         future: Account.getAll(),
         builder: (BuildContext context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot){
           if(!snapshot.hasData){
-            return const Scaffold(
+            return Scaffold(
               body: Center(
-                child: CircularProgressIndicator(),
+                child: Text("RestaurantPOS", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32.0, color: ColorStyle.primary))/*CircularProgressIndicator()*/,
               ),
             );
           }

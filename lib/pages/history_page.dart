@@ -17,6 +17,7 @@ import 'package:restaurant_pos/style/color_style.dart';
 class HistoryPage extends StatefulWidget {
   const HistoryPage({Key? key, this.account}) : super(key: key);
   final dynamic account;
+
   @override
   State<HistoryPage> createState() => _HistoryPageState();
 }
@@ -24,7 +25,7 @@ class HistoryPage extends StatefulWidget {
 class _HistoryPageState extends State<HistoryPage> {
   late List<Map<String, dynamic>> ordersData = [];
 
-  void loadWaiters() async {
+  void loadOrders() async {
     List<Map<String, dynamic>> ordersData = await Order.getAll();
     setState(() {
       this.ordersData = ordersData;
@@ -34,7 +35,7 @@ class _HistoryPageState extends State<HistoryPage> {
   @override
   void initState() {
     super.initState();
-    loadWaiters();
+    loadOrders();
   }
 
   Color getThemeColor() {
@@ -52,22 +53,45 @@ class _HistoryPageState extends State<HistoryPage> {
       width: double.maxFinite,
       height: double.maxFinite,
       child: ListView(scrollDirection: Axis.vertical, shrinkWrap: true, children: [
+        ordersData.isEmpty
+            ? SizedBox(
+                child: Padding(
+                  padding: EdgeInsets.only(
+                    top: (MediaQuery.of(context).size.width < MediaQuery.of(context).size.height
+                            ? MediaQuery.of(context).size.width
+                            : 0.0) *
+                        0.5,
+                  ),
+                  child: Center(
+                      child: Image.asset(
+                    'assets/images/2748558.png',
+                    width: (MediaQuery.of(context).size.width < MediaQuery.of(context).size.height
+                            ? MediaQuery.of(context).size.width
+                            : MediaQuery.of(context).size.height) *
+                        0.5,
+                  )),
+                ),
+              )
+            : Container(),
         for (var order in ordersData)
           InkWell(
             onTap: () {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                    builder: (context) => DetailedHistoryPage(order: order, account: widget.account,
-                      orderType: order['orderType'] == 'dineIn'
-                          ? OrderType.dineIn
-                          : order['orderType'] == 'delivery'
-                          ? OrderType.delivery
-                          : order['orderType'] == 'takeAway'
-                          ? OrderType.takeAway
-                          : null,)),
+                    builder: (context) => DetailedHistoryPage(
+                          order: order,
+                          account: widget.account,
+                          orderType: order['orderType'] == 'dineIn'
+                              ? OrderType.dineIn
+                              : order['orderType'] == 'delivery'
+                                  ? OrderType.delivery
+                                  : order['orderType'] == 'takeAway'
+                                      ? OrderType.takeAway
+                                      : null,
+                        )),
               ).then((_) {
-                setState((){});
+                setState(() {});
               });
             },
             child: Container(
@@ -108,7 +132,7 @@ class _HistoryPageState extends State<HistoryPage> {
                                     TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
                               ),
                               Text(
-                                DateTime.fromMicrosecondsSinceEpoch(order['timestamp']  ?? 0).toString(),
+                                DateTime.fromMicrosecondsSinceEpoch(order['timestamp'] ?? 0).toString(),
                                 style:
                                     TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400, color: ColorStyle.text400),
                               )
@@ -118,8 +142,10 @@ class _HistoryPageState extends State<HistoryPage> {
                       )),
                   Padding(
                       padding: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0),
-                      child: Text('${widget.account['currencySymbol'] ?? ''}${order['finalTotal']}', style:
-                      TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),)),
+                      child: Text(
+                        '${widget.account['currencySymbol'] ?? ''}${order['finalTotal']}',
+                        style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
+                      )),
                 ],
               ),
             ),

@@ -1,5 +1,6 @@
 import 'package:json_store/json_store.dart';
 import 'package:restaurant_pos/services/utility/generate.dart';
+
 class Account{
   static JsonStore store = JsonStore();
   static String name = "account-ref";

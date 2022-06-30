@@ -104,6 +104,7 @@ class _CreateAccount1PageState extends State<CreateAccount1Page> {
                     allowedExtensions: ['jpg', 'png'],
                   );
                   if (result != null && result.files.isNotEmpty) {
+                    var file = result.files.first;
                     setState(() {
                       pickedImagePath = result.files.first.path;
                     });

@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
 import 'package:restaurant_pos/components/food_type_selection_widget.dart';
 import 'package:restaurant_pos/components/pos_category_widget.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
-import 'package:restaurant_pos/components/tax_type_selection_widget.dart';
 import 'package:restaurant_pos/components/upload_button.dart';
 import 'package:restaurant_pos/database/product.dart';
 import 'package:restaurant_pos/database/product_category.dart';
@@ -25,7 +25,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
   String? pickedImagePath;
   String? selectedCategory;
   String? selectedFoodType;
-  String? selectedTaxType;
+  String? selectedTaxType = 'inclusive';
   final TextEditingController _controllerProductName = TextEditingController();
   final TextEditingController _controllerQuantity = TextEditingController();
   final TextEditingController _controllerWarningQuantity = TextEditingController();
@@ -35,14 +35,14 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
   final TextEditingController _controllerDescription = TextEditingController();
 
 
-  Color getThemeColor() {
-    return const Color(0xFF2FC289)/*ColorStyle.tertiary*/;
-  }
+  /*Color getThemeColor() {
+    return const Color(0xFF2FC289)*//*ColorStyle.tertiary*//*;
+  }*/
 
   @override
   Widget build(BuildContext context) {
     Color getThemeColor() {
-      return ColorStyle.tertiary;
+      return const Color(0xFF2FC289)/*ColorStyle.tertiary*/;
     }
 
     final appBar = AppBar(
@@ -358,26 +358,38 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    Flexible(
-                      child: InkWell(
-                        child: TaxTypeSelectionWidget(taxType: selectedTaxType),
-                        onTap: () {
-                          if (selectedTaxType == 'inclusive') {
-                            setState(() {
-                              selectedTaxType = 'exclusive';
-                            });
-                          } else if (selectedTaxType == 'exclusive') {
-                            setState(() {
-                              selectedTaxType = null;
-                            });
-                          } else {
-                            setState(() {
-                              selectedTaxType = 'inclusive';
-                            });
+
+                    FlutterSwitch(
+                      activeText: "Inclusive",
+                      inactiveText: "Exclusive",
+                      value: selectedTaxType == 'inclusive',
+                      valueFontSize: 14.0,
+                      width: 110,
+                      height: 45,
+                      borderRadius: 45.0,
+                      showOnOff: true,
+                      activeTextFontWeight: FontWeight.w500,
+                      inactiveTextFontWeight: FontWeight.w500,
+                      toggleSize: 39.0,
+                      // activeToggleColor: Color(0xFF6E40C9),
+                      // inactiveToggleColor: Color(0xFF2F363D),
+                      activeColor: getThemeColor(),
+                      // inactiveColor: Colors.white,
+                      // activeTextColor: Colors.black,
+                      // inactiveTextColor: Colors.white,
+
+
+                      onToggle: (value){
+                        setState((){
+                          if(selectedTaxType == 'inclusive'){
+                            selectedTaxType = 'exclusive';
                           }
-                        },
-                      ),
-                    ),
+                          else{
+                            selectedTaxType = 'inclusive';
+                          }
+                        });
+                      },
+                    )
                   ],
                 ),
                 const SizedBox(

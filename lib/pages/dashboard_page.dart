@@ -3,6 +3,7 @@ import 'package:battery_info/battery_info_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:restaurant_pos/components/menu_widget.dart';
+import 'package:restaurant_pos/components/menu_widget_extended.dart';
 import 'package:restaurant_pos/components/notification_widget.dart';
 import 'package:restaurant_pos/pages/backup_restore_page.dart';
 import 'package:restaurant_pos/pages/import_export_page.dart';
@@ -13,7 +14,7 @@ import 'package:restaurant_pos/pages/inventory_page.dart';
 import 'package:restaurant_pos/pages/kitchen_page.dart';
 import 'package:restaurant_pos/pages/logout_page.dart';
 import 'package:restaurant_pos/pages/point_of_sale_page.dart';
-import 'package:restaurant_pos/pages/setting_page.dart';
+import 'package:restaurant_pos/pages/settings_page.dart';
 import 'package:restaurant_pos/pages/dining_tables_page.dart';
 import 'package:restaurant_pos/pages/waiters_page.dart';
 import 'package:restaurant_pos/style/color_style.dart';
@@ -29,7 +30,6 @@ class DashboardPage extends StatefulWidget {
 class _DashboardPageState extends State<DashboardPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   late int batteryLevel;
-
 
   @override
   void initState() {
@@ -105,10 +105,12 @@ class _DashboardPageState extends State<DashboardPage> {
                       child: SizedBox(
                         height: 64,
                         width: 64,
-                        child: widget.account['image'] != null ? Image(
-                            image: Image.file(
-                          File(widget.account['image']),
-                        ).image) : Container(),
+                        child: widget.account['image'] != null
+                            ? Image(
+                                image: Image.file(
+                                File(widget.account['image']),
+                              ).image)
+                            : Container(),
                       ),
                     )
                   ],
@@ -118,12 +120,21 @@ class _DashboardPageState extends State<DashboardPage> {
                   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                     if (snapshot.connectionState == ConnectionState.done &&
                         snapshot.data <= widget.account['lowBatteryLevel']) {
-                      return NotificationWidget(message: 'Battery level is ${snapshot.data}% in need of charging.');
+                      return NotificationWidget(message: 'Battery level is ${snapshot.data}% in need of charging.', timestamp: true,);
                     } else {
                       return Container();
                     }
                   },
                 ),
+                // Modify here
+                widget.account['purchaseCode'] == null ? Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+                    child: NotificationWidget(message: 'Activate Product', header: "Upgrade", icon: const Icon(Icons.workspace_premium, color: Colors.amber,),
+                      onTap: (){
+
+                      },
+                    )
+                ) : Container(),
                 Padding(
                   padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
                   child: Row(
@@ -138,7 +149,10 @@ class _DashboardPageState extends State<DashboardPage> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => PointOfSalePage(account: widget.account,)),
+                            MaterialPageRoute(
+                                builder: (context) => PointOfSalePage(
+                                      account: widget.account,
+                                    )),
                           );
                         },
                       ),
@@ -243,7 +257,10 @@ class _DashboardPageState extends State<DashboardPage> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => HistoryPage(account: widget.account,)),
+                            MaterialPageRoute(
+                                builder: (context) => HistoryPage(
+                                      account: widget.account,
+                                    )),
                           );
                         },
                       ),
@@ -276,7 +293,10 @@ class _DashboardPageState extends State<DashboardPage> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => ImportExportPage(account: widget.account,)),
+                            MaterialPageRoute(
+                                builder: (context) => ImportExportPage(
+                                      account: widget.account,
+                                    )),
                           );
                         },
                       ),
@@ -288,7 +308,10 @@ class _DashboardPageState extends State<DashboardPage> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => BackupRestorePage(account: widget.account,)),
+                            MaterialPageRoute(
+                                builder: (context) => BackupRestorePage(
+                                      account: widget.account,
+                                    )),
                           );
                         },
                       ),
@@ -301,7 +324,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      MenuWidget(
+                      /*MenuWidget(
                         iconData: Icons.help_outline,
                         title: 'Help',
                         subtitle: 'Do you need an assistance?',
@@ -312,8 +335,8 @@ class _DashboardPageState extends State<DashboardPage> {
                             MaterialPageRoute(builder: (context) => const HelpPage()),
                           );
                         },
-                      ),
-                      MenuWidget(
+                      ),*/
+                      MenuWidgetExtended(
                         iconData: Icons.logout,
                         title: 'Logout',
                         subtitle: 'Close the session',
