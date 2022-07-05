@@ -2,6 +2,8 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
 import 'package:restaurant_pos/components/dialog_box.dart';
 import 'package:restaurant_pos/components/food_type_selection_widget.dart';
@@ -11,6 +13,8 @@ import 'package:restaurant_pos/components/upload_button.dart';
 import 'package:restaurant_pos/database/cart.dart';
 import 'package:restaurant_pos/database/product.dart';
 import 'package:restaurant_pos/database/product_category.dart';
+import 'package:restaurant_pos/extensions/app_file_system.dart';
+import 'package:restaurant_pos/services/utility/generate.dart';
 import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
@@ -183,15 +187,10 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
                     },
                   ),
                   onTap: () async {
-                    FilePickerResult? result = await FilePicker.platform.pickFiles(
-                      type: FileType.custom,
-                      allowedExtensions: ['jpg', 'png'],
-                    );
-                    if (result != null && result.files.isNotEmpty) {
-                      setState(() {
-                        pickedImagePath = result.files.first.path;
-                      });
-                    }
+                    String? path = await AppFileSystem.pickImage();
+                    setState(() {
+                      pickedImagePath = path;
+                    });
                   },
                 ),
                 const SizedBox(

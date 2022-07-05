@@ -1,16 +1,11 @@
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:restaurant_pos/components/bottom_view_grip.dart';
-import 'package:restaurant_pos/components/cart_product_card.dart';
 import 'package:restaurant_pos/components/checkout_product_card.dart';
 import 'package:restaurant_pos/components/custom_button.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
 import 'package:restaurant_pos/components/pos_waiter_card.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
-import 'package:restaurant_pos/components/upload_button.dart';
-import 'package:restaurant_pos/components/waiter_card.dart';
 import 'package:restaurant_pos/database/cart.dart';
-import 'package:restaurant_pos/database/dining_table_category.dart';
 import 'package:restaurant_pos/database/order.dart';
 import 'package:restaurant_pos/database/waiter.dart';
 import 'package:restaurant_pos/extensions/calculations.dart';
@@ -962,6 +957,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 };
                 String? id = await Order.add(order);
                 order['id'] = id;
+
+                // Print here
+                // PrintInvoice(order: order, account: widget.account);
+
+
                 Cart.cart = {};
                 Navigator.push(
                   context,

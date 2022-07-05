@@ -1,16 +1,10 @@
 import 'package:json_store/json_store.dart';
 import 'package:restaurant_pos/services/utility/generate.dart';
 
-class Account{
+class Printer{
   static JsonStore store = JsonStore();
-  static String name = "account-ref";
-  static Future<Map<String, dynamic>?> login(String email, String password) async {
-    var q = (await getAll()).where((element) => element['email'].toLowerCase() == email.toLowerCase() && element['password'] == password);
-    if (q.isNotEmpty) {
-      return q.first;
-    }
-    return null;
-  }
+  static String name = "printer-ref";
+
   static Future<String?> add(Map<String, dynamic> data) async {
     try{
       String id;
@@ -25,7 +19,6 @@ class Account{
           }
         }
       }
-
       await store.setItem('$name-$id', data);
       return id;
     }

@@ -22,7 +22,7 @@ class ProductCategoryCard extends StatelessWidget {
               boxShadow: const [
                 BoxShadow(
                   color: Color(0x2F000000),
-                  blurRadius: 6,
+                  blurRadius: 4,
                   offset: Offset(0, 4),
                   spreadRadius: 1,
                 )
@@ -42,48 +42,57 @@ class ProductCategoryCard extends StatelessWidget {
                 (1 / 3),
             child: InkWell(
               onTap: onTap,
-              child: Row(
-                children: [
-                  Flexible(
-                      flex: 1,
-                      child: Stack(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: ColorStyle.background200,
-                              borderRadius:
-                                  const BorderRadius.only(topLeft: Radius.circular(6), bottomLeft: Radius.circular(6)),
-                              image: File(image ?? '').existsSync()
-                                  ? DecorationImage(image: FileImage(File(image!)), fit: BoxFit.cover)
-                                  : const DecorationImage(
-                                      image: AssetImage('assets/images/no-image.jpg'), fit: BoxFit.cover),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: ColorStyle.background200,
+                  borderRadius: const BorderRadius.all(Radius.circular(6)),
+                ),
+                child: Row(
+                  children: [
+                    Flexible(
+                        flex: 1,
+                        child: Stack(
+                          children: [
+                            File(image ?? '').existsSync()
+                                ? Container(
+                                    margin: const EdgeInsets.all(6.0),
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(image: FileImage(File(image!)), fit: BoxFit.cover),
+                                    ),
+                                  )
+                                : Container(
+                                    decoration: const BoxDecoration(
+                                      image: DecorationImage(
+                                          image: AssetImage('assets/images/no-image.jpg'), fit: BoxFit.cover),
+                                    ),
+                                  ),
+                          ],
+                        )),
+                    Flexible(
+                        flex: 3,
+                        child: Stack(
+                          children: [
+                            Container(
+                              decoration: BoxDecoration(
+                                color: ColorStyle.background100,
+                                borderRadius: const BorderRadius.only(
+                                    topRight: Radius.circular(6), bottomRight: Radius.circular(6)),
+                              ),
                             ),
-                          ),
-                        ],
-                      )),
-                  Flexible(
-                      flex: 3,
-                      child: Stack(
-                        children: [
-                          Container(
-                            decoration: BoxDecoration(
-                              color: ColorStyle.background100,
-                              borderRadius: const BorderRadius.only(
-                                  topRight: Radius.circular(6), bottomRight: Radius.circular(6)),
-                            ),
-                          ),
-                          Container(
-                            alignment: Alignment.centerLeft,
-                            margin: const EdgeInsets.all(12.0),
-                            child: Text(
-                              name,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
-                            ),
-                          )
-                        ],
-                      )),
-                ],
+                            Container(
+                              alignment: Alignment.centerLeft,
+                              margin: const EdgeInsets.all(12.0),
+                              child: Text(
+                                name,
+                                overflow: TextOverflow.ellipsis,
+                                style:
+                                    TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
+                              ),
+                            )
+                          ],
+                        )),
+                  ],
+                ),
               ),
             ),
           ),

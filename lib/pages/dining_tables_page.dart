@@ -47,7 +47,7 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const DiningTableCategoriesPage()),
-          );
+          ).then((_) => setState(() {}));
         },
       ),
     ]);

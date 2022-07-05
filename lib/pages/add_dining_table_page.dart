@@ -2,14 +2,20 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
+import 'package:restaurant_pos/components/dialog_box.dart';
 import 'package:restaurant_pos/components/pos_category_widget.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/components/upload_button.dart';
 import 'package:restaurant_pos/database/dining_table.dart';
 import 'package:restaurant_pos/database/dining_table_category.dart';
+import 'package:restaurant_pos/extensions/app_file_system.dart';
+import 'package:restaurant_pos/services/utility/generate.dart';
 import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
+
 class AddDiningTablePage extends StatefulWidget {
   const AddDiningTablePage({Key? key}) : super(key: key);
 
@@ -25,6 +31,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
   Color getThemeColor() {
     return ColorStyle.tertiary;
   }
+
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
@@ -58,15 +65,10 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                   },
                 ),
                 onTap: () async {
-                  FilePickerResult? result = await FilePicker.platform.pickFiles(
-                    type: FileType.custom,
-                    allowedExtensions: ['jpg', 'png'],
-                  );
-                  if (result != null && result.files.isNotEmpty) {
-                    setState(() {
-                      pickedImagePath = result.files.first.path;
-                    });
-                  }
+                  String? path = await AppFileSystem.pickImage();
+                  setState(() {
+                    pickedImagePath = path;
+                  });
                 },
               ),
               const SizedBox(
@@ -121,8 +123,8 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                                             label: category['name'],
                                             onTap: () {
                                               setState(
-                                                    () {
-                                                      selectedDiningTableCategory = category['id'];
+                                                () {
+                                                  selectedDiningTableCategory = category['id'];
                                                 },
                                               );
                                             })
@@ -155,20 +157,23 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
             color: ColorStyle.background100,
             height: 50.0,
             onTap: () async {
-              if(_controllerCategoryName.text.trim() == ''){
+              if (_controllerCategoryName.text.trim() == '') {
                 showSnackBar(context, '* Dining table name required');
                 return;
               }
-              if(selectedDiningTableCategory == null){
+              if (selectedDiningTableCategory == null) {
                 showSnackBar(context, '* Select category');
                 return;
               }
-              var response = await DiningTable.add({'image': pickedImagePath, 'name': _controllerCategoryName.text, 'category': selectedDiningTableCategory});
-              if(response != null){
+              var response = await DiningTable.add({
+                'image': pickedImagePath,
+                'name': _controllerCategoryName.text,
+                'category': selectedDiningTableCategory
+              });
+              if (response != null) {
                 showSnackBar(context, 'Successfully created');
                 Navigator.pop(context);
-              }
-              else{
+              } else {
                 showSnackBar(context, 'Failed to create');
               }
             },

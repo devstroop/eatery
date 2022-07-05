@@ -25,7 +25,12 @@ class ImportExportPage extends StatefulWidget {
 
 class _ImportExportPageState extends State<ImportExportPage> {
 
+  Future<void> doImportProducts() async{
 
+  }
+  Future<void> doExportProducts() async{
+
+  }
   @override
   void initState() {
     super.initState();
@@ -43,19 +48,15 @@ class _ImportExportPageState extends State<ImportExportPage> {
         InkWell(
           onTap: () { },
           child: MenuTile(
-            prefixIcon: Icons.input, title: 'Import', subtitle: 'Import invoices and vouchers', postfixIcon: Icons.arrow_forward_ios_sharp, color: getThemeColor(),
-            onTap: (){
-
-            },
+            prefixIcon: Icons.input, title: 'Import Products', subtitle: 'Import invoices and vouchers', postfixIcon: Icons.arrow_forward_ios_sharp, color: getThemeColor(),
+            onTap: doImportProducts,
           ),
         ),
         InkWell(
           onTap: () { },
           child: MenuTile(
-            prefixIcon: Icons.output, title: 'Export', subtitle: 'Export invoices and vouchers', postfixIcon: Icons.arrow_forward_ios_sharp, color: getThemeColor(),
-            onTap: (){
-
-            },
+            prefixIcon: Icons.output, title: 'Export Products', subtitle: 'Export invoices and vouchers', postfixIcon: Icons.arrow_forward_ios_sharp, color: getThemeColor(),
+            onTap: doExportProducts,
           ),
         ),
       ]),

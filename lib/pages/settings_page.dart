@@ -13,6 +13,7 @@ import 'package:restaurant_pos/models/order_type.dart';
 import 'package:restaurant_pos/pages/add_waiter_page.dart';
 import 'package:restaurant_pos/pages/detailed_history_page.dart';
 import 'package:restaurant_pos/pages/edit_waiter_page.dart';
+import 'package:restaurant_pos/pages/printer_settings_page.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class SettingPage extends StatefulWidget {
@@ -62,16 +63,18 @@ class _SettingPageState extends State<SettingPage> {
          onTap: () { },
          child: MenuTile(
            prefixIcon: Icons.print, title: 'Printer Settings', subtitle: 'Manage Printing Devices', postfixIcon: Icons.arrow_forward_ios_sharp, color: getThemeColor(),
-           onTap: (){
-
-           },
+           onTap: () => Navigator.push(
+             context,
+             MaterialPageRoute(
+                 builder: (context) => const PrinterSettingsPage()),
+           ),
          ),
        ),
        InkWell(
          onTap: () { },
          child: MenuTile(
            prefixIcon: Icons.delete, title: 'Delete company', subtitle: 'Destroy all invoices/products etc', postfixIcon: Icons.arrow_forward_ios_sharp, color: getThemeColor(),
-           onTap: (){
+           onTap: () async {
 
            },
          ),

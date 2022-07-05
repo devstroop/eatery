@@ -7,11 +7,15 @@ class Order{
   static Future<String?> add(Map<String, dynamic> data) async {
     try{
       String id;
-      while(true){
-        id = getRandomString(8);
-        if(await store.getItem('$name-$id') == null){
-          data['id'] = id;
-          break;
+      if(data.containsKey('id')){
+        id = data['id'];
+      }else{
+        while(true){
+          id = getRandomString(8);
+          if(await store.getItem('$name-$id') == null){
+            data['id'] = id;
+            break;
+          }
         }
       }
       await store.setItem('$name-$id', data);

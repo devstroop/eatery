@@ -48,10 +48,24 @@ dependencies:
   platform_device_id: ^1.0.1
   encrypt: ^5.0.1
   json_store: ^2.0.0-nullsafety.0
-  path_provider: ^2.0.8
+  path_provider: ^2.0.9
   flutter_dropdown: ^1.0.0+hotfix.1
   flutter_switch: ^0.3.2
-  progress_dialog: ^1.2.4
+  image_picker: ^0.8.5+3
+
+  sn_progress_dialog: ^1.0.8
+  excel: ^2.0.0-null-safety-3
+
+  flutter_file_dialog: ^2.3.0
+  flutter_archive: ^5.0.0
+
+  # flutter_blue: ^0.8.0
+  # esc_pos_utils: ^1.1.0
+  # bluetooth_print: ^3.0.1
+  esc_pos_bluetooth: ^0.4.1
+
+  # esc_pos_bluetooth: ^0.4.1
+  # flutter_bluetooth_basic: ^0.1.7
 
 dev_dependencies:
   flutter_test:
