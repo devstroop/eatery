@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:restaurant_pos/components/menu_widget.dart';
 import 'package:restaurant_pos/components/menu_widget_extended.dart';
 import 'package:restaurant_pos/components/notification_widget.dart';
+import 'package:restaurant_pos/database/account.dart';
 import 'package:restaurant_pos/pages/backup_restore_page.dart';
 import 'package:restaurant_pos/pages/import_export_page.dart';
 import 'package:restaurant_pos/pages/product_categories_page.dart';
@@ -19,9 +20,11 @@ import 'package:restaurant_pos/pages/dining_tables_page.dart';
 import 'package:restaurant_pos/pages/waiters_page.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
+import 'activate_license_page.dart';
+
 class DashboardPage extends StatefulWidget {
-  const DashboardPage({Key? key, required this.account}) : super(key: key);
-  final Map<String, dynamic> account;
+  DashboardPage({Key? key, required this.account}) : super(key: key);
+  late Map<String, dynamic> account;
 
   @override
   _DashboardPageState createState() => _DashboardPageState();
@@ -105,7 +108,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       child: SizedBox(
                         height: 64,
                         width: 64,
-                        child: widget.account['image'] != null
+                        child: widget.account['image'] != null && File(widget.account['image']).existsSync()
                             ? Image(
                                 image: Image.file(
                                 File(widget.account['image']),
@@ -129,9 +132,19 @@ class _DashboardPageState extends State<DashboardPage> {
                 // Modify here
                 widget.account['purchaseCode'] == null ? Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
-                    child: NotificationWidget(message: 'Activate Product', header: "Upgrade", icon: const Icon(Icons.workspace_premium, color: Colors.amber,),
+                    child: NotificationWidget(message: 'Activate License', header: "Upgrade", icon: const Icon(Icons.workspace_premium, color: Colors.amber,),
                       onTap: (){
-
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ActivateLicensePage(
+                            account: widget.account,
+                          )),
+                        ).then((_) async {
+                          Map<String, dynamic>? account = (await Account.login(widget.account['email'], widget.account['password']));
+                          setState(() {
+                            widget.account = account!;
+                          });
+                        });
                       },
                     )
                 ) : Container(),
@@ -272,8 +285,15 @@ class _DashboardPageState extends State<DashboardPage> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const SettingPage()),
-                          );
+                            MaterialPageRoute(builder: (context) => SettingPage(
+                              account: widget.account,
+                            )),
+                          ).then((_) async {
+                            Map<String, dynamic>? account = (await Account.login(widget.account['email'], widget.account['password']));
+                            setState(() {
+                              widget.account = account!;
+                            });
+                          });
                         },
                       ),
                     ],
@@ -324,18 +344,6 @@ class _DashboardPageState extends State<DashboardPage> {
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      /*MenuWidget(
-                        iconData: Icons.help_outline,
-                        title: 'Help',
-                        subtitle: 'Do you need an assistance?',
-                        color: const Color(0xFF42A5F5),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const HelpPage()),
-                          );
-                        },
-                      ),*/
                       MenuWidgetExtended(
                         iconData: Icons.logout,
                         title: 'Logout',

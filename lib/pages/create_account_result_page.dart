@@ -21,7 +21,7 @@ class _CreateAccountResultPageState extends State<CreateAccountResultPage> {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(12.0),
-          child: Container(
+          child: SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             child: Column(
@@ -37,7 +37,7 @@ class _CreateAccountResultPageState extends State<CreateAccountResultPage> {
                 ),
                 Column(
                   mainAxisSize: MainAxisSize.min,
-                  children: [
+                  children: const [
                     Text(
                       'Congratulations',
                       style: TextStyle(

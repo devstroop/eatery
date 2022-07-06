@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
+import 'package:restaurant_pos/services/printing/print_invoice.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
 class OrderConfirmation extends StatefulWidget {
-  const OrderConfirmation({Key? key, required this.order}) : super(key: key);
+  const OrderConfirmation({Key? key, required this.order, required this.account}) : super(key: key);
   final Map<String, dynamic> order;
+  final Map<String, dynamic> account;
+
   @override
   State<OrderConfirmation> createState() => _OrderConfirmationState();
 }
 
 class _OrderConfirmationState extends State<OrderConfirmation> {
+  @override
+  void initState() {
+    super.initState();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,6 +60,31 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                   fontWeight: FontWeight.w500,
                 ),
               ),
+              SizedBox(
+                height: 12,
+              ),
+              /*Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  IconButton(
+                      onPressed: () async {
+                        await PrintInvoice.printReceipt(order: widget.order, account: widget.account);
+                      },
+                      icon: const Icon(
+                        Icons.print,
+                        size: 48,
+                      )),
+                  SizedBox(
+                    width: 24,
+                  ),
+                  IconButton(
+                      onPressed: () {},
+                      icon: const Icon(
+                        Icons.whatsapp,
+                        size: 48,
+                      )),
+                ],
+              )*/
             ],
           ),
         ),
@@ -70,7 +104,6 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
           ),
         ),
       ),
-
     );
   }
 }

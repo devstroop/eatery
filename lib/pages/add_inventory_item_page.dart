@@ -13,6 +13,7 @@ import 'package:restaurant_pos/database/product.dart';
 import 'package:restaurant_pos/database/product_category.dart';
 import 'package:restaurant_pos/extensions/app_file_system.dart';
 import 'package:restaurant_pos/services/utility/generate.dart';
+import 'package:restaurant_pos/services/utility/license.dart';
 import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
@@ -32,8 +33,7 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
   final TextEditingController _controllerProductName = TextEditingController();
   final TextEditingController _controllerQuantity = TextEditingController();
   final TextEditingController _controllerWarningQuantity = TextEditingController();
-  final TextEditingController _controllerSalePrice = TextEditingController();
-  final TextEditingController _controllerMRP = TextEditingController();
+  final TextEditingController _controllerPrice = TextEditingController();
   final TextEditingController _controllerTax = TextEditingController();
   final TextEditingController _controllerDescription = TextEditingController();
 
@@ -41,7 +41,7 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
   @override
   Widget build(BuildContext context) {
     Color getThemeColor() {
-      return const Color(0xFF6850EF)/*ColorStyle.tertiary*/;
+      return const Color(0xFF6850EF);
     }
 
     final appBar = AppBar(
@@ -176,7 +176,7 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
                     Flexible(
                       flex: 2,
                       child: Text(
-                        'MRP',
+                        'Price',
                         style: TextStyle(
                           color: ColorStyle.text400,
                           fontSize: 18,
@@ -198,46 +198,7 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
                             ),
                           ],
                         ),
-                        controller: _controllerMRP,
-                        labelText: '0.00',
-                        obscureText: false,
-                        themeColor: getThemeColor(),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 6.0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      flex: 2,
-                      child: Text(
-                        'Sale Price',
-                        style: TextStyle(
-                          color: ColorStyle.text400,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
-                    const Flexible(flex: 1, child: SizedBox()),
-                    Flexible(
-                      flex: 2,
-                      child: CustomTextFromField(
-                        keyboardType: TextInputType.number,
-                        prefixWidget: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              widget.account['currencySymbol'] ?? '',
-                              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18.0),
-                            ),
-                          ],
-                        ),
-                        controller: _controllerSalePrice,
+                        controller: _controllerPrice,
                         labelText: '0.00',
                         obscureText: false,
                         themeColor: getThemeColor(),
@@ -259,26 +220,36 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    Flexible(
-                      child: InkWell(
-                          onTap: () {
-                            if (selectedFoodType == 'veg') {
-                              setState(() {
-                                selectedFoodType = 'nonVeg';
-                              });
-                            } else if (selectedFoodType == 'nonVeg') {
-                              setState(() {
-                                selectedFoodType = null;
-                              });
-                            } else {
-                              setState(() {
-                                selectedFoodType = 'veg';
-                              });
-                            }
-                          },
-                          child: FoodTypeSelectionWidget(
-                            foodType: selectedFoodType,
-                          )),
+                    FlutterSwitch(
+                      activeText: "Veg",
+                      inactiveText: "Non-Veg",
+                      value: selectedFoodType == 'veg',
+                      valueFontSize: 14.0,
+                      width: 110,
+                      height: 45,
+                      borderRadius: 45.0,
+                      showOnOff: true,
+                      activeTextFontWeight: FontWeight.w500,
+                      inactiveTextFontWeight: FontWeight.w500,
+                      toggleSize: 39.0,
+                      // activeToggleColor: Color(0xFF6E40C9),
+                      // inactiveToggleColor: Color(0xFF2F363D),
+                      activeColor: getThemeColor(),
+                      // inactiveColor: Colors.white,
+                      // activeTextColor: Colors.black,
+                      // inactiveTextColor: Colors.white,
+
+
+                      onToggle: (value){
+                        setState((){
+                          if(selectedFoodType == 'veg'){
+                            selectedFoodType = 'nonVeg';
+                          }
+                          else{
+                            selectedFoodType = 'veg';
+                          }
+                        });
+                      },
                     ),
                   ],
                 ),
@@ -490,34 +461,51 @@ class _AddInventoryItemPageState extends State<AddInventoryItemPage> {
                 showSnackBar(context, '* Product name required');
                 return;
               }
-              if (_controllerMRP.text.trim() == '' && _controllerSalePrice.text.trim() == '') {
-                showSnackBar(context, '* MRP or Sale Price required');
+              if (_controllerPrice.text.trim() == '') {
+                showSnackBar(context, '* Price required');
                 return;
               }
               if (selectedCategory == null) {
                 showSnackBar(context, '* Select category');
                 return;
               }
-              var response = await Product.add({
-                'name': _controllerProductName.text,
-                'category': selectedCategory,
-                'description': _controllerDescription.text,
-                'quantity': _controllerQuantity.text,
-                'warningQuantity': _controllerWarningQuantity.text,
-                'unit': '',
-                'mrp': _controllerMRP.text,
-                'salePrice': _controllerSalePrice.text,
-                'foodType': selectedFoodType,
-                'taxType': selectedTaxType,
-                'tax': _controllerTax.text,
-                'image': pickedImagePath,
-                'as': 'item'
-              });
-              if (response != null) {
-                showSnackBar(context, 'Successfully created');
-                Navigator.pop(context);
-              } else {
-                showSnackBar(context, 'Failed to create');
+
+
+              bool flag = true;
+              LicenseData licData = License.validate(widget.account['purchaseCode']);
+              if(!licData.status){
+                List<Map<String, dynamic>> products = (await Product.getAll());
+                if(products.length >= 10){
+                  flag = false;
+                }
+              }
+
+
+
+              if(flag){
+                var response = await Product.add({
+                  'name': _controllerProductName.text,
+                  'category': selectedCategory,
+                  'description': _controllerDescription.text,
+                  'quantity': double.parse(_controllerQuantity.text),
+                  'warningQuantity': double.parse(_controllerWarningQuantity.text),
+                  'price': double.parse(_controllerPrice.text),
+                  'foodType': selectedFoodType,
+                  'taxType': selectedTaxType,
+                  'tax': double.parse(_controllerTax.text != '' ? _controllerTax.text : '0'),
+                  'image': pickedImagePath,
+                  'as': 'item'
+                });
+                if (response != null) {
+                  showSnackBar(context, 'Successfully created');
+                  Navigator.pop(context);
+                } else {
+                  showSnackBar(context, 'Failed to create');
+                }
+              }
+              else{
+                showSnackBar(context, 'Please activate license to add more products');
+                return;
               }
             },
           ),

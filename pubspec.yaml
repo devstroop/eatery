@@ -58,11 +58,15 @@ dependencies:
 
   flutter_file_dialog: ^2.3.0
   flutter_archive: ^5.0.0
-
+  qrscan: ^0.3.2
   # flutter_blue: ^0.8.0
   # esc_pos_utils: ^1.1.0
   # bluetooth_print: ^3.0.1
   esc_pos_bluetooth: ^0.4.1
+
+  get: ^4.6.5
+
+  date_time_picker: ^2.1.0
 
   # esc_pos_bluetooth: ^0.4.1
   # flutter_bluetooth_basic: ^0.1.7

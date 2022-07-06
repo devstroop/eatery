@@ -278,9 +278,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                 id: id,
                 name: Cart.cart[id]!['name'],
                 description: Cart.cart[id]!['description'],
-                priceTotal: Cart.cart[id]!['billingPrice'] * Cart.cart[id]!['quantity'],
-                customizationPriceTotal:
-                    Calculations.calculateCustomizationsTotal(Cart.cart[id]!['customizations']) ?? 0,
+                priceTotal: Cart.cart[id]!['price'] * Cart.cart[id]!['quantity'],
                 image: Cart.cart[id]!['image'],
                 cartQuantity: Cart.cart[id]!['quantity'],
                 currencySymbol: widget.account['currencySymbol'],
@@ -338,15 +336,9 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
               id: product['id'],
               name: product['name'],
               description: product['description'],
-              mrp: product['mrp'] != null && product['mrp'] != '' ? double.parse(product['mrp']) : null,
-              salePrice: product['salePrice'] != null && product['salePrice'] != ''
-                  ? double.parse(product['salePrice'])
-                  : null,
-              quantity:
-                  product['quantity'] != null && product['quantity'] != '' ? double.parse(product['quantity']) : null,
-              warningQuantity: product['warningQuantity'] != null && product['warningQuantity'] != ''
-                  ? double.parse(product['warningQuantity'])
-                  : null,
+              price: product['price'],
+              quantity: product['quantity'],
+              warningQuantity: product['warningQuantity'],
               image: product['image'],
               foodType: product['foodType'],
               themeColor: orderType.color,
@@ -359,18 +351,9 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                   Cart.cart[product['id']] = {
                     'name': product['name'],
                     'description': product['description'],
-                    'billingPrice': Calculations.getProductBillingPrice(
-                        mrp: product['mrp'] != null && product['mrp'] != '' ? double.parse(product['mrp']) : null,
-                        salePrice: product['salePrice'] != null && product['salePrice'] != ''
-                            ? double.parse(product['salePrice'])
-                            : null),
-                    'mrp': product['mrp'] != null && product['mrp'] != '' ? double.parse(product['mrp']) : null,
-                    'salePrice': product['salePrice'] != null && product['salePrice'] != ''
-                        ? double.parse(product['salePrice'])
-                        : null,
+                    'price': product['price'],
                     'image': product['image'],
-                    'discount': product['discount'] != null && product['discount'] != '' ? double.parse(product['discount']) : null,
-                    'tax': product['tax'] != null && product['tax'] != '' ? double.parse(product['tax']) : null,
+                    'tax': product['tax'],
                     'taxType': product['taxType'],
                     'quantity': 1.0, // Unit value
                     'unit': product['unit'],
@@ -524,22 +507,9 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                       id: product['id'],
                       name: product['name'],
                       description: product['description'],
-                      billingPrice: Calculations.getProductBillingPrice(
-                          mrp: product['mrp'] != null && product['mrp'] != '' ? double.parse(product['mrp']) : null,
-                          salePrice: product['salePrice'] != null && product['salePrice'] != ''
-                              ? double.parse(product['salePrice'])
-                              : null),
-                      otherPrice: Calculations.getProductOtherPrice(
-                          mrp: product['mrp'] != null && product['mrp'] != '' ? double.parse(product['mrp']) : null,
-                          salePrice: product['salePrice'] != null && product['salePrice'] != ''
-                              ? double.parse(product['salePrice'])
-                              : null),
-                      quantity: product['quantity'] != null && product['quantity'] != ''
-                          ? double.parse(product['quantity'])
-                          : null,
-                      warningQuantity: product['warningQuantity'] != null && product['warningQuantity'] != ''
-                          ? double.parse(product['warningQuantity'])
-                          : null,
+                      price: product['price'],
+                      quantity: product['quantity'],
+                      warningQuantity: product['warningQuantity'],
                       image: product['image'],
                       foodType: product['foodType'],
                       themeColor: orderType.color,
@@ -554,21 +524,9 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                             Cart.cart[product['id']] = {
                               'name': product['name'],
                               'description': product['description'],
-                              'billingPrice': Calculations.getProductBillingPrice(
-                                  mrp: product['mrp'] != null && product['mrp'] != ''
-                                      ? double.parse(product['mrp'])
-                                      : null,
-                                  salePrice: product['salePrice'] != null && product['salePrice'] != ''
-                                      ? double.parse(product['salePrice'])
-                                      : null),
-                              'mrp':
-                                  product['mrp'] != null && product['mrp'] != '' ? double.parse(product['mrp']) : null,
-                              'salePrice': product['salePrice'] != null && product['salePrice'] != ''
-                                  ? double.parse(product['salePrice'])
-                                  : null,
+                              'price': product['price'],
                               'image': product['image'],
-                              'discount': product['discount'] != null && product['discount'] != '' ? double.parse(product['discount']) : null,
-                              'tax': product['tax'] != null && product['tax'] != '' ? double.parse(product['tax']) : null,
+                              'tax': product['tax'],
                               'taxType': product['taxType'],
                               'quantity': 1.0, // Unit value
                               'unit': product['unit'],
@@ -836,27 +794,8 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                   setState(() {
                     position = details.offset;
                   });
-                  print(position);
-                  print(position.dx);
-                  print(position.dy);
                 }),
           ),
-          /*Positioned(
-            bottom: Cart.cart.isNotEmpty ? 132.0 : 84.0,
-            left: 12.0,
-            child: Draggable(
-                feedback: waiterSelectionButton,
-                child: waiterSelectionButton,
-                childWhenDragging: Container(),
-                onDragEnd: (details) {
-                  setState(() {
-                    position = details.offset;
-                  });
-                  print(position);
-                  print(position.dx);
-                  print(position.dy);
-                }),
-          ),*/
         ],
       ),
     );

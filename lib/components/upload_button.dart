@@ -57,8 +57,8 @@ class UploadButton extends StatelessWidget {
               ),
             ],
           ),
-          pickedImagePath != null
-              ? Container(
+          pickedImagePath != null && File(pickedImagePath!).existsSync() ?
+          Container(
                   height: 84,
                   width: 84,
                   decoration: BoxDecoration(

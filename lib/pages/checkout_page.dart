@@ -7,10 +7,13 @@ import 'package:restaurant_pos/components/pos_waiter_card.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/database/cart.dart';
 import 'package:restaurant_pos/database/order.dart';
+import 'package:restaurant_pos/database/printer.dart';
 import 'package:restaurant_pos/database/waiter.dart';
 import 'package:restaurant_pos/extensions/calculations.dart';
 import 'package:restaurant_pos/models/order_type.dart';
 import 'package:restaurant_pos/pages/order_confirmation.dart';
+import 'package:restaurant_pos/services/printing/print_invoice.dart';
+import 'package:restaurant_pos/services/utility/license.dart';
 import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
@@ -230,13 +233,9 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   @override
   Widget build(BuildContext context) {
-    final double total = Calculations.calculateTotal(cart: widget.cart);
-    final double discountOnMRP = Calculations.calculateDiscountOnMRPTotal(cart: widget.cart);
-    final double discount = Calculations.calculateDiscountTotal(cart: widget.cart);
     final double taxableTotal = Calculations.calculateTaxableTotal(cart: widget.cart);
     final double taxTotal = Calculations.calculateTaxTotal(cart: widget.cart);
     final double finalTotal = Calculations.calculateFinalTotal(cart: widget.cart);
-    final String? taxSlabs = Calculations.getAllTaxSlabsApplied(cart: widget.cart);
     final int finalTotalAfterRoundOff = Calculations.calculateRoundOff(finalTotal: finalTotal);
     final double roundOff = double.parse((finalTotalAfterRoundOff - finalTotal).toStringAsFixed(2));
 
@@ -550,9 +549,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                       id: id,
                       name: widget.cart[id]!['name'],
                       description: widget.cart[id]!['description'],
-                      priceTotal: widget.cart[id]!['billingPrice'] * widget.cart[id]!['quantity'],
-                      customizationPriceTotal:
-                          Calculations.calculateCustomizationsTotal(widget.cart[id]!['customizations']) ?? 0,
+                      priceTotal: Calculations.calculatePriceWithoutTax(taxType: widget.cart[id]!['taxType'], price: widget.cart[id]!['price'], tax: widget.cart[id]!['tax']) * widget.cart[id]!['quantity'],
                       image: widget.cart[id]!['image'],
                       cartQuantity: widget.cart[id]!['quantity'],
                       currencySymbol: widget.account['currencySymbol'],
@@ -649,118 +646,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     'Total summary',
                     style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
                   ),
-                  const SizedBox(
-                    height: 8.0,
-                  ),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                        child: Text(
-                          'Total',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            color: ColorStyle.text300,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                        child: Text(
-                          '${widget.account['currencySymbol']}$total',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            color: ColorStyle.text200,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  discountOnMRP > 0
-                      ? const SizedBox(
-                          height: 8.0,
-                        )
-                      : Container(),
-                  discountOnMRP > 0
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                              child: Text(
-                                'Discount on MRP',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  color: ColorStyle.information,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                              child: Text(
-                                '- ${widget.account['currencySymbol']}$discountOnMRP',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  color: ColorStyle.information,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      : Container(),
-                  discount > 0
-                      ? const SizedBox(
-                          height: 8.0,
-                        )
-                      : Container(),
-                  discount > 0
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                              child: Text(
-                                'Discount',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  color: ColorStyle.information,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                              child: Text(
-                                '- ${widget.account['currencySymbol']}$discount',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  color: ColorStyle.information,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      : Container(),
-                  const SizedBox(
-                    height: 8.0,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                        padding: const EdgeInsetsDirectional.fromSTEB(0, 12, 6, 0),
                         child: Text(
                           'Taxable',
                           textAlign: TextAlign.start,
@@ -799,7 +689,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               child: Row(
                                 children: [
                                   Text(
-                                    "GST",
+                                    "${widget.account['taxName'] != '' ? widget.account['taxName'] : 'Tax'}",
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
                                       color: ColorStyle.text300,
@@ -807,15 +697,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
-                                  Text(
-                                    taxSlabs != null ? '($taxSlabs)' : "",
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                        color: ColorStyle.text200,
-                                        fontSize: 12,
-                                        fontWeight: FontWeight.w400,
-                                        overflow: TextOverflow.clip),
-                                  )
                                 ],
                               ),
                             ),
@@ -937,40 +818,58 @@ class _CheckoutPageState extends State<CheckoutPage> {
             height: 50.0,
             onTap: () async {
               try{
-                Map<String, dynamic> order = {
-                  'orderType': widget.orderType.name,
-                  'customerName': customerName,
-                  'customerPhone': customerPhone,
-                  'customerAddress': customerAddress,
-                  'timestamp': DateTime.now().microsecondsSinceEpoch,
-                  'tableName': widget.diningTableName,
-                  'cart': widget.cart,
-                  'waiter': selectedWaiterName,
-                  'total': total,
-                  'discountOnMRP': discountOnMRP,
-                  'discount': discount,
-                  'taxableTotal': taxableTotal,
-                  'taxSlabs': taxSlabs,
-                  'taxTotal': taxTotal,
-                  'roundOff': roundOff,
-                  'finalTotal': finalTotal
-                };
-                String? id = await Order.add(order);
-                order['id'] = id;
+                bool flag = true;
+                LicenseData licData = License.validate(widget.account['purchaseCode']);
+                if(!licData.status){
+                  List<Map<String, dynamic>> ordersOfTheMonth = (await Order.getAll()).where((element){
+                    return DateTime.now().year == DateTime.fromMicrosecondsSinceEpoch(element['timestamp']).year && DateTime.now().month == DateTime.fromMicrosecondsSinceEpoch(element['timestamp']).month;
+                  }).toList();
+                  if(ordersOfTheMonth.length >= 100){
+                    flag = false;
+                  }
+                }
+                if(flag){
+                  Map<String, dynamic> order = {
+                    'orderType': widget.orderType.name,
+                    'orderTypeText': widget.orderType.text,
+                    'customerName': customerName,
+                    'customerPhone': customerPhone,
+                    'customerAddress': customerAddress,
+                    'timestamp': DateTime.now().microsecondsSinceEpoch,
+                    'tableName': widget.diningTableName,
+                    'cart': widget.cart,
+                    'waiter': selectedWaiterName,
+                    'taxableTotal': taxableTotal,
+                    'taxTotal': taxTotal,
+                    'roundOff': roundOff,
+                    'finalTotal': finalTotal
+                  };
+                  String? id = await Order.add(order);
+                  order['id'] = id;
 
-                // Print here
-                // PrintInvoice(order: order, account: widget.account);
+                  try{
+                    await PrintInvoice.printReceipt(order: order, account: widget.account);
+                  }catch(_){
+                    showSnackBar(context, 'Failed to print');
+                    return;
+                  }
 
+                  Cart.cart = {};
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => OrderConfirmation(order: order, account: widget.account)),
+                  ).then((_) {
+                    Navigator.pop(context, 'clear');
+                  });
+                }
+                else{
+                  showSnackBar(context, 'Please activate license to create more orders');
+                  return;
+                }
 
-                Cart.cart = {};
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => OrderConfirmation(order: order)),
-                ).then((_) {
-                  Navigator.pop(context, 'clear');
-                });
               }catch(_){
+                print(_);
                 showSnackBar(context, 'Failed');
                 return;
               }

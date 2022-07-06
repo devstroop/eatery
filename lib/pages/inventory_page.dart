@@ -170,22 +170,9 @@ class _InventoryPageState extends State<InventoryPage> {
                               id: product['id'],
                               name: product['name'],
                               description: product['description'],
-                              billingPrice: Calculations.getProductBillingPrice(
-                                  mrp: product['mrp'] != null && product['mrp'] != '' ? double.parse(product['mrp']) : null,
-                                  salePrice: product['salePrice'] != null && product['salePrice'] != ''
-                                      ? double.parse(product['salePrice'])
-                                      : null),
-                              otherPrice: Calculations.getProductOtherPrice(
-                                  mrp: product['mrp'] != null && product['mrp'] != '' ? double.parse(product['mrp']) : null,
-                                  salePrice: product['salePrice'] != null && product['salePrice'] != ''
-                                      ? double.parse(product['salePrice'])
-                                      : null),
-                              quantity: product['quantity'] != null && product['quantity'] != ''
-                                  ? double.parse(product['quantity'])
-                                  : null,
-                              warningQuantity: product['warningQuantity'] != null && product['warningQuantity'] != ''
-                                  ? double.parse(product['warningQuantity'])
-                                  : null,
+                              price: product['price'],
+                              quantity: product['quantity'],
+                              warningQuantity: product['warningQuantity'],
                               image: product['image'],
                               foodType: product['foodType'],
                               themeColor: getThemeColor(),

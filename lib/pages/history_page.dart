@@ -12,7 +12,10 @@ import 'package:restaurant_pos/models/order_type.dart';
 import 'package:restaurant_pos/pages/add_waiter_page.dart';
 import 'package:restaurant_pos/pages/detailed_history_page.dart';
 import 'package:restaurant_pos/pages/edit_waiter_page.dart';
+import 'package:restaurant_pos/pages/print_sales_report_page.dart';
+import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
+import 'package:qrscan/qrscan.dart' as scanner;
 
 class HistoryPage extends StatefulWidget {
   const HistoryPage({Key? key, this.account}) : super(key: key);
@@ -23,12 +26,12 @@ class HistoryPage extends StatefulWidget {
 }
 
 class _HistoryPageState extends State<HistoryPage> {
-  late List<Map<String, dynamic>> ordersData = [];
+  late List<Map<String, dynamic>> orders = [];
 
   void loadOrders() async {
-    List<Map<String, dynamic>> ordersData = await Order.getAll();
+    List<Map<String, dynamic>> orders = await Order.getAll();
     setState(() {
-      this.ordersData = ordersData;
+      this.orders = orders;
     });
   }
 
@@ -47,13 +50,53 @@ class _HistoryPageState extends State<HistoryPage> {
     final appBar = AppBar(
       backgroundColor: getThemeColor(),
       title: const Text('History'),
+      actions: [
+        IconButton(onPressed: () async {
+          String? id = await scanner.scan();
+          if(id != null){
+            Map<String, dynamic>? order = await Order.get(id);
+            if(order != null){
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => DetailedHistoryPage(
+                      order: order,
+                      account: widget.account,
+                      orderType: order['orderType'] == 'dineIn'
+                          ? OrderType.dineIn
+                          : order['orderType'] == 'delivery'
+                          ? OrderType.delivery
+                          : order['orderType'] == 'takeAway'
+                          ? OrderType.takeAway
+                          : null,
+                    )),
+              ).then((_) async {
+                List<Map<String, dynamic>> orders = await Order.getAll();
+                setState(() {
+                  this.orders = orders;
+                });
+              });
+            }
+            else{
+              showSnackBar(context, 'Not found');
+            }
+          }
+        }, icon: const Icon(Icons.qr_code)),
+        IconButton(onPressed: (){
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => PrintSalesReportPage(account: widget.account, orders: orders,)),
+          ).then((_) => setState(() {}));
+        }, icon: const Icon(Icons.print))
+      ],
     );
 
     final ordersPanel = SizedBox(
       width: double.maxFinite,
       height: double.maxFinite,
       child: ListView(scrollDirection: Axis.vertical, shrinkWrap: true, children: [
-        ordersData.isEmpty
+        orders.isEmpty
             ? SizedBox(
                 child: Padding(
                   padding: EdgeInsets.only(
@@ -73,7 +116,7 @@ class _HistoryPageState extends State<HistoryPage> {
                 ),
               )
             : Container(),
-        for (var order in ordersData)
+        for (var order in orders)
           InkWell(
             onTap: () {
               Navigator.push(
@@ -90,8 +133,11 @@ class _HistoryPageState extends State<HistoryPage> {
                                       ? OrderType.takeAway
                                       : null,
                         )),
-              ).then((_) {
-                setState(() {});
+              ).then((_) async {
+                List<Map<String, dynamic>> orders = await Order.getAll();
+                setState(() {
+                  this.orders = orders;
+                });
               });
             },
             child: Container(

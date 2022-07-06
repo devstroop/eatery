@@ -172,16 +172,7 @@ class _KitchenPageState extends State<KitchenPage> {
                           id: product['id'],
                           name: product['name'],
                           description: product['description'],
-                          billingPrice: Calculations.getProductBillingPrice(
-                              mrp: product['mrp'] != null && product['mrp'] != '' ? double.parse(product['mrp']) : null,
-                              salePrice: product['salePrice'] != null && product['salePrice'] != ''
-                                  ? double.parse(product['salePrice'])
-                                  : null),
-                          otherPrice: Calculations.getProductOtherPrice(
-                              mrp: product['mrp'] != null && product['mrp'] != '' ? double.parse(product['mrp']) : null,
-                              salePrice: product['salePrice'] != null && product['salePrice'] != ''
-                                  ? double.parse(product['salePrice'])
-                                  : null),
+                          price: product['price'],
                           quantity: product['quantity'] != null && product['quantity'] != ''
                               ? double.parse(product['quantity'])
                               : null,

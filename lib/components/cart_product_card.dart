@@ -15,7 +15,6 @@ class CartProductCard extends StatelessWidget {
       this.onAdd,
       this.onDeleteAll,
       required this.priceTotal,
-      required this.customizationPriceTotal,
       this.currencySymbol, required this.mode})
       : super(key: key);
   final String id;
@@ -23,7 +22,6 @@ class CartProductCard extends StatelessWidget {
   final String? description;
   final String? image;
   final double priceTotal;
-  final double customizationPriceTotal;
   final double cartQuantity;
   final String? currencySymbol;
   final Function()? onRemove;
@@ -72,14 +70,6 @@ class CartProductCard extends StatelessWidget {
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400, color: ColorStyle.text400),
                         ),
-                        customizationPriceTotal > 0
-                            ? Text(
-                                ' + ' + (currencySymbol ?? '') + '$customizationPriceTotal',
-                                overflow: TextOverflow.ellipsis,
-                                style:
-                                    TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400, color: ColorStyle.text400),
-                              )
-                            : Container()
                       ],
                     ),
                   ],

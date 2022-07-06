@@ -11,8 +11,7 @@ class ProductCard extends StatelessWidget {
         required this.id,
       required this.name,
       this.description,
-      this.billingPrice,
-      this.otherPrice,
+      this.price,
       this.quantity,
       this.image,
       this.foodType,
@@ -27,8 +26,7 @@ class ProductCard extends StatelessWidget {
   final String id; // int
   final String name; // String
   final String? description; // String?
-  final double? billingPrice; // double
-  final double? otherPrice; // double?
+  final double? price; // double
   final double? quantity; // double?
   final double? warningQuantity; // double?
   final double? cartQuantity;
@@ -69,7 +67,7 @@ class ProductCard extends StatelessWidget {
                         : MediaQuery.of(context).size.height) -
                     48) /
                 2 *
-                (230 / 165),
+                (195 / 165),
             child: InkWell(
               onTap: onTap,
               child: Column(
@@ -142,32 +140,15 @@ class ProductCard extends StatelessWidget {
                                   children: [
                                     Column(
                                       children: [
-                                        otherPrice != null ?
                                         Text(
-                                          '${currencySymbol ?? ''}$otherPrice',
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              fontSize: 12.0,
-                                              fontWeight: FontWeight.w400,
-                                              color: ColorStyle.text300,
-                                              decorationColor: ColorStyle.text300,
-                                              decoration: TextDecoration.lineThrough,
-                                              decorationStyle: TextDecorationStyle.solid,
-                                              decorationThickness: 2.0),
-                                        )
-                                            :
-                                        Container(),
-                                        billingPrice != null ?
-
-                                        Text(
-                                          '${currencySymbol ?? ''}$billingPrice',
+                                          '${currencySymbol ?? ''}$price',
                                           overflow: TextOverflow.ellipsis,
                                           style: TextStyle(
                                               fontSize: 16.0,
                                               fontWeight: FontWeight.w600,
-                                              color: otherPrice != null ? ColorStyle.information : ColorStyle.text200
+                                              color: ColorStyle.information
                                           ),
-                                        ) : Container(),
+                                        ) ,
                                       ],
                                     ),
                                     onAdd != null && onRemove != null && cartQuantity != null

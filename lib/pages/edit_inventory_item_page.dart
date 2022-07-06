@@ -2,8 +2,10 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_switch/flutter_switch.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:restaurant_pos/components/animated_toggle.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
 import 'package:restaurant_pos/components/dialog_box.dart';
 import 'package:restaurant_pos/components/food_type_selection_widget.dart';
@@ -35,8 +37,7 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
   final TextEditingController _controllerProductName = TextEditingController();
   final TextEditingController _controllerQuantity = TextEditingController();
   final TextEditingController _controllerWarningQuantity = TextEditingController();
-  final TextEditingController _controllerSalePrice = TextEditingController();
-  final TextEditingController _controllerMRP = TextEditingController();
+  final TextEditingController _controllerPrice = TextEditingController();
   final TextEditingController _controllerTax = TextEditingController();
   final TextEditingController _controllerDescription = TextEditingController();
   late Map<String, dynamic>? product;
@@ -57,18 +58,17 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
         selectedFoodType = this.product!['foodType'];
         selectedTaxType = this.product!['taxType'];
         _controllerProductName.text = this.product!['name'];
-        _controllerQuantity.text = this.product!['quantity'];
-        _controllerWarningQuantity.text = this.product!['warningQuantity'];
-        _controllerSalePrice.text = this.product!['salePrice'];
-        _controllerMRP.text = this.product!['mrp'];
-        _controllerTax.text = this.product!['tax'];
+        _controllerQuantity.text = this.product!['quantity'].toString();
+        _controllerWarningQuantity.text = this.product!['warningQuantity'].toString();
+        _controllerPrice.text = this.product!['price'].toString();
+        _controllerTax.text = this.product!['tax'].toString();
         _controllerDescription.text = this.product!['description'];
       });
     }
   }
 
   Color getThemeColor() {
-    return ColorStyle.tertiary;
+    return const Color(0xFF6850EF);
   }
 
   @override
@@ -231,7 +231,7 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
                     Flexible(
                       flex: 2,
                       child: Text(
-                        'MRP',
+                        'Price',
                         style: TextStyle(
                           color: ColorStyle.text400,
                           fontSize: 18,
@@ -252,45 +252,7 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
                             ),
                           ],
                         ),
-                        controller: _controllerMRP,
-                        labelText: '0.00',
-                        obscureText: false,
-                        themeColor: getThemeColor(),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 6.0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      flex: 2,
-                      child: Text(
-                        'Sale Price',
-                        style: TextStyle(
-                          color: ColorStyle.text400,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
-                    const Flexible(flex: 1, child: SizedBox()),
-                    Flexible(
-                      flex: 2,
-                      child: CustomTextFromField(
-                        prefixWidget: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              widget.account['currencySymbol'] ?? '',
-                              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18.0),
-                            ),
-                          ],
-                        ),
-                        controller: _controllerSalePrice,
+                        controller: _controllerPrice,
                         labelText: '0.00',
                         obscureText: false,
                         themeColor: getThemeColor(),
@@ -312,29 +274,33 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    Flexible(
-                      child: InkWell(
-                          onTap: () {
-                            if (selectedFoodType == 'veg') {
-                              setState(() {
-                                selectedFoodType = 'nonVeg';
-                              });
-                            } else if (selectedFoodType == 'nonVeg') {
-                              setState(() {
-                                selectedFoodType = null;
-                              });
-                            } else {
-                              setState(() {
-                                selectedFoodType = 'veg';
-                              });
-                            }
-                          },
-                          child: FoodTypeSelectionWidget(
-                            foodType: selectedFoodType,
-                          )),
+                    FlutterSwitch(
+                      activeText: "Veg",
+                      inactiveText: "Non-Veg",
+                      value: selectedFoodType == 'veg',
+                      valueFontSize: 14.0,
+                      width: 110,
+                      height: 45,
+                      borderRadius: 45.0,
+                      showOnOff: true,
+                      activeTextFontWeight: FontWeight.w500,
+                      inactiveTextFontWeight: FontWeight.w500,
+                      toggleSize: 39.0,
+                      activeColor: getThemeColor(),
+                      onToggle: (value){
+                        setState((){
+                          if(selectedFoodType == 'veg'){
+                            selectedFoodType = 'nonVeg';
+                          }
+                          else{
+                            selectedFoodType = 'veg';
+                          }
+                        });
+                      },
                     ),
                   ],
                 ),
+
                 const SizedBox(
                   height: 6.0,
                 ),
@@ -392,11 +358,10 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
                       ),
                     ),
                   ],
-                ),
-                const SizedBox(
+                ),const SizedBox(
                   height: 6.0,
                 ),
-                /*Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
@@ -407,33 +372,35 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    Flexible(
-                      child: InkWell(
-                        child: TaxTypeSelectionWidget(taxType: selectedTaxType),
-                        onTap: (){
-                          if(selectedTaxType == 'inclusive'){
-                            setState((){
-                              selectedTaxType = 'exclusive';
-                            });
-
-                          } else if(selectedTaxType == 'exclusive'){
-                            setState((){
-                              selectedTaxType = null;
-                            });
-
-                          } else {
-                            setState((){
-                              selectedTaxType = 'inclusive';
-                            });
+                    FlutterSwitch(
+                      activeText: "Incl",
+                      inactiveText: "Excl",
+                      value: selectedTaxType == 'incl',
+                      valueFontSize: 14.0,
+                      width: 110,
+                      height: 45,
+                      borderRadius: 45.0,
+                      showOnOff: true,
+                      activeTextFontWeight: FontWeight.w500,
+                      inactiveTextFontWeight: FontWeight.w500,
+                      toggleSize: 39.0,
+                      activeColor: getThemeColor(),
+                      onToggle: (value){
+                        setState((){
+                          if(selectedTaxType == 'incl'){
+                            selectedTaxType = 'excl';
                           }
-                        },
-                      ),
+                          else{
+                            selectedTaxType = 'incl';
+                          }
+                        });
+                      },
                     ),
                   ],
                 ),
                 const SizedBox(
                   height: 6.0,
-                ),*/
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -530,8 +497,8 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
                 showSnackBar(context, '* Product name required');
                 return;
               }
-              if (_controllerMRP.text.trim() == '' && _controllerSalePrice.text.trim() == '') {
-                showSnackBar(context, '* MRP or Sale Price required');
+              if (_controllerPrice.text.trim() == '') {
+                showSnackBar(context, '* Price required');
                 return;
               }
               if (selectedCategory == null) {
@@ -543,14 +510,12 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
                 'name': _controllerProductName.text,
                 'category': selectedCategory,
                 'description': _controllerDescription.text,
-                'quantity': _controllerQuantity.text,
-                'warningQuantity': _controllerWarningQuantity.text,
-                'unit': '',
-                'mrp': _controllerMRP.text,
-                'salePrice': _controllerSalePrice.text,
+                'quantity': double.parse(_controllerQuantity.text),
+                'warningQuantity': double.parse(_controllerWarningQuantity.text),
+                'price': double.parse(_controllerPrice.text),
                 'foodType': selectedFoodType,
                 'taxType': selectedTaxType,
-                'tax': _controllerTax.text,
+                'tax': double.parse(_controllerTax.text != '' ? _controllerTax.text : '0'),
                 'image': pickedImagePath,
                 'as': 'item'
               });

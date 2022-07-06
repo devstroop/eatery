@@ -22,7 +22,6 @@ class CreateAccount3Page extends StatefulWidget {
 }
 
 class _CreateAccount3PageState extends State<CreateAccount3Page> {
-  String? pickedImagePath;
   final TextEditingController _controllerFssai = TextEditingController();
   final TextEditingController _controllerGstin = TextEditingController();
 

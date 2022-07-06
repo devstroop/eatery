@@ -5,6 +5,7 @@ import 'package:restaurant_pos/components/cart_product_card.dart';
 import 'package:restaurant_pos/components/checkout_product_card.dart';
 import 'package:restaurant_pos/components/custom_button.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
+import 'package:restaurant_pos/components/dialog_box.dart';
 import 'package:restaurant_pos/components/pos_waiter_card.dart';
 import 'package:restaurant_pos/components/primary_button.dart';
 import 'package:restaurant_pos/components/upload_button.dart';
@@ -16,6 +17,7 @@ import 'package:restaurant_pos/database/waiter.dart';
 import 'package:restaurant_pos/extensions/calculations.dart';
 import 'package:restaurant_pos/models/order_type.dart';
 import 'package:restaurant_pos/pages/order_confirmation.dart';
+import 'package:restaurant_pos/services/printing/print_invoice.dart';
 import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
@@ -43,7 +45,38 @@ class _DetailedHistoryPageState extends State<DetailedHistoryPage> {
   Widget build(BuildContext context) {
     final appBar = AppBar(
       backgroundColor: widget.orderType!.color,
-      title: const Text('Checkout'),
+      title: const Text('Order detail'),
+      actions: [
+        IconButton(onPressed: (){
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return DialogBox(
+                title: 'Delete',
+                message: 'Are you sure?',
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Cancel')),
+                  TextButton(
+                      onPressed: () async {
+                        if ((await Order.delete(widget.order['id']))) {
+                          showSnackBar(context, 'Deleted successfully');
+                        }else{
+                          showSnackBar(context, 'Failed to delete');
+                        }
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                      child: const Text('OK'))
+                ],
+              );
+            },
+          );
+        }, icon: const Icon(Icons.delete))
+      ],
     );
     return Scaffold(
       backgroundColor: ColorStyle.background200,
@@ -314,8 +347,7 @@ class _DetailedHistoryPageState extends State<DetailedHistoryPage> {
                       id: id,
                       name: widget.order['cart'][id]['name'],
                       description: widget.order['cart'][id]['description'],
-                      priceTotal: widget.order['cart'][id]['billingPrice'] * widget.order['cart'][id]['quantity'],
-                      customizationPriceTotal: Calculations.calculateCustomizationsTotal(widget.order['cart'][id]['customizations']) ?? 0,
+                      priceTotal: widget.order['cart'][id]['price'] * widget.order['cart'][id]['quantity'],
                       image: widget.order['cart'][id]['image'],
                       cartQuantity: widget.order['cart'][id]['quantity'],
                       currencySymbol: widget.account['currencySymbol'],
@@ -387,110 +419,6 @@ class _DetailedHistoryPageState extends State<DetailedHistoryPage> {
                     'Total summary',
                     style: TextStyle(fontSize: 18.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
                   ),
-                  const SizedBox(
-                    height: 8.0,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                        child: Text(
-                          'Total',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            color: ColorStyle.text300,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                        child: Text(
-                          '${widget.account['currencySymbol']}${widget.order['total']}',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            color: ColorStyle.text200,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  widget.order['discountOnMRP'] > 0
-                      ? const SizedBox(
-                    height: 8.0,
-                  )
-                      : Container(),
-                  widget.order['discountOnMRP'] > 0
-                      ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                        child: Text(
-                          'Discount on MRP',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            color: ColorStyle.information,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                        child: Text(
-                          '- ${widget.account['currencySymbol']}${widget.order['discountOnMRP']}',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            color: ColorStyle.information,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                      : Container(),
-                  widget.order['discount'] > 0
-                      ? const SizedBox(
-                    height: 8.0,
-                  )
-                      : Container(),
-                  widget.order['discount'] > 0
-                      ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                        child: Text(
-                          'Discount',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            color: ColorStyle.information,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                        child: Text(
-                          '- ${widget.account['currencySymbol']}${widget.order['discount']}',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            color: ColorStyle.information,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
-                  )
-                      : Container(),
                   const SizedBox(
                     height: 8.0,
                   ),
@@ -674,7 +602,12 @@ class _DetailedHistoryPageState extends State<DetailedHistoryPage> {
             color: ColorStyle.background100,
             height: 50.0,
             onTap: () async {
-              // print copy
+              try{
+                await PrintInvoice.printReceipt(order: widget.order, account: widget.account);
+              }catch(_){
+                showSnackBar(context, 'Failed to print');
+                return;
+              }
             },
           ),
         ),

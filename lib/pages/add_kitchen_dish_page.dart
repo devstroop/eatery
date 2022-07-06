@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:restaurant_pos/components/animated_toggle.dart';
 import 'package:restaurant_pos/components/custom_text_from_field.dart';
 import 'package:restaurant_pos/components/dialog_box.dart';
 import 'package:restaurant_pos/components/food_type_selection_widget.dart';
@@ -13,6 +14,7 @@ import 'package:restaurant_pos/database/product.dart';
 import 'package:restaurant_pos/database/product_category.dart';
 import 'package:restaurant_pos/extensions/app_file_system.dart';
 import 'package:restaurant_pos/services/utility/generate.dart';
+import 'package:restaurant_pos/services/utility/license.dart';
 import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
@@ -32,8 +34,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
   final TextEditingController _controllerProductName = TextEditingController();
   final TextEditingController _controllerQuantity = TextEditingController();
   final TextEditingController _controllerWarningQuantity = TextEditingController();
-  final TextEditingController _controllerSalePrice = TextEditingController();
-  final TextEditingController _controllerMRP = TextEditingController();
+  final TextEditingController _controllerPrice = TextEditingController();
   final TextEditingController _controllerTax = TextEditingController();
   final TextEditingController _controllerDescription = TextEditingController();
 
@@ -178,7 +179,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                     Flexible(
                       flex: 2,
                       child: Text(
-                        'MRP',
+                        'Price',
                         style: TextStyle(
                           color: ColorStyle.text400,
                           fontSize: 18,
@@ -200,7 +201,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                             ),
                           ],
                         ),
-                        controller: _controllerMRP,
+                        controller: _controllerPrice,
                         labelText: '0.00',
                         obscureText: false,
                         themeColor: getThemeColor(),
@@ -210,42 +211,6 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                 ),
                 const SizedBox(
                   height: 6.0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      flex: 2,
-                      child: Text(
-                        'Sale Price',
-                        style: TextStyle(
-                          color: ColorStyle.text400,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
-                    const Flexible(flex: 1, child: SizedBox()),
-                    Flexible(
-                      flex: 2,
-                      child: CustomTextFromField(
-                        keyboardType: TextInputType.number,
-                        prefixWidget: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              widget.account['currencySymbol'] ?? '',
-                              style: const TextStyle(fontWeight: FontWeight.w500, fontSize: 18.0),
-                            ),
-                          ],
-                        ),
-                        controller: _controllerSalePrice,
-                        labelText: '0.00',
-                        obscureText: false,
-                        themeColor: getThemeColor(),
-                      ),
-                    ),
-                  ],
                 ),
                 const SizedBox(
                   height: 6.0,
@@ -261,90 +226,30 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    Flexible(
-                      child: InkWell(
-                          onTap: () {
-                            if (selectedFoodType == 'veg') {
-                              setState(() {
-                                selectedFoodType = 'nonVeg';
-                              });
-                            } else if (selectedFoodType == 'nonVeg') {
-                              setState(() {
-                                selectedFoodType = null;
-                              });
-                            } else {
-                              setState(() {
-                                selectedFoodType = 'veg';
-                              });
-                            }
-                          },
-                          child: FoodTypeSelectionWidget(
-                            foodType: selectedFoodType,
-                          )),
+                    AnimatedToggle(
+                      values: const ['Veg', 'Non-Veg'],
+                      onToggleCallback: (value) {
+                        setState(() {
+                          if (value == 0) {
+                            setState(() {
+                              selectedFoodType = 'veg';
+                            });
+                          } else {
+                            setState(() {
+                              selectedFoodType = 'nonVeg';
+                            });
+                          }
+                        });
+                      },
+                      buttonColor: const Color(0xFF0A3157),
+                      backgroundColor: const Color(0xFFB5C1CC),
+                      textColor: const Color(0xFFFFFFFF),
                     ),
                   ],
                 ),
                 const SizedBox(
                   height: 6.0,
                 ),
-                /*Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      flex: 2,
-                      child: Text(
-                        'Quantity(Optional)',
-                        style: TextStyle(
-                          color: ColorStyle.text400,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
-                    const Flexible(flex: 1, child: SizedBox()),
-                    Flexible(
-                      flex: 2,
-                      child: CustomTextFromField(
-                        controller: _controllerQuantity,
-                        labelText: '0',
-                        obscureText: false,
-                        themeColor: getThemeColor(),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 6.0,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Flexible(
-                      flex: 2,
-                      child: Text(
-                        'Warning Quantity',
-                        style: TextStyle(
-                          color: ColorStyle.text400,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                    ),
-                    const Flexible(flex: 1, child: SizedBox()),
-                    Flexible(
-                      flex: 2,
-                      child: CustomTextFromField(
-                        controller: _controllerWarningQuantity,
-                        labelText: '0',
-                        obscureText: false,
-                        themeColor: getThemeColor(),
-                      ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 6.0,
-                ),*/
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -356,38 +261,25 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-
-                    FlutterSwitch(
-                      activeText: "Inclusive",
-                      inactiveText: "Exclusive",
-                      value: selectedTaxType == 'inclusive',
-                      valueFontSize: 14.0,
-                      width: 110,
-                      height: 45,
-                      borderRadius: 45.0,
-                      showOnOff: true,
-                      activeTextFontWeight: FontWeight.w500,
-                      inactiveTextFontWeight: FontWeight.w500,
-                      toggleSize: 39.0,
-                      // activeToggleColor: Color(0xFF6E40C9),
-                      // inactiveToggleColor: Color(0xFF2F363D),
-                      activeColor: getThemeColor(),
-                      // inactiveColor: Colors.white,
-                      // activeTextColor: Colors.black,
-                      // inactiveTextColor: Colors.white,
-
-
-                      onToggle: (value){
-                        setState((){
-                          if(selectedTaxType == 'inclusive'){
-                            selectedTaxType = 'exclusive';
-                          }
-                          else{
-                            selectedTaxType = 'inclusive';
+                    AnimatedToggle(
+                      values: const ['Inclusive', 'Exclusive'],
+                      onToggleCallback: (value) {
+                        setState(() {
+                          if (value == 0) {
+                            setState(() {
+                              selectedTaxType = 'inclusive';
+                            });
+                          } else {
+                            setState(() {
+                              selectedTaxType = 'exclusive';
+                            });
                           }
                         });
                       },
-                    )
+                      buttonColor: const Color(0xFF0A3157),
+                      backgroundColor: const Color(0xFFB5C1CC),
+                      textColor: const Color(0xFFFFFFFF),
+                    ),
                   ],
                 ),
                 const SizedBox(
@@ -494,34 +386,46 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                 showSnackBar(context, '* Product name required');
                 return;
               }
-              if (_controllerMRP.text.trim() == '' && _controllerSalePrice.text.trim() == '') {
-                showSnackBar(context, '* MRP or Sale Price required');
+              if (_controllerPrice.text.trim() == '') {
+                showSnackBar(context, '* Price required');
                 return;
               }
               if (selectedCategory == null) {
                 showSnackBar(context, '* Select category');
                 return;
               }
-              var response = await Product.add({
-                'name': _controllerProductName.text,
-                'category': selectedCategory,
-                'description': _controllerDescription.text,
-                /*'quantity': _controllerQuantity.text,
-                'warningQuantity': _controllerWarningQuantity.text,*/
-                'unit': '',
-                'mrp': _controllerMRP.text,
-                'salePrice': _controllerSalePrice.text,
-                'foodType': selectedFoodType,
-                'taxType': selectedTaxType,
-                'tax': _controllerTax.text,
-                'image': pickedImagePath,
-                'as': 'dish'
-              });
-              if (response != null) {
-                showSnackBar(context, 'Successfully created');
-                Navigator.pop(context);
-              } else {
-                showSnackBar(context, 'Failed to create');
+
+
+              bool flag = true;
+              LicenseData licData = License.validate(widget.account['purchaseCode']);
+              if(!licData.status){
+                List<Map<String, dynamic>> products = (await Product.getAll());
+                if(products.length >= 10){
+                  flag = false;
+                }
+              }
+              if(flag){
+                var response = await Product.add({
+                  'name': _controllerProductName.text,
+                  'category': selectedCategory,
+                  'description': _controllerDescription.text,
+                  'price': double.parse(_controllerPrice.text),
+                  'foodType': selectedFoodType,
+                  'taxType': selectedTaxType,
+                  'tax': double.parse(_controllerTax.text != '' ? _controllerTax.text : '0'),
+                  'image': pickedImagePath,
+                  'as': 'dish'
+                });
+                if (response != null) {
+                  showSnackBar(context, 'Successfully created');
+                  Navigator.pop(context);
+                } else {
+                  showSnackBar(context, 'Failed to create');
+                }
+              }
+              else{
+                showSnackBar(context, 'Please activate license to add more products');
+                return;
               }
             },
           ),

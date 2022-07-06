@@ -10,8 +10,7 @@ class DetailedProductView extends StatefulWidget {
   const DetailedProductView({Key? key,
     required this.name,
     this.description,
-    required this.mrp,
-    required this.salePrice,
+    required this.price,
     this.quantity,
     this.image,
     this.foodType,
@@ -25,8 +24,7 @@ class DetailedProductView extends StatefulWidget {
   final String id;
   final String name;
   final String? description;
-  final double? mrp;
-  final double? salePrice;
+  final double? price;
   final double? quantity;
   final double? warningQuantity;
   final String? image;
@@ -84,47 +82,10 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                         fontSize: 20.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
                   ),
 
-                  widget.mrp != null && widget.salePrice != null
-                      ? Row(
-                    children: [
-                      widget.mrp!.compareTo(widget.salePrice!) == 1
-                          ? Container(
-                        margin: const EdgeInsets.only(right: 6.0),
-                            child: Text(
-                        '${widget.currencySymbol ?? ''}${widget.mrp}',
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                              fontSize: 18.0,
-                              fontWeight: FontWeight.w400,
-                              color: ColorStyle.text400,
-                              decorationColor: ColorStyle.text300,
-                              decoration: TextDecoration.lineThrough,
-                              decorationStyle: TextDecorationStyle.solid,
-                              decorationThickness: 3.0),
-                      ),
-                          )
-                          : Container(),
-                      widget.mrp!.compareTo(widget.salePrice!) == 1
-                          ? Text(
-                        '${widget.currencySymbol ?? ''}${widget.salePrice}',
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w500,
-                            color: ColorStyle.information),
-                      )
-                          : Container(),
-                    ],
-                  )
-                      : const SizedBox(
-                    height: 0,
-                    width: 0,
-                  ),
-                  widget.mrp == null && widget.salePrice != null
-                      ? Column(
+                  Column(
                     children: [
                       Text(
-                        '${widget.currencySymbol ?? ''}${widget.salePrice}',
+                        '${widget.currencySymbol ?? ''}${widget.price}',
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontSize: 20.0,
@@ -132,28 +93,8 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                             color: ColorStyle.text200),
                       ),
                     ],
-                  )
-                      : const SizedBox(
-                    height: 0,
-                    width: 0,
                   ),
-                  widget.salePrice == null && widget.mrp != null
-                      ? Column(
-                    children: [
-                      Text(
-                        '${widget.currencySymbol ?? ''}${widget.mrp}',
-                        overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.w500,
-                            color: ColorStyle.text200),
-                      ),
-                    ],
-                  )
-                      : const SizedBox(
-                    height: 0,
-                    width: 0,
-                  ),
+
                 ],
               ),
               widget.onAdd != null && widget.onRemove != null

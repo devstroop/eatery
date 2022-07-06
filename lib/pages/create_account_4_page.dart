@@ -7,6 +7,7 @@ import 'package:restaurant_pos/database/account.dart';
 
 import 'package:restaurant_pos/pages/create_account_result_page.dart';
 import 'package:restaurant_pos/services/utility/encryption.dart';
+import 'package:restaurant_pos/services/utility/license.dart';
 import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
 import 'package:restaurant_pos/style/color_style.dart';
 
@@ -186,59 +187,41 @@ class _CreateAccount4PageState extends State<CreateAccount4Page> {
             height: 50.0,
             onTap: () async {
               if (selectedIndex == 1 && controllerPurchaseCode.text != '') {
-                String? raw = Encryption.decrypt(controllerPurchaseCode.text);
-                if (raw != null) {
-                  List<String> data = Encryption.decrypt(controllerPurchaseCode.text)!.split(';');
-                  if (data.isNotEmpty) {
-                    if (data[0].trim() == deviceSerial!.trim()) {
-                      int validFrom = int.parse(data[1]);
-                      int validTill = int.parse(data[2]);
-                      DateTime _validFrom = DateTime.fromMicrosecondsSinceEpoch(validFrom);
-                      DateTime _validTill = DateTime.fromMicrosecondsSinceEpoch(validTill);
-
-                      if (validFrom < DateTime.now().microsecondsSinceEpoch ||
-                          validTill >= DateTime.now().microsecondsSinceEpoch) {
-                        String purchaseCode = controllerPurchaseCode.text;
-                        Map<String, dynamic>? accountData = {
-                          'name': widget.name,
-                          'image': widget.image,
-                          'email': widget.email,
-                          'phone': widget.phone,
-                          'address': widget.address,
-                          'password': widget.password,
-                          'fssai': widget.fssai,
-                          'gstin': widget.gstin,
-                          'currencySymbol': '₹',
-                          'purchaseCode': purchaseCode,
-                          'validFrom': _validFrom.microsecondsSinceEpoch,
-                          'validTill': _validTill.microsecondsSinceEpoch,
-                          'lowBatteryLevel': 20
-                        };
-                        var id = await Account.add(accountData);
-                        if(id != null){
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => const CreateAccountResultPage(createAccountStatus: true)),
-                                (Route<dynamic> route) => false,
-                          );
-                        }else{
-                          Navigator.pushAndRemoveUntil(
-                            context,
-                            MaterialPageRoute(builder: (context) => const CreateAccountResultPage(createAccountStatus: false)),
-                                (Route<dynamic> route) => false,
-                          );
-                        }
-                      } else {
-                        showSnackBar(context, '*Purchase code has expired');
-                      }
-                    } else {
-                      showSnackBar(context, '*Purchase code is not valid');
-                    }
-                  } else {
-                    showSnackBar(context, '*Purchase code is not valid');
+                LicenseData licData = License.validate(controllerPurchaseCode.text);
+                if(licData.status){
+                  Map<String, dynamic>? accountData = {
+                    'name': widget.name,
+                    'image': widget.image,
+                    'email': widget.email,
+                    'phone': widget.phone,
+                    'address': widget.address,
+                    'password': widget.password,
+                    'fssai': widget.fssai,
+                    'gstin': widget.gstin,
+                    'taxName': 'GST',
+                    'currencySymbol': '\$',
+                    'purchaseCode': licData.purchaseCode,
+                    'validFrom': licData.validFrom!.microsecondsSinceEpoch,
+                    'validTill': licData.validTill!.microsecondsSinceEpoch,
+                    'lowBatteryLevel': 20
+                  };
+                  var id = await Account.add(accountData);
+                  if(id != null){
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => const CreateAccountResultPage(createAccountStatus: true)),
+                          (Route<dynamic> route) => false,
+                    );
+                  }else{
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => const CreateAccountResultPage(createAccountStatus: false)),
+                          (Route<dynamic> route) => false,
+                    );
                   }
-                } else {
-                  showSnackBar(context, '*Purchase code is not valid');
+                }
+                else{
+                  showSnackBar(context, licData.message);
                 }
               } else {
                 Map<String, dynamic>? accountData = {
@@ -250,7 +233,8 @@ class _CreateAccount4PageState extends State<CreateAccount4Page> {
                   'password': widget.password,
                   'fssai': widget.fssai,
                   'gstin': widget.gstin,
-                  'currencySymbol': '₹',
+                  'taxName': 'GST',
+                  'currencySymbol': '\$',
                   'purchaseCode': null,
                   'validFrom': null,
                   'validTill': null,
