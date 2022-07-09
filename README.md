@@ -1,4 +1,4 @@
-![Eatery](https://github.com/devstroop/eatery/raw/master/assets/logo.png)
+![Eatery](https://github.com/devstroop/eatery/raw/master/assets/icons/icon.png)
 # Eatery
 
 A modern Point of Sale for Restaurant and Cafe
