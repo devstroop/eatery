@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_pos/components/bottom_view_grip.dart';
-import 'package:restaurant_pos/components/checkout_product_card.dart';
-import 'package:restaurant_pos/components/custom_button.dart';
-import 'package:restaurant_pos/components/custom_text_from_field.dart';
-import 'package:restaurant_pos/components/pos_waiter_card.dart';
-import 'package:restaurant_pos/components/primary_button.dart';
-import 'package:restaurant_pos/database/cart.dart';
-import 'package:restaurant_pos/database/order.dart';
-import 'package:restaurant_pos/database/printer.dart';
-import 'package:restaurant_pos/database/waiter.dart';
-import 'package:restaurant_pos/extensions/calculations.dart';
-import 'package:restaurant_pos/models/order_type.dart';
-import 'package:restaurant_pos/pages/order_confirmation.dart';
-import 'package:restaurant_pos/services/printing/print_invoice.dart';
-import 'package:restaurant_pos/services/utility/license.dart';
-import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/components/bottom_view_grip.dart';
+import 'package:eatery/components/checkout_product_card.dart';
+import 'package:eatery/components/custom_button.dart';
+import 'package:eatery/components/custom_text_from_field.dart';
+import 'package:eatery/components/pos_waiter_card.dart';
+import 'package:eatery/components/primary_button.dart';
+import 'package:eatery/database/cart.dart';
+import 'package:eatery/database/order.dart';
+import 'package:eatery/database/printer.dart';
+import 'package:eatery/database/waiter.dart';
+import 'package:eatery/extensions/calculations.dart';
+import 'package:eatery/models/order_type.dart';
+import 'package:eatery/pages/order_confirmation.dart';
+import 'package:eatery/services/printing/print_invoice.dart';
+import 'package:eatery/services/utility/license.dart';
+import 'package:eatery/services/utility/show_snack_bar.dart';
+import 'package:eatery/style/color_style.dart';
 
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage(
@@ -41,6 +41,8 @@ class _CheckoutPageState extends State<CheckoutPage> {
   late List<Map<String, dynamic>> waitersData;
   late String? selectedWaiter;
   late String? selectedWaiterName;
+  late bool isProcessing = false;
+
 
 
   void loadWaiters() async {
@@ -811,12 +813,20 @@ class _CheckoutPageState extends State<CheckoutPage> {
         color: ColorStyle.background100,
         child: Padding(
           padding: const EdgeInsets.all(12.0),
-          child: PrimaryButton(
+          child: isProcessing ? Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: const [
+              CircularProgressIndicator(),
+            ],
+          ) : PrimaryButton(
             text: 'Place Order',
             backgroundColor: widget.orderType.color ?? ColorStyle.primary,
             color: ColorStyle.background100,
             height: 50.0,
             onTap: () async {
+              setState((){
+                isProcessing = true;
+              });
               try{
                 bool flag = true;
                 LicenseData licData = License.validate(widget.account['purchaseCode']);
@@ -842,17 +852,21 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     'taxableTotal': taxableTotal,
                     'taxTotal': taxTotal,
                     'roundOff': roundOff,
-                    'finalTotal': finalTotal
+                    'finalTotal': finalTotalAfterRoundOff
                   };
                   String? id = await Order.add(order);
                   order['id'] = id;
 
-                  try{
-                    await PrintInvoice.printReceipt(order: order, account: widget.account);
-                  }catch(_){
-                    showSnackBar(context, 'Failed to print');
-                    return;
+                  if(widget.account['autoPrintOnSale']){
+                    try{
+                      String message = await PrintInvoice.printReceipt(order: order, account: widget.account);
+                      showSnackBar(context, message);
+                    }catch(_){
+                      showSnackBar(context, 'Print error');
+                      return;
+                    }
                   }
+
 
                   Cart.cart = {};
                   Navigator.push(
@@ -869,10 +883,13 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 }
 
               }catch(_){
-                print(_);
                 showSnackBar(context, 'Failed');
                 return;
               }
+
+              setState((){
+                isProcessing = false;
+              });
             },
           ),
         ),

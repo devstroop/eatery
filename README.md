@@ -1,4 +1,4 @@
-# restaurant_pos
+# eatery
 
 A new Flutter project.
 

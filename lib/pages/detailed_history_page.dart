@@ -1,25 +1,26 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:restaurant_pos/components/bottom_view_grip.dart';
-import 'package:restaurant_pos/components/cart_product_card.dart';
-import 'package:restaurant_pos/components/checkout_product_card.dart';
-import 'package:restaurant_pos/components/custom_button.dart';
-import 'package:restaurant_pos/components/custom_text_from_field.dart';
-import 'package:restaurant_pos/components/dialog_box.dart';
-import 'package:restaurant_pos/components/pos_waiter_card.dart';
-import 'package:restaurant_pos/components/primary_button.dart';
-import 'package:restaurant_pos/components/upload_button.dart';
-import 'package:restaurant_pos/components/waiter_card.dart';
-import 'package:restaurant_pos/database/cart.dart';
-import 'package:restaurant_pos/database/dining_table_category.dart';
-import 'package:restaurant_pos/database/order.dart';
-import 'package:restaurant_pos/database/waiter.dart';
-import 'package:restaurant_pos/extensions/calculations.dart';
-import 'package:restaurant_pos/models/order_type.dart';
-import 'package:restaurant_pos/pages/order_confirmation.dart';
-import 'package:restaurant_pos/services/printing/print_invoice.dart';
-import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:get/get.dart';
+import 'package:eatery/components/bottom_view_grip.dart';
+import 'package:eatery/components/cart_product_card.dart';
+import 'package:eatery/components/checkout_product_card.dart';
+import 'package:eatery/components/custom_button.dart';
+import 'package:eatery/components/custom_text_from_field.dart';
+import 'package:eatery/components/dialog_box.dart';
+import 'package:eatery/components/pos_waiter_card.dart';
+import 'package:eatery/components/primary_button.dart';
+import 'package:eatery/components/upload_button.dart';
+import 'package:eatery/components/waiter_card.dart';
+import 'package:eatery/database/cart.dart';
+import 'package:eatery/database/dining_table_category.dart';
+import 'package:eatery/database/order.dart';
+import 'package:eatery/database/waiter.dart';
+import 'package:eatery/extensions/calculations.dart';
+import 'package:eatery/models/order_type.dart';
+import 'package:eatery/pages/order_confirmation.dart';
+import 'package:eatery/services/printing/print_invoice.dart';
+import 'package:eatery/services/utility/show_snack_bar.dart';
+import 'package:eatery/style/color_style.dart';
 
 class DetailedHistoryPage extends StatefulWidget {
   const DetailedHistoryPage(
@@ -465,7 +466,7 @@ class _DetailedHistoryPageState extends State<DetailedHistoryPage> {
                         child: Row(
                           children: [
                             Text(
-                              "GST",
+                              widget.account['taxName'],
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 color: ColorStyle.text300,
@@ -575,7 +576,7 @@ class _DetailedHistoryPageState extends State<DetailedHistoryPage> {
                       Padding(
                         padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
                         child: Text(
-                          '${widget.account['currencySymbol']}${widget.order['finalTotal']}',
+                          '${widget.account['currencySymbol']}${(widget.order['finalTotal'])}',
                           textAlign: TextAlign.start,
                           style: TextStyle(
                             color: ColorStyle.text200,

@@ -1,16 +1,16 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:restaurant_pos/components/dining_table_card.dart';
-import 'package:restaurant_pos/components/pos_category_widget.dart';
-import 'package:restaurant_pos/components/product_card.dart';
-import 'package:restaurant_pos/database/dining_table.dart';
-import 'package:restaurant_pos/database/dining_table_category.dart';
-import 'package:restaurant_pos/pages/add_dining_table_page.dart';
-import 'package:restaurant_pos/pages/dining_table_categories_page.dart';
-import 'package:restaurant_pos/pages/edit_dining_table_page.dart';
-import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/components/dining_table_card.dart';
+import 'package:eatery/components/pos_category_widget.dart';
+import 'package:eatery/components/product_card.dart';
+import 'package:eatery/database/dining_table.dart';
+import 'package:eatery/database/dining_table_category.dart';
+import 'package:eatery/pages/add_dining_table_page.dart';
+import 'package:eatery/pages/dining_table_categories_page.dart';
+import 'package:eatery/pages/edit_dining_table_page.dart';
+import 'package:eatery/services/utility/show_snack_bar.dart';
+import 'package:eatery/style/color_style.dart';
 
 class DiningTablesPage extends StatefulWidget {
   const DiningTablesPage({Key? key}) : super(key: key);

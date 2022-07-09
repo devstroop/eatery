@@ -2,15 +2,15 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:restaurant_pos/components/custom_text_from_field.dart';
-import 'package:restaurant_pos/components/dialog_box.dart';
-import 'package:restaurant_pos/components/primary_button.dart';
-import 'package:restaurant_pos/components/upload_button.dart';
-import 'package:restaurant_pos/extensions/app_file_system.dart';
-import 'package:restaurant_pos/pages/create_account_2_page.dart';
-import 'package:restaurant_pos/services/utility/generate.dart';
-import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/components/custom_text_from_field.dart';
+import 'package:eatery/components/dialog_box.dart';
+import 'package:eatery/components/primary_button.dart';
+import 'package:eatery/components/upload_button.dart';
+import 'package:eatery/extensions/app_file_system.dart';
+import 'package:eatery/pages/createaccount/create_account_2_page.dart';
+import 'package:eatery/services/utility/generate.dart';
+import 'package:eatery/services/utility/show_snack_bar.dart';
+import 'package:eatery/style/color_style.dart';
 
 class CreateAccount1Page extends StatefulWidget {
   const CreateAccount1Page({Key? key}) : super(key: key);
@@ -32,7 +32,8 @@ class _CreateAccount1PageState extends State<CreateAccount1Page> {
       backgroundColor: ColorStyle.background200,
       appBar: AppBar(
         backgroundColor: ColorStyle.background100,
-        leading: IconButton(
+        title: Image.asset('assets/logo.png', height: 36,),
+        /*leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
             size: 18,
@@ -41,7 +42,7 @@ class _CreateAccount1PageState extends State<CreateAccount1Page> {
           onPressed: () {
             Navigator.of(context).pop();
           },
-        ),
+        ),*/
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 12.0),
@@ -91,7 +92,7 @@ class _CreateAccount1PageState extends State<CreateAccount1Page> {
                 child: UploadButton(
                   title: '+ Upload Picture',
                   subTitle: 'Restaurant Logo',
-                  primaryColor: ColorStyle.primary,
+                  primaryColor: ColorStyle.logoColor,
                   secondaryColor: ColorStyle.text200,
                   pickedImagePath: pickedImagePath,
                   onCloseTap: () {
@@ -204,7 +205,7 @@ class _CreateAccount1PageState extends State<CreateAccount1Page> {
           padding: const EdgeInsets.all(12.0),
           child: PrimaryButton(
             text: 'Continue',
-            backgroundColor: ColorStyle.primary,
+            backgroundColor: ColorStyle.logoColor,
             color: ColorStyle.background100,
             height: 50.0,
             onTap: () {

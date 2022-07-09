@@ -1,5 +1,5 @@
 import 'package:json_store/json_store.dart';
-import 'package:restaurant_pos/services/utility/generate.dart';
+import 'package:eatery/services/utility/generate.dart';
 class DiningTableCategory{
   static JsonStore store = JsonStore();
   static String name = "dining-table-category-ref";

@@ -4,17 +4,17 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:restaurant_pos/components/custom_text_from_field.dart';
-import 'package:restaurant_pos/components/dialog_box.dart';
-import 'package:restaurant_pos/components/pos_category_widget.dart';
-import 'package:restaurant_pos/components/primary_button.dart';
-import 'package:restaurant_pos/components/upload_button.dart';
-import 'package:restaurant_pos/database/dining_table.dart';
-import 'package:restaurant_pos/database/dining_table_category.dart';
-import 'package:restaurant_pos/extensions/app_file_system.dart';
-import 'package:restaurant_pos/services/utility/generate.dart';
-import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/components/custom_text_from_field.dart';
+import 'package:eatery/components/dialog_box.dart';
+import 'package:eatery/components/pos_category_widget.dart';
+import 'package:eatery/components/primary_button.dart';
+import 'package:eatery/components/upload_button.dart';
+import 'package:eatery/database/dining_table.dart';
+import 'package:eatery/database/dining_table_category.dart';
+import 'package:eatery/extensions/app_file_system.dart';
+import 'package:eatery/services/utility/generate.dart';
+import 'package:eatery/services/utility/show_snack_bar.dart';
+import 'package:eatery/style/color_style.dart';
 
 class AddDiningTablePage extends StatefulWidget {
   const AddDiningTablePage({Key? key}) : super(key: key);

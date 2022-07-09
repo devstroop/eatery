@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_pos/components/primary_button.dart';
-import 'package:restaurant_pos/database/account.dart';
-import 'package:restaurant_pos/database/cart.dart';
-import 'package:restaurant_pos/database/dining_table.dart';
-import 'package:restaurant_pos/database/dining_table_category.dart';
-import 'package:restaurant_pos/database/dish_customization.dart';
-import 'package:restaurant_pos/database/order.dart';
-import 'package:restaurant_pos/database/product.dart';
-import 'package:restaurant_pos/database/product_category.dart';
-import 'package:restaurant_pos/database/waiter.dart';
-import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/components/primary_button.dart';
+import 'package:eatery/database/account.dart';
+import 'package:eatery/database/cart.dart';
+import 'package:eatery/database/dining_table.dart';
+import 'package:eatery/database/dining_table_category.dart';
+import 'package:eatery/database/dish_customization.dart';
+import 'package:eatery/database/order.dart';
+import 'package:eatery/database/product.dart';
+import 'package:eatery/database/product_category.dart';
+import 'package:eatery/database/waiter.dart';
+import 'package:eatery/services/utility/show_snack_bar.dart';
+import 'package:eatery/style/color_style.dart';
 
 class DebugPage extends StatefulWidget {
   const DebugPage({Key? key, required this.account}) : super(key: key);

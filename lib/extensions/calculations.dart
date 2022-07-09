@@ -1,4 +1,4 @@
-import 'package:restaurant_pos/database/cart.dart';
+import 'package:eatery/database/cart.dart';
 
 
 class Calculations {

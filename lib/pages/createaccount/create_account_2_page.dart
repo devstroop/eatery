@@ -1,29 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_pos/components/custom_text_from_field.dart';
-import 'package:restaurant_pos/components/primary_button.dart';
-import 'package:restaurant_pos/components/secondary_button.dart';
-import 'package:restaurant_pos/pages/create_account_4_page.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/components/custom_text_from_field.dart';
+import 'package:eatery/components/primary_button.dart';
+import 'package:eatery/pages/createaccount/create_account_3_page.dart';
+import 'package:eatery/services/utility/show_snack_bar.dart';
+import 'package:eatery/style/color_style.dart';
 
-class CreateAccount3Page extends StatefulWidget {
-  const CreateAccount3Page(
-      {Key? key, this.image, required this.name, required this.phone, required this.address, required this.password, required this.email})
+class CreateAccount2Page extends StatefulWidget {
+  const CreateAccount2Page({Key? key, this.image, required this.name, required this.phone, required this.address, required this.email})
       : super(key: key);
-
   final String? image;
   final String name;
   final String phone;
   final String email;
   final String address;
-  final String password;
 
   @override
-  State<CreateAccount3Page> createState() => _CreateAccount3PageState();
+  State<CreateAccount2Page> createState() => _CreateAccount2State();
 }
 
-class _CreateAccount3PageState extends State<CreateAccount3Page> {
-  final TextEditingController _controllerFssai = TextEditingController();
-  final TextEditingController _controllerGstin = TextEditingController();
+class _CreateAccount2State extends State<CreateAccount2Page> {
+  String? pickedImagePath;
+  final TextEditingController _controllerPassword = TextEditingController();
+  final TextEditingController _controllerConfirmPassword = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +29,7 @@ class _CreateAccount3PageState extends State<CreateAccount3Page> {
       backgroundColor: ColorStyle.background200,
       appBar: AppBar(
         backgroundColor: ColorStyle.background100,
+        title: Image.asset('assets/logo.png', height: 36,),
         leading: IconButton(
           icon: Icon(
             Icons.arrow_back_ios,
@@ -46,7 +45,7 @@ class _CreateAccount3PageState extends State<CreateAccount3Page> {
             margin: const EdgeInsets.only(right: 12.0),
             child: Center(
                 child: Text(
-              'Step 3/4',
+              'Step 2/4',
               style: TextStyle(color: ColorStyle.text200, fontWeight: FontWeight.w500),
             )),
           )
@@ -69,14 +68,14 @@ class _CreateAccount3PageState extends State<CreateAccount3Page> {
                 mainAxisSize: MainAxisSize.min,
                 children: const [
                   Text(
-                    'Registration info',
+                    'Setup PIN',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                   Text(
-                    'Help us to know more about your business',
+                    'Setup PIN to secure your account',
                     style: TextStyle(
                       fontWeight: FontWeight.normal,
                     ),
@@ -88,7 +87,7 @@ class _CreateAccount3PageState extends State<CreateAccount3Page> {
               ),
               Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(
-                  'FSSAI License Number',
+                  'PIN',
                   style: TextStyle(
                     color: ColorStyle.text200,
                     fontSize: 12,
@@ -99,9 +98,10 @@ class _CreateAccount3PageState extends State<CreateAccount3Page> {
                   height: 3.0,
                 ),
                 CustomTextFromField(
-                  controller: _controllerFssai,
-                  labelText: 'eg. 12216912889355',
-                  obscureText: false,
+                  keyboardType: TextInputType.number,
+                  controller: _controllerPassword,
+                  labelText: 'PIN',
+                  obscureText: true,
                 ),
               ]),
               const SizedBox(
@@ -109,7 +109,7 @@ class _CreateAccount3PageState extends State<CreateAccount3Page> {
               ),
               Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.start, children: [
                 Text(
-                  'GSTIN Number',
+                  'Confirm PIN',
                   style: TextStyle(
                     color: ColorStyle.text200,
                     fontSize: 12,
@@ -120,9 +120,10 @@ class _CreateAccount3PageState extends State<CreateAccount3Page> {
                   height: 3.0,
                 ),
                 CustomTextFromField(
-                  controller: _controllerGstin,
-                  labelText: 'eg. 22ASAAA0990A1Z5',
-                  obscureText: false,
+                  keyboardType: TextInputType.number,
+                  controller: _controllerConfirmPassword,
+                  labelText: 'Confirm PIN',
+                  obscureText: true,
                 ),
               ]),
             ],
@@ -133,57 +134,27 @@ class _CreateAccount3PageState extends State<CreateAccount3Page> {
         color: ColorStyle.background100,
         child: Padding(
           padding: const EdgeInsets.all(12.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SecondaryButton(
-                color: ColorStyle.text300,
-                borderColor: ColorStyle.text400,
-                text: 'Skip',
-                height: 50.0,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CreateAccount4Page(
-                              address: widget.address,
-                              phone: widget.phone,
-                              password: widget.password,
-                              name: widget.name,
-                              image: widget.image,
-                              email: widget.email,
-                              fssai: '',
-                              gstin: '',
-                            )),
-                  );
-                },
-              ),
-              const SizedBox(
-                height: 8.0,
-              ),
-              PrimaryButton(
-                text: 'Continue',
-                backgroundColor: ColorStyle.primary,
-                color: ColorStyle.background100,
-                height: 50.0,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => CreateAccount4Page(
-                              address: widget.address,
-                              phone: widget.phone,
-                              email: widget.email,
-                              password: widget.password,
-                              name: widget.name,
-                              image: widget.image,
-                              fssai: _controllerFssai.text,
-                              gstin: _controllerGstin.text,
-                            )),
-                  );
-                },
-              ),
-            ],
+          child: PrimaryButton(
+            text: 'Continue',
+            backgroundColor: ColorStyle.logoColor,
+            color: ColorStyle.background100,
+            height: 50.0,
+            onTap: () {
+              if (_controllerPassword.text == _controllerConfirmPassword.text) {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => CreateAccount3Page(
+                          address: widget.address,
+                          phone: widget.phone,
+                          password: _controllerPassword.text,
+                          name: widget.name,
+                          image: widget.image, email: widget.email,)),
+                );
+              } else {
+                showSnackBar(context, '*Confirm PIN didn\'t match');
+              }
+            },
           ),
         ),
       ),

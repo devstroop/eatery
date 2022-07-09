@@ -5,20 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:restaurant_pos/components/animated_toggle.dart';
-import 'package:restaurant_pos/components/custom_text_from_field.dart';
-import 'package:restaurant_pos/components/dialog_box.dart';
-import 'package:restaurant_pos/components/food_type_selection_widget.dart';
-import 'package:restaurant_pos/components/pos_category_widget.dart';
-import 'package:restaurant_pos/components/primary_button.dart';
-import 'package:restaurant_pos/components/upload_button.dart';
-import 'package:restaurant_pos/database/cart.dart';
-import 'package:restaurant_pos/database/product.dart';
-import 'package:restaurant_pos/database/product_category.dart';
-import 'package:restaurant_pos/extensions/app_file_system.dart';
-import 'package:restaurant_pos/services/utility/generate.dart';
-import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/components/animated_toggle.dart';
+import 'package:eatery/components/custom_text_from_field.dart';
+import 'package:eatery/components/dialog_box.dart';
+import 'package:eatery/components/food_type_selection_widget.dart';
+import 'package:eatery/components/pos_category_widget.dart';
+import 'package:eatery/components/primary_button.dart';
+import 'package:eatery/components/upload_button.dart';
+import 'package:eatery/database/cart.dart';
+import 'package:eatery/database/product.dart';
+import 'package:eatery/database/product_category.dart';
+import 'package:eatery/extensions/app_file_system.dart';
+import 'package:eatery/services/utility/generate.dart';
+import 'package:eatery/services/utility/show_snack_bar.dart';
+import 'package:eatery/style/color_style.dart';
 
 class EditInventoryItemPage extends StatefulWidget {
   const EditInventoryItemPage({Key? key, required this.account, required this.id}) : super(key: key);
@@ -407,7 +407,7 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
                     Flexible(
                       flex: 2,
                       child: Text(
-                        'GST',
+                        widget.account['taxName'],
                         style: TextStyle(
                           color: ColorStyle.text400,
                           fontSize: 18,

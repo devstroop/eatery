@@ -4,31 +4,45 @@ import 'package:flutter_archive/flutter_archive.dart';
 
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:restaurant_pos/services/utility/generate.dart';
+import 'package:eatery/services/utility/generate.dart';
 
 class AppFileSystem {
-  static Future<String> getBackupDir() async {
-    Directory resourcesDir = (await getExternalStorageDirectory()) != null
-        ? (await getExternalStorageDirectory())!.parent
-        : (await getApplicationDocumentsDirectory()).parent;
+  static Future<Directory> appDataRoot() async{
+    return Directory((await getExternalStorageDirectory())!.parent.path);
+  }
 
-    if (!(Directory(resourcesDir.path + '/backup')).existsSync()) {
-      await Directory(resourcesDir.path + '/backup').create(recursive: true);
+  static Future<String> getBackupDir() async {
+
+    if (!(Directory((await appDataRoot()).path + '/backup')).existsSync()) {
+      await Directory((await appDataRoot()).path + '/backup').create(recursive: true);
     }
 
-    return '${resourcesDir.path}/backup';
+    return '${(await appDataRoot()).path}/backup';
+  }
+  static Future<String> getExportDir() async {
+
+    if (!(Directory((await appDataRoot()).path + '/export')).existsSync()) {
+      await Directory((await appDataRoot()).path + '/export').create(recursive: true);
+    }
+    return '${(await appDataRoot()).path}/export';
+
+  }
+  static Future<String> getShareDir() async {
+
+    if (!(Directory((await appDataRoot()).path + '/share')).existsSync()) {
+      await Directory((await appDataRoot()).path + '/share').create(recursive: true);
+    }
+    return '${(await appDataRoot()).path}/share';
+
   }
 
   static Future<String> getResourcesDir() async {
-    Directory resourcesDir = (await getExternalStorageDirectory()) != null
-        ? (await getExternalStorageDirectory())!.parent
-        : (await getApplicationDocumentsDirectory()).parent;
 
-    if (!(Directory(resourcesDir.path + '/images')).existsSync()) {
-      await Directory(resourcesDir.path + '/images').create(recursive: true);
+    if (!(Directory((await appDataRoot()).path + '/images')).existsSync()) {
+      await Directory((await appDataRoot()).path + '/images').create(recursive: true);
     }
 
-    return '${resourcesDir.path}/images';
+    return '${(await appDataRoot()).path}/images';
   }
 
   static Future<String?> pickImage() async {
@@ -36,14 +50,11 @@ class AppFileSystem {
     final XFile? photo = await _picker.pickImage(source: ImageSource.gallery);
 
     if (photo != null) {
-      Directory resourcesDir = (await getExternalStorageDirectory()) != null
-          ? (await getExternalStorageDirectory())!.parent
-          : (await getApplicationDocumentsDirectory()).parent;
 
-      if (!(Directory(resourcesDir.path + '/images')).existsSync()) {
-        await Directory(resourcesDir.path + '/images').create(recursive: true);
+      if (!(Directory((await appDataRoot()).path + '/images')).existsSync()) {
+        await Directory((await appDataRoot()).path + '/images').create(recursive: true);
       }
-      String path = '${resourcesDir.path + '/images'}/${getRandomString(32)}.${photo.name.split('.').last}';
+      String path = '${(await appDataRoot()).path + '/images'}/${getRandomString(32)}.${photo.name.split('.').last}';
       photo.saveTo(path);
       return path;
     }

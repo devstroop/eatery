@@ -1,27 +1,28 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:restaurant_pos/components/custom_text_from_field.dart';
-import 'package:restaurant_pos/components/menu_tile.dart';
-import 'package:restaurant_pos/components/pos_category_widget.dart';
-import 'package:restaurant_pos/components/primary_button.dart';
-import 'package:restaurant_pos/components/product_card.dart';
-import 'package:restaurant_pos/components/secondary_button.dart';
-import 'package:restaurant_pos/components/upload_button.dart';
-import 'package:restaurant_pos/components/waiter_card.dart';
-import 'package:restaurant_pos/database/account.dart';
-import 'package:restaurant_pos/database/dining_table.dart';
-import 'package:restaurant_pos/database/dining_table_category.dart';
-import 'package:restaurant_pos/database/order.dart';
-import 'package:restaurant_pos/database/waiter.dart';
-import 'package:restaurant_pos/extensions/app_file_system.dart';
-import 'package:restaurant_pos/models/order_type.dart';
-import 'package:restaurant_pos/pages/add_waiter_page.dart';
-import 'package:restaurant_pos/pages/detailed_history_page.dart';
-import 'package:restaurant_pos/pages/edit_waiter_page.dart';
-import 'package:restaurant_pos/pages/printer_settings_page.dart';
-import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:flutter_switch/flutter_switch.dart';
+import 'package:eatery/components/custom_text_from_field.dart';
+import 'package:eatery/components/menu_tile.dart';
+import 'package:eatery/components/pos_category_widget.dart';
+import 'package:eatery/components/primary_button.dart';
+import 'package:eatery/components/product_card.dart';
+import 'package:eatery/components/secondary_button.dart';
+import 'package:eatery/components/upload_button.dart';
+import 'package:eatery/components/waiter_card.dart';
+import 'package:eatery/database/account.dart';
+import 'package:eatery/database/dining_table.dart';
+import 'package:eatery/database/dining_table_category.dart';
+import 'package:eatery/database/order.dart';
+import 'package:eatery/database/waiter.dart';
+import 'package:eatery/extensions/app_file_system.dart';
+import 'package:eatery/models/order_type.dart';
+import 'package:eatery/pages/add_waiter_page.dart';
+import 'package:eatery/pages/detailed_history_page.dart';
+import 'package:eatery/pages/edit_waiter_page.dart';
+import 'package:eatery/pages/printer_settings_page.dart';
+import 'package:eatery/services/utility/show_snack_bar.dart';
+import 'package:eatery/style/color_style.dart';
 
 class EditCompanyPage extends StatefulWidget {
   const EditCompanyPage({Key? key, this.account}) : super(key: key);
@@ -39,8 +40,8 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
   final TextEditingController _controllerAddress = TextEditingController();
   final TextEditingController _controllerFssai = TextEditingController();
   final TextEditingController _controllerGstin = TextEditingController();
-  final TextEditingController _controllerTaxName = TextEditingController();
   final TextEditingController _controllerCurrencySymbol = TextEditingController();
+  late String selectedTaxName = 'GST';
 
   late Map<String, dynamic> company;
   @override
@@ -54,14 +55,14 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
     if(company != null){
       setState((){
         this.company = company;
-        pickedImagePath = this.company['image'];
+        pickedImagePath = this.company['logo'];
         _controllerRestaurantName.text = this.company['name'];
         _controllerEmailAddress.text = this.company['email'];
         _controllerPhoneNumber.text = this.company['phone'];
         _controllerAddress.text = this.company['address'];
-        _controllerFssai.text = this.company['fssai'];
-        _controllerGstin.text = this.company['gstin'];
-        _controllerTaxName.text = this.company['taxName'];
+        _controllerFssai.text = this.company['foodLicenseNo'];
+        _controllerGstin.text = this.company['taxNo'];
+        selectedTaxName = this.company['taxName'];
         _controllerCurrencySymbol.text = this.company['currencySymbol'];
       });
     }
@@ -232,28 +233,6 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
         ),
         Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(
-            'Tax name (GST/VAT)',
-            style: TextStyle(
-              color: ColorStyle.text200,
-              fontSize: 12,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          const SizedBox(
-            height: 3.0,
-          ),
-          CustomTextFromField(
-            keyboardType: TextInputType.text,
-            controller: _controllerTaxName,
-            labelText: 'eg. GST/VAT',
-            obscureText: false,
-          ),
-        ]),
-        const SizedBox(
-          height: 6.0,
-        ),
-        Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text(
             'Currency symbol',
             style: TextStyle(
               color: ColorStyle.text200,
@@ -270,7 +249,59 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
             labelText: 'eg. \$/₹',
             obscureText: false,
           ),
-        ])
+        ]),
+
+        const SizedBox(
+          height: 12.0,
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Taxation',
+              style: TextStyle(
+                color: ColorStyle.text200,
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+            FlutterSwitch(
+              activeText: "GST",
+              inactiveText: "VAT",
+              value: selectedTaxName == 'GST',
+              valueFontSize: 14.0,
+              width: 72,
+              height: 36,
+              borderRadius: 36.0,
+              showOnOff: true,
+              activeTextFontWeight: FontWeight.w500,
+              inactiveTextFontWeight: FontWeight.w500,
+              toggleSize: 30.0,
+              // activeToggleColor: Color(0xFF6E40C9),
+              // inactiveToggleColor: Color(0xFF2F363D),
+              // activeColor: getThemeColor(),
+              // inactiveColor: Colors.white,
+              // activeTextColor: Colors.black,
+              // inactiveTextColor: Colors.white,
+
+
+              onToggle: (value){
+                setState((){
+                  if(selectedTaxName == 'GST'){
+                    selectedTaxName = 'VAT';
+                  }
+                  else{
+                    selectedTaxName = 'GST';
+                  }
+                });
+              },
+            )
+          ],
+        ),
+
+        const SizedBox(
+          height: 12.0,
+        ),
       ]),
     );
   }
@@ -305,13 +336,13 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                 onTap: () async {
                   Map<String, dynamic> company = this.company;
                   company['name'] = _controllerRestaurantName.text;
-                  company['image'] = pickedImagePath;
+                  company['logo'] = pickedImagePath;
                   company['email'] = _controllerEmailAddress.text;
                   company['phone'] = _controllerPhoneNumber.text;
                   company['address'] = _controllerAddress.text;
-                  company['fssai'] = _controllerFssai.text;
-                  company['gstin'] = _controllerGstin.text;
-                  company['taxName'] = _controllerTaxName.text;
+                  company['foodLicenseNo'] = _controllerFssai.text;
+                  company['taxNo'] = _controllerGstin.text;
+                  company['taxName'] = selectedTaxName;
                   company['currencySymbol'] = _controllerCurrencySymbol.text;
                   bool response = await Account.update(company);
                   if(response){

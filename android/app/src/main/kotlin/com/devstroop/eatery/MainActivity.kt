@@ -1,4 +1,4 @@
-package com.devstroop.restaurant_pos
+package com.devstroop.eatery
 
 import io.flutter.embedding.android.FlutterActivity
 

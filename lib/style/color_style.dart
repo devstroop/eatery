@@ -5,6 +5,8 @@ class ColorStyle{
   static Color secondary = const Color(0xFF4AC3A1);
   static Color tertiary = const Color(0xFFE0855E);
   static Color alternate = const Color(0xFF705EE0);
+  static Color logoColor = const Color(0xFF74B952);
+  static Color logoColor2 = const Color(0xFF0F0F0F);
 
   static Color background100 = const Color(0xFFFFFFFF);
   static Color background200 = const Color(0xFFF5F5F5);

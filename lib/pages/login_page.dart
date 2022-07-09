@@ -1,17 +1,13 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_dropdown/flutter_dropdown.dart';
 import 'package:move_to_background/move_to_background.dart';
-import 'package:restaurant_pos/components/custom_text_from_field.dart';
-import 'package:restaurant_pos/components/primary_button.dart';
-import 'package:restaurant_pos/database/account.dart';
-
-import 'package:restaurant_pos/pages/create_account_3_page.dart';
-import 'package:restaurant_pos/pages/dashboard_page.dart';
-import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/components/custom_text_from_field.dart';
+import 'package:eatery/components/primary_button.dart';
+import 'package:eatery/database/account.dart';
+import 'package:eatery/pages/dashboard_page.dart';
+import 'package:eatery/services/utility/show_snack_bar.dart';
+import 'package:eatery/style/color_style.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -47,7 +43,7 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         backgroundColor: ColorStyle.background100,
         automaticallyImplyLeading: false,
-        title: Text('Login', style: TextStyle(color: ColorStyle.text100, fontWeight: FontWeight.w600, fontSize: 20.0),),
+        title: Image.asset('assets/logo.png', height: 36,),
         actions: [
           Container(
             margin: const EdgeInsets.only(right: 12.0),
@@ -83,7 +79,7 @@ class _LoginPageState extends State<LoginPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: const [
                   Text(
-                    'Welcome',
+                    'Welcome back on Eatery,',
                     style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.w500,
@@ -100,27 +96,11 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(
                 height: 24.0,
               ),
-              /*Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(
-                  'Email',
-                  style: TextStyle(
-                    color: ColorStyle.text200,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(
-                  height: 3.0,
-                ),
-                CustomTextFromField(
-                  controller: _controllerEmail,
-                  labelText: 'Email',
-                  obscureText: false,
-                ),
-              ]),*/
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
+                  const Text('Company', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 16.0),),
+                  const Spacer(),
                   DropDown(
                     //isExpanded: true,
                     initialValue: companies.isNotEmpty ? companies.first : null,
@@ -128,7 +108,7 @@ class _LoginPageState extends State<LoginPage> {
                     hint: const Text("Select Company"),
                     icon: Icon(
                       Icons.expand_more,
-                      color: ColorStyle.primary,
+                      color: ColorStyle.logoColor,
                     ),
                     onChanged: (value){
                       setState((){
@@ -171,13 +151,12 @@ class _LoginPageState extends State<LoginPage> {
           padding: const EdgeInsets.all(12.0),
           child: PrimaryButton(
             text: 'Login',
-            backgroundColor: ColorStyle.primary,
+            backgroundColor: ColorStyle.logoColor,
             color: ColorStyle.background100,
             height: 50.0,
             onTap: () async {
               Map<String, dynamic>? account = await Account.login(selectedCompanyEmail, _controllerPin.text);
               if(account != null){
-                print(account);
                 Navigator.pushAndRemoveUntil(
                   context,
                   MaterialPageRoute(builder: (context) => DashboardPage(account: account)),

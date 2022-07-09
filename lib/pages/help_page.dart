@@ -1,18 +1,18 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:restaurant_pos/components/pos_category_widget.dart';
-import 'package:restaurant_pos/components/product_card.dart';
-import 'package:restaurant_pos/components/waiter_card.dart';
-import 'package:restaurant_pos/database/dining_table.dart';
-import 'package:restaurant_pos/database/dining_table_category.dart';
-import 'package:restaurant_pos/database/order.dart';
-import 'package:restaurant_pos/database/waiter.dart';
-import 'package:restaurant_pos/models/order_type.dart';
-import 'package:restaurant_pos/pages/add_waiter_page.dart';
-import 'package:restaurant_pos/pages/detailed_history_page.dart';
-import 'package:restaurant_pos/pages/edit_waiter_page.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/components/pos_category_widget.dart';
+import 'package:eatery/components/product_card.dart';
+import 'package:eatery/components/waiter_card.dart';
+import 'package:eatery/database/dining_table.dart';
+import 'package:eatery/database/dining_table_category.dart';
+import 'package:eatery/database/order.dart';
+import 'package:eatery/database/waiter.dart';
+import 'package:eatery/models/order_type.dart';
+import 'package:eatery/pages/add_waiter_page.dart';
+import 'package:eatery/pages/detailed_history_page.dart';
+import 'package:eatery/pages/edit_waiter_page.dart';
+import 'package:eatery/style/color_style.dart';
 
 class HelpPage extends StatefulWidget {
   const HelpPage({Key? key, this.account}) : super(key: key);

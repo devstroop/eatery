@@ -1,7 +1,24 @@
+import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
-import 'package:restaurant_pos/components/primary_button.dart';
-import 'package:restaurant_pos/services/printing/print_invoice.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter_share/flutter_share.dart';
+import 'package:get/get_utils/src/extensions/string_extensions.dart';
+import 'package:intl/intl.dart';
+import 'package:number_to_words/number_to_words.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:qr_flutter/qr_flutter.dart';
+import 'package:eatery/components/primary_button.dart';
+import 'package:eatery/extensions/app_file_system.dart';
+import 'package:eatery/extensions/calculations.dart';
+import 'package:eatery/services/printing/print_invoice.dart';
+import 'package:eatery/services/utility/generate.dart';
+import 'package:eatery/services/utility/share.dart';
+import 'package:eatery/services/utility/show_snack_bar.dart';
+import 'package:eatery/style/color_style.dart';
+import 'dart:ui' as ui;
 
 class OrderConfirmation extends StatefulWidget {
   const OrderConfirmation({Key? key, required this.order, required this.account}) : super(key: key);
@@ -13,96 +30,451 @@ class OrderConfirmation extends StatefulWidget {
 }
 
 class _OrderConfirmationState extends State<OrderConfirmation> {
+  final GlobalKey genKey = GlobalKey();
   @override
   void initState() {
     super.initState();
   }
+  Future<Uint8List> _capturePng() async {
+    try {
+      RenderRepaintBoundary boundary = genKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+      ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      var pngBytes = byteData!.buffer.asUint8List();
+      var bs64 = base64Encode(pngBytes);
+      setState(() {});
+      return pngBytes;
+    } catch (e) {
+      rethrow;
+    }
+  }
 
+  previewWidget(BuildContext context) => RepaintBoundary(
+    key: genKey,
+    child: Container(
+      color: ColorStyle.background100,
+      margin: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0),
+      //height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const SizedBox(
+            height: 12.0,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                widget.account['name'],
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '${widget.account['taxNo'] != '' ? (widget.account['taxName'] != '' ? widget.account['taxName'] : 'Tax') + ': ' : ''}${widget.account['taxNo'] != '' ? widget.account['taxNo'] + ', ' : ''}${widget.account['foodLicenseNo'] != '' ? 'FSSAI:' + widget.account['foodLicenseNo'] : ''}',
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '${widget.account['address'] ?? ''}',
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                '${widget.account['phone']}, ${widget.account['email']}',
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+              )
+            ],
+          ),
+          const Divider(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                width: 12,
+              ),
+              Text(
+                'Order Id: #${widget.order['id']}',
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+              ),
+              const Spacer(),
+              Text(
+                '${widget.order['orderTypeText']}',
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                width: 12,
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                width: 12,
+              ),
+              Text(
+                '${widget.order['customerName'] ?? ''}',
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+              ),
+              const Spacer(),
+              Text(
+                '${widget.order['customerPhone'] ?? ''}',
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+              ),
+              const Spacer(),
+              Text(
+                '${widget.order['customerAddress'] ?? ''}',
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+              ),
+              const SizedBox(
+                width: 12,
+              ),
+            ],
+          ),
+          const Divider(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: const [
+              Flexible(
+                flex: 2,
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    'Qty',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                  ),
+                ),
+              ),
+              Spacer(),
+              Flexible(
+                flex: 6,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Particulars',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                  ),
+                ),
+              ),
+              Spacer(),
+              Flexible(
+                flex: 3,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Price',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                  ),
+                ),
+              ),
+              Spacer(),
+              Flexible(
+                flex: 3,
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    'Amount',
+                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          const Divider(),
+          for (Map<String, dynamic> item in widget.order['cart'].values)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                  flex: 2,
+                  child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Text(
+                      Calculations.compressDoubleToString(item['quantity']),
+                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                Flexible(
+                  flex: 6,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      item['name'],
+                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                Flexible(
+                  flex: 3,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '${Calculations.calculatePriceWithoutTax(taxType: item['taxType'], price: item['price'], tax: item['tax'])}/-',
+                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                Flexible(
+                  flex: 3,
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '${Calculations.calculatePriceWithoutTax(taxType: item['taxType'], price: item['price'], tax: item['tax']) * item['quantity']}',
+                      style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          const Divider(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                width: 12,
+              ),
+              const Text(
+                'Taxable',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+              ),
+              const Spacer(),
+              Text(
+                '${widget.order['taxableTotal']}',
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+              ),
+              const SizedBox(
+                width: 12,
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                width: 12,
+              ),
+              Text(
+                "${widget.account['taxName'] != '' ? widget.account['taxName'] : 'Tax'}",
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+              ),
+              const Spacer(),
+              Text(
+                '${widget.order['taxTotal']}',
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+              ),
+              const SizedBox(
+                width: 12,
+              ),
+            ],
+          ),
+          widget.order['roundOff'] > 0 ? Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                width: 12,
+              ),
+              const Text(
+                'Round off (+/-)',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+              ),
+              const Spacer(),
+              Text(
+                '${widget.order['roundOff']}',
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+              ),
+              const SizedBox(
+                width: 12,
+              ),
+            ],
+          ) : const SizedBox.shrink(),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const SizedBox(
+                width: 12,
+              ),
+              const Text(
+                'Total',
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              const Spacer(),
+              Text(
+                '${widget.account['currencySymbol']}${widget.order['finalTotal']}',
+                style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(
+                width: 12,
+              ),
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              const SizedBox(
+                width: 12,
+              ),
+              Text(
+                '${NumberToWord().convert('en-in',widget.order['finalTotal'])}only'.toUpperCase(),
+                style: const TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+              ),
+
+              const SizedBox(
+                width: 12,
+              ),
+            ],
+          ),
+          const Divider(),
+          const SizedBox(height: 16,),
+
+
+
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Text(
+                'Thank you!',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+              )
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Text(
+                DateFormat('MM/dd/yyyy H:m').format(DateTime.now()),
+                style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w400),
+              )
+            ],
+          ),
+          const SizedBox(height: 8,),
+          QrImage(
+            data: widget.order['id'],
+            version: QrVersions.auto,
+            size: 80.0,
+          ),
+          const SizedBox(
+            height: 12.0,
+          ),
+        ],
+      ),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorStyle.background200,
       body: SingleChildScrollView(
-        child: Container(
-          padding: const EdgeInsets.all(12.0),
-          height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Image.asset(
-                'assets/images/success.gif',
-                width: 120,
-                height: 120,
-                fit: BoxFit.contain,
-              ),
-              Text(
-                'Hurray!',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              Text(
-                'Order placed successfully',
-                style: TextStyle(
-                  fontSize: 14,
-                  fontWeight: FontWeight.normal,
-                ),
-              ),
-              Text(
-                'Order Id: ${widget.order['id']}',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-              SizedBox(
-                height: 12,
-              ),
-              /*Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton(
-                      onPressed: () async {
-                        await PrintInvoice.printReceipt(order: widget.order, account: widget.account);
-                      },
-                      icon: const Icon(
-                        Icons.print,
-                        size: 48,
-                      )),
-                  SizedBox(
-                    width: 24,
-                  ),
-                  IconButton(
-                      onPressed: () {},
-                      icon: const Icon(
-                        Icons.whatsapp,
-                        size: 48,
-                      )),
-                ],
-              )*/
-            ],
-          ),
+
+        child: Column(
+          children: [
+            const SizedBox(height: 60,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text(
+                  'Receipt Preview',
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                )
+              ],
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Text(
+                  'Customer copy',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                )
+              ],
+            ),
+            const SizedBox(height: 24,),
+            previewWidget(context),
+          ],
         ),
       ),
       bottomNavigationBar: BottomAppBar(
         color: ColorStyle.background100,
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: PrimaryButton(
-            text: 'Alright',
-            backgroundColor: ColorStyle.primary,
-            color: ColorStyle.background100,
-            height: 50.0,
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-        ),
+            padding: const EdgeInsets.all(12.0),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                PrimaryButton(
+                  flex: 2,
+                  text: '< Back',
+                  backgroundColor: ColorStyle.tertiary,
+                  color: ColorStyle.background100,
+                  height: 50.0,
+                  borderRadius: 50,
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                const SizedBox(
+                  width: 6,
+                ),
+                PrimaryButton(
+                  flex: 1,
+                  icon: Icon(
+                    Icons.print,
+                    color: ColorStyle.background100,
+                  ),
+                  backgroundColor: ColorStyle.primary,
+                  color: ColorStyle.background100,
+                  height: 50.0,
+                  borderRadius: 50,
+                  onTap: () async {
+                    try {
+                      String message = await PrintInvoice.printReceipt(order: widget.order, account: widget.account);
+                      showSnackBar(context, message);
+                    } catch (_) {
+                      showSnackBar(context, 'Print error');
+                      return;
+                    }
+                  },
+                ),
+                const SizedBox(
+                  width: 6,
+                ),
+                PrimaryButton(
+                  flex: 1,
+                  icon: Icon(
+                    Icons.share,
+                    color: ColorStyle.background100,
+                  ),
+                  backgroundColor: ColorStyle.information,
+                  color: ColorStyle.background100,
+                  height: 50.0,
+                  borderRadius: 50,
+                  onTap: () async {
+                    final temp = await AppFileSystem.getShareDir();
+                    final path ='$temp/${getRandomString(8)}.png';
+                    await File(path).writeAsBytes(await _capturePng());
+                    await shareFile(path, 'Invoice #${widget.order['id']}', 'Autogenerated by RestaurantPOS');
+                    //await File(path).delete();
+                  },
+                ),
+              ],
+            )),
       ),
     );
   }

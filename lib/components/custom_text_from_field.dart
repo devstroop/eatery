@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/style/color_style.dart';
 
 class CustomTextFromField extends StatelessWidget {
   const CustomTextFromField({Key? key, required this.controller, required this.labelText, required this.obscureText, this.keyboardType, this.autoValidate, this.validator, this.themeColor, this.minLines, this.maxLines, this.enabled, this.prefixWidget, this.suffixWidget}) : super(key: key);
@@ -29,7 +29,13 @@ class CustomTextFromField extends StatelessWidget {
       maxLines: maxLines ?? 1,
       decoration: InputDecoration(
         prefixIcon: prefixWidget,
-        suffixIcon: suffixWidget,
+        suffixIcon: suffixWidget != null ? Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            suffixWidget!
+          ],
+        ) : null,
         hintText: labelText,
         hintStyle: TextStyle(
           color: ColorStyle.text400,

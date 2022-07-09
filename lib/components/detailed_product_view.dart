@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:restaurant_pos/components/food_type_badge.dart';
-import 'package:restaurant_pos/database/cart.dart';
-import 'package:restaurant_pos/extensions/calculations.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/components/food_type_badge.dart';
+import 'package:eatery/database/cart.dart';
+import 'package:eatery/extensions/calculations.dart';
+import 'package:eatery/style/color_style.dart';
 
 class DetailedProductView extends StatefulWidget {
   const DetailedProductView({Key? key,

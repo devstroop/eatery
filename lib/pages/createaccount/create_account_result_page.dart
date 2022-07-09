@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_pos/components/custom_text_from_field.dart';
-import 'package:restaurant_pos/components/primary_button.dart';
-import 'package:restaurant_pos/components/selectable_card.dart';
-import 'package:restaurant_pos/pages/login_page.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/components/custom_text_from_field.dart';
+import 'package:eatery/components/primary_button.dart';
+import 'package:eatery/components/selectable_card.dart';
+import 'package:eatery/pages/login_page.dart';
+import 'package:eatery/style/color_style.dart';
 
 class CreateAccountResultPage extends StatefulWidget {
   const CreateAccountResultPage({Key? key, required this.createAccountStatus}) : super(key: key);
@@ -29,6 +29,9 @@ class _CreateAccountResultPageState extends State<CreateAccountResultPage> {
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.max,
               children: [
+                const Spacer(),
+                Image.asset('assets/logo.png', height: 72,),
+                const SizedBox(height: 48),
                 Image.asset(
                   'assets/images/success.gif',
                   width: 120,
@@ -54,6 +57,7 @@ class _CreateAccountResultPageState extends State<CreateAccountResultPage> {
                     ),
                   ],
                 ),
+                Spacer(),
               ],
             ),
           ),
@@ -65,7 +69,7 @@ class _CreateAccountResultPageState extends State<CreateAccountResultPage> {
         padding: const EdgeInsets.all(12.0),
         child: PrimaryButton(
           text: 'Alright',
-          backgroundColor: ColorStyle.primary,
+          backgroundColor: ColorStyle.logoColor,
           color: ColorStyle.background100,
           height: 50.0,
           onTap: () {

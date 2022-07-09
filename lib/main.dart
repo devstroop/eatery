@@ -1,17 +1,17 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:restaurant_pos/components/upload_button.dart';
-import 'package:restaurant_pos/components/waiter_card.dart';
-import 'package:restaurant_pos/database/dining_table.dart';
-import 'package:restaurant_pos/database/dining_table_category.dart';
-import 'package:restaurant_pos/database/printer.dart';
-import 'package:restaurant_pos/database/product.dart';
-import 'package:restaurant_pos/database/product_category.dart';
+import 'package:eatery/components/upload_button.dart';
+import 'package:eatery/components/waiter_card.dart';
+import 'package:eatery/database/dining_table.dart';
+import 'package:eatery/database/dining_table_category.dart';
+import 'package:eatery/database/printer.dart';
+import 'package:eatery/database/product.dart';
+import 'package:eatery/database/product_category.dart';
 
-import 'package:restaurant_pos/pages/create_account_1_page.dart';
-import 'package:restaurant_pos/pages/login_page.dart';
-import 'package:restaurant_pos/pages/order_confirmation.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/pages/createaccount/create_account_1_page.dart';
+import 'package:eatery/pages/login_page.dart';
+import 'package:eatery/pages/order_confirmation.dart';
+import 'package:eatery/style/color_style.dart';
 
 import 'database/account.dart';
 import 'database/cart.dart';
@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Restaurant POS',
+      title: 'Eatery',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -42,8 +42,19 @@ class MyApp extends StatelessWidget {
             Waiter.clear().then((value) => null);*/
 
             return Scaffold(
-              body: Center(
-                child: Text("RestaurantPOS", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 32.0, color: ColorStyle.primary))/*CircularProgressIndicator()*/,
+              body: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const Spacer(),
+                  Center(
+                    child: Image.asset("assets/logo.png", height: 150, width: 150,),
+                  ),
+                  const Spacer(),
+                  /*const Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                  const Spacer(),*/
+                ],
               ),
             );
           }

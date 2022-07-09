@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.devstroop" "\0"
-            VALUE "FileDescription", "restaurant_pos" "\0"
+            VALUE "FileDescription", "eatery" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "restaurant_pos" "\0"
+            VALUE "InternalName", "eatery" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2022 com.devstroop. All rights reserved." "\0"
-            VALUE "OriginalFilename", "restaurant_pos.exe" "\0"
-            VALUE "ProductName", "restaurant_pos" "\0"
+            VALUE "OriginalFilename", "eatery.exe" "\0"
+            VALUE "ProductName", "eatery" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END

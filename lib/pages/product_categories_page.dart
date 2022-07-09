@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_pos/components/product_category_card.dart';
-import 'package:restaurant_pos/database/product_category.dart';
-import 'package:restaurant_pos/pages/add_product_category_page.dart';
-import 'package:restaurant_pos/pages/edit_product_category_page.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/components/product_category_card.dart';
+import 'package:eatery/database/product_category.dart';
+import 'package:eatery/pages/add_product_category_page.dart';
+import 'package:eatery/pages/edit_product_category_page.dart';
+import 'package:eatery/style/color_style.dart';
 
 class ProductCategoriesPage extends StatefulWidget {
   const ProductCategoriesPage({Key? key}) : super(key: key);

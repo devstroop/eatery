@@ -27,9 +27,9 @@ class RestaurantFields {
   static const String pinCode = 'pinCode';
   static const String phoneNumber = 'phoneNumber';
   static const String emailAddress = 'emailAddress';
-  static const String gstin = 'gstin';
-  static const String fssai = 'fssai';
-  static const String password = 'password';
+  static const String gstin = 'taxNo';
+  static const String fssai = 'foodLicenseNo';
+  static const String password = 'pin';
   static const String currency = 'currency';
   static const String logo = 'logo';
   static const String purchaseCode = 'purchaseCode';

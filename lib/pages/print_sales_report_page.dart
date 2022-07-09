@@ -1,12 +1,12 @@
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:restaurant_pos/components/menu_tile.dart';
-import 'package:restaurant_pos/components/primary_button.dart';
-import 'package:restaurant_pos/pages/edit_company_page.dart';
-import 'package:restaurant_pos/pages/printer_settings_page.dart';
-import 'package:restaurant_pos/services/printing/print_report.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/components/menu_tile.dart';
+import 'package:eatery/components/primary_button.dart';
+import 'package:eatery/pages/edit_company_page.dart';
+import 'package:eatery/pages/printer_settings_page.dart';
+import 'package:eatery/services/printing/print_report.dart';
+import 'package:eatery/style/color_style.dart';
 
 class PrintSalesReportPage extends StatefulWidget {
   const PrintSalesReportPage({Key? key, required this.account, required this.orders}) : super(key: key);

@@ -1,32 +1,33 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:restaurant_pos/components/bottom_view_grip.dart';
-import 'package:restaurant_pos/components/custom_dialog_box.dart';
-import 'package:restaurant_pos/components/custom_text_from_field.dart';
-import 'package:restaurant_pos/components/dialog_box.dart';
-import 'package:restaurant_pos/components/menu_tile.dart';
-import 'package:restaurant_pos/components/pos_category_widget.dart';
-import 'package:restaurant_pos/components/product_card.dart';
-import 'package:restaurant_pos/components/waiter_card.dart';
-import 'package:restaurant_pos/database/account.dart';
-import 'package:restaurant_pos/database/dining_table.dart';
-import 'package:restaurant_pos/database/dining_table_category.dart';
-import 'package:restaurant_pos/database/order.dart';
-import 'package:restaurant_pos/database/printer.dart';
-import 'package:restaurant_pos/database/product.dart';
-import 'package:restaurant_pos/database/product_category.dart';
-import 'package:restaurant_pos/database/waiter.dart';
-import 'package:restaurant_pos/extensions/app_file_system.dart';
-import 'package:restaurant_pos/models/order_type.dart';
-import 'package:restaurant_pos/pages/add_waiter_page.dart';
-import 'package:restaurant_pos/pages/detailed_history_page.dart';
-import 'package:restaurant_pos/pages/edit_company_page.dart';
-import 'package:restaurant_pos/pages/edit_waiter_page.dart';
-import 'package:restaurant_pos/pages/printer_settings_page.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/components/bottom_view_grip.dart';
+import 'package:eatery/components/custom_dialog_box.dart';
+import 'package:eatery/components/custom_text_from_field.dart';
+import 'package:eatery/components/dialog_box.dart';
+import 'package:eatery/components/menu_tile.dart';
+import 'package:eatery/components/pos_category_widget.dart';
+import 'package:eatery/components/product_card.dart';
+import 'package:eatery/components/waiter_card.dart';
+import 'package:eatery/database/account.dart';
+import 'package:eatery/database/dining_table.dart';
+import 'package:eatery/database/dining_table_category.dart';
+import 'package:eatery/database/order.dart';
+import 'package:eatery/database/printer.dart';
+import 'package:eatery/database/product.dart';
+import 'package:eatery/database/product_category.dart';
+import 'package:eatery/database/waiter.dart';
+import 'package:eatery/extensions/app_file_system.dart';
+import 'package:eatery/models/order_type.dart';
+import 'package:eatery/pages/add_waiter_page.dart';
+import 'package:eatery/pages/detailed_history_page.dart';
+import 'package:eatery/pages/edit_company_page.dart';
+import 'package:eatery/pages/edit_waiter_page.dart';
+import 'package:eatery/pages/printer_settings_page.dart';
+import 'package:eatery/style/color_style.dart';
 import 'package:sn_progress_dialog/completed.dart';
 import 'package:sn_progress_dialog/progress_dialog.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key, this.account}) : super(key: key);
@@ -47,24 +48,45 @@ class _SettingPageState extends State<SettingPage> {
                 child: BottomViewGrip(),
               ),
               Row(
-                children: const [
-                  Icon(Icons.phone, size: 24,),
-                  SizedBox(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: const [
+                      Text('Help', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
+                      Text('Get support', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),),
+                    ],
+                  ),
+                  IconButton(onPressed: () async {
+                    const url = "https://devstroop.com";
+                    if (await canLaunch(url)) {
+                      await launch(url);
+                    } else {
+                      throw "Could not launch $url";
+                    }
+                  }, icon: Icon(Icons.link, color: ColorStyle.logoColor))
+                ],
+              ),
+              const SizedBox(height: 16.0,),
+              Row(
+                children: [
+                  Icon(Icons.phone, size: 24, color: ColorStyle.logoColor,),
+                  const SizedBox(
                     width: 12,
                   ),
-                  Text('+91 748 879 7047', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)
+                  const Text('+91 950 100 5734', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)
                 ],
               ),
               const SizedBox(
                 height: 8.0,
               ),
               Row(
-                children: const [
-                  Icon(Icons.email, size: 24,),
-                  SizedBox(
+                children: [
+                  Icon(Icons.email, size: 24, color: ColorStyle.logoColor,),
+                  const SizedBox(
                     width: 12,
                   ),
-                  Text('help@devstroop.com', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)
+                  const Text('help@devstroop.com', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)
                 ],
               ),
               const SizedBox(
@@ -81,7 +103,7 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   Color getThemeColor() {
-    return ColorStyle.tertiary;
+    return ColorStyle.logoColor;
   }
 
   SizedBox options() {
@@ -118,7 +140,7 @@ class _SettingPageState extends State<SettingPage> {
             color: getThemeColor(),
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const PrinterSettingsPage()),
+              MaterialPageRoute(builder: (context) => PrinterSettingsPage(account: widget.account)),
             ),
           ),
         ),
@@ -170,7 +192,7 @@ class _SettingPageState extends State<SettingPage> {
                           child: const Text('Cancel')),
                       TextButton(
                           onPressed: () async {
-                            if (widget.account['password'] == _controllerPassword.text) {
+                            if (widget.account['pin'] == _controllerPassword.text) {
                               Navigator.pop(context);
                               ProgressDialog pd = ProgressDialog(context: context);
                               pd.show(

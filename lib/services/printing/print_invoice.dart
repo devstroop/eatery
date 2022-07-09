@@ -2,25 +2,26 @@ import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
 import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 import 'package:intl/intl.dart';
-import 'package:restaurant_pos/database/printer.dart';
-import 'package:restaurant_pos/extensions/calculations.dart';
-import 'package:restaurant_pos/models/order_type.dart';
-import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
+import 'package:eatery/database/printer.dart';
+import 'package:eatery/extensions/calculations.dart';
+import 'package:eatery/models/order_type.dart';
+import 'package:eatery/services/utility/show_snack_bar.dart';
 
 class PrintInvoice{
   static PrinterBluetoothManager printerManager = PrinterBluetoothManager();
-  static Future<void> printReceipt({required Map<String, dynamic> order, required Map<String, dynamic> account}) async {
+  static Future<String> printReceipt({required Map<String, dynamic> order, required Map<String, dynamic> account}) async {
     List<Map<String, dynamic>> _jsons = await Printer.getAll();
-    if(_jsons.isNotEmpty){
+    if(_jsons.isNotEmpty) {
       BluetoothDevice _device = BluetoothDevice.fromJson(_jsons.first);
       PrinterBluetooth _printerBt = PrinterBluetooth(_device);
       printerManager.selectPrinter(_printerBt);
       const PaperSize paper = PaperSize.mm80;
       final profile = await CapabilityProfile.load();
       final PosPrintResult res = await printerManager.printTicket((await PrintInvoice.generateReceipt(paper, profile, order, account)));
+      return res.msg;
     }
-    else{
-
+    else {
+      return 'Printer not configured';
     }
   }
 
@@ -39,22 +40,30 @@ class PrintInvoice{
         ),
         linesAfter: 1);
 
-    bytes += ticket.text('${account['taxName'] != '' ? account['taxName'] : 'Tax'}: ${account['gstin']}, FSSAI: ${account['fssai']}', styles: const PosStyles(align: PosAlign.center));
+    bytes += ticket.text('${account['taxNo'] != '' ? (account['taxName'] != '' ? account['taxName'] : 'Tax') + ': ' : ''}${account['taxNo'] != '' ? account['taxNo'] + ', ' : ''}${account['foodLicenseNo'] != '' ? 'FSSAI:' + account['foodLicenseNo'] : ''}', styles: const PosStyles(align: PosAlign.center));
     bytes += ticket.text('${account['address']}', styles: const PosStyles(align: PosAlign.center));
     bytes += ticket.text('${account['phone']}, ${account['email']}', styles: const PosStyles(align: PosAlign.center));
 
     bytes += ticket.hr();
 
     bytes += ticket.row([
-      PosColumn(text: 'Order Id: ${order['id']}', width: 6, styles: const PosStyles(align: PosAlign.left)),
+      PosColumn(text: 'Order Id: #${order['id']}', width: 6, styles: const PosStyles(align: PosAlign.left)),
       PosColumn(text: '${order['orderTypeText']}', width: 6, styles: const PosStyles(align: PosAlign.right, height: PosTextSize.size2, width: PosTextSize.size2)),
     ]);
 
     bytes += ticket.row([
-      PosColumn(text: '${order['customerName']}', width: 6, styles: const PosStyles(align: PosAlign.left)),
-      PosColumn(text: '${order['customerPhone']} ${order['customerAddress']}', width: 6, styles: const PosStyles(align: PosAlign.right)),
+      PosColumn(text: '${order['customerName'] ?? ''}', width: 4, styles: const PosStyles(align: PosAlign.left)),
+      PosColumn(text: '${order['customerPhone'] ?? ''}', width: 4, styles: const PosStyles(align: PosAlign.center)),
+      PosColumn(text: '${order['customerAddress'] ?? ''}', width: 4, styles: const PosStyles(align: PosAlign.right)),
     ]);
 
+    bytes += ticket.hr();
+    bytes += ticket.row([
+      PosColumn(text: 'Qty', width: 1),
+      PosColumn(text: 'Particulars', width: 6),
+      PosColumn(text: 'Price', width: 3, styles: const PosStyles(align: PosAlign.right)),
+      PosColumn(text: 'Amount', width: 2, styles: const PosStyles(align: PosAlign.right)),
+    ]);
     bytes += ticket.hr();
     for(Map<String, dynamic> item in order['cart'].values){
       bytes += ticket.row([

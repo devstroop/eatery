@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/style/color_style.dart';
 class BottomViewGrip extends StatelessWidget {
   const BottomViewGrip({Key? key}) : super(key: key);
 

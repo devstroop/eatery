@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/style/color_style.dart';
 
 class SelectableCard extends StatelessWidget {
   const SelectableCard(
       {required this.header,
       required this.title,
-      required this.highlight,
+        required this.highlights,
       required this.footer,
       required this.active,
       required this.highlightColor,
@@ -13,7 +13,7 @@ class SelectableCard extends StatelessWidget {
 
   final String header;
   final String title;
-  final String highlight;
+  final List<String> highlights;
   final String footer;
   final bool active;
   final Color highlightColor;
@@ -26,7 +26,7 @@ class SelectableCard extends StatelessWidget {
         color: Colors.white,
         borderRadius: BorderRadius.circular(6),
         border: Border.all(
-          color: active ? ColorStyle.primary : ColorStyle.text400,
+          color: active ? ColorStyle.logoColor : ColorStyle.text400,
           width: active ? 2 : 1,
         ),
       ),
@@ -56,7 +56,7 @@ class SelectableCard extends StatelessWidget {
                                   width: 24,
                                   height: 24,
                                   decoration: BoxDecoration(
-                                    color: ColorStyle.primary,
+                                    color: ColorStyle.logoColor,
                                     borderRadius: const BorderRadius.all(Radius.elliptical(24, 24)),
                                   ))),
                           Positioned(
@@ -97,15 +97,20 @@ class SelectableCard extends StatelessWidget {
             const SizedBox(
               height: 8.0,
             ),
-            Container(
-              decoration: BoxDecoration(color: highlightColor.withOpacity(0.2), borderRadius: const BorderRadius.all(Radius.elliptical(4, 4)),),
-              child: Padding(
-                padding: const EdgeInsets.all(6.0),
-                child: Text(
-                  highlight,
-                  style: TextStyle(color: highlightColor, fontWeight: FontWeight.w500),
-                ),
-              ),
+
+            Row(
+              children: [
+                for(var highlight in highlights)
+                  Container(
+                    margin: const EdgeInsets.only(right: 6.0),
+                    padding: const EdgeInsets.all(6.0),
+                    decoration: BoxDecoration(color: highlightColor.withOpacity(0.2), borderRadius: const BorderRadius.all(Radius.elliptical(4, 4)),),
+                    child: Text(
+                      highlight,
+                      style: TextStyle(color: highlightColor, fontWeight: FontWeight.w500),
+                    ),
+                  ),
+              ],
             ),
             const SizedBox(
               height: 8.0,

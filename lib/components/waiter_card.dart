@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:restaurant_pos/components/food_type_badge.dart';
-import 'package:restaurant_pos/components/low_qty_label_widget.dart';
-import 'package:restaurant_pos/database/cart.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/components/food_type_badge.dart';
+import 'package:eatery/components/low_qty_label_widget.dart';
+import 'package:eatery/database/cart.dart';
+import 'package:eatery/style/color_style.dart';
 
 class WaiterCard extends StatelessWidget {
   const WaiterCard(

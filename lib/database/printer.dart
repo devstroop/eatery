@@ -1,5 +1,5 @@
 import 'package:json_store/json_store.dart';
-import 'package:restaurant_pos/services/utility/generate.dart';
+import 'package:eatery/services/utility/generate.dart';
 
 class Printer{
   static JsonStore store = JsonStore();

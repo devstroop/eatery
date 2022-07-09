@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/style/color_style.dart';
 class LowQtyLabelWidget extends StatefulWidget {
   const LowQtyLabelWidget({
     Key? key,

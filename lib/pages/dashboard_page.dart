@@ -2,23 +2,23 @@ import 'dart:io';
 import 'package:battery_info/battery_info_plugin.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:restaurant_pos/components/menu_widget.dart';
-import 'package:restaurant_pos/components/menu_widget_extended.dart';
-import 'package:restaurant_pos/components/notification_widget.dart';
-import 'package:restaurant_pos/database/account.dart';
-import 'package:restaurant_pos/pages/backup_restore_page.dart';
-import 'package:restaurant_pos/pages/import_export_page.dart';
-import 'package:restaurant_pos/pages/product_categories_page.dart';
-import 'package:restaurant_pos/pages/help_page.dart';
-import 'package:restaurant_pos/pages/history_page.dart';
-import 'package:restaurant_pos/pages/inventory_page.dart';
-import 'package:restaurant_pos/pages/kitchen_page.dart';
-import 'package:restaurant_pos/pages/logout_page.dart';
-import 'package:restaurant_pos/pages/point_of_sale_page.dart';
-import 'package:restaurant_pos/pages/settings_page.dart';
-import 'package:restaurant_pos/pages/dining_tables_page.dart';
-import 'package:restaurant_pos/pages/waiters_page.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/components/menu_widget.dart';
+import 'package:eatery/components/menu_widget_extended.dart';
+import 'package:eatery/components/notification_widget.dart';
+import 'package:eatery/database/account.dart';
+import 'package:eatery/pages/backup_restore_page.dart';
+import 'package:eatery/pages/import_export_page.dart';
+import 'package:eatery/pages/product_categories_page.dart';
+import 'package:eatery/pages/help_page.dart';
+import 'package:eatery/pages/history_page.dart';
+import 'package:eatery/pages/inventory_page.dart';
+import 'package:eatery/pages/kitchen_page.dart';
+import 'package:eatery/pages/logout_page.dart';
+import 'package:eatery/pages/point_of_sale_page.dart';
+import 'package:eatery/pages/settings_page.dart';
+import 'package:eatery/pages/dining_tables_page.dart';
+import 'package:eatery/pages/waiters_page.dart';
+import 'package:eatery/style/color_style.dart';
 
 import 'activate_license_page.dart';
 
@@ -108,10 +108,10 @@ class _DashboardPageState extends State<DashboardPage> {
                       child: SizedBox(
                         height: 64,
                         width: 64,
-                        child: widget.account['image'] != null && File(widget.account['image']).existsSync()
+                        child: widget.account['logo'] != null && File(widget.account['logo']).existsSync()
                             ? Image(
                                 image: Image.file(
-                                File(widget.account['image']),
+                                File(widget.account['logo']),
                               ).image)
                             : Container(),
                       ),
@@ -122,7 +122,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   future: getBatteryLevel(),
                   builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
                     if (snapshot.connectionState == ConnectionState.done &&
-                        snapshot.data <= widget.account['lowBatteryLevel']) {
+                        snapshot.data <= 20) {
                       return NotificationWidget(message: 'Battery level is ${snapshot.data}% in need of charging.', timestamp: true,);
                     } else {
                       return Container();
@@ -140,7 +140,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             account: widget.account,
                           )),
                         ).then((_) async {
-                          Map<String, dynamic>? account = (await Account.login(widget.account['email'], widget.account['password']));
+                          Map<String, dynamic>? account = (await Account.login(widget.account['email'], widget.account['pin']));
                           setState(() {
                             widget.account = account!;
                           });
@@ -289,7 +289,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               account: widget.account,
                             )),
                           ).then((_) async {
-                            Map<String, dynamic>? account = (await Account.login(widget.account['email'], widget.account['password']));
+                            Map<String, dynamic>? account = (await Account.login(widget.account['email'], widget.account['pin']));
                             setState(() {
                               widget.account = account!;
                             });

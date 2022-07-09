@@ -2,14 +2,14 @@ import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
 import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 import 'package:intl/intl.dart';
-import 'package:restaurant_pos/database/printer.dart';
-import 'package:restaurant_pos/extensions/calculations.dart';
-import 'package:restaurant_pos/models/order_type.dart';
-import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
+import 'package:eatery/database/printer.dart';
+import 'package:eatery/extensions/calculations.dart';
+import 'package:eatery/models/order_type.dart';
+import 'package:eatery/services/utility/show_snack_bar.dart';
 class PrintReport{
 
   static PrinterBluetoothManager printerManager = PrinterBluetoothManager();
-  static Future<void> printReceipt({required List<Map<String, dynamic>> orders, required Map<String, dynamic> account, required DateTime from, required DateTime till}) async {
+  static Future<String> printReceipt({required List<Map<String, dynamic>> orders, required Map<String, dynamic> account, DateTime? from, DateTime? till}) async {
     List<Map<String, dynamic>> _jsons = await Printer.getAll();
     if(_jsons.isNotEmpty){
       BluetoothDevice _device = BluetoothDevice.fromJson(_jsons.first);
@@ -18,12 +18,13 @@ class PrintReport{
       const PaperSize paper = PaperSize.mm80;
       final profile = await CapabilityProfile.load();
       final PosPrintResult res = await printerManager.printTicket((await PrintReport.generateReceipt(paper, profile, orders, account, from, till)));
+      return res.msg;
     }
     else{
-
+      return 'Printer not configured';
     }
   }
-  static Future<List<int>> generateReceipt(PaperSize paper, CapabilityProfile profile, List<Map<String, dynamic>> orders, Map<String, dynamic> account, DateTime from, DateTime till) async {
+  static Future<List<int>> generateReceipt(PaperSize paper, CapabilityProfile profile, List<Map<String, dynamic>> orders, Map<String, dynamic> account, DateTime? from, DateTime? till) async {
     final Generator ticket = Generator(paper, profile);
     List<int> bytes = [];
     bytes += ticket.text('${account['name']}',
@@ -34,7 +35,10 @@ class PrintReport{
         ), linesAfter: 1);
 
     bytes += ticket.text('Sales Report', styles: const PosStyles(align: PosAlign.center, bold: true, width: PosTextSize.size2,), linesAfter: 1);
-    bytes += ticket.text('${DateFormat("yyyy-MM-dd").format(from)} - ${DateFormat("yyyy-MM-dd").format(till)}', styles: const PosStyles(align: PosAlign.center, bold: true));
+    if(from != null && till != null) {
+      bytes += ticket.text('${DateFormat("yyyy-MM-dd").format(from)} - ${DateFormat("yyyy-MM-dd").format(till)}',
+          styles: const PosStyles(align: PosAlign.center, bold: true));
+    }
 
     bytes += ticket.hr();
     bytes += ticket.row([
@@ -47,15 +51,16 @@ class PrintReport{
     double sum = 0;
 
     for(Map<String, dynamic> order in orders){
-      if(DateTime.fromMicrosecondsSinceEpoch(order['timestamp']).isAfter(from) && DateTime.fromMicrosecondsSinceEpoch(order['timestamp']).isBefore(till.add(const Duration(days: 1)))){
+      /*if(DateTime.fromMicrosecondsSinceEpoch(order['timestamp']).isAfter(from) && DateTime.fromMicrosecondsSinceEpoch(order['timestamp']).isBefore(till.add(const Duration(days: 1)))){
         
-        bytes += ticket.row([
-          PosColumn(text: DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.fromMicrosecondsSinceEpoch(order['timestamp'])) , width: 6, styles: const PosStyles(align: PosAlign.left)),
-          PosColumn(text: '${order['id']}', width: 3, styles: const PosStyles(align: PosAlign.center)),
-          PosColumn(text: '${order['finalTotal']}', width: 3, styles: const PosStyles(align: PosAlign.right)),
-        ]);
-        sum += order['finalTotal'];
-      }
+
+      }*/
+      bytes += ticket.row([
+        PosColumn(text: DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.fromMicrosecondsSinceEpoch(order['timestamp'])) , width: 6, styles: const PosStyles(align: PosAlign.left)),
+        PosColumn(text: '${order['id']}', width: 3, styles: const PosStyles(align: PosAlign.center)),
+        PosColumn(text: '${order['finalTotal'].toStringAsFixed(2)}', width: 3, styles: const PosStyles(align: PosAlign.right)),
+      ]);
+      sum += order['finalTotal'];
     }
 
     bytes += ticket.hr();
@@ -69,7 +74,7 @@ class PrintReport{
             width: PosTextSize.size2,
           )),
       PosColumn(
-          text: 'INR $sum',
+          text: '${account['currencySymbol']}$sum',
           width: 6,
           styles: const PosStyles(
             align: PosAlign.right,

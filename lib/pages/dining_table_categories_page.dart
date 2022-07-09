@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:restaurant_pos/components/dining_table_category_card.dart';
-import 'package:restaurant_pos/database/dining_table_category.dart';
-import 'package:restaurant_pos/pages/add_dining_table_category_page.dart';
-import 'package:restaurant_pos/pages/edit_dining_table_category_page.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/components/dining_table_category_card.dart';
+import 'package:eatery/database/dining_table_category.dart';
+import 'package:eatery/pages/add_dining_table_category_page.dart';
+import 'package:eatery/pages/edit_dining_table_category_page.dart';
+import 'package:eatery/style/color_style.dart';
 
 class DiningTableCategoriesPage extends StatefulWidget {
   const DiningTableCategoriesPage({Key? key}) : super(key: key);

@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/style/color_style.dart';
 
 class ProductCategoryCard extends StatelessWidget {
   const ProductCategoryCard({Key? key, required this.id, required this.name, this.image, this.onTap}) : super(key: key);

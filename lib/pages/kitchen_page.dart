@@ -1,21 +1,21 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:restaurant_pos/components/custom_text_from_field.dart';
-import 'package:restaurant_pos/components/food_type_badge.dart';
-import 'package:restaurant_pos/components/pos_category_widget.dart';
-import 'package:restaurant_pos/components/pos_order_type_selection_button.dart';
-import 'package:restaurant_pos/components/primary_button.dart';
-import 'package:restaurant_pos/components/product_card.dart';
+import 'package:eatery/components/custom_text_from_field.dart';
+import 'package:eatery/components/food_type_badge.dart';
+import 'package:eatery/components/pos_category_widget.dart';
+import 'package:eatery/components/pos_order_type_selection_button.dart';
+import 'package:eatery/components/primary_button.dart';
+import 'package:eatery/components/product_card.dart';
 
-import 'package:restaurant_pos/database/product.dart';
-import 'package:restaurant_pos/database/product_category.dart';
-import 'package:restaurant_pos/extensions/calculations.dart';
-import 'package:restaurant_pos/models/order_type.dart';
-import 'package:restaurant_pos/pages/add_kitchen_dish_page.dart';
-import 'package:restaurant_pos/pages/edit_kitchen_dish_page.dart';
-import 'package:restaurant_pos/services/utility/show_snack_bar.dart';
-import 'package:restaurant_pos/style/color_style.dart';
+import 'package:eatery/database/product.dart';
+import 'package:eatery/database/product_category.dart';
+import 'package:eatery/extensions/calculations.dart';
+import 'package:eatery/models/order_type.dart';
+import 'package:eatery/pages/add_kitchen_dish_page.dart';
+import 'package:eatery/pages/edit_kitchen_dish_page.dart';
+import 'package:eatery/services/utility/show_snack_bar.dart';
+import 'package:eatery/style/color_style.dart';
 
 class KitchenPage extends StatefulWidget {
   const KitchenPage({Key? key, required this.account}) : super(key: key);

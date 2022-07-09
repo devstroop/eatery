@@ -1,4 +1,4 @@
-name: restaurant_pos
+name: eatery
 description: A new Flutter project.
 
 # The following line prevents the package from being accidentally published to
@@ -59,10 +59,11 @@ dependencies:
   flutter_file_dialog: ^2.3.0
   flutter_archive: ^5.0.0
   qrscan: ^0.3.2
-  # flutter_blue: ^0.8.0
-  # esc_pos_utils: ^1.1.0
-  # bluetooth_print: ^3.0.1
+  qr_flutter: ^4.0.0
+  flutter_share: ^2.0.0
+  number_to_words: ^1.0.0
   esc_pos_bluetooth: ^0.4.1
+  url_launcher: ^6.1.4
 
   get: ^4.6.5
 
@@ -74,6 +75,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.9.3
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -82,6 +84,10 @@ dev_dependencies:
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
 
+flutter_icons:
+  android: "ic_launcher"
+  ios: true
+  image_path: "assets/icons/icon.png"
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
 
@@ -94,6 +100,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/
+    - assets/
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
