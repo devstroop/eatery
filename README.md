@@ -1,6 +1,6 @@
-# eatery
+# Eatery
 
-A new Flutter project.
+A modern Point of Sale for Restaurant and Cafe
 
 ## Getting Started
 
