@@ -1,4 +1,5 @@
-![Eatery](https://github.com/devstroop/eatery/raw/master/assets/icons/icon.png)
+<img src="https://github.com/devstroop/eatery/raw/master/assets/icons/icon.png" alt="Eatery" width="200"/>
+
 # Eatery
 
 A modern Point of Sale for Restaurant and Cafe
