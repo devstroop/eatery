@@ -15,10 +15,15 @@ class PrintInvoice{
       BluetoothDevice _device = BluetoothDevice.fromJson(_jsons.first);
       PrinterBluetooth _printerBt = PrinterBluetooth(_device);
       printerManager.selectPrinter(_printerBt);
-      const PaperSize paper = PaperSize.mm80;
-      final profile = await CapabilityProfile.load();
-      final PosPrintResult res = await printerManager.printTicket((await PrintInvoice.generateReceipt(paper, profile, order, account)));
-      return res.msg;
+      PaperSize? paper = (account['prineterSize'] == '80mm') ? PaperSize.mm80 : (account['prineterSize'] == '58mm') ? PaperSize.mm58 : null;
+      if(paper != null){
+        final profile = await CapabilityProfile.load();
+        final PosPrintResult res = await printerManager.printTicket((await PrintInvoice.generateReceipt(paper, profile, order, account)));
+        return res.msg;
+      }
+      else {
+        return 'Printer not configured';
+      }
     }
     else {
       return 'Printer not configured';

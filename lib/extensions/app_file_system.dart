@@ -1,5 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:eatery/components/bottom_view_grip.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_archive/flutter_archive.dart';
 
 import 'package:image_picker/image_picker.dart';
@@ -45,7 +47,63 @@ class AppFileSystem {
     return '${(await appDataRoot()).path}/images';
   }
 
-  static Future<String?> pickImage() async {
+
+  static Widget buildUploadOptionsBottomSheet() => StatefulBuilder(builder: (context, state) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
+      child: ListView(
+        shrinkWrap: true,
+        children: [
+          const Center(
+            child: BottomViewGrip(),
+          ),
+          Row(
+            children: const [
+              Icon(Icons.phone, size: 24,),
+              SizedBox(
+                width: 12,
+              ),
+              Text('+91 748 879 7047', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)
+            ],
+          ),
+          const SizedBox(
+            height: 8.0,
+          ),
+          Row(
+            children: const [
+              Icon(Icons.email, size: 24,),
+              SizedBox(
+                width: 12,
+              ),
+              Text('help@devstroop.com', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)
+            ],
+          ),
+          const SizedBox(
+            height: 20.0,
+          ),
+        ],
+      ),
+    );
+  });
+
+  static Future<String?> pickImage(BuildContext context) async {
+    showModalBottomSheet(
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
+            bottomLeft: Radius.circular(0),
+            bottomRight: Radius.circular(0),
+          ),
+        ),
+        context: context,
+        builder: (context) => buildUploadOptionsBottomSheet());
+
+
+
+
+
+
     final ImagePicker _picker = ImagePicker();
     final XFile? photo = await _picker.pickImage(source: ImageSource.gallery);
 

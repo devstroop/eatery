@@ -121,7 +121,7 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
                   },
                 ),
                 onTap: () async {
-                  String? path = await AppFileSystem.pickImage();
+                  String? path = await AppFileSystem.pickImage(context);
                   setState(() {
                     pickedImagePath = path;
                   });

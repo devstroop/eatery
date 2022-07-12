@@ -65,7 +65,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                   },
                 ),
                 onTap: () async {
-                  String? path = await AppFileSystem.pickImage();
+                  String? path = await AppFileSystem.pickImage(context);
                   setState(() {
                     pickedImagePath = path;
                   });

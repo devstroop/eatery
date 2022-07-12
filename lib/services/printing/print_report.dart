@@ -3,9 +3,6 @@ import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
 import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 import 'package:intl/intl.dart';
 import 'package:eatery/database/printer.dart';
-import 'package:eatery/extensions/calculations.dart';
-import 'package:eatery/models/order_type.dart';
-import 'package:eatery/services/utility/show_snack_bar.dart';
 class PrintReport{
 
   static PrinterBluetoothManager printerManager = PrinterBluetoothManager();
@@ -15,10 +12,15 @@ class PrintReport{
       BluetoothDevice _device = BluetoothDevice.fromJson(_jsons.first);
       PrinterBluetooth _printerBt = PrinterBluetooth(_device);
       printerManager.selectPrinter(_printerBt);
-      const PaperSize paper = PaperSize.mm80;
-      final profile = await CapabilityProfile.load();
-      final PosPrintResult res = await printerManager.printTicket((await PrintReport.generateReceipt(paper, profile, orders, account, from, till)));
-      return res.msg;
+      PaperSize? paper = (account['prineterSize'] == '80mm') ? PaperSize.mm80 : (account['prineterSize'] == '58mm') ? PaperSize.mm58 : null;
+      if(paper != null){
+        final profile = await CapabilityProfile.load();
+        final PosPrintResult res = await printerManager.printTicket((await PrintReport.generateReceipt(paper, profile, orders, account, from, till)));
+        return res.msg;
+      }
+      else {
+        return 'Printer not configured';
+      }
     }
     else{
       return 'Printer not configured';

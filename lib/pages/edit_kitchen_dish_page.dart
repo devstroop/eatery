@@ -184,7 +184,7 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                     },
                   ),
                   onTap: () async {
-                    String? path = await AppFileSystem.pickImage();
+                    String? path = await AppFileSystem.pickImage(context);
                     setState(() {
                       pickedImagePath = path;
                     });

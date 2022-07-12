@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dropdown/flutter_dropdown.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:intl/intl.dart';
 import 'package:eatery/components/bottom_view_grip.dart';
@@ -26,6 +27,7 @@ class _PrinterSettingsPageState extends State<PrinterSettingsPage> {
   final List<PrinterBluetooth> _savedDevices = [];
 
 
+
   Future<void> loadDevicesFromDatabase() async {
     List<Map<String, dynamic>> _devices = await Printer.getAll();
     for (Map<String, dynamic> _device in _devices) {
@@ -36,6 +38,8 @@ class _PrinterSettingsPageState extends State<PrinterSettingsPage> {
   }
   Widget buildPrinterConfigBottomSheet() => StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
     bool autoPrintOnSale = widget.account['autoPrintOnSale'] ?? false;
+    List<String> printerSizes = ['58mm', '80mm'];
+    String selectedPrinterSize = widget.account['printerSize'];
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
       child: ListView(
@@ -75,7 +79,29 @@ class _PrinterSettingsPageState extends State<PrinterSettingsPage> {
                   });
                 },
               )
-
+            ],
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text('Size', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
+              DropDown(
+                //isExpanded: true,
+                initialValue: widget.account['printerSize'],
+                items: printerSizes,
+                hint: const Text("Select"),
+                icon: Icon(
+                  Icons.expand_more,
+                  color: ColorStyle.logoColor,
+                ),
+                onChanged: (value) async {
+                  widget.account['printerSize'] = selectedPrinterSize;
+                  await Account.update(widget.account);
+                  setState((){
+                    selectedPrinterSize = value.toString();
+                  });
+                },
+              ),
             ],
           ),
 

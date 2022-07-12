@@ -61,7 +61,7 @@ class _AddWaiterPageState extends State<AddWaiterPage> {
                   },
                 ),
                 onTap: () async {
-                  String? path = await AppFileSystem.pickImage();
+                  String? path = await AppFileSystem.pickImage(context);
                   setState(() {
                     pickedImagePath = path;
                   });

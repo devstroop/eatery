@@ -187,7 +187,7 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
                     },
                   ),
                   onTap: () async {
-                    String? path = await AppFileSystem.pickImage();
+                    String? path = await AppFileSystem.pickImage(context);
                     setState(() {
                       pickedImagePath = path;
                     });

@@ -102,7 +102,7 @@ class _CreateAccount1PageState extends State<CreateAccount1Page> {
                   },
                 ),
                 onTap: () async {
-                  String? path = await AppFileSystem.pickImage();
+                  String? path = await AppFileSystem.pickImage(context);
                   setState(() {
                     pickedImagePath = path;
                   });

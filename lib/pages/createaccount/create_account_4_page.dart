@@ -319,6 +319,7 @@ class _CreateAccount4PageState extends State<CreateAccount4Page> {
                         'validFrom': licData.validFrom!.microsecondsSinceEpoch,
                         'validTill': licData.validTill!.microsecondsSinceEpoch,
                         'autoPrintOnSale': false,
+                        'printerSize': "80mm",
                       };
                       var id = await Account.add(accountData);
                       if (id != null) {
@@ -355,6 +356,7 @@ class _CreateAccount4PageState extends State<CreateAccount4Page> {
                       'validFrom': null,
                       'validTill': null,
                       'autoPrintOnSale': false,
+                      'printerSize': "80mm",
                     };
 
                     var id = await Account.add(accountData);
