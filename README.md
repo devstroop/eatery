@@ -1,6 +1,8 @@
-# eatery
+<img src="https://github.com/devstroop/eatery/raw/master/assets/icons/icon.png" alt="Eatery" width="200"/>
 
-A new Flutter project.
+# Eatery
+
+A modern Point of Sale for Restaurant and Cafe
 
 ## Getting Started
 
