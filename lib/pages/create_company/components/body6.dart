@@ -1,0 +1,206 @@
+import 'dart:io';
+
+import 'package:clipboard/clipboard.dart';
+import 'package:eatery/components/custom_text_from_field.dart';
+import 'package:eatery/components/selectable_card.dart';
+import 'package:eatery/constants/plugins/license.dart';
+import 'package:eatery/constants/style/color_style.dart';
+import 'package:eatery/constants/style/spacing_style.dart';
+import 'package:eatery_components/titles/page.title.dart';
+import 'package:eatery_db/models/subscription/subscription_type.dart';
+import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:platform_device_id/platform_device_id.dart';
+import 'package:devdart_windows_hdsn/devdart_windows_hdsn.dart';
+import 'package:devdart_windows_hdsn/drive.dart';
+import 'package:eatery_components/buttons/primary.button.dart';
+
+class Body6 extends StatefulWidget {
+  final Color themeColor;
+  final Function(SubscriptionType subscriptionType, String? purchaseCde, DateTime? validFrom, DateTime? validTill) callback;
+  String? deviceSerial;
+  SubscriptionType? subscriptionType;
+
+  Body6({Key? key, required this.themeColor, required this.callback, required this.subscriptionType}) : super(key: key);
+
+  @override
+  State<Body6> createState() => _Body6State();
+}
+
+class _Body6State extends State<Body6> {
+  final TextEditingController _controllerPurchaseCode = TextEditingController();
+  DateTime? validFrom;
+  DateTime? validTill;
+
+  Future fetchDeviceInfo() async {
+    String? deviceId;
+    if(Platform.isAndroid || Platform.isIOS){
+      try {
+        deviceId = await PlatformDeviceId.getDeviceId;
+      } on Exception {
+        deviceId = null;
+      }
+    }
+    else if(Platform.isWindows){
+      List<Drive> drives = WindowsHDSN().getDrives();
+      for(Drive drive in drives){
+        print(drive.model);
+        print(drive.serial);
+      }
+    }
+    else{
+      deviceId = null;
+    }
+
+    setState(() {
+      widget.deviceSerial = deviceId;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    fetchDeviceInfo();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: _formKey,
+      child: ListView(
+        scrollDirection: Axis.vertical,
+        children: [
+          const PageTitle(
+            title: "Choose your plan",
+            subtitle: "Get access to whole product in one go",
+          ),
+          SpacingStyle.defaultVerticalSpacing,
+          SpacingStyle.defaultVerticalSpacing,
+          SelectableCard(
+            header: 'EVALUATION',
+            title: 'Try It Free',
+            highlights: const ['100 invoices a month', '10 products'],
+            footer: 'Enjoy with limited access',
+            selected: widget.subscriptionType == SubscriptionType.free,
+            highlightColor: ColorStyle.warning,
+            onTap: () {
+              widget.callback(SubscriptionType.free, null, null, null);
+            },
+          ),
+          SpacingStyle.defaultVerticalSpacing,
+          SelectableCard(
+            header: 'PREMIUM',
+            title: 'Activate License',
+            highlights: const ['Everything Unlimited'],
+            footer: 'Get unlocked to all premium features',
+            selected: widget.subscriptionType == SubscriptionType.premium,
+            highlightColor: ColorStyle.success,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SpacingStyle.defaultVerticalSpacing,
+                Row(
+                  children: [
+                    const Text('Device ID'),
+                    const SizedBox(width: 6.0),
+                    Text(widget.deviceSerial ?? 'Undefined', style: TextStyle(fontWeight: FontWeight.w500),),
+                    IconButton(onPressed: fetchDeviceInfo, icon: const Icon(Icons.refresh))
+                    
+                  ],
+                ),
+                SpacingStyle.defaultVerticalSpacing,
+                if(validTill != null)
+                  Text('Validity: ${DateFormat.yMMMd().format(validTill!)}'),
+                if(validTill != null)
+                  SpacingStyle.defaultVerticalSpacing,
+                CustomTextFromField(
+                  themeColor: widget.themeColor,
+                  controller: _controllerPurchaseCode,
+                  title: 'Purchase code',
+                  hint: 'Enter purchase code...',
+                  textInputAction: TextInputAction.done,
+                  autofocus: true,
+                  suffixWidget: IconButton(
+                    onPressed: () async {
+                      String val = await FlutterClipboard.paste();
+                      setState(() {
+                        _controllerPurchaseCode.text = val;
+                      });
+                    },
+                    icon: const Icon(Icons.paste),
+                    color: ColorStyle.text400,
+                  ),
+                  validator: (value) {
+                    if (widget.subscriptionType == SubscriptionType.premium) {
+                      if (value!.isEmpty) return 'Purchase code cannot be blank';
+                      if (value.contains(' ')) return 'Purchase code is not valid';
+                      if (validFrom == null || validTill == null) return 'Purchase code is not valid';
+                    }
+                    return null;
+                  },
+
+                  onChanged: (value){
+                    // VALIDATE_LICENSE_HERE
+                    License(purchaseCode: value).validate((validFrom, validTill)  {
+                      setState(() {
+                        this.validFrom = validFrom;
+                        this.validTill = validTill;
+                      });
+                      widget.callback(SubscriptionType.premium, _controllerPurchaseCode.text, validFrom, validTill);
+                    });
+                  },
+                  onFieldSubmitted: (v) {
+                    FocusScope.of(context).unfocus();
+                  },
+                ),
+              ],
+            ),
+            onTap: () {
+              widget.callback(SubscriptionType.premium, null, null, null);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+final _formKey = GlobalKey<FormState>();
+
+class BAP6 extends StatelessWidget {
+  final Color themeColor;
+  final Function(int? index)? callback;
+  final int? index;
+
+  const BAP6(
+      {Key? key,
+      required this.themeColor,
+      this.callback,
+      this.index})
+      : super(key: key);
+
+  void _submit() {
+    final isValid = _formKey.currentState!.validate();
+    if (!isValid) {
+      return;
+    }
+    _formKey.currentState!.save();
+    if (callback != null) {
+      callback!(index);
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return BottomAppBar(
+      color: ColorStyle.backgroundColorAlter,
+      child: Padding(
+        padding: SpacingStyle.defaultPadding,
+        child: PrimaryButton(
+            child: const Text('Finish'),
+            color: themeColor,
+            onPressed: _submit),
+      ),
+    );
+  }
+}
