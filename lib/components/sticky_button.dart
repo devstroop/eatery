@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:eatery/style/color_style.dart';
+import 'package:eatery/constants/style/color_style.dart';
 
 class StickyButton extends StatelessWidget {
   const StickyButton({Key? key, required this.name, this.iconData, this.onTap, this.topLeftRound, this.topRightRound, this.bottomLeftRound, this.bottomRightRound,})
@@ -23,7 +23,7 @@ class StickyButton extends StatelessWidget {
           Container(
             margin: const EdgeInsets.fromLTRB(9, 0, 9, 0),
             decoration: BoxDecoration(
-              color: ColorStyle.background100,
+              color: ColorStyle.backgroundColorAlter,
               boxShadow: const [
                 BoxShadow(
                   color: Color(0x2F000000),
@@ -53,7 +53,7 @@ class StickyButton extends StatelessWidget {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: ColorStyle.background200,
+                            color: ColorStyle.backgroundColorAlter,
                             borderRadius:
                             BorderRadius.only(
                                 topLeft: topLeftRound != null ? Radius.circular(topLeftRound!) : const Radius.circular(6),
@@ -62,7 +62,7 @@ class StickyButton extends StatelessWidget {
                             /*image: File(image ?? '').existsSync()
                                 ? DecorationImage(image: FileImage(File(image!)), fit: BoxFit.scaleDown)
                                 : const DecorationImage(
-                                image: AssetImage('assets/images/no-image.jpg'), fit: BoxFit.cover),*/
+                                image: AssetImage('assets/images/default.jpg'), fit: BoxFit.cover),*/
                           ),
                           child: Icon(iconData),
                         ),
@@ -74,7 +74,7 @@ class StickyButton extends StatelessWidget {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: ColorStyle.background100,
+                            color: ColorStyle.backgroundColorAlter,
                             borderRadius: BorderRadius.only(
                                 topRight: topRightRound != null ? Radius.circular(topRightRound!) : const Radius.circular(6),
                                 bottomRight: bottomRightRound != null ? Radius.circular(bottomRightRound!) : const Radius.circular(6)),

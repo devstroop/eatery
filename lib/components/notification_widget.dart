@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class NotificationWidget extends StatelessWidget {
-  const NotificationWidget({Key? key, required this.message, this.timestamp, this.header, this.icon, this.onTap}) : super(key: key);
+  const NotificationWidget({Key? key, required this.message, this.timestamp, this.header, this.leading, this.onTap}) : super(key: key);
+
   final String message;
   final bool? timestamp;
   final String? header;
-  final Icon? icon;
+  final Widget? leading;
   final Function()? onTap;
   @override
   Widget build(BuildContext context) {
@@ -29,9 +30,9 @@ class NotificationWidget extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
-            icon != null ? Padding(
+            leading != null ? Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
-                child: icon) : Container(),
+                child: leading) : Container(),
             Expanded(
               child: Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(12, 0, 16, 0),

@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:eatery/style/color_style.dart';
+import 'package:eatery/constants/style/color_style.dart';
 class BottomViewGrip extends StatelessWidget {
   const BottomViewGrip({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Container(
-        margin: const EdgeInsets.fromLTRB(0.0, 12.0, 0.0, 18.0),
+        margin: const EdgeInsets.fromLTRB(0.0, 8.0, 0.0, 16.0),
         width: 60,
         height: 5,
         decoration: BoxDecoration(

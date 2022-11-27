@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:eatery/style/color_style.dart';
+import 'package:eatery/constants/style/color_style.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({Key? key, required this.text, this.onTap}) : super(key: key);

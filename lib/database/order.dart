@@ -1,18 +1,21 @@
+import 'package:eatery/database/dining_table.dart';
+import 'package:eatery/database/waiter.dart';
 import 'package:json_store/json_store.dart';
 import 'package:eatery/services/utility/generate.dart';
-class Order{
+
+class Order {
   static JsonStore store = JsonStore();
   static String name = "order-ref";
 
   static Future<String?> add(Map<String, dynamic> data) async {
-    try{
+    try {
       String id;
-      if(data.containsKey('id')){
+      if (data.containsKey('id')) {
         id = data['id'];
-      }else{
-        while(true){
+      } else {
+        while (true) {
           id = getRandomString(8);
-          if(await store.getItem('$name-$id') == null){
+          if (await store.getItem('$name-$id') == null) {
             data['id'] = id;
             break;
           }
@@ -21,37 +24,46 @@ class Order{
       await store.setItem('$name-$id', data);
       return id;
     }
-    catch(_){}
+    catch (_) {}
     return null;
   }
+
   static Future<Map<String, dynamic>?> get(String id) async {
     try {
       return await store.getItem('$name-$id');
-    }catch(_){}
+    } catch (_) {}
     return null;
   }
+
   static Future<List<Map<String, dynamic>>> getAll() async {
     return await store.getListLike('$name-%') ?? [];
   }
+
   static Future<bool> update(Map<String, dynamic> data) async {
-    try{
+    try {
       await store.setItem('$name-${data['id']}', data);
       return true;
-    }catch(_){}
+    } catch (_) {}
     return false;
   }
+
   static Future<bool> delete(String id) async {
-    try{
+    try {
       await store.deleteItem('$name-$id');
       return true;
-    }catch(_){}
+    } catch (_) {}
     return false;
   }
+
   static Future<bool> clear() async {
     try {
       await store.deleteLike('$name-%');
       return true;
-    }catch(_){}
+    } catch (_) {}
     return false;
   }
+
+
 }
+
+

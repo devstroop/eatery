@@ -1,7 +1,7 @@
 import 'dart:io';
+import 'package:eatery/constants/utils/calculations.dart';
 import 'package:flutter/material.dart';
-import 'package:eatery/extensions/calculations.dart';
-import 'package:eatery/style/color_style.dart';
+import 'package:eatery/constants/style/color_style.dart';
 
 class CartProductCard extends StatelessWidget {
   const CartProductCard(
@@ -43,11 +43,11 @@ class CartProductCard extends StatelessWidget {
                   height: 50,
                   width: 50,
                   decoration: BoxDecoration(
-                    color: ColorStyle.background200,
+                    color: ColorStyle.backgroundColorAlter,
                     borderRadius: const BorderRadius.all(Radius.circular(6)),
                     image: File(image ?? '').existsSync()
                         ? DecorationImage(image: FileImage(File(image!)), fit: BoxFit.cover)
-                        : const DecorationImage(image: AssetImage('assets/images/no-image.jpg'), fit: BoxFit.cover),
+                        : const DecorationImage(image: AssetImage('assets/images/default.jpg'), fit: BoxFit.cover),
                   ),
                 ),
                 const SizedBox(

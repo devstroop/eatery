@@ -1,26 +1,35 @@
-import 'package:file_picker/file_picker.dart';
+import 'dart:io';
+
+import 'package:eatery/constants/global_variables.dart';
+import 'package:eatery/pages/create_company/create_company_page.dart';
+import 'package:eatery_db/eatery_db.dart';
+import 'package:eatery_services/eatery_services.dart';
 import 'package:flutter/material.dart';
-import 'package:eatery/components/upload_button.dart';
-import 'package:eatery/components/waiter_card.dart';
-import 'package:eatery/database/dining_table.dart';
-import 'package:eatery/database/dining_table_category.dart';
-import 'package:eatery/database/printer.dart';
-import 'package:eatery/database/product.dart';
-import 'package:eatery/database/product_category.dart';
+import 'package:eatery/pages/auth/login_page.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:flutter_native_splash/flutter_native_splash.dart';
 
-import 'package:eatery/pages/createaccount/create_account_1_page.dart';
-import 'package:eatery/pages/login_page.dart';
-import 'package:eatery/pages/order_confirmation.dart';
-import 'package:eatery/style/color_style.dart';
+Future main() async {
+  WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding); // bind splash
+  await setupPermission();
+  await setupDatabase();
 
-import 'database/account.dart';
-import 'database/cart.dart';
-import 'database/dish_customization.dart';
-import 'database/order.dart';
-import 'database/waiter.dart';
-
-void main() {
   runApp(const MyApp());
+}
+
+
+Future setupDatabase() async {
+  // Storage Permission Required
+  // String dataDirectory = await AppFileSystem.getDataDir();
+  Directory dataDirectory = await getApplicationSupportDirectory();
+  await EateryDB().init(dataDirectory.path);
+  return;
+}
+
+Future setupPermission() async {
+  // setup permission
+  return;
 }
 
 class MyApp extends StatelessWidget {
@@ -28,43 +37,16 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FlutterNativeSplash.remove(); // remove splash
     return MaterialApp(
-      title: 'Eatery',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: FutureBuilder<List<Map<String, dynamic>>>(
-        future: Account.getAll(),
-        builder: (BuildContext context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot){
-          if(!snapshot.hasData){
-            /*Account.clear().then((value) => null);
-            Printer.clear().then((value) => null);
-            Waiter.clear().then((value) => null);*/
-
-            return Scaffold(
-              body: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  const Spacer(),
-                  Center(
-                    child: Image.asset("assets/logo.png", height: 150, width: 150,),
-                  ),
-                  const Spacer(),
-                  /*const Center(
-                    child: CircularProgressIndicator(),
-                  ),
-                  const Spacer(),*/
-                ],
-              ),
-            );
-          }
-          else{
-            return snapshot.data!.isNotEmpty ? const LoginPage() : const CreateAccount1Page();
-            //return Test();
-          }
-        },
-      ),
-    );
+        title: 'Eatery',
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+        ),
+        home: Scaffold(
+          body: EateryDB().companyBox().isNotEmpty
+              ? const LoginPage()
+              : const CreateCompanyPage(),
+        ));
   }
 }
-

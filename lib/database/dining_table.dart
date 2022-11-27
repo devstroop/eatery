@@ -58,4 +58,5 @@ class DiningTable{
     }catch(_){}
     return false;
   }
+
 }

@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:eatery/style/color_style.dart';
+import 'package:eatery/constants/style/color_style.dart';
 
 class PosCategoryWidget extends StatelessWidget {
-  const PosCategoryWidget({Key? key, required this.active, required this.label, required this.image, this.onTap})
+  PosCategoryWidget({Key? key, this.active, required this.label, this.image, this.onTap})
       : super(key: key);
-  final bool active;
+  late bool? active;
   final String label;
   final Widget? image;
   final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
+    active = active ?? false;
     return Padding(
       padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 12, 6),
       child: InkWell(
@@ -23,15 +24,15 @@ class PosCategoryWidget extends StatelessWidget {
           ),
           child: Container(
             decoration: BoxDecoration(
-              color: active ? ColorStyle.text200 : ColorStyle.background200,
+              color: active! ? ColorStyle.text200 : ColorStyle.backgroundColorAlter,
               boxShadow: [
                 BoxShadow(
-                  color: active ? ColorStyle.text200 : ColorStyle.background200,
+                  color: active! ? ColorStyle.text200 : ColorStyle.backgroundColorAlter,
                 )
               ],
               borderRadius: BorderRadius.circular(22),
               border: Border.all(
-                color: active ? ColorStyle.text200 : ColorStyle.background300,
+                color: active! ? ColorStyle.text200 : ColorStyle.backgroundColorAlter,
                 width: 1,
               ),
             ),
@@ -54,7 +55,7 @@ class PosCategoryWidget extends StatelessWidget {
                     label,
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
-                      color: active ? ColorStyle.background200 : ColorStyle.text200,
+                      color: active! ? ColorStyle.backgroundColorAlter : ColorStyle.text200,
                     ),
                   ),
                 ],

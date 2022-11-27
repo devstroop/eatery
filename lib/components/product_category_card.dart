@@ -1,16 +1,43 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:eatery/style/color_style.dart';
+import 'package:eatery/constants/style/color_style.dart';
 
 class ProductCategoryCard extends StatelessWidget {
-  const ProductCategoryCard({Key? key, required this.id, required this.name, this.image, this.onTap}) : super(key: key);
-  final dynamic id; // int
-  final dynamic name; // String
-  final dynamic image;
+  const ProductCategoryCard(
+      {Key? key, required this.id, required this.name, this.image, this.onTap})
+      : super(key: key);
+  final int? id; // int
+  final String name; // String
+  final String? image;
   final Function()? onTap;
 
   @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 60,
+      child: ElevatedButton(
+        style: ElevatedButton.styleFrom(primary: ColorStyle.backgroundColorAlter),
+        onPressed: onTap,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (image != null && File(image!).existsSync())
+              Padding(padding: const EdgeInsets.all(12.0),child: Image.file(File(image!))),
+            const SizedBox(
+              width: 8.0,
+            ),
+            Text(name, style: TextStyle(
+              color: ColorStyle.text200
+            ),)
+          ],
+        ),
+      ),
+    );
+  }
+
+/*@override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 9, 0, 9),
@@ -44,7 +71,7 @@ class ProductCategoryCard extends StatelessWidget {
               onTap: onTap,
               child: Container(
                 decoration: BoxDecoration(
-                  color: ColorStyle.background200,
+                  color: ColorStyle.backgroundColorAlter,
                   borderRadius: const BorderRadius.all(Radius.circular(6)),
                 ),
                 child: Row(
@@ -63,7 +90,7 @@ class ProductCategoryCard extends StatelessWidget {
                                 : Container(
                                     decoration: const BoxDecoration(
                                       image: DecorationImage(
-                                          image: AssetImage('assets/images/no-image.jpg'), fit: BoxFit.cover),
+                                          image: AssetImage('assets/images/default.jpg'), fit: BoxFit.cover),
                                     ),
                                   ),
                           ],
@@ -74,7 +101,7 @@ class ProductCategoryCard extends StatelessWidget {
                           children: [
                             Container(
                               decoration: BoxDecoration(
-                                color: ColorStyle.background100,
+                                color: ColorStyle.backgroundColorAlter,
                                 borderRadius: const BorderRadius.only(
                                     topRight: Radius.circular(6), bottomRight: Radius.circular(6)),
                               ),
@@ -99,5 +126,5 @@ class ProductCategoryCard extends StatelessWidget {
         ],
       ),
     );
-  }
+  }*/
 }

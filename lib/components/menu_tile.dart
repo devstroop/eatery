@@ -1,6 +1,5 @@
+import 'package:eatery/constants/style/color_style.dart';
 import 'package:flutter/material.dart';
-
-import '../style/color_style.dart';
 
 class MenuTile extends StatelessWidget {
   const MenuTile({Key? key, required this.title, this.subtitle, required this.prefixIcon, required this.postfixIcon, this.color, this.onTap}) : super(key: key);
@@ -15,7 +14,7 @@ class MenuTile extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        color: ColorStyle.background100,
+        color: ColorStyle.backgroundColorAlter,
         margin: const EdgeInsets.only(bottom: 8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

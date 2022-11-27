@@ -1,10 +1,11 @@
 import 'dart:io';
 
+import 'package:eatery/constants/utils/calculations.dart';
+import 'package:eatery_db/models/product/food_type.dart';
 import 'package:flutter/material.dart';
-import 'package:eatery/components/food_type_badge.dart';
+import 'package:eatery_components/badges/food_type.badge.dart';
 import 'package:eatery/database/cart.dart';
-import 'package:eatery/extensions/calculations.dart';
-import 'package:eatery/style/color_style.dart';
+import 'package:eatery/constants/style/color_style.dart';
 
 class DetailedProductView extends StatefulWidget {
   const DetailedProductView({Key? key,
@@ -28,7 +29,7 @@ class DetailedProductView extends StatefulWidget {
   final double? quantity;
   final double? warningQuantity;
   final String? image;
-  final String? foodType; // FoodType? // FoodType.values.firstWhere((e) => e.toString() == product['foodType']),
+  final FoodType? foodType; // FoodType? // FoodType.values.firstWhere((e) => e.toString() == product['foodType']),
   final String? currencySymbol;
   final Color? themeColor;
   final Function()? onRemove;
@@ -49,11 +50,11 @@ class _DetailedProductViewState extends State<DetailedProductView> {
           margin: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 8.0),
           height: MediaQuery.of(context).size.width * 4/7,
           decoration: BoxDecoration(
-            color: ColorStyle.background200,
+            color: ColorStyle.backgroundColorAlter,
             borderRadius: const BorderRadius.all(Radius.circular(6)),
             image: File(widget.image ?? '').existsSync()
                 ? DecorationImage(image: FileImage(File(widget.image!)), fit: BoxFit.cover)
-                : const DecorationImage(image: AssetImage('assets/images/no-image.jpg'), fit: BoxFit.cover),
+                : const DecorationImage(image: AssetImage('assets/images/default.jpg'), fit: BoxFit.cover),
           ),
           child: Stack(
             children: [

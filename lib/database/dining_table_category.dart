@@ -54,4 +54,5 @@ class DiningTableCategory{
     }catch(_){}
     return false;
   }
+
 }

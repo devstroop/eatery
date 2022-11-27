@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:eatery/style/color_style.dart';
+import 'package:eatery/constants/style/color_style.dart';
 
 class PosWaiterCard extends StatelessWidget {
   const PosWaiterCard({Key? key, required this.id, required this.name, this.image, this.onTap, this.active}) : super(key: key);
@@ -51,13 +51,13 @@ class PosWaiterCard extends StatelessWidget {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              color: ColorStyle.background200,
+                              color: ColorStyle.backgroundColorAlter,
                               borderRadius:
                               const BorderRadius.only(topLeft: Radius.circular(6), bottomLeft: Radius.circular(6)),
                               image: File(image ?? '').existsSync()
                                   ? DecorationImage(image: FileImage(File(image!)), fit: BoxFit.cover)
                                   : const DecorationImage(
-                                  image: AssetImage('assets/images/no-image.jpg'), fit: BoxFit.cover),
+                                  image: AssetImage('assets/images/default.jpg'), fit: BoxFit.cover),
                             ),
                           ),
                         ],
@@ -68,7 +68,7 @@ class PosWaiterCard extends StatelessWidget {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              color: active ?? false ? ColorStyle.text200 : ColorStyle.background100,
+                              color: active ?? false ? ColorStyle.text200 : ColorStyle.backgroundColorAlter,
                               borderRadius: const BorderRadius.only(
                                   topRight: Radius.circular(6), bottomRight: Radius.circular(6)),
                             ),
@@ -80,7 +80,7 @@ class PosWaiterCard extends StatelessWidget {
                               name,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600,
-                                  color: active ?? false ? ColorStyle.background100 : ColorStyle.text200
+                                  color: active ?? false ? ColorStyle.backgroundColorAlter : ColorStyle.text200
                               ),
                             ),
                           )

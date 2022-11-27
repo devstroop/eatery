@@ -1,4 +1,0 @@
-enum TaxType{
-  inclusive,
-  exclusive
-}

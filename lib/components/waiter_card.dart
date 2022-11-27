@@ -1,12 +1,6 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:eatery/components/food_type_badge.dart';
-import 'package:eatery/components/low_qty_label_widget.dart';
-import 'package:eatery/database/cart.dart';
-import 'package:eatery/style/color_style.dart';
+import 'package:eatery/constants/style/color_style.dart';
 
 class WaiterCard extends StatelessWidget {
   const WaiterCard(
@@ -62,13 +56,13 @@ class WaiterCard extends StatelessWidget {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              color: ColorStyle.background200,
+                              color: ColorStyle.backgroundColorAlter,
                               borderRadius:
                               const BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
                               image: File(image ?? '').existsSync()
                                   ? DecorationImage(image: FileImage(File(image!)), fit: BoxFit.cover)
                                   : const DecorationImage(
-                                  image: AssetImage('assets/images/no-image.jpg'), fit: BoxFit.cover),
+                                  image: AssetImage('assets/images/default.jpg'), fit: BoxFit.cover),
                             ),
                           ),
                         ],
@@ -79,7 +73,7 @@ class WaiterCard extends StatelessWidget {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              color: ColorStyle.background100,
+                              color: ColorStyle.backgroundColorAlter,
                               borderRadius: const BorderRadius.only(
                                   bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
                             ),

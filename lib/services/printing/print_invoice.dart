@@ -1,11 +1,9 @@
+import 'package:eatery/constants/utils/calculations.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
 import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 import 'package:intl/intl.dart';
 import 'package:eatery/database/printer.dart';
-import 'package:eatery/extensions/calculations.dart';
-import 'package:eatery/models/order_type.dart';
-import 'package:eatery/services/utility/show_snack_bar.dart';
 
 class PrintInvoice{
   static PrinterBluetoothManager printerManager = PrinterBluetoothManager();
@@ -74,8 +72,8 @@ class PrintInvoice{
       bytes += ticket.row([
         PosColumn(text: Calculations.compressDoubleToString(item['quantity']), width: 1),
         PosColumn(text: item['name'], width: 6),
-        PosColumn(text: '${Calculations.calculatePriceWithoutTax(taxType: item['taxType'], price: item['price'], tax: item['tax'])}/-', width: 3, styles: const PosStyles(align: PosAlign.right)),
-        PosColumn(text: '${Calculations.calculatePriceWithoutTax(taxType: item['taxType'], price: item['price'], tax: item['tax']) * item['quantity']}', width: 2, styles: const PosStyles(align: PosAlign.right)),
+        PosColumn(text: '${Calculations.calculatePriceWithoutTax(taxType: item['taxType'], price: item['price'], tax: item['tax_slab'])}/-', width: 3, styles: const PosStyles(align: PosAlign.right)),
+        PosColumn(text: '${Calculations.calculatePriceWithoutTax(taxType: item['taxType'], price: item['price'], tax: item['tax_slab']) * item['quantity']}', width: 2, styles: const PosStyles(align: PosAlign.right)),
       ]);
     }
 

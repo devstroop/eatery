@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:eatery/style/color_style.dart';
+import 'package:eatery/constants/style/color_style.dart';
 class LowQtyLabelWidget extends StatefulWidget {
   const LowQtyLabelWidget({
     Key? key,
@@ -46,7 +46,7 @@ class _LowQtyLabelWidgetState extends State<LowQtyLabelWidget> {
                   child: Text(
                     'Only',
                     style: TextStyle(
-                      color: ColorStyle.background200,
+                      color: ColorStyle.backgroundColorAlter,
                       fontSize: 12,
                     ),
                   ),
@@ -56,7 +56,7 @@ class _LowQtyLabelWidgetState extends State<LowQtyLabelWidget> {
                   child: Text(
                     '${widget.qty%1 != 0 ? widget.qty: widget.qty.round()}',
                     style: TextStyle(
-                      color: ColorStyle.background200,
+                      color: ColorStyle.backgroundColorAlter,
                       fontSize: 12,
                     ),
                   ),
@@ -66,7 +66,7 @@ class _LowQtyLabelWidgetState extends State<LowQtyLabelWidget> {
                   child: Text(
                     'left',
                     style: TextStyle(
-                      color: ColorStyle.background200,
+                      color: ColorStyle.backgroundColorAlter,
                       fontSize: 12,
                     ),
                   ),
