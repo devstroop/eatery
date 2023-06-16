@@ -135,23 +135,26 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
     pd.update(value: 60);
     for (Map<String, dynamic> product in data['products']) {
       // await Product.add(product);
+      debugPrint(product.toString());
     }
     pd.update(value: 70);
     for (Map<String, dynamic> productCategory in data['productCategories']) {
       // await ProductCategoryOld.add(productCategory);
+      debugPrint(productCategory.toString());
     }
     pd.update(value: 80);
-    for (Map<String, dynamic> waiter in data['waiters']) {
-      await Waiter.add(waiter);
-    }
-    pd.update(value: 100);
-
-    pd.close();
-
-    setState(() {
-      inProgress = false;
+    await Future.delayed(Duration(seconds: 1), () async {
+      for (Map<String, dynamic> waiter in data['waiters']) {
+        await Waiter.add(waiter);
+      }
+    }).then((value) {
+      pd.update(value: 100);
+      pd.close();
+      setState(() {
+        inProgress = false;
+      });
+      showSnackBar(context, "Restore done");
     });
-    showSnackBar(context, "Restore done");
   }
 
   @override

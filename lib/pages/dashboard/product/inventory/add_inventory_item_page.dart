@@ -145,7 +145,7 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
                     primaryColor: getThemeColor(),
                     secondaryColor: ColorStyle.text200,
                     uploadType: UploadType.image,
-                    path: _image,
+                    filePath: _image,
                     onChanged: (_image) {
                       setState(() {
                         this._image = _image;

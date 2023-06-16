@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 import '../../../activation/upgrade_page.dart';
 
 class UpgradeNotification extends StatefulWidget {
-  late Company? company;
+  final Company? company;
 
-  UpgradeNotification({Key? key, this.company}) : super(key: key);
+  const UpgradeNotification({Key? key, this.company}) : super(key: key);
 
   @override
   State<UpgradeNotification> createState() => _UpgradeNotificationState();
@@ -16,16 +16,22 @@ class UpgradeNotification extends StatefulWidget {
 class _UpgradeNotificationState extends State<UpgradeNotification> {
   @override
   Widget build(BuildContext context) {
-    return EateryDB().subscriptionBox().values.singleWhere((element) => element.id == widget.company!.subscriptionId!).purchaseCode == null
+    return EateryDB()
+                .subscriptionBox()
+                .values
+                .singleWhere(
+                    (element) => element.id == widget.company!.subscriptionId!)
+                .purchaseCode ==
+            null
         ? Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
             child: NotificationWidget(
               message: 'Activate License',
               header: "Upgrade",
-              leading: const Icon(Icons.workspace_premium, color: Colors.white,)/*Image.asset(
-                'assets/images/upgrade.png',
-                width: 36.0,
-              )*/,
+              leading: const Icon(
+                Icons.workspace_premium,
+                color: Colors.white,
+              ),
               onTap: () {
                 Navigator.push(
                   context,

@@ -49,7 +49,7 @@ class Body1 extends StatelessWidget {
             primaryColor: themeColor,
             secondaryColor: ColorStyle.text200,
             uploadType: UploadType.image,
-            path: selectedLogoPath,
+            filePath: selectedLogoPath,
             onChanged: onChanged,
           ),
           SpacingStyle.defaultVerticalSpacing,

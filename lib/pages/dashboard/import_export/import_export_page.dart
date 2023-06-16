@@ -5,60 +5,56 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/dialog_box.dart';
 import 'package:eatery/components/menu_tile.dart';
-import 'package:eatery/constants/utils/app_file_system.dart';
-import 'package:eatery/services/utility/generate.dart';
-import 'package:eatery/services/utility/share.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
 class ImportExportPage extends StatefulWidget {
   const ImportExportPage({Key? key, required this.company}) : super(key: key);
-final Company company;
+  final Company company;
   @override
   State<ImportExportPage> createState() => _ImportExportPageState();
 }
 
 class _ImportExportPageState extends State<ImportExportPage> {
-
-  Future<void> doImportProducts() async{
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
+  Future<void> doImportProducts() async {
+    await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['xls', 'xlsx']
-    );
-    if (result != null) {
-      File file = File(result.files.single.path!);
-      var bytes = file.readAsBytesSync();
-      var excel = Excel.decodeBytes(bytes);
+        allowedExtensions: ['xls', 'xlsx']).then((result) {
+      if (result != null) {
+        File file = File(result.files.single.path!);
+        var bytes = file.readAsBytesSync();
+        var excel = Excel.decodeBytes(bytes);
 
-
-      List<List<Data?>> rows = excel.tables[0]!.rows;
-      for (int index = 1; index < rows.length; index++) {
-        try{
-          Map<String, dynamic> product = {};
-          product['name'] = rows[index][0]!.value;
-          product['category'] = rows[index][1]!.value;
-          product['description'] = rows[index][2]!.value;
-          product['price'] = double.parse(rows[index][3]!.value.toString());
-          product['foodType'] = rows[index][4]!.value;
-          product['taxType'] = rows[index][5]!.value;
-          product['tax_slab'] = double.parse(rows[index][6]!.value.toString());
-          product['as'] = rows[index][7]!.value;
-          //await Product.add(product);
+        List<List<Data?>> rows = excel.tables[0]!.rows;
+        for (int index = 1; index < rows.length; index++) {
+          try {
+            Map<String, dynamic> product = {};
+            product['name'] = rows[index][0]!.value;
+            product['category'] = rows[index][1]!.value;
+            product['description'] = rows[index][2]!.value;
+            product['price'] = double.parse(rows[index][3]!.value.toString());
+            product['foodType'] = rows[index][4]!.value;
+            product['taxType'] = rows[index][5]!.value;
+            product['tax_slab'] =
+                double.parse(rows[index][6]!.value.toString());
+            product['as'] = rows[index][7]!.value;
+            //await Product.add(product);
+          } catch (_) {
+            showSnackBar(context, 'Failed to add ${index + 1}th row');
+          }
         }
-        catch(_){
-          showSnackBar(context, 'Failed to add ${index + 1}th row');
-        }
+        showSnackBar(context, "Imported successfully");
+      } else {
+        // User canceled the picker
       }
-      showSnackBar(context, "Imported successfully");
-    } else {
-      // User canceled the picker
-    }
+    });
   }
-  Future<void> doExportProducts() async{
+
+  Future<void> doExportProducts() async {
     var excel = Excel.createExcel();
     var sheet = excel[excel.getDefaultSheet()!];
-
- /*   List<Map<String, dynamic>> products = await Product.getAll();
+    debugPrint('Exporting products ${sheet.maxCols} ${sheet.maxRows}');
+    /*   List<Map<String, dynamic>> products = await Product.getAll();
 
     sheet
         .cell(CellIndex.indexByColumnRow(columnIndex: 0, rowIndex: 0))
@@ -115,14 +111,14 @@ class _ImportExportPageState extends State<ImportExportPage> {
     String filePath = '${await AppFileSystem.getExportDir()}/export-${getRandomString(8)}.xlsx';
     File(filePath).writeAsBytes(excel.encode()!);*/
 
-
     showSnackBar(context, "Exported successfully");
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return DialogBox(
           title: 'Confirm',
-          message: 'Successfully exported all products\nDo you want to share now?',
+          message:
+              'Successfully exported all products\nDo you want to share now?',
           actions: [
             TextButton(
                 onPressed: () {
@@ -149,22 +145,31 @@ class _ImportExportPageState extends State<ImportExportPage> {
     return ColorStyle.tertiary;
   }
 
-  SizedBox options(){
+  SizedBox options() {
     return SizedBox(
       width: double.maxFinite,
       height: double.maxFinite,
-      child: ListView(scrollDirection: Axis.vertical, shrinkWrap: true, children: [
+      child:
+          ListView(scrollDirection: Axis.vertical, shrinkWrap: true, children: [
         InkWell(
-          onTap: () { },
+          onTap: () {},
           child: MenuTile(
-            prefixIcon: Icons.input, title: 'Import Products', subtitle: 'Import invoices and vouchers', postfixIcon: Icons.arrow_forward_ios_sharp, color: getThemeColor(),
+            prefixIcon: Icons.input,
+            title: 'Import Products',
+            subtitle: 'Import invoices and vouchers',
+            postfixIcon: Icons.arrow_forward_ios_sharp,
+            color: getThemeColor(),
             onTap: doImportProducts,
           ),
         ),
         InkWell(
-          onTap: () { },
+          onTap: () {},
           child: MenuTile(
-            prefixIcon: Icons.output, title: 'Export Products', subtitle: 'Export invoices and vouchers', postfixIcon: Icons.arrow_forward_ios_sharp, color: getThemeColor(),
+            prefixIcon: Icons.output,
+            title: 'Export Products',
+            subtitle: 'Export invoices and vouchers',
+            postfixIcon: Icons.arrow_forward_ios_sharp,
+            color: getThemeColor(),
             onTap: doExportProducts,
           ),
         ),
@@ -179,12 +184,12 @@ class _ImportExportPageState extends State<ImportExportPage> {
       title: const Text('Import / Export'),
     );
 
-
     return Scaffold(
       appBar: appBar,
       body: Stack(
         children: [
-          Positioned(top: 12.0, left: 0.0, right: 0.0, bottom: 72, child: options()),
+          Positioned(
+              top: 12.0, left: 0.0, right: 0.0, bottom: 72, child: options()),
         ],
       ),
     );

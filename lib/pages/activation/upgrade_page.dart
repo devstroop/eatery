@@ -58,9 +58,9 @@ class _UpgradePageState extends State<UpgradePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    const Column(
+                    Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
+                      children: const [
                         Text(
                           'Contact Sales',
                           style: TextStyle(

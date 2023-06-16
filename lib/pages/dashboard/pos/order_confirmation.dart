@@ -160,9 +160,9 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                 ],
               ),
               const Divider(),
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: const [
                   Flexible(
                     flex: 2,
                     child: Align(
@@ -376,9 +376,9 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
               const SizedBox(
                 height: 16,
               ),
-              const Row(
+              Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+                children: const [
                   Text(
                     'Thank you!',
                     style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
@@ -422,18 +422,18 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
             const SizedBox(
               height: 60,
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: const [
                 Text(
                   'Receipt Preview',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
                 )
               ],
             ),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
+              children: const [
                 Text(
                   'Customer copy',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),

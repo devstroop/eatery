@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 
 class SecondaryButton extends StatelessWidget {
   const SecondaryButton({
-    super.key,
+    Key? key,
     required this.color,
     required this.borderColor,
     required this.text,
     required this.height,
     this.onTap,
-  });
+  }) : super(key: key);
 
   final Color color;
   final Color borderColor;

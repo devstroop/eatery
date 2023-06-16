@@ -3,14 +3,16 @@ import 'package:eatery/constants/style/color_style.dart';
 
 class SelectableCard extends StatelessWidget {
   const SelectableCard(
-      {super.key,
+      {Key? key,
       required this.header,
       required this.title,
       this.highlights,
       required this.footer,
       required this.selected,
       this.highlightColor,
-      this.child, this.onTap});
+      this.child,
+      this.onTap})
+      : super(key: key);
 
   final String header;
   final String title;
@@ -46,7 +48,8 @@ class SelectableCard extends StatelessWidget {
                 children: [
                   Text(
                     header,
-                    style: TextStyle(fontWeight: FontWeight.w500, color: ColorStyle.text300),
+                    style: TextStyle(
+                        fontWeight: FontWeight.w500, color: ColorStyle.text300),
                   ),
                   selected
                       ? SizedBox(
@@ -61,7 +64,8 @@ class SelectableCard extends StatelessWidget {
                                     height: 24,
                                     decoration: BoxDecoration(
                                       color: ColorStyle.brandColor,
-                                      borderRadius: const BorderRadius.all(Radius.elliptical(24, 24)),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.elliptical(24, 24)),
                                     ))),
                             Positioned(
                                 top: 7,
@@ -71,7 +75,8 @@ class SelectableCard extends StatelessWidget {
                                     height: 10,
                                     decoration: BoxDecoration(
                                       color: ColorStyle.backgroundColorAlter,
-                                      borderRadius: const BorderRadius.all(Radius.elliptical(10, 10)),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.elliptical(10, 10)),
                                     ))),
                           ]))
                       : Container(
@@ -82,7 +87,8 @@ class SelectableCard extends StatelessWidget {
                               color: const Color.fromRGBO(209, 215, 215, 1),
                               width: 2,
                             ),
-                            borderRadius: const BorderRadius.all(Radius.elliptical(24, 24)),
+                            borderRadius: const BorderRadius.all(
+                                Radius.elliptical(24, 24)),
                           ))
                 ],
               ),
@@ -101,7 +107,7 @@ class SelectableCard extends StatelessWidget {
               const SizedBox(
                 height: 8.0,
               ),
-              if(highlights != null)
+              if (highlights != null)
                 Row(
                   children: [
                     for (var highlight in highlights!)
@@ -109,12 +115,16 @@ class SelectableCard extends StatelessWidget {
                         margin: const EdgeInsets.only(right: 6.0),
                         padding: const EdgeInsets.all(6.0),
                         decoration: BoxDecoration(
-                          color: (highlightColor ?? ColorStyle.brandColor).withOpacity(0.2),
-                          borderRadius: const BorderRadius.all(Radius.elliptical(4, 4)),
+                          color: (highlightColor ?? ColorStyle.brandColor)
+                              .withOpacity(0.2),
+                          borderRadius:
+                              const BorderRadius.all(Radius.elliptical(4, 4)),
                         ),
                         child: Text(
                           highlight,
-                          style: TextStyle(color: highlightColor, fontWeight: FontWeight.w500),
+                          style: TextStyle(
+                              color: highlightColor,
+                              fontWeight: FontWeight.w500),
                         ),
                       ),
                   ],

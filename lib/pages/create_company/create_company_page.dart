@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:currency_picker/currency_picker.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/constants/style/spacing_style.dart';

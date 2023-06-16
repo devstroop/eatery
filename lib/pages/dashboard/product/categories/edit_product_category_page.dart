@@ -64,8 +64,7 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
                               .productBox()
                               .values
                               .where((element) =>
-                                  element.categoryId ==
-                                  widget.category.id)
+                                  element.categoryId == widget.category.id)
                               .isNotEmpty;
                           if (_isLinkedToProduct) {
                             showSnackBar(
@@ -107,7 +106,7 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
                 primaryColor: getThemeColor(),
                 secondaryColor: ColorStyle.text200,
                 uploadType: UploadType.image,
-                path: pickedImagePath,
+                filePath: pickedImagePath,
                 onChanged: (pickedImagePath) {
                   setState(() {
                     this.pickedImagePath = pickedImagePath;
@@ -160,8 +159,7 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
               }
 
               try {
-                widget.category.name =
-                    _controllerCategoryName.text.trim();
+                widget.category.name = _controllerCategoryName.text.trim();
                 widget.category.image = pickedImagePath;
                 widget.category.save();
                 showSnackBar(context, 'Successfully updated');

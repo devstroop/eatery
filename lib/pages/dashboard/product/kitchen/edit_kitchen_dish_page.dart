@@ -18,7 +18,9 @@ import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
 class EditKitchenDish extends StatefulWidget {
-  const EditKitchenDish({Key? key, required this.company, required this.product}) : super(key: key);
+  const EditKitchenDish(
+      {Key? key, required this.company, required this.product})
+      : super(key: key);
   final Company company;
   final Product product;
   @override
@@ -55,13 +57,22 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
     _image = widget.product.image;
     _ctrlName.text = widget.product.name;
     _ctrlMRP.text = widget.product.mrpPrice.toString();
-    _ctrlSP.text = widget.product.salePrice != null ? widget.product.salePrice.toString() : '';
+    _ctrlSP.text = widget.product.salePrice != null
+        ? widget.product.salePrice.toString()
+        : '';
     _foodType = widget.product.foodType;
-    _taxSlab = EateryDB().taxSlabBox().values.singleWhere((element) => element.id == widget.product.taxSlabId);
-    _category = EateryDB().productCategoryBox().values.singleWhere((element) => element.id == widget.product.categoryId);
+    _taxSlab = EateryDB()
+        .taxSlabBox()
+        .values
+        .singleWhere((element) => element.id == widget.product.taxSlabId);
+    _category = EateryDB()
+        .productCategoryBox()
+        .values
+        .singleWhere((element) => element.id == widget.product.categoryId);
     _ctrlDesc.text = widget.product.description ?? '';
-    setState(() { });
+    setState(() {});
   }
+
   final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
@@ -90,7 +101,7 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                   label: "Uncategorized",
                   onTap: () {
                     setState(
-                          () {
+                      () {
                         _category = null;
                       },
                     );
@@ -105,13 +116,13 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                       return PosCategoryWidget(
                           active: _category == category,
                           image: category.image != null &&
-                              File(snapshot.data!).existsSync()
+                                  File(snapshot.data!).existsSync()
                               ? Image.file(File(snapshot.data!))
                               : null,
                           label: category.name,
                           onTap: () {
                             setState(
-                                  () {
+                              () {
                                 _category = category;
                               },
                             );
@@ -148,7 +159,7 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                     primaryColor: getThemeColor(),
                     secondaryColor: ColorStyle.text200,
                     uploadType: UploadType.image,
-                    path: _image,
+                    filePath: _image,
                     onChanged: (_image) {
                       setState(() {
                         this._image = _image;
@@ -217,17 +228,19 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                         child: CustomTextFromField(
                             controller: _ctrlMRP,
                             keyboardType: TextInputType.number,
-                            prefixWidget: _currencySymbol != null ? Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  _currencySymbol ?? '',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 18.0),
-                                ),
-                              ],
-                            ) : null,
+                            prefixWidget: _currencySymbol != null
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        _currencySymbol ?? '',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 18.0),
+                                      ),
+                                    ],
+                                  )
+                                : null,
                             hint: '0.00',
                             obscureText: false,
                             themeColor: getThemeColor(),
@@ -267,17 +280,19 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                         child: CustomTextFromField(
                             controller: _ctrlSP,
                             keyboardType: TextInputType.number,
-                            prefixWidget: _currencySymbol != null ? Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  _currencySymbol ?? '',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 18.0),
-                                ),
-                              ],
-                            ) : null,
+                            prefixWidget: _currencySymbol != null
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        _currencySymbol ?? '',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 18.0),
+                                      ),
+                                    ],
+                                  )
+                                : null,
                             hint: '0.00',
                             obscureText: false,
                             themeColor: getThemeColor(),
@@ -308,18 +323,15 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                       ToggleSwitch(
                         nullableValue: 'None',
                         color:
-                        _foodType != null ? _foodType!.color : Colors.grey,
-                        options: [
-                          for (var each in FoodType.values) each.name
-                        ],
+                            _foodType != null ? _foodType!.color : Colors.grey,
+                        options: [for (var each in FoodType.values) each.name],
                         index: _foodType?.index,
                         onChange: (int? index) {
-                          if(index == null){
+                          if (index == null) {
                             _foodType = null;
-                          }
-                          else{
-                            _foodType = FoodType.values.singleWhere(
-                                    (element) => element.id == index);
+                          } else {
+                            _foodType = FoodType.values
+                                .singleWhere((element) => element.id == index);
                           }
                           setState(() {});
                         },
@@ -353,10 +365,9 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                             ],
                             index: _taxSlab?.id,
                             onChange: (int? index) {
-                              if(index == null){
+                              if (index == null) {
                                 _taxSlab = null;
-                              }
-                              else{
+                              } else {
                                 _taxSlab = EateryDB()
                                     .taxSlabBox()
                                     .values
@@ -366,14 +377,16 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                               setState(() {});
                             },
                           ),
-                          if(_taxSlab != null)
+                          if (_taxSlab != null)
                             Padding(
                               padding: const EdgeInsets.all(12.0),
-                              child: Text('${_taxSlab!.rate}% (${_taxSlab!.type.name})', style: TextStyle(
-                                  color: getThemeColor(),
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w500
-                              ),),
+                              child: Text(
+                                '${_taxSlab!.rate}% (${_taxSlab!.type.name})',
+                                style: TextStyle(
+                                    color: getThemeColor(),
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w500),
+                              ),
                             ),
                         ],
                       ),
@@ -421,7 +434,7 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                             keyboardType: TextInputType.multiline,
                             controller: _ctrlDesc,
                             hint:
-                            '- Describe your dish \n- Highlight ingredients used\n- Keep it simple',
+                                '- Describe your dish \n- Highlight ingredients used\n- Keep it simple',
                             obscureText: false,
                             themeColor: getThemeColor(),
                             minLines: 4,
