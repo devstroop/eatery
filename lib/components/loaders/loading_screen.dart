@@ -1,5 +1,4 @@
 import 'package:eatery/constants/style/color_style.dart';
-import 'package:eatery/constants/style/spacing_style.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 

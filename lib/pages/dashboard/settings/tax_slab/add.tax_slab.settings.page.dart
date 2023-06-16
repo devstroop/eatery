@@ -26,7 +26,7 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
   final focus1 = FocusNode();
   final focus2 = FocusNode();
   final _formKey = GlobalKey<FormState>();
-  TaxType _taxType = TaxType.inclusive;
+  final TaxType _taxType = TaxType.inclusive;
 
   Future _submit() async {
     final isValid = _formKey.currentState!.validate();
@@ -37,7 +37,7 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
 
     try {
       TaxSlab taxSlab = TaxSlab(
-        id: EateryDB().getIdentity(EateryDB().taxSlabBox().values),
+          id: EateryDB().getNewIdentity(EateryDB().taxSlabBox().values),
           name: controllerSlabName.text,
           rate: double.parse(controllerTaxRate.text),
           type: _taxType);
@@ -114,7 +114,10 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
                       hint: '',
                       themeColor: localColor,
                       focusNode: focus2,
-                      suffixWidget: Icon(Icons.percent, color: ColorStyle.text400,),
+                      suffixWidget: Icon(
+                        Icons.percent,
+                        color: ColorStyle.text400,
+                      ),
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: true),
                       validator: (value) {
@@ -144,7 +147,7 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
                       fontWeight: FontWeight.w400,
                     ),
                   ),
-                  ToggleSwitch(
+                  /*ToggleSwitch(
                     color: localColor,
                     options: [for (var each in TaxType.values) each.name!],
                     index: _taxType.index,
@@ -154,7 +157,7 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
                       setState(() {});
 
                     },
-                  ),
+                  ),*/
                 ],
               ),
             ],

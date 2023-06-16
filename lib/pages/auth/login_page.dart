@@ -1,12 +1,12 @@
 import 'dart:io';
 import 'package:eatery/constants/style/spacing_style.dart';
+import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:eatery_db/models/company/company.dart';
 import 'package:eatery_services/eatery_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
-import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/pages/dashboard/dashboard_page.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
@@ -15,7 +15,6 @@ import 'package:eatery/components/bottomsheets/upgrade_to_access_bottomsheet.dar
 import 'package:eatery/components/loaders/loading_screen.dart';
 
 class LoginPage extends StatefulWidget {
-
   const LoginPage({Key? key}) : super(key: key);
 
   @override
@@ -42,7 +41,9 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(
-            builder: (context) => DashboardPage(company: company!,)),
+            builder: (context) => DashboardPage(
+                  company: company!,
+                )),
         (Route<dynamic> route) => false,
       );
     } else {
@@ -88,25 +89,31 @@ class _LoginPageState extends State<LoginPage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         FutureBuilder<String>(
-                          future: FileServices.absImage(company!.logo ?? ''),
-                            builder: (context, snapshot){
-                            return Container(
-                              height: 96,
-                              width: 96,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(48),
-                                image: DecorationImage(
-                                  fit: BoxFit.cover,
-                                  image: snapshot.hasData && company!.logo != null && File(snapshot.data!).existsSync()
-                                      ? Image.file(
-                                    File(snapshot.data!),
-                                  ).image : Image.asset('assets/images/default.jpg').image,
+                            future: FileServices.absImage(company!.logo ?? ''),
+                            builder: (context, snapshot) {
+                              return Container(
+                                height: 96,
+                                width: 96,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(48),
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: snapshot.hasData &&
+                                            company!.logo != null &&
+                                            File(snapshot.data!).existsSync()
+                                        ? Image.file(
+                                            File(snapshot.data!),
+                                          ).image
+                                        : Image.asset(
+                                                'assets/images/default.jpg')
+                                            .image,
+                                  ),
                                 ),
-                              ),
-                            );
-                            }
+                              );
+                            }),
+                        const SizedBox(
+                          height: 8.0,
                         ),
-                        const SizedBox(height: 8.0,),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -149,8 +156,10 @@ class _LoginPageState extends State<LoginPage> {
                                 FocusScope.of(context).unfocus();
                               },
                               validator: (value) {
-                                if (value!.trim().isEmpty) return 'Pin cannot be blank';
-                                if (!value.trim().isNumericOnly) return 'Invalid character';
+                                if (value!.trim().isEmpty)
+                                  return 'Pin cannot be blank';
+                                if (!value.trim().isNumericOnly)
+                                  return 'Invalid character';
                                 return null;
                               },
                             ),
@@ -173,23 +182,32 @@ class _LoginPageState extends State<LoginPage> {
                               bottomRight: Radius.circular(0),
                             ),
                           ),
-                          builder: (context) => EateryDB().subscriptionBox().values.singleWhere((element) => element.id == company!.subscriptionId!).purchaseCode != null ? ForgotPasswordBottomSheet(
-                                context,
-                                themeColor: themeColor,
-                                callback: (Company? company) {
-                                  setState(() {
-                                    this.company = company;
-                                  });
-                                },
-                              ) : UpgradeToAccessBottomSheet(
-                            context,
-                            themeColor: themeColor,
-                            callback: (Company? company) {
-                              setState(() {
-                                this.company = company;
-                              });
-                            },
-                          )),
+                          builder: (context) => EateryDB()
+                                      .subscriptionBox()
+                                      .values
+                                      .singleWhere((element) =>
+                                          element.id ==
+                                          company!.subscriptionId!)
+                                      .purchaseCode !=
+                                  null
+                              ? ForgotPasswordBottomSheet(
+                                  context,
+                                  themeColor: themeColor,
+                                  callback: (Company? company) {
+                                    setState(() {
+                                      this.company = company;
+                                    });
+                                  },
+                                )
+                              : UpgradeToAccessBottomSheet(
+                                  context,
+                                  themeColor: themeColor,
+                                  callback: (Company? company) {
+                                    setState(() {
+                                      this.company = company;
+                                    });
+                                  },
+                                )),
                     )
                   ],
                 ),

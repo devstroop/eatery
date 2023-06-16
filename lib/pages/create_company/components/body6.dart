@@ -6,6 +6,7 @@ import 'package:eatery/components/selectable_card.dart';
 import 'package:eatery/constants/plugins/license.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/constants/style/spacing_style.dart';
+import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery_components/titles/page.title.dart';
 import 'package:eatery_db/models/subscription/subscription_type.dart';
 import 'package:flutter/material.dart';
@@ -13,15 +14,20 @@ import 'package:intl/intl.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:devdart_windows_hdsn/devdart_windows_hdsn.dart';
 import 'package:devdart_windows_hdsn/drive.dart';
-import 'package:eatery_components/buttons/primary.button.dart';
 
 class Body6 extends StatefulWidget {
   final Color themeColor;
-  final Function(SubscriptionType subscriptionType, String? purchaseCde, DateTime? validFrom, DateTime? validTill) callback;
+  final Function(SubscriptionType subscriptionType, String? purchaseCde,
+      DateTime? validFrom, DateTime? validTill) callback;
   String? deviceSerial;
   SubscriptionType? subscriptionType;
 
-  Body6({Key? key, required this.themeColor, required this.callback, required this.subscriptionType}) : super(key: key);
+  Body6(
+      {Key? key,
+      required this.themeColor,
+      required this.callback,
+      required this.subscriptionType})
+      : super(key: key);
 
   @override
   State<Body6> createState() => _Body6State();
@@ -34,21 +40,19 @@ class _Body6State extends State<Body6> {
 
   Future fetchDeviceInfo() async {
     String? deviceId;
-    if(Platform.isAndroid || Platform.isIOS){
+    if (Platform.isAndroid || Platform.isIOS) {
       try {
         deviceId = await PlatformDeviceId.getDeviceId;
       } on Exception {
         deviceId = null;
       }
-    }
-    else if(Platform.isWindows){
+    } else if (Platform.isWindows) {
       List<Drive> drives = WindowsHDSN().getDrives();
-      for(Drive drive in drives){
-        print(drive.model);
-        print(drive.serial);
+      for (Drive drive in drives) {
+        debugPrint(drive.model);
+        debugPrint(drive.serial);
       }
-    }
-    else{
+    } else {
       deviceId = null;
     }
 
@@ -103,16 +107,19 @@ class _Body6State extends State<Body6> {
                   children: [
                     const Text('Device ID'),
                     const SizedBox(width: 6.0),
-                    Text(widget.deviceSerial ?? 'Undefined', style: TextStyle(fontWeight: FontWeight.w500),),
-                    IconButton(onPressed: fetchDeviceInfo, icon: const Icon(Icons.refresh))
-                    
+                    Text(
+                      widget.deviceSerial ?? 'Undefined',
+                      style: const TextStyle(fontWeight: FontWeight.w500),
+                    ),
+                    IconButton(
+                        onPressed: fetchDeviceInfo,
+                        icon: const Icon(Icons.refresh))
                   ],
                 ),
                 SpacingStyle.defaultVerticalSpacing,
-                if(validTill != null)
+                if (validTill != null)
                   Text('Validity: ${DateFormat.yMMMd().format(validTill!)}'),
-                if(validTill != null)
-                  SpacingStyle.defaultVerticalSpacing,
+                if (validTill != null) SpacingStyle.defaultVerticalSpacing,
                 CustomTextFromField(
                   themeColor: widget.themeColor,
                   controller: _controllerPurchaseCode,
@@ -132,21 +139,28 @@ class _Body6State extends State<Body6> {
                   ),
                   validator: (value) {
                     if (widget.subscriptionType == SubscriptionType.premium) {
-                      if (value!.isEmpty) return 'Purchase code cannot be blank';
-                      if (value.contains(' ')) return 'Purchase code is not valid';
-                      if (validFrom == null || validTill == null) return 'Purchase code is not valid';
+                      if (value!.isEmpty) {
+                        return 'Purchase code cannot be blank';
+                      }
+                      if (value.contains(' ')) {
+                        return 'Purchase code is not valid';
+                      }
+                      if (validFrom == null || validTill == null) {
+                        return 'Purchase code is not valid';
+                      }
                     }
                     return null;
                   },
-
-                  onChanged: (value){
+                  onChanged: (value) {
                     // VALIDATE_LICENSE_HERE
-                    License(purchaseCode: value).validate((validFrom, validTill)  {
+                    License(purchaseCode: value)
+                        .validate((validFrom, validTill) {
                       setState(() {
                         this.validFrom = validFrom;
                         this.validTill = validTill;
                       });
-                      widget.callback(SubscriptionType.premium, _controllerPurchaseCode.text, validFrom, validTill);
+                      widget.callback(SubscriptionType.premium,
+                          _controllerPurchaseCode.text, validFrom, validTill);
                     });
                   },
                   onFieldSubmitted: (v) {
@@ -172,11 +186,7 @@ class BAP6 extends StatelessWidget {
   final Function(int? index)? callback;
   final int? index;
 
-  const BAP6(
-      {Key? key,
-      required this.themeColor,
-      this.callback,
-      this.index})
+  const BAP6({Key? key, required this.themeColor, this.callback, this.index})
       : super(key: key);
 
   void _submit() {
@@ -197,9 +207,7 @@ class BAP6 extends StatelessWidget {
       child: Padding(
         padding: SpacingStyle.defaultPadding,
         child: PrimaryButton(
-            child: const Text('Finish'),
-            color: themeColor,
-            onPressed: _submit),
+            child: const Text('Finish'), color: themeColor, onPressed: _submit),
       ),
     );
   }

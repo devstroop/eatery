@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'dart:io';
 import 'package:eatery/services/cloud/google_drive.dart';
 import 'package:eatery_db/models/company/company.dart';
 import 'package:flutter/material.dart';
@@ -10,15 +8,13 @@ import 'package:eatery/database/dining_table_category.dart';
 import 'package:eatery/database/order.dart';
 import 'package:eatery/database/waiter.dart';
 import 'package:eatery/constants/utils/app_file_system.dart';
-import 'package:googleapis/drive/v3.dart' as ga;
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
-
 class BackupRestorePage extends StatefulWidget {
   const BackupRestorePage({Key? key, required this.company}) : super(key: key);
-final Company company;
+  final Company company;
   @override
   State<BackupRestorePage> createState() => _BackupRestorePageState();
 }
@@ -27,11 +23,9 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
   final drive = GoogleDrive();
   bool inProgress = false;
 
-
   Future<void> doBackUp() async {
-
     ProgressDialog pd = ProgressDialog(context: context);
-    setState((){
+    setState(() {
       inProgress = true;
     });
     pd.show(
@@ -84,9 +78,10 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
     });
     showSnackBar(context, "Backup done");*/
   }
+
   void doRestore() async {
     ProgressDialog pd = ProgressDialog(context: context);
-    setState((){
+    setState(() {
       inProgress = true;
     });
     pd.show(
@@ -97,7 +92,6 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
       completed: Completed(),
     );
 
-
     /*Map<String, dynamic>? account = await Account.get(widget.account['id']);
 
     List<ga.File> files = await drive.download((account!['backupIds']));
@@ -106,9 +100,11 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
       print(file.toJson());
     }*/
 
-
-    Map<String, dynamic> data = await AppFileSystem.readBackupFile(backupFilePath: '${await AppFileSystem.getBackupDir()}/backup.json');
-    await AppFileSystem.doUnZip(dataDirPath: await AppFileSystem.getResourcesDir(), zipFilePath: '${await AppFileSystem.getBackupDir()}/resources.zip');
+    Map<String, dynamic> data = await AppFileSystem.readBackupFile(
+        backupFilePath: '${await AppFileSystem.getBackupDir()}/backup.json');
+    await AppFileSystem.doUnZip(
+        dataDirPath: await AppFileSystem.getResourcesDir(),
+        zipFilePath: '${await AppFileSystem.getBackupDir()}/resources.zip');
 
     await Account.clear();
     await DiningTable.clear();
@@ -119,43 +115,45 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
     await Waiter.clear();
 
     pd.update(value: 10);
-    for(Map<String, dynamic> account in data['accounts']){
+    for (Map<String, dynamic> account in data['accounts']) {
       await Account.add(account);
     }
     pd.update(value: 20);
-    for(Map<String, dynamic> diningTable in data['diningTables']){
+    for (Map<String, dynamic> diningTable in data['diningTables']) {
       await DiningTable.add(diningTable);
     }
     pd.update(value: 30);
-    for(Map<String, dynamic> diningTableCategory in data['diningTableCategories']){
+    for (Map<String, dynamic> diningTableCategory
+        in data['diningTableCategories']) {
       await DiningTableCategory.add(diningTableCategory);
     }
     pd.update(value: 40);
     pd.update(value: 50);
-    for(Map<String, dynamic> order in data['orders']){
+    for (Map<String, dynamic> order in data['orders']) {
       await Order.add(order);
     }
     pd.update(value: 60);
-    for(Map<String, dynamic> product in data['products']){
+    for (Map<String, dynamic> product in data['products']) {
       // await Product.add(product);
     }
     pd.update(value: 70);
-    for(Map<String, dynamic> productCategory in data['productCategories']){
+    for (Map<String, dynamic> productCategory in data['productCategories']) {
       // await ProductCategoryOld.add(productCategory);
     }
     pd.update(value: 80);
-    for(Map<String, dynamic> waiter in data['waiters']){
+    for (Map<String, dynamic> waiter in data['waiters']) {
       await Waiter.add(waiter);
     }
     pd.update(value: 100);
 
     pd.close();
 
-    setState((){
+    setState(() {
       inProgress = false;
     });
     showSnackBar(context, "Restore done");
   }
+
   @override
   void initState() {
     super.initState();
@@ -169,7 +167,8 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
     return SizedBox(
       width: double.maxFinite,
       height: double.maxFinite,
-      child: ListView(scrollDirection: Axis.vertical, shrinkWrap: true, children: [
+      child:
+          ListView(scrollDirection: Axis.vertical, shrinkWrap: true, children: [
         InkWell(
           onTap: () {},
           child: MenuTile(
@@ -207,7 +206,8 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
       appBar: appBar,
       body: Stack(
         children: [
-          Positioned(top: 12.0, left: 0.0, right: 0.0, bottom: 72, child: options()),
+          Positioned(
+              top: 12.0, left: 0.0, right: 0.0, bottom: 72, child: options()),
         ],
       ),
     );

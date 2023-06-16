@@ -53,8 +53,9 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
           .singleWhere((element) => element.id == widget.company.currencyId)
           .symbol;
     } catch (_) {}
-    _taxSlab = EateryDB().taxSlabBox().values.singleWhere((element) => element.id == widget.company.defaultTaxSlabId);
-    print(_taxSlab!.id);
+    _taxSlab = EateryDB().taxSlabBox().values.singleWhere(
+        (element) => element.id == widget.company.defaultTaxSlabId);
+    debugPrint('${_taxSlab!.id}');
   }
 
   final ScrollController _scrollController = ScrollController();
@@ -86,7 +87,7 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
                   label: "Uncategorized",
                   onTap: () {
                     setState(
-                          () {
+                      () {
                         _category = null;
                       },
                     );
@@ -101,13 +102,13 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
                       return PosCategoryWidget(
                           active: _category == category,
                           image: category.image != null &&
-                              File(snapshot.data!).existsSync()
+                                  File(snapshot.data!).existsSync()
                               ? Image.file(File(snapshot.data!))
                               : null,
                           label: category.name,
                           onTap: () {
                             setState(
-                                  () {
+                              () {
                                 _category = category;
                               },
                             );
@@ -213,17 +214,19 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
                         child: CustomTextFromField(
                             controller: _ctrlMRP,
                             keyboardType: TextInputType.number,
-                            prefixWidget: _currencySymbol != null ? Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  _currencySymbol ?? '',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 18.0),
-                                ),
-                              ],
-                            ) : null,
+                            prefixWidget: _currencySymbol != null
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        _currencySymbol ?? '',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 18.0),
+                                      ),
+                                    ],
+                                  )
+                                : null,
                             hint: '0.00',
                             obscureText: false,
                             themeColor: getThemeColor(),
@@ -263,17 +266,19 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
                         child: CustomTextFromField(
                             controller: _ctrlSP,
                             keyboardType: TextInputType.number,
-                            prefixWidget: _currencySymbol != null ? Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  _currencySymbol ?? '',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 18.0),
-                                ),
-                              ],
-                            ) : null,
+                            prefixWidget: _currencySymbol != null
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        _currencySymbol ?? '',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 18.0),
+                                      ),
+                                    ],
+                                  )
+                                : null,
                             hint: '0.00',
                             obscureText: false,
                             themeColor: getThemeColor(),
@@ -304,18 +309,15 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
                       ToggleSwitch(
                         nullableValue: 'None',
                         color:
-                        _foodType != null ? _foodType!.color : Colors.grey,
-                        options: [
-                          for (var each in FoodType.values) each.name
-                        ],
+                            _foodType != null ? _foodType!.color : Colors.grey,
+                        options: [for (var each in FoodType.values) each.name],
                         index: _foodType?.index,
                         onChange: (int? index) {
-                          if(index == null){
+                          if (index == null) {
                             _foodType = null;
-                          }
-                          else{
-                            _foodType = FoodType.values.singleWhere(
-                                    (element) => element.id == index);
+                          } else {
+                            _foodType = FoodType.values
+                                .singleWhere((element) => element.id == index);
                           }
                           setState(() {});
                         },
@@ -349,10 +351,9 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
                             ],
                             index: _taxSlab?.id,
                             onChange: (int? index) {
-                              if(index == null){
+                              if (index == null) {
                                 _taxSlab = null;
-                              }
-                              else{
+                              } else {
                                 _taxSlab = EateryDB()
                                     .taxSlabBox()
                                     .values
@@ -419,7 +420,7 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
                             keyboardType: TextInputType.multiline,
                             controller: _ctrlDesc,
                             hint:
-                            '- Describe your dish \n- Highlight ingredients used\n- Keep it simple',
+                                '- Describe your dish \n- Highlight ingredients used\n- Keep it simple',
                             obscureText: false,
                             themeColor: getThemeColor(),
                             minLines: 4,
@@ -454,7 +455,8 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
 
               try {
                 Product product = Product(
-                    id: EateryDB().getIdentity(EateryDB().productBox().values),
+                    id: EateryDB()
+                        .getNewIdentity(EateryDB().productBox().values),
                     name: _ctrlName.text,
                     categoryId: _category?.id,
                     description: _ctrlDesc.text,

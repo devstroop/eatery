@@ -1,5 +1,3 @@
-import 'package:eatery/database/dining_table.dart';
-import 'package:eatery/database/waiter.dart';
 import 'package:json_store/json_store.dart';
 import 'package:eatery/services/utility/generate.dart';
 
@@ -23,8 +21,7 @@ class Order {
       }
       await store.setItem('$name-$id', data);
       return id;
-    }
-    catch (_) {}
+    } catch (_) {}
     return null;
   }
 
@@ -62,8 +59,4 @@ class Order {
     } catch (_) {}
     return false;
   }
-
-
 }
-
-

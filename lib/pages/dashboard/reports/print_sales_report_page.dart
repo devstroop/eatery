@@ -6,7 +6,9 @@ import 'package:eatery/services/printing/print_report.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
 class PrintSalesReportPage extends StatefulWidget {
-  const PrintSalesReportPage({Key? key, required this.account, required this.orders}) : super(key: key);
+  const PrintSalesReportPage(
+      {Key? key, required this.account, required this.orders})
+      : super(key: key);
   final dynamic account;
   final List<Map<String, dynamic>> orders;
 
@@ -27,11 +29,12 @@ class _PrintSalesReportPageState extends State<PrintSalesReportPage> {
     return ColorStyle.tertiary;
   }
 
-  SizedBox options(){
+  SizedBox options() {
     return SizedBox(
       width: double.maxFinite,
       height: double.maxFinite,
-      child: ListView(scrollDirection: Axis.vertical, shrinkWrap: true, children: [
+      child:
+          ListView(scrollDirection: Axis.vertical, shrinkWrap: true, children: [
         DateTimePicker(
           cursorColor: getThemeColor(),
           initialValue: '',
@@ -39,14 +42,14 @@ class _PrintSalesReportPageState extends State<PrintSalesReportPage> {
           lastDate: DateTime(2100),
           dateLabelText: 'From',
           onChanged: (val) {
-            setState((){
+            setState(() {
               from = DateFormat("yyyy-MM-dd").parse(val);
             });
           },
           validator: (val) {
             return null;
           },
-          onSaved: (val) => print(val),
+          onSaved: (val) => debugPrint(val),
         ),
         DateTimePicker(
           cursorColor: getThemeColor(),
@@ -54,17 +57,16 @@ class _PrintSalesReportPageState extends State<PrintSalesReportPage> {
           firstDate: DateTime(2000),
           lastDate: DateTime(2100),
           dateLabelText: 'Till',
-          onChanged: (val){
-            setState((){
+          onChanged: (val) {
+            setState(() {
               till = DateFormat("yyyy-MM-dd").parse(val);
             });
           },
           validator: (val) {
             return null;
           },
-          onSaved: (val) => print(val),
+          onSaved: (val) => debugPrint(val),
         )
-
       ]),
     );
   }
@@ -76,12 +78,12 @@ class _PrintSalesReportPageState extends State<PrintSalesReportPage> {
       title: const Text('Sales Report'),
     );
 
-
     return Scaffold(
       appBar: appBar,
       body: Stack(
         children: [
-          Positioned(top: 12.0, left: 12.0, right: 12.0, bottom: 0, child: options()),
+          Positioned(
+              top: 12.0, left: 12.0, right: 12.0, bottom: 0, child: options()),
         ],
       ),
       bottomNavigationBar: BottomAppBar(
@@ -92,7 +94,11 @@ class _PrintSalesReportPageState extends State<PrintSalesReportPage> {
             child: const Text('Print'),
             color: getThemeColor(),
             onPressed: () async {
-              await PrintReport.printReceipt(orders: widget.orders, account: widget.account, from: from, till: till);
+              // await PrintReport.printReceipt(
+              //     orders: widget.orders,
+              //     account: widget.account,
+              //     from: from,
+              //     till: till);
             },
           ),
         ),

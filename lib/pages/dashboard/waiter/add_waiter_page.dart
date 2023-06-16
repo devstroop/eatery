@@ -1,7 +1,7 @@
-import 'package:eatery_components/buttons/upload.button.dart';
+// import 'package:eatery_components/buttons/upload.button.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
-import 'package:eatery_components/buttons/primary.button.dart';
+// import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/database/waiter.dart';
 import 'package:eatery/constants/utils/app_file_system.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
@@ -40,7 +40,7 @@ class _AddWaiterPageState extends State<AddWaiterPage> {
               const SizedBox(
                 height: 12.0,
               ),
-              UploadButton(
+              /*UploadButton(
                 label: 'Waiter Image',
                 primaryColor: getThemeColor(),
                 secondaryColor: ColorStyle.text200,
@@ -51,7 +51,7 @@ class _AddWaiterPageState extends State<AddWaiterPage> {
                     this.pickedImagePath = pickedImagePath;
                   });
                 },
-              ),
+              ),*/
               const SizedBox(
                 height: 6.0,
               ),
@@ -85,7 +85,7 @@ class _AddWaiterPageState extends State<AddWaiterPage> {
         color: ColorStyle.backgroundColorAlter,
         child: Padding(
           padding: const EdgeInsets.all(12.0),
-          child: PrimaryButton(
+          child: Container()/*PrimaryButton(
             child: const Text('Save'),
             color: getThemeColor(),
             onPressed: () async {
@@ -102,7 +102,7 @@ class _AddWaiterPageState extends State<AddWaiterPage> {
                 showSnackBar(context, 'Failed to create');
               }
             },
-          ),
+          ),*/
         ),
       ),
     );

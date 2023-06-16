@@ -1,12 +1,11 @@
 import 'package:eatery/components/bottom_view_grip.dart';
 import 'package:eatery/components/secondary_button.dart';
+import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery_db/models/company/company.dart';
 import 'package:flutter/material.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
-import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/components/selectable_card.dart';
-import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -25,7 +24,6 @@ class _UpgradePageState extends State<UpgradePage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     fetchDeviceInfo();
   }
@@ -47,7 +45,8 @@ class _UpgradePageState extends State<UpgradePage> {
       backgroundColor: getThemeColor(),
       title: const Text('Upgrade'),
     );
-    Widget buildContactSalesBottomSheet() => StatefulBuilder(builder: (context, state) {
+    Widget buildContactSalesBottomSheet() =>
+        StatefulBuilder(builder: (context, state) {
           return Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
             child: ListView(
@@ -59,16 +58,18 @@ class _UpgradePageState extends State<UpgradePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
+                    const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
                           'Contact Sales',
-                          style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                              fontSize: 24, fontWeight: FontWeight.bold),
                         ),
                         Text(
                           'Contact us to get subscription',
-                          style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
@@ -99,7 +100,8 @@ class _UpgradePageState extends State<UpgradePage> {
                     ),
                     const Text(
                       '+91 950 100 5734',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     )
                   ],
                 ),
@@ -118,7 +120,8 @@ class _UpgradePageState extends State<UpgradePage> {
                     ),
                     const Text(
                       'help@devstroop.com',
-                      style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
                     )
                   ],
                 ),
@@ -218,10 +221,11 @@ class _UpgradePageState extends State<UpgradePage> {
                     child: const Text('Activate'),
                     color: getThemeColor(),
                     onPressed: () async {
-                      if (selectedIndex == 1 && controllerPurchaseCode.text != '') {
+                      if (selectedIndex == 1 &&
+                          controllerPurchaseCode.text != '') {
                         /*LicenseData licData = License.validate(controllerPurchaseCode.text);
                         if (licData.status) {
-                          *//*Map<String, dynamic> account = widget.account;
+                          */ /*Map<String, dynamic> account = widget.account;
                           account['purchaseCode'] = licData.purchaseCode;
                           var status = await Account.update(account);
                           if (status) {
@@ -229,7 +233,7 @@ class _UpgradePageState extends State<UpgradePage> {
                             Navigator.pop(context);
                           } else {
                             showSnackBar(context, "Activation failed");
-                          }*//*
+                          }*/ /*
                         } else {
                           showSnackBar(context, licData.message);
                         }*/

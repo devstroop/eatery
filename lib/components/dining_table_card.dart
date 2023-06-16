@@ -1,11 +1,15 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
 class DiningTableCard extends StatelessWidget {
   const DiningTableCard(
-      {Key? key, required this.id, required this.name, this.currencySymbol, this.due, this.onTap, this.active})
+      {Key? key,
+      required this.id,
+      required this.name,
+      this.currencySymbol,
+      this.due,
+      this.onTap,
+      this.active})
       : super(key: key);
   final bool? active;
   final dynamic id; // int
@@ -16,7 +20,9 @@ class DiningTableCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color _localColor = id != null ? (due != null ? ColorStyle.error : ColorStyle.success) : ColorStyle.text200;
+    final Color _localColor = id != null
+        ? (due != null ? ColorStyle.error : ColorStyle.success)
+        : ColorStyle.text200;
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 9, 0, 9),
       child: Container(
@@ -32,15 +38,17 @@ class DiningTableCard extends StatelessWidget {
           ],*/
           borderRadius: BorderRadius.circular(6),
         ),
-        width: ((MediaQuery.of(context).size.width < MediaQuery.of(context).size.height
-            ? MediaQuery.of(context).size.width
-            : MediaQuery.of(context).size.height) -
-            48) /
+        width: ((MediaQuery.of(context).size.width <
+                        MediaQuery.of(context).size.height
+                    ? MediaQuery.of(context).size.width
+                    : MediaQuery.of(context).size.height) -
+                48) /
             2,
-        height: ((MediaQuery.of(context).size.width < MediaQuery.of(context).size.height
-            ? MediaQuery.of(context).size.width
-            : MediaQuery.of(context).size.height) -
-            48) /
+        height: ((MediaQuery.of(context).size.width <
+                        MediaQuery.of(context).size.height
+                    ? MediaQuery.of(context).size.width
+                    : MediaQuery.of(context).size.height) -
+                48) /
             2 *
             (1 / 3),
         child: InkWell(
@@ -48,12 +56,11 @@ class DiningTableCard extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
-              color: _localColor.withOpacity(0.15),
-              borderRadius: const BorderRadius.all(Radius.circular(6)),
-              border: Border.all(
+                color: _localColor.withOpacity(0.15),
+                borderRadius: const BorderRadius.all(Radius.circular(6)),
+                border: Border.all(
                   color: _localColor,
-              )
-            ),
+                )),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -71,29 +78,36 @@ class DiningTableCard extends StatelessWidget {
                           name,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
-                              fontSize: 14.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w600,
+                              color: ColorStyle.text200),
                         ),
                       ],
                     ),
                     due != null
                         ? Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          '${currencySymbol ?? ''}$due due',
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                              fontSize: 12.0, fontWeight: FontWeight.w600, color: ColorStyle.error),
-                        ),
-                      ],
-                    )
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                '${currencySymbol ?? ''}$due due',
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w600,
+                                    color: ColorStyle.error),
+                              ),
+                            ],
+                          )
                         : Container()
                   ],
                 ),
-                if(active!)
-                  Icon(Icons.check_circle, color: _localColor,)
+                if (active!)
+                  Icon(
+                    Icons.check_circle,
+                    color: _localColor,
+                  )
               ],
             ),
           ),

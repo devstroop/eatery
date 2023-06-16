@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
@@ -30,15 +28,17 @@ class DiningTableCategoryCard extends StatelessWidget {
               ],
               borderRadius: BorderRadius.circular(6),
             ),
-            width: ((MediaQuery.of(context).size.width < MediaQuery.of(context).size.height
-                ? MediaQuery.of(context).size.width
-                : MediaQuery.of(context).size.height) -
-                48) /
+            width: ((MediaQuery.of(context).size.width <
+                            MediaQuery.of(context).size.height
+                        ? MediaQuery.of(context).size.width
+                        : MediaQuery.of(context).size.height) -
+                    48) /
                 2,
-            height: ((MediaQuery.of(context).size.width < MediaQuery.of(context).size.height
-                ? MediaQuery.of(context).size.width
-                : MediaQuery.of(context).size.height) -
-                48) /
+            height: ((MediaQuery.of(context).size.width <
+                            MediaQuery.of(context).size.height
+                        ? MediaQuery.of(context).size.width
+                        : MediaQuery.of(context).size.height) -
+                    48) /
                 2 *
                 (1 / 3),
             child: InkWell(
@@ -67,7 +67,9 @@ class DiningTableCategoryCard extends StatelessWidget {
                               name,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                  fontSize: 16.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
+                                  fontSize: 16.0,
+                                  fontWeight: FontWeight.w600,
+                                  color: ColorStyle.text200),
                             ),
                           ],
                         ),

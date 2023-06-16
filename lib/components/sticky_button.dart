@@ -1,11 +1,17 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
 class StickyButton extends StatelessWidget {
-  const StickyButton({Key? key, required this.name, this.iconData, this.onTap, this.topLeftRound, this.topRightRound, this.bottomLeftRound, this.bottomRightRound,})
-      : super(key: key);
+  const StickyButton({
+    Key? key,
+    required this.name,
+    this.iconData,
+    this.onTap,
+    this.topLeftRound,
+    this.topRightRound,
+    this.bottomLeftRound,
+    this.bottomRightRound,
+  }) : super(key: key);
   final dynamic name; // String
   final dynamic iconData;
   final double? topLeftRound;
@@ -34,15 +40,17 @@ class StickyButton extends StatelessWidget {
               ],
               borderRadius: BorderRadius.circular(6),
             ),
-            width: ((MediaQuery.of(context).size.width < MediaQuery.of(context).size.height
-                ? MediaQuery.of(context).size.width
-                : MediaQuery.of(context).size.height) -
-                48) /
+            width: ((MediaQuery.of(context).size.width <
+                            MediaQuery.of(context).size.height
+                        ? MediaQuery.of(context).size.width
+                        : MediaQuery.of(context).size.height) -
+                    48) /
                 2,
-            height: ((MediaQuery.of(context).size.width < MediaQuery.of(context).size.height
-                ? MediaQuery.of(context).size.width
-                : MediaQuery.of(context).size.height) -
-                48) /
+            height: ((MediaQuery.of(context).size.width <
+                            MediaQuery.of(context).size.height
+                        ? MediaQuery.of(context).size.width
+                        : MediaQuery.of(context).size.height) -
+                    48) /
                 2 *
                 (1 / 3),
             child: Row(
@@ -54,10 +62,13 @@ class StickyButton extends StatelessWidget {
                         Container(
                           decoration: BoxDecoration(
                             color: ColorStyle.backgroundColorAlter,
-                            borderRadius:
-                            BorderRadius.only(
-                                topLeft: topLeftRound != null ? Radius.circular(topLeftRound!) : const Radius.circular(6),
-                                bottomLeft: bottomLeftRound != null ? Radius.circular(bottomLeftRound!) : const Radius.circular(6),
+                            borderRadius: BorderRadius.only(
+                              topLeft: topLeftRound != null
+                                  ? Radius.circular(topLeftRound!)
+                                  : const Radius.circular(6),
+                              bottomLeft: bottomLeftRound != null
+                                  ? Radius.circular(bottomLeftRound!)
+                                  : const Radius.circular(6),
                             ),
                             /*image: File(image ?? '').existsSync()
                                 ? DecorationImage(image: FileImage(File(image!)), fit: BoxFit.scaleDown)
@@ -76,8 +87,12 @@ class StickyButton extends StatelessWidget {
                           decoration: BoxDecoration(
                             color: ColorStyle.backgroundColorAlter,
                             borderRadius: BorderRadius.only(
-                                topRight: topRightRound != null ? Radius.circular(topRightRound!) : const Radius.circular(6),
-                                bottomRight: bottomRightRound != null ? Radius.circular(bottomRightRound!) : const Radius.circular(6)),
+                                topRight: topRightRound != null
+                                    ? Radius.circular(topRightRound!)
+                                    : const Radius.circular(6),
+                                bottomRight: bottomRightRound != null
+                                    ? Radius.circular(bottomRightRound!)
+                                    : const Radius.circular(6)),
                           ),
                         ),
                         Container(
@@ -87,7 +102,9 @@ class StickyButton extends StatelessWidget {
                             name,
                             overflow: TextOverflow.ellipsis,
                             style: TextStyle(
-                                fontSize: 16.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
+                                fontSize: 16.0,
+                                fontWeight: FontWeight.w600,
+                                color: ColorStyle.text200),
                           ),
                         )
                       ],

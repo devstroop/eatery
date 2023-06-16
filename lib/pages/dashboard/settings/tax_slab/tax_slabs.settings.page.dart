@@ -58,7 +58,7 @@ class _TaxSlabsSettingsPageState extends State<TaxSlabsSettingsPage> {
             shrinkWrap: true,
             children: [
               for (TaxSlab taxSlab in EateryDB().taxSlabBox().values)
-                FlatButton(
+                TextButton(
                   onPressed: () => showModalBottomSheet(
                       context: context,
                       shape: const RoundedRectangleBorder(

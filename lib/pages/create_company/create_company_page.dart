@@ -19,7 +19,6 @@ import 'components/body4.dart';
 import 'components/body5.dart';
 import 'components/body6.dart';
 import 'create_account_result_page.dart';
-import 'package:eatery_services/eatery_services.dart';
 
 class CreateCompanyPage extends StatefulWidget {
   const CreateCompanyPage({Key? key}) : super(key: key);
@@ -90,8 +89,8 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
           defaultTaxController: _controllerDefaultTaxPercent,
           taxType: _taxType,
           onTaxTypeChanged: (int? index) {
-            _taxType = TaxType.values
-                .singleWhere((element) => element.id == index);
+            _taxType =
+                TaxType.values.singleWhere((element) => element.id == index);
             setState(() {});
           },
         ),
@@ -164,15 +163,20 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
               try {
                 TaxSlab? taxSlab = _controllerDefaultTaxPercent.text.isNotEmpty
                     ? TaxSlab(
-                    id: EateryDB().getIdentity(EateryDB().taxSlabBox().values),
-                    name: 'default',
-                    rate: double.parse(_controllerDefaultTaxPercent.text),
-                    type: _taxType)
+                        id: EateryDB()
+                            .getNewIdentity(EateryDB().taxSlabBox().values),
+                        name: 'default',
+                        rate: double.parse(_controllerDefaultTaxPercent.text),
+                        type: _taxType)
                     : null;
-                List<TaxSlab> isMatch = EateryDB().taxSlabBox().values.where((element) => element.name == 'default').toList();
-                if(taxSlab!=null){
-                  if(isMatch.isNotEmpty){
-                    for(var each in isMatch){
+                List<TaxSlab> isMatch = EateryDB()
+                    .taxSlabBox()
+                    .values
+                    .where((element) => element.name == 'default')
+                    .toList();
+                if (taxSlab != null) {
+                  if (isMatch.isNotEmpty) {
+                    for (var each in isMatch) {
                       await each.delete();
                     }
                   }
@@ -181,7 +185,8 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
 
                 // Subscription
                 Subscription subscription = Subscription(
-                    id: EateryDB().getIdentity(EateryDB().subscriptionBox().values),
+                    id: EateryDB()
+                        .getNewIdentity(EateryDB().subscriptionBox().values),
                     purchaseCode: purchaseCode,
                     validFrom: validFrom,
                     validTill: validTill,
@@ -189,7 +194,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                 await EateryDB().subscriptionBox().add(subscription);
 
                 kCurrency? _kCurrency;
-                if(currency != null){
+                if (currency != null) {
                   _kCurrency = kCurrency(
                       id: 1,
                       name: currency!.name,
@@ -201,11 +206,10 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                       namePlural: currency!.namePlural,
                       thousandsSeparator: currency!.thousandsSeparator,
                       spaceBetweenAmountAndSymbol:
-                      currency!.spaceBetweenAmountAndSymbol,
+                          currency!.spaceBetweenAmountAndSymbol,
                       decimalSeparator: currency!.decimalSeparator,
                       symbolOnLeft: currency!.symbolOnLeft);
                   await EateryDB().currencyBox().add(_kCurrency);
-
                 }
                 // COMPANY
                 Company company = Company(
@@ -224,6 +228,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                   currencyId: _kCurrency?.id,
                 );
                 int result = await EateryDB().companyBox().add(company);
+                debugPrint('Company Added: $result');
                 Navigator.of(context).pushAndRemoveUntil(
                     MaterialPageRoute(
                         builder: (BuildContext context) =>

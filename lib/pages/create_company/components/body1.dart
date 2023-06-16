@@ -3,10 +3,10 @@ import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/constants/style/spacing_style.dart';
 import 'package:eatery/constants/utils/email_validator.dart';
 import 'package:eatery/constants/validators/phone_validator.dart';
-import 'package:eatery_components/titles/page.title.dart';
-import 'package:flutter/material.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery_components/buttons/upload.button.dart';
+import 'package:eatery_components/titles/page.title.dart';
+import 'package:flutter/material.dart';
 
 class Body1 extends StatelessWidget {
   final Function(String? logoPath) onChanged;
@@ -24,7 +24,7 @@ class Body1 extends StatelessWidget {
       required this.emailController,
       required this.phoneController,
       required this.addressController,
-        this.selectedLogoPath})
+      this.selectedLogoPath})
       : super(key: key);
 
   final focus1 = FocusNode();
@@ -159,9 +159,7 @@ class BAP1 extends StatelessWidget {
       child: Padding(
         padding: SpacingStyle.defaultPadding,
         child: PrimaryButton(
-            child: const Text('Next'),
-            color: themeColor,
-            onPressed: _submit),
+            child: const Text('Next'), color: themeColor, onPressed: _submit),
       ),
     );
   }

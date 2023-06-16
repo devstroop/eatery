@@ -2,18 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
 class PosCategoryWidget extends StatelessWidget {
-  PosCategoryWidget({Key? key, this.active, required this.label, this.image, this.onTap})
-      : super(key: key);
-  late bool? active;
+  const PosCategoryWidget({
+    Key? key,
+    this.active = false,
+    required this.label,
+    this.image,
+    this.onTap,
+  }) : super(key: key);
+
+  final bool active;
   final String label;
   final Widget? image;
   final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
-    active = active ?? false;
     return Padding(
-      padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 12, 6),
+      padding: const EdgeInsets.only(bottom: 6, right: 12),
       child: InkWell(
         onTap: onTap,
         child: Material(
@@ -24,38 +29,47 @@ class PosCategoryWidget extends StatelessWidget {
           ),
           child: Container(
             decoration: BoxDecoration(
-              color: active! ? ColorStyle.text200 : ColorStyle.backgroundColorAlter,
+              color:
+                  active ? ColorStyle.text200 : ColorStyle.backgroundColorAlter,
               boxShadow: [
                 BoxShadow(
-                  color: active! ? ColorStyle.text200 : ColorStyle.backgroundColorAlter,
-                )
+                  color: active
+                      ? ColorStyle.text200
+                      : ColorStyle.backgroundColorAlter,
+                ),
               ],
               borderRadius: BorderRadius.circular(22),
               border: Border.all(
-                color: active! ? ColorStyle.text200 : ColorStyle.backgroundColorAlter,
+                color: active
+                    ? ColorStyle.text200
+                    : ColorStyle.backgroundColorAlter,
                 width: 1,
               ),
             ),
-            alignment: const AlignmentDirectional(0, 0),
+            alignment: Alignment.center,
             child: Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(12, 0, 12, 0),
+              padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  image != null
-                      ? Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(0, 6, 6, 6),
-                          child: image,
-                        )
-                      : const Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0, 0, 3, 0),
-                        ),
+                  if (image != null)
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 6, horizontal: 6),
+                      child: image,
+                    )
+                  else
+                    const Padding(
+                      padding: EdgeInsets.only(right: 3),
+                    ),
                   Text(
                     label,
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
-                      color: active! ? ColorStyle.backgroundColorAlter : ColorStyle.text200,
+                      color: active
+                          ? ColorStyle.backgroundColorAlter
+                          : ColorStyle.text200,
                     ),
                   ),
                 ],

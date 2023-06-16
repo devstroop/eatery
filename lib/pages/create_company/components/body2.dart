@@ -1,18 +1,21 @@
 import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/constants/style/spacing_style.dart';
+import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery_components/titles/page.title.dart';
 import 'package:flutter/material.dart';
-import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:get/get.dart';
-
 
 class Body2 extends StatelessWidget {
   final Color themeColor;
   final TextEditingController passwordController;
   final TextEditingController confirmPasswordController;
 
-  Body2({Key? key, required this.themeColor, required this.passwordController, required this.confirmPasswordController})
+  Body2(
+      {Key? key,
+      required this.themeColor,
+      required this.passwordController,
+      required this.confirmPasswordController})
       : super(key: key);
 
   final focus1 = FocusNode();
@@ -46,8 +49,8 @@ class Body2 extends StatelessWidget {
             },
             validator: (value) {
               if (value!.trim().isEmpty) return 'Pin cannot be blank';
-              if(!value.trim().isNumericOnly) return 'Invalid character';
-              if(value.trim().length < 4) return 'Less secured pin';
+              if (!value.trim().isNumericOnly) return 'Invalid character';
+              if (value.trim().length < 4) return 'Less secured pin';
               return null;
             },
           ),
@@ -63,8 +66,9 @@ class Body2 extends StatelessWidget {
             focusNode: focus2,
             textInputAction: TextInputAction.done,
             validator: (value) {
-              if(!value!.trim().isNumericOnly) return 'Invalid character';
-              if (value.trim().isEmpty || passwordController.text != value ) return "Confirm pin didn't match";
+              if (!value!.trim().isNumericOnly) return 'Invalid character';
+              if (value.trim().isEmpty || passwordController.text != value)
+                return "Confirm pin didn't match";
               return null;
             },
             onFieldSubmitted: (v) {
@@ -77,13 +81,14 @@ class Body2 extends StatelessWidget {
   }
 }
 
-
 final _formKey = GlobalKey<FormState>();
+
 class BAP2 extends StatelessWidget {
   final Color themeColor;
   final Function(int? index)? callback;
   final int? index;
-  const BAP2({Key? key, required this.themeColor, this.callback, this.index}) : super(key: key);
+  const BAP2({Key? key, required this.themeColor, this.callback, this.index})
+      : super(key: key);
 
   void _submit() {
     final isValid = _formKey.currentState!.validate();
@@ -91,10 +96,11 @@ class BAP2 extends StatelessWidget {
       return;
     }
     _formKey.currentState!.save();
-    if(callback != null){
+    if (callback != null) {
       callback!(index);
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
@@ -102,9 +108,7 @@ class BAP2 extends StatelessWidget {
       child: Padding(
         padding: SpacingStyle.defaultPadding,
         child: PrimaryButton(
-            child: const Text('Next'),
-            color: themeColor,
-            onPressed: _submit),
+            child: const Text('Next'), color: themeColor, onPressed: _submit),
       ),
     );
   }

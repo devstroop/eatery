@@ -8,6 +8,7 @@ import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
+
 class AddProductCategoryPage extends StatefulWidget {
   const AddProductCategoryPage({Key? key}) : super(key: key);
 
@@ -22,6 +23,7 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
   Color getThemeColor() {
     return ColorStyle.tertiary;
   }
+
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
@@ -56,25 +58,28 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
               const SizedBox(
                 height: 6.0,
               ),
-              Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(
-                  'Category Name',
-                  style: TextStyle(
-                    color: ColorStyle.text200,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(
-                  height: 3.0,
-                ),
-                CustomTextFromField(
-                  controller: _controllerCategoryName,
-                  hint: 'eg. Starters',
-                  obscureText: false,
-                  themeColor: getThemeColor(),
-                ),
-              ]),
+              Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Category Name',
+                      style: TextStyle(
+                        color: ColorStyle.text200,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 3.0,
+                    ),
+                    CustomTextFromField(
+                      controller: _controllerCategoryName,
+                      hint: 'eg. Starters',
+                      obscureText: false,
+                      themeColor: getThemeColor(),
+                    ),
+                  ]),
               const SizedBox(
                 height: 6.0,
               ),
@@ -90,16 +95,20 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
             child: const Text('Save'),
             color: getThemeColor(),
             onPressed: () async {
-              if(_controllerCategoryName.text.trim() == ''){
+              if (_controllerCategoryName.text.trim() == '') {
                 showSnackBar(context, '* Category name required');
                 return;
               }
-              try{
-                int response = await EateryDB().productCategoryBox().add(ProductCategory(id: EateryDB().getIdentity(EateryDB().productCategoryBox().values),name: _controllerCategoryName.text, image: pickedImagePath));
+              try {
+                int response = await EateryDB().productCategoryBox().add(
+                    ProductCategory(
+                        id: EateryDB().getNewIdentity(
+                            EateryDB().productCategoryBox().values),
+                        name: _controllerCategoryName.text,
+                        image: pickedImagePath));
                 showSnackBar(context, 'Successfully created');
                 Navigator.pop(context);
-              }
-              catch(_){
+              } catch (_) {
                 showSnackBar(context, 'Failed to create');
               }
             },

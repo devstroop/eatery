@@ -311,17 +311,14 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                         nullableValue: 'None',
                         color:
                             _foodType != null ? _foodType!.color : Colors.grey,
-                        options: [
-                          for (var each in FoodType.values) each.name
-                        ],
+                        options: [for (var each in FoodType.values) each.name],
                         index: _foodType?.index,
                         onChange: (int? index) {
-                          if(index == null){
+                          if (index == null) {
                             _foodType = null;
-                          }
-                          else{
-                            _foodType = FoodType.values.singleWhere(
-                                    (element) => element.id == index);
+                          } else {
+                            _foodType = FoodType.values
+                                .singleWhere((element) => element.id == index);
                           }
                           setState(() {});
                         },
@@ -355,10 +352,9 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                             ],
                             index: _taxSlab?.id,
                             onChange: (int? index) {
-                              if(index == null){
+                              if (index == null) {
                                 _taxSlab = null;
-                              }
-                              else{
+                              } else {
                                 _taxSlab = EateryDB()
                                     .taxSlabBox()
                                     .values
@@ -460,7 +456,8 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
 
               try {
                 Product product = Product(
-                    id: EateryDB().getIdentity(EateryDB().productBox().values),
+                    id: EateryDB()
+                        .getNewIdentity(EateryDB().productBox().values),
                     name: _ctrlName.text,
                     categoryId: _category?.id,
                     description: _ctrlDesc.text,

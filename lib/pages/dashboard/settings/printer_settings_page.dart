@@ -1,5 +1,6 @@
+/*
 import 'dart:convert';
-import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
+//import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dropdown/flutter_dropdown.dart';
@@ -10,8 +11,8 @@ import 'package:eatery/database/account.dart';
 import 'package:eatery/database/printer.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
-import 'package:esc_pos_utils/esc_pos_utils.dart';
-import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
+//import 'package:esc_pos_utils/esc_pos_utils.dart';
+//import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 import 'package:eatery/services/printing/print_invoice.dart';
 
 class PrinterSettingsPage extends StatefulWidget {
@@ -242,10 +243,12 @@ class _PrinterSettingsPageState extends State<PrinterSettingsPage> {
                                     children: <Widget>[
                                       Text(_devices[index].name ?? ''),
                                       Text(_devices[index].address!),
-                                      /*Text(
+                                      */
+/*Text(
                                     'Long press to print a test receipt',
                                     style: TextStyle(color: Colors.grey[700]),
-                                  ),*/
+                                  ),*//*
+
                                     ],
                                   ),
                                 ),
@@ -282,3 +285,4 @@ class _PrinterSettingsPageState extends State<PrinterSettingsPage> {
     );
   }
 }
+*/

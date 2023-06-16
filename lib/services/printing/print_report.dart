@@ -1,3 +1,4 @@
+/*
 import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
 import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
@@ -53,10 +54,12 @@ class PrintReport{
     double sum = 0;
 
     for(Map<String, dynamic> order in orders){
-      /*if(DateTime.fromMicrosecondsSinceEpoch(order['timestamp']).isAfter(from) && DateTime.fromMicrosecondsSinceEpoch(order['timestamp']).isBefore(till.add(const Duration(days: 1)))){
+      */
+/*if(DateTime.fromMicrosecondsSinceEpoch(order['timestamp']).isAfter(from) && DateTime.fromMicrosecondsSinceEpoch(order['timestamp']).isBefore(till.add(const Duration(days: 1)))){
         
 
-      }*/
+      }*//*
+
       bytes += ticket.row([
         PosColumn(text: DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.fromMicrosecondsSinceEpoch(order['timestamp'])) , width: 6, styles: const PosStyles(align: PosAlign.left)),
         PosColumn(text: '${order['id']}', width: 3, styles: const PosStyles(align: PosAlign.center)),
@@ -100,4 +103,4 @@ class PrintReport{
     return bytes;
   }
 
-}
+}*/

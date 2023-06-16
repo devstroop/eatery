@@ -1,8 +1,8 @@
-import 'package:eatery_components/buttons/upload.button.dart';
+//import 'package:eatery_components/buttons/upload.button.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery/components/dialog_box.dart';
-import 'package:eatery_components/buttons/primary.button.dart';
+//import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/database/waiter.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
@@ -91,7 +91,7 @@ class _EditWaiterPageState extends State<EditWaiterPage> {
               const SizedBox(
                 height: 12.0,
               ),
-              UploadButton(
+              /*UploadButton(
                 label: 'Waiter Image',
                 primaryColor: getThemeColor(),
                 secondaryColor: ColorStyle.text200,
@@ -102,7 +102,7 @@ class _EditWaiterPageState extends State<EditWaiterPage> {
                     this.pickedImagePath = pickedImagePath;
                   });
                 },
-              ),
+              ),*/
               const SizedBox(
                 height: 6.0,
               ),
@@ -136,7 +136,7 @@ class _EditWaiterPageState extends State<EditWaiterPage> {
         color: ColorStyle.backgroundColorAlter,
         child: Padding(
           padding: const EdgeInsets.all(12.0),
-          child: PrimaryButton(
+          child: Container()/*PrimaryButton(
             child: const Text('Update'),
             color: getThemeColor(),
             onPressed: () async {
@@ -152,7 +152,7 @@ class _EditWaiterPageState extends State<EditWaiterPage> {
                 showSnackBar(context, 'Failed to update');
               }
             },
-          ),
+          ),*/
         ),
       ),
     );

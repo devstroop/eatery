@@ -1,6 +1,3 @@
-import 'package:eatery/database/cart.dart';
-
-
 class Calculations {
   static String compressDoubleToString(double? value) {
     if (value != null) {
@@ -13,10 +10,15 @@ class Calculations {
     return '';
   } // OK
 
-  static double calculatePriceWithoutTax({required String taxType, required double price, required double tax}){
-    return double.parse((taxType == 'inclusive' ? price / (1 + (tax / 100)) : price).toStringAsFixed(2));
+  static double calculatePriceWithoutTax(
+      {required String taxType, required double price, required double tax}) {
+    return double.parse(
+        (taxType == 'inclusive' ? price / (1 + (tax / 100)) : price)
+            .toStringAsFixed(2));
   }
-  static double calculateTaxableTotal({required Map<String, Map<String, dynamic>> cart}) {
+
+  static double calculateTaxableTotal(
+      {required Map<String, Map<String, dynamic>> cart}) {
     double total = 0;
     for (String id in cart.keys) {
       double quantity = cart[id]!['quantity'];
@@ -31,7 +33,8 @@ class Calculations {
     return double.parse(total.toStringAsFixed(2));
   }
 
-  static double calculateTaxTotal({required Map<String, Map<String, dynamic>> cart}) {
+  static double calculateTaxTotal(
+      {required Map<String, Map<String, dynamic>> cart}) {
     double total = 0;
     for (String id in cart.keys) {
       double quantity = cart[id]!['quantity'];
@@ -45,10 +48,13 @@ class Calculations {
     }
     return double.parse(total.toStringAsFixed(2));
   }
+
   static int calculateRoundOff({required double finalTotal}) {
     return (finalTotal / 1).ceil();
   }
-  static double calculateFinalTotal({required Map<String, Map<String, dynamic>> cart}) {
+
+  static double calculateFinalTotal(
+      {required Map<String, Map<String, dynamic>> cart}) {
     return calculateTaxableTotal(cart: cart) + calculateTaxTotal(cart: cart);
   }
 }
