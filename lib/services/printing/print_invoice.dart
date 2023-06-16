@@ -1,5 +1,9 @@
+import 'package:bluetooth_thermal_printer/esc_utils/capability_profile.dart';
+import 'package:bluetooth_thermal_printer/esc_utils/enums.dart';
+import 'package:bluetooth_thermal_printer/esc_utils/generator.dart';
+import 'package:bluetooth_thermal_printer/esc_utils/pos_column.dart';
+import 'package:bluetooth_thermal_printer/esc_utils/pos_styles.dart';
 import 'package:eatery/constants/utils/calculations.dart';
-import 'package:esc_pos_utils/esc_pos_utils.dart';
 import 'package:bluetooth_thermal_printer/bluetooth_thermal_printer.dart';
 import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 import 'package:intl/intl.dart';
