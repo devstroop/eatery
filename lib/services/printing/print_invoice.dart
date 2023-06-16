@@ -1,19 +1,19 @@
 import 'package:eatery/constants/utils/calculations.dart';
 import 'package:esc_pos_utils/esc_pos_utils.dart';
-import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
+import 'package:bluetooth_thermal_printer/bluetooth_thermal_printer.dart';
 import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 import 'package:intl/intl.dart';
 import 'package:eatery/database/printer.dart';
 
 class PrintInvoice {
-  static PrinterBluetoothManager printerManager = PrinterBluetoothManager();
+  static BluetoothPrinterService printerManager = BluetoothPrinterService();
   static Future<String> printReceipt(
       {required Map<String, dynamic> order,
       required Map<String, dynamic> account}) async {
     List<Map<String, dynamic>> _jsons = await Printer.getAll();
     if (_jsons.isNotEmpty) {
       BluetoothDevice _device = BluetoothDevice.fromJson(_jsons.first);
-      PrinterBluetooth _printerBt = PrinterBluetooth(_device);
+      BluetoothPrinter _printerBt = BluetoothPrinter(_device);
       printerManager.selectPrinter(_printerBt);
       PaperSize? paper = (account['prineterSize'] == '80mm')
           ? PaperSize.mm80
@@ -22,7 +22,7 @@ class PrintInvoice {
               : null;
       if (paper != null) {
         final profile = await CapabilityProfile.load();
-        final PosPrintResult res = await printerManager.printTicket(
+        final PrintResult res = await printerManager.printTicket(
             (await PrintInvoice.generateReceipt(
                 paper, profile, order, account)));
         return res.msg;
