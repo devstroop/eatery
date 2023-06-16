@@ -10,7 +10,6 @@ import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:intl/intl.dart';
 import 'package:number_to_words/number_to_words.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:qr_flutter/qr_flutter.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/constants/utils/app_file_system.dart';
 import 'package:eatery/services/printing/print_invoice.dart';

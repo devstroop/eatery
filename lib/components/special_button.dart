@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 
 class SpecialButton extends StatelessWidget {
-  const SpecialButton({Key? key, this.onTap, required this.icon, required this.text, required this.color, required this.foreColor}) : super(key: key);
+  const SpecialButton(
+      {Key? key,
+      this.onTap,
+      required this.icon,
+      required this.text,
+      required this.color,
+      required this.foreColor})
+      : super(key: key);
   final Function()? onTap;
   final IconData icon;
   final String text;
@@ -13,6 +20,16 @@ class SpecialButton extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
+        decoration: BoxDecoration(
+          color: color,
+          borderRadius: BorderRadius.circular(8.0),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.30),
+              blurRadius: 4.0,
+            ),
+          ],
+        ),
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Row(
@@ -29,7 +46,9 @@ class SpecialButton extends StatelessWidget {
                   Text(
                     text,
                     style: TextStyle(
-                        color: foreColor, fontWeight: FontWeight.w600, fontSize: 18.0),
+                        color: foreColor,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 18.0),
                   ),
                 ],
               ),
@@ -39,16 +58,6 @@ class SpecialButton extends StatelessWidget {
               ),
             ],
           ),
-        ),
-        decoration: BoxDecoration(
-          color: color,
-          borderRadius: BorderRadius.circular(8.0),
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.30),
-              blurRadius: 4.0,
-            ),
-          ],
         ),
       ),
     );

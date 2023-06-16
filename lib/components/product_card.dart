@@ -108,6 +108,12 @@ class ProductCard extends StatelessWidget {
                     children: [
                       Container(
                         padding: const EdgeInsets.all(12.0),
+                        decoration: BoxDecoration(
+                          color: ColorStyle.backgroundColorAlter,
+                          borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(6),
+                              bottomRight: Radius.circular(6)),
+                        ),
                         child: Column(
                           mainAxisSize: MainAxisSize.min,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -163,15 +169,15 @@ class ProductCard extends StatelessWidget {
                                             fontWeight: FontWeight.w600,
                                             color: ColorStyle.success),
                                       ),
-
-                                    if(product.salePrice == null)Text(
-                                      '${currencySymbol ?? ''}${product.mrpPrice}',
-                                      overflow: TextOverflow.ellipsis,
-                                      style: TextStyle(
-                                          fontSize: 16.0,
-                                          fontWeight: FontWeight.w600,
-                                          color: ColorStyle.success),
-                                    ),
+                                    if (product.salePrice == null)
+                                      Text(
+                                        '${currencySymbol ?? ''}${product.mrpPrice}',
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.w600,
+                                            color: ColorStyle.success),
+                                      ),
                                   ],
                                 ),
                                 onAdd != null &&
@@ -209,7 +215,7 @@ class ProductCard extends StatelessWidget {
                                                         ? Padding(
                                                             padding:
                                                                 const EdgeInsetsDirectional
-                                                                        .fromSTEB(
+                                                                    .fromSTEB(
                                                                     4, 0, 4, 0),
                                                             child: Text(
                                                               Calculations
@@ -241,12 +247,6 @@ class ProductCard extends StatelessWidget {
                               ],
                             )
                           ],
-                        ),
-                        decoration: BoxDecoration(
-                          color: ColorStyle.backgroundColorAlter,
-                          borderRadius: const BorderRadius.only(
-                              bottomLeft: Radius.circular(6),
-                              bottomRight: Radius.circular(6)),
                         ),
                       )
                     ],

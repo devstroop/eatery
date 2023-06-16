@@ -1,23 +1,20 @@
-import 'dart:io';
 import 'package:eatery/components/bottomsheets/help_bottom_sheet.dart';
 import 'package:eatery/pages/dashboard/settings/tax_slab/tax_slabs.settings.page.dart';
 import 'package:eatery_db/models/company/company.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/menu_tile.dart';
 import 'package:eatery/constants/style/color_style.dart';
-
 import 'company/show_company_page.dart';
 import 'currency/show_currency_region_page.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key, required this.company}) : super(key: key);
-final Company company;
+  final Company company;
   @override
   State<SettingPage> createState() => _SettingPageState();
 }
 
 class _SettingPageState extends State<SettingPage> {
-
   @override
   void initState() {
     super.initState();
@@ -31,7 +28,8 @@ class _SettingPageState extends State<SettingPage> {
     return SizedBox(
       width: double.maxFinite,
       height: double.maxFinite,
-      child: ListView(scrollDirection: Axis.vertical, shrinkWrap: true, children: [
+      child:
+          ListView(scrollDirection: Axis.vertical, shrinkWrap: true, children: [
         MenuTile(
           prefixIcon: Icons.business,
           title: 'Company',
@@ -41,9 +39,7 @@ class _SettingPageState extends State<SettingPage> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(
-                  builder: (context) => ShowCompanyPage(
-                      )),
+              MaterialPageRoute(builder: (context) => ShowCompanyPage()),
             ).then((_) => setState(() {}));
           },
         ),
@@ -65,7 +61,10 @@ class _SettingPageState extends State<SettingPage> {
           postfixIcon: Icons.arrow_forward_ios_sharp,
           color: getThemeColor(),
           onTap: () => Navigator.push(
-            context, MaterialPageRoute(builder: (context) => TaxSlabsSettingsPage(company: widget.company)),
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    TaxSlabsSettingsPage(company: widget.company)),
           ),
         ),
         MenuTile(
@@ -111,7 +110,8 @@ class _SettingPageState extends State<SettingPage> {
       appBar: appBar,
       body: Stack(
         children: [
-          Positioned(top: 12.0, left: 0.0, right: 0.0, bottom: 72, child: options()),
+          Positioned(
+              top: 12.0, left: 0.0, right: 0.0, bottom: 72, child: options()),
         ],
       ),
     );

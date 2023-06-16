@@ -159,7 +159,7 @@ class BAP1 extends StatelessWidget {
       child: Padding(
         padding: SpacingStyle.defaultPadding,
         child: PrimaryButton(
-            child: const Text('Next'), color: themeColor, onPressed: _submit),
+            color: themeColor, onPressed: _submit, child: const Text('Next')),
       ),
     );
   }

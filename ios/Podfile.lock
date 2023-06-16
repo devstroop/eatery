@@ -1,0 +1,177 @@
+PODS:
+  - battery_info (0.0.1):
+    - Flutter
+  - device_info (0.0.1):
+    - Flutter
+  - DKImagePickerController/Core (4.3.4):
+    - DKImagePickerController/ImageDataManager
+    - DKImagePickerController/Resource
+  - DKImagePickerController/ImageDataManager (4.3.4)
+  - DKImagePickerController/PhotoGallery (4.3.4):
+    - DKImagePickerController/Core
+    - DKPhotoGallery
+  - DKImagePickerController/Resource (4.3.4)
+  - DKPhotoGallery (0.0.17):
+    - DKPhotoGallery/Core (= 0.0.17)
+    - DKPhotoGallery/Model (= 0.0.17)
+    - DKPhotoGallery/Preview (= 0.0.17)
+    - DKPhotoGallery/Resource (= 0.0.17)
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Core (0.0.17):
+    - DKPhotoGallery/Model
+    - DKPhotoGallery/Preview
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Model (0.0.17):
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Preview (0.0.17):
+    - DKPhotoGallery/Model
+    - DKPhotoGallery/Resource
+    - SDWebImage
+    - SwiftyGif
+  - DKPhotoGallery/Resource (0.0.17):
+    - SDWebImage
+    - SwiftyGif
+  - file_picker (0.0.1):
+    - DKImagePickerController/PhotoGallery
+    - Flutter
+  - Flutter (1.0.0)
+  - flutter_archive (0.0.1):
+    - Flutter
+    - ZIPFoundation (= 0.9.13)
+  - flutter_bluetooth_basic (0.0.1):
+    - Flutter
+  - flutter_file_dialog (0.0.1):
+    - Flutter
+  - flutter_native_splash (0.0.1):
+    - Flutter
+  - flutter_secure_storage (3.3.1):
+    - Flutter
+  - flutter_share (0.0.1):
+    - Flutter
+  - FMDB (2.7.5):
+    - FMDB/standard (= 2.7.5)
+  - FMDB/standard (2.7.5)
+  - image_picker_ios (0.0.1):
+    - Flutter
+  - move_to_background (0.0.1):
+    - Flutter
+  - path_provider_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - permission_handler_apple (9.1.0):
+    - Flutter
+  - platform_device_id (0.0.1):
+    - Flutter
+  - SDWebImage (5.16.0):
+    - SDWebImage/Core (= 5.16.0)
+  - SDWebImage/Core (5.16.0)
+  - shared_preferences_foundation (0.0.1):
+    - Flutter
+    - FlutterMacOS
+  - sqflite (0.0.3):
+    - Flutter
+    - FMDB (>= 2.7.5)
+  - SwiftyGif (5.4.4)
+  - url_launcher_ios (0.0.1):
+    - Flutter
+  - ZIPFoundation (0.9.13)
+
+DEPENDENCIES:
+  - battery_info (from `.symlinks/plugins/battery_info/ios`)
+  - device_info (from `.symlinks/plugins/device_info/ios`)
+  - file_picker (from `.symlinks/plugins/file_picker/ios`)
+  - Flutter (from `Flutter`)
+  - flutter_archive (from `.symlinks/plugins/flutter_archive/ios`)
+  - flutter_bluetooth_basic (from `.symlinks/plugins/flutter_bluetooth_basic/ios`)
+  - flutter_file_dialog (from `.symlinks/plugins/flutter_file_dialog/ios`)
+  - flutter_native_splash (from `.symlinks/plugins/flutter_native_splash/ios`)
+  - flutter_secure_storage (from `.symlinks/plugins/flutter_secure_storage/ios`)
+  - flutter_share (from `.symlinks/plugins/flutter_share/ios`)
+  - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
+  - move_to_background (from `.symlinks/plugins/move_to_background/ios`)
+  - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
+  - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
+  - platform_device_id (from `.symlinks/plugins/platform_device_id/ios`)
+  - shared_preferences_foundation (from `.symlinks/plugins/shared_preferences_foundation/darwin`)
+  - sqflite (from `.symlinks/plugins/sqflite/ios`)
+  - url_launcher_ios (from `.symlinks/plugins/url_launcher_ios/ios`)
+
+SPEC REPOS:
+  trunk:
+    - DKImagePickerController
+    - DKPhotoGallery
+    - FMDB
+    - SDWebImage
+    - SwiftyGif
+    - ZIPFoundation
+
+EXTERNAL SOURCES:
+  battery_info:
+    :path: ".symlinks/plugins/battery_info/ios"
+  device_info:
+    :path: ".symlinks/plugins/device_info/ios"
+  file_picker:
+    :path: ".symlinks/plugins/file_picker/ios"
+  Flutter:
+    :path: Flutter
+  flutter_archive:
+    :path: ".symlinks/plugins/flutter_archive/ios"
+  flutter_bluetooth_basic:
+    :path: ".symlinks/plugins/flutter_bluetooth_basic/ios"
+  flutter_file_dialog:
+    :path: ".symlinks/plugins/flutter_file_dialog/ios"
+  flutter_native_splash:
+    :path: ".symlinks/plugins/flutter_native_splash/ios"
+  flutter_secure_storage:
+    :path: ".symlinks/plugins/flutter_secure_storage/ios"
+  flutter_share:
+    :path: ".symlinks/plugins/flutter_share/ios"
+  image_picker_ios:
+    :path: ".symlinks/plugins/image_picker_ios/ios"
+  move_to_background:
+    :path: ".symlinks/plugins/move_to_background/ios"
+  path_provider_foundation:
+    :path: ".symlinks/plugins/path_provider_foundation/darwin"
+  permission_handler_apple:
+    :path: ".symlinks/plugins/permission_handler_apple/ios"
+  platform_device_id:
+    :path: ".symlinks/plugins/platform_device_id/ios"
+  shared_preferences_foundation:
+    :path: ".symlinks/plugins/shared_preferences_foundation/darwin"
+  sqflite:
+    :path: ".symlinks/plugins/sqflite/ios"
+  url_launcher_ios:
+    :path: ".symlinks/plugins/url_launcher_ios/ios"
+
+SPEC CHECKSUMS:
+  battery_info: 09f5c9ee65394f2291c8c6227bedff345b8a730c
+  device_info: d7d233b645a32c40dfdc212de5cf646ca482f175
+  DKImagePickerController: b512c28220a2b8ac7419f21c491fc8534b7601ac
+  DKPhotoGallery: fdfad5125a9fdda9cc57df834d49df790dbb4179
+  file_picker: ce3938a0df3cc1ef404671531facef740d03f920
+  Flutter: f04841e97a9d0b0a8025694d0796dd46242b2854
+  flutter_archive: 1805fdd3a695fd284b43edb53dc35ca843fb761c
+  flutter_bluetooth_basic: 0e4e27e22b50b3a25cc1d1e131953feb4af414f4
+  flutter_file_dialog: 4c014a45b105709a27391e266c277d7e588e9299
+  flutter_native_splash: 52501b97d1c0a5f898d687f1646226c1f93c56ef
+  flutter_secure_storage: 7953c38a04c3fdbb00571bcd87d8e3b5ceb9daec
+  flutter_share: 4be0208963c60b537e6255ed2ce1faae61cd9ac2
+  FMDB: 2ce00b547f966261cd18927a3ddb07cb6f3db82a
+  image_picker_ios: 4a8aadfbb6dc30ad5141a2ce3832af9214a705b5
+  move_to_background: 39a5b79b26d577b0372cbe8a8c55e7aa9fcd3a2d
+  path_provider_foundation: eaf5b3e458fc0e5fbb9940fb09980e853fe058b8
+  permission_handler_apple: 8f116445eff3c0e7c65ad60f5fef5490aa94b4e4
+  platform_device_id: 81b3e2993881f87d0c82ef151dc274df4869aef5
+  SDWebImage: 2aea163b50bfcb569a2726b6a754c54a4506fcf6
+  shared_preferences_foundation: e2dae3258e06f44cc55f49d42024fd8dd03c590c
+  sqflite: 31f7eba61e3074736dff8807a9b41581e4f7f15a
+  SwiftyGif: 93a1cc87bf3a51916001cf8f3d63835fb64c819f
+  url_launcher_ios: 08a3dfac5fb39e8759aeb0abbd5d9480f30fc8b4
+  ZIPFoundation: ae5b4b813d216d3bf0a148773267fff14bd51d37
+
+PODFILE CHECKSUM: 4e8f8b2be68aeea4c0d5beb6ff1e79fface1d048
+
+COCOAPODS: 1.12.1

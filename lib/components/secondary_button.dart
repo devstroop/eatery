@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class SecondaryButton extends StatelessWidget {
   const SecondaryButton({
+    super.key,
     required this.color,
     required this.borderColor,
     required this.text,
@@ -24,7 +25,7 @@ class SecondaryButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(4),
-          border : Border.all(
+          border: Border.all(
             color: borderColor,
             width: 1,
           ),
@@ -36,10 +37,7 @@ class SecondaryButton extends StatelessWidget {
             Text(
               text,
               style: TextStyle(
-                color: color,
-                fontSize: 16,
-                fontWeight: FontWeight.w500
-              ),
+                  color: color, fontSize: 16, fontWeight: FontWeight.w500),
             ),
           ],
         ),

@@ -17,20 +17,24 @@ class ProductCategoryCard extends StatelessWidget {
     return SizedBox(
       height: 60,
       child: ElevatedButton(
-        style: ElevatedButton.styleFrom(primary: ColorStyle.backgroundColorAlter),
+        style: ElevatedButton.styleFrom(
+            backgroundColor: ColorStyle.backgroundColorAlter),
         onPressed: onTap,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
             if (image != null && File(image!).existsSync())
-              Padding(padding: const EdgeInsets.all(12.0),child: Image.file(File(image!))),
+              Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Image.file(File(image!))),
             const SizedBox(
               width: 8.0,
             ),
-            Text(name, style: TextStyle(
-              color: ColorStyle.text200
-            ),)
+            Text(
+              name,
+              style: TextStyle(color: ColorStyle.text200),
+            )
           ],
         ),
       ),
