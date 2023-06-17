@@ -21,7 +21,7 @@ class CreateCompanyBottomAppBar extends StatelessWidget {
       : super(key: key);
 
   void _submit() {
-    final isValid = formKey.currentState!.validate();
+    final isValid = formKey.currentState?.validate() ?? false;
     if (!isValid) {
       return;
     }
