@@ -1,5 +1,3 @@
-import 'package:eatery/components/loaders/loading_screen.dart';
-import 'package:eatery/pages/auth/login_page.dart';
 import 'package:eatery/pages/auth/logout_page.dart';
 import 'package:eatery/pages/dashboard/components/dashboard_header.dart';
 import 'package:eatery/pages/dashboard/components/notifications/low_battery_warning_notification.dart';
@@ -37,7 +35,6 @@ class _DashboardPageState extends State<DashboardPage> {
   void initState() {
     super.initState();
   }
-
 
   Color themeColor = ColorStyle.brandColor;
 
@@ -87,7 +84,9 @@ class _DashboardPageState extends State<DashboardPage> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const ProductCategoriesPage()),
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const ProductCategoriesPage()),
                           );
                         },
                       ),
@@ -109,7 +108,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => KitchenPage(company: widget.company,
+                                builder: (context) => KitchenPage(
+                                      company: widget.company,
                                     )),
                           );
                         },
@@ -123,7 +123,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => InventoryPage(company: widget.company,
+                                builder: (context) => InventoryPage(
+                                      company: widget.company,
                                     )),
                           );
                         },
@@ -145,7 +146,10 @@ class _DashboardPageState extends State<DashboardPage> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => DiningTablesPage(company: widget.company,)),
+                            MaterialPageRoute(
+                                builder: (context) => DiningTablesPage(
+                                      company: widget.company,
+                                    )),
                           );
                         },
                       ),
@@ -157,7 +161,10 @@ class _DashboardPageState extends State<DashboardPage> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => WaitersPage(company: widget.company,)),
+                            MaterialPageRoute(
+                                builder: (context) => WaitersPage(
+                                      company: widget.company,
+                                    )),
                           );
                         },
                       ),
@@ -179,7 +186,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ReportsPage(company: widget.company,
+                                builder: (context) => ReportsPage(
+                                      company: widget.company,
                                     )),
                           );
                         },
@@ -192,10 +200,12 @@ class _DashboardPageState extends State<DashboardPage> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => SettingPage(company: widget.company,
-                            )),
+                            MaterialPageRoute(
+                                builder: (context) => SettingPage(
+                                      company: widget.company,
+                                    )),
                           ).then((_) async {
-                            setState(() { });
+                            setState(() {});
                           });
                         },
                       ),
@@ -217,7 +227,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ImportExportPage(company: widget.company,
+                                builder: (context) => ImportExportPage(
+                                      company: widget.company,
                                     )),
                           );
                         },
@@ -231,7 +242,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => BackupRestorePage(company: widget.company,
+                                builder: (context) => BackupRestorePage(
+                                      company: widget.company,
                                     )),
                           );
                         },
@@ -255,7 +267,10 @@ class _DashboardPageState extends State<DashboardPage> {
                           await prefs.remove('companyId');
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => LogoutPage(company: widget.company,)),
+                            MaterialPageRoute(
+                                builder: (context) => LogoutPage(
+                                      company: widget.company,
+                                    )),
                           );
                         },
                       ),

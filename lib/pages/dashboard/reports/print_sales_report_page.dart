@@ -2,7 +2,6 @@ import 'package:date_time_picker/date_time_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:eatery/services/printing/print_report.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
 class PrintSalesReportPage extends StatefulWidget {

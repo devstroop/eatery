@@ -1,11 +1,7 @@
-// import 'package:eatery_components/buttons/upload.button.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
-// import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:eatery/database/waiter.dart';
-import 'package:eatery/constants/utils/app_file_system.dart';
-import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
+
 class AddWaiterPage extends StatefulWidget {
   const AddWaiterPage({Key? key}) : super(key: key);
 
@@ -20,9 +16,9 @@ class _AddWaiterPageState extends State<AddWaiterPage> {
   Color getThemeColor() {
     return ColorStyle.tertiary;
   }
+
   @override
   Widget build(BuildContext context) {
-
     final appBar = AppBar(
       backgroundColor: getThemeColor(),
       title: const Text('Add Waiter'),
@@ -55,25 +51,28 @@ class _AddWaiterPageState extends State<AddWaiterPage> {
               const SizedBox(
                 height: 6.0,
               ),
-              Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(
-                  'Waiter Name',
-                  style: TextStyle(
-                    color: ColorStyle.text200,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(
-                  height: 3.0,
-                ),
-                CustomTextFromField(
-                  controller: _controllerWaiterName,
-                  hint: 'Waiter Name',
-                  obscureText: false,
-                  themeColor: getThemeColor(),
-                ),
-              ]),
+              Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Waiter Name',
+                      style: TextStyle(
+                        color: ColorStyle.text200,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 3.0,
+                    ),
+                    CustomTextFromField(
+                      controller: _controllerWaiterName,
+                      hint: 'Waiter Name',
+                      obscureText: false,
+                      themeColor: getThemeColor(),
+                    ),
+                  ]),
               const SizedBox(
                 height: 6.0,
               ),
@@ -84,8 +83,9 @@ class _AddWaiterPageState extends State<AddWaiterPage> {
       bottomNavigationBar: BottomAppBar(
         color: ColorStyle.backgroundColorAlter,
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Container()/*PrimaryButton(
+            padding: const EdgeInsets.all(12.0),
+            child:
+                Container() /*PrimaryButton(
             child: const Text('Save'),
             color: getThemeColor(),
             onPressed: () async {
@@ -103,7 +103,7 @@ class _AddWaiterPageState extends State<AddWaiterPage> {
               }
             },
           ),*/
-        ),
+            ),
       ),
     );
   }

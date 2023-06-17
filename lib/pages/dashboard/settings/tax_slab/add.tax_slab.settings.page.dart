@@ -3,7 +3,6 @@ import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/constants/style/spacing_style.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:eatery_components/switches/toggle.switch.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:eatery_db/models/company/company.dart';
 import 'package:eatery_db/models/tax/tax_slab.dart';

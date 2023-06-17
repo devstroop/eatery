@@ -279,85 +279,84 @@ class _CheckoutPageState extends State<CheckoutPage> {
     final double roundOff =
         double.parse((finalTotalAfterRoundOff - finalTotal).toStringAsFixed(2));
 
-    placeOrderAction() async {
+    Future<void> placeOrderAction() async {
       setState(() {
         isProcessing = true;
       });
       try {
-        bool flag = false;
-        /*LicenseData licData = License.validate(widget.account['purchaseCode']);
-        if(!licData.status){
-          List<Map<String, dynamic>> ordersOfTheMonth = (await Order.getAll()).where((element){
-            return DateTime.now().year == DateTime.fromMicrosecondsSinceEpoch(element['timestamp']).year && DateTime.now().month == DateTime.fromMicrosecondsSinceEpoch(element['timestamp']).month;
-          }).toList();
-          if(ordersOfTheMonth.length >= 100){
-            flag = false;
-          }
-        }*/
-        flag = true;
-        if (flag) {
-          Map<String, dynamic> order = {
-            'orderType': widget.orderType.name,
-            'orderTypeText': widget.orderType.name,
-            'customerName': customerName,
-            'customerPhone': customerPhone,
-            'customerAddress': customerAddress,
-            'timestamp': DateTime.now().microsecondsSinceEpoch,
-            'tableName': widget.diningTableName,
-            'table': widget.diningTable,
-            'cart': widget.cart,
-            'waiter': selectedWaiterName,
-            'taxableTotal': taxableTotal,
-            'taxTotal': taxTotal,
-            'roundOff': roundOff,
-            'finalTotal': finalTotalAfterRoundOff,
-            'open': OrderType.dine == widget.orderType ? true : false
-          };
+        // bool flag = true;
+        // TODO: Uncomment this code to enable license validation
+        // LicenseData licData = License.validate(widget.account['purchaseCode']);
+        // if(!licData.status){
+        //   List<Map<String, dynamic>> ordersOfTheMonth = (await Order.getAll()).where((element){
+        //     return DateTime.now().year == DateTime.fromMicrosecondsSinceEpoch(element['timestamp']).year && DateTime.now().month == DateTime.fromMicrosecondsSinceEpoch(element['timestamp']).month;
+        //   }).toList();
+        //   if(ordersOfTheMonth.length >= 100){
+        //     flag = false;
+        //   }
+        // }
+        // if (!flag) {
+        //   Future.delayed(Duration.zero, () {
+        //     showSnackBar(
+        //         context, 'Please activate license to create more orders');
+        //   });
+        //   return;
+        // }
+        Map<String, dynamic> order = {
+          'orderType': widget.orderType.name,
+          'orderTypeText': widget.orderType.name,
+          'customerName': customerName,
+          'customerPhone': customerPhone,
+          'customerAddress': customerAddress,
+          'timestamp': DateTime.now().microsecondsSinceEpoch,
+          'tableName': widget.diningTableName,
+          'table': widget.diningTable,
+          'cart': widget.cart,
+          'waiter': selectedWaiterName,
+          'taxableTotal': taxableTotal,
+          'taxTotal': taxTotal,
+          'roundOff': roundOff,
+          'finalTotal': finalTotalAfterRoundOff,
+          'open': OrderType.dine == widget.orderType ? true : false
+        };
 
-          String? id;
-          if (widget.openOrderId != null) {
-            order['id'] = widget.openOrderId;
-            await Order.update(order);
-          } else {
-            id = await Order.add(order);
-            order['id'] = id;
-          }
-
-          if (OrderType.dine == widget.orderType) {
-            Map<String, dynamic>? diningTable =
-                await DiningTable.get(widget.diningTable!);
-            diningTable!['orderId'] = id;
-            diningTable['due'] = finalTotalAfterRoundOff;
-            await DiningTable.update(diningTable);
-          }
-
-          if (widget.account['autoPrintOnSale']) {
-            PrintInvoice.printReceipt(order: order, account: widget.account)
-                .then((message) {
-              showSnackBar(context, message);
-            }).onError((error, stackTrace) {
-              showSnackBar(context, '$error ${stackTrace.toString()}');
-            });
-          }
-
-          Cart.cart = {};
-          await Future.delayed(Duration.zero, () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      OrderConfirmation(order: order, account: widget.account)),
-            ).then((_) {
-              Navigator.pop(context, 'clear');
-            });
-          });
+        String? id;
+        if (widget.openOrderId != null) {
+          order['id'] = widget.openOrderId;
+          await Order.update(order);
         } else {
-          await Future.delayed(Duration.zero, () {
-            showSnackBar(
-                context, 'Please activate license to create more orders');
-          });
-          return;
+          id = await Order.add(order);
+          order['id'] = id;
         }
+
+        if (OrderType.dine == widget.orderType) {
+          Map<String, dynamic>? diningTable =
+              await DiningTable.get(widget.diningTable!);
+          diningTable!['orderId'] = id;
+          diningTable['due'] = finalTotalAfterRoundOff;
+          await DiningTable.update(diningTable);
+        }
+
+        if (widget.account['autoPrintOnSale']) {
+          PrintInvoice.printReceipt(order: order, account: widget.account)
+              .then((message) {
+            showSnackBar(context, message);
+          }).onError((error, stackTrace) {
+            showSnackBar(context, '$error ${stackTrace.toString()}');
+          });
+        }
+
+        Cart.cart = {};
+        await Future.delayed(Duration.zero, () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) =>
+                    OrderConfirmation(order: order, account: widget.account)),
+          ).then((_) {
+            Navigator.pop(context, 'clear');
+          });
+        });
       } catch (_) {
         showSnackBar(context, 'Failed');
         return;

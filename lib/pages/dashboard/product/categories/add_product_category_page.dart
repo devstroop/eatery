@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:eatery_components/buttons/upload.button.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:eatery_db/models/product/product_category.dart';
@@ -92,7 +90,6 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: PrimaryButton(
-            child: const Text('Save'),
             color: getThemeColor(),
             onPressed: () async {
               if (_controllerCategoryName.text.trim() == '') {
@@ -100,18 +97,27 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
                 return;
               }
               try {
-                int response = await EateryDB().productCategoryBox().add(
-                    ProductCategory(
+                EateryDB()
+                    .productCategoryBox()
+                    .add(ProductCategory(
                         id: EateryDB().getNewIdentity(
                             EateryDB().productCategoryBox().values),
                         name: _controllerCategoryName.text,
-                        image: pickedImagePath));
-                showSnackBar(context, 'Successfully created');
-                Navigator.pop(context);
+                        image: pickedImagePath))
+                    .then((response) {
+                  if (response == 1) {
+                    showSnackBar(context, 'Created successfully');
+                  } else {
+                    showSnackBar(context, 'Failed to create');
+                  }
+                }).whenComplete(() {
+                  Navigator.pop(context);
+                });
               } catch (_) {
                 showSnackBar(context, 'Failed to create');
               }
             },
+            child: const Text('Save'),
           ),
         ),
       ),

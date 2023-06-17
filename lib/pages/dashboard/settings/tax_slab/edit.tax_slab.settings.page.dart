@@ -4,7 +4,6 @@ import 'package:eatery/constants/style/spacing_style.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery_components/switches/toggle.switch.dart';
-import 'package:eatery_db/eatery_db.dart';
 import 'package:eatery_db/models/company/company.dart';
 import 'package:eatery_db/models/tax/tax_slab.dart';
 import 'package:eatery_db/models/tax/tax_type.dart';
@@ -124,9 +123,12 @@ class _EditTaxSlabSettingsPageState extends State<EditTaxSlabSettingsPage> {
                       hint: '',
                       themeColor: localColor,
                       focusNode: focus2,
-                      suffixWidget: Icon(Icons.percent, color: ColorStyle.text400,),
+                      suffixWidget: Icon(
+                        Icons.percent,
+                        color: ColorStyle.text400,
+                      ),
                       keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
+                          const TextInputType.numberWithOptions(decimal: true),
                       validator: (value) {
                         if (value!.trim().isEmpty) {
                           return 'Tax rate couldn\'t be blank';
@@ -158,11 +160,10 @@ class _EditTaxSlabSettingsPageState extends State<EditTaxSlabSettingsPage> {
                     color: localColor,
                     options: [for (var each in TaxType.values) each.name!],
                     index: _taxType.index,
-                    onChange: (int? index){
+                    onChange: (int? index) {
                       _taxType = TaxType.values
                           .singleWhere((element) => element.id == index);
                       setState(() {});
-
                     },
                   ),
                 ],

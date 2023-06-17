@@ -6,7 +6,6 @@ import 'package:eatery_db/models/company/company.dart';
 import 'package:eatery_db/models/product/food_type.dart';
 import 'package:eatery_db/models/product/product.dart';
 import 'package:eatery_db/models/product/product_category.dart';
-import 'package:eatery_db/models/product/product_type.dart';
 import 'package:eatery_db/models/tax/tax_slab.dart';
 import 'package:eatery_db/models/tax/tax_type.dart';
 import 'package:eatery_services/eatery_services.dart';
@@ -19,7 +18,9 @@ import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
 class EditInventoryItem extends StatefulWidget {
-  const EditInventoryItem({Key? key, required this.company, required this.product}) : super(key: key);
+  const EditInventoryItem(
+      {Key? key, required this.company, required this.product})
+      : super(key: key);
   final Company company;
   final Product product;
   @override
@@ -58,13 +59,22 @@ class _EditInventoryItemState extends State<EditInventoryItem> {
     _image = widget.product.image;
     _ctrlName.text = widget.product.name;
     _ctrlMRP.text = widget.product.mrpPrice.toString();
-    _ctrlSP.text = widget.product.salePrice != null ? widget.product.salePrice.toString() : '';
+    _ctrlSP.text = widget.product.salePrice != null
+        ? widget.product.salePrice.toString()
+        : '';
     _foodType = widget.product.foodType;
-    _taxSlab = EateryDB().taxSlabBox().values.singleWhere((element) => element.id == widget.product.taxSlabId);
-    _category = EateryDB().productCategoryBox().values.singleWhere((element) => element.id == widget.product.categoryId);
+    _taxSlab = EateryDB()
+        .taxSlabBox()
+        .values
+        .singleWhere((element) => element.id == widget.product.taxSlabId);
+    _category = EateryDB()
+        .productCategoryBox()
+        .values
+        .singleWhere((element) => element.id == widget.product.categoryId);
     _ctrlDesc.text = widget.product.description ?? '';
-    setState(() { });
+    setState(() {});
   }
+
   final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
@@ -93,7 +103,7 @@ class _EditInventoryItemState extends State<EditInventoryItem> {
                   label: "Uncategorized",
                   onTap: () {
                     setState(
-                          () {
+                      () {
                         _category = null;
                       },
                     );
@@ -108,13 +118,13 @@ class _EditInventoryItemState extends State<EditInventoryItem> {
                       return PosCategoryWidget(
                           active: _category == category,
                           image: category.image != null &&
-                              File(snapshot.data!).existsSync()
+                                  File(snapshot.data!).existsSync()
                               ? Image.file(File(snapshot.data!))
                               : null,
                           label: category.name,
                           onTap: () {
                             setState(
-                                  () {
+                              () {
                                 _category = category;
                               },
                             );
@@ -220,17 +230,19 @@ class _EditInventoryItemState extends State<EditInventoryItem> {
                         child: CustomTextFromField(
                             controller: _ctrlMRP,
                             keyboardType: TextInputType.number,
-                            prefixWidget: _currencySymbol != null ? Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  _currencySymbol ?? '',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 18.0),
-                                ),
-                              ],
-                            ) : null,
+                            prefixWidget: _currencySymbol != null
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        _currencySymbol ?? '',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 18.0),
+                                      ),
+                                    ],
+                                  )
+                                : null,
                             hint: '0.00',
                             obscureText: false,
                             themeColor: getThemeColor(),
@@ -270,17 +282,19 @@ class _EditInventoryItemState extends State<EditInventoryItem> {
                         child: CustomTextFromField(
                             controller: _ctrlSP,
                             keyboardType: TextInputType.number,
-                            prefixWidget: _currencySymbol != null ? Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Text(
-                                  _currencySymbol ?? '',
-                                  style: const TextStyle(
-                                      fontWeight: FontWeight.w500,
-                                      fontSize: 18.0),
-                                ),
-                              ],
-                            ) : null,
+                            prefixWidget: _currencySymbol != null
+                                ? Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        _currencySymbol ?? '',
+                                        style: const TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 18.0),
+                                      ),
+                                    ],
+                                  )
+                                : null,
                             hint: '0.00',
                             obscureText: false,
                             themeColor: getThemeColor(),
@@ -311,18 +325,15 @@ class _EditInventoryItemState extends State<EditInventoryItem> {
                       ToggleSwitch(
                         nullableValue: 'None',
                         color:
-                        _foodType != null ? _foodType!.color : Colors.grey,
-                        options: [
-                          for (var each in FoodType.values) each.name
-                        ],
+                            _foodType != null ? _foodType!.color : Colors.grey,
+                        options: [for (var each in FoodType.values) each.name],
                         index: _foodType?.index,
                         onChange: (int? index) {
-                          if(index == null){
+                          if (index == null) {
                             _foodType = null;
-                          }
-                          else{
-                            _foodType = FoodType.values.singleWhere(
-                                    (element) => element.id == index);
+                          } else {
+                            _foodType = FoodType.values
+                                .singleWhere((element) => element.id == index);
                           }
                           setState(() {});
                         },
@@ -356,10 +367,9 @@ class _EditInventoryItemState extends State<EditInventoryItem> {
                             ],
                             index: _taxSlab?.id,
                             onChange: (int? index) {
-                              if(index == null){
+                              if (index == null) {
                                 _taxSlab = null;
-                              }
-                              else{
+                              } else {
                                 _taxSlab = EateryDB()
                                     .taxSlabBox()
                                     .values
@@ -369,14 +379,16 @@ class _EditInventoryItemState extends State<EditInventoryItem> {
                               setState(() {});
                             },
                           ),
-                          if(_taxSlab != null)
+                          if (_taxSlab != null)
                             Padding(
                               padding: const EdgeInsets.all(12.0),
-                              child: Text('${_taxSlab!.rate}% (${_taxSlab!.type.name})', style: TextStyle(
-                                  color: getThemeColor(),
-                                  fontSize: 16.0,
-                                  fontWeight: FontWeight.w500
-                              ),),
+                              child: Text(
+                                '${_taxSlab!.rate}% (${_taxSlab!.type.name})',
+                                style: TextStyle(
+                                    color: getThemeColor(),
+                                    fontSize: 16.0,
+                                    fontWeight: FontWeight.w500),
+                              ),
                             ),
                         ],
                       ),
@@ -424,7 +436,7 @@ class _EditInventoryItemState extends State<EditInventoryItem> {
                             keyboardType: TextInputType.multiline,
                             controller: _ctrlDesc,
                             hint:
-                            '- Describe your dish \n- Highlight ingredients used\n- Keep it simple',
+                                '- Describe your dish \n- Highlight ingredients used\n- Keep it simple',
                             obscureText: false,
                             themeColor: getThemeColor(),
                             minLines: 4,

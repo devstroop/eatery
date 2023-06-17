@@ -1,15 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 import 'dart:typed_data';
-
 import 'package:eatery/constants/utils/calculations.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:flutter_share/flutter_share.dart';
-import 'package:get/get_utils/src/extensions/string_extensions.dart';
 import 'package:intl/intl.dart';
 import 'package:number_to_words/number_to_words.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/constants/utils/app_file_system.dart';
 import 'package:eatery/services/printing/print_invoice.dart';
@@ -46,6 +42,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
           await image.toByteData(format: ui.ImageByteFormat.png);
       var pngBytes = byteData!.buffer.asUint8List();
       var bs64 = base64Encode(pngBytes);
+      debugPrint(bs64.length.toString());
       setState(() {});
       return pngBytes;
     } catch (e) {

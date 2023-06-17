@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:eatery_components/buttons/upload.button.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:eatery_db/models/product/product_category.dart';

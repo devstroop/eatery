@@ -11,7 +11,6 @@ import 'package:intl/intl.dart';
 import 'package:eatery/components/custom_dialog_box.dart';
 import 'package:eatery/database/order.dart';
 import 'package:eatery/constants/utils/app_file_system.dart';
-import 'package:eatery/services/printing/print_report.dart';
 import 'package:eatery/services/utility/generate.dart';
 import 'package:eatery/services/utility/share.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
@@ -20,7 +19,7 @@ import 'package:qrscan/qrscan.dart' as scanner;
 
 class ReportsPage extends StatefulWidget {
   const ReportsPage({Key? key, required this.company}) : super(key: key);
-final Company company;
+  final Company company;
   @override
   State<ReportsPage> createState() => _ReportsPageState();
 }
@@ -33,7 +32,8 @@ class _ReportsPageState extends State<ReportsPage> {
 
   void loadOrders() async {
     List<Map<String, dynamic>> orders = await Order.getAll();
-    orders.sort((a, b) => (b['timestamp'] as int).compareTo(a['timestamp'] as int));
+    orders.sort(
+        (a, b) => (b['timestamp'] as int).compareTo(a['timestamp'] as int));
     setState(() {
       this.orders = orders;
     });
@@ -48,13 +48,17 @@ class _ReportsPageState extends State<ReportsPage> {
   Color getThemeColor() {
     return ColorStyle.brandColor;
   }
+
   Future<Uint8List> _capturePng() async {
     try {
-      RenderRepaintBoundary boundary = genKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
+      RenderRepaintBoundary boundary =
+          genKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
       ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-      ByteData? byteData = await image.toByteData(format: ui.ImageByteFormat.png);
+      ByteData? byteData =
+          await image.toByteData(format: ui.ImageByteFormat.png);
       var pngBytes = byteData!.buffer.asUint8List();
       var bs64 = base64Encode(pngBytes);
+      debugPrint(bs64.length.toString());
       setState(() {});
       return pngBytes;
     } catch (e) {
@@ -68,34 +72,42 @@ class _ReportsPageState extends State<ReportsPage> {
     DateTime from = DateTime(now.year, now.month, now.day, 0, 0, 0);
     DateTime till = DateTime(now.year, now.month, now.day, 59, 59, 59);
     for (Map<String, dynamic> order in orders) {
-      if (DateTime.fromMicrosecondsSinceEpoch(order['timestamp']).isAfter(from) &&
-          DateTime.fromMicrosecondsSinceEpoch(order['timestamp']).isBefore(till)) {
+      if (DateTime.fromMicrosecondsSinceEpoch(order['timestamp'])
+              .isAfter(from) &&
+          DateTime.fromMicrosecondsSinceEpoch(order['timestamp'])
+              .isBefore(till)) {
         total += order['taxableTotal'];
       }
     }
     return double.parse(total.toStringAsFixed(2));
   }
+
   double calculateTodayTaxTotal(List<Map<String, dynamic>> orders) {
     double total = 0;
     DateTime now = DateTime.now();
     DateTime from = DateTime(now.year, now.month, now.day, 0, 0, 0);
     DateTime till = DateTime(now.year, now.month, now.day, 59, 59, 59);
     for (Map<String, dynamic> order in orders) {
-      if (DateTime.fromMicrosecondsSinceEpoch(order['timestamp']).isAfter(from) &&
-          DateTime.fromMicrosecondsSinceEpoch(order['timestamp']).isBefore(till)) {
+      if (DateTime.fromMicrosecondsSinceEpoch(order['timestamp'])
+              .isAfter(from) &&
+          DateTime.fromMicrosecondsSinceEpoch(order['timestamp'])
+              .isBefore(till)) {
         total += order['taxTotal'];
       }
     }
     return double.parse(total.toStringAsFixed(2));
   }
+
   double calculateTodayFinalTotal(List<Map<String, dynamic>> orders) {
     double total = 0;
     DateTime now = DateTime.now();
     DateTime from = DateTime(now.year, now.month, now.day, 0, 0, 0);
     DateTime till = DateTime(now.year, now.month, now.day, 59, 59, 59);
     for (Map<String, dynamic> order in orders) {
-      if (DateTime.fromMicrosecondsSinceEpoch(order['timestamp']).isAfter(from) &&
-          DateTime.fromMicrosecondsSinceEpoch(order['timestamp']).isBefore(till)) {
+      if (DateTime.fromMicrosecondsSinceEpoch(order['timestamp'])
+              .isAfter(from) &&
+          DateTime.fromMicrosecondsSinceEpoch(order['timestamp'])
+              .isBefore(till)) {
         total += order['finalTotal'];
       }
     }
@@ -109,6 +121,7 @@ class _ReportsPageState extends State<ReportsPage> {
     }
     return double.parse(total.toStringAsFixed(2));
   }
+
   double calculateAllTaxableTotal(List<Map<String, dynamic>> orders) {
     double total = 0;
     for (Map<String, dynamic> order in orders) {
@@ -116,6 +129,7 @@ class _ReportsPageState extends State<ReportsPage> {
     }
     return total;
   }
+
   double calculateAllTaxTotal(List<Map<String, dynamic>> orders) {
     double total = 0;
     for (Map<String, dynamic> order in orders) {
@@ -123,13 +137,13 @@ class _ReportsPageState extends State<ReportsPage> {
     }
     return double.parse(total.toStringAsFixed(2));
   }
+
   bodyWidget(BuildContext context, Widget ordersPanel) => RepaintBoundary(
-    key: genKey,
-    child: Container(
-      color: ColorStyle.backgroundColorAlter,
-      child: ordersPanel,
-    )
-  );
+      key: genKey,
+      child: Container(
+        color: ColorStyle.backgroundColorAlter,
+        child: ordersPanel,
+      ));
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
@@ -151,13 +165,16 @@ class _ReportsPageState extends State<ReportsPage> {
                         Column(children: [
                           DateTimePicker(
                             cursorColor: getThemeColor(),
-                            initialValue: filterFrom != null ? DateFormat("yyyy-MM-dd").format(filterFrom!) : '',
+                            initialValue: filterFrom != null
+                                ? DateFormat("yyyy-MM-dd").format(filterFrom!)
+                                : '',
                             firstDate: DateTime(2000),
                             lastDate: DateTime(2100),
                             dateLabelText: 'From',
                             onChanged: (val) {
-                              setState((){
-                                filterFrom = DateFormat("yyyy-MM-dd").parse(val);
+                              setState(() {
+                                filterFrom =
+                                    DateFormat("yyyy-MM-dd").parse(val);
                               });
                             },
                             validator: (val) {
@@ -167,13 +184,16 @@ class _ReportsPageState extends State<ReportsPage> {
                           ),
                           DateTimePicker(
                             cursorColor: getThemeColor(),
-                            initialValue: filterTill != null ? DateFormat("yyyy-MM-dd").format(filterTill!) : '',
+                            initialValue: filterTill != null
+                                ? DateFormat("yyyy-MM-dd").format(filterTill!)
+                                : '',
                             firstDate: DateTime(2000),
                             lastDate: DateTime(2100),
                             dateLabelText: 'Till',
-                            onChanged: (val){
-                              setState((){
-                                filterTill = DateFormat("yyyy-MM-dd").parse(val);
+                            onChanged: (val) {
+                              setState(() {
+                                filterTill =
+                                    DateFormat("yyyy-MM-dd").parse(val);
                               });
                             },
                             onSaved: (val) => print(val),
@@ -184,8 +204,9 @@ class _ReportsPageState extends State<ReportsPage> {
                     actions: [
                       TextButton(
                           onPressed: () async {
-                            List<Map<String, dynamic>> orders = await Order.getAll();
-                            setState((){
+                            List<Map<String, dynamic>> orders =
+                                await Order.getAll();
+                            setState(() {
                               this.orders = orders;
                               filterFrom = null;
                               filterTill = null;
@@ -195,17 +216,27 @@ class _ReportsPageState extends State<ReportsPage> {
                           child: const Text('Clear')),
                       TextButton(
                           onPressed: () async {
-                            if(filterFrom != null && filterTill != null){
-                              List<Map<String, dynamic>> orders = await Order.getAll();
-                              orders = orders.where((order) => DateTime.fromMicrosecondsSinceEpoch(order['timestamp']).isAfter(filterFrom!) && DateTime.fromMicrosecondsSinceEpoch(order['timestamp']).isBefore(filterTill!.add(const Duration(days: 1)))).toList();
-                              setState((){
+                            if (filterFrom != null && filterTill != null) {
+                              List<Map<String, dynamic>> orders =
+                                  await Order.getAll();
+                              orders = orders
+                                  .where((order) =>
+                                      DateTime.fromMicrosecondsSinceEpoch(
+                                              order['timestamp'])
+                                          .isAfter(filterFrom!) &&
+                                      DateTime.fromMicrosecondsSinceEpoch(
+                                              order['timestamp'])
+                                          .isBefore(filterTill!
+                                              .add(const Duration(days: 1))))
+                                  .toList();
+                              setState(() {
                                 this.orders = orders;
                               });
-                            }else{
-                              showSnackBar(context, "Select date range to filter");
+                            } else {
+                              showSnackBar(
+                                  context, "Select date range to filter");
                             }
                             Navigator.pop(context);
-
                           },
                           child: const Text('Filter'))
                     ],
@@ -216,10 +247,10 @@ class _ReportsPageState extends State<ReportsPage> {
             icon: const Icon(Icons.filter_alt)),
         IconButton(
             onPressed: () async {
-              try{
+              try {
                 /*String message = await PrintReport.printReceipt(orders: orders, account: widget.account, from: filterFrom, till: filterTill);
                 showSnackBar(context, message);*/
-              }catch(_){
+              } catch (_) {
                 showSnackBar(context, 'Print error');
                 return;
               }
@@ -228,9 +259,10 @@ class _ReportsPageState extends State<ReportsPage> {
         IconButton(
             onPressed: () async {
               final temp = await AppFileSystem.getShareDir();
-              final path ='$temp/${getRandomString(8)}.png';
+              final path = '$temp/${getRandomString(8)}.png';
               await File(path).writeAsBytes(await _capturePng());
-              await shareFile(path, 'Sales Report', 'Autogenerated by RestaurantPOS');
+              await shareFile(
+                  path, 'Sales Report', 'Autogenerated by RestaurantPOS');
             },
             icon: const Icon(Icons.share))
       ],
@@ -249,25 +281,23 @@ class _ReportsPageState extends State<ReportsPage> {
           orders[index]['orderType'] == 'dineIn'
               ? OrderType.dine.icon
               : orders[index]['orderType'] == 'delivery'
-              ? OrderType.delivery.icon
-              : orders[index]['orderType'] == 'takeAway'
-              ? OrderType.takeout.icon
-              : Icons.block,
+                  ? OrderType.delivery.icon
+                  : orders[index]['orderType'] == 'takeAway'
+                      ? OrderType.takeout.icon
+                      : Icons.block,
           color: orders[index]['orderType'] == 'dineIn'
               ? OrderType.dine.color
               : orders[index]['orderType'] == 'delivery'
-              ? OrderType.delivery.color
-              : orders[index]['orderType'] == 'takeAway'
-              ? OrderType.takeout.color
-              : ColorStyle.text200,
+                  ? OrderType.delivery.color
+                  : orders[index]['orderType'] == 'takeAway'
+                      ? OrderType.takeout.color
+                      : ColorStyle.text200,
         ),
         title: Text(orders[index]['customerName']),
-        subtitle: Text('#${orders[index]['id']} on ${
-            DateFormat().format(DateTime.fromMicrosecondsSinceEpoch(orders[index]['timestamp'] ?? 0))
-        }',
-        style: const TextStyle(
-          fontSize: 12
-        ),),
+        subtitle: Text(
+          '#${orders[index]['id']} on ${DateFormat().format(DateTime.fromMicrosecondsSinceEpoch(orders[index]['timestamp'] ?? 0))}',
+          style: const TextStyle(fontSize: 12),
+        ),
         trailing: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.end,
@@ -286,7 +316,7 @@ class _ReportsPageState extends State<ReportsPage> {
             ),*/
           ],
         ),
-        onTap: (){
+        onTap: () {
           /*Navigator.push(
             context,
             MaterialPageRoute(
@@ -308,9 +338,7 @@ class _ReportsPageState extends State<ReportsPage> {
             });
           });*/
         },
-
       ),
-
     );
 
     return Scaffold(
@@ -318,7 +346,6 @@ class _ReportsPageState extends State<ReportsPage> {
       body: bodyWidget(context, ordersView),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
-
         backgroundColor: getThemeColor(),
         icon: const Icon(Icons.qr_code),
         onPressed: () async {
@@ -350,7 +377,8 @@ class _ReportsPageState extends State<ReportsPage> {
               showSnackBar(context, 'Not found');
             }
           }
-        }, label: const Text("Scan"),
+        },
+        label: const Text("Scan"),
       ),
       bottomNavigationBar: BottomAppBar(
         child: Container(
@@ -359,16 +387,17 @@ class _ReportsPageState extends State<ReportsPage> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                filterFrom == null  && filterTill == null ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Today\'s Sale',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    Row(
-                      children: [
-                        /*Text(
+                filterFrom == null && filterTill == null
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Today\'s Sale',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          Row(
+                            children: [
+                              /*Text(
                           '${widget.account['currencySymbol']}${calculateTodayTaxableTotal(orders)} + ${widget.account['currencySymbol']}${calculateTodayTaxTotal(orders)}',
                           style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w500, color: ColorStyle.text400),
                         ),
@@ -379,20 +408,22 @@ class _ReportsPageState extends State<ReportsPage> {
                           '${widget.account['currencySymbol']}${calculateTodayFinalTotal(orders)}',
                           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         ),*/
-                      ],
-                    )
-                  ],
-                ) : const SizedBox.shrink(),
-                filterFrom == null  && filterTill == null ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Total Sale',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    Row(
-                      children: [
-                        /*Text(
+                            ],
+                          )
+                        ],
+                      )
+                    : const SizedBox.shrink(),
+                filterFrom == null && filterTill == null
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Total Sale',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          Row(
+                            children: [
+                              /*Text(
                           '${widget.account['currencySymbol']}${calculateAllTaxableTotal(orders)} + ${widget.account['currencySymbol']}${calculateAllTaxTotal(orders)}',
                           style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w500, color: ColorStyle.text400),
                         ),
@@ -403,20 +434,22 @@ class _ReportsPageState extends State<ReportsPage> {
                           '${widget.account['currencySymbol']}${calculateAllFinalTotal(orders)}',
                           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         )*/
-                      ],
-                    )
-                  ],
-                ) : const SizedBox.shrink(),
-                filterFrom != null  && filterTill != null ? Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Sale',
-                      style: TextStyle(fontSize: 16),
-                    ),
-                    Row(
-                      children: [
-                        /*Text(
+                            ],
+                          )
+                        ],
+                      )
+                    : const SizedBox.shrink(),
+                filterFrom != null && filterTill != null
+                    ? Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            'Sale',
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          Row(
+                            children: [
+                              /*Text(
                           '${widget.account['currencySymbol']}${calculateAllTaxableTotal(orders)} + ${widget.account['currencySymbol']}${calculateAllTaxTotal(orders)}',
                           style: TextStyle(fontSize: 12.0, fontWeight: FontWeight.w500, color: ColorStyle.text400),
                         ),
@@ -427,10 +460,11 @@ class _ReportsPageState extends State<ReportsPage> {
                           '${widget.account['currencySymbol']}${calculateAllFinalTotal(orders)}',
                           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                         )*/
-                      ],
-                    )
-                  ],
-                ) : const SizedBox.shrink(),
+                            ],
+                          )
+                        ],
+                      )
+                    : const SizedBox.shrink(),
               ],
             )),
       ),
