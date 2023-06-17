@@ -2,6 +2,7 @@ import 'package:eatery/components/notification_widget.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:eatery_db/models/company/company.dart';
 import 'package:flutter/material.dart';
+import 'package:uicons/uicons.dart';
 import '../../../activation/upgrade_page.dart';
 
 class UpgradeNotification extends StatefulWidget {
@@ -28,8 +29,8 @@ class _UpgradeNotificationState extends State<UpgradeNotification> {
             child: NotificationWidget(
               message: 'Activate License',
               header: "Upgrade",
-              leading: const Icon(
-                Icons.workspace_premium,
+              leading: Icon(
+                UIcons.regularStraight.badge,
                 color: Colors.white,
               ),
               onTap: () {

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:uicons/uicons.dart';
 
-class CustomTextFromField extends StatelessWidget {
+class CustomTextFromField extends StatefulWidget {
   const CustomTextFromField({
     Key? key,
     required this.controller,
@@ -49,68 +49,69 @@ class CustomTextFromField extends StatelessWidget {
   final FocusNode? focusNode;
 
   @override
+  State<CustomTextFromField> createState() => _CustomTextFromFieldState();
+}
+
+class _CustomTextFromFieldState extends State<CustomTextFromField> {
+  bool obscureText = true;
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      obscureText = widget.obscureText;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (title != null)
+        if (widget.title != null)
           Text(
-            title!,
+            widget.title!,
             style: TextStyle(
               color: ColorStyle.text200,
               fontSize: 12,
               fontWeight: FontWeight.w500,
             ),
           ),
-        if (title != null)
+        if (widget.title != null)
           const SizedBox(
             height: 3.0,
           ),
         TextFormField(
-          enabled: enabled,
+          enabled: widget.enabled,
           autovalidateMode: AutovalidateMode.onUserInteraction,
-          onEditingComplete: onEditingComplete,
-          onChanged: onChanged,
-          validator: validator,
-          keyboardType: keyboardType,
-          controller: controller,
+          onEditingComplete: widget.onEditingComplete,
+          onChanged: widget.onChanged,
+          validator: widget.validator,
+          keyboardType: widget.keyboardType,
+          controller: widget.controller,
           obscureText: obscureText,
-          minLines: minLines ?? 1,
-          maxLines: maxLines ?? 1,
-          textInputAction: textInputAction,
-          autofocus: autofocus,
-          focusNode: focusNode,
-          onFieldSubmitted: onFieldSubmitted,
+          minLines: widget.minLines ?? 1,
+          maxLines: widget.maxLines ?? 1,
+          textInputAction: widget.textInputAction,
+          autofocus: widget.autofocus,
+          focusNode: widget.focusNode,
+          onFieldSubmitted: widget.onFieldSubmitted,
           decoration: InputDecoration(
-            prefixIcon: prefixWidget,
-            suffixIcon: suffixWidget != null
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [suffixWidget!],
-                  )
-                : isPassword
-                    ? Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          if (obscureText)
-                            IconButton(
-                              onPressed: () => {},
-                              icon: Icon(UIcons.regularStraight.eye),
-                              color: ColorStyle.text400,
-                            )
-                          else
-                            IconButton(
-                              onPressed: () => {},
-                              icon: Icon(UIcons.regularStraight.crossed_eye),
-                              color: ColorStyle.text400,
-                            ),
-                        ],
+            prefixIcon: widget.prefixWidget,
+            suffixIcon: widget.suffixWidget != null
+                ? widget.suffixWidget!
+                : widget.isPassword
+                    ? IconButton(
+                        onPressed: () => setState(() {
+                          obscureText = !obscureText;
+                        }),
+                        icon: obscureText
+                            ? Icon(UIcons.regularStraight.eye)
+                            : Icon(UIcons.regularStraight.crossed_eye),
+                        color: ColorStyle.text400,
                       )
                     : null,
-            hintText: hint,
+            hintText: widget.hint,
             hintStyle: TextStyle(
               color: ColorStyle.text400,
               fontSize: 14,
@@ -146,14 +147,14 @@ class CustomTextFromField extends StatelessWidget {
             ),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: themeColor ?? ColorStyle.primary,
+                color: widget.themeColor ?? ColorStyle.primary,
                 width: 2,
               ),
               borderRadius: BorderRadius.circular(8),
             ),
             filled: true,
-            fillColor: enabled != null
-                ? (enabled!
+            fillColor: widget.enabled != null
+                ? (widget.enabled!
                     ? Colors.white
                     : const Color.fromRGBO(240, 240, 240, 1))
                 : Colors.white,

@@ -11,10 +11,11 @@ import 'package:eatery/constants/utils/app_file_system.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
+import 'package:uicons/uicons.dart';
 
 class BackupRestorePage extends StatefulWidget {
-  const BackupRestorePage({Key? key, required this.company}) : super(key: key);
-  final Company company;
+  const BackupRestorePage({Key? key, this.company}) : super(key: key);
+  final Company? company;
   @override
   State<BackupRestorePage> createState() => _BackupRestorePageState();
 }
@@ -201,6 +202,12 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
+      leading: IconButton(
+        icon: Icon(UIcons.regularStraight.arrow_small_left),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
       backgroundColor: getThemeColor(),
       title: const Text('Backup / Restore'),
     );

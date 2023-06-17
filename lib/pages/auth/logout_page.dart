@@ -1,4 +1,3 @@
-
 import 'package:eatery_db/models/company/company.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/pages/auth/login_page.dart';
@@ -18,18 +17,42 @@ class _LogoutPageState extends State<LogoutPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(const Duration(milliseconds: 1000),() {
+    Future.delayed(Duration.zero, () {
       Navigator.pushAndRemoveUntil(
         context,
         MaterialPageRoute(builder: (context) => const LoginPage()),
-            (Route<dynamic> route) => false,
+        (Route<dynamic> route) => false,
       );
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: LoadingScreen(),
-    );
+        body: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisSize: MainAxisSize.max,
+      children: [
+        const SizedBox(
+          height: 60,
+          width: 60,
+          child: CircularProgressIndicator(
+            color: Colors.redAccent,
+          ),
+        ),
+        Row(
+          children: [
+            Text(
+              'Logging out...',
+              style: TextStyle(
+                  color: ColorStyle.brandColor,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ],
+    ));
   }
 }

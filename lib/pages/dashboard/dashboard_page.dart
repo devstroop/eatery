@@ -16,6 +16,7 @@ import 'package:eatery/components/menu_widget_extended.dart';
 import 'package:eatery/pages/backup_restore/backup_restore_page.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uicons/uicons.dart';
 import 'components/notifications/upgrade_notification.dart';
 import 'dining_table/dining_tables_page.dart';
 import 'import_export/import_export_page.dart';
@@ -64,7 +65,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       MenuWidget(
-                        iconData: Icons.store,
+                        iconData: UIcons.regularStraight.calculator,
                         title: 'POS',
                         subtitle: 'Tap here to start your sale',
                         color: ColorStyle.primary,
@@ -77,7 +78,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         },
                       ),
                       MenuWidget(
-                        iconData: Icons.category_rounded,
+                        iconData: UIcons.regularStraight.table_tree,
                         title: 'Categories',
                         subtitle: 'Manage your product categories here',
                         color: ColorStyle.tertiary,
@@ -100,7 +101,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       MenuWidget(
-                        iconData: FontAwesomeIcons.itchIo,
+                        iconData: UIcons.regularStraight.restaurant,
                         title: 'Kitchen',
                         subtitle: 'Manage your dishes here',
                         color: const Color(0xFF2FC289),
@@ -115,7 +116,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         },
                       ),
                       MenuWidget(
-                        iconData: FontAwesomeIcons.warehouse,
+                        iconData: UIcons.regularStraight.package,
                         title: 'Inventory',
                         subtitle: 'Manage your items here',
                         color: const Color(0xFF6850EF),
@@ -139,7 +140,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       MenuWidget(
-                        iconData: Icons.table_chart,
+                        iconData: UIcons.regularStraight.eclipse,
                         title: 'Tables',
                         subtitle: 'Manage your dining tables here',
                         color: const Color(0xFFEF9050),
