@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:eatery/pages/create_company/create_company_page.dart';
 import 'package:eatery_db/eatery_db.dart';
-import 'package:eatery_db/models/company/company.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/pages/auth/login_page.dart';
 import 'package:path_provider/path_provider.dart';

@@ -50,10 +50,15 @@ class CheckoutProductCard extends StatelessWidget {
                       width: 50,
                       decoration: BoxDecoration(
                         color: ColorStyle.backgroundColorAlter,
-                        borderRadius: const BorderRadius.all(Radius.circular(6)),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(6)),
                         image: File(image ?? '').existsSync()
-                            ? DecorationImage(image: FileImage(File(image!)), fit: BoxFit.cover)
-                            : const DecorationImage(image: AssetImage('assets/images/default.jpg'), fit: BoxFit.cover),
+                            ? DecorationImage(
+                                image: FileImage(File(image!)),
+                                fit: BoxFit.cover)
+                            : const DecorationImage(
+                                image: AssetImage('assets/images/default.jpg'),
+                                fit: BoxFit.cover),
                       ),
                     ),
                   ),
@@ -69,17 +74,23 @@ class CheckoutProductCard extends StatelessWidget {
                         child: Text(
                           name,
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500, color: ColorStyle.text200),
+                          style: TextStyle(
+                              fontSize: 16.0,
+                              fontWeight: FontWeight.w500,
+                              color: ColorStyle.text200),
                         ),
                       ),
                       description != null
                           ? Flexible(
-                            child: Text(
+                              child: Text(
                                 description!,
                                 overflow: TextOverflow.ellipsis,
-                                style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400, color: ColorStyle.text400),
+                                style: TextStyle(
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w400,
+                                    color: ColorStyle.text400),
                               ),
-                          )
+                            )
                           : Container(),
                     ],
                   ),
@@ -92,7 +103,10 @@ class CheckoutProductCard extends StatelessWidget {
                 Text(
                   'x ${Calculations.compressDoubleToString(cartQuantity)} ',
                   overflow: TextOverflow.visible,
-                  style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500, color: ColorStyle.text200),
+                  style: TextStyle(
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w500,
+                      color: ColorStyle.text200),
                 ),
               ],
             ),
@@ -102,9 +116,12 @@ class CheckoutProductCard extends StatelessWidget {
             child: Column(
               children: [
                 Text(
-                  (currencySymbol ?? '') + '$priceTotal',
+                  '${currencySymbol ?? ''}$priceTotal',
                   overflow: TextOverflow.visible,
-                  style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w500, color: ColorStyle.text200),
+                  style: TextStyle(
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w500,
+                      color: ColorStyle.text200),
                 ),
               ],
             ),

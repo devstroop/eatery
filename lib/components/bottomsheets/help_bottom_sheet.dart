@@ -17,35 +17,53 @@ class HelpBottomSheet extends StatelessWidget {
             const Center(
               child: BottomViewGrip(),
             ),
-
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Column(
+                const Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text('Help', style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
-                    Text('Get support', style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),),
+                  children: [
+                    Text(
+                      'Help',
+                      style:
+                          TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      'Get support',
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                    ),
                   ],
                 ),
-                IconButton(onPressed: () async {
-                  const url = "https://devstroop.com";
-                  if (await canLaunch(url)) {
-                    await launch(url);
-                  } else {
-                    throw "Could not launch $url";
-                  }
-                }, icon: Icon(Icons.link, color: ColorStyle.brandColor))
+                IconButton(
+                    onPressed: () async {
+                      const url = "https://devstroop.com";
+                      if (await canLaunch(url)) {
+                        await launch(url);
+                      } else {
+                        throw "Could not launch $url";
+                      }
+                    },
+                    icon: Icon(Icons.link, color: ColorStyle.brandColor))
               ],
             ),
-            const SizedBox(height: 16.0,),
+            const SizedBox(
+              height: 16.0,
+            ),
             Row(
               children: [
-                Icon(Icons.phone, size: 24, color: ColorStyle.brandColor,),
+                Icon(
+                  Icons.phone,
+                  size: 24,
+                  color: ColorStyle.brandColor,
+                ),
                 const SizedBox(
                   width: 12,
                 ),
-                const Text('+91 950 100 5734', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)
+                const Text(
+                  '+91 950 100 5734',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                )
               ],
             ),
             const SizedBox(
@@ -53,11 +71,18 @@ class HelpBottomSheet extends StatelessWidget {
             ),
             Row(
               children: [
-                Icon(Icons.email, size: 24, color: ColorStyle.brandColor,),
+                Icon(
+                  Icons.email,
+                  size: 24,
+                  color: ColorStyle.brandColor,
+                ),
                 const SizedBox(
                   width: 12,
                 ),
-                const Text('help@devstroop.com', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),)
+                const Text(
+                  'help@devstroop.com',
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                )
               ],
             ),
             const SizedBox(

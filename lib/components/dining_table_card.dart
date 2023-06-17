@@ -20,7 +20,7 @@ class DiningTableCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final Color _localColor = id != null
+    final Color localColor = id != null
         ? (due != null ? ColorStyle.error : ColorStyle.success)
         : ColorStyle.text200;
     return Padding(
@@ -56,10 +56,10 @@ class DiningTableCard extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
-                color: _localColor.withOpacity(0.15),
+                color: localColor.withOpacity(0.15),
                 borderRadius: const BorderRadius.all(Radius.circular(6)),
                 border: Border.all(
-                  color: _localColor,
+                  color: localColor,
                 )),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -106,7 +106,7 @@ class DiningTableCard extends StatelessWidget {
                 if (active!)
                   Icon(
                     Icons.check_circle,
-                    color: _localColor,
+                    color: localColor,
                   )
               ],
             ),

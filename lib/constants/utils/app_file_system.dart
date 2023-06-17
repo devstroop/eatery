@@ -72,8 +72,8 @@ class AppFileSystem {
               const Center(
                 child: BottomViewGrip(),
               ),
-              Row(
-                children: const [
+              const Row(
+                children: [
                   SizedBox(
                     width: 12,
                   ),

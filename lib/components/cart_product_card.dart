@@ -15,7 +15,8 @@ class CartProductCard extends StatelessWidget {
       this.onAdd,
       this.onDeleteAll,
       required this.priceTotal,
-      this.currencySymbol, required this.mode})
+      this.currencySymbol,
+      required this.mode})
       : super(key: key);
   final String id;
   final String name;
@@ -46,8 +47,11 @@ class CartProductCard extends StatelessWidget {
                     color: ColorStyle.backgroundColorAlter,
                     borderRadius: const BorderRadius.all(Radius.circular(6)),
                     image: File(image ?? '').existsSync()
-                        ? DecorationImage(image: FileImage(File(image!)), fit: BoxFit.cover)
-                        : const DecorationImage(image: AssetImage('assets/images/default.jpg'), fit: BoxFit.cover),
+                        ? DecorationImage(
+                            image: FileImage(File(image!)), fit: BoxFit.cover)
+                        : const DecorationImage(
+                            image: AssetImage('assets/images/default.jpg'),
+                            fit: BoxFit.cover),
                   ),
                 ),
                 const SizedBox(
@@ -61,14 +65,20 @@ class CartProductCard extends StatelessWidget {
                     Text(
                       name,
                       overflow: TextOverflow.ellipsis,
-                      style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
+                      style: TextStyle(
+                          fontSize: 16.0,
+                          fontWeight: FontWeight.w600,
+                          color: ColorStyle.text200),
                     ),
                     Row(
                       children: [
                         Text(
-                          (currencySymbol ?? '') + '$priceTotal',
+                          '${currencySymbol ?? ''}$priceTotal',
                           overflow: TextOverflow.ellipsis,
-                          style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400, color: ColorStyle.text400),
+                          style: TextStyle(
+                              fontSize: 14.0,
+                              fontWeight: FontWeight.w400,
+                              color: ColorStyle.text400),
                         ),
                       ],
                     ),
@@ -91,29 +101,33 @@ class CartProductCard extends StatelessWidget {
                           ),
                         ),
                         child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(2, 1, 2, 1),
+                          padding:
+                              const EdgeInsetsDirectional.fromSTEB(2, 1, 2, 1),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               cartQuantity > 0
                                   ? InkWell(
-                                onTap: onRemove,
-                                child: Icon(
-                                  Icons.remove,
-                                  color: ColorStyle.primary,
-                                ),
-                              )
+                                      onTap: onRemove,
+                                      child: Icon(
+                                        Icons.remove,
+                                        color: ColorStyle.primary,
+                                      ),
+                                    )
                                   : Container(),
                               cartQuantity > 0
                                   ? Padding(
-                                padding: const EdgeInsetsDirectional.fromSTEB(4, 0, 4, 0),
-                                child: Text(
-                                  Calculations.compressDoubleToString(cartQuantity),
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              )
+                                      padding:
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                              4, 0, 4, 0),
+                                      child: Text(
+                                        Calculations.compressDoubleToString(
+                                            cartQuantity),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    )
                                   : Container(),
                               InkWell(
                                 onTap: onAdd,
@@ -127,13 +141,15 @@ class CartProductCard extends StatelessWidget {
                         ),
                       )
                     : Container(),
-                onDeleteAll != null ? InkWell(
-                  child: Icon(
-                    Icons.delete_outline,
-                    color: ColorStyle.error,
-                  ),
-                  onTap: onDeleteAll,
-                ) : Container()
+                onDeleteAll != null
+                    ? InkWell(
+                        onTap: onDeleteAll,
+                        child: Icon(
+                          Icons.delete_outline,
+                          color: ColorStyle.error,
+                        ),
+                      )
+                    : Container()
               ],
             )),
       ],

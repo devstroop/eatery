@@ -10,19 +10,27 @@ class UpgradeToAccessBottomSheet extends StatefulWidget {
   final Color themeColor;
   final Company? company;
   final Function(Company? company) callback;
-  const  UpgradeToAccessBottomSheet(this.context, {Key? key, required this.themeColor, required this.callback, this.company}) : super(key: key);
+  const UpgradeToAccessBottomSheet(this.context,
+      {Key? key,
+      required this.themeColor,
+      required this.callback,
+      this.company})
+      : super(key: key);
 
   @override
-  State<UpgradeToAccessBottomSheet> createState() => _UpgradeToAccessBottomSheetState();
+  State<UpgradeToAccessBottomSheet> createState() =>
+      _UpgradeToAccessBottomSheetState();
 }
 
-class _UpgradeToAccessBottomSheetState extends State<UpgradeToAccessBottomSheet> {
-  void _upgrade(){
+class _UpgradeToAccessBottomSheetState
+    extends State<UpgradeToAccessBottomSheet> {
+  void _upgrade() {
     Navigator.push(
       widget.context,
-      MaterialPageRoute(builder: (context) => UpgradePage(
-        company: widget.company,
-      )),
+      MaterialPageRoute(
+          builder: (context) => UpgradePage(
+                company: widget.company,
+              )),
     ).then((_) async {
       setState(() {
         // DO CHANGE HERE
@@ -45,7 +53,10 @@ class _UpgradeToAccessBottomSheetState extends State<UpgradeToAccessBottomSheet>
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset('assets/images/upgrade.png', width: 96.0,),
+                Image.asset(
+                  'assets/images/upgrade.png',
+                  width: 96.0,
+                ),
                 SpacingStyle.defaultVerticalSpacing,
                 const Text(
                   'Upgrade to access',
@@ -58,15 +69,18 @@ class _UpgradeToAccessBottomSheetState extends State<UpgradeToAccessBottomSheet>
                 ),
               ],
             ),
-              SpacingStyle.defaultVerticalSpacing,
-              SpacingStyle.defaultVerticalSpacing,
             SpacingStyle.defaultVerticalSpacing,
-              Row(
-                children: [
-                  PrimaryButton(color: widget.themeColor, child: const Text('Upgrade'), onPressed: _upgrade,),
-                ],
-              ),
-
+            SpacingStyle.defaultVerticalSpacing,
+            SpacingStyle.defaultVerticalSpacing,
+            Row(
+              children: [
+                PrimaryButton(
+                  color: widget.themeColor,
+                  onPressed: _upgrade,
+                  child: const Text('Upgrade'),
+                ),
+              ],
+            ),
             SpacingStyle.defaultVerticalSpacing,
           ],
         ),
