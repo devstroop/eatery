@@ -58,7 +58,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
 
   List<Widget> bodies() => [
         Body1(
-          formKey: formKeys()[0],
+          formKey: formKeys[0],
           selectedLogoPath: logoPath,
           themeColor: themeColor,
           restaurantNameController: _controllerRestaurantName,
@@ -70,15 +70,21 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
               this.logoPath = logoPath;
             });
           },
+          callbackFormKey: (formKey) => setState(() {
+            formKeys[0] = formKey;
+          }),
         ),
         Body2(
-          formKey: formKeys()[1],
+          formKey: formKeys[1],
           themeColor: themeColor,
           passwordController: _controllerPassword,
           confirmPasswordController: _controllerRetypePassword,
+          callbackFormKey: (formKey) => setState(() {
+            formKeys[1] = formKey;
+          }),
         ),
         Body3(
-          formKey: formKeys()[2],
+          formKey: formKeys[2],
           edition: edition,
           themeColor: themeColor,
           callback: (Edition edition) {
@@ -86,9 +92,12 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
               this.edition = edition;
             });
           },
+          callbackFormKey: (formKey) => setState(() {
+            formKeys[2] = formKey;
+          }),
         ),
         Body4(
-          formKey: formKeys()[3],
+          formKey: formKeys[3],
           themeColor: themeColor,
           edition: edition,
           taxNoController: _controllerTaxLicNo,
@@ -100,17 +109,23 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                 TaxType.values.singleWhere((element) => element.id == index);
             setState(() {});
           },
+          callbackFormKey: (formKey) => setState(() {
+            formKeys[3] = formKey;
+          }),
         ),
         Body5(
-          formKey: formKeys()[4],
+          formKey: formKeys[4],
           themeColor: themeColor,
           currency: currency,
           callback: (currency) {
             this.currency = currency;
           },
+          callbackFormKey: (formKey) => setState(() {
+            formKeys[4] = formKey;
+          }),
         ),
         Body6(
-          formKey: formKeys()[5],
+          formKey: formKeys[5],
           themeColor: themeColor,
           subscriptionType: subscriptionType,
           callback: (subscriptionType, purchaseCode, validFrom, validTill) {
@@ -121,20 +136,23 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
               this.validTill = validTill;
             });
           },
+          callbackFormKey: (formKey) => setState(() {
+            formKeys[5] = formKey;
+          }),
         )
       ];
 
-  List<GlobalKey<FormState>> formKeys() => [
-        GlobalKey<FormState>(),
-        GlobalKey<FormState>(),
-        GlobalKey<FormState>(),
-        GlobalKey<FormState>(),
-        GlobalKey<FormState>(),
-        GlobalKey<FormState>()
-      ];
+  List<GlobalKey<FormState>> formKeys = [
+    GlobalKey<FormState>(),
+    GlobalKey<FormState>(),
+    GlobalKey<FormState>(),
+    GlobalKey<FormState>(),
+    GlobalKey<FormState>(),
+    GlobalKey<FormState>()
+  ];
   List<Widget> bottomAppBars() => [
         CreateCompanyBottomAppBar(
-            formKey: formKeys()[0],
+            formKey: formKeys[0],
             index: 1,
             themeColor: themeColor,
             title: 'Next',
@@ -144,7 +162,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
               });
             }),
         CreateCompanyBottomAppBar(
-            formKey: formKeys()[1],
+            formKey: formKeys[1],
             index: 2,
             themeColor: themeColor,
             title: 'Next',
@@ -154,7 +172,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
               });
             }),
         CreateCompanyBottomAppBar(
-            formKey: formKeys()[2],
+            formKey: formKeys[2],
             index: 3,
             themeColor: themeColor,
             title: 'Next',
@@ -164,7 +182,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
               });
             }),
         CreateCompanyBottomAppBar(
-          formKey: formKeys()[3],
+          formKey: formKeys[3],
           index: 4,
           themeColor: themeColor,
           callback: (index) {
@@ -175,7 +193,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
           title: 'Next',
         ),
         CreateCompanyBottomAppBar(
-          formKey: formKeys()[4],
+          formKey: formKeys[4],
           index: 5,
           themeColor: themeColor,
           callback: (index) {
@@ -187,7 +205,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
         ),
         CreateCompanyBottomAppBar(
             title: 'Finish',
-            formKey: formKeys()[5],
+            formKey: formKeys[5],
             index: 6,
             themeColor: themeColor,
             callback: (index) async {

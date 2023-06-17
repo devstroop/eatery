@@ -13,6 +13,7 @@ import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/components/bottomsheets/forgot_password_bottomsheet.dart';
 import 'package:eatery/components/bottomsheets/upgrade_to_access_bottomsheet.dart';
 import 'package:eatery/components/loaders/loading_screen.dart';
+import 'package:uicons/uicons.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -68,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
         actions: [
           IconButton(
             icon: Icon(
-              Icons.settings_backup_restore,
+              UIcons.regularStraight.time_past,
               color: ColorStyle.text200,
             ),
             onPressed: () {},
@@ -145,7 +146,7 @@ class _LoginPageState extends State<LoginPage> {
                           children: [
                             CustomTextFromField(
                               themeColor: themeColor,
-                              keyboardType: TextInputType.number,
+                              keyboardType: TextInputType.text,
                               controller: _controllerPassword,
                               obscureText: true,
                               isPassword: true,

@@ -9,13 +9,14 @@ class Body5 extends StatefulWidget {
   final Currency? currency;
   final Function(Currency? currency) callback;
   final GlobalKey<FormState> formKey;
-
+  final Function(GlobalKey<FormState> formKey)? callbackFormKey;
   const Body5({
     Key? key,
     required this.themeColor,
     required this.callback,
     this.currency,
     required this.formKey,
+    this.callbackFormKey,
   }) : super(key: key);
 
   @override
@@ -55,6 +56,9 @@ class _Body5State extends State<Body5> {
                 setState(() {
                   selectedCurrency = currency;
                 });
+                if (widget.callbackFormKey != null) {
+                  widget.callbackFormKey!(widget.formKey);
+                }
                 widget.callback(currency);
               },
             ),

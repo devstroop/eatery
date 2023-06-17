@@ -9,12 +9,14 @@ class Body3 extends StatelessWidget {
   final Color themeColor;
   final Edition edition;
   final GlobalKey<FormState> formKey;
+  final Function(GlobalKey<FormState> formKey)? callbackFormKey;
   const Body3(
       {Key? key,
       required this.themeColor,
       required this.callback,
       required this.edition,
-      required this.formKey})
+      required this.formKey,
+      this.callbackFormKey})
       : super(key: key);
 
   @override
@@ -36,6 +38,7 @@ class Body3 extends StatelessWidget {
             footer: Edition.gst.description,
             selected: edition == Edition.gst,
             onTap: () {
+              if (callbackFormKey != null) callbackFormKey!(formKey);
               callback(Edition.gst);
             },
           ),
@@ -46,6 +49,7 @@ class Body3 extends StatelessWidget {
             footer: Edition.vat.description,
             selected: edition == Edition.vat,
             onTap: () {
+              if (callbackFormKey != null) callbackFormKey!(formKey);
               callback(Edition.vat);
             },
           ),

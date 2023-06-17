@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eatery/constants/style/color_style.dart';
+import 'package:uicons/uicons.dart';
 
 class CustomTextFromField extends StatelessWidget {
   const CustomTextFromField({
@@ -97,13 +98,13 @@ class CustomTextFromField extends StatelessWidget {
                           if (obscureText)
                             IconButton(
                               onPressed: () => {},
-                              icon: const Icon(Icons.visibility),
+                              icon: Icon(UIcons.regularStraight.eye),
                               color: ColorStyle.text400,
                             )
                           else
                             IconButton(
                               onPressed: () => {},
-                              icon: const Icon(Icons.visibility_off),
+                              icon: Icon(UIcons.regularStraight.crossed_eye),
                               color: ColorStyle.text400,
                             ),
                         ],

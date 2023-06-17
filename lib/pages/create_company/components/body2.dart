@@ -9,13 +9,15 @@ class Body2 extends StatelessWidget {
   final TextEditingController passwordController;
   final TextEditingController confirmPasswordController;
   final GlobalKey<FormState> formKey;
+  final Function(GlobalKey<FormState> formKey)? callbackFormKey;
 
   Body2(
       {Key? key,
       required this.themeColor,
       required this.passwordController,
       required this.confirmPasswordController,
-      required this.formKey})
+      required this.formKey,
+      this.callbackFormKey})
       : super(key: key);
 
   final focus1 = FocusNode();
@@ -45,6 +47,7 @@ class Body2 extends StatelessWidget {
             focusNode: focus1,
             textInputAction: TextInputAction.next,
             onFieldSubmitted: (v) {
+              if (callbackFormKey != null) callbackFormKey!(formKey);
               FocusScope.of(context).requestFocus(focus2);
             },
             validator: (value) {
@@ -73,6 +76,7 @@ class Body2 extends StatelessWidget {
               return null;
             },
             onFieldSubmitted: (v) {
+              if (callbackFormKey != null) callbackFormKey!(formKey);
               FocusScope.of(context).unfocus();
             },
           ),

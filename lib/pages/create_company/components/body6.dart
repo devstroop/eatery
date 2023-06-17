@@ -23,13 +23,14 @@ class Body6 extends StatefulWidget {
   String? deviceSerial;
   SubscriptionType? subscriptionType;
   final GlobalKey<FormState> formKey;
-
+  final Function(GlobalKey<FormState> formKey)? callbackFormKey;
   Body6(
       {Key? key,
       required this.themeColor,
       required this.callback,
       required this.subscriptionType,
-      required this.formKey})
+      required this.formKey,
+      this.callbackFormKey})
       : super(key: key);
 
   @override
@@ -59,6 +60,9 @@ class _Body6State extends State<Body6> {
       deviceId = null;
     }
 
+    if (widget.callbackFormKey != null) {
+      widget.callbackFormKey!(widget.formKey);
+    }
     setState(() {
       widget.deviceSerial = deviceId;
     });
@@ -92,6 +96,10 @@ class _Body6State extends State<Body6> {
             highlightColor: ColorStyle.warning,
             onTap: () {
               widget.callback(SubscriptionType.free, null, null, null);
+
+              if (widget.callbackFormKey != null) {
+                widget.callbackFormKey!(widget.formKey);
+              }
             },
           ),
           SpacingStyle.defaultVerticalSpacing,
@@ -136,6 +144,10 @@ class _Body6State extends State<Body6> {
                       setState(() {
                         _controllerPurchaseCode.text = val;
                       });
+
+                      if (widget.callbackFormKey != null) {
+                        widget.callbackFormKey!(widget.formKey);
+                      }
                     },
                     icon: const Icon(Icons.paste),
                     color: ColorStyle.text400,
@@ -164,9 +176,16 @@ class _Body6State extends State<Body6> {
                       });
                       widget.callback(SubscriptionType.premium,
                           _controllerPurchaseCode.text, validFrom, validTill);
+
+                      if (widget.callbackFormKey != null) {
+                        widget.callbackFormKey!(widget.formKey);
+                      }
                     });
                   },
                   onFieldSubmitted: (v) {
+                    if (widget.callbackFormKey != null) {
+                      widget.callbackFormKey!(widget.formKey);
+                    }
                     FocusScope.of(context).unfocus();
                   },
                 ),
@@ -174,6 +193,10 @@ class _Body6State extends State<Body6> {
             ),
             onTap: () {
               widget.callback(SubscriptionType.premium, null, null, null);
+
+              if (widget.callbackFormKey != null) {
+                widget.callbackFormKey!(widget.formKey);
+              }
             },
           ),
         ],

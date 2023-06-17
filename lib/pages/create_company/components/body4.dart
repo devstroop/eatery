@@ -18,6 +18,7 @@ class Body4 extends StatelessWidget {
   final TaxType taxType;
   final Function(int? index) onTaxTypeChanged;
   final GlobalKey<FormState> formKey;
+  final Function(GlobalKey<FormState> formKey)? callbackFormKey;
   Body4(
       {Key? key,
       required this.themeColor,
@@ -27,7 +28,8 @@ class Body4 extends StatelessWidget {
       required this.defaultTaxController,
       required this.onTaxTypeChanged,
       required this.taxType,
-      required this.formKey})
+      required this.formKey,
+      this.callbackFormKey})
       : super(key: key);
 
   final focus1 = FocusNode();
@@ -55,6 +57,7 @@ class Body4 extends StatelessWidget {
             focusNode: focus1,
             textInputAction: TextInputAction.next,
             onFieldSubmitted: (v) {
+              if (callbackFormKey != null) callbackFormKey!(formKey);
               FocusScope.of(context).requestFocus(focus2);
             },
             validator: (value) {
@@ -75,6 +78,7 @@ class Body4 extends StatelessWidget {
             focusNode: focus2,
             textInputAction: TextInputAction.next,
             onFieldSubmitted: (v) {
+              if (callbackFormKey != null) callbackFormKey!(formKey);
               FocusScope.of(context).requestFocus(focus3);
             },
             validator: (value) {
@@ -112,6 +116,7 @@ class Body4 extends StatelessWidget {
                     return null;
                   },
                   onFieldSubmitted: (v) {
+                    if (callbackFormKey != null) callbackFormKey!(formKey);
                     FocusScope.of(context).unfocus();
                   },
                 ),

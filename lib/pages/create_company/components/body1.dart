@@ -16,6 +16,7 @@ class Body1 extends StatelessWidget {
   final TextEditingController phoneController;
   final TextEditingController addressController;
   final String? selectedLogoPath;
+  final Function(GlobalKey<FormState> formKey)? callbackFormKey;
   Body1(
       {Key? key,
       required this.onChanged,
@@ -25,7 +26,8 @@ class Body1 extends StatelessWidget {
       required this.phoneController,
       required this.addressController,
       this.selectedLogoPath,
-      required this.formKey})
+      required this.formKey,
+      this.callbackFormKey})
       : super(key: key);
 
   final focus1 = FocusNode();
@@ -62,6 +64,7 @@ class Body1 extends StatelessWidget {
               hint: 'Enter company name...',
               textInputAction: TextInputAction.next,
               onFieldSubmitted: (v) {
+                if (callbackFormKey != null) callbackFormKey!(formKey);
                 FocusScope.of(context).requestFocus(focus1);
               },
               validator: (value) {
@@ -80,6 +83,7 @@ class Body1 extends StatelessWidget {
               focusNode: focus1,
               textInputAction: TextInputAction.next,
               onFieldSubmitted: (v) {
+                if (callbackFormKey != null) callbackFormKey!(formKey);
                 FocusScope.of(context).requestFocus(focus2);
               },
               validator: (value) {
@@ -99,6 +103,7 @@ class Body1 extends StatelessWidget {
               focusNode: focus2,
               textInputAction: TextInputAction.next,
               onFieldSubmitted: (v) {
+                if (callbackFormKey != null) callbackFormKey!(formKey);
                 FocusScope.of(context).requestFocus(focus3);
               },
               validator: (value) {
@@ -123,6 +128,7 @@ class Body1 extends StatelessWidget {
               return null;
             },
             onFieldSubmitted: (v) {
+              if (callbackFormKey != null) callbackFormKey!(formKey);
               FocusScope.of(context).unfocus();
             },
           ),
