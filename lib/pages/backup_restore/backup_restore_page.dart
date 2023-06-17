@@ -143,7 +143,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
       debugPrint(productCategory.toString());
     }
     pd.update(value: 80);
-    await Future.delayed(Duration(seconds: 1), () async {
+    await Future.delayed(const Duration(seconds: 1), () async {
       for (Map<String, dynamic> waiter in data['waiters']) {
         await Waiter.add(waiter);
       }

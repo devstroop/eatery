@@ -1,7 +1,5 @@
 import 'package:eatery/components/selectable_card.dart';
-import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/constants/style/spacing_style.dart';
-import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery_components/titles/page.title.dart';
 import 'package:eatery_db/models/company/edition.dart';
 import 'package:flutter/material.dart';
@@ -10,17 +8,19 @@ class Body3 extends StatelessWidget {
   final Function(Edition edition) callback;
   final Color themeColor;
   final Edition edition;
-  Body3(
+  final GlobalKey<FormState> formKey;
+  const Body3(
       {Key? key,
       required this.themeColor,
       required this.callback,
-      required this.edition})
+      required this.edition,
+      required this.formKey})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _formKey,
+      key: formKey,
       child: ListView(
         scrollDirection: Axis.vertical,
         children: [
@@ -50,39 +50,6 @@ class Body3 extends StatelessWidget {
             },
           ),
         ],
-      ),
-    );
-  }
-}
-
-final _formKey = GlobalKey<FormState>();
-
-class BAP3 extends StatelessWidget {
-  final Color themeColor;
-  final Function(int? index)? callback;
-  final int? index;
-  const BAP3({Key? key, required this.themeColor, this.callback, this.index})
-      : super(key: key);
-
-  void _submit() {
-    final isValid = _formKey.currentState!.validate();
-    if (!isValid) {
-      return;
-    }
-    _formKey.currentState!.save();
-    if (callback != null) {
-      callback!(index);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomAppBar(
-      color: ColorStyle.backgroundColorAlter,
-      child: Padding(
-        padding: SpacingStyle.defaultPadding,
-        child: PrimaryButton(
-            color: themeColor, onPressed: _submit, child: const Text('Next')),
       ),
     );
   }

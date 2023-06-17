@@ -67,7 +67,6 @@ class _CreateAccountResultPageState extends State<CreateAccountResultPage> {
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: PrimaryButton(
-            child: const Text('Continue'),
             color: ColorStyle.brandColor,
             onPressed: () {
               Navigator.pushAndRemoveUntil(
@@ -76,6 +75,7 @@ class _CreateAccountResultPageState extends State<CreateAccountResultPage> {
                 (Route<dynamic> route) => false,
               );
             },
+            child: const Text('Continue'),
           ),
         ),
       ),

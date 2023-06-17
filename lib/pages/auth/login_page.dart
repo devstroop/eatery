@@ -156,10 +156,12 @@ class _LoginPageState extends State<LoginPage> {
                                 FocusScope.of(context).unfocus();
                               },
                               validator: (value) {
-                                if (value!.trim().isEmpty)
+                                if (value!.trim().isEmpty) {
                                   return 'Pin cannot be blank';
-                                if (!value.trim().isNumericOnly)
+                                }
+                                if (!value.trim().isNumericOnly) {
                                   return 'Invalid character';
+                                }
                                 return null;
                               },
                             ),
@@ -219,9 +221,9 @@ class _LoginPageState extends State<LoginPage> {
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: PrimaryButton(
-            child: const Text('Login'),
             color: themeColor,
             onPressed: _submit,
+            child: const Text('Login'),
           ),
         ),
       ),

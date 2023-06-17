@@ -3,7 +3,6 @@ import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/constants/style/spacing_style.dart';
 import 'package:eatery/constants/utils/email_validator.dart';
 import 'package:eatery/constants/validators/phone_validator.dart';
-import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery_components/buttons/upload.button.dart';
 import 'package:eatery_components/titles/page.title.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +10,7 @@ import 'package:flutter/material.dart';
 class Body1 extends StatelessWidget {
   final Function(String? logoPath) onChanged;
   final Color themeColor;
+  final GlobalKey<FormState> formKey;
   final TextEditingController restaurantNameController;
   final TextEditingController emailController;
   final TextEditingController phoneController;
@@ -24,7 +24,8 @@ class Body1 extends StatelessWidget {
       required this.emailController,
       required this.phoneController,
       required this.addressController,
-      this.selectedLogoPath})
+      this.selectedLogoPath,
+      required this.formKey})
       : super(key: key);
 
   final focus1 = FocusNode();
@@ -34,7 +35,7 @@ class Body1 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _formKey,
+      key: formKey,
       child: ListView(
         scrollDirection: Axis.vertical,
         children: [
@@ -126,40 +127,6 @@ class Body1 extends StatelessWidget {
             },
           ),
         ],
-      ),
-    );
-  }
-}
-
-final _formKey = GlobalKey<FormState>();
-
-class BAP1 extends StatelessWidget {
-  final Color themeColor;
-  final Function(int? index)? callback;
-  final int? index;
-
-  const BAP1({Key? key, required this.themeColor, this.callback, this.index})
-      : super(key: key);
-
-  void _submit() {
-    final isValid = _formKey.currentState!.validate();
-    if (!isValid) {
-      return;
-    }
-    _formKey.currentState!.save();
-    if (callback != null) {
-      callback!(index);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomAppBar(
-      color: ColorStyle.backgroundColorAlter,
-      child: Padding(
-        padding: SpacingStyle.defaultPadding,
-        child: PrimaryButton(
-            color: themeColor, onPressed: _submit, child: const Text('Next')),
       ),
     );
   }

@@ -2,7 +2,6 @@ import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/constants/style/spacing_style.dart';
 import 'package:eatery/constants/validators/gstin_validator.dart';
-import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery_components/switches/toggle.switch.dart';
 import 'package:eatery_components/titles/page.title.dart';
 import 'package:eatery_db/models/company/edition.dart';
@@ -18,6 +17,7 @@ class Body4 extends StatelessWidget {
   final TextEditingController defaultTaxController;
   final TaxType taxType;
   final Function(int? index) onTaxTypeChanged;
+  final GlobalKey<FormState> formKey;
   Body4(
       {Key? key,
       required this.themeColor,
@@ -26,7 +26,8 @@ class Body4 extends StatelessWidget {
       required this.foodLicNoController,
       required this.defaultTaxController,
       required this.onTaxTypeChanged,
-      required this.taxType})
+      required this.taxType,
+      required this.formKey})
       : super(key: key);
 
   final focus1 = FocusNode();
@@ -35,7 +36,7 @@ class Body4 extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _formKey,
+      key: formKey,
       child: ListView(
         scrollDirection: Axis.vertical,
         children: [
@@ -104,8 +105,9 @@ class Body4 extends StatelessWidget {
                   focusNode: focus3,
                   textInputAction: TextInputAction.done,
                   validator: (value) {
-                    if (value!.trim().isNotEmpty && !value.trim().isNum)
+                    if (value!.trim().isNotEmpty && !value.trim().isNum) {
                       return 'Default ${edition.name} license number is not valid';
+                    }
                     // if (edition == Edition.gst && !value!.trim().isValidGSTIN()) return '${edition.name} license number is not valid';
                     return null;
                   },
@@ -124,39 +126,6 @@ class Body4 extends StatelessWidget {
             ],
           ),
         ],
-      ),
-    );
-  }
-}
-
-final _formKey = GlobalKey<FormState>();
-
-class BAP4 extends StatelessWidget {
-  final Color themeColor;
-  final Function(int? index)? callback;
-  final int? index;
-  const BAP4({Key? key, required this.themeColor, this.callback, this.index})
-      : super(key: key);
-
-  void _submit() {
-    final isValid = _formKey.currentState!.validate();
-    if (!isValid) {
-      return;
-    }
-    _formKey.currentState!.save();
-    if (callback != null) {
-      callback!(index);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomAppBar(
-      color: ColorStyle.backgroundColorAlter,
-      child: Padding(
-        padding: SpacingStyle.defaultPadding,
-        child: PrimaryButton(
-            child: const Text('Next'), color: themeColor, onPressed: _submit),
       ),
     );
   }

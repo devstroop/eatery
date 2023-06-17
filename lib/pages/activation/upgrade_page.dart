@@ -58,9 +58,9 @@ class _UpgradePageState extends State<UpgradePage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Column(
+                    const Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
-                      children: const [
+                      children: [
                         Text(
                           'Contact Sales',
                           style: TextStyle(
@@ -218,7 +218,6 @@ class _UpgradePageState extends State<UpgradePage> {
               Row(
                 children: [
                   PrimaryButton(
-                    child: const Text('Activate'),
                     color: getThemeColor(),
                     onPressed: () async {
                       if (selectedIndex == 1 &&
@@ -239,6 +238,7 @@ class _UpgradePageState extends State<UpgradePage> {
                         }*/
                       }
                     },
+                    child: const Text('Activate'),
                   ),
                 ],
               ),

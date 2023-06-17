@@ -1,6 +1,5 @@
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/constants/style/spacing_style.dart';
-import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery_components/titles/page.title.dart';
 import 'package:flutter/material.dart';
 import 'package:currency_picker/currency_picker.dart';
@@ -9,12 +8,14 @@ class Body5 extends StatefulWidget {
   final Color themeColor;
   final Currency? currency;
   final Function(Currency? currency) callback;
+  final GlobalKey<FormState> formKey;
 
   const Body5({
     Key? key,
     required this.themeColor,
     required this.callback,
     this.currency,
+    required this.formKey,
   }) : super(key: key);
 
   @override
@@ -33,7 +34,7 @@ class _Body5State extends State<Body5> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _formKey,
+      key: widget.formKey,
       child: ListView(
         scrollDirection: Axis.vertical,
         children: [
@@ -100,47 +101,6 @@ class _Body5State extends State<Body5> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-final _formKey = GlobalKey<FormState>();
-
-class BAP5 extends StatelessWidget {
-  final Color themeColor;
-  final Function(int? index)? callback;
-  final int? index;
-
-  const BAP5({
-    Key? key,
-    required this.themeColor,
-    this.callback,
-    this.index,
-  }) : super(key: key);
-
-  void _submit() {
-    final isValid = _formKey.currentState!.validate();
-    if (!isValid) {
-      return;
-    }
-    _formKey.currentState!.save();
-    if (callback != null) {
-      callback!(index);
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return BottomAppBar(
-      color: ColorStyle.backgroundColorAlter,
-      child: Padding(
-        padding: SpacingStyle.defaultPadding,
-        child: PrimaryButton(
-          child: const Text('Next'),
-          color: themeColor,
-          onPressed: _submit,
-        ),
       ),
     );
   }

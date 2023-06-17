@@ -1,3 +1,5 @@
+// ignore_for_file: no_leading_underscores_for_local_identifiers
+
 import 'package:currency_picker/currency_picker.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/constants/style/spacing_style.dart';
@@ -17,6 +19,7 @@ import 'components/body3.dart';
 import 'components/body4.dart';
 import 'components/body5.dart';
 import 'components/body6.dart';
+import 'components/create_company.bottomappbar.dart';
 import 'create_account_result_page.dart';
 
 class CreateCompanyPage extends StatefulWidget {
@@ -44,6 +47,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
   final TextEditingController _controllerFoodLicNo = TextEditingController();
   final TextEditingController _controllerDefaultTaxPercent =
       TextEditingController();
+
   String? purchaseCode;
   DateTime? validFrom;
   DateTime? validTill;
@@ -54,6 +58,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
 
   List<Widget> bodies() => [
         Body1(
+          formKey: formKeys()[0],
           selectedLogoPath: logoPath,
           themeColor: themeColor,
           restaurantNameController: _controllerRestaurantName,
@@ -67,11 +72,13 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
           },
         ),
         Body2(
+          formKey: formKeys()[1],
           themeColor: themeColor,
           passwordController: _controllerPassword,
           confirmPasswordController: _controllerRetypePassword,
         ),
         Body3(
+          formKey: formKeys()[2],
           edition: edition,
           themeColor: themeColor,
           callback: (Edition edition) {
@@ -81,6 +88,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
           },
         ),
         Body4(
+          formKey: formKeys()[3],
           themeColor: themeColor,
           edition: edition,
           taxNoController: _controllerTaxLicNo,
@@ -94,6 +102,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
           },
         ),
         Body5(
+          formKey: formKeys()[4],
           themeColor: themeColor,
           currency: currency,
           callback: (currency) {
@@ -101,6 +110,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
           },
         ),
         Body6(
+          formKey: formKeys()[5],
           themeColor: themeColor,
           subscriptionType: subscriptionType,
           callback: (subscriptionType, purchaseCode, validFrom, validTill) {
@@ -114,48 +124,70 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
         )
       ];
 
+  List<GlobalKey<FormState>> formKeys() => [
+        GlobalKey<FormState>(),
+        GlobalKey<FormState>(),
+        GlobalKey<FormState>(),
+        GlobalKey<FormState>(),
+        GlobalKey<FormState>(),
+        GlobalKey<FormState>()
+      ];
   List<Widget> bottomAppBars() => [
-        BAP1(
+        CreateCompanyBottomAppBar(
+            formKey: formKeys()[0],
             index: 1,
             themeColor: themeColor,
+            title: 'Next',
             callback: (index) {
               setState(() {
                 viewIndex++;
               });
             }),
-        BAP2(
+        CreateCompanyBottomAppBar(
+            formKey: formKeys()[1],
             index: 2,
             themeColor: themeColor,
+            title: 'Next',
             callback: (index) {
               setState(() {
                 viewIndex++;
               });
             }),
-        BAP3(
+        CreateCompanyBottomAppBar(
+            formKey: formKeys()[2],
             index: 3,
             themeColor: themeColor,
+            title: 'Next',
             callback: (index) {
               setState(() {
                 viewIndex++;
               });
             }),
-        BAP4(
-            index: 4,
-            themeColor: themeColor,
-            callback: (index) {
-              setState(() {
-                viewIndex++;
-              });
-            }),
-        BAP5(
-            index: 5,
-            themeColor: themeColor,
-            callback: (index) {
-              setState(() {
-                viewIndex++;
-              });
-            }),
-        BAP6(
+        CreateCompanyBottomAppBar(
+          formKey: formKeys()[3],
+          index: 4,
+          themeColor: themeColor,
+          callback: (index) {
+            setState(() {
+              viewIndex++;
+            });
+          },
+          title: 'Next',
+        ),
+        CreateCompanyBottomAppBar(
+          formKey: formKeys()[4],
+          index: 5,
+          themeColor: themeColor,
+          callback: (index) {
+            setState(() {
+              viewIndex++;
+            });
+          },
+          title: 'Next',
+        ),
+        CreateCompanyBottomAppBar(
+            title: 'Finish',
+            formKey: formKeys()[5],
             index: 6,
             themeColor: themeColor,
             callback: (index) async {
@@ -226,13 +258,16 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                   subscriptionId: subscription.id,
                   currencyId: _kCurrency?.id,
                 );
-                int result = await EateryDB().companyBox().add(company);
+                int result = await EateryDB()
+                    .companyBox()
+                    .add(company)
+                    .whenComplete(() => Navigator.of(context)
+                        .pushAndRemoveUntil(
+                            MaterialPageRoute(
+                                builder: (BuildContext context) =>
+                                    const CreateAccountResultPage()),
+                            (route) => false));
                 debugPrint('Company Added: $result');
-                Navigator.of(context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                        builder: (BuildContext context) =>
-                            const CreateAccountResultPage()),
-                    (route) => false);
               } catch (e) {
                 showSnackBar(context, e.toString());
               }

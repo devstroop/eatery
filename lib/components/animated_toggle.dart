@@ -8,13 +8,15 @@ class AnimatedToggle extends StatefulWidget {
   final Color buttonColor;
   final Color textColor;
 
-  AnimatedToggle({
+  const AnimatedToggle({
+    Key? key,
     required this.values,
     required this.onToggleCallback,
     this.backgroundColor = const Color(0xFFe7e7e8),
     this.buttonColor = const Color(0xFFFFFFFF),
     this.textColor = const Color(0xFF000000),
-  });
+  }) : super(key: key);
+
   @override
   _AnimatedToggleState createState() => _AnimatedToggleState();
 }
@@ -26,7 +28,7 @@ class _AnimatedToggleState extends State<AnimatedToggle> {
     return Container(
       width: Get.width * 0.6,
       height: Get.width * 0.13,
-      margin: EdgeInsets.all(20),
+      margin: const EdgeInsets.all(20),
       child: Stack(
         children: <Widget>[
           GestureDetector(
@@ -52,7 +54,7 @@ class _AnimatedToggleState extends State<AnimatedToggle> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: List.generate(
                   widget.values.length,
-                      (index) => Padding(
+                  (index) => Padding(
                     padding: EdgeInsets.symmetric(horizontal: Get.width * 0.05),
                     child: Text(
                       widget.values[index],
@@ -72,7 +74,7 @@ class _AnimatedToggleState extends State<AnimatedToggle> {
             duration: const Duration(milliseconds: 250),
             curve: Curves.decelerate,
             alignment:
-            initialPosition ? Alignment.centerLeft : Alignment.centerRight,
+                initialPosition ? Alignment.centerLeft : Alignment.centerRight,
             child: Container(
               width: Get.width * 0.33,
               height: Get.width * 0.13,
@@ -82,6 +84,7 @@ class _AnimatedToggleState extends State<AnimatedToggle> {
                   borderRadius: BorderRadius.circular(Get.width * 0.1),
                 ),
               ),
+              alignment: Alignment.center,
               child: Text(
                 initialPosition ? widget.values[0] : widget.values[1],
                 style: TextStyle(
@@ -91,7 +94,6 @@ class _AnimatedToggleState extends State<AnimatedToggle> {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              alignment: Alignment.center,
             ),
           ),
         ],
