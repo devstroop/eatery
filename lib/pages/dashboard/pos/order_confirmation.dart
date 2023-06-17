@@ -79,7 +79,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    '${widget.account['taxNo'] != '' ? (widget.account['taxName'] != '' ? widget.account['taxName'] : 'Tax') + ': ' : ''}${widget.account['taxNo'] != '' ? widget.account['taxNo'] + ', ' : ''}${widget.account['foodLicenseNo'] != '' ? 'FSSAI:' + widget.account['foodLicenseNo'] : ''}',
+                    '${widget.account['taxNo'] != '' ? (widget.account['taxName'] != '' ? widget.account['taxName'] : 'Tax') + ': ' : ''}${widget.account['taxNo'] != '' ? widget.account['taxNo'] + ', ' : ''}${widget.account['foodLicenseNo'] != '' ? 'FSSAI:${widget.account['foodLicenseNo']}' : ''}',
                     style: const TextStyle(
                         fontSize: 14, fontWeight: FontWeight.w400),
                   )

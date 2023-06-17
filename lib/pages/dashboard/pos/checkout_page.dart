@@ -242,7 +242,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
             child: Row(
               children: [
                 PrimaryButton(
-                  child: const Text('Save'),
                   color: widget.orderType.color!,
                   onPressed: () {
                     if (_controllerCustomerName.text.trim() == '') {
@@ -260,6 +259,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     setState(() {});
                     Navigator.pop(context);
                   },
+                  child: const Text('Save'),
                 ),
               ],
             ),
@@ -998,23 +998,23 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   children: [
                     Flexible(
                       child: PrimaryButton(
-                        child: Text(
-                            '${widget.openOrderId == null ? 'Place' : 'Update'} Order'),
                         color: widget.orderType.color ?? ColorStyle.primary,
                         onPressed: () async {
                           await placeOrderAction();
                         },
+                        child: Text(
+                            '${widget.openOrderId == null ? 'Place' : 'Update'} Order'),
                       ),
                     ),
                     if (widget.openOrderId != null) const SizedBox(width: 8.0),
                     if (widget.openOrderId != null)
                       Flexible(
                         child: PrimaryButton(
-                          child: const Text('Finish'),
                           color: ColorStyle.success,
                           onPressed: () async {
                             await placeOrderAction();
                           },
+                          child: const Text('Finish'),
                         ),
                       ),
                   ],
