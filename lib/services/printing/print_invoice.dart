@@ -14,14 +14,14 @@ class PrintInvoice {
   static Future<String> printReceipt(
       {required Map<String, dynamic> order,
       required Map<String, dynamic> account}) async {
-    List<Map<String, dynamic>> _jsons = await Printer.getAll();
-    if (_jsons.isNotEmpty) {
-      BluetoothDevice _device = BluetoothDevice.fromJson(_jsons.first);
-      BluetoothPrinter _printerBt = BluetoothPrinter(_device);
-      printerManager.selectPrinter(_printerBt);
-      PaperSize? paper = (account['prineterSize'] == '80mm')
+    List<Map<String, dynamic>> jsons = await Printer.getAll();
+    if (jsons.isNotEmpty) {
+      BluetoothDevice device = BluetoothDevice.fromJson(jsons.first);
+      BluetoothPrinter printerBt = BluetoothPrinter(device);
+      printerManager.selectPrinter(printerBt);
+      PaperSize? paper = (account['printerSize'] == '80mm')
           ? PaperSize.mm80
-          : (account['prineterSize'] == '58mm')
+          : (account['printerSize'] == '58mm')
               ? PaperSize.mm58
               : null;
       if (paper != null) {
