@@ -264,14 +264,15 @@ class _DashboardPageState extends State<DashboardPage> {
                         color: const Color(0xFFEF5350),
                         onTap: () async {
                           final prefs = await SharedPreferences.getInstance();
-                          await prefs.remove('companyId');
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => LogoutPage(
-                                      company: widget.company,
-                                    )),
-                          );
+                          await prefs.remove('companyId').then((value) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LogoutPage(
+                                        company: widget.company,
+                                      )),
+                            );
+                          });
                         },
                       ),
                     ],
