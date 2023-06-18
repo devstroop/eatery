@@ -68,9 +68,11 @@ packages:
   bluetooth_thermal_printer:
     dependency: "direct main"
     description:
-      path: "../bluetooth_thermal_printer"
-      relative: true
-    source: path
+      path: "."
+      ref: master
+      resolved-ref: fdbd56e17bdca8c6a060d60cd7fb5a0fab34c595
+      url: "https://github.com/devstroop/bluetooth_thermal_printer.git"
+    source: git
     version: "0.0.1"
   boolean_selector:
     dependency: transitive
@@ -299,23 +301,29 @@ packages:
   eatery_components:
     dependency: "direct main"
     description:
-      path: "../eatery_components"
-      relative: true
-    source: path
+      path: "."
+      ref: main
+      resolved-ref: "9e107671f7e2e0921337d3ae2c5347fc55d08845"
+      url: "https://github.com/devstroop/eatery_components.git"
+    source: git
     version: "0.0.1"
   eatery_db:
     dependency: "direct main"
     description:
-      path: "../eatery_db"
-      relative: true
-    source: path
+      path: "."
+      ref: main
+      resolved-ref: "97e192acbb825028ed2c5c1ebd7ae63d03a09c17"
+      url: "https://github.com/devstroop/eatery_db.git"
+    source: git
     version: "0.0.1"
   eatery_services:
     dependency: "direct main"
     description:
-      path: "../eatery_services"
-      relative: true
-    source: path
+      path: "."
+      ref: main
+      resolved-ref: "0062249226bef65c4938cae1b53e6bf4b809e4ce"
+      url: "https://github.com/devstroop/eatery_services.git"
+    source: git
     version: "0.0.1"
   encrypt:
     dependency: "direct main"
