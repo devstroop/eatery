@@ -221,7 +221,7 @@ class _ReportsPageState extends State<ReportsPage> {
                             validator: (val) {
                               return null;
                             },
-                            onSaved: (val) => print(val),
+                            onSaved: (val) => debugPrint(val),
                           ),
                           DateTimePicker(
                             cursorColor: getThemeColor(),
@@ -237,7 +237,7 @@ class _ReportsPageState extends State<ReportsPage> {
                                     DateFormat("yyyy-MM-dd").parse(val);
                               });
                             },
-                            onSaved: (val) => print(val),
+                            onSaved: (val) => debugPrint(val),
                           )
                         ])
                       ],

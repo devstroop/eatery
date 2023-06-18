@@ -6,7 +6,8 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as p;
 import 'package:url_launcher/url_launcher.dart';
 
-const _clientId = "43263799198-3k39t047lg9rabjbefeepl045mihsdlg.apps.googleusercontent.com";
+const _clientId =
+    "43263799198-3k39t047lg9rabjbefeepl045mihsdlg.apps.googleusercontent.com";
 const _clientSecret = "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";
 const _scopes = [ga.DriveApi.driveFileScope];
 
@@ -19,12 +20,13 @@ class GoogleDrive {
     if (credentials == null) {
       //Needs user authentication
       var authClient = await clientViaUserConsent(
-          ClientId(_clientId, _clientSecret), _scopes, (url) {
+          ClientId(_clientId, _clientSecret), _scopes, (url) async {
         //Open Url in Browser
-        launch(url);
+        await launchUrl(Uri.parse(url));
       });
       //Save Credentials
-      await storage.saveCredentials(authClient.credentials.accessToken, authClient.credentials.refreshToken!);
+      await storage.saveCredentials(authClient.credentials.accessToken,
+          authClient.credentials.refreshToken!);
       return authClient;
     } else {
       //Already authenticated
@@ -40,47 +42,49 @@ class GoogleDrive {
 
   //Upload File
   Future<ga.File> upload(File file) async {
-    try{
+    try {
       var client = await getHttpClient();
       var drive = ga.DriveApi(client);
       var response = await drive.files.create(
           ga.File()..name = p.basename(file.absolute.path),
           uploadMedia: ga.Media(file.openRead(), file.lengthSync()));
       return response;
-    }catch(_){
+    } catch (_) {
       await storage.clear();
       return upload(file);
     }
   }
+
   //Upload File
   Future<ga.File> update(File file, String fileId) async {
     try {
       var client = await getHttpClient();
       var drive = ga.DriveApi(client);
       var response = await drive.files.update(
-        ga.File()
-          ..name = p.basename(file.absolute.path),
+        ga.File()..name = p.basename(file.absolute.path),
         fileId,
         uploadMedia: ga.Media(file.openRead(), file.lengthSync()),
       );
       return response;
-    }catch(_){
+    } catch (_) {
       await storage.clear();
       return update(file, fileId);
     }
   }
+
   Future<List<ga.File>> download(List<dynamic> ids) async {
-    try{
-      List<ga.File> _files = [];
+    try {
+      List<ga.File> files = [];
       var client = await getHttpClient();
       var drive = ga.DriveApi(client);
-      for(String id in ids){
+      for (String id in ids) {
         //await drive.files.export(id, mimeType);
-        var file = await drive.files.get(id, downloadOptions: ga.DownloadOptions.fullMedia);
-        _files.add(file as ga.File);
+        var file = await drive.files
+            .get(id, downloadOptions: ga.DownloadOptions.fullMedia);
+        files.add(file as ga.File);
       }
-      return _files;
-    }catch(_){
+      return files;
+    } catch (_) {
       await storage.clear();
       return download(ids);
     }

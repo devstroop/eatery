@@ -177,8 +177,8 @@ class _EditTaxSlabSettingsPageState extends State<EditTaxSlabSettingsPage> {
           padding: const EdgeInsets.all(16.0),
           child: PrimaryButton(
             color: localColor,
-            child: const Text('Update'),
             onPressed: _submit,
+            child: const Text('Update'),
           ),
         ),
       ),

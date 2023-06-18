@@ -17,14 +17,14 @@ class Onboarding3Body extends StatelessWidget {
         SpacingStyle.defaultVerticalSpacing,
         Text(
           'Easy & safe management ',
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         SpacingStyle.defaultVerticalSpacing,
         Text(
           'A smooth transpire of data backup automatically\nso that you don’t have to worry about data',
           overflow: TextOverflow.clip,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyText2,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
       ],
     );

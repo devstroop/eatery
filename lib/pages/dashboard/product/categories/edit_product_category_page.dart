@@ -69,9 +69,10 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
                                 context, 'Linked to product, Can\'t delete');
                             return;
                           }
-                          await widget.category.delete();
-                          showSnackBar(context, 'Deleted successfully');
-                          Navigator.pop(context);
+                          widget.category.delete().whenComplete(() {
+                            showSnackBar(context, 'Deleted successfully');
+                            Navigator.pop(context);
+                          });
                         },
                         child: const Text('OK'))
                   ],
@@ -148,7 +149,6 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: PrimaryButton(
-            child: const Text('Update'),
             color: getThemeColor(),
             onPressed: () async {
               if (_controllerCategoryName.text.trim() == '') {
@@ -166,6 +166,7 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
                 showSnackBar(context, 'Failed to update');
               }
             },
+            child: const Text('Update'),
           ),
         ),
       ),

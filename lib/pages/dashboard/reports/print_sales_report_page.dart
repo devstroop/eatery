@@ -90,7 +90,6 @@ class _PrintSalesReportPageState extends State<PrintSalesReportPage> {
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: PrimaryButton(
-            child: const Text('Print'),
             color: getThemeColor(),
             onPressed: () async {
               // await PrintReport.printReceipt(
@@ -99,6 +98,7 @@ class _PrintSalesReportPageState extends State<PrintSalesReportPage> {
               //     from: from,
               //     till: till);
             },
+            child: const Text('Print'),
           ),
         ),
       ),

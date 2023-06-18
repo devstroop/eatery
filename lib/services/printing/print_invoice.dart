@@ -54,7 +54,7 @@ class PrintInvoice {
         linesAfter: 1);
 
     bytes += ticket.text(
-        '${account['taxNo'] != '' ? (account['taxName'] != '' ? account['taxName'] : 'Tax') + ': ' : ''}${account['taxNo'] != '' ? account['taxNo'] + ', ' : ''}${account['foodLicenseNo'] != '' ? 'FSSAI:' + account['foodLicenseNo'] : ''}',
+        '${account['taxNo'] != '' ? (account['taxName'] != '' ? account['taxName'] : 'Tax') + ': ' : ''}${account['taxNo'] != '' ? account['taxNo'] + ', ' : ''}${account['foodLicenseNo'] != '' ? 'FSSAI:${account['foodLicenseNo']}' : ''}',
         styles: const PosStyles(align: PosAlign.center));
     bytes += ticket.text('${account['address']}',
         styles: const PosStyles(align: PosAlign.center));

@@ -13,7 +13,7 @@ import 'package:flutter/material.dart';
 import 'edit_company_page.dart';
 
 class ShowCompanyPage extends StatefulWidget {
-  ShowCompanyPage({Key? key}) : super(key: key);
+  const ShowCompanyPage({Key? key}) : super(key: key);
 
   @override
   State<ShowCompanyPage> createState() => _ShowCompanyPageState();
@@ -173,7 +173,7 @@ class _ShowCompanyPageState extends State<ShowCompanyPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => EditCompanyPage()),
+                              builder: (context) => const EditCompanyPage()),
                         ).then((_) async {
                           postInit();
                           setState(() {});

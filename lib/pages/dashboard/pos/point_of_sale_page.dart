@@ -30,7 +30,6 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
   String? openOrderWaiterId;
   String? openOrderWaiterName;
 
-
   late OrderType orderType;
   late String? selectedProductCategory;
   late String? selectedDiningTableCategory;
@@ -82,7 +81,10 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
             padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
             child: Text(
               'Select type of order',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
+              style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w600,
+                  color: ColorStyle.text200),
             ),
           ),
           for (var orderType in OrderType.values)
@@ -107,7 +109,8 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
         ],
       );
 
-  Widget buildDiningTableViewBottomSheet() => StatefulBuilder(builder: (context, state) {
+  Widget buildDiningTableViewBottomSheet() =>
+      StatefulBuilder(builder: (context, state) {
         return ListView(shrinkWrap: true, children: [
           const Center(
             child: BottomViewGrip(),
@@ -116,7 +119,10 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
             padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
             child: Text(
               'Select Dining Table',
-              style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
+              style: TextStyle(
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.w600,
+                  color: ColorStyle.text200),
             ),
           ),
           SizedBox(
@@ -145,21 +151,29 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                         }),
                     FutureBuilder(
                         future: DiningTableCategory.getAll(),
-                        builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                          if (snapshot.connectionState == ConnectionState.done) {
+                        builder: (BuildContext context,
+                            AsyncSnapshot<dynamic> snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.done) {
                             if (snapshot.hasData) {
                               return Row(
                                 children: [
                                   for (var diningTableCategory in snapshot.data)
                                     PosCategoryWidget(
-                                        active: selectedDiningTableCategory == diningTableCategory['id'],
-                                        image: diningTableCategory['image'] != null &&
-                                                File(diningTableCategory['image']).existsSync()
-                                            ? Image.file(File(diningTableCategory['image']))
+                                        active: selectedDiningTableCategory ==
+                                            diningTableCategory['id'],
+                                        image: diningTableCategory['image'] !=
+                                                    null &&
+                                                File(diningTableCategory[
+                                                        'image'])
+                                                    .existsSync()
+                                            ? Image.file(File(
+                                                diningTableCategory['image']))
                                             : null,
                                         label: diningTableCategory['name'],
                                         onTap: () {
-                                          selectedDiningTableCategory = diningTableCategory['id'];
+                                          selectedDiningTableCategory =
+                                              diningTableCategory['id'];
                                           setState(() {});
                                           state(() {});
                                         })
@@ -229,7 +243,8 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                     child: Center(
                         child: Image.asset(
                       'assets/images/2748558.png',
-                      width: (MediaQuery.of(context).size.width < MediaQuery.of(context).size.height
+                      width: (MediaQuery.of(context).size.width <
+                                  MediaQuery.of(context).size.height
                               ? MediaQuery.of(context).size.width
                               : MediaQuery.of(context).size.height) *
                           0.5,
@@ -245,7 +260,8 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
         ]);
       });
 
-  Widget buildCartViewBottomSheet() => StatefulBuilder(builder: (context, state) {
+  Widget buildCartViewBottomSheet() =>
+      StatefulBuilder(builder: (context, state) {
         return ListView(shrinkWrap: true, children: [
           const Center(
             child: BottomViewGrip(),
@@ -257,13 +273,19 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
               children: [
                 Text(
                   'Cart',
-                  style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
+                  style: TextStyle(
+                      fontSize: 22.0,
+                      fontWeight: FontWeight.w600,
+                      color: ColorStyle.text200),
                 ),
                 Row(
                   children: [
                     Text(
                       'Subtotal',
-                      style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w400, color: ColorStyle.text200),
+                      style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.w400,
+                          color: ColorStyle.text200),
                     ),
                     const SizedBox(
                       width: 6.0,
@@ -328,12 +350,13 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
         ]);
       });
 
-  Widget buildProductDetailedViewBottomSheet({required Map<String, dynamic> product}) =>
+  Widget buildProductDetailedViewBottomSheet(
+          {required Map<String, dynamic> product}) =>
       StatefulBuilder(builder: (context, state) {
         return ListView(
           shrinkWrap: true,
-          children: [
-            const Center(
+          children: const [
+            Center(
               child: BottomViewGrip(),
             ),
             ////////////////////////////////////////////////////////////
@@ -383,7 +406,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
             ),*/
 
             ////////////////////////////////////////////////////////////
-            const SizedBox(
+            SizedBox(
               height: 20.0,
             ),
           ],
@@ -393,6 +416,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
   @override
   Widget build(BuildContext context) {
     final appBar = PreferredSize(
+      preferredSize: const Size.fromHeight(116),
       child: AppBar(
         title: const Text('POS'),
         backgroundColor: orderType.color,
@@ -400,7 +424,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
           margin: const EdgeInsets.only(top: 90, left: 12, right: 12),
           width: double.maxFinite,
           child: TextFormField(
-            onChanged: (value){
+            onChanged: (value) {
               loadProducts();
             },
             keyboardType: TextInputType.text,
@@ -431,7 +455,8 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
               ),
               filled: true,
               fillColor: Colors.white,
-              contentPadding: const EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
+              contentPadding:
+                  const EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
             ),
             style: TextStyle(
               color: ColorStyle.text200,
@@ -441,7 +466,6 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
           ),
         ),
       ),
-      preferredSize: const Size.fromHeight(116),
     );
 
     final categoryBar = SizedBox(
@@ -478,7 +502,10 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                       for (var category in productCategoriesData)
                         PosCategoryWidget(
                             active: selectedProductCategory == category['id'],
-                            image: category['image'] != null && File(category['image']).existsSync() ? Image.file(File(category['image'])) : null,
+                            image: category['image'] != null &&
+                                    File(category['image']).existsSync()
+                                ? Image.file(File(category['image']))
+                                : null,
                             label: category['name'],
                             onTap: () {
                               setState(
@@ -574,7 +601,8 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
             : SizedBox(
                 child: Padding(
                   padding: EdgeInsets.only(
-                    top: (MediaQuery.of(context).size.width < MediaQuery.of(context).size.height
+                    top: (MediaQuery.of(context).size.width <
+                                MediaQuery.of(context).size.height
                             ? MediaQuery.of(context).size.width
                             : 0.0) *
                         0.5,
@@ -582,7 +610,8 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                   child: Center(
                       child: Image.asset(
                     'assets/images/2748558.png',
-                    width: (MediaQuery.of(context).size.width < MediaQuery.of(context).size.height
+                    width: (MediaQuery.of(context).size.width <
+                                MediaQuery.of(context).size.height
                             ? MediaQuery.of(context).size.width
                             : MediaQuery.of(context).size.height) *
                         0.5,
@@ -626,14 +655,14 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
             Flexible(
               flex: 1,
               child: PrimaryButton(
-                child: const Text('Checkout'),
                 color: orderType.color!,
                 onPressed: () {
-                  if(Cart.cart.isEmpty){
+                  if (Cart.cart.isEmpty) {
                     showSnackBar(context, '* Empty cart');
                     return;
                   }
-                  if(orderType == OrderType.dine && selectedDiningTableId == null){
+                  if (orderType == OrderType.dine &&
+                      selectedDiningTableId == null) {
                     showSnackBar(context, '* Select dining table');
                     return;
                   }
@@ -685,6 +714,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                     setState((){});
                   });*/
                 },
+                child: const Text('Checkout'),
               ),
             ),
           ],
@@ -728,7 +758,6 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
               )
         : Container();
 
-
     final cartStrip = Cart.cart.isNotEmpty
         ? Container(
             height: 48,
@@ -751,7 +780,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(
+                    const Row(
                       children: [
                         /*Text(
                           '${Cart.cart.length} Item | ${widget.account['currencySymbol']}${Calculations.calculateTaxableTotal(cart: Cart.cart)}',
@@ -763,7 +792,9 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                       children: [
                         Text(
                           'Cart',
-                          style: TextStyle(fontWeight: FontWeight.bold, color: ColorStyle.backgroundColorAlter),
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: ColorStyle.backgroundColorAlter),
                         ),
                         Icon(
                           Icons.arrow_right,
@@ -788,7 +819,12 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
             right: 0.0,
             child: categoryBar,
           ),
-          Positioned(top: 60.0, left: 0.0, right: 0.0, bottom: 72, child: productsPanel),
+          Positioned(
+              top: 60.0,
+              left: 0.0,
+              right: 0.0,
+              bottom: 72,
+              child: productsPanel),
           Positioned(left: 0.0, right: 0.0, bottom: 72, child: cartStrip),
           Positioned(bottom: 0.0, left: 0.0, right: 0.0, child: bottomAppBar),
           Positioned(
@@ -796,13 +832,13 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
             right: 12.0,
             child: Draggable(
                 feedback: diningTableSelectionButton,
-                child: diningTableSelectionButton,
                 childWhenDragging: Container(),
                 onDragEnd: (details) {
                   setState(() {
                     position = details.offset;
                   });
-                }),
+                },
+                child: diningTableSelectionButton),
           ),
         ],
       ),

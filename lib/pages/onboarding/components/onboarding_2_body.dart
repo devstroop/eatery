@@ -17,14 +17,14 @@ class Onboarding2Body extends StatelessWidget {
         SpacingStyle.defaultVerticalSpacing,
         Text(
           'Quick Communication',
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         SpacingStyle.defaultVerticalSpacing,
         Text(
           'Instant KOT printing and allocation of\nresponsibility right after placing order',
           overflow: TextOverflow.clip,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyText2,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
       ],
     );

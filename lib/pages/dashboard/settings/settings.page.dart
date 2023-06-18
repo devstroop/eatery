@@ -39,7 +39,7 @@ class _SettingPageState extends State<SettingPage> {
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => ShowCompanyPage()),
+              MaterialPageRoute(builder: (context) => const ShowCompanyPage()),
             ).then((_) => setState(() {}));
           },
         ),
@@ -51,7 +51,8 @@ class _SettingPageState extends State<SettingPage> {
           color: getThemeColor(),
           onTap: () => Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => ShowCurrencyRegionPage()),
+            MaterialPageRoute(
+                builder: (context) => const ShowCurrencyRegionPage()),
           ),
         ),
         MenuTile(

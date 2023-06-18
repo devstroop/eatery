@@ -99,7 +99,6 @@ class _TaxSlabsSettingsPageState extends State<TaxSlabsSettingsPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
         onPressed: () => Navigator.push(
           context,
           MaterialPageRoute(
@@ -107,6 +106,7 @@ class _TaxSlabsSettingsPageState extends State<TaxSlabsSettingsPage> {
                   AddTaxSlabSettingsPage(company: widget.company)),
         ).then((_) => setState(() {})),
         backgroundColor: getThemeColor(),
+        child: const Icon(Icons.add),
       ),
     );
   }

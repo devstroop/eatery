@@ -17,14 +17,14 @@ class Onboarding1Body extends StatelessWidget {
         SpacingStyle.defaultVerticalSpacing,
         Text(
           'Fast & easy to access',
-          style: Theme.of(context).textTheme.headline6,
+          style: Theme.of(context).textTheme.titleLarge,
         ),
         SpacingStyle.defaultVerticalSpacing,
         Text(
           'A well thought POS system keeping user\nexperience and accessibility as priority',
           overflow: TextOverflow.clip,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyText2,
+          style: Theme.of(context).textTheme.bodyMedium,
         ),
       ],
     );

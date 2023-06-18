@@ -168,8 +168,8 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
           padding: const EdgeInsets.all(16.0),
           child: PrimaryButton(
             color: localColor,
-            child: const Text('Save'),
             onPressed: _submit,
+            child: const Text('Save'),
           ),
         ),
       ),
