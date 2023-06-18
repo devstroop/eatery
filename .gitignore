@@ -44,3 +44,9 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# custom
+/.flutter-plugins
+/.flutter-plugins-dependencies
+/.dart_tool
+/ios/Podfile.lock

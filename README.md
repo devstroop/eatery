@@ -1,16 +1,14 @@
-# eatery
+# Eatery
 
-A new Flutter project.
+A simple restaurant management with pos app for Android.
 
-## Getting Started
+# Project Information
 
-This project is a starting point for a Flutter application.
+Flutter version: `3.10.5`
+Dart SDK version: `>=2.17.2 < 3.0.0`
+Dart Tool version: `3.0.5`
+DevTools version: `2.23.1`
 
-A few resources to get you started if this is your first Flutter project:
+# Developer TODO's
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+TODO: Add developer reference here.
