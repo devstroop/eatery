@@ -8,14 +8,17 @@ import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
 class EditDiningTableCategoryPage extends StatefulWidget {
-  const EditDiningTableCategoryPage({Key? key, required this.id}) : super(key: key);
+  const EditDiningTableCategoryPage({Key? key, required this.id})
+      : super(key: key);
   final String id;
 
   @override
-  State<EditDiningTableCategoryPage> createState() => _EditDiningTableCategoryPageState();
+  State<EditDiningTableCategoryPage> createState() =>
+      _EditDiningTableCategoryPageState();
 }
 
-class _EditDiningTableCategoryPageState extends State<EditDiningTableCategoryPage> {
+class _EditDiningTableCategoryPageState
+    extends State<EditDiningTableCategoryPage> {
   final TextEditingController _controllerCategoryName = TextEditingController();
   late Map<String, dynamic>? diningTableCategory;
 
@@ -62,13 +65,16 @@ class _EditDiningTableCategoryPageState extends State<EditDiningTableCategoryPag
                     TextButton(
                         onPressed: () async {
                           Navigator.pop(context);
-                          if ((await DiningTable.getAll(category: widget.id)).isNotEmpty) {
-                            showSnackBar(context, 'Can\'t delete');
-                            return;
-                          }
-                          DiningTableCategory.delete(widget.id);
-                          showSnackBar(context, 'Deleted successfully');
-                          Navigator.pop(context);
+                          DiningTable.getAll(category: widget.id).then((value) {
+                            if (value.isNotEmpty) {
+                              showSnackBar(context, 'Can\'t delete');
+                              return;
+                            }
+                          });
+                          DiningTableCategory.delete(widget.id).then((value) {
+                            showSnackBar(context, 'Deleted successfully');
+                            Navigator.pop(context);
+                          });
                         },
                         child: const Text('OK'))
                   ],
@@ -96,25 +102,28 @@ class _EditDiningTableCategoryPageState extends State<EditDiningTableCategoryPag
               const SizedBox(
                 height: 12.0,
               ),
-              Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(
-                  'Category Name',
-                  style: TextStyle(
-                    color: ColorStyle.text200,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(
-                  height: 3.0,
-                ),
-                CustomTextFromField(
-                  controller: _controllerCategoryName,
-                  hint: 'eg. Terrace',
-                  obscureText: false,
-                  themeColor: getThemeColor(),
-                ),
-              ]),
+              Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Category Name',
+                      style: TextStyle(
+                        color: ColorStyle.text200,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 3.0,
+                    ),
+                    CustomTextFromField(
+                      controller: _controllerCategoryName,
+                      hint: 'eg. Terrace',
+                      obscureText: false,
+                      themeColor: getThemeColor(),
+                    ),
+                  ]),
               const SizedBox(
                 height: 6.0,
               ),
@@ -127,22 +136,24 @@ class _EditDiningTableCategoryPageState extends State<EditDiningTableCategoryPag
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: PrimaryButton(
-            child: const Text('Update'),
             color: getThemeColor(),
             onPressed: () async {
               if (_controllerCategoryName.text.trim() == '') {
                 showSnackBar(context, '* Category name required');
                 return;
               }
-              var response = await DiningTableCategory.update(
-                  {'id': widget.id, 'name': _controllerCategoryName.text});
-              if (response) {
-                showSnackBar(context, 'Successfully updated');
-                Navigator.of(context).pop();
-              } else {
-                showSnackBar(context, 'Failed to update');
-              }
+              DiningTableCategory.update(
+                      {'id': widget.id, 'name': _controllerCategoryName.text})
+                  .then((response) {
+                if (response) {
+                  showSnackBar(context, 'Successfully updated');
+                  Navigator.of(context).pop();
+                } else {
+                  showSnackBar(context, 'Failed to update');
+                }
+              });
             },
+            child: const Text('Update'),
           ),
         ),
       ),
