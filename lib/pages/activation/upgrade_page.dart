@@ -7,7 +7,7 @@ import 'package:platform_device_id/platform_device_id.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery/components/selectable_card.dart';
 import 'package:eatery/constants/style/color_style.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 class UpgradePage extends StatefulWidget {
   const UpgradePage({Key? key, required this.company}) : super(key: key);
@@ -76,8 +76,8 @@ class _UpgradePageState extends State<UpgradePage> {
                     IconButton(
                         onPressed: () async {
                           const url = "https://eatery.devstroop.com";
-                          if (await canLaunch(url)) {
-                            await launch(url);
+                          if (await url_launcher.canLaunchUrl(Uri.parse(url))) {
+                            await url_launcher.launchUrl(Uri.parse(url));
                           } else {
                             throw "Could not launch $url";
                           }

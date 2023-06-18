@@ -444,7 +444,6 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: PrimaryButton(
-            child: const Text('Save'),
             color: getThemeColor(),
             onPressed: () async {
               final isValid = _formKey.currentState!.validate();
@@ -474,6 +473,7 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
                 showSnackBar(context, 'Failed to create');
               }
             },
+            child: const Text('Save'),
           ),
         ),
       ),

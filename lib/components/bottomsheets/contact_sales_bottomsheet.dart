@@ -1,7 +1,7 @@
 import 'package:eatery/components/bottom_view_grip.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:flutter/material.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 class ContactSalesBottomSheet extends StatelessWidget {
   const ContactSalesBottomSheet({Key? key}) : super(key: key);
@@ -38,8 +38,8 @@ class ContactSalesBottomSheet extends StatelessWidget {
                 IconButton(
                     onPressed: () async {
                       const url = "https://eatery.devstroop.com";
-                      if (await canLaunch(url)) {
-                        await launch(url);
+                      if (await url_launcher.canLaunchUrl(Uri.parse(url))) {
+                        await url_launcher.launchUrl(Uri.parse(url));
                       } else {
                         throw "Could not launch $url";
                       }

@@ -11,7 +11,6 @@ import 'package:eatery/database/dining_table_category.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
-
 class EditDiningTablePage extends StatefulWidget {
   const EditDiningTablePage({Key? key, required this.id}) : super(key: key);
   final String id;
@@ -24,23 +23,22 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
   final TextEditingController _controllerName = TextEditingController();
   late Map<String, dynamic>? diningTable;
 
-
   @override
   initState() {
     super.initState();
     loadData();
   }
+
   loadData() async {
     var diningTable = await DiningTable.get(widget.id);
-    if(diningTable != null){
-      setState((){
+    if (diningTable != null) {
+      setState(() {
         this.diningTable = diningTable;
         selectedDiningTableCategory = this.diningTable!['category'];
         _controllerName.text = this.diningTable!['name'];
       });
     }
   }
-
 
   Color getThemeColor() {
     return ColorStyle.tertiary;
@@ -79,7 +77,10 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
               },
             );
           },
-          child: Text('Delete', style: TextStyle(color: ColorStyle.backgroundColorAlter),),
+          child: Text(
+            'Delete',
+            style: TextStyle(color: ColorStyle.backgroundColorAlter),
+          ),
         )
       ],
     );
@@ -96,25 +97,28 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
               const SizedBox(
                 height: 12.0,
               ),
-              Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(
-                  'Category Name',
-                  style: TextStyle(
-                    color: ColorStyle.text200,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(
-                  height: 3.0,
-                ),
-                CustomTextFromField(
-                  controller: _controllerName,
-                  hint: 'eg. Table 1 ',
-                  obscureText: false,
-                  themeColor: getThemeColor(),
-                ),
-              ]),
+              Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Category Name',
+                      style: TextStyle(
+                        color: ColorStyle.text200,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 3.0,
+                    ),
+                    CustomTextFromField(
+                      controller: _controllerName,
+                      hint: 'eg. Table 1 ',
+                      obscureText: false,
+                      themeColor: getThemeColor(),
+                    ),
+                  ]),
               const SizedBox(
                 height: 6.0,
               ),
@@ -130,22 +134,30 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                       children: [
                         FutureBuilder(
                             future: DiningTableCategory.getAll(),
-                            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                              if (snapshot.connectionState == ConnectionState.done) {
+                            builder: (BuildContext context,
+                                AsyncSnapshot<dynamic> snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
                                 if (snapshot.hasData) {
                                   return Row(
                                     children: [
                                       for (var category in snapshot.data)
                                         PosCategoryWidget(
-                                            active: selectedDiningTableCategory == category['id'],
-                                            image: category['image'] != null && File(category['image']).existsSync()
-                                                ? Image.file(File(category['image']))
+                                            active:
+                                                selectedDiningTableCategory ==
+                                                    category['id'],
+                                            image: category['image'] != null &&
+                                                    File(category['image'])
+                                                        .existsSync()
+                                                ? Image.file(
+                                                    File(category['image']))
                                                 : null,
                                             label: category['name'],
                                             onTap: () {
                                               setState(
                                                 () {
-                                                  selectedDiningTableCategory = category['id'];
+                                                  selectedDiningTableCategory =
+                                                      category['id'];
                                                 },
                                               );
                                             })
@@ -171,7 +183,6 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: PrimaryButton(
-            child: const Text('Update'),
             color: getThemeColor(),
             onPressed: () async {
               if (_controllerName.text.trim() == '') {
@@ -194,6 +205,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                 showSnackBar(context, 'Failed to update');
               }
             },
+            child: const Text('Update'),
           ),
         ),
       ),

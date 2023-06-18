@@ -460,7 +460,6 @@ class _EditInventoryItemState extends State<EditInventoryItem> {
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: PrimaryButton(
-            child: const Text('Save'),
             color: getThemeColor(),
             onPressed: () async {
               final isValid = _formKey.currentState!.validate();
@@ -485,6 +484,7 @@ class _EditInventoryItemState extends State<EditInventoryItem> {
                 showSnackBar(context, 'Failed to update');
               }
             },
+            child: const Text('Save'),
           ),
         ),
       ),

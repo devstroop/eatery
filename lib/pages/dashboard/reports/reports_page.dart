@@ -157,6 +157,47 @@ class _ReportsPageState extends State<ReportsPage> {
                 builder: (BuildContext context) {
                   return CustomDialogBox(
                     title: 'Filter',
+                    actions: [
+                      TextButton(
+                          onPressed: () async {
+                            Order.getAll()
+                                .then((List<Map<String, dynamic>> orders) {
+                              setState(() {
+                                this.orders = orders;
+                                filterFrom = null;
+                                filterTill = null;
+                              });
+                              Navigator.pop(context);
+                            });
+                          },
+                          child: const Text('Clear')),
+                      TextButton(
+                          onPressed: () async {
+                            if (filterFrom != null && filterTill != null) {
+                              Order.getAll()
+                                  .then((List<Map<String, dynamic>> orders) {
+                                orders = orders
+                                    .where((order) =>
+                                        DateTime.fromMicrosecondsSinceEpoch(
+                                                order['timestamp'])
+                                            .isAfter(filterFrom!) &&
+                                        DateTime.fromMicrosecondsSinceEpoch(
+                                                order['timestamp'])
+                                            .isBefore(filterTill!
+                                                .add(const Duration(days: 1))))
+                                    .toList();
+                                setState(() {
+                                  this.orders = orders;
+                                });
+                              });
+                            } else {
+                              showSnackBar(
+                                  context, "Select date range to filter");
+                            }
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Filter'))
+                    ],
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,45 +242,6 @@ class _ReportsPageState extends State<ReportsPage> {
                         ])
                       ],
                     ),
-                    actions: [
-                      TextButton(
-                          onPressed: () async {
-                            List<Map<String, dynamic>> orders =
-                                await Order.getAll();
-                            setState(() {
-                              this.orders = orders;
-                              filterFrom = null;
-                              filterTill = null;
-                            });
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Clear')),
-                      TextButton(
-                          onPressed: () async {
-                            if (filterFrom != null && filterTill != null) {
-                              List<Map<String, dynamic>> orders =
-                                  await Order.getAll();
-                              orders = orders
-                                  .where((order) =>
-                                      DateTime.fromMicrosecondsSinceEpoch(
-                                              order['timestamp'])
-                                          .isAfter(filterFrom!) &&
-                                      DateTime.fromMicrosecondsSinceEpoch(
-                                              order['timestamp'])
-                                          .isBefore(filterTill!
-                                              .add(const Duration(days: 1))))
-                                  .toList();
-                              setState(() {
-                                this.orders = orders;
-                              });
-                            } else {
-                              showSnackBar(
-                                  context, "Select date range to filter");
-                            }
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Filter'))
-                    ],
                   );
                 },
               );
@@ -298,7 +300,7 @@ class _ReportsPageState extends State<ReportsPage> {
           '#${orders[index]['id']} on ${DateFormat().format(DateTime.fromMicrosecondsSinceEpoch(orders[index]['timestamp'] ?? 0))}',
           style: const TextStyle(fontSize: 12),
         ),
-        trailing: Column(
+        trailing: const Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
@@ -388,10 +390,10 @@ class _ReportsPageState extends State<ReportsPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 filterFrom == null && filterTill == null
-                    ? Row(
+                    ? const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
+                          Text(
                             'Today\'s Sale',
                             style: TextStyle(fontSize: 16),
                           ),
@@ -414,10 +416,10 @@ class _ReportsPageState extends State<ReportsPage> {
                       )
                     : const SizedBox.shrink(),
                 filterFrom == null && filterTill == null
-                    ? Row(
+                    ? const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
+                          Text(
                             'Total Sale',
                             style: TextStyle(fontSize: 16),
                           ),
@@ -440,10 +442,10 @@ class _ReportsPageState extends State<ReportsPage> {
                       )
                     : const SizedBox.shrink(),
                 filterFrom != null && filterTill != null
-                    ? Row(
+                    ? const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          const Text(
+                          Text(
                             'Sale',
                             style: TextStyle(fontSize: 16),
                           ),

@@ -9,10 +9,12 @@ class AddDiningTableCategoryPage extends StatefulWidget {
   const AddDiningTableCategoryPage({Key? key}) : super(key: key);
 
   @override
-  State<AddDiningTableCategoryPage> createState() => _AddDiningTableCategoryPageState();
+  State<AddDiningTableCategoryPage> createState() =>
+      _AddDiningTableCategoryPageState();
 }
 
-class _AddDiningTableCategoryPageState extends State<AddDiningTableCategoryPage> {
+class _AddDiningTableCategoryPageState
+    extends State<AddDiningTableCategoryPage> {
   final TextEditingController _controllerCategoryName = TextEditingController();
 
   Color getThemeColor() {
@@ -38,26 +40,29 @@ class _AddDiningTableCategoryPageState extends State<AddDiningTableCategoryPage>
               const SizedBox(
                 height: 12.0,
               ),
-              Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(
-                  'Category Name',
-                  style: TextStyle(
-                    color: ColorStyle.text200,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(
-                  height: 3.0,
-                ),
-                CustomTextFromField(
-                  keyboardType: TextInputType.text,
-                  controller: _controllerCategoryName,
-                  hint: 'eg. Terrace',
-                  obscureText: false,
-                  themeColor: getThemeColor(),
-                ),
-              ]),
+              Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Category Name',
+                      style: TextStyle(
+                        color: ColorStyle.text200,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 3.0,
+                    ),
+                    CustomTextFromField(
+                      keyboardType: TextInputType.text,
+                      controller: _controllerCategoryName,
+                      hint: 'eg. Terrace',
+                      obscureText: false,
+                      themeColor: getThemeColor(),
+                    ),
+                  ]),
               const SizedBox(
                 height: 6.0,
               ),
@@ -70,15 +75,14 @@ class _AddDiningTableCategoryPageState extends State<AddDiningTableCategoryPage>
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: PrimaryButton(
-            child: const Text('Save'),
             color: getThemeColor(),
             onPressed: () async {
               if (_controllerCategoryName.text.trim() == '') {
                 showSnackBar(context, '* Category name required');
                 return;
               }
-              var response =
-                  await DiningTableCategory.add({'name': _controllerCategoryName.text});
+              var response = await DiningTableCategory.add(
+                  {'name': _controllerCategoryName.text});
               if (response != null) {
                 showSnackBar(context, 'Successfully created');
                 Navigator.pop(context);
@@ -86,6 +90,7 @@ class _AddDiningTableCategoryPageState extends State<AddDiningTableCategoryPage>
                 showSnackBar(context, 'Failed to create');
               }
             },
+            child: const Text('Save'),
           ),
         ),
       ),

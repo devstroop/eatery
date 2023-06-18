@@ -445,7 +445,6 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: PrimaryButton(
-            child: const Text('Save'),
             color: getThemeColor(),
             onPressed: () async {
               final isValid = _formKey.currentState!.validate();
@@ -475,6 +474,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                 showSnackBar(context, 'Failed to create');
               }
             },
+            child: const Text('Save'),
           ),
         ),
       ),

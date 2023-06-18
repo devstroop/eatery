@@ -43,26 +43,29 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
               const SizedBox(
                 height: 12.0,
               ),
-              Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(
-                  'Category Name',
-                  style: TextStyle(
-                    color: ColorStyle.text200,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(
-                  height: 3.0,
-                ),
-                CustomTextFromField(
-                  keyboardType: TextInputType.text,
-                  controller: _controllerCategoryName,
-                  hint: 'eg. Table 1 ',
-                  obscureText: false,
-                  themeColor: getThemeColor(),
-                ),
-              ]),
+              Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Category Name',
+                      style: TextStyle(
+                        color: ColorStyle.text200,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 3.0,
+                    ),
+                    CustomTextFromField(
+                      keyboardType: TextInputType.text,
+                      controller: _controllerCategoryName,
+                      hint: 'eg. Table 1 ',
+                      obscureText: false,
+                      themeColor: getThemeColor(),
+                    ),
+                  ]),
               const SizedBox(
                 height: 6.0,
               ),
@@ -78,22 +81,30 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                       children: [
                         FutureBuilder(
                             future: DiningTableCategory.getAll(),
-                            builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                              if (snapshot.connectionState == ConnectionState.done) {
+                            builder: (BuildContext context,
+                                AsyncSnapshot<dynamic> snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.done) {
                                 if (snapshot.hasData) {
                                   return Row(
                                     children: [
                                       for (var category in snapshot.data)
                                         PosCategoryWidget(
-                                            active: selectedDiningTableCategory == category['id'],
-                                            image: category['image'] != null && File(category['image']).existsSync()
-                                                ? Image.file(File(category['image']))
+                                            active:
+                                                selectedDiningTableCategory ==
+                                                    category['id'],
+                                            image: category['image'] != null &&
+                                                    File(category['image'])
+                                                        .existsSync()
+                                                ? Image.file(
+                                                    File(category['image']))
                                                 : null,
                                             label: category['name'],
                                             onTap: () {
                                               setState(
                                                 () {
-                                                  selectedDiningTableCategory = category['id'];
+                                                  selectedDiningTableCategory =
+                                                      category['id'];
                                                 },
                                               );
                                             })
@@ -119,7 +130,6 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: PrimaryButton(
-            child: const Text('Save'),
             color: getThemeColor(),
             onPressed: () async {
               if (_controllerCategoryName.text.trim() == '') {
@@ -141,6 +151,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                 showSnackBar(context, 'Failed to create');
               }
             },
+            child: const Text('Save'),
           ),
         ),
       ),
