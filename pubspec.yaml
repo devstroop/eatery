@@ -54,14 +54,18 @@ dependencies:
   devdart_windows_hdsn: ^0.0.2
   # bluetooth esc printer
   bluetooth_thermal_printer:
-    path: ../bluetooth_thermal_printer
+    # path: ../bluetooth_thermal_printer
+    url: 'https://github.com/devstroop/bluetooth_thermal_printer.git'
   # database provider
   eatery_db:
-    path: "../eatery_db"
+    # path: "../eatery_db"
+    url: 'https://github.com/devstroop/eatery_db.git'
   eatery_components:
-    path: "../eatery_components"
+    # path: "../eatery_components"
+    url: 'https://github.com/devstroop/eatery_components.git'
   eatery_services:
-    path: "../eatery_services"
+    # path: "../eatery_services"
+    url: 'https://github.com/devstroop/eatery_services.git'
 
 dev_dependencies:
   flutter_test:
