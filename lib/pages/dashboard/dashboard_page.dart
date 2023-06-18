@@ -10,7 +10,6 @@ import 'package:eatery/pages/dashboard/settings/settings.page.dart';
 import 'package:eatery/pages/dashboard/waiter/waiters_page.dart';
 import 'package:eatery_db/models/company/company.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:eatery/components/menu_widget.dart';
 import 'package:eatery/components/menu_widget_extended.dart';
 import 'package:eatery/pages/backup_restore/backup_restore_page.dart';
