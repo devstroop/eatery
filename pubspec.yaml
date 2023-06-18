@@ -57,19 +57,23 @@ dependencies:
     # path: ../bluetooth_thermal_printer
     git:
       url: 'https://github.com/devstroop/bluetooth_thermal_printer.git'
+      ref: 'master'
   # database provider
   eatery_db:
     # path: "../eatery_db"
     git:
       url: 'https://github.com/devstroop/eatery_db.git'
+      ref: 'main'
   eatery_components:
     # path: "../eatery_components"
     git:
       url: 'https://github.com/devstroop/eatery_components.git'
+      ref: 'main'
   eatery_services:
     # path: "../eatery_services"
     git:
       url: 'https://github.com/devstroop/eatery_services.git'
+      ref: 'main'
 
 dev_dependencies:
   flutter_test:
