@@ -50,3 +50,4 @@ app.*.map.json
 /.flutter-plugins-dependencies
 /.dart_tool
 /ios/Podfile.lock
+/pubspec.lock

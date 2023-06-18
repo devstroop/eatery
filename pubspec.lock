@@ -70,7 +70,7 @@ packages:
     description:
       path: "."
       ref: master
-      resolved-ref: fdbd56e17bdca8c6a060d60cd7fb5a0fab34c595
+      resolved-ref: f7f9043592c25d815c0b23e8e8128551ca2f62d6
       url: "https://github.com/devstroop/bluetooth_thermal_printer.git"
     source: git
     version: "0.0.1"
@@ -303,7 +303,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "9e107671f7e2e0921337d3ae2c5347fc55d08845"
+      resolved-ref: "20f96759362fc134dad5ba476fb0b5293a3e6b51"
       url: "https://github.com/devstroop/eatery_components.git"
     source: git
     version: "0.0.1"
@@ -312,7 +312,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "97e192acbb825028ed2c5c1ebd7ae63d03a09c17"
+      resolved-ref: b013e76623e9ddb5e7a901e9ee4aa85a7279a3fd
       url: "https://github.com/devstroop/eatery_db.git"
     source: git
     version: "0.0.1"
@@ -321,7 +321,7 @@ packages:
     description:
       path: "."
       ref: main
-      resolved-ref: "0062249226bef65c4938cae1b53e6bf4b809e4ce"
+      resolved-ref: fa8ed27c31e8d9e9aae06628e8f3b49b33def6fe
       url: "https://github.com/devstroop/eatery_services.git"
     source: git
     version: "0.0.1"
