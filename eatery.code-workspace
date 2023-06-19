@@ -1,0 +1,28 @@
+{
+	"folders": [
+		{
+			"path": "../eatery"
+		},
+		{
+			"path": "../eatery_components"
+		},
+		{
+			"path": "../eatery_db"
+		},
+		{
+			"path": "../eatery_services"
+		},
+		{
+			"path": "../bluetooth_thermal_printer"
+		}
+	],
+	"settings": {
+		"cSpell.words": [
+			"greyscale",
+			"resterized",
+			"Roboto",
+			"rxdart",
+			"uicons"
+		]
+	}
+}

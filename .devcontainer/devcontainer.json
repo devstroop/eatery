@@ -1,5 +1,7 @@
 {
-  "image": "cirrusci/flutter:stable",
-  "forwardPorts": [3000],
-  // "postCreateCommand": "sudo su && cd .. && git clone https://github.com/devstroop/eatery_db && git clone https://github.com/devstroop/eatery_components && git clone https://github.com/devstroop/eatery_services && git clone https://github.com/devstroop/bluetooth_thermal_printer"
+  "name": "Flutter Mobile Dev",
+  "forwardPorts": [5555],
+  "dockerFile": "Dockerfile",
+  "remoteUser": "vscode",
+  "postCreateCommand": "flutter doctor && flutter pub get && cd /workspace/eatery_components && flutter pub get && cd /workspace/eatery_db && flutter pub get && cd /workspace/eatery_services && flutter pub get && cd /workspace/bluetooth_thermal_printer && flutter pub get"
 }
