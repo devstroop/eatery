@@ -1,3 +1,4 @@
+import 'package:eatery/components/labeled_custom_text_from_field.dart';
 import 'package:eatery_components/buttons/upload.button.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:eatery_db/models/product/product_category.dart';
@@ -6,6 +7,7 @@ import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
+import 'package:uicons/uicons.dart';
 
 class AddProductCategoryPage extends StatefulWidget {
   const AddProductCategoryPage({Key? key}) : super(key: key);
@@ -17,6 +19,8 @@ class AddProductCategoryPage extends StatefulWidget {
 class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
   String? pickedImagePath;
   final TextEditingController _controllerCategoryName = TextEditingController();
+  final TextEditingController _controllerCategoryDescription =
+      TextEditingController();
 
   Color getThemeColor() {
     return ColorStyle.tertiary;
@@ -25,18 +29,25 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
+      foregroundColor: Colors.white,
       backgroundColor: getThemeColor(),
+      leading: IconButton(
+        icon: Icon(UIcons.regularStraight.arrow_small_left),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
       title: const Text('Add Product Category'),
     );
     return Scaffold(
       appBar: appBar,
-      body: SingleChildScrollView(
+      body: InkWell(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
         child: Padding(
           padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
+          child: ListView(
             children: [
               const SizedBox(
                 height: 12.0,
@@ -81,44 +92,53 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
               const SizedBox(
                 height: 6.0,
               ),
+              LabeledCustomTextFromField(
+                label: 'Description',
+                foregroundColor: ColorStyle.text200,
+                backgroundColor: getThemeColor(),
+                controller: _controllerCategoryDescription,
+                multiline: true,
+                description: 'eg. Starters are the best',
+              ),
+              const SizedBox(
+                height: 6.0,
+              ),
             ],
           ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
         color: ColorStyle.backgroundColorAlter,
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: PrimaryButton(
-            color: getThemeColor(),
-            onPressed: () async {
-              if (_controllerCategoryName.text.trim() == '') {
-                showSnackBar(context, '* Category name required');
-                return;
-              }
-              try {
-                EateryDB()
-                    .productCategoryBox()
-                    .add(ProductCategory(
-                        id: EateryDB().getNewIdentity(
-                            EateryDB().productCategoryBox().values),
-                        name: _controllerCategoryName.text,
-                        image: pickedImagePath))
-                    .then((response) {
-                  if (response == 1) {
-                    showSnackBar(context, 'Created successfully');
-                  } else {
-                    showSnackBar(context, 'Failed to create');
-                  }
-                }).whenComplete(() {
-                  Navigator.pop(context);
-                });
-              } catch (_) {
-                showSnackBar(context, 'Failed to create');
-              }
-            },
-            child: const Text('Save'),
-          ),
+        child: PrimaryButton(
+          color: getThemeColor(),
+          onPressed: () async {
+            if (_controllerCategoryName.text.trim() == '') {
+              showSnackBar(context, '* Category name required');
+              return;
+            }
+            try {
+              EateryDB()
+                  .productCategoryBox()
+                  .add(ProductCategory(
+                      id: EateryDB().getNewIdentity(
+                          EateryDB().productCategoryBox().values),
+                      name: _controllerCategoryName.text,
+                      description: _controllerCategoryDescription.text,
+                      image: pickedImagePath))
+                  .then((response) {
+                if (response == 1) {
+                  showSnackBar(context, 'Created successfully');
+                } else {
+                  showSnackBar(context, 'Failed to create');
+                }
+              }).whenComplete(() {
+                Navigator.pop(context);
+              });
+            } catch (_) {
+              showSnackBar(context, 'Failed to create');
+            }
+          },
+          child: const Text('Save'),
         ),
       ),
     );

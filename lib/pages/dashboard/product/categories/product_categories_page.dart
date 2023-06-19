@@ -4,6 +4,7 @@ import 'package:eatery_db/eatery_db.dart';
 import 'package:eatery_services/eatery_services.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/constants/style/color_style.dart';
+import 'package:uicons/uicons.dart';
 import 'add_product_category_page.dart';
 import 'edit_product_category_page.dart';
 
@@ -19,91 +20,85 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
-      backgroundColor: themeColor,
-      title: const Text('Product Categories'),
-    );
-    final categoriesPanel = SizedBox(
-      width: double.maxFinite,
-      height: double.maxFinite,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.vertical,
-        child: Wrap(
-          spacing: 4.0,
-          runSpacing: 4.0,
-          alignment: WrapAlignment.center,
-          children: [
-            SizedBox(
-              height: 50.0,
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  PosCategoryWidget(
-                    label: "Uncategorized",
-                    image: null,
-                    onTap: (){ },
-                  ),
-                ],
-              ),
-            ),
-            for (var category in EateryDB().productCategoryBox().values)
-              SizedBox(
-                height: 50.0,
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    FutureBuilder<String>(
-                      future: FileServices.absImage(category.image ?? ''),
-                      builder: (BuildContext context, AsyncSnapshot<String> snapshot) {
-                        if (!snapshot.hasData) {
-                          return const SizedBox.shrink();
-                        } else {
-                          return PosCategoryWidget(
-                            label: category.name,
-                            image: category.image != null &&
-                                File(snapshot.data!).existsSync()
-                                ? Image.file(File(snapshot.data!))
-                                : null,
-                            onTap: (){
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => EditProductCategoryPage(category: category,)),
-                              ).then((_) => setState(() {}));
-                            },
-                          );
-                        }
-                      },
-                    ),
-
-                  ],
-                ),
-              )
-          ],
-        )
-      ),
-    );
+        backgroundColor: themeColor,
+        foregroundColor: Colors.white,
+        title: const Text('Product Categories'),
+        leading: IconButton(
+          icon: Icon(UIcons.regularStraight.arrow_small_left),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ));
     return Scaffold(
       backgroundColor: ColorStyle.backgroundColor,
       appBar: appBar,
-      body: Stack(
+      body: ListView(
         children: [
-          Positioned(
-              top: 12.0,
-              left: 0.0,
-              right: 0.0,
-              bottom: 72,
-              child: categoriesPanel
+          ListTile(
+            title: const Text('None'),
+            subtitle: const Text('No category'),
+            trailing: Icon(
+              UIcons.regularStraight.ban,
+              size: 18,
+            ),
+            leading: SizedBox(
+              width: 50.0,
+              height: 50.0,
+              child: Image.asset(
+                'assets/images/no-image.jpg',
+                fit: BoxFit.cover,
+              ),
+            ),
+            onTap: () {},
           ),
+          ...EateryDB().productCategoryBox().values.map((e) {
+            return ListTile(
+              title: Text(e.name),
+              subtitle: Text(e.description ?? ''),
+              trailing: Icon(UIcons.regularStraight.arrow_small_right),
+              leading: FutureBuilder<String>(
+                future: FileServices.absImage(e.image ?? ''),
+                builder:
+                    (BuildContext context, AsyncSnapshot<String> snapshot) {
+                  if (!snapshot.hasData) {
+                    return const SizedBox.shrink();
+                  } else {
+                    return SizedBox(
+                        width: 50.0,
+                        height: 50.0,
+                        child:
+                            e.image != null && File(snapshot.data!).existsSync()
+                                ? Image.file(File(snapshot.data!))
+                                : Image.asset(
+                                    'assets/images/no-image.jpg',
+                                    fit: BoxFit.cover,
+                                  ));
+                  }
+                },
+              ),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => EditProductCategoryPage(
+                            category: e,
+                          )),
+                ).then((_) => setState(() {}));
+              },
+            );
+          }),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
+        foregroundColor: Colors.white,
         backgroundColor: themeColor,
-        icon: const Icon(Icons.add),
+        icon: Icon(UIcons.regularStraight.add_folder),
         label: const Text('New'),
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AddProductCategoryPage()),
+            MaterialPageRoute(
+                builder: (context) => const AddProductCategoryPage()),
           ).then((_) => setState(() {}));
         },
       ),

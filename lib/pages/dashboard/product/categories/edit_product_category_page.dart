@@ -7,6 +7,11 @@ import 'package:eatery/components/dialog_box.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
+import 'package:uicons/uicons.dart';
+
+import '../../../../components/labeled_custom_text_from_field.dart';
+
+Color _pageColor = ColorStyle.tertiary;
 
 class EditProductCategoryPage extends StatefulWidget {
   const EditProductCategoryPage({Key? key, required this.category})
@@ -21,6 +26,7 @@ class EditProductCategoryPage extends StatefulWidget {
 class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
   String? pickedImagePath;
   final TextEditingController _controllerCategoryName = TextEditingController();
+  final TextEditingController _controllerDescription = TextEditingController();
 
   @override
   initState() {
@@ -28,20 +34,24 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
     setState(() {
       pickedImagePath = widget.category.image;
       _controllerCategoryName.text = widget.category.name;
+      _controllerDescription.text = widget.category.description ?? '';
     });
-  }
-
-  Color getThemeColor() {
-    return ColorStyle.tertiary;
   }
 
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
-      backgroundColor: getThemeColor(),
+      backgroundColor: _pageColor,
+      foregroundColor: Colors.white,
+      leading: IconButton(
+        icon: Icon(UIcons.regularStraight.arrow_small_left),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
       title: const Text('Edit Product Category'),
       actions: [
-        TextButton(
+        IconButton(
           onPressed: () async {
             showDialog(
               context: context,
@@ -80,29 +90,29 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
               },
             );
           },
-          child: Text(
-            'Delete',
-            style: TextStyle(color: ColorStyle.backgroundColorAlter),
+          icon: Icon(
+            UIcons.regularStraight.trash,
+            color: Colors.white.withAlpha(200),
           ),
         )
       ],
     );
     return Scaffold(
       appBar: appBar,
-      body: SingleChildScrollView(
+      body: InkWell(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
         child: Padding(
           padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
+          child: ListView(
             children: [
               const SizedBox(
                 height: 12.0,
               ),
               UploadButton(
                 label: 'Product Category Image',
-                primaryColor: getThemeColor(),
+                primaryColor: _pageColor,
                 secondaryColor: ColorStyle.text200,
                 uploadType: UploadType.image,
                 filePath: pickedImagePath,
@@ -115,28 +125,26 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
               const SizedBox(
                 height: 6.0,
               ),
-              Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Category Name',
-                      style: TextStyle(
-                        color: ColorStyle.text200,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 3.0,
-                    ),
-                    CustomTextFromField(
-                      controller: _controllerCategoryName,
-                      hint: 'eg. Starters',
-                      obscureText: false,
-                      themeColor: getThemeColor(),
-                    ),
-                  ]),
+              LabeledCustomTextFromField(
+                label: 'Category Name',
+                controller: _controllerCategoryName,
+                description: 'eg. Starters',
+                obscureText: false,
+                backgroundColor: _pageColor,
+                foregroundColor: ColorStyle.text200,
+              ),
+              const SizedBox(
+                height: 6.0,
+              ),
+              LabeledCustomTextFromField(
+                label: 'Description',
+                controller: _controllerDescription,
+                description: 'eg. Starters are the best',
+                obscureText: false,
+                backgroundColor: _pageColor,
+                foregroundColor: ColorStyle.text200,
+                multiline: true,
+              ),
               const SizedBox(
                 height: 6.0,
               ),
@@ -146,28 +154,26 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
       ),
       bottomNavigationBar: BottomAppBar(
         color: ColorStyle.backgroundColorAlter,
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: PrimaryButton(
-            color: getThemeColor(),
-            onPressed: () async {
-              if (_controllerCategoryName.text.trim() == '') {
-                showSnackBar(context, '* Category name required');
-                return;
-              }
+        child: PrimaryButton(
+          color: _pageColor,
+          onPressed: () async {
+            if (_controllerCategoryName.text.trim() == '') {
+              showSnackBar(context, '* Category name required');
+              return;
+            }
 
-              try {
-                widget.category.name = _controllerCategoryName.text.trim();
-                widget.category.image = pickedImagePath;
-                widget.category.save();
-                showSnackBar(context, 'Successfully updated');
-                Navigator.of(context).pop();
-              } catch (_) {
-                showSnackBar(context, 'Failed to update');
-              }
-            },
-            child: const Text('Update'),
-          ),
+            try {
+              widget.category.name = _controllerCategoryName.text.trim();
+              widget.category.description = _controllerDescription.text.trim();
+              widget.category.image = pickedImagePath;
+              widget.category.save();
+              showSnackBar(context, 'Successfully updated');
+              Navigator.of(context).pop();
+            } catch (_) {
+              showSnackBar(context, 'Failed to update');
+            }
+          },
+          child: const Text('Update'),
         ),
       ),
     );
