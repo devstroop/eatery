@@ -52,3 +52,4 @@ app.*.map.json
 /ios/Podfile.lock
 /pubspec.lock
 ios/Podfile.lock
+.dart_tool 3/flutter_build/d8d009d718601037ea3e2a8e5e7b65a7/debug_unpack_ios.stamp
