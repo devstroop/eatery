@@ -43,6 +43,7 @@ class _UpgradePageState extends State<UpgradePage> {
     }
 
     final appBar = AppBar(
+      foregroundColor: Colors.white,
       backgroundColor: getThemeColor(),
       title: const Text('Upgrade'),
       leading: IconButton(
@@ -83,13 +84,13 @@ class _UpgradePageState extends State<UpgradePage> {
                     IconButton(
                         onPressed: () async {
                           const url = "https://eatery.devstroop.com";
-                          if (await url_launcher.canLaunchUrl(Uri.parse(url))) {
-                            await url_launcher.launchUrl(Uri.parse(url));
-                          } else {
-                            throw "Could not launch $url";
-                          }
+                          url_launcher.canLaunchUrl(Uri.parse(url)).then(
+                              (value) => value
+                                  ? url_launcher.launchUrl(Uri.parse(url))
+                                  : throw "Could not launch $url");
                         },
-                        icon: Icon(Icons.link, color: ColorStyle.brandColor))
+                        icon: Icon(UIcons.regularStraight.link,
+                            color: ColorStyle.brandColor))
                   ],
                 ),
                 const SizedBox(
@@ -98,7 +99,7 @@ class _UpgradePageState extends State<UpgradePage> {
                 Row(
                   children: [
                     Icon(
-                      Icons.phone,
+                      UIcons.regularStraight.phone_call,
                       size: 24,
                       color: ColorStyle.brandColor,
                     ),
@@ -108,7 +109,7 @@ class _UpgradePageState extends State<UpgradePage> {
                     const Text(
                       '+91 950 100 5734',
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                     )
                   ],
                 ),
@@ -118,7 +119,7 @@ class _UpgradePageState extends State<UpgradePage> {
                 Row(
                   children: [
                     Icon(
-                      Icons.email,
+                      UIcons.regularStraight.envelope,
                       size: 24,
                       color: ColorStyle.brandColor,
                     ),
@@ -128,7 +129,7 @@ class _UpgradePageState extends State<UpgradePage> {
                     const Text(
                       'help@devstroop.com',
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
                     )
                   ],
                 ),
@@ -197,64 +198,61 @@ class _UpgradePageState extends State<UpgradePage> {
       ),
       bottomNavigationBar: BottomAppBar(
         color: ColorStyle.backgroundColorAlter,
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Flexible(
-                fit: FlexFit.tight,
-                flex: 1,
-                child: SecondaryButton(
-                  color: ColorStyle.text300,
-                  borderColor: ColorStyle.text400,
-                  text: 'Contact Sales',
-                  height: 50.0,
-                  onTap: () => showModalBottomSheet(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(24),
-                          topRight: Radius.circular(24),
-                          bottomLeft: Radius.circular(0),
-                          bottomRight: Radius.circular(0),
-                        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Flexible(
+              fit: FlexFit.tight,
+              flex: 1,
+              child: SecondaryButton(
+                color: ColorStyle.text300,
+                borderColor: ColorStyle.text400,
+                text: 'Contact Sales',
+                height: 50.0,
+                onTap: () => showModalBottomSheet(
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(24),
+                        topRight: Radius.circular(24),
+                        bottomLeft: Radius.circular(0),
+                        bottomRight: Radius.circular(0),
                       ),
-                      context: context,
-                      builder: (context) => buildContactSalesBottomSheet()),
-                ),
+                    ),
+                    context: context,
+                    builder: (context) => buildContactSalesBottomSheet()),
               ),
-              const SizedBox(
-                width: 8.0,
-              ),
-              Flexible(
-                flex: 1,
-                fit: FlexFit.tight,
-                child: PrimaryButton(
-                  color: getThemeColor(),
-                  onPressed: () async {
-                    if (selectedIndex == 1 &&
-                        controllerPurchaseCode.text != '') {
-                      /*LicenseData licData = License.validate(controllerPurchaseCode.text);
-                      if (licData.status) {
-                        */ /*Map<String, dynamic> account = widget.account;
-                        account['purchaseCode'] = licData.purchaseCode;
-                        var status = await Account.update(account);
-                        if (status) {
-                          showSnackBar(context, "Activated successfully");
-                          Navigator.pop(context);
-                        } else {
-                          showSnackBar(context, "Activation failed");
-                        }*/ /*
+            ),
+            const SizedBox(
+              width: 8.0,
+            ),
+            Flexible(
+              flex: 1,
+              fit: FlexFit.tight,
+              child: PrimaryButton(
+                height: 50.0,
+                color: getThemeColor(),
+                onPressed: () async {
+                  if (selectedIndex == 1 && controllerPurchaseCode.text != '') {
+                    /*LicenseData licData = License.validate(controllerPurchaseCode.text);
+                    if (licData.status) {
+                      */ /*Map<String, dynamic> account = widget.account;
+                      account['purchaseCode'] = licData.purchaseCode;
+                      var status = await Account.update(account);
+                      if (status) {
+                        showSnackBar(context, "Activated successfully");
+                        Navigator.pop(context);
                       } else {
-                        showSnackBar(context, licData.message);
-                      }*/
-                    }
-                  },
-                  child: const Text('Activate'),
-                ),
+                        showSnackBar(context, "Activation failed");
+                      }*/ /*
+                    } else {
+                      showSnackBar(context, licData.message);
+                    }*/
+                  }
+                },
+                child: const Text('Activate'),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

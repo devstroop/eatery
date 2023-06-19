@@ -1,6 +1,7 @@
 import 'package:eatery/components/bottom_view_grip.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:flutter/material.dart';
+import 'package:uicons/uicons.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 class ContactSalesBottomSheet extends StatelessWidget {
@@ -44,7 +45,7 @@ class ContactSalesBottomSheet extends StatelessWidget {
                         throw "Could not launch $url";
                       }
                     },
-                    icon: Icon(Icons.link, color: ColorStyle.brandColor))
+                    icon: Icon(UIcons.regularStraight.link))
               ],
             ),
             const SizedBox(
@@ -53,7 +54,7 @@ class ContactSalesBottomSheet extends StatelessWidget {
             Row(
               children: [
                 Icon(
-                  Icons.phone,
+                  UIcons.regularStraight.phone_call,
                   size: 24,
                   color: ColorStyle.brandColor,
                 ),
@@ -72,7 +73,7 @@ class ContactSalesBottomSheet extends StatelessWidget {
             Row(
               children: [
                 Icon(
-                  Icons.email,
+                  UIcons.regularStraight.envelope,
                   size: 24,
                   color: ColorStyle.brandColor,
                 ),

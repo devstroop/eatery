@@ -176,10 +176,10 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
         InkWell(
           onTap: () {},
           child: MenuTile(
-            prefixIcon: Icons.backup,
+            prefixIcon: UIcons.regularStraight.time_past,
             title: 'Backup',
             subtitle: 'Backup your settings data to Google Drive',
-            postfixIcon: Icons.arrow_forward_ios_sharp,
+            postfixIcon: UIcons.regularStraight.arrow_small_right,
             color: getThemeColor(),
             onTap: doBackUp,
           ),
@@ -187,10 +187,10 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
         InkWell(
           onTap: () {},
           child: MenuTile(
-            prefixIcon: Icons.restore,
+            prefixIcon: UIcons.regularStraight.time_forward,
             title: 'Restore',
             subtitle: 'Restore your settings data from Google Drive',
-            postfixIcon: Icons.arrow_forward_ios_sharp,
+            postfixIcon: UIcons.regularStraight.arrow_small_right,
             color: getThemeColor(),
             onTap: doRestore,
           ),
@@ -209,6 +209,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
         },
       ),
       backgroundColor: getThemeColor(),
+      foregroundColor: Colors.white,
       title: const Text('Backup / Restore'),
     );
 

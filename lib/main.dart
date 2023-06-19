@@ -45,6 +45,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'Eatery',
         theme: ThemeData(
+          useMaterial3: true,
           primarySwatch: Colors.blue,
         ),
         home: Scaffold(

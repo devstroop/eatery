@@ -72,14 +72,11 @@ class _UpgradeToAccessBottomSheetState
             SpacingStyle.defaultVerticalSpacing,
             SpacingStyle.defaultVerticalSpacing,
             SpacingStyle.defaultVerticalSpacing,
-            Row(
-              children: [
-                PrimaryButton(
-                  color: widget.themeColor,
-                  onPressed: _upgrade,
-                  child: const Text('Upgrade'),
-                ),
-              ],
+            PrimaryButton(
+              height: 50,
+              color: widget.themeColor,
+              onPressed: _upgrade,
+              child: const Text('Upgrade'),
             ),
             SpacingStyle.defaultVerticalSpacing,
           ],

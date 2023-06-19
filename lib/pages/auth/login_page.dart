@@ -252,13 +252,11 @@ class _LoginPageState extends State<LoginPage> {
           true, // Enable auto resize to avoid the keyboard
       bottomNavigationBar: BottomAppBar(
         color: ColorStyle.backgroundColorAlter,
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: PrimaryButton(
-            color: themeColor,
-            onPressed: _submit,
-            child: const Text('Login'),
-          ),
+        child: PrimaryButton(
+          height: 50,
+          color: themeColor,
+          onPressed: _submit,
+          child: const Text('Login'),
         ),
       ),
     );
