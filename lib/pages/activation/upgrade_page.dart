@@ -47,7 +47,7 @@ class _UpgradePageState extends State<UpgradePage> {
       backgroundColor: getThemeColor(),
       title: const Text('Upgrade'),
       leading: IconButton(
-        icon: Icon(UIcons.regularStraight.arrow_small_left),
+        icon: Icon(UIcons.regularStraight.arrow_left),
         onPressed: () {
           Navigator.pop(context);
         },

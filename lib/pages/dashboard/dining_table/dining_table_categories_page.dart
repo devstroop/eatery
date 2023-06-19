@@ -1,94 +1,63 @@
-import 'package:eatery/components/loaders/loading_screen.dart';
+import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/dining_table_category_card.dart';
-import 'package:eatery/database/dining_table_category.dart';
 import 'package:eatery/constants/style/color_style.dart';
+import 'package:uicons/uicons.dart';
 
 import 'add_dining_table_category_page.dart';
 import 'edit_dining_table_category_page.dart';
+
+Color _pageColor = ColorStyle.tertiary;
 
 class DiningTableCategoriesPage extends StatefulWidget {
   const DiningTableCategoriesPage({Key? key}) : super(key: key);
 
   @override
-  State<DiningTableCategoriesPage> createState() => _DiningTableCategoriesPageState();
+  State<DiningTableCategoriesPage> createState() =>
+      _DiningTableCategoriesPageState();
 }
 
 class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
-
-  Color getThemeColor() {
-    return ColorStyle.tertiary;
-  }
   @override
   Widget build(BuildContext context) {
-    final appBar = AppBar(
-      backgroundColor: getThemeColor(),
-      title: const Text('Dining Table Categories'),
-    );
-    final categoriesPanel = SizedBox(
-      width: double.maxFinite,
-      height: double.maxFinite,
-      child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: FutureBuilder(
-              future: DiningTableCategory.getAll(),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot){
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if(snapshot.hasData && snapshot.data.isNotEmpty){
-                    return Wrap(
-                      alignment: WrapAlignment.center,
-                      children: [
-                        for (var category in snapshot.data)
-                          DiningTableCategoryCard(
-                            id: category['id'],
-                            name: category['name'],
-                            onTap: (){
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => EditDiningTableCategoryPage(id: category['id'])),
-                              ).then((_) => setState(() {}));
-                            },
-                          )
-                      ],
-                    );
-                  }
-                  return SizedBox(
-                    child: Padding(
-                      padding: EdgeInsets.only(top: (MediaQuery.of(context).size.width < MediaQuery.of(context).size.height ? MediaQuery.of(context).size.width: 0.0) * 0.5,),
-                      child: Center(
-                          child: Image.asset('assets/images/2748558.png', width: (MediaQuery.of(context).size.width < MediaQuery.of(context).size.height ? MediaQuery.of(context).size.width: MediaQuery.of(context).size.height) * 0.5,)
-                      ),
-                    ),
-                  );
-                }
-                else{
-                  return LoadingScreen();
-                }
-              }
-          )
-      ),
-    );
     return Scaffold(
-      appBar: appBar,
-      body: Stack(
+      appBar: AppBar(
+        backgroundColor: _pageColor,
+        foregroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(UIcons.regularStraight.arrow_left),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: const Text('Dining Table Categories'),
+      ),
+      body: ListView(
         children: [
-          Positioned(
-              top: 12.0,
-              left: 0.0,
-              right: 0.0,
-              bottom: 72,
-              child: categoriesPanel
-          ),
+          ...EateryDB().diningTableCategoryBox().values.map((e) {
+            return DiningTableCategoryCard(
+              id: e.id,
+              name: e.name,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          EditDiningTableCategoryPage(id: e.id)),
+                ).then((_) => setState(() {}));
+              },
+            );
+          })
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: getThemeColor(),
-        child: const Icon(Icons.add),
+        backgroundColor: _pageColor,
+        child: Icon(UIcons.regularStraight.plus),
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AddDiningTableCategoryPage()),
+            MaterialPageRoute(
+                builder: (context) => const AddDiningTableCategoryPage()),
           ).then((_) => setState(() {}));
         },
       ),

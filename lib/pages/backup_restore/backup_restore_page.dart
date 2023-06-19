@@ -2,11 +2,6 @@ import 'package:eatery/services/cloud/google_drive.dart';
 import 'package:eatery_db/models/company/company.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/menu_tile.dart';
-import 'package:eatery/database/account.dart';
-import 'package:eatery/database/dining_table.dart';
-import 'package:eatery/database/dining_table_category.dart';
-import 'package:eatery/database/order.dart';
-import 'package:eatery/database/waiter.dart';
 import 'package:eatery/constants/utils/app_file_system.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
@@ -107,31 +102,31 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
         dataDirPath: await AppFileSystem.getResourcesDir(),
         zipFilePath: '${await AppFileSystem.getBackupDir()}/resources.zip');
 
-    await Account.clear();
-    await DiningTable.clear();
-    await DiningTableCategory.clear();
-    await Order.clear();
-    // await Product.clear();
-    // await ProductCategoryOld.clear();
-    await Waiter.clear();
+    // await Account.clear();
+    // await DiningTable.clear();
+    // await DiningTableCategory.clear();
+    // await Order.clear();
+    // // await Product.clear();
+    // // await ProductCategoryOld.clear();
+    // await Waiter.clear();
 
     pd.update(value: 10);
     for (Map<String, dynamic> account in data['accounts']) {
-      await Account.add(account);
+      // await Account.add(account);
     }
     pd.update(value: 20);
     for (Map<String, dynamic> diningTable in data['diningTables']) {
-      await DiningTable.add(diningTable);
+      // await DiningTable.add(diningTable);
     }
     pd.update(value: 30);
     for (Map<String, dynamic> diningTableCategory
         in data['diningTableCategories']) {
-      await DiningTableCategory.add(diningTableCategory);
+      // await DiningTableCategory.add(diningTableCategory);
     }
     pd.update(value: 40);
     pd.update(value: 50);
     for (Map<String, dynamic> order in data['orders']) {
-      await Order.add(order);
+      // await Order.add(order);
     }
     pd.update(value: 60);
     for (Map<String, dynamic> product in data['products']) {
@@ -146,7 +141,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
     pd.update(value: 80);
     await Future.delayed(const Duration(seconds: 1), () async {
       for (Map<String, dynamic> waiter in data['waiters']) {
-        await Waiter.add(waiter);
+        // await Waiter.add(waiter);
       }
     }).then((value) {
       pd.update(value: 100);
@@ -203,7 +198,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
   Widget build(BuildContext context) {
     final appBar = AppBar(
       leading: IconButton(
-        icon: Icon(UIcons.regularStraight.arrow_small_left),
+        icon: Icon(UIcons.regularStraight.arrow_left),
         onPressed: () {
           Navigator.pop(context);
         },

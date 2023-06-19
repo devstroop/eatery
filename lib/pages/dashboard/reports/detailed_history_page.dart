@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:eatery/components/checkout_product_card.dart';
 import 'package:eatery/components/dialog_box.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:eatery/database/order.dart';
 import 'package:eatery/services/printing/print_invoice.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
@@ -51,13 +50,13 @@ class _DetailedHistoryPageState extends State<DetailedHistoryPage> {
                           child: const Text('Cancel')),
                       TextButton(
                           onPressed: () async {
-                            if ((await Order.delete(widget.order['id']))) {
-                              showSnackBar(context, 'Deleted successfully');
-                            } else {
-                              showSnackBar(context, 'Failed to delete');
-                            }
-                            Navigator.pop(context);
-                            Navigator.pop(context);
+                            // if ((await Order.delete(widget.order['id']))) {
+                            //   showSnackBar(context, 'Deleted successfully');
+                            // } else {
+                            //   showSnackBar(context, 'Failed to delete');
+                            // }
+                            // Navigator.pop(context);
+                            // Navigator.pop(context);
                           },
                           child: const Text('OK'))
                     ],

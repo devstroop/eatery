@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:eatery/database/dining_table_category.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
@@ -81,14 +80,14 @@ class _AddDiningTableCategoryPageState
                 showSnackBar(context, '* Category name required');
                 return;
               }
-              var response = await DiningTableCategory.add(
-                  {'name': _controllerCategoryName.text});
-              if (response != null) {
-                showSnackBar(context, 'Successfully created');
-                Navigator.pop(context);
-              } else {
-                showSnackBar(context, 'Failed to create');
-              }
+              // var response = await DiningTableCategory.add(
+              //     {'name': _controllerCategoryName.text});
+              // if (response != null) {
+              //   showSnackBar(context, 'Successfully created');
+              //   Navigator.pop(context);
+              // } else {
+              //   showSnackBar(context, 'Failed to create');
+              // }
             },
             child: const Text('Save'),
           ),

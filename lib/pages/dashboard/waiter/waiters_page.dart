@@ -3,7 +3,6 @@ import 'package:eatery/pages/dashboard/waiter/add_waiter_page.dart';
 import 'package:eatery_db/models/company/company.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/waiter_card.dart';
-import 'package:eatery/database/waiter.dart';
 import 'edit_waiter_page.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
@@ -38,7 +37,7 @@ class _WaitersPageState extends State<WaitersPage> {
       child: SingleChildScrollView(
         scrollDirection: Axis.vertical,
         child: FutureBuilder(
-            future: Waiter.getAll(),
+            future: Future.delayed(Duration.zero), // a dummy future
             builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
               if (snapshot.connectionState == ConnectionState.done) {
                 if (snapshot.hasData && snapshot.data.isNotEmpty) {

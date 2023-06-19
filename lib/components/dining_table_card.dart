@@ -1,28 +1,20 @@
+import 'package:eatery/constants/global_variables.dart';
+import 'package:eatery_db/models/dining_table/dining_table.dart';
+import 'package:eatery_db/models/order/order.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/constants/style/color_style.dart';
+import 'package:uicons/uicons.dart';
 
 class DiningTableCard extends StatelessWidget {
   const DiningTableCard(
-      {Key? key,
-      required this.id,
-      required this.name,
-      this.currencySymbol,
-      this.due,
-      this.onTap,
-      this.active})
+      {Key? key, required this.diningTable, this.onTap, this.order})
       : super(key: key);
-  final bool? active;
-  final dynamic id; // int
-  final dynamic name; // String
-  final dynamic currencySymbol;
-  final dynamic due;
+  final DiningTable diningTable;
+  final Order? order;
   final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
-    final Color localColor = id != null
-        ? (due != null ? ColorStyle.error : ColorStyle.success)
-        : ColorStyle.text200;
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 9, 0, 9),
       child: Container(
@@ -56,10 +48,14 @@ class DiningTableCard extends StatelessWidget {
           child: Container(
             padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
-                color: localColor.withOpacity(0.15),
+                color: diningTable.isActive
+                    ? ColorStyle.success.withOpacity(0.15)
+                    : ColorStyle.error.withOpacity(0.15),
                 borderRadius: const BorderRadius.all(Radius.circular(6)),
                 border: Border.all(
-                  color: localColor,
+                  color: diningTable.isActive
+                      ? ColorStyle.success
+                      : ColorStyle.error,
                 )),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -75,7 +71,7 @@ class DiningTableCard extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          name,
+                          diningTable.name,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                               fontSize: 14.0,
@@ -84,14 +80,14 @@ class DiningTableCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    due != null
+                    order != null
                         ? Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                '${currencySymbol ?? ''}$due due',
+                                '${GlobalVariables.currency?.symbol ?? ''}${order?.finalTotal} due',
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     fontSize: 12.0,
@@ -103,10 +99,10 @@ class DiningTableCard extends StatelessWidget {
                         : Container()
                   ],
                 ),
-                if (active!)
+                if (diningTable.isActive)
                   Icon(
-                    Icons.check_circle,
-                    color: localColor,
+                    UIcons.regularStraight.check,
+                    color: ColorStyle.success,
                   )
               ],
             ),

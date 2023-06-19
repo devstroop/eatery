@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery/components/dialog_box.dart';
 //import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:eatery/database/waiter.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
@@ -20,21 +19,21 @@ class _EditWaiterPageState extends State<EditWaiterPage> {
   final TextEditingController _controllerWaiterName = TextEditingController();
   late Map<String, dynamic>? waiter;
 
-
   @override
   initState() {
     super.initState();
     loadData();
   }
+
   loadData() async {
-    var waiter = await Waiter.get(widget.id);
-    if(waiter != null){
-      setState((){
-        this.waiter = waiter;
-        pickedImagePath = this.waiter!['image'];
-        _controllerWaiterName.text = this.waiter!['name'];
-      });
-    }
+    // var waiter = await Waiter.get(widget.id);
+    // if(waiter != null){
+    //   setState((){
+    //     this.waiter = waiter;
+    //     pickedImagePath = this.waiter!['image'];
+    //     _controllerWaiterName.text = this.waiter!['name'];
+    //   });
+    // }
   }
 
   Color getThemeColor() {
@@ -64,7 +63,7 @@ class _EditWaiterPageState extends State<EditWaiterPage> {
                     TextButton(
                         onPressed: () async {
                           Navigator.pop(context);
-                          Waiter.delete(widget.id);
+                          // Waiter.delete(widget.id);
                           showSnackBar(context, 'Deleted successfully');
                           Navigator.pop(context);
                         },
@@ -74,7 +73,10 @@ class _EditWaiterPageState extends State<EditWaiterPage> {
               },
             );
           },
-          child: Text('Delete', style: TextStyle(color: ColorStyle.backgroundColorAlter),),
+          child: Text(
+            'Delete',
+            style: TextStyle(color: ColorStyle.backgroundColorAlter),
+          ),
         )
       ],
     );
@@ -106,25 +108,28 @@ class _EditWaiterPageState extends State<EditWaiterPage> {
               const SizedBox(
                 height: 6.0,
               ),
-              Column(mainAxisSize: MainAxisSize.max, crossAxisAlignment: CrossAxisAlignment.start, children: [
-                Text(
-                  'Waiter Name',
-                  style: TextStyle(
-                    color: ColorStyle.text200,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                const SizedBox(
-                  height: 3.0,
-                ),
-                CustomTextFromField(
-                  controller: _controllerWaiterName,
-                  hint: 'Waiter Name',
-                  obscureText: false,
-                  themeColor: getThemeColor(),
-                ),
-              ]),
+              Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Waiter Name',
+                      style: TextStyle(
+                        color: ColorStyle.text200,
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 3.0,
+                    ),
+                    CustomTextFromField(
+                      controller: _controllerWaiterName,
+                      hint: 'Waiter Name',
+                      obscureText: false,
+                      themeColor: getThemeColor(),
+                    ),
+                  ]),
               const SizedBox(
                 height: 6.0,
               ),
@@ -135,8 +140,9 @@ class _EditWaiterPageState extends State<EditWaiterPage> {
       bottomNavigationBar: BottomAppBar(
         color: ColorStyle.backgroundColorAlter,
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Container()/*PrimaryButton(
+            padding: const EdgeInsets.all(12.0),
+            child:
+                Container() /*PrimaryButton(
             child: const Text('Update'),
             color: getThemeColor(),
             onPressed: () async {
@@ -153,7 +159,7 @@ class _EditWaiterPageState extends State<EditWaiterPage> {
               }
             },
           ),*/
-        ),
+            ),
       ),
     );
   }

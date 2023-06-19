@@ -44,7 +44,7 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
       backgroundColor: _pageColor,
       foregroundColor: Colors.white,
       leading: IconButton(
-        icon: Icon(UIcons.regularStraight.arrow_small_left),
+        icon: Icon(UIcons.regularStraight.arrow_left),
         onPressed: () {
           Navigator.pop(context);
         },

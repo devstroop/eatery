@@ -1,16 +1,19 @@
+import 'package:eatery_db/eatery_db.dart';
+import 'package:eatery_db/models/dining_table/dining_table_category.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery/components/dialog_box.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:eatery/database/dining_table.dart';
-import 'package:eatery/database/dining_table_category.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
+import 'package:uicons/uicons.dart';
+
+Color _pageColor = ColorStyle.tertiary;
 
 class EditDiningTableCategoryPage extends StatefulWidget {
   const EditDiningTableCategoryPage({Key? key, required this.id})
       : super(key: key);
-  final String id;
+  final int id;
 
   @override
   State<EditDiningTableCategoryPage> createState() =>
@@ -20,32 +23,32 @@ class EditDiningTableCategoryPage extends StatefulWidget {
 class _EditDiningTableCategoryPageState
     extends State<EditDiningTableCategoryPage> {
   final TextEditingController _controllerCategoryName = TextEditingController();
-  late Map<String, dynamic>? diningTableCategory;
+  final TextEditingController _controllerCategoryDescription =
+      TextEditingController();
+  DiningTableCategory? diningTableCategory;
 
   @override
   initState() {
     super.initState();
-    loadData();
-  }
-
-  loadData() async {
-    var diningTableCategory = await DiningTableCategory.get(widget.id);
-    if (diningTableCategory != null) {
-      setState(() {
-        this.diningTableCategory = diningTableCategory;
-        _controllerCategoryName.text = this.diningTableCategory!['name'];
-      });
-    }
-  }
-
-  Color getThemeColor() {
-    return ColorStyle.tertiary;
+    setState(() {
+      diningTableCategory = EateryDB().diningTableCategoryBox().get(widget.id);
+      _controllerCategoryName.text = diningTableCategory?.name ?? '';
+      _controllerCategoryDescription.text =
+          diningTableCategory?.description ?? '';
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
-      backgroundColor: getThemeColor(),
+      backgroundColor: _pageColor,
+      foregroundColor: Colors.white,
+      leading: IconButton(
+        icon: Icon(UIcons.regularStraight.arrow_left),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
       title: const Text('Edit Dining Table Category'),
       actions: [
         TextButton(
@@ -65,16 +68,16 @@ class _EditDiningTableCategoryPageState
                     TextButton(
                         onPressed: () async {
                           Navigator.pop(context);
-                          DiningTable.getAll(category: widget.id).then((value) {
-                            if (value.isNotEmpty) {
-                              showSnackBar(context, 'Can\'t delete');
-                              return;
-                            }
-                          });
-                          DiningTableCategory.delete(widget.id).then((value) {
-                            showSnackBar(context, 'Deleted successfully');
-                            Navigator.pop(context);
-                          });
+                          // DiningTable.getAll(category: widget.id).then((value) {
+                          //   if (value.isNotEmpty) {
+                          //     showSnackBar(context, 'Can\'t delete');
+                          //     return;
+                          //   }
+                          // });
+                          // DiningTableCategory.delete(widget.id).then((value) {
+                          //   showSnackBar(context, 'Deleted successfully');
+                          //   Navigator.pop(context);
+                          // });
                         },
                         child: const Text('OK'))
                   ],
@@ -121,7 +124,7 @@ class _EditDiningTableCategoryPageState
                       controller: _controllerCategoryName,
                       hint: 'eg. Terrace',
                       obscureText: false,
-                      themeColor: getThemeColor(),
+                      themeColor: _pageColor,
                     ),
                   ]),
               const SizedBox(
@@ -136,22 +139,22 @@ class _EditDiningTableCategoryPageState
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: PrimaryButton(
-            color: getThemeColor(),
+            color: _pageColor,
             onPressed: () async {
               if (_controllerCategoryName.text.trim() == '') {
                 showSnackBar(context, '* Category name required');
                 return;
               }
-              DiningTableCategory.update(
-                      {'id': widget.id, 'name': _controllerCategoryName.text})
-                  .then((response) {
-                if (response) {
-                  showSnackBar(context, 'Successfully updated');
-                  Navigator.of(context).pop();
-                } else {
-                  showSnackBar(context, 'Failed to update');
-                }
-              });
+              // DiningTableCategory.update(
+              //         {'id': widget.id, 'name': _controllerCategoryName.text})
+              //     .then((response) {
+              //   if (response) {
+              //     showSnackBar(context, 'Successfully updated');
+              //     Navigator.of(context).pop();
+              //   } else {
+              //     showSnackBar(context, 'Failed to update');
+              //   }
+              // });
             },
             child: const Text('Update'),
           ),

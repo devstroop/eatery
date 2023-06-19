@@ -7,14 +7,13 @@ import 'package:eatery/constants/utils/calculations.dart';
 import 'package:bluetooth_thermal_printer/bluetooth_thermal_printer.dart';
 import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 import 'package:intl/intl.dart';
-import 'package:eatery/database/printer.dart';
 
 class PrintInvoice {
   static BluetoothPrinterService printerManager = BluetoothPrinterService();
   static Future<String> printReceipt(
       {required Map<String, dynamic> order,
       required Map<String, dynamic> account}) async {
-    List<Map<String, dynamic>> jsons = await Printer.getAll();
+    List<Map<String, dynamic>> jsons = []; // await Printer.getAll();
     if (jsons.isNotEmpty) {
       BluetoothDevice device = BluetoothDevice.fromJson(jsons.first);
       BluetoothPrinter printerBt = BluetoothPrinter(device);

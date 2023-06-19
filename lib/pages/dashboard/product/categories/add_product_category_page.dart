@@ -32,7 +32,7 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
       foregroundColor: Colors.white,
       backgroundColor: getThemeColor(),
       leading: IconButton(
-        icon: Icon(UIcons.regularStraight.arrow_small_left),
+        icon: Icon(UIcons.regularStraight.arrow_left),
         onPressed: () {
           Navigator.pop(context);
         },

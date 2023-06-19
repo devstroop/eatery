@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:eatery/components/loaders/loading_screen.dart';
+import 'package:eatery/constants/global_variables.dart';
 import 'package:eatery_db/models/order/order_type.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/bottom_view_grip.dart';
@@ -8,9 +9,6 @@ import 'package:eatery/components/pos_category_widget.dart';
 import 'package:eatery/components/pos_order_type_selection_button.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/components/special_button.dart';
-import 'package:eatery/database/cart.dart';
-import 'package:eatery/database/dining_table.dart';
-import 'package:eatery/database/dining_table_category.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
@@ -149,111 +147,111 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                           setState(() {});
                           state(() {});
                         }),
-                    FutureBuilder(
-                        future: DiningTableCategory.getAll(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<dynamic> snapshot) {
-                          if (snapshot.connectionState ==
-                              ConnectionState.done) {
-                            if (snapshot.hasData) {
-                              return Row(
-                                children: [
-                                  for (var diningTableCategory in snapshot.data)
-                                    PosCategoryWidget(
-                                        active: selectedDiningTableCategory ==
-                                            diningTableCategory['id'],
-                                        image: diningTableCategory['image'] !=
-                                                    null &&
-                                                File(diningTableCategory[
-                                                        'image'])
-                                                    .existsSync()
-                                            ? Image.file(File(
-                                                diningTableCategory['image']))
-                                            : null,
-                                        label: diningTableCategory['name'],
-                                        onTap: () {
-                                          selectedDiningTableCategory =
-                                              diningTableCategory['id'];
-                                          setState(() {});
-                                          state(() {});
-                                        })
-                                ],
-                              );
-                            }
-                            return Container();
-                          } else {
-                            return LoadingScreen();
-                          }
-                        }),
+                    // FutureBuilder(
+                    //     future: DiningTableCategory.getAll(),
+                    //     builder: (BuildContext context,
+                    //         AsyncSnapshot<dynamic> snapshot) {
+                    //       if (snapshot.connectionState ==
+                    //           ConnectionState.done) {
+                    //         if (snapshot.hasData) {
+                    //           return Row(
+                    //             children: [
+                    //               for (var diningTableCategory in snapshot.data)
+                    //                 PosCategoryWidget(
+                    //                     active: selectedDiningTableCategory ==
+                    //                         diningTableCategory['id'],
+                    //                     image: diningTableCategory['image'] !=
+                    //                                 null &&
+                    //                             File(diningTableCategory[
+                    //                                     'image'])
+                    //                                 .existsSync()
+                    //                         ? Image.file(File(
+                    //                             diningTableCategory['image']))
+                    //                         : null,
+                    //                     label: diningTableCategory['name'],
+                    //                     onTap: () {
+                    //                       selectedDiningTableCategory =
+                    //                           diningTableCategory['id'];
+                    //                       setState(() {});
+                    //                       state(() {});
+                    //                     })
+                    //             ],
+                    //           );
+                    //         }
+                    //         return Container();
+                    //       } else {
+                    //         return LoadingScreen();
+                    //       }
+                    //     }),
                   ],
                 ),
               ),
             ),
           ),
-          FutureBuilder(
-              future: DiningTable.getAll(category: selectedDiningTableCategory),
-              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
-                  if (snapshot.hasData && snapshot.data.isNotEmpty) {
-                    return Wrap(
-                      alignment: WrapAlignment.center,
-                      children: [
-                        DiningTableCard(
-                          active: selectedDiningTableId == null,
-                          id: null,
-                          name: 'None',
-                          onTap: () {
-                            selectedDiningTableId = null;
-                            selectedDiningTableName = null;
-                            setState(() {});
-                            state(() {});
-                            // Navigator.of(context).pop();
-                          },
-                        ),
-                        /*for (var _diningTable in snapshot.data)
-                          DiningTableCard(
-                            active: selectedDiningTableId == _diningTable['id'],
-                            id: _diningTable['id'],
-                            name: _diningTable['name'],
-                            currencySymbol: widget.account['currencySymbol'],
-                            due: _diningTable['due'],
-                            onTap: () async {
-                              selectedDiningTableId = _diningTable['id'];
-                              selectedDiningTableName = _diningTable['name'];
-                              if(_diningTable['due'] != null){
-                                Map<String, dynamic>? _order = await Order.get(_diningTable['orderId']);
-                                orderType = OrderType.dineIn;
-                                Cart.cart = Map<String, Map<String, dynamic>>.from(_order!['cart']);
-                                openOrderId = _diningTable['orderId'];
-                                openOrderCustomerName = _diningTable['customerName'];
-                                openOrderCustomerPhone = _diningTable['customerPhone'];
-                                openOrderCustomerAddress = _diningTable['customerAddress'];
-                                openOrderWaiterId = _diningTable['customerPhone'];
-                                openOrderWaiterName = _diningTable['customerAddress'];
-                              }
-                              setState(() {});
-                              state(() {});
-                              // Navigator.of(context).pop();
-                            },
-                          )*/
-                      ],
-                    );
-                  }
-                  return SizedBox(
-                    child: Center(
-                        child: Image.asset(
-                      'assets/images/2748558.png',
-                      width: (MediaQuery.of(context).size.width <
-                                  MediaQuery.of(context).size.height
-                              ? MediaQuery.of(context).size.width
-                              : MediaQuery.of(context).size.height) *
-                          0.5,
-                    )),
-                  );
-                } else {
-                  return LoadingScreen();
-                }
-              }),
+          // FutureBuilder(
+          //     future: DiningTable.getAll(category: selectedDiningTableCategory),
+          //     builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot) {
+          //       if (snapshot.connectionState == ConnectionState.done) {
+          //         if (snapshot.hasData && snapshot.data.isNotEmpty) {
+          //           return Wrap(
+          //             alignment: WrapAlignment.center,
+          //             children: [
+          //               DiningTableCard(
+          //                 active: selectedDiningTableId == null,
+          //                 id: null,
+          //                 name: 'None',
+          //                 onTap: () {
+          //                   selectedDiningTableId = null;
+          //                   selectedDiningTableName = null;
+          //                   setState(() {});
+          //                   state(() {});
+          //                   // Navigator.of(context).pop();
+          //                 },
+          //               ),
+          //               /*for (var _diningTable in snapshot.data)
+          //                 DiningTableCard(
+          //                   active: selectedDiningTableId == _diningTable['id'],
+          //                   id: _diningTable['id'],
+          //                   name: _diningTable['name'],
+          //                   currencySymbol: widget.account['currencySymbol'],
+          //                   due: _diningTable['due'],
+          //                   onTap: () async {
+          //                     selectedDiningTableId = _diningTable['id'];
+          //                     selectedDiningTableName = _diningTable['name'];
+          //                     if(_diningTable['due'] != null){
+          //                       Map<String, dynamic>? _order = await Order.get(_diningTable['orderId']);
+          //                       orderType = OrderType.dineIn;
+          //                       Cart.cart = Map<String, Map<String, dynamic>>.from(_order!['cart']);
+          //                       openOrderId = _diningTable['orderId'];
+          //                       openOrderCustomerName = _diningTable['customerName'];
+          //                       openOrderCustomerPhone = _diningTable['customerPhone'];
+          //                       openOrderCustomerAddress = _diningTable['customerAddress'];
+          //                       openOrderWaiterId = _diningTable['customerPhone'];
+          //                       openOrderWaiterName = _diningTable['customerAddress'];
+          //                     }
+          //                     setState(() {});
+          //                     state(() {});
+          //                     // Navigator.of(context).pop();
+          //                   },
+          //                 )*/
+          //             ],
+          //           );
+          //         }
+          //         return SizedBox(
+          //           child: Center(
+          //               child: Image.asset(
+          //             'assets/images/2748558.png',
+          //             width: (MediaQuery.of(context).size.width <
+          //                         MediaQuery.of(context).size.height
+          //                     ? MediaQuery.of(context).size.width
+          //                     : MediaQuery.of(context).size.height) *
+          //                 0.5,
+          //           )),
+          //         );
+          //       } else {
+          //         return LoadingScreen();
+          //       }
+          //     }),
           const SizedBox(
             height: 20.0,
           ),
@@ -591,11 +589,11 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                           context: context,
                           builder: (context) => buildProductDetailedViewBottomSheet(product: product)),
                     ),*/
-                  Cart.cart.isNotEmpty
-                      ? orderType == OrderType.dine
-                          ? Container(height: 120)
-                          : Container(height: 60)
-                      : Container()
+                  // Cart.cart.isNotEmpty
+                  //     ? orderType == OrderType.dine
+                  //         ? Container(height: 120)
+                  //         : Container(height: 60)
+                  //     : Container()
                 ],
               )
             : SizedBox(
@@ -657,15 +655,15 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
               child: PrimaryButton(
                 color: orderType.color!,
                 onPressed: () {
-                  if (Cart.cart.isEmpty) {
-                    showSnackBar(context, '* Empty cart');
-                    return;
-                  }
-                  if (orderType == OrderType.dine &&
-                      selectedDiningTableId == null) {
-                    showSnackBar(context, '* Select dining table');
-                    return;
-                  }
+                  // if (Cart.cart.isEmpty) {
+                  //   showSnackBar(context, '* Empty cart');
+                  //   return;
+                  // }
+                  // if (orderType == OrderType.dine &&
+                  //     selectedDiningTableId == null) {
+                  //   showSnackBar(context, '* Select dining table');
+                  //   return;
+                  // }
                   /*Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -758,7 +756,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
               )
         : Container();
 
-    final cartStrip = Cart.cart.isNotEmpty
+    final cartStrip = GlobalVariables.cart.isNotEmpty
         ? Container(
             height: 48,
             width: double.maxFinite,
@@ -828,7 +826,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
           Positioned(left: 0.0, right: 0.0, bottom: 72, child: cartStrip),
           Positioned(bottom: 0.0, left: 0.0, right: 0.0, child: bottomAppBar),
           Positioned(
-            bottom: Cart.cart.isNotEmpty ? 132.0 : 84.0,
+            bottom: GlobalVariables.cart.isNotEmpty ? 132.0 : 84.0,
             right: 12.0,
             child: Draggable(
                 feedback: diningTableSelectionButton,

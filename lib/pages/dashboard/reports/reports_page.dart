@@ -9,7 +9,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
 import 'package:eatery/components/custom_dialog_box.dart';
-import 'package:eatery/database/order.dart';
 import 'package:eatery/constants/utils/app_file_system.dart';
 import 'package:eatery/services/utility/generate.dart';
 import 'package:eatery/services/utility/share.dart';
@@ -31,12 +30,12 @@ class _ReportsPageState extends State<ReportsPage> {
   DateTime? filterTill;
 
   void loadOrders() async {
-    List<Map<String, dynamic>> orders = await Order.getAll();
-    orders.sort(
-        (a, b) => (b['timestamp'] as int).compareTo(a['timestamp'] as int));
-    setState(() {
-      this.orders = orders;
-    });
+    // List<Map<String, dynamic>> orders = await Order.getAll();
+    // orders.sort(
+    //     (a, b) => (b['timestamp'] as int).compareTo(a['timestamp'] as int));
+    // setState(() {
+    //   this.orders = orders;
+    // });
   }
 
   @override
@@ -160,36 +159,36 @@ class _ReportsPageState extends State<ReportsPage> {
                     actions: [
                       TextButton(
                           onPressed: () async {
-                            Order.getAll()
-                                .then((List<Map<String, dynamic>> orders) {
-                              setState(() {
-                                this.orders = orders;
-                                filterFrom = null;
-                                filterTill = null;
-                              });
-                              Navigator.pop(context);
-                            });
+                            // Order.getAll()
+                            //     .then((List<Map<String, dynamic>> orders) {
+                            //   setState(() {
+                            //     this.orders = orders;
+                            //     filterFrom = null;
+                            //     filterTill = null;
+                            //   });
+                            //   Navigator.pop(context);
+                            // });
                           },
                           child: const Text('Clear')),
                       TextButton(
                           onPressed: () async {
                             if (filterFrom != null && filterTill != null) {
-                              Order.getAll()
-                                  .then((List<Map<String, dynamic>> orders) {
-                                orders = orders
-                                    .where((order) =>
-                                        DateTime.fromMicrosecondsSinceEpoch(
-                                                order['timestamp'])
-                                            .isAfter(filterFrom!) &&
-                                        DateTime.fromMicrosecondsSinceEpoch(
-                                                order['timestamp'])
-                                            .isBefore(filterTill!
-                                                .add(const Duration(days: 1))))
-                                    .toList();
-                                setState(() {
-                                  this.orders = orders;
-                                });
-                              });
+                              // Order.getAll()
+                              //     .then((List<Map<String, dynamic>> orders) {
+                              //   orders = orders
+                              //       .where((order) =>
+                              //           DateTime.fromMicrosecondsSinceEpoch(
+                              //                   order['timestamp'])
+                              //               .isAfter(filterFrom!) &&
+                              //           DateTime.fromMicrosecondsSinceEpoch(
+                              //                   order['timestamp'])
+                              //               .isBefore(filterTill!
+                              //                   .add(const Duration(days: 1))))
+                              //       .toList();
+                              //   setState(() {
+                              //     this.orders = orders;
+                              //   });
+                              // });
                             } else {
                               showSnackBar(
                                   context, "Select date range to filter");
@@ -353,32 +352,32 @@ class _ReportsPageState extends State<ReportsPage> {
         onPressed: () async {
           String? id = await scanner.scan();
           if (id != null) {
-            Order.get(id).then((order) {
-              if (order != null) {
-                /*Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => DetailedHistoryPage(
-                      order: order,
-                      account: widget.account,
-                      orderType: order['orderType'] == 'dineIn'
-                          ? OrderType.dineIn
-                          : order['orderType'] == 'delivery'
-                          ? OrderType.delivery
-                          : order['orderType'] == 'takeAway'
-                          ? OrderType.takeAway
-                          : null,
-                    )),
-              ).then((_) async {
-                List<Map<String, dynamic>> orders = await Order.getAll();
-                setState(() {
-                  this.orders = orders;
-                });
-              });*/
-              } else {
-                showSnackBar(context, 'Not found');
-              }
-            });
+            // Order.get(id).then((order) {
+            //   if (order != null) {
+            //     /*Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //         builder: (context) => DetailedHistoryPage(
+            //           order: order,
+            //           account: widget.account,
+            //           orderType: order['orderType'] == 'dineIn'
+            //               ? OrderType.dineIn
+            //               : order['orderType'] == 'delivery'
+            //               ? OrderType.delivery
+            //               : order['orderType'] == 'takeAway'
+            //               ? OrderType.takeAway
+            //               : null,
+            //         )),
+            //   ).then((_) async {
+            //     List<Map<String, dynamic>> orders = await Order.getAll();
+            //     setState(() {
+            //       this.orders = orders;
+            //     });
+            //   });*/
+            //   } else {
+            //     showSnackBar(context, 'Not found');
+            //   }
+            // });
           }
         },
         label: const Text("Scan"),

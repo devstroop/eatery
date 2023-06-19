@@ -24,7 +24,7 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
         foregroundColor: Colors.white,
         title: const Text('Product Categories'),
         leading: IconButton(
-          icon: Icon(UIcons.regularStraight.arrow_small_left),
+          icon: Icon(UIcons.regularStraight.arrow_left),
           onPressed: () {
             Navigator.pop(context);
           },
@@ -35,25 +35,31 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
       body: ListView(
         children: [
           ListTile(
-            title: const Text('None'),
+            title: const Text('None',
+                style: TextStyle(fontWeight: FontWeight.w600)),
             subtitle: const Text('No category'),
             trailing: Icon(
               UIcons.regularStraight.ban,
               size: 18,
             ),
-            leading: SizedBox(
+            leading: Container(
               width: 50.0,
               height: 50.0,
-              child: Image.asset(
-                'assets/images/no-image.jpg',
-                fit: BoxFit.cover,
+              decoration: BoxDecoration(
+                color: Colors.grey[300],
+                borderRadius: BorderRadius.circular(12.0),
+                image: const DecorationImage(
+                  image: AssetImage('assets/images/no-image.jpg'),
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
             onTap: () {},
           ),
           ...EateryDB().productCategoryBox().values.map((e) {
             return ListTile(
-              title: Text(e.name),
+              title: Text(e.name,
+                  style: const TextStyle(fontWeight: FontWeight.w600)),
               subtitle: Text(e.description ?? ''),
               trailing: Icon(UIcons.regularStraight.arrow_small_right),
               leading: FutureBuilder<String>(
@@ -63,16 +69,24 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
                   if (!snapshot.hasData) {
                     return const SizedBox.shrink();
                   } else {
-                    return SizedBox(
+                    return Container(
                         width: 50.0,
                         height: 50.0,
-                        child:
-                            e.image != null && File(snapshot.data!).existsSync()
-                                ? Image.file(File(snapshot.data!))
-                                : Image.asset(
-                                    'assets/images/no-image.jpg',
-                                    fit: BoxFit.cover,
-                                  ));
+                        decoration: BoxDecoration(
+                          color: Colors.grey[300],
+                          borderRadius: BorderRadius.circular(12.0),
+                          image: DecorationImage(
+                            image: (e.image != null &&
+                                        File(snapshot.data!).existsSync()
+                                    ? Image.file(File(snapshot.data!))
+                                    : Image.asset(
+                                        'assets/images/no-image.jpg',
+                                        fit: BoxFit.cover,
+                                      ))
+                                .image,
+                            fit: BoxFit.cover,
+                          ),
+                        ));
                   }
                 },
               ),

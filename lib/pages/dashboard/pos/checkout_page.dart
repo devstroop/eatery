@@ -1,5 +1,4 @@
 import 'package:eatery/constants/utils/calculations.dart';
-import 'package:eatery/database/dining_table.dart';
 import 'package:eatery_db/models/order/order_type.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/bottom_view_grip.dart';
@@ -8,9 +7,6 @@ import 'package:eatery/components/custom_button.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery/components/pos_waiter_card.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:eatery/database/cart.dart';
-import 'package:eatery/database/order.dart';
-import 'package:eatery/database/waiter.dart';
 import 'package:eatery/services/printing/print_invoice.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
@@ -65,10 +61,10 @@ class _CheckoutPageState extends State<CheckoutPage> {
   final themeColor = ColorStyle.brandColor;
 
   void loadWaiters() async {
-    var waitersData = await Waiter.getAll();
-    setState(() {
-      this.waitersData = waitersData;
-    });
+    // var waitersData = await Waiter.getAll();
+    // setState(() {
+    //   this.waitersData = waitersData;
+    // });
   }
 
   @override
@@ -320,43 +316,43 @@ class _CheckoutPageState extends State<CheckoutPage> {
           'open': OrderType.dine == widget.orderType ? true : false
         };
 
-        String? id;
-        if (widget.openOrderId != null) {
-          order['id'] = widget.openOrderId;
-          await Order.update(order);
-        } else {
-          id = await Order.add(order);
-          order['id'] = id;
-        }
+        // String? id;
+        // if (widget.openOrderId != null) {
+        //   order['id'] = widget.openOrderId;
+        //   await Order.update(order);
+        // } else {
+        //   id = await Order.add(order);
+        //   order['id'] = id;
+        // }
 
-        if (OrderType.dine == widget.orderType) {
-          Map<String, dynamic>? diningTable =
-              await DiningTable.get(widget.diningTable!);
-          diningTable!['orderId'] = id;
-          diningTable['due'] = finalTotalAfterRoundOff;
-          await DiningTable.update(diningTable);
-        }
+        // if (OrderType.dine == widget.orderType) {
+        //   Map<String, dynamic>? diningTable =
+        //       await DiningTable.get(widget.diningTable!);
+        //   diningTable!['orderId'] = id;
+        //   diningTable['due'] = finalTotalAfterRoundOff;
+        //   await DiningTable.update(diningTable);
+        // }
 
-        if (widget.account['autoPrintOnSale']) {
-          PrintInvoice.printReceipt(order: order, account: widget.account)
-              .then((message) {
-            showSnackBar(context, message);
-          }).onError((error, stackTrace) {
-            showSnackBar(context, '$error ${stackTrace.toString()}');
-          });
-        }
+        // if (widget.account['autoPrintOnSale']) {
+        //   PrintInvoice.printReceipt(order: order, account: widget.account)
+        //       .then((message) {
+        //     showSnackBar(context, message);
+        //   }).onError((error, stackTrace) {
+        //     showSnackBar(context, '$error ${stackTrace.toString()}');
+        //   });
+        // }
 
-        Cart.cart = {};
-        await Future.delayed(Duration.zero, () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) =>
-                    OrderConfirmation(order: order, account: widget.account)),
-          ).then((_) {
-            Navigator.pop(context, 'clear');
-          });
-        });
+        // Cart.cart = {};
+        // await Future.delayed(Duration.zero, () {
+        //   Navigator.push(
+        //     context,
+        //     MaterialPageRoute(
+        //         builder: (context) =>
+        //             OrderConfirmation(order: order, account: widget.account)),
+        //   ).then((_) {
+        //     Navigator.pop(context, 'clear');
+        //   });
+        // });
       } catch (_) {
         showSnackBar(context, 'Failed');
         return;

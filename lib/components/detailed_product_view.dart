@@ -1,36 +1,21 @@
 import 'dart:io';
 
+import 'package:eatery/constants/global_variables.dart';
 import 'package:eatery/constants/utils/calculations.dart';
-import 'package:eatery_db/models/product/food_type.dart';
+import 'package:eatery_db/models/product/product.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery_components/badges/food_type.badge.dart';
-import 'package:eatery/database/cart.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
 class DetailedProductView extends StatefulWidget {
-  const DetailedProductView({Key? key,
-    required this.name,
-    this.description,
-    required this.price,
-    this.quantity,
-    this.image,
-    this.foodType,
-    this.themeColor,
-    required this.id,
-    this.warningQuantity,
-    this.currencySymbol,
-    this.onRemove,
-    this.onAdd})
+  const DetailedProductView(
+      {Key? key,
+      this.themeColor,
+      this.onRemove,
+      this.onAdd,
+      required this.product})
       : super(key: key);
-  final String id;
-  final String name;
-  final String? description;
-  final double? price;
-  final double? quantity;
-  final double? warningQuantity;
-  final String? image;
-  final FoodType? foodType; // FoodType? // FoodType.values.firstWhere((e) => e.toString() == product['foodType']),
-  final String? currencySymbol;
+  final Product product;
   final Color? themeColor;
   final Function()? onRemove;
   final Function()? onAdd;
@@ -40,7 +25,6 @@ class DetailedProductView extends StatefulWidget {
 }
 
 class _DetailedProductViewState extends State<DetailedProductView> {
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -48,21 +32,26 @@ class _DetailedProductViewState extends State<DetailedProductView> {
       children: [
         Container(
           margin: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 8.0),
-          height: MediaQuery.of(context).size.width * 4/7,
+          height: MediaQuery.of(context).size.width * 4 / 7,
           decoration: BoxDecoration(
             color: ColorStyle.backgroundColorAlter,
             borderRadius: const BorderRadius.all(Radius.circular(6)),
-            image: File(widget.image ?? '').existsSync()
-                ? DecorationImage(image: FileImage(File(widget.image!)), fit: BoxFit.cover)
-                : const DecorationImage(image: AssetImage('assets/images/default.jpg'), fit: BoxFit.cover),
+            image: File(widget.product.image ?? '').existsSync()
+                ? DecorationImage(
+                    image: FileImage(File(widget.product.image!)),
+                    fit: BoxFit.cover)
+                : const DecorationImage(
+                    image: AssetImage('assets/images/default.jpg'),
+                    fit: BoxFit.cover),
           ),
           child: Stack(
             children: [
               Positioned(
                   top: 12.0,
                   right: 12.0,
-                  child: FoodTypeBadge(foodType: widget.foodType,)
-              )
+                  child: FoodTypeBadge(
+                    foodType: widget.product.foodType,
+                  ))
             ],
           ),
         ),
@@ -77,16 +66,17 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    widget.name,
+                    widget.product.name,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
-                        fontSize: 20.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.w600,
+                        color: ColorStyle.text200),
                   ),
-
                   Column(
                     children: [
                       Text(
-                        '${widget.currencySymbol ?? ''}${widget.price}',
+                        '${GlobalVariables.currency?.symbol ?? ''}${widget.product.salePrice}',
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontSize: 20.0,
@@ -95,65 +85,79 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                       ),
                     ],
                   ),
-
                 ],
               ),
               widget.onAdd != null && widget.onRemove != null
                   ? Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(4),
-                  border: Border.all(
-                    color: ColorStyle.primary,
-                    width: 2,
-                  ),
-                ),
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(2, 1, 2, 1),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Cart.cart.containsKey(widget.id) && Cart.cart[widget.id]!['quantity'] > 0
-                          ? InkWell(
-                        onTap: widget.onRemove,
-                        child: Icon(
-                          Icons.remove,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(
                           color: ColorStyle.primary,
-                        ),
-                      )
-                          : Container(),
-                      Cart.cart.containsKey(widget.id) && Cart.cart[widget.id]!['quantity'] > 0
-                          ? Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(4, 0, 4, 0),
-                        child: Text(
-                          Calculations.compressDoubleToString(Cart.cart[widget.id]!['quantity']),
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      )
-                          : Container(),
-                      InkWell(
-                        onTap: widget.onAdd,
-                        child: Icon(
-                          Icons.add,
-                          color: ColorStyle.primary,
+                          width: 2,
                         ),
                       ),
-                    ],
-                  ),
-                ),
-              )
-                  : Container()
+                      child: Padding(
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(2, 1, 2, 1),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            GlobalVariables.cart
+                                    .where((element) =>
+                                        element.id == widget.product.id)
+                                    .isNotEmpty
+                                ? InkWell(
+                                    onTap: widget.onRemove,
+                                    child: Icon(
+                                      Icons.remove,
+                                      color: ColorStyle.primary,
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                            GlobalVariables.cart
+                                    .where((element) =>
+                                        element.id == widget.product.id)
+                                    .isNotEmpty
+                                ? Padding(
+                                    padding:
+                                        const EdgeInsetsDirectional.fromSTEB(
+                                            4, 0, 4, 0),
+                                    child: Text(
+                                      GlobalVariables.cart
+                                          .where((element) =>
+                                              element.id == widget.product.id)
+                                          .length
+                                          .toString(),
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox.shrink(),
+                            InkWell(
+                              onTap: widget.onAdd,
+                              child: Icon(
+                                Icons.add,
+                                color: ColorStyle.primary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  : const SizedBox.shrink()
             ],
           ),
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 8.0),
           child: Text(
-            widget.description ?? '',
+            widget.product.description ?? '',
             overflow: TextOverflow.clip,
             style: TextStyle(
-                fontSize: 18.0, fontWeight: FontWeight.w400, color: ColorStyle.text400),
+                fontSize: 18.0,
+                fontWeight: FontWeight.w400,
+                color: ColorStyle.text400),
           ),
         ),
       ],

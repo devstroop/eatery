@@ -1,5 +1,6 @@
 import 'package:eatery/components/menu_widget.dart';
 import 'package:eatery/components/menu_widget_extended.dart';
+import 'package:eatery/constants/global_variables.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/pages/backup_restore/backup_restore_page.dart';
 import 'package:eatery/constants/style/color_style.dart';
@@ -14,6 +15,7 @@ import 'package:eatery/pages/dashboard/pos/point_of_sale_page.dart';
 import 'package:eatery/pages/dashboard/reports/reports_page.dart';
 import 'package:eatery/pages/dashboard/settings/settings.page.dart';
 import 'package:eatery/pages/dashboard/waiter/waiters_page.dart';
+import 'package:eatery_db/eatery_db.dart';
 import 'package:eatery_db/models/company/company.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -35,6 +37,11 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState() {
     super.initState();
+    setState(() {
+      GlobalVariables.company = widget.company;
+      GlobalVariables.currency =
+          EateryDB().currencyBox().get(GlobalVariables.company?.currencyId);
+    });
   }
 
   @override
@@ -58,7 +65,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
                 UpgradeNotification(
                     company: widget.company, width: screenWidth * 0.85),
-                const LowBatteryWarningNotification(),
+                LowBatteryWarningNotification(width: screenWidth * 0.85),
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
                   child: Wrap(
