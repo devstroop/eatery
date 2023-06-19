@@ -1,7 +1,15 @@
 {
   "name": "Flutter Mobile Dev",
-  "forwardPorts": [5555],
   "dockerFile": "Dockerfile",
   "remoteUser": "vscode",
-  "postCreateCommand": "flutter doctor && flutter pub get && cd /workspace/eatery_components && flutter pub get && cd /workspace/eatery_db && flutter pub get && cd /workspace/eatery_services && flutter pub get && cd /workspace/bluetooth_thermal_printer && flutter pub get"
+  "forwardPorts": [5555],
+  "extensions": [
+    "dart-code.flutter",
+    "dart-code.dart"
+  ],
+  "postCreateCommand": "flutter doctor && flutter pub get && cd /workspace/eatery_components && flutter pub get && cd /workspace/eatery_db && flutter pub get && cd /workspace/eatery_services && flutter pub get && cd /workspace/bluetooth_thermal_printer && flutter pub get",
+  "settings": {
+    "dart.sdkPath": "/opt/flutter/bin/cache/dart-sdk",
+    "dart.flutterSdkPath": "/opt/flutter"
+  }
 }
