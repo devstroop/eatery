@@ -12,9 +12,11 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Download and install Android SDK
+RUN rm -rf ${ANDROID_HOME}
 RUN wget -q https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip -O commandlinetools.zip \
     && unzip -q commandlinetools.zip -d cmdline-tools \
     && rm commandlinetools.zip
+
 
 # Set environment variables
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
