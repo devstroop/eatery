@@ -20,16 +20,16 @@ RUN wget -q https://dl.google.com/android/repository/commandlinetools-linux-7583
 # Set environment variables
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 ENV ANDROID_HOME=/workspace/cmdline-tools
-ENV PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools
+ENV PATH=${PATH}:${ANDROID_HOME}/bin:${ANDROID_HOME}/platform-tools
 
 # Accept Android SDK licenses
-RUN yes | ${ANDROID_HOME}/tools/bin/sdkmanager --licenses
+RUN yes | ${ANDROID_HOME}/bin/sdkmanager --licenses
 
 # Install required Android SDK components
-RUN ${ANDROID_HOME}/tools/bin/sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.3" "emulator"
+RUN ${ANDROID_HOME}/bin/sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.3" "emulator"
 
 # Create Android emulator
-RUN echo "no" | ${ANDROID_HOME}/tools/bin/avdmanager create avd -n emulator -k "system-images;android-30;google_apis;x86_64" --device "pixel"
+RUN echo "no" | ${ANDROID_HOME}/bin/avdmanager create avd -n emulator -k "system-images;android-30;google_apis;x86_64" --device "pixel"
 
 # Install Flutter
 ENV FLUTTER_HOME=/usr/local/flutter
