@@ -17,7 +17,6 @@ RUN wget -q https://dl.google.com/android/repository/commandlinetools-linux-7583
     && unzip -q commandlinetools.zip -d cmdline-tools \
     && rm commandlinetools.zip
 
-
 # Set environment variables
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 ENV ANDROID_HOME=/workspace/cmdline-tools
@@ -27,13 +26,10 @@ ENV PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}
 RUN yes | ${ANDROID_HOME}/tools/bin/sdkmanager --licenses
 
 # Install required Android SDK components
-RUN ${ANDROID_HOME}/tools/bin/sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.3"
-
-# Install required Android packages
-RUN /sdk/cmdline-tools/tools/bin/sdkmanager "platform-tools" "platforms;android-30" "emulator"
+RUN ${ANDROID_HOME}/tools/bin/sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.3" "emulator"
 
 # Create Android emulator
-RUN echo "no" | /sdk/cmdline-tools/tools/bin/avdmanager create avd -n emulator -k "system-images;android-30;google_apis;x86_64" --device "pixel"
+RUN echo "no" | ${ANDROID_HOME}/tools/bin/avdmanager create avd -n emulator -k "system-images;android-30;google_apis;x86_64" --device "pixel"
 
 # Install Flutter
 ENV FLUTTER_HOME=/usr/local/flutter
@@ -48,10 +44,6 @@ RUN flutter config --enable-web
 RUN flutter config --enable-linux-desktop
 RUN flutter config --enable-macos-desktop
 RUN flutter config --enable-windows-desktop
-
-# Set Java environment variables
-ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
-ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
 # Expose port for Android emulator
 EXPOSE 5555
