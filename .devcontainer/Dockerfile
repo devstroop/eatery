@@ -1,27 +1,31 @@
-FROM mcr.microsoft.com/vscode/devcontainers/universal:1-linux
+# Start from the base image
+FROM ubuntu:20.04
 
-# Set user to root
-USER root
+# Set the working directory to /workspace
+WORKDIR /workspace
 
-# Install nano
-RUN apt-get update && apt-get install -y nano
+# Install necessary dependencies
+RUN apt-get update && apt-get install -y \
+    wget \
+    unzip \
+    openjdk-8-jdk \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install Java 11
-RUN apt-get install -y openjdk-11-jdk
-
-# Install Android SDK and emulator
-ENV ANDROID_SDK_ROOT=/sdk
-RUN mkdir -p ${ANDROID_SDK_ROOT}/cmdline-tools \
-    && wget -q https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip -O commandlinetools.zip \
-    && unzip -q commandlinetools.zip -d ${ANDROID_SDK_ROOT}/cmdline-tools \
+# Download and install Android SDK
+RUN wget -q https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip -O commandlinetools.zip \
+    && unzip -q commandlinetools.zip -d cmdline-tools \
     && rm commandlinetools.zip
 
-# Accept Android licenses
-RUN yes | /sdk/cmdline-tools/tools/bin/sdkmanager --licenses
+# Set environment variables
+ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
+ENV ANDROID_HOME=/workspace/cmdline-tools
+ENV PATH=${PATH}:${ANDROID_HOME}/tools:${ANDROID_HOME}/tools/bin:${ANDROID_HOME}/platform-tools
 
-# Set Android SDK paths
-ENV PATH="${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin:${ANDROID_SDK_ROOT}/cmdline-tools/tools:${PATH}"
-# ENV PATH="/sdk/cmdline-tools/tools/bin:${PATH}" # Use this if the above doesn't work
+# Accept Android SDK licenses
+RUN yes | ${ANDROID_HOME}/tools/bin/sdkmanager --licenses
+
+# Install required Android SDK components
+RUN ${ANDROID_HOME}/tools/bin/sdkmanager "platform-tools" "platforms;android-30" "build-tools;30.0.3"
 
 # Install required Android packages
 RUN /sdk/cmdline-tools/tools/bin/sdkmanager "platform-tools" "platforms;android-30" "emulator"
