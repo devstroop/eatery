@@ -1,5 +1,5 @@
 {
   "image": "cirrusci/flutter:stable",
   "forwardPorts": [3000],
-  "postCreateCommand": "sudo su && git clone https://github.com/devstroop/eatery_db && git clone https://github.com/devstroop/eatery_components && git clone https://github.com/devstroop/eatery_services && git clone https://github.com/devstroop/bluetooth_thermal_printer"
+  // "postCreateCommand": "sudo su && git clone https://github.com/devstroop/eatery_db && git clone https://github.com/devstroop/eatery_components && git clone https://github.com/devstroop/eatery_services && git clone https://github.com/devstroop/bluetooth_thermal_printer"
 }
