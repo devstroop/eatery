@@ -10,7 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  path: ^1.8.1
+  path: ^1.8.0
   uicons: ^1.0.1
   flutter_bluetooth_basic: ^0.1.7
   flutter_native_splash: ^2.3.1
