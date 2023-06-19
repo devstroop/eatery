@@ -23,6 +23,7 @@
 			"Roboto",
 			"rxdart",
 			"uicons"
-		]
+		],
+		"files.autoSave": "onFocusChange"
 	}
 }
