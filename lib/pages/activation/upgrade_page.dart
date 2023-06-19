@@ -7,6 +7,7 @@ import 'package:platform_device_id/platform_device_id.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery/components/selectable_card.dart';
 import 'package:eatery/constants/style/color_style.dart';
+import 'package:uicons/uicons.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 class UpgradePage extends StatefulWidget {
@@ -44,6 +45,12 @@ class _UpgradePageState extends State<UpgradePage> {
     final appBar = AppBar(
       backgroundColor: getThemeColor(),
       title: const Text('Upgrade'),
+      leading: IconButton(
+        icon: Icon(UIcons.regularStraight.arrow_small_left),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
     );
     Widget buildContactSalesBottomSheet() =>
         StatefulBuilder(builder: (context, state) {
@@ -192,55 +199,59 @@ class _UpgradePageState extends State<UpgradePage> {
         color: ColorStyle.backgroundColorAlter,
         child: Padding(
           padding: const EdgeInsets.all(12.0),
-          child: Column(
+          child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SecondaryButton(
-                color: ColorStyle.text300,
-                borderColor: ColorStyle.text400,
-                text: 'Contact Sales',
-                height: 50.0,
-                onTap: () => showModalBottomSheet(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(24),
-                        topRight: Radius.circular(24),
-                        bottomLeft: Radius.circular(0),
-                        bottomRight: Radius.circular(0),
+              Flexible(
+                fit: FlexFit.tight,
+                flex: 1,
+                child: SecondaryButton(
+                  color: ColorStyle.text300,
+                  borderColor: ColorStyle.text400,
+                  text: 'Contact Sales',
+                  height: 50.0,
+                  onTap: () => showModalBottomSheet(
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(24),
+                          topRight: Radius.circular(24),
+                          bottomLeft: Radius.circular(0),
+                          bottomRight: Radius.circular(0),
+                        ),
                       ),
-                    ),
-                    context: context,
-                    builder: (context) => buildContactSalesBottomSheet()),
+                      context: context,
+                      builder: (context) => buildContactSalesBottomSheet()),
+                ),
               ),
               const SizedBox(
-                height: 8.0,
+                width: 8.0,
               ),
-              Row(
-                children: [
-                  PrimaryButton(
-                    color: getThemeColor(),
-                    onPressed: () async {
-                      if (selectedIndex == 1 &&
-                          controllerPurchaseCode.text != '') {
-                        /*LicenseData licData = License.validate(controllerPurchaseCode.text);
-                        if (licData.status) {
-                          */ /*Map<String, dynamic> account = widget.account;
-                          account['purchaseCode'] = licData.purchaseCode;
-                          var status = await Account.update(account);
-                          if (status) {
-                            showSnackBar(context, "Activated successfully");
-                            Navigator.pop(context);
-                          } else {
-                            showSnackBar(context, "Activation failed");
-                          }*/ /*
+              Flexible(
+                flex: 1,
+                fit: FlexFit.tight,
+                child: PrimaryButton(
+                  color: getThemeColor(),
+                  onPressed: () async {
+                    if (selectedIndex == 1 &&
+                        controllerPurchaseCode.text != '') {
+                      /*LicenseData licData = License.validate(controllerPurchaseCode.text);
+                      if (licData.status) {
+                        */ /*Map<String, dynamic> account = widget.account;
+                        account['purchaseCode'] = licData.purchaseCode;
+                        var status = await Account.update(account);
+                        if (status) {
+                          showSnackBar(context, "Activated successfully");
+                          Navigator.pop(context);
                         } else {
-                          showSnackBar(context, licData.message);
-                        }*/
-                      }
-                    },
-                    child: const Text('Activate'),
-                  ),
-                ],
+                          showSnackBar(context, "Activation failed");
+                        }*/ /*
+                      } else {
+                        showSnackBar(context, licData.message);
+                      }*/
+                    }
+                  },
+                  child: const Text('Activate'),
+                ),
               ),
             ],
           ),

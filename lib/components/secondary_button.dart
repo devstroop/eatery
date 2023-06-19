@@ -6,40 +6,38 @@ class SecondaryButton extends StatelessWidget {
     required this.color,
     required this.borderColor,
     required this.text,
-    required this.height,
+    this.height,
     this.onTap,
+    this.width,
   }) : super(key: key);
 
   final Color color;
   final Color borderColor;
   final String text;
-  final double height;
+  final double? width;
+  final double? height;
   final Function()? onTap;
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
       child: Container(
-        width: MediaQuery.of(context).size.width,
+        alignment: Alignment.center,
+        width: width,
         height: height,
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(4),
+          borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: borderColor,
             width: 1,
           ),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              text,
-              style: TextStyle(
-                  color: color, fontSize: 16, fontWeight: FontWeight.w500),
-            ),
-          ],
+        child: Text(
+          text,
+          style: TextStyle(
+              color: color, fontSize: 16, fontWeight: FontWeight.w500),
         ),
       ),
     );
