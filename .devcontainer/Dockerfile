@@ -20,7 +20,7 @@ RUN mkdir -p /opt/android-sdk
 # Set environment variables
 ENV JAVA_HOME=/usr/lib/jvm/java-8-openjdk-amd64
 ENV ANDROID_HOME=/opt/android-sdk
-ENV PATH=${PATH}:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/tools
+ENV PATH=${PATH}:${ANDROID_HOME}/platform-tools:${ANDROID_HOME}/cmdline-tools/latest/bin:${ANDROID_HOME}/tools/bin
 
 # Download and install Android SDK
 RUN wget -q https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip -O commandlinetools.zip \
