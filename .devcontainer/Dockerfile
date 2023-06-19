@@ -1,5 +1,8 @@
 FROM ghcr.io/cirruslabs/flutter:3.10.5
 
+# Super user
+RUN sudo su
+
 # Install nano
 RUN apt-get update && apt-get install -y nano
 
