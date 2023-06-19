@@ -16,17 +16,18 @@ RUN mkdir -p ${ANDROID_SDK_ROOT}/cmdline-tools \
     && unzip -q commandlinetools.zip -d ${ANDROID_SDK_ROOT}/cmdline-tools \
     && rm commandlinetools.zip
 
+# Accept Android licenses
+RUN yes | /sdk/cmdline-tools/tools/bin/sdkmanager --licenses
+
 # Set Android SDK paths
 ENV PATH="${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin:${ANDROID_SDK_ROOT}/cmdline-tools/tools:${PATH}"
-
-# Accept Android licenses
-RUN yes | sdkmanager --licenses
+# ENV PATH="/sdk/cmdline-tools/tools/bin:${PATH}" # Use this if the above doesn't work
 
 # Install required Android packages
-RUN sdkmanager "platform-tools" "platforms;android-30" "emulator"
+RUN /sdk/cmdline-tools/tools/bin/sdkmanager "platform-tools" "platforms;android-30" "emulator"
 
 # Create Android emulator
-RUN echo "no" | avdmanager create avd -n emulator -k "system-images;android-30;google_apis;x86_64" --device "pixel"
+RUN echo "no" | /sdk/cmdline-tools/tools/bin/avdmanager create avd -n emulator -k "system-images;android-30;google_apis;x86_64" --device "pixel"
 
 # Install Flutter
 ENV FLUTTER_HOME=/usr/local/flutter
