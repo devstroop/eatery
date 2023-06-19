@@ -5,8 +5,8 @@ import 'package:eatery_services/eatery_services.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:uicons/uicons.dart';
-import 'add_product_category_page.dart';
-import 'edit_product_category_page.dart';
+import 'add_productCategory.page.dart';
+import 'edit_productCategory.page.dart';
 
 class ProductCategoriesPage extends StatefulWidget {
   const ProductCategoriesPage({Key? key}) : super(key: key);

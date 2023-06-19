@@ -1,5 +1,5 @@
 import 'package:eatery/services/cloud/google_drive.dart';
-import 'package:eatery_db/models/company/company.dart';
+import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/menu_tile.dart';
 import 'package:eatery/constants/utils/app_file_system.dart';

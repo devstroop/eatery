@@ -1,7 +1,6 @@
 import 'package:eatery/constants/style/spacing_style.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:eatery_db/models/company/company.dart';
-import 'package:flutter/material.dart';
+import 'package:eatery_db/eatery_db.dart';
 import '../../../pages/activation/upgrade_page.dart';
 import '../bottom_view_grip.dart';
 

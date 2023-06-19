@@ -11,7 +11,7 @@ import 'package:eatery/services/printing/print_invoice.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
-import 'order_confirmation.dart';
+import 'orderConfirmation.page.dart';
 
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage(

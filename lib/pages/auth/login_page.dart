@@ -2,8 +2,6 @@ import 'dart:io';
 import 'package:eatery/constants/style/spacing_style.dart';
 import 'package:eatery/pages/backup_restore/backup_restore_page.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:eatery_db/eatery_db.dart';
-import 'package:eatery_db/models/company/company.dart';
 import 'package:eatery_services/eatery_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,6 +13,7 @@ import 'package:eatery/components/bottomsheets/forgot_password_bottomsheet.dart'
 import 'package:eatery/components/bottomsheets/upgrade_to_access_bottomsheet.dart';
 import 'package:eatery/components/loaders/loading_screen.dart';
 import 'package:uicons/uicons.dart';
+import 'package:eatery_db/eatery_db.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -208,7 +207,7 @@ class _LoginPageState extends State<LoginPage> {
                                   bottomRight: Radius.circular(0),
                                 ),
                               ),
-                              builder: (context) => EateryDB()
+                              builder: (context) => EateryDB.instance
                                           .subscriptionBox()
                                           .values
                                           .singleWhere(

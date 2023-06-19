@@ -4,8 +4,8 @@ import 'package:eatery/components/dining_table_category_card.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:uicons/uicons.dart';
 
-import 'add_dining_table_category_page.dart';
-import 'edit_dining_table_category_page.dart';
+import 'add_diningTable_category.page.dart';
+import 'edit_diningTable_category.page.dart';
 
 Color _pageColor = ColorStyle.tertiary;
 
@@ -52,7 +52,10 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
       ),
       floatingActionButton: FloatingActionButton(
         backgroundColor: _pageColor,
-        child: Icon(UIcons.regularStraight.plus),
+        foregroundColor: Colors.white,
+        child: Icon(
+          UIcons.regularStraight.plus,
+        ),
         onPressed: () {
           Navigator.push(
             context,

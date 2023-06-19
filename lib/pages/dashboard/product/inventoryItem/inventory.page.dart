@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:eatery/pages/dashboard/product/inventory/add_inventory_item_page.dart';
+import 'package:eatery/pages/dashboard/product/inventoryItem/add_inventoryItem.page.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:eatery_db/models/company/company.dart';
 import 'package:eatery_db/models/product/product.dart';
@@ -12,7 +12,7 @@ import 'package:eatery/components/product_card.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery_components/bottomsheets/product_internal_view.bottomsheet.dart';
 
-import 'edit_inventory_item_page.dart';
+import 'edit_inventoryItem.page.dart';
 
 class InventoryPage extends StatefulWidget {
   const InventoryPage({Key? key, required this.company}) : super(key: key);

@@ -10,8 +10,8 @@ import 'package:eatery/components/pos_category_widget.dart';
 import 'package:eatery/components/product_card.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery_components/bottomsheets/product_internal_view.bottomsheet.dart';
-import 'add_kitchen_dish_page.dart';
-import 'edit_kitchen_dish_page.dart';
+import 'add_kitchenDish.page.dart';
+import 'edit_kitchenDish.page.dart';
 
 class KitchenPage extends StatefulWidget {
   const KitchenPage({Key? key, required this.company}) : super(key: key);

@@ -7,9 +7,11 @@ import 'package:eatery/components/pos_category_widget.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:uicons/uicons.dart';
-import 'add_dining_table_page.dart';
-import 'dining_table_categories_page.dart';
-import 'edit_dining_table_page.dart';
+import 'add_diningTable.page.dart';
+import 'category/diningTable_categories.page.dart';
+import 'edit_diningTable.page.dart';
+
+Color _pageColor = ColorStyle.tertiary;
 
 class DiningTablesPage extends StatefulWidget {
   const DiningTablesPage({Key? key, required this.company}) : super(key: key);
@@ -29,14 +31,10 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
     });
   }
 
-  Color getThemeColor() {
-    return ColorStyle.tertiary;
-  }
-
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
-        backgroundColor: getThemeColor(),
+        backgroundColor: _pageColor,
         foregroundColor: Colors.white,
         title: const Text('Dining Tables'),
         leading: IconButton(
@@ -140,8 +138,10 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
       ),
       floatingActionButton: FloatingActionButton(
         foregroundColor: Colors.white,
-        backgroundColor: getThemeColor(),
-        child: Icon(UIcons.regularStraight.plus),
+        backgroundColor: _pageColor,
+        child: Icon(
+          UIcons.regularStraight.plus,
+        ),
         onPressed: () async {
           Navigator.push(
             context,
