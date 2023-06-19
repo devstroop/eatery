@@ -8,19 +8,21 @@ import 'package:eatery/components/selectable_card.dart';
 import 'package:eatery/constants/plugins/license.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/constants/style/spacing_style.dart';
+import 'package:eatery/constants/utils/utils.dart';
 import 'package:eatery_components/titles/page.title.dart';
 import 'package:eatery_db/models/subscription/subscription_type.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:devdart_windows_hdsn/devdart_windows_hdsn.dart';
 import 'package:devdart_windows_hdsn/drive.dart';
+import 'package:uicons/uicons.dart';
 
 class Body6 extends StatefulWidget {
   final Color themeColor;
   final Function(SubscriptionType subscriptionType, String? purchaseCde,
       DateTime? validFrom, DateTime? validTill) callback;
-  String? deviceSerial;
   SubscriptionType? subscriptionType;
   final GlobalKey<FormState> formKey;
   final Function(GlobalKey<FormState> formKey)? callbackFormKey;
@@ -41,6 +43,7 @@ class _Body6State extends State<Body6> {
   final TextEditingController _controllerPurchaseCode = TextEditingController();
   DateTime? validFrom;
   DateTime? validTill;
+  String? deviceSerial;
 
   Future fetchDeviceInfo() async {
     String? deviceId;
@@ -64,7 +67,7 @@ class _Body6State extends State<Body6> {
       widget.callbackFormKey!(widget.formKey);
     }
     setState(() {
-      widget.deviceSerial = deviceId;
+      deviceSerial = deviceId;
     });
   }
 
@@ -114,17 +117,39 @@ class _Body6State extends State<Body6> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SpacingStyle.defaultVerticalSpacing,
-                Row(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    const Text('Device ID'),
-                    const SizedBox(width: 6.0),
-                    Text(
-                      widget.deviceSerial ?? 'Undefined',
-                      style: const TextStyle(fontWeight: FontWeight.w500),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const Text('Device ID'),
+                        IconButton(
+                          onPressed: fetchDeviceInfo,
+                          iconSize: 14,
+                          icon: Icon(
+                            UIcons.regularStraight.refresh,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: copyDeviceIdToClipboard,
+                          iconSize: 14,
+                          icon: Icon(
+                            UIcons.regularStraight.copy,
+                          ),
+                        ),
+                      ],
                     ),
-                    IconButton(
-                        onPressed: fetchDeviceInfo,
-                        icon: const Icon(Icons.refresh))
+                    InkWell(
+                      onTap: copyDeviceIdToClipboard,
+                      child: Text(
+                        deviceSerial ?? 'Undefined',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 14),
+                      ),
+                    ),
+                    const Divider()
                   ],
                 ),
                 SpacingStyle.defaultVerticalSpacing,
@@ -149,7 +174,7 @@ class _Body6State extends State<Body6> {
                         widget.callbackFormKey!(widget.formKey);
                       }
                     },
-                    icon: const Icon(Icons.paste),
+                    icon: Icon(UIcons.regularStraight.clipboard_list),
                     color: ColorStyle.text400,
                   ),
                   validator: (value) {
@@ -202,5 +227,17 @@ class _Body6State extends State<Body6> {
         ],
       ),
     );
+  }
+
+  void copyDeviceIdToClipboard() {
+    // Implement copy to clipboard 'deviceSerial'
+    String? deviceSerial = this.deviceSerial;
+    if (deviceSerial == null) {
+      showSnackBar(context, 'Device Id can\'t be copied in clipboard');
+      return;
+    }
+    Clipboard.setData(ClipboardData(text: deviceSerial)).whenComplete(() {
+      showSnackBar(context, 'Copied to clipboard');
+    });
   }
 }

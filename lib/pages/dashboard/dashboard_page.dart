@@ -1,45 +1,46 @@
-import 'package:eatery/pages/auth/logout_page.dart';
+import 'package:eatery/components/menu_widget.dart';
+import 'package:eatery/components/menu_widget_extended.dart';
+import 'package:eatery/constants/style/color_style.dart';
+import 'package:eatery/pages/backup_restore/backup_restore_page.dart';
+import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/pages/dashboard/components/dashboard_header.dart';
 import 'package:eatery/pages/dashboard/components/notifications/low_battery_warning_notification.dart';
-import 'package:eatery/pages/dashboard/pos/point_of_sale_page.dart';
+import 'package:eatery/pages/dashboard/components/notifications/upgrade_notification.dart';
+import 'package:eatery/pages/dashboard/dining_table/dining_tables_page.dart';
 import 'package:eatery/pages/dashboard/product/categories/product_categories_page.dart';
 import 'package:eatery/pages/dashboard/product/inventory/inventory_page.dart';
 import 'package:eatery/pages/dashboard/product/kitchen/kitchen_page.dart';
+import 'package:eatery/pages/dashboard/pos/point_of_sale_page.dart';
 import 'package:eatery/pages/dashboard/reports/reports_page.dart';
 import 'package:eatery/pages/dashboard/settings/settings.page.dart';
 import 'package:eatery/pages/dashboard/waiter/waiters_page.dart';
 import 'package:eatery_db/models/company/company.dart';
 import 'package:flutter/material.dart';
-import 'package:eatery/components/menu_widget.dart';
-import 'package:eatery/components/menu_widget_extended.dart';
-import 'package:eatery/pages/backup_restore/backup_restore_page.dart';
-import 'package:eatery/constants/style/color_style.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uicons/uicons.dart';
-import 'components/notifications/upgrade_notification.dart';
-import 'dining_table/dining_tables_page.dart';
+import '../auth/logout_page.dart';
 import 'import_export/import_export_page.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key, required this.company}) : super(key: key);
   final Company company;
+
   @override
   _DashboardPageState createState() => _DashboardPageState();
 }
 
 class _DashboardPageState extends State<DashboardPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  late int batteryLevel;
 
   @override
   void initState() {
     super.initState();
   }
 
-  Color themeColor = ColorStyle.brandColor;
-
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+
     return WillPopScope(
       onWillPop: () {
         return Future.value(false);
@@ -55,13 +56,15 @@ class _DashboardPageState extends State<DashboardPage> {
                   companyName: widget.company.name,
                   logoPath: widget.company.logo,
                 ),
-                UpgradeNotification(company: widget.company),
+                UpgradeNotification(
+                    company: widget.company, width: screenWidth * 0.85),
                 const LowBatteryWarningNotification(),
                 Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Wrap(
+                    spacing: 16,
+                    runSpacing: 16,
+                    alignment: WrapAlignment.spaceEvenly,
                     children: [
                       MenuWidget(
                         iconData: UIcons.regularStraight.calculator,
@@ -72,7 +75,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => const PointOfSalePage()),
+                              builder: (context) => const PointOfSalePage(),
+                            ),
                           );
                         },
                       ),
@@ -85,20 +89,12 @@ class _DashboardPageState extends State<DashboardPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) =>
-                                    const ProductCategoriesPage()),
+                              builder: (context) =>
+                                  const ProductCategoriesPage(),
+                            ),
                           );
                         },
                       ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
                       MenuWidget(
                         iconData: UIcons.regularStraight.restaurant,
                         title: 'Kitchen',
@@ -108,9 +104,10 @@ class _DashboardPageState extends State<DashboardPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => KitchenPage(
-                                      company: widget.company,
-                                    )),
+                              builder: (context) => KitchenPage(
+                                company: widget.company,
+                              ),
+                            ),
                           );
                         },
                       ),
@@ -123,23 +120,15 @@ class _DashboardPageState extends State<DashboardPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => InventoryPage(
-                                      company: widget.company,
-                                    )),
+                              builder: (context) => InventoryPage(
+                                company: widget.company,
+                              ),
+                            ),
                           );
                         },
                       ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
                       MenuWidget(
-                        iconData: UIcons.regularStraight.eclipse,
+                        iconData: UIcons.regularStraight.terrace,
                         title: 'Tables',
                         subtitle: 'Manage your dining tables here',
                         color: const Color(0xFFEF9050),
@@ -147,14 +136,15 @@ class _DashboardPageState extends State<DashboardPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => DiningTablesPage(
-                                      company: widget.company,
-                                    )),
+                              builder: (context) => DiningTablesPage(
+                                company: widget.company,
+                              ),
+                            ),
                           );
                         },
                       ),
                       MenuWidget(
-                        iconData: Icons.emoji_people,
+                        iconData: UIcons.regularStraight.people_poll,
                         title: 'Waiters',
                         subtitle: 'Manage your waiters here',
                         color: const Color(0xFFC2592F),
@@ -162,23 +152,15 @@ class _DashboardPageState extends State<DashboardPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => WaitersPage(
-                                      company: widget.company,
-                                    )),
+                              builder: (context) => WaitersPage(
+                                company: widget.company,
+                              ),
+                            ),
                           );
                         },
                       ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
                       MenuWidget(
-                        iconData: Icons.history,
+                        iconData: UIcons.regularStraight.list,
                         title: 'Reports',
                         subtitle: 'All sales are here',
                         color: const Color(0xFFF5B942),
@@ -186,14 +168,15 @@ class _DashboardPageState extends State<DashboardPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ReportsPage(
-                                      company: widget.company,
-                                    )),
+                              builder: (context) => ReportsPage(
+                                company: widget.company,
+                              ),
+                            ),
                           );
                         },
                       ),
                       MenuWidget(
-                        iconData: Icons.settings,
+                        iconData: UIcons.regularStraight.settings,
                         title: 'Settings',
                         subtitle: 'Manage your settings here',
                         color: const Color(0xFF222222),
@@ -201,25 +184,17 @@ class _DashboardPageState extends State<DashboardPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => SettingPage(
-                                      company: widget.company,
-                                    )),
+                              builder: (context) => SettingPage(
+                                company: widget.company,
+                              ),
+                            ),
                           ).then((_) async {
                             setState(() {});
                           });
                         },
                       ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
                       MenuWidget(
-                        iconData: Icons.import_export,
+                        iconData: UIcons.regularStraight.exchange,
                         title: 'Import / Export',
                         subtitle: 'Import Products/Invoices here',
                         color: const Color(0xFFEF9050),
@@ -227,14 +202,15 @@ class _DashboardPageState extends State<DashboardPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => ImportExportPage(
-                                      company: widget.company,
-                                    )),
+                              builder: (context) => ImportExportPage(
+                                company: widget.company,
+                              ),
+                            ),
                           );
                         },
                       ),
                       MenuWidget(
-                        iconData: Icons.settings_backup_restore,
+                        iconData: UIcons.regularStraight.time_past,
                         title: 'Backup / Restore',
                         subtitle: 'Backup and Restore is here',
                         color: const Color(0xFF2FC289),
@@ -242,23 +218,15 @@ class _DashboardPageState extends State<DashboardPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => BackupRestorePage(
-                                      company: widget.company,
-                                    )),
+                              builder: (context) => BackupRestorePage(
+                                company: widget.company,
+                              ),
+                            ),
                           );
                         },
                       ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
                       MenuWidgetExtended(
-                        iconData: Icons.logout,
+                        iconData: UIcons.regularStraight.log_out,
                         title: 'Logout',
                         subtitle: 'Close the session',
                         color: const Color(0xFFEF5350),
@@ -268,9 +236,10 @@ class _DashboardPageState extends State<DashboardPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => LogoutPage(
-                                        company: widget.company,
-                                      )),
+                                builder: (context) => LogoutPage(
+                                  company: widget.company,
+                                ),
+                              ),
                             );
                           });
                         },

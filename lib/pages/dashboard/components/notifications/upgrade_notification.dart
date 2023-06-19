@@ -7,8 +7,9 @@ import '../../../activation/upgrade_page.dart';
 
 class UpgradeNotification extends StatefulWidget {
   final Company? company;
-
-  const UpgradeNotification({Key? key, this.company}) : super(key: key);
+  final double? width;
+  const UpgradeNotification({Key? key, this.company, this.width})
+      : super(key: key);
 
   @override
   State<UpgradeNotification> createState() => _UpgradeNotificationState();
@@ -24,7 +25,8 @@ class _UpgradeNotificationState extends State<UpgradeNotification> {
                     (element) => element.id == widget.company!.subscriptionId!)
                 .purchaseCode ==
             null
-        ? Padding(
+        ? Container(
+            width: widget.width,
             padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
             child: NotificationWidget(
               message: 'Activate License',
@@ -47,6 +49,6 @@ class _UpgradeNotificationState extends State<UpgradeNotification> {
                 });
               },
             ))
-        : Container();
+        : const SizedBox.shrink();
   }
 }

@@ -13,6 +13,7 @@ import 'package:eatery_db/models/subscription/subscription_type.dart';
 import 'package:eatery_db/models/tax/tax_slab.dart';
 import 'package:eatery_db/models/tax/tax_type.dart';
 import 'package:flutter/material.dart';
+import 'package:uicons/uicons.dart';
 import 'components/body1.dart';
 import 'components/body2.dart';
 import 'components/body3.dart';
@@ -305,7 +306,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
         leading: viewIndex != 0
             ? IconButton(
                 icon: Icon(
-                  Icons.arrow_back,
+                  UIcons.regularStraight.arrow_small_left,
                   color: themeColor,
                 ),
                 onPressed: () {

@@ -3,6 +3,7 @@ import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/pages/auth/login_page.dart';
 import 'package:eatery/constants/style/color_style.dart';
+import 'package:lottie/lottie.dart';
 
 class CreateAccountResultPage extends StatefulWidget {
   const CreateAccountResultPage({Key? key}) : super(key: key);
@@ -28,27 +29,29 @@ class _CreateAccountResultPageState extends State<CreateAccountResultPage> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 const Spacer(),
-                Image.asset(
-                  'assets/images/upgrade.png',
-                  height: 120.0,
-                  width: 120.0,
-                ),
-                const SizedBox(height: 32),
+                Lottie.asset(
+                    'assets/lottie/42183-congratulation-success-batch.json'),
+                // Image.asset(
+                //   'assets/images/upgrade.png',
+                //   height: 120.0,
+                //   width: 120.0,
+                // ),
+                const SizedBox(height: 36),
                 Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      'Success',
+                      'Congratulations!',
                       style: TextStyle(
-                          fontSize: 24,
+                          fontSize: 28,
                           fontWeight: FontWeight.bold,
                           color: ColorStyle.brandColor),
                     ),
                     SpacingStyle.defaultVerticalSpacing,
                     const Text(
-                      'Congratulations! Your account has been created successfully',
+                      'Your account has been created successfully',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 18,
                         fontWeight: FontWeight.w400,
                       ),
                       textAlign: TextAlign.center,
@@ -75,7 +78,7 @@ class _CreateAccountResultPageState extends State<CreateAccountResultPage> {
                 (Route<dynamic> route) => false,
               );
             },
-            child: const Text('Continue'),
+            child: const Text('Continue to Login'),
           ),
         ),
       ),

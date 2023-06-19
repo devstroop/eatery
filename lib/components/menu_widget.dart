@@ -1,19 +1,38 @@
 import 'package:flutter/material.dart';
 
 class MenuWidget extends StatelessWidget {
-  const MenuWidget({Key? key, required this.iconData, required this.title, required this.subtitle, required this.color, this.onTap}) : super(key: key);
+  const MenuWidget({
+    Key? key,
+    required this.iconData,
+    required this.title,
+    required this.subtitle,
+    required this.color,
+    this.onTap,
+  }) : super(key: key);
+
   final IconData iconData;
   final String title;
   final String subtitle;
   final Color color;
-  final Function()? onTap;
+  final VoidCallback? onTap;
+
   @override
   Widget build(BuildContext context) {
+    final double screenWidth = MediaQuery.of(context).size.width;
+    // final double itemWidth = screenWidth <= 500
+    //     ? screenWidth / 2.5
+    //     : screenWidth <= 1000
+    //         ? screenWidth / 5
+    //         : screenWidth / 7.5;
+    final double itemWidth =
+        screenWidth > 500 ? (screenWidth / 2) * 0.4 : screenWidth * 0.4;
+
     return InkWell(
       onTap: onTap,
       child: Container(
-        width: MediaQuery.of(context).size.width * 0.44,
-        height: 150,
+        width: itemWidth,
+        height: itemWidth,
+        alignment: Alignment.center,
         decoration: BoxDecoration(
           color: color,
           boxShadow: const [
@@ -27,36 +46,52 @@ class MenuWidget extends StatelessWidget {
         ),
         child: Column(
           mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
+              padding: EdgeInsetsDirectional.fromSTEB(
+                0,
+                screenWidth > 600 ? 16 : 12,
+                0,
+                0,
+              ),
               child: Icon(
                 iconData,
                 color: Colors.white,
-                size: 44,
+                size: screenWidth > 600 ? 44 : 32,
               ),
             ),
             Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0, 8, 0, 0),
+              padding: EdgeInsetsDirectional.fromSTEB(
+                0,
+                screenWidth > 600 ? 8 : 4,
+                0,
+                0,
+              ),
               child: Text(
                 title,
                 textAlign: TextAlign.center,
-                style: const TextStyle(
+                style: TextStyle(
                   color: Colors.white,
-                  fontSize: 18,
+                  fontSize: screenWidth > 600 ? 18 : 14,
                   fontWeight: FontWeight.w500,
                 ),
               ),
             ),
-            Expanded(
+            Flexible(
               child: Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(8, 4, 8, 0),
+                padding: EdgeInsetsDirectional.fromSTEB(
+                  8,
+                  4,
+                  8,
+                  0,
+                ),
                 child: Text(
                   subtitle,
                   textAlign: TextAlign.center,
-                  style: const TextStyle(
+                  style: TextStyle(
                     color: Color(0xB3FFFFFF),
-                    fontSize: 12,
+                    fontSize: screenWidth > 600 ? 12 : 10,
                   ),
                 ),
               ),
