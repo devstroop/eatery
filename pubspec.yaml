@@ -13,7 +13,7 @@ dependencies:
   path: ^1.8.2
   uicons: ^1.0.1
   flutter_bluetooth_basic: ^0.1.7
-  flutter_native_splash: ^2.3.0
+  flutter_native_splash: ^2.2.19
   cupertino_icons: ^1.0.2
   sqflite: ^2.0.0+3
   intl: ^0.17.0
