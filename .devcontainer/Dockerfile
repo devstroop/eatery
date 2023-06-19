@@ -6,6 +6,9 @@ USER root
 # Install nano
 RUN apt-get update && apt-get install -y nano
 
+# Install Java 11
+RUN apt-get install -y openjdk-11-jdk
+
 # Install Android SDK and emulator
 ENV ANDROID_SDK_ROOT=/sdk
 RUN mkdir -p ${ANDROID_SDK_ROOT}/cmdline-tools \
@@ -26,6 +29,22 @@ RUN flutter config --no-analytics && flutter precache
 ENV ANDROID_SDK_ROOT=${ANDROID_SDK_ROOT}
 RUN yes | sdkmanager --update
 RUN yes | sdkmanager --install "platforms;android-30" "build-tools;30.0.3"
+
+# Accept Android licenses
+RUN yes | sdkmanager --licenses
+
+# Configure Flutter
+RUN flutter config --no-analytics
+RUN flutter config --enable-web
+
+# Enable desktop support (optional)
+RUN flutter config --enable-linux-desktop
+RUN flutter config --enable-macos-desktop
+RUN flutter config --enable-windows-desktop
+
+# Set Java environment variables
+ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
 
 # Expose port for Android emulator
 EXPOSE 5555
