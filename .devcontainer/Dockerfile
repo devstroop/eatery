@@ -27,6 +27,9 @@ RUN wget -q https://dl.google.com/android/repository/commandlinetools-linux-7583
     && unzip -q commandlinetools.zip -d cmdline-tools \
     && rm commandlinetools.zip
 
+# Create the destination directory for cmdline-tools
+RUN mkdir -p ${ANDROID_HOME}/cmdline-tools/latest
+
 # Move Android SDK files to appropriate directory
 RUN mv cmdline-tools ${ANDROID_HOME}/cmdline-tools/latest
 
