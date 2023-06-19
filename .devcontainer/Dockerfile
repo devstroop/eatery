@@ -14,10 +14,19 @@ ENV ANDROID_SDK_ROOT=/sdk
 RUN mkdir -p ${ANDROID_SDK_ROOT}/cmdline-tools \
     && wget -q https://dl.google.com/android/repository/commandlinetools-linux-7583922_latest.zip -O commandlinetools.zip \
     && unzip -q commandlinetools.zip -d ${ANDROID_SDK_ROOT}/cmdline-tools \
-    && rm commandlinetools.zip \
-    && yes | ${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin/sdkmanager --licenses \
-    && ${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin/sdkmanager "platform-tools" "platforms;android-30" "emulator" \
-    && echo "no" | ${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin/avdmanager create avd -n emulator -k "system-images;android-30;google_apis;x86_64" --device "pixel"
+    && rm commandlinetools.zip
+
+# Set Android SDK paths
+ENV PATH="${ANDROID_SDK_ROOT}/cmdline-tools/tools/bin:${ANDROID_SDK_ROOT}/cmdline-tools/tools:${PATH}"
+
+# Accept Android licenses
+RUN yes | sdkmanager --licenses
+
+# Install required Android packages
+RUN sdkmanager "platform-tools" "platforms;android-30" "emulator"
+
+# Create Android emulator
+RUN echo "no" | avdmanager create avd -n emulator -k "system-images;android-30;google_apis;x86_64" --device "pixel"
 
 # Install Flutter
 ENV FLUTTER_HOME=/usr/local/flutter
@@ -25,16 +34,7 @@ ENV PATH="${FLUTTER_HOME}/bin:${PATH}"
 RUN git clone --branch 3.10.5 https://github.com/flutter/flutter.git ${FLUTTER_HOME}
 RUN flutter config --no-analytics && flutter precache
 
-# Set Android SDK paths for Flutter
-ENV ANDROID_SDK_ROOT=${ANDROID_SDK_ROOT}
-RUN yes | sdkmanager --update
-RUN yes | sdkmanager --install "platforms;android-30" "build-tools;30.0.3"
-
-# Accept Android licenses
-RUN yes | sdkmanager --licenses
-
 # Configure Flutter
-RUN flutter config --no-analytics
 RUN flutter config --enable-web
 
 # Enable desktop support (optional)
