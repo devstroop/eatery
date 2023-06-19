@@ -27,7 +27,7 @@ class AddInventoryItem extends StatefulWidget {
 }
 
 class _AddInventoryItemState extends State<AddInventoryItem> {
-  String? _image;
+  String? image;
   ProductCategory? _category;
 
   FoodType? _foodType;
@@ -145,10 +145,10 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
                     primaryColor: getThemeColor(),
                     secondaryColor: ColorStyle.text200,
                     uploadType: UploadType.image,
-                    filePath: _image,
-                    onChanged: (_image) {
+                    filePath: image,
+                    onChanged: (image) {
                       setState(() {
-                        this._image = _image;
+                        this.image = image;
                       });
                     },
                   ),
@@ -459,16 +459,17 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
                     name: _ctrlName.text,
                     categoryId: _category?.id,
                     description: _ctrlDesc.text,
-                    image: _image,
+                    image: image,
                     mrpPrice: _ctrlMRP.text.toDouble() ?? 0.0,
                     salePrice: _ctrlSP.text.toDouble(),
                     taxSlabId: _taxSlab?.id,
                     foodType: _foodType,
                     type: ProductType.inventoryItem,
                     isActive: true);
-                await EateryDB().productBox().add(product);
-                showSnackBar(context, 'Successfully created');
-                Navigator.pop(context);
+                await EateryDB().productBox().add(product).whenComplete(() {
+                  showSnackBar(context, 'Successfully created');
+                  Navigator.pop(context);
+                });
               } catch (_) {
                 showSnackBar(context, 'Failed to create');
               }

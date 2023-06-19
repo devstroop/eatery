@@ -55,9 +55,10 @@ class _KitchenPageState extends State<KitchenPage> {
       });
 
   _delete(Product product) async {
-    await product.delete();
-    Navigator.of(context).pop();
-    setState(() {});
+    await product.delete().whenComplete(() {
+      Navigator.of(context).pop();
+      setState(() {});
+    });
   }
 
   @override

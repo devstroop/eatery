@@ -353,9 +353,9 @@ class _ReportsPageState extends State<ReportsPage> {
         onPressed: () async {
           String? id = await scanner.scan();
           if (id != null) {
-            Map<String, dynamic>? order = await Order.get(id);
-            if (order != null) {
-              /*Navigator.push(
+            Order.get(id).then((order) {
+              if (order != null) {
+                /*Navigator.push(
                 context,
                 MaterialPageRoute(
                     builder: (context) => DetailedHistoryPage(
@@ -375,9 +375,10 @@ class _ReportsPageState extends State<ReportsPage> {
                   this.orders = orders;
                 });
               });*/
-            } else {
-              showSnackBar(context, 'Not found');
-            }
+              } else {
+                showSnackBar(context, 'Not found');
+              }
+            });
           }
         },
         label: const Text("Scan"),

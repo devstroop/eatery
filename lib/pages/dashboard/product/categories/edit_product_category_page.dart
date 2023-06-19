@@ -58,13 +58,13 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
                     TextButton(
                         onPressed: () async {
                           Navigator.pop(context);
-                          bool _isLinkedToProduct = EateryDB()
+                          bool isLinkedToProduct = EateryDB()
                               .productBox()
                               .values
                               .where((element) =>
                                   element.categoryId == widget.category.id)
                               .isNotEmpty;
-                          if (_isLinkedToProduct) {
+                          if (isLinkedToProduct) {
                             showSnackBar(
                                 context, 'Linked to product, Can\'t delete');
                             return;

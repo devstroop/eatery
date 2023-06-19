@@ -37,9 +37,10 @@ class _TaxSlabsSettingsPageState extends State<TaxSlabsSettingsPage> {
       });
 
   _delete(TaxSlab taxSlab) async {
-    await taxSlab.delete();
-    setState(() {});
-    Navigator.of(context).pop();
+    await taxSlab.delete().whenComplete(() {
+      setState(() {});
+      Navigator.of(context).pop();
+    });
   }
 
   @override

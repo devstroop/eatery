@@ -28,7 +28,7 @@ class EditInventoryItem extends StatefulWidget {
 }
 
 class _EditInventoryItemState extends State<EditInventoryItem> {
-  String? _image;
+  String? image;
   ProductCategory? _category;
 
   FoodType? _foodType;
@@ -56,7 +56,7 @@ class _EditInventoryItemState extends State<EditInventoryItem> {
           .singleWhere((element) => element.id == widget.company.currencyId)
           .symbol;
     } catch (_) {}
-    _image = widget.product.image;
+    image = widget.product.image;
     _ctrlName.text = widget.product.name;
     _ctrlMRP.text = widget.product.mrpPrice.toString();
     _ctrlSP.text = widget.product.salePrice != null
@@ -161,10 +161,10 @@ class _EditInventoryItemState extends State<EditInventoryItem> {
                     primaryColor: getThemeColor(),
                     secondaryColor: ColorStyle.text200,
                     uploadType: UploadType.image,
-                    filePath: _image,
-                    onChanged: (_image) {
+                    filePath: image,
+                    onChanged: (image) {
                       setState(() {
-                        this._image = _image;
+                        this.image = image;
                       });
                     },
                   ),
@@ -469,7 +469,7 @@ class _EditInventoryItemState extends State<EditInventoryItem> {
               _formKey.currentState!.save();
 
               try {
-                widget.product.image = _image;
+                widget.product.image = image;
                 widget.product.name = _ctrlName.text;
                 widget.product.mrpPrice = _ctrlMRP.text.toDouble() ?? 0;
                 widget.product.salePrice = _ctrlSP.text.toDouble();
@@ -477,9 +477,10 @@ class _EditInventoryItemState extends State<EditInventoryItem> {
                 widget.product.taxSlabId = _taxSlab?.id;
                 widget.product.categoryId = _category?.id;
                 widget.product.description = _ctrlDesc.text;
-                await widget.product.save();
-                showSnackBar(context, 'Successfully updated');
-                Navigator.pop(context);
+                await widget.product.save().whenComplete(() {
+                  showSnackBar(context, 'Successfully updated');
+                  Navigator.pop(context);
+                });
               } catch (_) {
                 showSnackBar(context, 'Failed to update');
               }

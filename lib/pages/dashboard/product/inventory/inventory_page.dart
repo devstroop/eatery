@@ -46,19 +46,20 @@ class _InventoryPageState extends State<InventoryPage> {
   }
 
   _edit(Product product) => Navigator.push(
-    context,
-    MaterialPageRoute(
-        builder: (context) =>
-            EditInventoryItem(company: widget.company, product: product)),
-  ).then((_) {
-    setState(() {});
-    Navigator.of(context).pop();
-  });
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                EditInventoryItem(company: widget.company, product: product)),
+      ).then((_) {
+        setState(() {});
+        Navigator.of(context).pop();
+      });
 
   _delete(Product product) async {
-    await product.delete();
-    Navigator.of(context).pop();
-    setState(() {});
+    product.delete().then((value) {
+      Navigator.of(context).pop();
+      setState(() {});
+    });
   }
 
   @override
@@ -106,7 +107,7 @@ class _InventoryPageState extends State<InventoryPage> {
               filled: true,
               fillColor: Colors.white,
               contentPadding:
-              const EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
+                  const EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
             ),
             style: TextStyle(
               color: ColorStyle.text200,
@@ -155,7 +156,7 @@ class _InventoryPageState extends State<InventoryPage> {
                             return PosCategoryWidget(
                                 active: this._category == _category,
                                 image: snapshot.data != null &&
-                                    File(snapshot.data!).existsSync()
+                                        File(snapshot.data!).existsSync()
                                     ? Image.file(File(snapshot.data!))
                                     : null,
                                 label: _category.name,
@@ -182,13 +183,13 @@ class _InventoryPageState extends State<InventoryPage> {
             alignment: WrapAlignment.center,
             children: [
               for (var product in EateryDB().productBox().values.where(
-                      (element) => element.type == ProductType.inventoryItem &&
-                      _category != null
+                  (element) => element.type == ProductType.inventoryItem &&
+                          _category != null
                       ? element.categoryId == _category?.id
                       : true &&
-                      element.name
-                          .toLowerCase()
-                          .contains(_ctrlSearch.text.toLowerCase())))
+                          element.name
+                              .toLowerCase()
+                              .contains(_ctrlSearch.text.toLowerCase())))
                 ProductCard(
                   currencySymbol: _currencySymbol,
                   product: product,
@@ -246,8 +247,8 @@ class _InventoryPageState extends State<InventoryPage> {
             context,
             MaterialPageRoute(
                 builder: (context) => AddInventoryItem(
-                  company: widget.company,
-                )),
+                      company: widget.company,
+                    )),
           ).then((_) => setState(() {}));
         },
       ),

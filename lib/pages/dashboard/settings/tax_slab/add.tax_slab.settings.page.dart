@@ -40,9 +40,10 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
           name: controllerSlabName.text,
           rate: double.parse(controllerTaxRate.text),
           type: _taxType);
-      await EateryDB().taxSlabBox().add(taxSlab);
-      showSnackBar(context, 'Successfully created!');
-      Navigator.of(context).pop();
+      await EateryDB().taxSlabBox().add(taxSlab).whenComplete(() {
+        showSnackBar(context, 'Successfully created!');
+        Navigator.of(context).pop();
+      });
     } catch (_) {
       showSnackBar(context, 'Failed to created!');
     }
