@@ -1,6 +1,4 @@
 import 'package:eatery_db/eatery_db.dart';
-import 'package:eatery_db/models/dining_table/dining_table.dart';
-import 'package:eatery_db/models/dining_table/dining_table_category.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery/components/dialog_box.dart';
@@ -8,7 +6,6 @@ import 'package:eatery/components/pos_category_widget.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
-import 'package:uicons/uicons.dart';
 
 Color _pageColor = ColorStyle.tertiary;
 
@@ -28,9 +25,9 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
   initState() {
     super.initState();
     setState(() {
-      diningTable = EateryDB().diningTableBox().get(widget.id);
+      diningTable = EateryDB.instance.diningTableBox.get(widget.id);
       diningTableCategory =
-          EateryDB().diningTableCategoryBox().get(diningTable?.categoryId);
+          EateryDB.instance.diningTableCategoryBox.get(diningTable?.categoryId);
     });
   }
 
@@ -65,8 +62,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                       TextButton(
                           onPressed: () async {
                             Navigator.pop(context);
-                            EateryDB()
-                                .diningTableBox()
+                            EateryDB.instance.diningTableBox
                                 .delete(widget.id)
                                 .whenComplete(() {
                               showSnackBar(context, 'Deleted successfully');
@@ -133,7 +129,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                         },
                       );
                     }),
-                ...EateryDB().diningTableCategoryBox().values.map((e) {
+                ...EateryDB.instance.diningTableCategoryBox.values.map((e) {
                   return PosCategoryWidget(
                     active: diningTableCategory?.id == e.id,
                     label: e.name,
@@ -167,8 +163,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
               if (diningTable != null) {
                 diningTable!.name = _controllerName.text;
                 diningTable!.categoryId = diningTableCategory!.id;
-                EateryDB()
-                    .diningTableBox()
+                EateryDB.instance.diningTableBox
                     .put(widget.id, diningTable!)
                     .whenComplete(() {
                   showSnackBar(context, 'Successfully updated');

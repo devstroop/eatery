@@ -29,7 +29,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   void initState() {
     super.initState();
-    company = EateryDB().companyBox().values.single;
+    company = EateryDB.instance.companyBox.values.single;
   }
 
   void _submit() async {
@@ -207,34 +207,33 @@ class _LoginPageState extends State<LoginPage> {
                                   bottomRight: Radius.circular(0),
                                 ),
                               ),
-                              builder: (context) => EateryDB.instance
-                                          .subscriptionBox()
-                                          .values
-                                          .singleWhere(
-                                            (element) =>
-                                                element.id ==
-                                                company!.subscriptionId!,
-                                          )
-                                          .purchaseCode !=
-                                      null
-                                  ? ForgotPasswordBottomSheet(
-                                      context,
-                                      themeColor: themeColor,
-                                      callback: (Company? company) {
-                                        setState(() {
-                                          this.company = company;
-                                        });
-                                      },
-                                    )
-                                  : UpgradeToAccessBottomSheet(
-                                      context,
-                                      themeColor: themeColor,
-                                      callback: (Company? company) {
-                                        setState(() {
-                                          this.company = company;
-                                        });
-                                      },
-                                    ),
+                              builder: (context) =>
+                                  EateryDB.instance.subscriptionBox.values
+                                              .singleWhere(
+                                                (element) =>
+                                                    element.id ==
+                                                    company!.subscriptionId!,
+                                              )
+                                              .purchaseCode !=
+                                          null
+                                      ? ForgotPasswordBottomSheet(
+                                          context,
+                                          themeColor: themeColor,
+                                          callback: (Company? company) {
+                                            setState(() {
+                                              this.company = company;
+                                            });
+                                          },
+                                        )
+                                      : UpgradeToAccessBottomSheet(
+                                          context,
+                                          themeColor: themeColor,
+                                          callback: (Company? company) {
+                                            setState(() {
+                                              this.company = company;
+                                            });
+                                          },
+                                        ),
                             ),
                           )
                         ],

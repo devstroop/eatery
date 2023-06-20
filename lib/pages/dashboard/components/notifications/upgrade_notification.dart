@@ -1,8 +1,6 @@
 import 'package:eatery/components/notification_widget.dart';
 import 'package:eatery_db/eatery_db.dart';
-import 'package:eatery_db/models/company/company.dart';
 import 'package:flutter/material.dart';
-import 'package:uicons/uicons.dart';
 import '../../../activation/upgrade_page.dart';
 
 class UpgradeNotification extends StatefulWidget {
@@ -18,9 +16,7 @@ class UpgradeNotification extends StatefulWidget {
 class _UpgradeNotificationState extends State<UpgradeNotification> {
   @override
   Widget build(BuildContext context) {
-    return EateryDB()
-                .subscriptionBox()
-                .values
+    return EateryDB.instance.subscriptionBox.values
                 .singleWhere(
                     (element) => element.id == widget.company!.subscriptionId!)
                 .purchaseCode ==

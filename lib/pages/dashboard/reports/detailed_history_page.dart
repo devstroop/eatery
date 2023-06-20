@@ -1,4 +1,3 @@
-import 'package:eatery_db/models/order/order_type.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/checkout_product_card.dart';
 import 'package:eatery/components/dialog_box.dart';
@@ -6,6 +5,7 @@ import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/services/printing/print_invoice.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
+import 'package:eatery_db/eatery_db.dart';
 
 class DetailedHistoryPage extends StatefulWidget {
   const DetailedHistoryPage(
@@ -30,8 +30,9 @@ class _DetailedHistoryPageState extends State<DetailedHistoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final _pageColor = Color(widget.orderType!.color!);
     final appBar = AppBar(
-      backgroundColor: widget.orderType!.color,
+      backgroundColor: _pageColor,
       title: const Text('Order detail'),
       actions: [
         IconButton(
@@ -105,7 +106,7 @@ class _DetailedHistoryPageState extends State<DetailedHistoryPage> {
                                 0, 0, 6, 0),
                             child: Icon(
                               widget.orderType!.icon,
-                              color: widget.orderType!.color,
+                              color: _pageColor,
                             ),
                           ),
                           Padding(
@@ -627,7 +628,7 @@ class _DetailedHistoryPageState extends State<DetailedHistoryPage> {
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: PrimaryButton(
-            color: widget.orderType!.color ?? ColorStyle.primary,
+            color: _pageColor,
             onPressed: () async {
               try {
                 await PrintInvoice.printReceipt(

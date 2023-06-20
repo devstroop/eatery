@@ -1,8 +1,7 @@
 import 'dart:io';
 
 import 'package:eatery/constants/global_variables.dart';
-import 'package:eatery/constants/utils/calculations.dart';
-import 'package:eatery_db/models/product/product.dart';
+import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery_components/badges/food_type.badge.dart';
 import 'package:eatery/constants/style/color_style.dart';

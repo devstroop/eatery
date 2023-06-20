@@ -6,8 +6,6 @@ import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/constants/style/spacing_style.dart';
 import 'package:eatery_db/eatery_db.dart';
-import 'package:eatery_db/models/company/company.dart';
-import 'package:eatery_db/models/company/edition.dart';
 import 'package:flutter/material.dart';
 
 import 'edit_company_page.dart';
@@ -152,7 +150,7 @@ class _ShowCompanyPageState extends State<ShowCompanyPage> {
                     leading: const Text('Default tax_slab rate'),
                     trailing: Text(
                       company!.defaultTaxSlabId != null
-                          ? '${EateryDB().taxSlabBox().values.singleWhere((element) => element.id == company!.defaultTaxSlabId).rate.toString()}%'
+                          ? '${EateryDB.instance.taxSlabBox.values.singleWhere((element) => element.id == company!.defaultTaxSlabId).rate.toString()}%'
                           : 'Not Available',
                       style: const TextStyle(fontWeight: FontWeight.w500),
                     ),

@@ -3,7 +3,6 @@ import 'package:eatery/components/menu_widget_extended.dart';
 import 'package:eatery/constants/global_variables.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/pages/backup_restore/backup_restore_page.dart';
-import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/pages/dashboard/components/dashboard_header.dart';
 import 'package:eatery/pages/dashboard/components/notifications/low_battery_warning_notification.dart';
 import 'package:eatery/pages/dashboard/components/notifications/upgrade_notification.dart';
@@ -16,10 +15,8 @@ import 'package:eatery/pages/dashboard/reports/reports_page.dart';
 import 'package:eatery/pages/dashboard/settings/settings.page.dart';
 import 'package:eatery/pages/dashboard/waiter/waiters_page.dart';
 import 'package:eatery_db/eatery_db.dart';
-import 'package:eatery_db/models/company/company.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:uicons/uicons.dart';
 import '../auth/logout_page.dart';
 import 'importExport/importExport.page.dart';
 
@@ -39,8 +36,8 @@ class _DashboardPageState extends State<DashboardPage> {
     super.initState();
     setState(() {
       GlobalVariables.company = widget.company;
-      GlobalVariables.currency =
-          EateryDB().currencyBox().get(GlobalVariables.company?.currencyId);
+      GlobalVariables.currency = EateryDB.instance.currencyBox
+          .get(GlobalVariables.company?.currencyId);
     });
   }
 

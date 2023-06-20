@@ -6,10 +6,9 @@ import 'package:eatery/constants/style/spacing_style.dart';
 import 'package:eatery/constants/utils/email_validator.dart';
 import 'package:eatery/constants/validators/gstin_validator.dart';
 import 'package:eatery/constants/validators/phone_validator.dart';
-import 'package:eatery_db/models/company/company.dart';
-import 'package:eatery_db/models/company/edition.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:eatery_db/eatery_db.dart';
 
 class EditCompanyPage extends StatefulWidget {
   const EditCompanyPage({Key? key}) : super(key: key);

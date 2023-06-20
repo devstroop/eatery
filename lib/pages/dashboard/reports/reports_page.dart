@@ -3,8 +3,6 @@ import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'package:date_time_picker/date_time_picker.dart';
-import 'package:eatery_db/models/company/company.dart';
-import 'package:eatery_db/models/order/order_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
@@ -15,6 +13,7 @@ import 'package:eatery/services/utility/share.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
+import 'package:eatery_db/eatery_db.dart';
 
 class ReportsPage extends StatefulWidget {
   const ReportsPage({Key? key, required this.company}) : super(key: key);
@@ -286,13 +285,13 @@ class _ReportsPageState extends State<ReportsPage> {
                   : orders[index]['orderType'] == 'takeAway'
                       ? OrderType.takeout.icon
                       : Icons.block,
-          color: orders[index]['orderType'] == 'dineIn'
-              ? OrderType.dine.color
-              : orders[index]['orderType'] == 'delivery'
-                  ? OrderType.delivery.color
-                  : orders[index]['orderType'] == 'takeAway'
-                      ? OrderType.takeout.color
-                      : ColorStyle.text200,
+          // color: orders[index]['orderType'] == 'dineIn'
+          //     ? OrderType.dine.color
+          //     : orders[index]['orderType'] == 'delivery'
+          //         ? OrderType.delivery.color
+          //         : orders[index]['orderType'] == 'takeAway'
+          //             ? OrderType.takeout.color
+          //             : ColorStyle.text200,
         ),
         title: Text(orders[index]['customerName']),
         subtitle: Text(

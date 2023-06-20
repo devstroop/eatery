@@ -1,14 +1,8 @@
 import 'dart:io';
 import 'package:eatery/constants/extensions/string_extension.dart';
+import 'package:eatery/constants/global_variables.dart';
 import 'package:eatery_components/buttons/upload.button.dart';
 import 'package:eatery_db/eatery_db.dart';
-import 'package:eatery_db/models/company/company.dart';
-import 'package:eatery_db/models/product/food_type.dart';
-import 'package:eatery_db/models/product/product.dart';
-import 'package:eatery_db/models/product/product_category.dart';
-import 'package:eatery_db/models/product/product_type.dart';
-import 'package:eatery_db/models/tax/tax_slab.dart';
-import 'package:eatery_db/models/tax/tax_type.dart';
 import 'package:eatery_services/eatery_services.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
@@ -42,19 +36,11 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
   final focus3 = FocusNode();
   final focus4 = FocusNode();
   final _formKey = GlobalKey<FormState>();
-  String? _currencySymbol;
 
   @override
   void initState() {
     super.initState();
-    try {
-      _currencySymbol = EateryDB()
-          .currencyBox()
-          .values
-          .singleWhere((element) => element.id == widget.company.currencyId)
-          .symbol;
-    } catch (_) {}
-    _taxSlab = EateryDB().taxSlabBox().values.singleWhere(
+    _taxSlab = EateryDB.instance.taxSlabBox.values.singleWhere(
         (element) => element.id == widget.company.defaultTaxSlabId);
     setState(() {});
   }
@@ -93,7 +79,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                       },
                     );
                   }),
-              for (var category in EateryDB().productCategoryBox().values)
+              for (var category in EateryDB.instance.productCategoryBox.values)
                 FutureBuilder<String>(
                   future: FileServices.absImage(category.image ?? ''),
                   builder: (context, snapshot) {
@@ -215,19 +201,11 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                         child: CustomTextFromField(
                             controller: _ctrlMRP,
                             keyboardType: TextInputType.number,
-                            prefixWidget: _currencySymbol != null
-                                ? Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        _currencySymbol ?? '',
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 18.0),
-                                      ),
-                                    ],
-                                  )
-                                : null,
+                            prefixWidget: Text(
+                              GlobalVariables.currency?.symbol ?? '',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 18.0),
+                            ),
                             hint: '0.00',
                             obscureText: false,
                             themeColor: getThemeColor(),
@@ -267,19 +245,11 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                         child: CustomTextFromField(
                             controller: _ctrlSP,
                             keyboardType: TextInputType.number,
-                            prefixWidget: _currencySymbol != null
-                                ? Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        _currencySymbol ?? '',
-                                        style: const TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 18.0),
-                                      ),
-                                    ],
-                                  )
-                                : null,
+                            prefixWidget: Text(
+                              GlobalVariables.currency?.symbol ?? '',
+                              style: const TextStyle(
+                                  fontWeight: FontWeight.w500, fontSize: 18.0),
+                            ),
                             hint: '0.00',
                             obscureText: false,
                             themeColor: getThemeColor(),
@@ -347,7 +317,8 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                                 ? getThemeColor()
                                 : Colors.grey,
                             options: [
-                              for (var each in EateryDB().taxSlabBox().values)
+                              for (var each
+                                  in EateryDB.instance.taxSlabBox.values)
                                 each.name
                             ],
                             index: _taxSlab?.id,
@@ -355,9 +326,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                               if (index == null) {
                                 _taxSlab = null;
                               } else {
-                                _taxSlab = EateryDB()
-                                    .taxSlabBox()
-                                    .values
+                                _taxSlab = EateryDB.instance.taxSlabBox.values
                                     .singleWhere(
                                         (element) => element.id == index);
                               }
@@ -452,28 +421,25 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                 return;
               }
               _formKey.currentState!.save();
-
-              try {
-                Product product = Product(
-                    id: EateryDB()
-                        .getNewIdentity(EateryDB().productBox().values),
-                    name: _ctrlName.text,
-                    categoryId: _category?.id,
-                    description: _ctrlDesc.text,
-                    image: image,
-                    mrpPrice: _ctrlMRP.text.toDouble() ?? 0.0,
-                    salePrice: _ctrlSP.text.toDouble(),
-                    taxSlabId: _taxSlab?.id,
-                    foodType: _foodType,
-                    type: ProductType.kitchenDish,
-                    isActive: true);
-                await EateryDB().productBox().add(product).whenComplete(() {
-                  showSnackBar(context, 'Successfully created');
-                  Navigator.pop(context);
-                });
-              } catch (_) {
+              Product product = Product(
+                  id: EateryDB.instance.productBox.nextId(),
+                  name: _ctrlName.text,
+                  categoryId: _category?.id,
+                  description: _ctrlDesc.text,
+                  image: image,
+                  mrpPrice: _ctrlMRP.text.toDouble() ?? 0.0,
+                  salePrice: _ctrlSP.text.toDouble(),
+                  taxSlabId: _taxSlab?.id,
+                  foodType: _foodType,
+                  type: ProductType.kitchenDish,
+                  isActive: true);
+              EateryDB.instance.productBox.add(product).whenComplete(() {
+                showSnackBar(context, 'Successfully created');
+                Navigator.pop(context);
+              }).onError((error, stackTrace) {
                 showSnackBar(context, 'Failed to create');
-              }
+                return Future.error(false);
+              });
             },
             child: const Text('Save'),
           ),

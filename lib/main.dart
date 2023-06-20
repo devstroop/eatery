@@ -1,10 +1,11 @@
 import 'dart:io';
-import 'package:eatery/pages/create_company/create_company_page.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/pages/auth/login_page.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+
+import 'pages/create_company/create_company_page.dart';
 
 Future main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -22,7 +23,7 @@ Future setupDatabase() async {
   // Storage Permission Required
   // String dataDirectory = await AppFileSystem.getDataDir();
   Directory dataDirectory = await getApplicationSupportDirectory();
-  await EateryDB().init(dataDirectory.path);
+  await EateryDB.instance.init(dataDirectory.path);
   return;
 }
 
@@ -32,7 +33,7 @@ Future setupPermission() async {
 }
 
 Future flushDatabase() async {
-  await EateryDB().companyBox().clear();
+  await EateryDB.instance.companyBox.clear();
   return;
 }
 
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: Scaffold(
-          body: EateryDB().companyBox().isNotEmpty
+          body: EateryDB.instance.companyBox.isNotEmpty
               ? const LoginPage()
               : const CreateCompanyPage(),
         ));

@@ -1,9 +1,5 @@
 import 'dart:io';
 import 'package:eatery_db/eatery_db.dart';
-import 'package:eatery_db/models/company/company.dart';
-import 'package:eatery_db/models/product/product.dart';
-import 'package:eatery_db/models/product/product_category.dart';
-import 'package:eatery_db/models/product/product_type.dart';
 import 'package:eatery_services/eatery_services.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/pos_category_widget.dart';
@@ -31,9 +27,7 @@ class _KitchenPageState extends State<KitchenPage> {
     _category = null;
 
     try {
-      _currencySymbol = EateryDB()
-          .currencyBox()
-          .values
+      _currencySymbol = EateryDB.instance.currencyBox.values
           .singleWhere((element) => element.id == widget.company.currencyId)
           .symbol;
     } catch (_) {}
@@ -144,7 +138,8 @@ class _KitchenPageState extends State<KitchenPage> {
                   }),
               Row(
                 children: [
-                  for (var _category in EateryDB().productCategoryBox().values)
+                  for (var _category
+                      in EateryDB.instance.productCategoryBox.values)
                     FutureBuilder<String>(
                         future: FileServices.absImage(_category.image ?? ''),
                         builder: (BuildContext context,
@@ -181,7 +176,7 @@ class _KitchenPageState extends State<KitchenPage> {
           child: Wrap(
             alignment: WrapAlignment.center,
             children: [
-              for (var product in EateryDB().productBox().values.where(
+              for (var product in EateryDB.instance.productBox.values.where(
                   (element) => element.type == ProductType.kitchenDish &&
                           _category != null
                       ? element.categoryId == _category?.id

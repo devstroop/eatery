@@ -1,16 +1,13 @@
 import 'dart:io';
-import 'package:eatery/components/loaders/loading_screen.dart';
 import 'package:eatery/constants/global_variables.dart';
-import 'package:eatery_db/models/order/order_type.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/bottom_view_grip.dart';
-import 'package:eatery/components/dining_table_card.dart';
 import 'package:eatery/components/pos_category_widget.dart';
 import 'package:eatery/components/pos_order_type_selection_button.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/components/special_button.dart';
-import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
+import 'package:eatery_db/eatery_db.dart';
 
 class PointOfSalePage extends StatefulWidget {
   const PointOfSalePage({Key? key}) : super(key: key);
@@ -68,44 +65,6 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
       this.productsData = productsData;
     });*/
   }
-
-  Widget buildPOSModeSelectionBottomSheet() => ListView(
-        shrinkWrap: true,
-        children: [
-          const Center(
-            child: BottomViewGrip(),
-          ),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
-            child: Text(
-              'Select type of order',
-              style: TextStyle(
-                  fontSize: 20.0,
-                  fontWeight: FontWeight.w600,
-                  color: ColorStyle.text200),
-            ),
-          ),
-          for (var orderType in OrderType.values)
-            Padding(
-              padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
-              child: SpecialButton(
-                icon: orderType.icon!,
-                text: orderType.name!,
-                color: orderType.color!,
-                foreColor: Colors.white,
-                onTap: () {
-                  setState(() {
-                    this.orderType = orderType;
-                    Navigator.of(context).pop();
-                  });
-                },
-              ),
-            ),
-          const SizedBox(
-            height: 20.0,
-          ),
-        ],
-      );
 
   Widget buildDiningTableViewBottomSheet() =>
       StatefulBuilder(builder: (context, state) {
@@ -413,11 +372,12 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
 
   @override
   Widget build(BuildContext context) {
+    Color _pageColor = Color(orderType.color!);
     final appBar = PreferredSize(
       preferredSize: const Size.fromHeight(116),
       child: AppBar(
         title: const Text('POS'),
-        backgroundColor: orderType.color,
+        backgroundColor: _pageColor,
         flexibleSpace: Container(
           margin: const EdgeInsets.only(top: 90, left: 12, right: 12),
           width: double.maxFinite,
@@ -446,7 +406,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: orderType.color!.withOpacity(0.5),
+                  color: _pageColor.withOpacity(0.5),
                   width: 2,
                 ),
                 borderRadius: BorderRadius.circular(8),
@@ -644,16 +604,54 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                       ),
                     ),
                     context: context,
-                    builder: (context) => buildPOSModeSelectionBottomSheet()),
+                    builder: (context) => ListView(
+                          shrinkWrap: true,
+                          children: [
+                            const Center(
+                              child: BottomViewGrip(),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.fromLTRB(
+                                  16.0, 12.0, 16.0, 12.0),
+                              child: Text(
+                                'Select type of order',
+                                style: TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.w600,
+                                    color: ColorStyle.text200),
+                              ),
+                            ),
+                            for (var orderType in OrderType.values)
+                              Padding(
+                                padding:
+                                    const EdgeInsets.fromLTRB(12, 4, 12, 8),
+                                child: SpecialButton(
+                                  icon: orderType.icon!,
+                                  text: orderType.name!,
+                                  color: _pageColor,
+                                  foreColor: Colors.white,
+                                  onTap: () {
+                                    setState(() {
+                                      this.orderType = orderType;
+                                      Navigator.of(context).pop();
+                                    });
+                                  },
+                                ),
+                              ),
+                            const SizedBox(
+                              height: 20.0,
+                            ),
+                          ],
+                        )),
                 iconData: orderType.icon!,
-                themeColor: orderType.color!,
+                themeColor: _pageColor,
                 text: orderType.name!,
               ),
             ),
             Flexible(
               flex: 1,
               child: PrimaryButton(
-                color: orderType.color!,
+                color: _pageColor,
                 onPressed: () {
                   // if (Cart.cart.isEmpty) {
                   //   showSnackBar(context, '* Empty cart');
@@ -723,7 +721,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
     final diningTableSelectionButton = orderType == OrderType.dine
         ? selectedDiningTableId != null
             ? FloatingActionButton.extended(
-                backgroundColor: orderType.color,
+                backgroundColor: _pageColor,
                 icon: const Icon(Icons.chair),
                 label: Text(selectedDiningTableName!),
                 onPressed: () => showModalBottomSheet(
@@ -739,7 +737,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                     builder: (context) => buildDiningTableViewBottomSheet()),
               )
             : FloatingActionButton.extended(
-                backgroundColor: orderType.color,
+                backgroundColor: _pageColor,
                 icon: const Icon(Icons.add),
                 label: const Text('Select Table'),
                 onPressed: () => showModalBottomSheet(

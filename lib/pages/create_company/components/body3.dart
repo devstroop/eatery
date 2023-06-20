@@ -1,7 +1,7 @@
 import 'package:eatery/components/selectable_card.dart';
 import 'package:eatery/constants/style/spacing_style.dart';
 import 'package:eatery_components/titles/page.title.dart';
-import 'package:eatery_db/models/company/edition.dart';
+import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 
 class Body3 extends StatelessWidget {

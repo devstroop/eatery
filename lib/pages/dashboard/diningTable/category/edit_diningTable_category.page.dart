@@ -1,12 +1,10 @@
 import 'package:eatery_db/eatery_db.dart';
-import 'package:eatery_db/models/dining_table/dining_table_category.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery/components/dialog_box.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
-import 'package:uicons/uicons.dart';
 
 Color _pageColor = ColorStyle.tertiary;
 
@@ -31,7 +29,8 @@ class _EditDiningTableCategoryPageState
   initState() {
     super.initState();
     setState(() {
-      diningTableCategory = EateryDB().diningTableCategoryBox().get(widget.id);
+      diningTableCategory =
+          EateryDB.instance.diningTableCategoryBox.get(widget.id);
       _controllerCategoryName.text = diningTableCategory?.name ?? '';
       _controllerCategoryDescription.text =
           diningTableCategory?.description ?? '';

@@ -1,13 +1,12 @@
 import 'package:eatery/components/bottom_view_grip.dart';
 import 'package:eatery/components/secondary_button.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:eatery_db/models/company/company.dart';
+import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery/components/selectable_card.dart';
 import 'package:eatery/constants/style/color_style.dart';
-import 'package:uicons/uicons.dart';
 import 'package:url_launcher/url_launcher.dart' as url_launcher;
 
 class UpgradePage extends StatefulWidget {

@@ -3,6 +3,7 @@ import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery_db/eatery_db.dart';
 import '../../../pages/activation/upgrade_page.dart';
 import '../bottom_view_grip.dart';
+import 'package:flutter/material.dart';
 
 class UpgradeToAccessBottomSheet extends StatefulWidget {
   final BuildContext context;

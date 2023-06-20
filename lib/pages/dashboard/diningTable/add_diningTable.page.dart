@@ -1,13 +1,10 @@
 import 'package:eatery/components/labeled_custom_text_from_field.dart';
 import 'package:eatery_db/eatery_db.dart';
-import 'package:eatery_db/models/dining_table/dining_table.dart';
-import 'package:eatery_db/models/dining_table/dining_table_category.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/pos_category_widget.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
-import 'package:uicons/uicons.dart';
 
 Color _pageColor = ColorStyle.tertiary;
 
@@ -96,7 +93,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                             },
                           );
                         }),
-                    ...EateryDB().diningTableCategoryBox().values.map((e) {
+                    ...EateryDB.instance.diningTableCategoryBox.values.map((e) {
                       return PosCategoryWidget(
                         active: diningTableCategory?.id == e.id,
                         label: e.name,
@@ -127,8 +124,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                 name: _controllerCategoryName.text,
                 description: _controllerCategoryDescription.text,
                 categoryId: diningTableCategory?.id,
-                id: EateryDB()
-                    .getNewIdentity(EateryDB().diningTableBox().values),
+                id: EateryDB.instance.diningTableBox.nextId(),
                 isActive: true,
               );
             });
@@ -136,7 +132,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
               showSnackBar(context, 'Failed to create');
               return;
             }
-            EateryDB().diningTableBox().add(diningTable!).then((value) {
+            EateryDB.instance.diningTableBox.add(diningTable!).then((value) {
               showSnackBar(context, 'Successfully created');
               Navigator.pop(context);
             }).onError((error, stackTrace) {

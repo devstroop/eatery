@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:eatery_db/models/company/company.dart';
 import 'package:excel/excel.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +6,7 @@ import 'package:eatery/components/dialog_box.dart';
 import 'package:eatery/components/menu_tile.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
+import 'package:eatery_db/eatery_db.dart';
 
 class ImportExportPage extends StatefulWidget {
   const ImportExportPage({Key? key, required this.company}) : super(key: key);

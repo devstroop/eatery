@@ -10,14 +10,13 @@ import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/constants/style/spacing_style.dart';
 import 'package:eatery/constants/utils/utils.dart';
 import 'package:eatery_components/titles/page.title.dart';
-import 'package:eatery_db/models/subscription/subscription_type.dart';
+import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:platform_device_id/platform_device_id.dart';
 import 'package:devdart_windows_hdsn/devdart_windows_hdsn.dart';
 import 'package:devdart_windows_hdsn/drive.dart';
-import 'package:uicons/uicons.dart';
 
 class Body6 extends StatefulWidget {
   final Color themeColor;

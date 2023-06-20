@@ -6,6 +6,7 @@ import 'package:eatery/constants/style/spacing_style.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 
 class ForgotPasswordBottomSheet extends StatefulWidget {
   final BuildContext context;
@@ -111,8 +112,9 @@ class _ForgotPasswordBottomSheetState extends State<ForgotPasswordBottomSheet> {
                     return null;
                   },
                   onChanged: (value) {
-                    var temp = EateryDB().subscriptionBox().values.singleWhere(
-                        (element) => element.id == company!.subscriptionId!);
+                    var temp = EateryDB.instance.subscriptionBox.values
+                        .singleWhere((element) =>
+                            element.id == company!.subscriptionId!);
                     if (value == temp.purchaseCode) {
                       setState(() {
                         verified = true;

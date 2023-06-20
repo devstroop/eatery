@@ -1,9 +1,7 @@
 import 'package:eatery/constants/global_variables.dart';
-import 'package:eatery_db/models/dining_table/dining_table.dart';
-import 'package:eatery_db/models/order/order.dart';
+import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/constants/style/color_style.dart';
-import 'package:uicons/uicons.dart';
 
 class DiningTableCard extends StatelessWidget {
   const DiningTableCard(

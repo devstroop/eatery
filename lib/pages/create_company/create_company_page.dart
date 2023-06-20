@@ -6,7 +6,6 @@ import 'package:eatery/constants/style/spacing_style.dart';
 import 'package:eatery/constants/utils/utils.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
-import 'package:uicons/uicons.dart';
 import 'components/body1.dart';
 import 'components/body2.dart';
 import 'components/body3.dart';
@@ -206,15 +205,12 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
               try {
                 TaxSlab? taxSlab = _controllerDefaultTaxPercent.text.isNotEmpty
                     ? TaxSlab(
-                        id: EateryDB()
-                            .getNewIdentity(EateryDB().taxSlabBox().values),
+                        id: EateryDB.instance.taxSlabBox.nextId(),
                         name: 'default',
                         rate: double.parse(_controllerDefaultTaxPercent.text),
                         type: _taxType)
                     : null;
-                List<TaxSlab> isMatch = EateryDB()
-                    .taxSlabBox()
-                    .values
+                List<TaxSlab> isMatch = EateryDB.instance.taxSlabBox.values
                     .where((element) => element.name == 'default')
                     .toList();
                 if (taxSlab != null) {
@@ -223,18 +219,17 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                       await each.delete();
                     }
                   }
-                  await EateryDB().taxSlabBox().add(taxSlab);
+                  await EateryDB.instance.taxSlabBox.add(taxSlab);
                 }
 
                 // Subscription
                 Subscription subscription = Subscription(
-                    id: EateryDB()
-                        .getNewIdentity(EateryDB().subscriptionBox().values),
+                    id: EateryDB.instance.subscriptionBox.nextId(),
                     purchaseCode: purchaseCode,
                     validFrom: validFrom,
                     validTill: validTill,
                     subscriptionType: subscriptionType);
-                await EateryDB().subscriptionBox().add(subscription);
+                await EateryDB.instance.subscriptionBox.add(subscription);
 
                 kCurrency? _kCurrency;
                 if (currency != null) {
@@ -252,7 +247,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                           currency!.spaceBetweenAmountAndSymbol,
                       decimalSeparator: currency!.decimalSeparator,
                       symbolOnLeft: currency!.symbolOnLeft);
-                  await EateryDB().currencyBox().add(_kCurrency);
+                  await EateryDB.instance.currencyBox.add(_kCurrency);
                 }
                 // COMPANY
                 Company company = Company(
@@ -270,8 +265,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                   subscriptionId: subscription.id,
                   currencyId: _kCurrency?.id,
                 );
-                int result = await EateryDB()
-                    .companyBox()
+                int result = await EateryDB.instance.companyBox
                     .add(company)
                     .whenComplete(() => Navigator.of(context)
                         .pushAndRemoveUntil(

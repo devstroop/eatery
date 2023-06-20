@@ -63,8 +63,8 @@ dependencies:
       # url: 'https://github.com/devstroop/bluetooth_thermal_printer.git'
       # ref: 'master'
   # database provider
-  # eatery_db:
-    # path: "../eatery_db"
+  eatery_db:
+    path: "../eatery_db"
     # git:
       # url: 'https://github.com/devstroop/eatery_db.git'
       # ref: 'main'

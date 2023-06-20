@@ -1,12 +1,8 @@
-import 'package:eatery/components/loaders/loading_screen.dart';
 import 'package:eatery_db/eatery_db.dart';
-import 'package:eatery_db/models/company/company.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/dining_table_card.dart';
 import 'package:eatery/components/pos_category_widget.dart';
-import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
-import 'package:uicons/uicons.dart';
 import 'add_diningTable.page.dart';
 import 'category/diningTable_categories.page.dart';
 import 'edit_diningTable.page.dart';
@@ -89,7 +85,7 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                           },
                         );
                       }),
-                  ...EateryDB().diningTableCategoryBox().values.map((e) {
+                  ...EateryDB.instance.diningTableCategoryBox.values.map((e) {
                     return PosCategoryWidget(
                       active: selectedCategory == e.id,
                       label: e.name,
@@ -111,16 +107,14 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
             bottom: 72,
             child: Wrap(
               children: [
-                ...EateryDB()
-                    .diningTableBox()
-                    .values
+                ...EateryDB.instance.diningTableBox.values
                     .where((element) =>
                         selectedCategory == null ||
                         element.categoryId == selectedCategory)
                     .map((e) {
                   return DiningTableCard(
                     diningTable: e,
-                    order: EateryDB().orderBox().get(e.orderId),
+                    order: EateryDB.instance.orderBox.get(e.orderId),
                     onTap: () {
                       Navigator.push(
                         context,

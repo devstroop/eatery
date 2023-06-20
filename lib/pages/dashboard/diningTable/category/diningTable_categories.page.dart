@@ -2,7 +2,6 @@ import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/dining_table_category_card.dart';
 import 'package:eatery/constants/style/color_style.dart';
-import 'package:uicons/uicons.dart';
 
 import 'add_diningTable_category.page.dart';
 import 'edit_diningTable_category.page.dart';
@@ -34,7 +33,7 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
       ),
       body: ListView(
         children: [
-          ...EateryDB().diningTableCategoryBox().values.map((e) {
+          ...EateryDB.instance.diningTableCategoryBox.values.map((e) {
             return DiningTableCategoryCard(
               id: e.id,
               name: e.name,

@@ -1,8 +1,6 @@
 import 'package:eatery_components/buttons/upload.button.dart';
 import 'package:eatery_db/eatery_db.dart';
-import 'package:eatery_db/models/product/product_category.dart';
 import 'package:flutter/material.dart';
-import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery/components/dialog_box.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
@@ -68,9 +66,8 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
                     TextButton(
                         onPressed: () async {
                           Navigator.pop(context);
-                          bool isLinkedToProduct = EateryDB()
-                              .productBox()
-                              .values
+                          bool isLinkedToProduct = EateryDB
+                              .instance.productBox.values
                               .where((element) =>
                                   element.categoryId == widget.category.id)
                               .isNotEmpty;

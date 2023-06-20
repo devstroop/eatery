@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:eatery/constants/utils/calculations.dart';
-import 'package:eatery_db/models/product/product.dart';
+import 'package:eatery_db/eatery_db.dart';
 import 'package:eatery_services/eatery_services.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery_components/badges/food_type.badge.dart';
@@ -215,7 +215,7 @@ class ProductCard extends StatelessWidget {
                                                         ? Padding(
                                                             padding:
                                                                 const EdgeInsetsDirectional
-                                                                    .fromSTEB(
+                                                                        .fromSTEB(
                                                                     4, 0, 4, 0),
                                                             child: Text(
                                                               Calculations

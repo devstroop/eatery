@@ -1,5 +1,5 @@
 import 'package:eatery/constants/utils/calculations.dart';
-import 'package:eatery_db/models/order/order_type.dart';
+import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/bottom_view_grip.dart';
 import 'package:eatery/components/checkout_product_card.dart';
@@ -7,7 +7,6 @@ import 'package:eatery/components/custom_button.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery/components/pos_waiter_card.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:eatery/services/printing/print_invoice.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
@@ -57,8 +56,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
   late String? selectedWaiterId;
   late String? selectedWaiterName;
   late bool isProcessing = false;
-
-  final themeColor = ColorStyle.brandColor;
 
   void loadWaiters() async {
     // var waitersData = await Waiter.getAll();
@@ -173,7 +170,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   CustomTextFromField(
                     keyboardType: TextInputType.text,
                     controller: _controllerCustomerName,
-                    themeColor: widget.orderType.color,
+                    themeColor: Color(widget.orderType.color ?? 0),
                     hint: '',
                     obscureText: false,
                   ),
@@ -199,7 +196,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   CustomTextFromField(
                     keyboardType: TextInputType.phone,
                     controller: _controllerCustomerPhone,
-                    themeColor: widget.orderType.color,
+                    themeColor: Color(widget.orderType.color ?? 0),
                     hint: '',
                     obscureText: false,
                   ),
@@ -225,7 +222,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   CustomTextFromField(
                     keyboardType: TextInputType.multiline,
                     controller: _controllerCustomerAddress,
-                    themeColor: widget.orderType.color,
+                    themeColor: Color(widget.orderType.color!),
                     hint: '',
                     obscureText: false,
                     minLines: 2,
@@ -238,7 +235,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             child: Row(
               children: [
                 PrimaryButton(
-                  color: widget.orderType.color!,
+                  color: Color(widget.orderType.color!),
                   onPressed: () {
                     if (_controllerCustomerName.text.trim() == '') {
                       showSnackBar(context, '* Customer name invalid');
@@ -265,6 +262,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   @override
   Widget build(BuildContext context) {
+    Color _pageColor = Color(widget.orderType.color!);
     final double taxableTotal =
         Calculations.calculateTaxableTotal(cart: widget.cart);
     final double taxTotal = Calculations.calculateTaxTotal(cart: widget.cart);
@@ -280,24 +278,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         isProcessing = true;
       });
       try {
-        // bool flag = true;
-        // TODO: Uncomment this code to enable license validation
-        // LicenseData licData = License.validate(widget.account['purchaseCode']);
-        // if(!licData.status){
-        //   List<Map<String, dynamic>> ordersOfTheMonth = (await Order.getAll()).where((element){
-        //     return DateTime.now().year == DateTime.fromMicrosecondsSinceEpoch(element['timestamp']).year && DateTime.now().month == DateTime.fromMicrosecondsSinceEpoch(element['timestamp']).month;
-        //   }).toList();
-        //   if(ordersOfTheMonth.length >= 100){
-        //     flag = false;
-        //   }
-        // }
-        // if (!flag) {
-        //   Future.delayed(Duration.zero, () {
-        //     showSnackBar(
-        //         context, 'Please activate license to create more orders');
-        //   });
-        //   return;
-        // }
+        // TODO: Implement license validation
         Map<String, dynamic> order = {
           'orderType': widget.orderType.name,
           'orderTypeText': widget.orderType.name,
@@ -364,7 +345,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
     }
 
     final appBar = AppBar(
-      backgroundColor: widget.orderType.color,
+      backgroundColor: _pageColor,
       title: const Text('Checkout'),
     );
     return Scaffold(
@@ -405,7 +386,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 0, 0, 6, 0),
                             child: Icon(
                               widget.orderType.icon,
-                              color: widget.orderType.color,
+                              color: _pageColor,
                             ),
                           ),
                           Padding(
@@ -434,7 +415,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             'Change',
                             textAlign: TextAlign.start,
                             style: TextStyle(
-                              color: widget.orderType.color,
+                              color: _pageColor,
                               fontSize: 16,
                               fontWeight: FontWeight.w500,
                             ),
@@ -778,7 +759,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   'Change',
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
-                                    color: widget.orderType.color,
+                                    color: _pageColor,
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
                                   ),
@@ -986,7 +967,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     CircularProgressIndicator(
-                      color: themeColor,
+                      color: _pageColor,
                     ),
                   ],
                 )
@@ -994,7 +975,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   children: [
                     Flexible(
                       child: PrimaryButton(
-                        color: widget.orderType.color ?? ColorStyle.primary,
+                        color: _pageColor,
                         onPressed: () async {
                           await placeOrderAction();
                         },

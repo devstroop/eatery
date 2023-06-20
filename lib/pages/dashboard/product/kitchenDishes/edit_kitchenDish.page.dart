@@ -2,12 +2,6 @@ import 'dart:io';
 import 'package:eatery/constants/extensions/string_extension.dart';
 import 'package:eatery_components/buttons/upload.button.dart';
 import 'package:eatery_db/eatery_db.dart';
-import 'package:eatery_db/models/company/company.dart';
-import 'package:eatery_db/models/product/food_type.dart';
-import 'package:eatery_db/models/product/product.dart';
-import 'package:eatery_db/models/product/product_category.dart';
-import 'package:eatery_db/models/tax/tax_slab.dart';
-import 'package:eatery_db/models/tax/tax_type.dart';
 import 'package:eatery_services/eatery_services.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
@@ -48,8 +42,8 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
   void initState() {
     super.initState();
     try {
-      _currencySymbol = EateryDB()
-          .currencyBox()
+      _currencySymbol = EateryDB.instance
+          .currencyBox
           .values
           .singleWhere((element) => element.id == widget.company.currencyId)
           .symbol;
@@ -61,12 +55,12 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
         ? widget.product.salePrice.toString()
         : '';
     _foodType = widget.product.foodType;
-    _taxSlab = EateryDB()
-        .taxSlabBox()
+    _taxSlab = EateryDB.instance
+        .taxSlabBox
         .values
         .singleWhere((element) => element.id == widget.product.taxSlabId);
-    _category = EateryDB()
-        .productCategoryBox()
+    _category = EateryDB.instance
+        .productCategoryBox
         .values
         .singleWhere((element) => element.id == widget.product.categoryId);
     _ctrlDesc.text = widget.product.description ?? '';
@@ -106,7 +100,8 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                       },
                     );
                   }),
-              for (var category in EateryDB().productCategoryBox().values)
+              for (var category
+                  in EateryDB.instance.productCategoryBox.values)
                 FutureBuilder<String>(
                   future: FileServices.absImage(category.image ?? ''),
                   builder: (context, snapshot) {
@@ -360,7 +355,8 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                                 ? getThemeColor()
                                 : Colors.grey,
                             options: [
-                              for (var each in EateryDB().taxSlabBox().values)
+                              for (var each
+                                  in EateryDB.instance.taxSlabBox.values)
                                 each.name
                             ],
                             index: _taxSlab?.id,
@@ -368,8 +364,8 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                               if (index == null) {
                                 _taxSlab = null;
                               } else {
-                                _taxSlab = EateryDB()
-                                    .taxSlabBox()
+                                _taxSlab = EateryDB.instance
+                                    .taxSlabBox
                                     .values
                                     .singleWhere(
                                         (element) => element.id == index);

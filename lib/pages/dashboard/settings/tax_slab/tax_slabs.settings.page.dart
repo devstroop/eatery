@@ -1,7 +1,5 @@
 import 'package:eatery/pages/dashboard/settings/tax_slab/add.tax_slab.settings.page.dart';
 import 'package:eatery_db/eatery_db.dart';
-import 'package:eatery_db/models/company/company.dart';
-import 'package:eatery_db/models/tax/tax_slab.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery_components/bottomsheets/tax_slab.bottomsheet.dart';
@@ -58,7 +56,7 @@ class _TaxSlabsSettingsPageState extends State<TaxSlabsSettingsPage> {
           ListView(
             shrinkWrap: true,
             children: [
-              for (TaxSlab taxSlab in EateryDB().taxSlabBox().values)
+              for (TaxSlab taxSlab in EateryDB.instance.taxSlabBox.values)
                 TextButton(
                   onPressed: () => showModalBottomSheet(
                       context: context,
@@ -91,7 +89,7 @@ class _TaxSlabsSettingsPageState extends State<TaxSlabsSettingsPage> {
                               fontSize: 12,
                               color: ColorStyle.backgroundColorAlter),
                         )),
-                    subtitle: Text(taxSlab.type.name),
+                    subtitle: Text(taxSlab.type.name ?? 'None'),
                     trailing: const Icon(Icons.arrow_forward_ios),
                   ),
                 ),

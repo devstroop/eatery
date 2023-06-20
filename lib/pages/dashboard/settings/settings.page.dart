@@ -1,6 +1,6 @@
 import 'package:eatery/components/bottomsheets/help_bottom_sheet.dart';
 import 'package:eatery/pages/dashboard/settings/tax_slab/tax_slabs.settings.page.dart';
-import 'package:eatery_db/models/company/company.dart';
+import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/menu_tile.dart';
 import 'package:eatery/constants/style/color_style.dart';

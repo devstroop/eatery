@@ -1,13 +1,11 @@
 import 'package:eatery/components/labeled_custom_text_from_field.dart';
 import 'package:eatery_components/buttons/upload.button.dart';
 import 'package:eatery_db/eatery_db.dart';
-import 'package:eatery_db/models/product/product_category.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
-import 'package:uicons/uicons.dart';
 
 class AddProductCategoryPage extends StatefulWidget {
   const AddProductCategoryPage({Key? key}) : super(key: key);
@@ -117,11 +115,10 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
               return;
             }
             try {
-              EateryDB()
-                  .productCategoryBox()
+              EateryDB.instance
+                  .productCategoryBox
                   .add(ProductCategory(
-                      id: EateryDB().getNewIdentity(
-                          EateryDB().productCategoryBox().values),
+                      id: EateryDB.instance.productCategoryBox.nextId(),
                       name: _controllerCategoryName.text,
                       description: _controllerCategoryDescription.text,
                       image: pickedImagePath))

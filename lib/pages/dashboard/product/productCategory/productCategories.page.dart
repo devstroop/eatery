@@ -1,10 +1,8 @@
 import 'dart:io';
-import 'package:eatery/components/pos_category_widget.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:eatery_services/eatery_services.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/constants/style/color_style.dart';
-import 'package:uicons/uicons.dart';
 import 'add_productCategory.page.dart';
 import 'edit_productCategory.page.dart';
 
@@ -56,7 +54,7 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
             ),
             onTap: () {},
           ),
-          ...EateryDB().productCategoryBox().values.map((e) {
+          ...EateryDB.instance.productCategoryBox.values.map((e) {
             return ListTile(
               title: Text(e.name,
                   style: const TextStyle(fontWeight: FontWeight.w600)),

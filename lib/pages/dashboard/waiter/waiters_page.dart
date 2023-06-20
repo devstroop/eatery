@@ -1,6 +1,6 @@
 import 'package:eatery/components/loaders/loading_screen.dart';
 import 'package:eatery/pages/dashboard/waiter/add_waiter_page.dart';
-import 'package:eatery_db/models/company/company.dart';
+import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/waiter_card.dart';
 import 'edit_waiter_page.dart';
