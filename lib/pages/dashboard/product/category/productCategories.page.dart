@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:eatery_db/eatery_db.dart';
-import 'package:eatery_services/eatery_services.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import '../productCategory/add_productCategory.page.dart';
@@ -60,34 +59,23 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
                   style: const TextStyle(fontWeight: FontWeight.w600)),
               subtitle: Text(e.description ?? ''),
               trailing: Icon(UIcons.regularStraight.arrow_small_right),
-              leading: FutureBuilder<String>(
-                future: FileServices.absImage(e.image ?? ''),
-                builder:
-                    (BuildContext context, AsyncSnapshot<String> snapshot) {
-                  if (!snapshot.hasData) {
-                    return const SizedBox.shrink();
-                  } else {
-                    return Container(
-                        width: 50.0,
-                        height: 50.0,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[300],
-                          borderRadius: BorderRadius.circular(12.0),
-                          image: DecorationImage(
-                            image: (e.image != null &&
-                                        File(snapshot.data!).existsSync()
-                                    ? Image.file(File(snapshot.data!))
-                                    : Image.asset(
-                                        'assets/images/no-image.jpg',
-                                        fit: BoxFit.cover,
-                                      ))
-                                .image,
-                            fit: BoxFit.cover,
-                          ),
-                        ));
-                  }
-                },
-              ),
+              leading: Container(
+                  width: 50.0,
+                  height: 50.0,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(12.0),
+                    image: DecorationImage(
+                      image: (e.image != null && File(e.image!).existsSync()
+                              ? Image.file(File(e.image!))
+                              : Image.asset(
+                                  'assets/images/no-image.jpg',
+                                  fit: BoxFit.cover,
+                                ))
+                          .image,
+                      fit: BoxFit.cover,
+                    ),
+                  )),
               onTap: () {
                 Navigator.push(
                   context,

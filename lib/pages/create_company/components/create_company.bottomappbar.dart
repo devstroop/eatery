@@ -35,11 +35,8 @@ class CreateCompanyBottomAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return BottomAppBar(
       color: ColorStyle.backgroundColorAlter,
-      child: Padding(
-        padding: SpacingStyle.defaultPadding,
-        child: PrimaryButton(
-            color: themeColor, onPressed: _submit, child: Text(title)),
-      ),
+      child: PrimaryButton(
+          color: themeColor, onPressed: _submit, child: Text(title)),
     );
   }
 }

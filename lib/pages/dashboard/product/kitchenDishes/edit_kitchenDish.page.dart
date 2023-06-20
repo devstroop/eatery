@@ -1,8 +1,7 @@
 import 'dart:io';
 import 'package:eatery/constants/extensions/string_extension.dart';
-import 'package:eatery_components/buttons/upload.button.dart';
+
 import 'package:eatery_db/eatery_db.dart';
-import 'package:eatery_services/eatery_services.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery/components/pos_category_widget.dart';
@@ -10,6 +9,8 @@ import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery_components/switches/toggle.switch.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
+
+import '../../../../widgets/buttons/upload.button.dart';
 
 class EditKitchenDish extends StatefulWidget {
   const EditKitchenDish(
@@ -42,9 +43,7 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
   void initState() {
     super.initState();
     try {
-      _currencySymbol = EateryDB.instance
-          .currencyBox
-          .values
+      _currencySymbol = EateryDB.instance.currencyBox.values
           .singleWhere((element) => element.id == widget.company.currencyId)
           .symbol;
     } catch (_) {}
@@ -55,13 +54,9 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
         ? widget.product.salePrice.toString()
         : '';
     _foodType = widget.product.foodType;
-    _taxSlab = EateryDB.instance
-        .taxSlabBox
-        .values
+    _taxSlab = EateryDB.instance.taxSlabBox.values
         .singleWhere((element) => element.id == widget.product.taxSlabId);
-    _category = EateryDB.instance
-        .productCategoryBox
-        .values
+    _category = EateryDB.instance.productCategoryBox.values
         .singleWhere((element) => element.id == widget.product.categoryId);
     _ctrlDesc.text = widget.product.description ?? '';
     setState(() {});
@@ -100,31 +95,21 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                       },
                     );
                   }),
-              for (var category
-                  in EateryDB.instance.productCategoryBox.values)
-                FutureBuilder<String>(
-                  future: FileServices.absImage(category.image ?? ''),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const SizedBox.shrink();
-                    } else {
-                      return PosCategoryWidget(
-                          active: _category == category,
-                          image: category.image != null &&
-                                  File(snapshot.data!).existsSync()
-                              ? Image.file(File(snapshot.data!))
-                              : null,
-                          label: category.name,
-                          onTap: () {
-                            setState(
-                              () {
-                                _category = category;
-                              },
-                            );
-                          });
-                    }
-                  },
-                ),
+              for (var category in EateryDB.instance.productCategoryBox.values)
+                PosCategoryWidget(
+                    active: _category == category,
+                    image: category.image != null &&
+                            File(category.image!).existsSync()
+                        ? Image.file(File(category.image!))
+                        : null,
+                    label: category.name,
+                    onTap: () {
+                      setState(
+                        () {
+                          _category = category;
+                        },
+                      );
+                    }),
             ],
           ),
         ),
@@ -364,9 +349,7 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                               if (index == null) {
                                 _taxSlab = null;
                               } else {
-                                _taxSlab = EateryDB.instance
-                                    .taxSlabBox
-                                    .values
+                                _taxSlab = EateryDB.instance.taxSlabBox.values
                                     .singleWhere(
                                         (element) => element.id == index);
                               }

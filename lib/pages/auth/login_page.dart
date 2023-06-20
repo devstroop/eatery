@@ -1,8 +1,8 @@
 import 'dart:io';
+import 'package:eatery/constants/global_variables.dart';
 import 'package:eatery/constants/style/spacing_style.dart';
 import 'package:eatery/pages/backup_restore/backup_restore_page.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:eatery_services/eatery_services.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
@@ -105,31 +105,29 @@ class _LoginPageState extends State<LoginPage> {
                           Column(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
-                              FutureBuilder<String>(
-                                  future: FileServices.absImage(
-                                      company!.logo ?? ''),
-                                  builder: (context, snapshot) {
-                                    return Container(
-                                      height: 96,
-                                      width: 96,
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(48),
-                                        image: DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: snapshot.hasData &&
-                                                  company!.logo != null &&
-                                                  File(snapshot.data!)
-                                                      .existsSync()
-                                              ? Image.file(
-                                                  File(snapshot.data!),
-                                                ).image
-                                              : Image.asset(
-                                                      'assets/images/default.jpg')
-                                                  .image,
-                                        ),
-                                      ),
-                                    );
-                                  }),
+                              Container(
+                                height: 96,
+                                width: 96,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(48),
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: GlobalVariables.company?.logo !=
+                                                null &&
+                                            File(GlobalVariables
+                                                        .company?.logo ??
+                                                    '')
+                                                .existsSync()
+                                        ? Image.file(
+                                            File(
+                                                GlobalVariables.company!.logo!),
+                                          ).image
+                                        : Image.asset(
+                                                'assets/images/default.jpg')
+                                            .image,
+                                  ),
+                                ),
+                              ),
                               const SizedBox(
                                 height: 8.0,
                               ),

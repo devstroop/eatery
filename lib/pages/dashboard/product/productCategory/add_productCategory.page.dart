@@ -1,11 +1,13 @@
 import 'package:eatery/components/labeled_custom_text_from_field.dart';
-import 'package:eatery_components/buttons/upload.button.dart';
+
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
+
+import '../../../../widgets/buttons/upload.button.dart';
 
 class AddProductCategoryPage extends StatefulWidget {
   const AddProductCategoryPage({Key? key}) : super(key: key);
@@ -96,7 +98,7 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
                 backgroundColor: getThemeColor(),
                 controller: _controllerCategoryDescription,
                 multiline: true,
-                description: 'eg. Starters are the best',
+                hint: 'eg. Starters are the best',
               ),
               const SizedBox(
                 height: 6.0,
@@ -115,8 +117,7 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
               return;
             }
             try {
-              EateryDB.instance
-                  .productCategoryBox
+              EateryDB.instance.productCategoryBox
                   .add(ProductCategory(
                       id: EateryDB.instance.productCategoryBox.nextId(),
                       name: _controllerCategoryName.text,

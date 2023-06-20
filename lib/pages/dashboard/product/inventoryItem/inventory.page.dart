@@ -1,13 +1,12 @@
 import 'dart:io';
 import 'package:eatery/pages/dashboard/product/inventoryItem/add_inventoryItem.page.dart';
 import 'package:eatery_db/eatery_db.dart';
-import 'package:eatery_services/eatery_services.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/pos_category_widget.dart';
 import 'package:eatery/components/product_card.dart';
 import 'package:eatery/constants/style/color_style.dart';
-import 'package:eatery_components/bottomsheets/product_internal_view.bottomsheet.dart';
 
+import '../../../../widgets/bottomSheets/productInternalView.bottomsheet.dart';
 import 'edit_inventoryItem.page.dart';
 
 class InventoryPage extends StatefulWidget {
@@ -19,8 +18,8 @@ class InventoryPage extends StatefulWidget {
 }
 
 class _InventoryPageState extends State<InventoryPage> {
-  ProductCategory? _category;
-  final TextEditingController _ctrlSearch = TextEditingController();
+  ProductCategory? selectedCategory;
+  final TextEditingController _controllerSearch = TextEditingController();
   String? _currencySymbol;
 
   @override
@@ -31,7 +30,7 @@ class _InventoryPageState extends State<InventoryPage> {
           .singleWhere((element) => element.id == widget.company.currencyId)
           .symbol;
     } catch (_) {}
-    _category = null;
+    selectedCategory = null;
     setState(() {});
   }
 
@@ -70,7 +69,7 @@ class _InventoryPageState extends State<InventoryPage> {
               setState(() {});
             },
             keyboardType: TextInputType.text,
-            controller: _ctrlSearch,
+            controller: _controllerSearch,
             decoration: InputDecoration(
               prefixIcon: Icon(
                 Icons.search,
@@ -124,7 +123,7 @@ class _InventoryPageState extends State<InventoryPage> {
             mainAxisSize: MainAxisSize.max,
             children: [
               PosCategoryWidget(
-                  active: _category == null,
+                  active: selectedCategory == null,
                   image: Image.asset(
                     'assets/images/all.png',
                     width: 18,
@@ -134,35 +133,26 @@ class _InventoryPageState extends State<InventoryPage> {
                   label: 'All',
                   onTap: () {
                     setState(() {
-                      _category = null;
+                      selectedCategory = null;
                     });
                   }),
               Row(
                 children: [
-                  for (var _category
+                  for (var category
                       in EateryDB.instance.productCategoryBox.values)
-                    FutureBuilder<String>(
-                        future: FileServices.absImage(_category.image ?? ''),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<String> snapshot) {
-                          if (!snapshot.hasData) {
-                            return const SizedBox.shrink();
-                          } else {
-                            return PosCategoryWidget(
-                                active: this._category == _category,
-                                image: snapshot.data != null &&
-                                        File(snapshot.data!).existsSync()
-                                    ? Image.file(File(snapshot.data!))
-                                    : null,
-                                label: _category.name,
-                                onTap: () {
-                                  setState(() {
-                                    this._category = _category;
-                                    _ctrlSearch.text = '';
-                                  });
-                                });
-                          }
-                        })
+                    PosCategoryWidget(
+                        active: selectedCategory == category,
+                        image: category.image != null &&
+                                File(category.image!).existsSync()
+                            ? Image.file(File(category.image!))
+                            : null,
+                        label: category.name,
+                        onTap: () {
+                          setState(() {
+                            selectedCategory = category;
+                            _controllerSearch.text = '';
+                          });
+                        }),
                 ],
               )
             ],
@@ -179,12 +169,12 @@ class _InventoryPageState extends State<InventoryPage> {
             children: [
               for (var product in EateryDB.instance.productBox.values.where(
                   (element) => element.type == ProductType.inventoryItem &&
-                          _category != null
-                      ? element.categoryId == _category?.id
+                          selectedCategory != null
+                      ? element.categoryId == selectedCategory?.id
                       : true &&
                           element.name
                               .toLowerCase()
-                              .contains(_ctrlSearch.text.toLowerCase())))
+                              .contains(_controllerSearch.text.toLowerCase())))
                 ProductCard(
                   currencySymbol: _currencySymbol,
                   product: product,

@@ -48,7 +48,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
               LabeledCustomTextFromField(
                 label: 'Dining Table Name',
                 controller: _controllerCategoryName,
-                description: 'eg. Table 1 ',
+                hint: 'eg. Table 1 ',
                 obscureText: false,
                 backgroundColor: _pageColor,
                 foregroundColor: ColorStyle.text200,
@@ -59,7 +59,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
               LabeledCustomTextFromField(
                 label: 'Description',
                 controller: _controllerCategoryDescription,
-                description: 'eg. Table description',
+                hint: 'eg. Table description',
                 obscureText: false,
                 backgroundColor: _pageColor,
                 foregroundColor: ColorStyle.text200,

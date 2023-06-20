@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:eatery/constants/utils/calculations.dart';
 import 'package:eatery_db/eatery_db.dart';
-import 'package:eatery_services/eatery_services.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery_components/badges/food_type.badge.dart';
 import 'package:eatery/constants/style/color_style.dart';
@@ -71,28 +70,23 @@ class ProductCard extends StatelessWidget {
                     child: Stack(
                       fit: StackFit.loose,
                       children: [
-                        FutureBuilder<String>(
-                            future: FileServices.absImage(product.image ?? ''),
-                            builder: (context, snapshot) {
-                              return Container(
-                                decoration: BoxDecoration(
-                                  color: ColorStyle.backgroundColorAlter,
-                                  borderRadius: const BorderRadius.only(
-                                      topLeft: Radius.circular(6),
-                                      topRight: Radius.circular(6)),
-                                  image: snapshot.hasData &&
-                                          File(snapshot.data ?? '').existsSync()
-                                      ? DecorationImage(
-                                          image:
-                                              FileImage(File(snapshot.data!)),
-                                          fit: BoxFit.cover)
-                                      : const DecorationImage(
-                                          image: AssetImage(
-                                              'assets/images/default.jpg'),
-                                          fit: BoxFit.cover),
-                                ),
-                              );
-                            }),
+                        Container(
+                          decoration: BoxDecoration(
+                            color: ColorStyle.backgroundColorAlter,
+                            borderRadius: const BorderRadius.only(
+                                topLeft: Radius.circular(6),
+                                topRight: Radius.circular(6)),
+                            image: product.image != null &&
+                                    File(product.image ?? '').existsSync()
+                                ? DecorationImage(
+                                    image: FileImage(File(product.image!)),
+                                    fit: BoxFit.cover)
+                                : const DecorationImage(
+                                    image:
+                                        AssetImage('assets/images/default.jpg'),
+                                    fit: BoxFit.cover),
+                          ),
+                        ),
                         Positioned(
                           top: 12.0,
                           right: 12.0,

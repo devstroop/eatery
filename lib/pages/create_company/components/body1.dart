@@ -1,11 +1,14 @@
 import 'package:eatery/components/custom_text_from_field.dart';
+import 'package:eatery/components/labeled_custom_text_from_field.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/constants/style/spacing_style.dart';
 import 'package:eatery/constants/utils/email_validator.dart';
 import 'package:eatery/constants/validators/phone_validator.dart';
-import 'package:eatery_components/buttons/upload.button.dart';
+
 import 'package:eatery_components/titles/page.title.dart';
 import 'package:flutter/material.dart';
+
+import '../../../widgets/buttons/upload.button.dart';
 
 class Body1 extends StatelessWidget {
   final Function(String? logoPath) onChanged;
@@ -116,13 +119,15 @@ class Body1 extends StatelessWidget {
                 return null;
               }),
           SpacingStyle.defaultVerticalSpacing,
-          CustomTextFromField(
-            themeColor: themeColor,
+          LabeledCustomTextFromField(
+            backgroundColor: themeColor,
+            foregroundColor: ColorStyle.text200,
             controller: addressController,
-            title: 'Address',
+            label: 'Address',
             hint: 'Enter address...',
             focusNode: focus3,
             textInputAction: TextInputAction.done,
+            multiline: true,
             validator: (value) {
               if (value!.trim().isEmpty) return 'Address cannot be blank';
               return null;

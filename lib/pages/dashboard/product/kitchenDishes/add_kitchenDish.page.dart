@@ -1,9 +1,8 @@
 import 'dart:io';
 import 'package:eatery/constants/extensions/string_extension.dart';
 import 'package:eatery/constants/global_variables.dart';
-import 'package:eatery_components/buttons/upload.button.dart';
+
 import 'package:eatery_db/eatery_db.dart';
-import 'package:eatery_services/eatery_services.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery/components/pos_category_widget.dart';
@@ -11,6 +10,8 @@ import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery_components/switches/toggle.switch.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
+
+import '../../../../widgets/buttons/upload.button.dart';
 
 class AddKitchenDish extends StatefulWidget {
   const AddKitchenDish({Key? key, required this.company}) : super(key: key);
@@ -22,7 +23,7 @@ class AddKitchenDish extends StatefulWidget {
 
 class _AddKitchenDishState extends State<AddKitchenDish> {
   String? image;
-  ProductCategory? _category;
+  ProductCategory? selectedCategory;
 
   FoodType? _foodType;
   TaxSlab? _taxSlab;
@@ -69,40 +70,31 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
             mainAxisSize: MainAxisSize.max,
             children: [
               PosCategoryWidget(
-                  active: _category == null,
+                  active: selectedCategory == null,
                   image: null,
                   label: "Uncategorized",
                   onTap: () {
                     setState(
                       () {
-                        _category = null;
+                        selectedCategory = null;
                       },
                     );
                   }),
               for (var category in EateryDB.instance.productCategoryBox.values)
-                FutureBuilder<String>(
-                  future: FileServices.absImage(category.image ?? ''),
-                  builder: (context, snapshot) {
-                    if (!snapshot.hasData) {
-                      return const SizedBox.shrink();
-                    } else {
-                      return PosCategoryWidget(
-                          active: _category == category,
-                          image: category.image != null &&
-                                  File(snapshot.data!).existsSync()
-                              ? Image.file(File(snapshot.data!))
-                              : null,
-                          label: category.name,
-                          onTap: () {
-                            setState(
-                              () {
-                                _category = category;
-                              },
-                            );
-                          });
-                    }
-                  },
-                ),
+                PosCategoryWidget(
+                    active: selectedCategory == category,
+                    image: category.image != null &&
+                            File(category.image!).existsSync()
+                        ? Image.file(File(category.image!))
+                        : null,
+                    label: category.name,
+                    onTap: () {
+                      setState(
+                        () {
+                          selectedCategory = category;
+                        },
+                      );
+                    }),
             ],
           ),
         ),
@@ -424,7 +416,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
               Product product = Product(
                   id: EateryDB.instance.productBox.nextId(),
                   name: _ctrlName.text,
-                  categoryId: _category?.id,
+                  categoryId: selectedCategory?.id,
                   description: _ctrlDesc.text,
                   image: image,
                   mrpPrice: _ctrlMRP.text.toDouble() ?? 0.0,

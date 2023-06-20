@@ -10,14 +10,22 @@ class LabeledCustomTextFromField extends StatelessWidget {
       required this.controller,
       this.multiline = false,
       this.obscureText = false,
-      this.description = ''});
+      this.hint = '',
+      this.focusNode,
+      this.textInputAction = TextInputAction.done,
+      this.validator,
+      this.onFieldSubmitted});
   final String label;
-  final String description;
+  final String hint;
   final Color foregroundColor;
   final Color backgroundColor;
   final TextEditingController controller;
   final bool multiline;
   final bool obscureText;
+  final FocusNode? focusNode;
+  final TextInputAction textInputAction;
+  final String? Function(dynamic value)? validator;
+  final Function(dynamic v)? onFieldSubmitted;
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +46,15 @@ class LabeledCustomTextFromField extends StatelessWidget {
           ),
           CustomTextFromField(
             controller: controller,
-            hint: description,
+            hint: hint,
             obscureText: obscureText,
             themeColor: backgroundColor,
             maxLines: multiline ? 4 : null,
             minLines: multiline ? 2 : null,
+            focusNode: focusNode,
+            textInputAction: textInputAction,
+            validator: validator,
+            onFieldSubmitted: onFieldSubmitted,
           ),
         ]);
   }

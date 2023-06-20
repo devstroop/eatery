@@ -65,7 +65,7 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisSize: MainAxisSize.max,
+      mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         if (widget.title != null)

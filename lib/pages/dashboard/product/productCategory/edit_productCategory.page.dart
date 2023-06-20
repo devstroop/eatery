@@ -1,13 +1,12 @@
-import 'package:eatery_components/buttons/upload.button.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/dialog_box.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
-import 'package:uicons/uicons.dart';
 
 import '../../../../components/labeled_custom_text_from_field.dart';
+import '../../../../widgets/buttons/upload.button.dart';
 
 Color _pageColor = ColorStyle.tertiary;
 
@@ -125,7 +124,7 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
               LabeledCustomTextFromField(
                 label: 'Category Name',
                 controller: _controllerCategoryName,
-                description: 'eg. Starters',
+                hint: 'eg. Starters',
                 obscureText: false,
                 backgroundColor: _pageColor,
                 foregroundColor: ColorStyle.text200,
@@ -136,7 +135,7 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
               LabeledCustomTextFromField(
                 label: 'Description',
                 controller: _controllerDescription,
-                description: 'eg. Starters are the best',
+                hint: 'eg. Starters are the best',
                 obscureText: false,
                 backgroundColor: _pageColor,
                 foregroundColor: ColorStyle.text200,
