@@ -14,7 +14,8 @@ class LabeledCustomTextFromField extends StatelessWidget {
       this.focusNode,
       this.textInputAction = TextInputAction.done,
       this.validator,
-      this.onFieldSubmitted});
+      this.onFieldSubmitted,
+      this.keyboardType});
   final String label;
   final String hint;
   final Color foregroundColor;
@@ -26,6 +27,7 @@ class LabeledCustomTextFromField extends StatelessWidget {
   final TextInputAction textInputAction;
   final String? Function(dynamic value)? validator;
   final Function(dynamic v)? onFieldSubmitted;
+  final TextInputType? keyboardType;
 
   @override
   Widget build(BuildContext context) {

@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:eatery/constants/global_variables.dart';
 import 'package:eatery/constants/style/spacing_style.dart';
 import 'package:eatery/pages/backup_restore/backup_restore_page.dart';
 import 'package:eatery/services/utility/file.utility.service.dart';
@@ -12,7 +11,6 @@ import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/components/bottomsheets/forgot_password_bottomsheet.dart';
 import 'package:eatery/components/bottomsheets/upgrade_to_access_bottomsheet.dart';
-import 'package:eatery/components/loaders/loading_screen.dart';
 import 'package:eatery_db/eatery_db.dart';
 
 class LoginPage extends StatefulWidget {
@@ -33,12 +31,7 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         company = EateryDB.instance.companyBox.values.single;
       });
-      debugPrint("Company: ${company!.name}");
-      debugPrint("Logo: ${company!.logo}");
-      debugPrint(FileUtilityService
-          .getAbsolutePath(
-          company?.logo ??
-              ''));
+      debugPrint(FileUtilityService.getAbsolutePath(company?.logo ?? ''));
     });
   }
 
@@ -100,157 +93,153 @@ class _LoginPageState extends State<LoginPage> {
         },
         child: ListView(
           children: [
-            if(company == null)
+            if (company == null)
               LinearProgressIndicator(
                 backgroundColor: ColorStyle.backgroundColorAlter,
                 valueColor: AlwaysStoppedAnimation<Color>(
                   ColorStyle.brandColor,
                 ),
               ),
-            if(company != null)
+            if (company != null)
               Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  SpacingStyle.defaultVerticalSpacing,
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 120,
-                        width: 120,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(24),
-                          image: DecorationImage(
-                            fit: BoxFit.cover,
-                            image: company?.logo !=
-                                null &&
-                                File(FileUtilityService
-                                    .getAbsolutePath(
-                                    company?.logo ??
-                                        ''))
-                                    .existsSync()
-                                ? Image.file(
-                              File(FileUtilityService
-                                  .getAbsolutePath(company!.logo!)),
-                            ).image
-                                : Image.asset('assets/images/default.jpg')
-                                .image,
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    SpacingStyle.defaultVerticalSpacing,
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Container(
+                          height: 120,
+                          width: 120,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(24),
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: company?.logo != null &&
+                                      File(FileUtilityService.getAbsolutePath(
+                                              company?.logo ?? ''))
+                                          .existsSync()
+                                  ? Image.file(
+                                      File(FileUtilityService.getAbsolutePath(
+                                          company!.logo!)),
+                                    ).image
+                                  : Image.asset('assets/images/default.jpg')
+                                      .image,
+                            ),
                           ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 8.0,
-                      ),
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            company!.name,
-                            style: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w500,
+                        const SizedBox(
+                          height: 8.0,
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              company!.name,
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
-                          ),
-                          Text(
-                            company!.address,
-                            style: const TextStyle(
-                              fontWeight: FontWeight.normal,
-                            ),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                  SpacingStyle.defaultVerticalSpacing,
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CustomTextFromField(
-                          themeColor: themeColor,
-                          keyboardType:
-                          const TextInputType.numberWithOptions(
-                              decimal: false, signed: false),
-                          controller: _controllerPassword,
-                          obscureText: true,
-                          isPassword: true,
-                          title: 'Secure PIN',
-                          hint: 'Enter secure pin...',
-                          textInputAction: TextInputAction.done,
-                          onFieldSubmitted: (v) {
-                            FocusScope.of(context).unfocus();
-                            _submit();
-                          },
-                          validator: (value) {
-                            if (value!.trim().isEmpty) {
-                              return 'Pin cannot be blank';
-                            }
-                            if (!value.trim().isNumericOnly) {
-                              return 'Invalid character';
-                            }
-                            return null;
-                          },
+                            Text(
+                              company!.address,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.normal,
+                              ),
+                            )
+                          ],
                         ),
                       ],
                     ),
-                  ),
-                  SpacingStyle.defaultVerticalSpacing,
-                  TextButton(
-                    child: Text(
-                      'Forgot password?',
-                      style: TextStyle(color: ColorStyle.text200),
+                    SpacingStyle.defaultVerticalSpacing,
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          CustomTextFromField(
+                            themeColor: themeColor,
+                            keyboardType: const TextInputType.numberWithOptions(
+                                decimal: false, signed: false),
+                            controller: _controllerPassword,
+                            obscureText: true,
+                            isPassword: true,
+                            title: 'Secure PIN',
+                            hint: 'Enter secure pin...',
+                            textInputAction: TextInputAction.done,
+                            onFieldSubmitted: (v) {
+                              FocusScope.of(context).unfocus();
+                              _submit();
+                            },
+                            validator: (value) {
+                              if (value!.trim().isEmpty) {
+                                return 'Pin cannot be blank';
+                              }
+                              if (!value.trim().isNumericOnly) {
+                                return 'Invalid character';
+                              }
+                              return null;
+                            },
+                          ),
+                        ],
+                      ),
                     ),
-                    onPressed: () => showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(24),
-                          topRight: Radius.circular(24),
-                          bottomLeft: Radius.circular(0),
-                          bottomRight: Radius.circular(0),
+                    SpacingStyle.defaultVerticalSpacing,
+                    TextButton(
+                      child: Text(
+                        'Forgot password?',
+                        style: TextStyle(color: ColorStyle.text200),
+                      ),
+                      onPressed: () => showModalBottomSheet(
+                        context: context,
+                        isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(24),
+                            topRight: Radius.circular(24),
+                            bottomLeft: Radius.circular(0),
+                            bottomRight: Radius.circular(0),
+                          ),
                         ),
+                        builder: (context) =>
+                            EateryDB.instance.subscriptionBox.values
+                                        .singleWhere(
+                                          (element) =>
+                                              element.id ==
+                                              company!.subscriptionId!,
+                                        )
+                                        .purchaseCode !=
+                                    null
+                                ? ForgotPasswordBottomSheet(
+                                    context,
+                                    themeColor: themeColor,
+                                    callback: (Company? company) {
+                                      setState(() {
+                                        this.company = company;
+                                      });
+                                    },
+                                  )
+                                : UpgradeToAccessBottomSheet(
+                                    context,
+                                    themeColor: themeColor,
+                                    callback: (Company? company) {
+                                      setState(() {
+                                        this.company = company;
+                                      });
+                                    },
+                                  ),
                       ),
-                      builder: (context) =>
-                      EateryDB.instance.subscriptionBox.values
-                          .singleWhere(
-                            (element) =>
-                        element.id ==
-                            company!.subscriptionId!,
-                      )
-                          .purchaseCode !=
-                          null
-                          ? ForgotPasswordBottomSheet(
-                        context,
-                        themeColor: themeColor,
-                        callback: (Company? company) {
-                          setState(() {
-                            this.company = company;
-                          });
-                        },
-                      )
-                          : UpgradeToAccessBottomSheet(
-                        context,
-                        themeColor: themeColor,
-                        callback: (Company? company) {
-                          setState(() {
-                            this.company = company;
-                          });
-                        },
-                      ),
-                    ),
-                  )
-                ],
-              ),
-            ), // Placeholder to add space for the bottom app bar
+                    )
+                  ],
+                ),
+              ), // Placeholder to add space for the bottom app bar
           ],
         ),
       ),

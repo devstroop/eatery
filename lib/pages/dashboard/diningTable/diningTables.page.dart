@@ -80,7 +80,8 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                       ),
                       label: 'All Categories',
                       onTap: () {
-                        setState(() {
+                        setState(
+                          () {
                             selectedCategory = null;
                           },
                         );
@@ -91,7 +92,7 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                       label: e.name,
                       image: Image.asset(
                         e.image != null
-                            ? FileUtilityService.getAbsolutePath(e.image!)
+                            ? FileUtilityService.getAbsolutePath(e.image ?? '')
                             : 'assets/images/default.jpg',
                         width: 18,
                         height: 18,

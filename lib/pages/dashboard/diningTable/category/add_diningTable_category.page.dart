@@ -1,8 +1,13 @@
+import 'package:eatery/widgets/buttons/upload.button.dart';
+import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
-import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
+
+import '../../../../components/labeled_custom_text_from_field.dart';
+
+Color _pageColor = ColorStyle.tertiary;
 
 class AddDiningTableCategoryPage extends StatefulWidget {
   const AddDiningTableCategoryPage({Key? key}) : super(key: key);
@@ -15,17 +20,21 @@ class AddDiningTableCategoryPage extends StatefulWidget {
 class _AddDiningTableCategoryPageState
     extends State<AddDiningTableCategoryPage> {
   final TextEditingController _controllerCategoryName = TextEditingController();
-
-  Color getThemeColor() {
-    return ColorStyle.tertiary;
-  }
-
+  final TextEditingController _controllerCategoryDescription =
+      TextEditingController();
+  String? image;
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
-      backgroundColor: getThemeColor(),
-      title: const Text('Add Dining Table Category'),
-    );
+        backgroundColor: _pageColor,
+        foregroundColor: Colors.white,
+        title: const Text('Add Dining Table Category'),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(UIcons.regularStraight.arrow_left),
+        ));
     return Scaffold(
       appBar: appBar,
       body: SingleChildScrollView(
@@ -39,29 +48,41 @@ class _AddDiningTableCategoryPageState
               const SizedBox(
                 height: 12.0,
               ),
-              Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Category Name',
-                      style: TextStyle(
-                        color: ColorStyle.text200,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 3.0,
-                    ),
-                    CustomTextFromField(
-                      keyboardType: TextInputType.text,
-                      controller: _controllerCategoryName,
-                      hint: 'eg. Terrace',
-                      obscureText: false,
-                      themeColor: getThemeColor(),
-                    ),
-                  ]),
+              UploadButton(
+                onChanged: (value) {
+                  setState(() {
+                    image = value;
+                  });
+                },
+                title: '+ Upload Icon',
+                label: 'Table Category Icon',
+                filePath: image,
+              ),
+              const SizedBox(
+                height: 6.0,
+              ),
+              LabeledCustomTextFromField(
+                keyboardType: TextInputType.text,
+                controller: _controllerCategoryName,
+                label: 'Category Name',
+                hint: 'eg. Terrace',
+                obscureText: false,
+                backgroundColor: _pageColor,
+                foregroundColor: ColorStyle.text200,
+              ),
+              const SizedBox(
+                height: 6.0,
+              ),
+              LabeledCustomTextFromField(
+                keyboardType: TextInputType.text,
+                controller: _controllerCategoryDescription,
+                label: 'Description',
+                hint: 'eg. Terrace',
+                obscureText: false,
+                backgroundColor: _pageColor,
+                foregroundColor: ColorStyle.text200,
+                multiline: true,
+              ),
               const SizedBox(
                 height: 6.0,
               ),
@@ -71,26 +92,28 @@ class _AddDiningTableCategoryPageState
       ),
       bottomNavigationBar: BottomAppBar(
         color: ColorStyle.backgroundColorAlter,
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: PrimaryButton(
-            color: getThemeColor(),
-            onPressed: () async {
-              if (_controllerCategoryName.text.trim() == '') {
-                showSnackBar(context, '* Category name required');
-                return;
-              }
-              // var response = await DiningTableCategory.add(
-              //     {'name': _controllerCategoryName.text});
-              // if (response != null) {
-              //   showSnackBar(context, 'Successfully created');
-              //   Navigator.pop(context);
-              // } else {
-              //   showSnackBar(context, 'Failed to create');
-              // }
-            },
-            child: const Text('Save'),
-          ),
+        child: PrimaryButton(
+          color: _pageColor,
+          onPressed: () async {
+            if (_controllerCategoryName.text.trim() == '') {
+              showSnackBar(context, '* Category name required');
+              return;
+            }
+            int id = EateryDB.instance.diningTableCategoryBox.nextId();
+            EateryDB.instance.diningTableCategoryBox
+                .add(
+              DiningTableCategory(
+                  id: id,
+                  name: _controllerCategoryName.text.trim(),
+                  description: _controllerCategoryDescription.text.trim(),
+                  image: image,
+                  isActive: true),
+            )
+                .then((value) {
+              Navigator.pop(context);
+            });
+          },
+          child: const Text('Save'),
         ),
       ),
     );
