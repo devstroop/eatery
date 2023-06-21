@@ -6,12 +6,12 @@ import 'package:eatery/components/pos_category_widget.dart';
 import 'package:eatery/components/product_card.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
+import '../../../../constants/global_variables.dart';
 import '../../../../widgets/bottomSheets/productInternalView.bottomsheet.dart';
 import 'edit_inventoryItem.page.dart';
 
 class InventoryPage extends StatefulWidget {
-  const InventoryPage({Key? key, required this.company}) : super(key: key);
-  final Company company;
+  const InventoryPage({Key? key}) : super(key: key);
 
   @override
   State<InventoryPage> createState() => _InventoryPageState();
@@ -27,7 +27,7 @@ class _InventoryPageState extends State<InventoryPage> {
     super.initState();
     try {
       _currencySymbol = EateryDB.instance.currencyBox.values
-          .singleWhere((element) => element.id == widget.company.currencyId)
+          .singleWhere((element) => element.id == GlobalVariables.company!.currencyId)
           .symbol;
     } catch (_) {}
     selectedCategory = null;
@@ -42,7 +42,7 @@ class _InventoryPageState extends State<InventoryPage> {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                EditInventoryItem(company: widget.company, product: product)),
+                EditInventoryItem(product: product)),
       ).then((_) {
         setState(() {});
         Navigator.of(context).pop();
@@ -231,9 +231,7 @@ class _InventoryPageState extends State<InventoryPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => AddInventoryItem(
-                      company: widget.company,
-                    )),
+                builder: (context) => const AddInventoryItem()),
           ).then((_) => setState(() {}));
         },
       ),

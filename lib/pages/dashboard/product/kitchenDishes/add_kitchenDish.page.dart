@@ -123,7 +123,6 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                     label: 'Product Image',
                     primaryColor: getThemeColor(),
                     secondaryColor: ColorStyle.text200,
-                    uploadType: UploadType.image,
                     filePath: image,
                     onChanged: (image) {
                       setState(() {

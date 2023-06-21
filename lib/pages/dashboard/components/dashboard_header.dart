@@ -1,25 +1,47 @@
 import 'dart:io';
 
+import 'package:eatery/pages/auth/logout_page.dart';
+import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 
 class DashboardHeader extends StatelessWidget {
   final String companyName;
   final String? logoPath;
-  const DashboardHeader({Key? key, required this.companyName, this.logoPath})
+  final double? width;
+  final EdgeInsets? margin;
+  final List<Widget>? suffix;
+  const DashboardHeader({Key? key, required this.companyName, this.logoPath, this.width, this.margin, this.suffix})
       : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(24, 16, 24, 0),
-              child: Row(
+    return Container(
+      margin: margin,
+      width: width,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          if(logoPath != null && File(logoPath!).existsSync())
+          Container(
+            height: 64,
+            width: 64,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              image: DecorationImage(
+                fit: BoxFit.cover,
+                image: Image.file(
+                  File(logoPath!),
+                ).image,
+              ),
+            ),
+          ),
+          if(logoPath != null && File(logoPath!).existsSync())
+            const SizedBox(width: 12,),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Text(
@@ -32,10 +54,7 @@ class DashboardHeader extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-            const Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(24, 4, 24, 0),
-              child: Row(
+              const Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
                   Text(
@@ -48,28 +67,13 @@ class DashboardHeader extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-          ],
-        ),
-        Padding(
-          padding: const EdgeInsets.only(right: 24.0, top: 16.0),
-          child: logoPath != null && File(logoPath!).existsSync()
-              ? Container(
-                  height: 64,
-                  width: 64,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(32),
-                    image: DecorationImage(
-                      fit: BoxFit.cover,
-                      image: Image.file(
-                        File(logoPath!),
-                      ).image,
-                    ),
-                  ),
-                )
-              : Container(),
-        )
-      ],
+            ],
+          ),
+          const Spacer(),
+          ...suffix ?? [],
+          const SizedBox(width: 8,),
+        ],
+      ),
     );
   }
 }

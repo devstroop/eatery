@@ -25,7 +25,7 @@ class PosCategoryWidget extends StatelessWidget {
           color: Colors.transparent,
           elevation: 2,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(22),
+            borderRadius: BorderRadius.circular(12),
           ),
           child: Container(
             decoration: BoxDecoration(
@@ -38,7 +38,7 @@ class PosCategoryWidget extends StatelessWidget {
                       : ColorStyle.backgroundColorAlter,
                 ),
               ],
-              borderRadius: BorderRadius.circular(22),
+              borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: active
                     ? ColorStyle.text200
@@ -48,7 +48,7 @@ class PosCategoryWidget extends StatelessWidget {
             ),
             alignment: Alignment.center,
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 12),
+              padding: const EdgeInsets.symmetric(horizontal: 8),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -63,6 +63,7 @@ class PosCategoryWidget extends StatelessWidget {
                     const Padding(
                       padding: EdgeInsets.only(right: 3),
                     ),
+                  const SizedBox(width: 2,),
                   Text(
                     label,
                     style: TextStyle(

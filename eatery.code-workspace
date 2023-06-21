@@ -27,6 +27,13 @@
 			"rxdart",
 			"uicons"
 		],
-		"files.autoSave": "onFocusChange"
+		"files.autoSave": "onFocusChange",
+		"docify.translateService.docstringFormat": "JavaDoc",
+		"docify.translateService.programmingLanguage": "auto-detect",
+		"docify.translateService.sourceLanguage": "English",
+		"docify.commentService.sidePanelReviewMode": true,
+		"docify.commentService.docstringFormat": "Custom",
+		"docify.commentService.inlineComments": false,
+		"docify.commentService.programmingLanguage": "auto-detect"
 	}
 }

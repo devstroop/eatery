@@ -10,13 +10,13 @@ import 'package:eatery_components/switches/toggle.switch.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
+import '../../../../constants/global_variables.dart';
 import '../../../../widgets/buttons/upload.button.dart';
 
 class EditKitchenDish extends StatefulWidget {
   const EditKitchenDish(
-      {Key? key, required this.company, required this.product})
+      {Key? key, required this.product})
       : super(key: key);
-  final Company company;
   final Product product;
   @override
   State<EditKitchenDish> createState() => _EditKitchenDishState();
@@ -44,7 +44,7 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
     super.initState();
     try {
       _currencySymbol = EateryDB.instance.currencyBox.values
-          .singleWhere((element) => element.id == widget.company.currencyId)
+          .singleWhere((element) => element.id == GlobalVariables.company!.currencyId)
           .symbol;
     } catch (_) {}
     image = widget.product.image;
@@ -138,7 +138,6 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                     label: 'Product Image',
                     primaryColor: getThemeColor(),
                     secondaryColor: ColorStyle.text200,
-                    uploadType: UploadType.image,
                     filePath: image,
                     onChanged: (image) {
                       setState(() {

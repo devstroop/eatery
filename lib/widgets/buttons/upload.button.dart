@@ -1,9 +1,9 @@
 import 'dart:io';
+import 'package:eatery/services/utility/file.utility.service.dart';
 import 'package:flutter/material.dart';
 import 'package:uicons/uicons.dart';
 
 import '../bottomSheets/imageLibrary.bottomSheet.dart';
-import '../bottomSheets/uploadFile.bottomSheet.dart';
 
 class UploadButton extends StatefulWidget {
   const UploadButton(
@@ -13,8 +13,7 @@ class UploadButton extends StatefulWidget {
       this.primaryColor = const Color(0xFF30A8CF),
       this.secondaryColor = const Color(0xFF2F2F2F),
       this.title,
-      this.label,
-      required this.uploadType})
+      this.label})
       : super(key: key);
   final String? filePath;
   final Function(String? path)? onChanged;
@@ -22,7 +21,6 @@ class UploadButton extends StatefulWidget {
   final Color secondaryColor;
   final String? title;
   final String? label;
-  final UploadType uploadType;
 
   @override
   State<UploadButton> createState() => _UploadButtonState();
@@ -45,21 +43,13 @@ class _UploadButtonState extends State<UploadButton> {
           bottomRight: Radius.circular(0),
         ),
       ),
-      builder: (context) => widget.uploadType == UploadType.image
-          ? ImageLibraryBottomSheet(context, (path) {
-              filePath = path;
-              if (widget.onChanged != null) {
-                widget.onChanged!(path);
-              }
-              setState(() {});
-            })
-          : UploadFileBottomSheet(context, (path) {
-              filePath = path;
-              if (widget.onChanged != null) {
-                widget.onChanged!(path);
-              }
-              setState(() {});
-            }));
+      builder: (context) => ImageLibraryBottomSheet(context, (path) {
+            filePath = path;
+            if (widget.onChanged != null) {
+              widget.onChanged!(path);
+            }
+            setState(() {});
+          }));
 
   @override
   Widget build(BuildContext context) {
@@ -78,31 +68,36 @@ class _UploadButtonState extends State<UploadButton> {
           children: [
             Row(
               children: [
-                if (widget.filePath != null)
-                  Container(
-                    height: 84,
-                    width: 84,
-                    decoration: BoxDecoration(
-                      color: widget.uploadType != UploadType.image
-                          ? const Color(0xFFF7F7F8)
-                          : null,
-                      borderRadius: BorderRadius.circular(4),
-                      image: widget.uploadType == UploadType.image
-                          ? DecorationImage(
-                              fit: BoxFit.cover,
-                              image: Image.file(File(widget.filePath!)).image,
-                            )
-                          : null,
-                    ),
-                    child: Stack(
-                      children: [
-                        if (widget.uploadType != UploadType.image)
-                          Center(
-                              child: Icon(
-                            UIcons.regularStraight.file,
-                            size: 64,
-                            color: widget.primaryColor.withOpacity(0.50),
-                          )),
+                SizedBox(
+                  height: 72,
+                  width: 72,
+                  child: Stack(
+                    children: [
+                      if (widget.filePath == null)
+                        Center(
+                            child: Icon(
+                          UIcons.regularStraight.mode_landscape,
+                          size: 54,
+                          color: widget.primaryColor.withOpacity(0.50),
+                        )),
+                      if (widget.filePath != null)
+                        Container(
+                          margin: const EdgeInsets.all(6),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFFF7F7F8),
+                            borderRadius: BorderRadius.circular(4),
+                            image: widget.filePath != null
+                                ? DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: Image.file(File(
+                                            FileUtilityService.getAbsolutePath(
+                                                widget.filePath!)))
+                                        .image,
+                                  )
+                                : null,
+                          ),
+                        ),
+                      if (widget.filePath != null)
                         Positioned(
                             top: 0,
                             right: 0,
@@ -115,24 +110,25 @@ class _UploadButtonState extends State<UploadButton> {
                                 setState(() {});
                               },
                               child: Container(
-                                height: 16,
-                                width: 16,
+                                height: 20,
+                                width: 20,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(8),
                                   color: const Color(0xFFB63A3A),
                                 ),
                                 child: Icon(
                                   UIcons.regularStraight.minus_small,
-                                  size: 12,
+                                  size: 16,
                                   color: Colors.white,
                                 ),
                               ),
                             ))
-                      ],
-                    ),
+                    ],
                   ),
+                ),
+                SizedBox(width: 6,),
                 Container(
-                  height: 100,
+                  height: 96,
                   decoration: const BoxDecoration(),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
@@ -143,23 +139,19 @@ class _UploadButtonState extends State<UploadButton> {
                         Text(
                           widget.label!,
                           style: TextStyle(
-                              fontSize: 16,
+                              fontSize: 12,
                               fontWeight: FontWeight.w400,
                               color: widget.secondaryColor),
                         ),
-                      if (widget.label != null)
-                        const SizedBox(
-                          height: 2,
+                      InkWell(
+                        onTap: onUploadPressed,
+                        child: Text(
+                          widget.title ?? "+ Attach Media",
+                          style: TextStyle(
+                              fontSize: 14,
+                              color: widget.primaryColor,
+                              fontWeight: FontWeight.bold),
                         ),
-                      Text(
-                        widget.title ??
-                            (widget.uploadType == UploadType.image
-                                ? "+ Attach Image"
-                                : "+ Upload File"),
-                        style: TextStyle(
-                            fontSize: 14,
-                            color: widget.primaryColor,
-                            fontWeight: FontWeight.bold),
                       ),
                     ],
                   ),
@@ -174,11 +166,12 @@ class _UploadButtonState extends State<UploadButton> {
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(9)),
                   child: SizedBox(
-                    width: 84,
+                    width: 54,
                     height: 84,
                     child: Icon(
-                      UIcons.regularStraight.camera,
-                      size: 18,
+                      UIcons.regularStraight.clip,
+                      size: 24,
+                      color: widget.primaryColor,
                     ),
                   ),
                 ),
@@ -190,5 +183,3 @@ class _UploadButtonState extends State<UploadButton> {
     );
   }
 }
-
-enum UploadType { file, image }

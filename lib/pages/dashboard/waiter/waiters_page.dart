@@ -7,8 +7,7 @@ import 'edit_waiter_page.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
 class WaitersPage extends StatefulWidget {
-  const WaitersPage({Key? key, required this.company}) : super(key: key);
-  final Company company;
+  const WaitersPage({Key? key}) : super(key: key);
 
   @override
   State<WaitersPage> createState() => _WaitersPageState();

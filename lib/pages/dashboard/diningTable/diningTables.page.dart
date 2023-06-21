@@ -1,3 +1,4 @@
+import 'package:eatery/services/utility/file.utility.service.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/dining_table_card.dart';
@@ -10,8 +11,7 @@ import 'edit_diningTable.page.dart';
 Color _pageColor = ColorStyle.tertiary;
 
 class DiningTablesPage extends StatefulWidget {
-  const DiningTablesPage({Key? key, required this.company}) : super(key: key);
-  final Company company;
+  const DiningTablesPage({Key? key}) : super(key: key);
   @override
   State<DiningTablesPage> createState() => _DiningTablesPageState();
 }
@@ -65,9 +65,10 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
             child: Container(
               width: double.maxFinite,
               height: 60,
-              margin: const EdgeInsets.symmetric(vertical: 16.0),
+              margin: const EdgeInsets.symmetric(vertical: 12.0),
               child: ListView(
                 scrollDirection: Axis.horizontal,
+                padding: const EdgeInsets.symmetric(horizontal: 12.0),
                 children: [
                   PosCategoryWidget(
                       active: selectedCategory == null,
@@ -77,10 +78,9 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                         height: 18,
                         fit: BoxFit.cover,
                       ),
-                      label: 'All',
+                      label: 'All Categories',
                       onTap: () {
-                        setState(
-                          () {
+                        setState(() {
                             selectedCategory = null;
                           },
                         );
@@ -89,6 +89,14 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                     return PosCategoryWidget(
                       active: selectedCategory == e.id,
                       label: e.name,
+                      image: Image.asset(
+                        e.image != null
+                            ? FileUtilityService.getAbsolutePath(e.image!)
+                            : 'assets/images/default.jpg',
+                        width: 18,
+                        height: 18,
+                        fit: BoxFit.cover,
+                      ),
                       onTap: () {
                         setState(() {
                           selectedCategory = e.id;

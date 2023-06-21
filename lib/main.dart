@@ -27,29 +27,19 @@ Future setupPermission() async {
 }
 
 Future setupDirectory() async {
-  GlobalVariables.rootDirectory = await getApplicationSupportDirectory();
-  GlobalVariables.dataDirectory =
-      Directory('${GlobalVariables.rootDirectory?.path}/data');
-  GlobalVariables.resourcesDirectory =
-      Directory('${GlobalVariables.rootDirectory?.path}/resources');
-  GlobalVariables.backupDirectory =
-      Directory('${GlobalVariables.rootDirectory?.path}/backup');
-  if (!await GlobalVariables.dataDirectory!.exists()) {
-    await GlobalVariables.dataDirectory!.create();
+  if (Platform.isAndroid) {
+    GlobalVariables.baseDirectory =
+        (await getApplicationDocumentsDirectory()).path;
+  } else if (Platform.isIOS) {
+    GlobalVariables.baseDirectory =
+        (await getApplicationDocumentsDirectory()).path;
+  } else {
+    throw Exception('Unsupported platform');
   }
-  if (!await GlobalVariables.resourcesDirectory!.exists()) {
-    await GlobalVariables.resourcesDirectory!.create();
-  }
-  if (!await GlobalVariables.backupDirectory!.exists()) {
-    await GlobalVariables.backupDirectory!.create();
-  }
-  // TODO: Remove debug tag
-  debugPrint(GlobalVariables.rootDirectory?.path);
-  return;
 }
 
 Future setupDatabase() async {
-  await EateryDB.instance.init(GlobalVariables.dataDirectory?.path);
+  await EateryDB.instance.init(GlobalVariables.dataDirectoryAbs);
   return;
 }
 

@@ -49,7 +49,7 @@ class _CreateAccountResultPageState extends State<CreateAccountResultPage> {
                     ),
                     SpacingStyle.defaultVerticalSpacing,
                     const Text(
-                      'Your account has been created successfully',
+                      'Company created successfully',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w400,
@@ -67,19 +67,16 @@ class _CreateAccountResultPageState extends State<CreateAccountResultPage> {
       ),
       bottomNavigationBar: BottomAppBar(
         color: ColorStyle.backgroundColorAlter,
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: PrimaryButton(
-            color: ColorStyle.brandColor,
-            onPressed: () {
-              Navigator.pushAndRemoveUntil(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginPage()),
-                (Route<dynamic> route) => false,
-              );
-            },
-            child: const Text('Continue to Login'),
-          ),
+        child: PrimaryButton(
+          color: ColorStyle.brandColor,
+          onPressed: () {
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => const LoginPage()),
+              (Route<dynamic> route) => false,
+            );
+          },
+          child: const Text('Continue to Login'),
         ),
       ),
     );

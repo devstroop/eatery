@@ -6,7 +6,8 @@ import '../../../activation/upgrade_page.dart';
 class UpgradeNotification extends StatefulWidget {
   final Company? company;
   final double? width;
-  const UpgradeNotification({Key? key, this.company, this.width})
+  final EdgeInsets? margin;
+  const UpgradeNotification({Key? key, this.company, this.width, this.margin})
       : super(key: key);
 
   @override
@@ -22,6 +23,7 @@ class _UpgradeNotificationState extends State<UpgradeNotification> {
                 .purchaseCode ==
             null
         ? Container(
+      margin: widget.margin,
             width: widget.width,
             padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
             child: NotificationWidget(

@@ -374,12 +374,19 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
   Widget build(BuildContext context) {
     Color _pageColor = Color(orderType.color!);
     final appBar = PreferredSize(
-      preferredSize: const Size.fromHeight(116),
+      preferredSize: const Size.fromHeight(120),
       child: AppBar(
-        title: const Text('POS'),
+        title: const Text('Point of Sale'),
         backgroundColor: _pageColor,
+        foregroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(UIcons.regularStraight.arrow_left),
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+        ),
         flexibleSpace: Container(
-          margin: const EdgeInsets.only(top: 90, left: 12, right: 12),
+          margin: const EdgeInsets.only(top: 102, left: 12, right: 12),
           width: double.maxFinite,
           child: TextFormField(
             onChanged: (value) {
@@ -388,37 +395,35 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
             keyboardType: TextInputType.text,
             controller: _controllerSearch,
             decoration: InputDecoration(
-              prefixIcon: const Icon(Icons.search),
+              prefixIcon: Icon(UIcons.regularStraight.search, color: ColorStyle.text400),
               hintText: 'Search a product...',
               hintStyle: TextStyle(
                 color: ColorStyle.text400,
-                fontSize: 14,
+                fontSize: 16,
                 fontWeight: FontWeight.normal,
               ),
-              //prefixIcon: const Icon(Icons.search),
-              //prefixIconColor: ColorStyle.text100,
               enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   color: ColorStyle.text400,
                   width: 1,
                 ),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(12),
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
                   color: _pageColor.withOpacity(0.5),
                   width: 2,
                 ),
-                borderRadius: BorderRadius.circular(8),
+                borderRadius: BorderRadius.circular(12),
               ),
               filled: true,
               fillColor: Colors.white,
               contentPadding:
-                  const EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
+                  const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
             ),
             style: TextStyle(
               color: ColorStyle.text200,
-              fontSize: 14,
+              fontSize: 16,
               fontWeight: FontWeight.normal,
             ),
           ),
@@ -586,7 +591,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
         color: ColorStyle.backgroundColorAlter,
       ),
       child: Padding(
-        padding: const EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

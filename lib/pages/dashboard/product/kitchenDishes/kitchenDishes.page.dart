@@ -10,8 +10,7 @@ import 'add_kitchenDish.page.dart';
 import 'edit_kitchenDish.page.dart';
 
 class KitchenPage extends StatefulWidget {
-  const KitchenPage({Key? key, required this.company}) : super(key: key);
-  final Company company;
+  const KitchenPage({Key? key}) : super(key: key);
 
   @override
   State<KitchenPage> createState() => _KitchenPageState();
@@ -35,7 +34,7 @@ class _KitchenPageState extends State<KitchenPage> {
         context,
         MaterialPageRoute(
             builder: (context) =>
-                EditKitchenDish(company: widget.company, product: product)),
+                EditKitchenDish(product: product)),
       ).then((_) {
         setState(() {});
         Navigator.of(context).pop();
@@ -225,7 +224,7 @@ class _KitchenPageState extends State<KitchenPage> {
             context,
             MaterialPageRoute(
                 builder: (context) => AddKitchenDish(
-                      company: widget.company,
+                      company: GlobalVariables.company!,
                     )),
           ).then((_) => setState(() {}));
         },

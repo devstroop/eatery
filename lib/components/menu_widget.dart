@@ -7,7 +7,7 @@ class MenuWidget extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.color,
-    this.onTap,
+    this.onTap, this.width, this.height, this.iconSize, this.titleSize, this.subtitleSize, this.padding,
   }) : super(key: key);
 
   final IconData iconData;
@@ -15,23 +15,22 @@ class MenuWidget extends StatelessWidget {
   final String subtitle;
   final Color color;
   final VoidCallback? onTap;
+  final double? width;
+  final double? height;
+  final double? iconSize;
+  final double? titleSize;
+  final double? subtitleSize;
+  final EdgeInsets? padding;
 
   @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
-    // final double itemWidth = screenWidth <= 500
-    //     ? screenWidth / 2.5
-    //     : screenWidth <= 1000
-    //         ? screenWidth / 5
-    //         : screenWidth / 7.5;
-    final double itemWidth =
-        screenWidth > 500 ? (screenWidth / 2) * 0.4 : screenWidth * 0.4;
 
     return InkWell(
       onTap: onTap,
       child: Container(
-        width: itemWidth,
-        height: itemWidth,
+        padding: padding ?? const EdgeInsets.all(12),
+        width: width,
+        height: height,
         alignment: Alignment.center,
         decoration: BoxDecoration(
           color: color,
@@ -42,57 +41,36 @@ class MenuWidget extends StatelessWidget {
               offset: Offset(0, 1),
             )
           ],
-          borderRadius: BorderRadius.circular(8),
+          borderRadius: BorderRadius.circular(12),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(
-                0,
-                screenWidth > 600 ? 16 : 12,
-                0,
-                0,
-              ),
-              child: Icon(
-                iconData,
-                color: Colors.white,
-                size: screenWidth > 600 ? 44 : 32,
-              ),
+            Icon(
+              iconData,
+              color: Colors.white,
+              size: iconSize,
             ),
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(
-                0,
-                screenWidth > 600 ? 8 : 4,
-                0,
-                0,
-              ),
-              child: Text(
-                title,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: screenWidth > 600 ? 18 : 14,
-                  fontWeight: FontWeight.w500,
-                ),
+            const SizedBox(
+              height: 8,
+            ),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: titleSize,
+                fontWeight: FontWeight.w700,
               ),
             ),
             Flexible(
-              child: Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(
-                  8,
-                  4,
-                  8,
-                  0,
-                ),
-                child: Text(
-                  subtitle,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Color(0xB3FFFFFF),
-                    fontSize: screenWidth > 600 ? 12 : 10,
-                  ),
+              child: Text(
+                subtitle,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: const Color(0xB3FFFFFF),
+                  fontSize: subtitleSize,
                 ),
               ),
             ),

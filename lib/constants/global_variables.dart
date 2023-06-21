@@ -1,13 +1,54 @@
 import 'dart:io';
 
 import 'package:eatery_db/eatery_db.dart';
+import 'package:flutter/material.dart';
 
 class GlobalVariables {
   static List<Product> cart = [];
   static Company? company;
   static kCurrency? currency;
-  static Directory? rootDirectory;
-  static Directory? dataDirectory;
-  static Directory? resourcesDirectory;
-  static Directory? backupDirectory;
+
+  // Relative paths
+  static String? dataDirectory = '/data';
+  static String? resourcesDirectory = '/resources';
+  static String? backupDirectory = '/backup';
+  // Absolute paths
+  static String? dataDirectoryAbs =
+      '${GlobalVariables.baseDirectory}$dataDirectory';
+  static String? resourcesDirectoryAbs =
+      '${GlobalVariables.baseDirectory}$resourcesDirectory';
+  static String? backupDirectoryAbs =
+      '${GlobalVariables.baseDirectory}$backupDirectory';
+
+  static String? _baseDirectory;
+  static String? get baseDirectory => _baseDirectory;
+  static set baseDirectory(String? value) {
+    _baseDirectory = value;
+    Future.delayed(Duration.zero, () {
+      Directory dataDirectory = Directory(
+          '${GlobalVariables.baseDirectory}${GlobalVariables.dataDirectory}');
+      dataDirectory.exists().then((value) {
+        debugPrint('dataDirectory: $value');
+        if (!value) {
+          dataDirectory.createSync(recursive: true);
+        }
+      });
+      Directory resourcesDirectory = Directory(
+          '${GlobalVariables.baseDirectory}${GlobalVariables.resourcesDirectory}');
+      resourcesDirectory.exists().then((value) {
+        debugPrint('resourcesDirectory: $value');
+        if (!value) {
+          resourcesDirectory.createSync(recursive: true);
+        }
+      });
+      Directory backupDirectory = Directory(
+          '${GlobalVariables.baseDirectory}${GlobalVariables.backupDirectory}');
+      backupDirectory.exists().then((value) {
+        debugPrint('backupDirectory: $value');
+        if (!value) {
+          backupDirectory.createSync(recursive: true);
+        }
+      });
+    });
+  }
 }

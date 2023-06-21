@@ -4,8 +4,7 @@ import 'package:eatery/pages/auth/login_page.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
 class LogoutPage extends StatefulWidget {
-  const LogoutPage({Key? key, required this.company}) : super(key: key);
-  final Company company;
+  const LogoutPage({Key? key}) : super(key: key);
   @override
   State<LogoutPage> createState() => _LogoutPageState();
 }

@@ -10,11 +10,11 @@ import 'package:eatery_components/switches/toggle.switch.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
+import '../../../../constants/global_variables.dart';
 import '../../../../widgets/buttons/upload.button.dart';
 
 class AddInventoryItem extends StatefulWidget {
-  const AddInventoryItem({Key? key, required this.company}) : super(key: key);
-  final Company company;
+  const AddInventoryItem({Key? key}) : super(key: key);
 
   @override
   State<AddInventoryItem> createState() => _AddInventoryItemState();
@@ -42,11 +42,11 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
     super.initState();
     try {
       _currencySymbol = EateryDB.instance.currencyBox.values
-          .singleWhere((element) => element.id == widget.company.currencyId)
+          .singleWhere((element) => element.id == GlobalVariables.company?.currencyId)
           .symbol;
     } catch (_) {}
     _taxSlab = EateryDB.instance.taxSlabBox.values.singleWhere(
-        (element) => element.id == widget.company.defaultTaxSlabId);
+        (element) => element.id == GlobalVariables.company?.defaultTaxSlabId);
     debugPrint('${_taxSlab!.id}');
   }
 
@@ -127,7 +127,6 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
                     label: 'Product Image',
                     primaryColor: getThemeColor(),
                     secondaryColor: ColorStyle.text200,
-                    uploadType: UploadType.image,
                     filePath: image,
                     onChanged: (image) {
                       setState(() {

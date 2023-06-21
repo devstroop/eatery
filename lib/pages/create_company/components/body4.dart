@@ -51,8 +51,8 @@ class Body4 extends StatelessWidget {
             themeColor: themeColor,
             keyboardType: TextInputType.text,
             controller: taxNoController,
-            title: '${edition.name} License No',
-            hint: 'Enter ${edition.name} license number...',
+            title: '${edition.name} Registration No',
+            hint: 'Enter ${edition.name} registration number',
             focusNode: focus1,
             textInputAction: TextInputAction.next,
             onFieldSubmitted: (v) {
@@ -71,9 +71,10 @@ class Body4 extends StatelessWidget {
             themeColor: themeColor,
             keyboardType: TextInputType.number,
             controller: foodLicNoController,
-            title: '${edition == Edition.gst ? 'FSSAI' : 'Food'} License No',
+            title:
+                '${edition == Edition.gst ? 'FSSAI' : 'Food'} Registration Number',
             hint:
-                'Enter ${edition == Edition.gst ? 'FSSAI' : 'Food'} license number...',
+                'Enter ${edition == Edition.gst ? 'FSSAI' : 'Food'} registration number',
             focusNode: focus2,
             textInputAction: TextInputAction.next,
             onFieldSubmitted: (v) {
@@ -96,20 +97,20 @@ class Body4 extends StatelessWidget {
               Flexible(
                 child: CustomTextFromField(
                   themeColor: themeColor,
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: TextInputType.numberWithOptions(decimal: true),
                   controller: defaultTaxController,
                   title: 'Default ${edition.name} Rate',
-                  hint: 'Enter default ${edition.name} rate...',
+                  hint: '${edition.name} Rate',
                   suffixWidget: Icon(
-                    Icons.percent,
+                    UIcons.regularStraight.percentage,
                     color: ColorStyle.text400,
+                    size: 18,
                   ),
                   focusNode: focus3,
                   textInputAction: TextInputAction.done,
                   validator: (value) {
                     if (value!.trim().isNotEmpty && !value.trim().isNum) {
-                      return 'Default ${edition.name} license number is not valid';
+                      return 'Default ${edition.name} registration number is not valid';
                     }
                     // if (edition == Edition.gst && !value!.trim().isValidGSTIN()) return '${edition.name} license number is not valid';
                     return null;

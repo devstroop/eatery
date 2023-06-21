@@ -1,14 +1,18 @@
 import 'dart:io';
+import 'package:eatery/constants/utils/utils.dart';
 import 'package:eatery_components/others/bottom_sheet.grip.dart';
 import 'package:eatery_components/titles/page.title.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uicons/uicons.dart';
 import 'package:path/path.dart' as path;
 
+import '../../constants/global_variables.dart';
 import '../../services/utility/file.utility.service.dart';
 import '../containers/image.container.dart';
+import '../dialogs/showConfirmationDialog.dart';
 
 class ImageLibraryBottomSheet extends StatefulWidget {
   final BuildContext context;
@@ -23,39 +27,54 @@ class ImageLibraryBottomSheet extends StatefulWidget {
 }
 
 class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
+  List<String> _images = [];
+
   @override
   void initState() {
     super.initState();
-    loadImages();
+    fetchLibrary();
   }
 
-  Future pickFromFile() async {
+
+  void fetchLibrary() {
+    _images.clear();
+    bool flag = false;
+    Directory(GlobalVariables.resourcesDirectoryAbs!).list().listen((event) {
+      if (event.path.toLowerCase().endsWith(".jpg") ||
+          event.path.toLowerCase().endsWith(".jpeg") ||
+          event.path.toLowerCase().endsWith(".png")) {
+        setState(() {
+          _images.add(event.path);
+          flag = true;
+        });
+      }
+    }).onDone(() {
+      if (flag) {
+        setState(() {
+          _images.sort((a, b) => File(a).lastModifiedSync().compareTo(File(b).lastModifiedSync()));
+        });
+      }else{
+        setState(() {
+          _images = [];
+        });
+      }
+    });
+  }
+
+  Future pickImageFromFile() async {
     FilePicker.platform.pickFiles(
       type: FileType.custom,
       allowedExtensions: ['jpg', 'jpeg', 'png'],
     ).then((value) async {
       if (value != null && value.files.isNotEmpty) {
-        // TODO: Remove debug tag
-        debugPrint('TEST1');
-        FileUtilityServices.copyFile(
-                sourcePath: value.files.single.path!, targetPath: '')
-            .then((value) {
-          debugPrint(value?.path);
-          if (value != null) {
-            widget.action(path.relative(value.path));
-            Navigator.pop(context);
-          }
-        });
-        debugPrint(value.files.single.path.toString());
-        // FileServices.copy(
-        //         target: value.files.single.path!,
-        //         directory: await FileServices.libraryPath())
-        //     .then((value) {
-        //   if (value != null) {
-        //     widget.action(path.relative(value.path));
-        //     Navigator.pop(context);
-        //   }
-        // });
+        try {
+          String relativeImagePath =
+              FileUtilityService.importInResources(value.files.single.path!);
+          // widget.action(relativeImagePath);
+          fetchLibrary();
+        } catch (e) {
+          showSnackBar(context, e.toString());
+        }
       }
     });
   }
@@ -90,16 +109,6 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
     }
   }
 
-  final List<String> _existingImages = [];
-
-  Future loadImages() async {
-    _existingImages.clear();
-    // for (var each in await FileServices.getImages()) {
-    //   _existingImages.add(each);
-    //   setState(() {});
-    // }
-  }
-
   @override
   Widget build(BuildContext context) {
     return StatefulBuilder(builder: (context, state) {
@@ -120,6 +129,23 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
                 ),
                 Row(
                   children: [
+                    // if clipboard text is link to image
+                    FutureBuilder<ClipboardData?>(
+                      future: Clipboard.getData('text/plain'),
+                      builder: (context, snapshot) {
+                        Uri? uri = Uri.tryParse(snapshot.data?.text ?? '');
+                        if (uri?.isAbsolute ?? false) {
+                          return IconButton(
+                            icon: Icon(UIcons.regularStraight.link),
+                            iconSize: 24,
+                            color: const Color(0xFF888888),
+                            onPressed: () async {},
+                          );
+                        } else {
+                          return const SizedBox.shrink();
+                        }
+                      },
+                    ),
                     if (Platform.isAndroid)
                       IconButton(
                         icon: Icon(UIcons.regularStraight.camera),
@@ -136,10 +162,10 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
                       ),
                     if (Platform.isIOS)
                       IconButton(
-                        icon: Icon(UIcons.regularStraight.upload),
+                        icon: Icon(UIcons.regularStraight.download),
                         iconSize: 24,
                         color: const Color(0xFF888888),
-                        onPressed: pickFromFile,
+                        onPressed: pickImageFromFile,
                       ),
                   ],
                 ),
@@ -152,36 +178,57 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
               thickness: 0.5,
               color: Color(0xFFB2B2B2),
             ),
-            if (_existingImages.isEmpty)
-              const Expanded(
-                  child: Center(
-                child: Text('Empty'),
-              )),
-            if (_existingImages.isNotEmpty)
-              Expanded(
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
-                  child: Wrap(
-                    spacing: 12.0,
-                    runSpacing: 12.0,
-                    children: [
-                      for (var each in _existingImages)
-                        if (File(each).existsSync())
-                          ImageContainer(
-                              screenWidth: MediaQuery.of(context).size.width,
-                              onTap: () {
-                                widget.action(path.relative(each));
-                                Navigator.pop(context);
-                              },
-                              onLongPress: () async {
-                                await FileUtilityServices.deleteFile(
-                                    filePath: each);
-                                await loadImages();
-                              },
-                              file: File(each)),
-                    ],
-                  ),
+            if (_images.isEmpty)
+              Opacity(
+                opacity: 0.25,
+                child: Column(
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 3,
+                      child: Image.asset('assets/images/empty-folder.png'),
+                    ),
+                    const Text(
+                      'Empty Library',
+                      style: TextStyle(fontSize: 24),
+                    ),
+                  ],
                 ),
+              ),
+            if (_images.isNotEmpty)
+              GridView.count(
+                crossAxisCount: 3,
+                crossAxisSpacing: 12.0,
+                mainAxisSpacing: 12.0,
+                shrinkWrap: true,
+                children: [
+                  for (var each in _images)
+                    if (File(each).existsSync())
+                      ImageContainer(
+                        onTap: () {
+                          widget.action(path.relative(each));
+                          Navigator.pop(context);
+                        },
+                        onLongPress: () {
+                          showConfirmationDialog(context, 'Are you sure?',
+                              'Do you want to remove this image from library.',
+                              () {
+                            bool result =
+                                FileUtilityService.deleteResource(each);
+                            if (result) {
+                              showSnackBar(
+                                  context, 'Image removed from library.');
+                            } else {
+                              showSnackBar(context,
+                                  'Failed to remove image from library.');
+                            }
+                            fetchLibrary();
+                          }, () {
+                            // Do nothing
+                          });
+                        },
+                        file: File(each),
+                      ),
+                ],
               )
           ],
         ),

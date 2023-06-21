@@ -16,8 +16,7 @@ import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:eatery_db/eatery_db.dart';
 
 class ReportsPage extends StatefulWidget {
-  const ReportsPage({Key? key, required this.company}) : super(key: key);
-  final Company company;
+  const ReportsPage({Key? key}) : super(key: key);
   @override
   State<ReportsPage> createState() => _ReportsPageState();
 }

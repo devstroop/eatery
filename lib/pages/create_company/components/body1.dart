@@ -54,7 +54,6 @@ class Body1 extends StatelessWidget {
             label: 'Restaurant Logo',
             primaryColor: themeColor,
             secondaryColor: ColorStyle.text200,
-            uploadType: UploadType.image,
             filePath: selectedLogoPath,
             onChanged: onChanged,
           ),

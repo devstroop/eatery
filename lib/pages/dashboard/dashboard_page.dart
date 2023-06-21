@@ -14,6 +14,7 @@ import 'package:eatery/pages/dashboard/pos/pointOfSale.page.dart';
 import 'package:eatery/pages/dashboard/reports/reports_page.dart';
 import 'package:eatery/pages/dashboard/settings/settings.page.dart';
 import 'package:eatery/pages/dashboard/waiter/waiters_page.dart';
+import 'package:eatery/services/utility/file.utility.service.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,218 +46,308 @@ class _DashboardPageState extends State<DashboardPage> {
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
 
+    double crossAxisItemCount;
+    double menuSize;
+    double spacing;
+    double iconSize;
+    double titleSize;
+    double subtitleSize;
+
+    if (screenWidth >= 1200) {
+      crossAxisItemCount = 5;
+      spacing = 32;
+      iconSize = 72;
+      titleSize = 24;
+      subtitleSize = 18;
+    } else if (screenWidth >= 800) {
+      crossAxisItemCount = 4;
+      spacing = 24;
+      iconSize = 60;
+      titleSize = 20;
+      subtitleSize = 16;
+    } else if (screenWidth >= 600) {
+      crossAxisItemCount = 3;
+      spacing = 20;
+      iconSize = 48;
+      titleSize = 18;
+      subtitleSize = 14;
+    } else {
+      crossAxisItemCount = 2;
+      spacing = 16;
+      iconSize = 36;
+      titleSize = 16;
+      subtitleSize = 12;
+    }
+
+    menuSize = (screenWidth - (spacing * (crossAxisItemCount + 1))) / crossAxisItemCount;
+
+
     return WillPopScope(
       onWillPop: () {
         return Future.value(false);
       },
       child: Scaffold(
         key: scaffoldKey,
-        body: SafeArea(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              children: [
-                DashboardHeader(
-                  companyName: widget.company.name,
-                  logoPath: widget.company.logo,
-                ),
-                UpgradeNotification(
-                    company: widget.company, width: screenWidth * 0.85),
-                LowBatteryWarningNotification(width: screenWidth * 0.85),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Wrap(
-                    spacing: 16,
-                    runSpacing: 16,
-                    alignment: WrapAlignment.spaceEvenly,
-                    children: [
-                      MenuWidget(
-                        iconData: UIcons.regularStraight.calculator,
-                        title: 'POS',
-                        subtitle: 'Tap here to start your sale',
-                        color: ColorStyle.primary,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const PointOfSalePage(),
+        body: ListView(
+          padding: EdgeInsets.symmetric(horizontal: spacing, vertical: 60),
+          children: [
+            DashboardHeader(
+              companyName: GlobalVariables.company!.name,
+              logoPath: FileUtilityService.getAbsolutePath(GlobalVariables.company?.logo ?? ''),
+              suffix: [
+                IconButton(icon: Icon(UIcons.regularStraight.log_out,), onPressed: (){
+                  showDialog(
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Logout'),
+                          content: const Text('Are you sure you want to logout?'),
+                          actions: [
+                            TextButton(
+                              onPressed: () async {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const LogoutPage(),
+                                  ),
+                                );
+                              },
+                              child: const Text('Yes'),
                             ),
-                          );
-                        },
-                      ),
-                      MenuWidget(
-                        iconData: UIcons.regularStraight.table_tree,
-                        title: 'Categories',
-                        subtitle: 'Manage your product categories here',
-                        color: ColorStyle.tertiary,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const ProductCategoriesPage(),
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('No'),
                             ),
-                          );
-                        },
-                      ),
-                      MenuWidget(
-                        iconData: UIcons.regularStraight.restaurant,
-                        title: 'Kitchen',
-                        subtitle: 'Manage your dishes here',
-                        color: const Color(0xFF2FC289),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => KitchenPage(
-                                company: widget.company,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      MenuWidget(
-                        iconData: UIcons.regularStraight.package,
-                        title: 'Inventory',
-                        subtitle: 'Manage your items here',
-                        color: const Color(0xFF6850EF),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => InventoryPage(
-                                company: widget.company,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      MenuWidget(
-                        iconData: UIcons.regularStraight.terrace,
-                        title: 'Tables',
-                        subtitle: 'Manage your dining tables here',
-                        color: const Color(0xFFEF9050),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => DiningTablesPage(
-                                company: widget.company,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      MenuWidget(
-                        iconData: UIcons.regularStraight.people_poll,
-                        title: 'Waiters',
-                        subtitle: 'Manage your waiters here',
-                        color: const Color(0xFFC2592F),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => WaitersPage(
-                                company: widget.company,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      MenuWidget(
-                        iconData: UIcons.regularStraight.list,
-                        title: 'Reports',
-                        subtitle: 'All sales are here',
-                        color: const Color(0xFFF5B942),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ReportsPage(
-                                company: widget.company,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      MenuWidget(
-                        iconData: UIcons.regularStraight.settings,
-                        title: 'Settings',
-                        subtitle: 'Manage your settings here',
-                        color: const Color(0xFF222222),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SettingPage(
-                                company: widget.company,
-                              ),
-                            ),
-                          ).then((_) async {
-                            setState(() {});
-                          });
-                        },
-                      ),
-                      MenuWidget(
-                        iconData: UIcons.regularStraight.exchange,
-                        title: 'Import / Export',
-                        subtitle: 'Import Products/Invoices here',
-                        color: const Color(0xFFEF9050),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => ImportExportPage(
-                                company: widget.company,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      MenuWidget(
-                        iconData: UIcons.regularStraight.time_past,
-                        title: 'Backup / Restore',
-                        subtitle: 'Backup and Restore is here',
-                        color: const Color(0xFF2FC289),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => BackupRestorePage(
-                                company: widget.company,
-                              ),
-                            ),
-                          );
-                        },
-                      ),
-                      MenuWidgetExtended(
-                        iconData: UIcons.regularStraight.log_out,
-                        title: 'Logout',
-                        subtitle: 'Close the session',
-                        color: const Color(0xFFEF5350),
-                        onTap: () async {
-                          final prefs = await SharedPreferences.getInstance();
-                          await prefs.remove('companyId').then((value) {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => LogoutPage(
-                                  company: widget.company,
-                                ),
-                              ),
-                            );
-                          });
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                const SizedBox(
-                  height: 24,
-                ),
+                          ],
+                        );
+                      });
+                },)
               ],
             ),
-          ),
+            UpgradeNotification(
+                company: GlobalVariables.company,),
+            const LowBatteryWarningNotification(),
+            const SizedBox(height: 16),
+            Wrap(
+              spacing: spacing,
+              runSpacing: spacing,
+              alignment: WrapAlignment.spaceBetween,
+              children: [
+                MenuWidget(
+                  iconData: UIcons.regularStraight.calculator,
+                  iconSize: iconSize,
+                  title: 'Point of Sale',
+                  subtitle: 'Tap here to start your sale',
+                  titleSize: titleSize,
+                  subtitleSize: subtitleSize,
+                  color: ColorStyle.primary,
+                  width: menuSize,
+                  height: menuSize,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const PointOfSalePage(),
+                      ),
+                    );
+                  },
+                ),
+                MenuWidget(
+                  iconData: UIcons.regularStraight.table_tree,
+                  iconSize: iconSize,
+                  title: 'Categories',
+                  subtitle: 'Manage your product categories here',
+                  titleSize: titleSize,
+                  subtitleSize: subtitleSize,
+                  color: ColorStyle.tertiary,
+                  width: menuSize,
+                  height: menuSize,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            const ProductCategoriesPage(),
+                      ),
+                    );
+                  },
+                ),
+                MenuWidget(
+                  iconData: UIcons.regularStraight.restaurant,
+                  iconSize: iconSize,
+                  title: 'Kitchen',
+                  subtitle: 'Manage your dishes here',
+                  titleSize: titleSize,
+                  subtitleSize: subtitleSize,
+                  color: const Color(0xFF2FC289),
+                  width: menuSize,
+                  height: menuSize,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const KitchenPage(),
+                      ),
+                    );
+                  },
+                ),
+                MenuWidget(
+                  iconData: UIcons.regularStraight.boxes,
+                  iconSize: iconSize,
+                  title: 'Inventory',
+                  subtitle: 'Manage your items here',
+                  titleSize: titleSize,
+                  subtitleSize: subtitleSize,
+                  color: const Color(0xFF6850EF),
+                  width: menuSize,
+                  height: menuSize,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const InventoryPage(),
+                      ),
+                    );
+                  },
+                ),
+                MenuWidget(
+                  iconData: UIcons.regularStraight.terrace,
+                  iconSize: iconSize,
+                  title: 'Dining Tables',
+                  subtitle: 'Manage your dining tables here',
+                  titleSize: titleSize,
+                  subtitleSize: subtitleSize,
+                  color: const Color(0xFFEF9050),
+                  width: menuSize,
+                  height: menuSize,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const DiningTablesPage(),
+                      ),
+                    );
+                  },
+                ),
+                MenuWidget(
+                  iconData: UIcons.regularStraight.people_poll,
+                  iconSize: iconSize,
+                  title: 'Waiters',
+                  subtitle: 'Manage your waiters here',
+                  titleSize: titleSize,
+                  subtitleSize: subtitleSize,
+                  color: const Color(0xFFC2592F),
+                  width: menuSize,
+                  height: menuSize,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const WaitersPage(),
+                      ),
+                    );
+                  },
+                ),
+                MenuWidget(
+                  iconData: UIcons.regularStraight.list,
+                  iconSize: iconSize,
+                  title: 'Reports',
+                  subtitle: 'All reports and record are here',
+                  titleSize: titleSize,
+                  subtitleSize: subtitleSize,
+                  color: const Color(0xFFF5B942),
+                  width: menuSize,
+                  height: menuSize,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ReportsPage(),
+                      ),
+                    );
+                  },
+                ),
+                MenuWidget(
+                  iconData: UIcons.regularStraight.settings,
+                  iconSize: iconSize,
+                  title: 'Settings',
+                  subtitle: 'Manage your settings here',
+                  titleSize: titleSize,
+                  subtitleSize: subtitleSize,
+                  width: menuSize,
+                  height: menuSize,
+                  color: const Color(0xFF222222),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SettingPage(),
+                      ),
+                    ).then((_) async {
+                      setState(() {});
+                    });
+                  },
+                ),
+                MenuWidget(
+                  iconData: UIcons.regularStraight.exchange,
+                  iconSize: iconSize,
+                  title: 'Import / Export',
+                  subtitle: 'Import Products/Invoices here',
+                  titleSize: titleSize,
+                  subtitleSize: subtitleSize,
+                  width: menuSize,
+                  height: menuSize,
+                  color: const Color(0xFFEF9050),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const ImportExportPage(),
+                      ),
+                    );
+                  },
+                ),
+                MenuWidget(
+                  iconData: UIcons.regularStraight.time_past,
+                  iconSize: iconSize,
+                  title: 'Backup / Restore',
+                  subtitle: 'Backup and Restore is here',
+                  titleSize: titleSize,
+                  subtitleSize: subtitleSize,
+                  width: menuSize,
+                  height: menuSize,
+                  color: const Color(0xFF2FC289),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const BackupRestorePage(),
+                      ),
+                    );
+                  },
+                ),
+                // MenuWidgetExtended(
+                //   iconData: UIcons.regularStraight.log_out,
+                //   title: 'Logout',
+                //   subtitle: 'Close the session',
+                //   color: const Color(0xFFEF5350),
+                //   onTap: () async {
+                //     final prefs = await SharedPreferences.getInstance();
+                //     await prefs.remove('companyId').then((value) {
+                //       Navigator.push(
+                //         context,
+                //         MaterialPageRoute(
+                //           builder: (context) => const LogoutPage(),
+                //         ),
+                //       );
+                //     });
+                //   },
+                // ),
+              ],
+            ),
+          ],
         ),
       ),
     );

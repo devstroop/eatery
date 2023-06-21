@@ -32,22 +32,25 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
       body: ListView(
         children: [
           ListTile(
-            title: const Text('None',
+            title: const Text('Default',
                 style: TextStyle(fontWeight: FontWeight.w600)),
-            subtitle: const Text('No category'),
+            subtitle: const Text('Uncategorized'),
             trailing: Icon(
-              UIcons.regularStraight.ban,
+              UIcons.regularStraight.arrow_small_right,
               size: 18,
             ),
-            leading: Container(
-              width: 50.0,
-              height: 50.0,
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(12.0),
-                image: const DecorationImage(
-                  image: AssetImage('assets/images/no-image.jpg'),
-                  fit: BoxFit.cover,
+            leading: Material(
+              elevation: 2.0,
+              borderRadius: BorderRadius.circular(12.0),
+              child: Container(
+                width: 50.0,
+                height: 50.0,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12.0),
+                  image: const DecorationImage(
+                    image: AssetImage('assets/images/default.jpg'),
+                    fit: BoxFit.cover,
+                  ),
                 ),
               ),
             ),
@@ -59,23 +62,26 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
                   style: const TextStyle(fontWeight: FontWeight.w600)),
               subtitle: Text(e.description ?? ''),
               trailing: Icon(UIcons.regularStraight.arrow_small_right),
-              leading: Container(
-                  width: 50.0,
-                  height: 50.0,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[300],
-                    borderRadius: BorderRadius.circular(12.0),
-                    image: DecorationImage(
-                      image: (e.image != null && File(e.image!).existsSync()
-                              ? Image.file(File(e.image!))
-                              : Image.asset(
-                                  'assets/images/no-image.jpg',
-                                  fit: BoxFit.cover,
-                                ))
-                          .image,
-                      fit: BoxFit.cover,
-                    ),
-                  )),
+              leading: Material(
+                elevation: 2.0,
+                borderRadius: BorderRadius.circular(12.0),
+                child: Container(
+                    width: 50.0,
+                    height: 50.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(12.0),
+                      image: DecorationImage(
+                        image: (e.image != null && File(e.image!).existsSync()
+                                ? Image.file(File(e.image!))
+                                : Image.asset(
+                                    'assets/images/no-image.jpg',
+                                    fit: BoxFit.cover,
+                                  ))
+                            .image,
+                        fit: BoxFit.cover,
+                      ),
+                    )),
+              ),
               onTap: () {
                 Navigator.push(
                   context,
@@ -93,7 +99,7 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
         foregroundColor: Colors.white,
         backgroundColor: themeColor,
         icon: Icon(UIcons.regularStraight.add_folder),
-        label: const Text('New'),
+        label: const Text('New Category'),
         onPressed: () {
           Navigator.push(
             context,

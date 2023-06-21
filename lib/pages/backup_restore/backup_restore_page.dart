@@ -106,8 +106,8 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
     // await DiningTable.clear();
     // await DiningTableCategory.clear();
     // await Order.clear();
-    // // await Product.clear();
-    // // await ProductCategoryOld.clear();
+    // await Product.clear();
+    // await ProductCategoryOld.clear();
     // await Waiter.clear();
 
     pd.update(value: 10);

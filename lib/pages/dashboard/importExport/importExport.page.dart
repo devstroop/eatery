@@ -9,8 +9,7 @@ import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery_db/eatery_db.dart';
 
 class ImportExportPage extends StatefulWidget {
-  const ImportExportPage({Key? key, required this.company}) : super(key: key);
-  final Company company;
+  const ImportExportPage({Key? key}) : super(key: key);
   @override
   State<ImportExportPage> createState() => _ImportExportPageState();
 }

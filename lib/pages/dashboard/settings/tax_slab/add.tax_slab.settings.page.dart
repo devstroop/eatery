@@ -7,9 +7,8 @@ import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 
 class AddTaxSlabSettingsPage extends StatefulWidget {
-  const AddTaxSlabSettingsPage({Key? key, required this.company})
+  const AddTaxSlabSettingsPage({Key? key})
       : super(key: key);
-  final Company company;
 
   @override
   State<AddTaxSlabSettingsPage> createState() => _AddTaxSlabSettingsPageState();

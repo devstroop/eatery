@@ -56,7 +56,6 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
                 label: 'Product Category Image',
                 primaryColor: getThemeColor(),
                 secondaryColor: ColorStyle.text200,
-                uploadType: UploadType.image,
                 filePath: pickedImagePath,
                 onChanged: (pickedImagePath) {
                   setState(() {

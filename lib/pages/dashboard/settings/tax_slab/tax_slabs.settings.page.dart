@@ -6,9 +6,8 @@ import 'package:eatery_components/bottomsheets/tax_slab.bottomsheet.dart';
 import 'edit.tax_slab.settings.page.dart';
 
 class TaxSlabsSettingsPage extends StatefulWidget {
-  const TaxSlabsSettingsPage({Key? key, required this.company})
+  const TaxSlabsSettingsPage({Key? key})
       : super(key: key);
-  final Company company;
 
   @override
   State<TaxSlabsSettingsPage> createState() => _TaxSlabsSettingsPageState();
@@ -27,8 +26,7 @@ class _TaxSlabsSettingsPageState extends State<TaxSlabsSettingsPage> {
   _edit(TaxSlab taxSlab) => Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => EditTaxSlabSettingsPage(
-                company: widget.company, taxSlab: taxSlab)),
+            builder: (context) => EditTaxSlabSettingsPage(taxSlab: taxSlab)),
       ).then((_) {
         setState(() {});
         Navigator.of(context).pop();
@@ -102,7 +100,7 @@ class _TaxSlabsSettingsPageState extends State<TaxSlabsSettingsPage> {
           context,
           MaterialPageRoute(
               builder: (context) =>
-                  AddTaxSlabSettingsPage(company: widget.company)),
+                  const AddTaxSlabSettingsPage()),
         ).then((_) => setState(() {})),
         backgroundColor: getThemeColor(),
         child: const Icon(Icons.add),

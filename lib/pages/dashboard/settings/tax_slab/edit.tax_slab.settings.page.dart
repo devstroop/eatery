@@ -9,9 +9,8 @@ import 'package:eatery_db/eatery_db.dart';
 
 class EditTaxSlabSettingsPage extends StatefulWidget {
   const EditTaxSlabSettingsPage(
-      {Key? key, required this.company, required this.taxSlab})
+      {Key? key, required this.taxSlab})
       : super(key: key);
-  final Company company;
   final TaxSlab taxSlab;
 
   @override

@@ -110,7 +110,6 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
                 label: 'Product Category Image',
                 primaryColor: _pageColor,
                 secondaryColor: ColorStyle.text200,
-                uploadType: UploadType.image,
                 filePath: pickedImagePath,
                 onChanged: (pickedImagePath) {
                   setState(() {
