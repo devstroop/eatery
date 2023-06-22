@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:eatery/services/utility/file.utility.service.dart';
+import 'package:eatery/services/utility/library_image.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/dining_table_card.dart';
@@ -90,10 +93,9 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                     return PosCategoryWidget(
                       active: selectedCategory == e.id,
                       label: e.name,
-                      image: Image.asset(
-                        e.image != null
-                            ? FileUtilityService.getAbsolutePath(e.image ?? '')
-                            : 'assets/images/default.jpg',
+                      image: Image(
+                        image: LibraryImage(
+                            e.image ?? '').image,
                         width: 18,
                         height: 18,
                         fit: BoxFit.cover,

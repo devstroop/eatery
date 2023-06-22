@@ -6,6 +6,7 @@ import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
 import '../../../../components/labeled_custom_text_from_field.dart';
+import '../../../../services/utility/library_image.dart';
 import '../../../../widgets/buttons/upload.button.dart';
 
 Color _pageColor = ColorStyle.tertiary;
@@ -21,7 +22,7 @@ class EditProductCategoryPage extends StatefulWidget {
 }
 
 class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
-  String? pickedImagePath;
+  LibraryImage? pickedLibraryImage;
   final TextEditingController _controllerCategoryName = TextEditingController();
   final TextEditingController _controllerDescription = TextEditingController();
 
@@ -29,7 +30,7 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
   initState() {
     super.initState();
     setState(() {
-      pickedImagePath = widget.category.image;
+      pickedLibraryImage = LibraryImage(widget.category.image);
       _controllerCategoryName.text = widget.category.name;
       _controllerDescription.text = widget.category.description ?? '';
     });
@@ -110,10 +111,10 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
                 label: 'Product Category Image',
                 primaryColor: _pageColor,
                 secondaryColor: ColorStyle.text200,
-                filePath: pickedImagePath,
-                onChanged: (pickedImagePath) {
+                image: pickedLibraryImage?.image,
+                onChanged: (libraryImage) {
                   setState(() {
-                    this.pickedImagePath = pickedImagePath;
+                    pickedLibraryImage = libraryImage;
                   });
                 },
               ),
@@ -160,7 +161,7 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
             try {
               widget.category.name = _controllerCategoryName.text.trim();
               widget.category.description = _controllerDescription.text.trim();
-              widget.category.image = pickedImagePath;
+              widget.category.image = pickedLibraryImage?.filename;
               widget.category.save();
               showSnackBar(context, 'Successfully updated');
               Navigator.of(context).pop();

@@ -1,16 +1,22 @@
 import 'dart:io';
-
-import 'package:eatery/pages/auth/logout_page.dart';
-import 'package:eatery_db/eatery_db.dart';
+import 'package:eatery/services/utility/library_image.dart';
 import 'package:flutter/material.dart';
+
+import '../../../services/utility/file.utility.service.dart';
 
 class DashboardHeader extends StatelessWidget {
   final String companyName;
-  final String? logoPath;
+  final ImageProvider? image;
   final double? width;
   final EdgeInsets? margin;
   final List<Widget>? suffix;
-  const DashboardHeader({Key? key, required this.companyName, this.logoPath, this.width, this.margin, this.suffix})
+  const DashboardHeader(
+      {Key? key,
+      required this.companyName,
+      this.image,
+      this.width,
+      this.margin,
+      this.suffix})
       : super(key: key);
 
   @override
@@ -21,22 +27,22 @@ class DashboardHeader extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          if(logoPath != null && File(logoPath!).existsSync())
-          Container(
-            height: 64,
-            width: 64,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: Image.file(
-                  File(logoPath!),
-                ).image,
+          if (image != null)
+            Container(
+              height: 64,
+              width: 64,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                image: DecorationImage(
+                  fit: BoxFit.cover,
+                  image: image!,
+                ),
               ),
             ),
-          ),
-          if(logoPath != null && File(logoPath!).existsSync())
-            const SizedBox(width: 12,),
+          if (image != null)
+            const SizedBox(
+              width: 12,
+            ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -71,7 +77,9 @@ class DashboardHeader extends StatelessWidget {
           ),
           const Spacer(),
           ...suffix ?? [],
-          const SizedBox(width: 8,),
+          const SizedBox(
+            width: 8,
+          ),
         ],
       ),
     );

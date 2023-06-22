@@ -1,16 +1,17 @@
 import 'dart:io';
-import 'package:eatery/constants/global_variables.dart';
 import 'package:flutter/material.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
 import 'package:http/http.dart' as http;
 
-class ImageLibrary {
-  final String filename;
+import '../../constants/global_variables.dart';
 
-  ImageLibrary(this.filename);
+class LibraryImage {
+  final String? filename;
 
-  String get subDirectory => '/images';
+  LibraryImage(this.filename);
+
+  String get _subDirectory => '/images';
 
   File get file => File(absolutePath);
 
@@ -18,21 +19,26 @@ class ImageLibrary {
 
   Future<DateTime> get lastModifiedAsync => file.lastModified();
 
-  bool get exists => file.existsSync();
+  bool exists() => filename != null && file.existsSync();
 
-  Future<bool> get existsAsync => file.exists();
+  Future<bool> existsAsync() async {
+    return filename != null && await file.exists();
+  }
 
-  String get absolutePath => '${GlobalVariables.baseDirectory}$subDirectory/$filename';
+  String get absolutePath =>
+      '${GlobalVariables.baseDirectory}$_subDirectory/$filename';
 
-  String get basename => path.basename(filename);
+  String? get basename => exists() ? path.basename(filename!) : null;
 
-  String get extension => path.extension(filename);
+  String? get extension => exists() ? path.extension(filename!) : null;
 
-  String get mimeType => lookupMimeType(extension) ?? 'application/octet-stream';
+  String? get mimeType => exists()
+      ? lookupMimeType(extension!) ?? 'application/octet-stream'
+      : null;
 
-  int get size => file.lengthSync();
+  int? get size => exists() ? file.lengthSync() : null;
 
-  Future<int> get sizeAsync => file.length();
+  Future<int?> get sizeAsync => exists() ? file.length() : Future.value(null);
 
   File copyTo(String destinationPath) {
     final destinationFile = File(destinationPath);
@@ -64,15 +70,22 @@ class ImageLibrary {
     await file.delete();
   }
 
-  ImageProvider get image => (file.existsSync() ? Image.file(file) : Image.asset('assets/images/default.jpg')).image;
+  ImageProvider get image => (file.existsSync()
+          ? Image.file(file)
+          : Image.asset('assets/images/default.jpg'))
+      .image;
+}
 
-  static ImageLibrary importFromPath(String imagePath) {
+class LibraryImageProvider {
+  static LibraryImage importFromPath(String imagePath) {
     final sourceFile = File(imagePath);
     if (sourceFile.existsSync()) {
       try {
-        final destinationFile =
-        sourceFile.copySync('${GlobalVariables.baseDirectory}/images/${path.basename(imagePath)}');
-        return ImageLibrary(destinationFile.path.replaceAll('\\', '/').replaceFirst(GlobalVariables.baseDirectory!, ''));
+        final destinationFile = sourceFile.copySync(
+            '${GlobalVariables.baseDirectory}/images/${path.basename(imagePath)}');
+        return LibraryImage(destinationFile.path
+            .replaceAll('\\', '/')
+            .replaceFirst(GlobalVariables.baseDirectory!, ''));
       } catch (e) {
         rethrow;
       }
@@ -80,7 +93,7 @@ class ImageLibrary {
     throw Exception('Source file does not exist');
   }
 
-  static Future<ImageLibrary> importFromURL(String url) async {
+  static Future<LibraryImage> importFromURL(String url) async {
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
@@ -89,12 +102,54 @@ class ImageLibrary {
         final filePath = '${GlobalVariables.baseDirectory}/images/$fileName';
         final file = File(filePath);
         await file.writeAsBytes(bytes);
-        return ImageLibrary(file.path.replaceAll('\\', '/').replaceFirst(GlobalVariables.baseDirectory!, ''));
+        return LibraryImage(file.path
+            .replaceAll('\\', '/')
+            .replaceFirst(GlobalVariables.baseDirectory!, ''));
       } else {
-        throw Exception('Failed to download image. Status code: ${response.statusCode}');
+        throw Exception(
+            'Failed to download image. Status code: ${response.statusCode}');
       }
     } catch (e) {
       throw Exception('Failed to download image: $e');
     }
+  }
+
+  static List<LibraryImage> getAll({Function(LibraryImage)? listen}) {
+    final directory = Directory('${GlobalVariables.baseDirectory}/images');
+    if (directory.existsSync()) {
+      return directory.listSync().map((e) {
+        if (listen != null) {
+          listen(LibraryImage(e.path
+              .replaceAll('\\', '/')
+              .replaceFirst('${GlobalVariables.baseDirectory}/images/', '')));
+        }
+        return LibraryImage(e.path
+            .replaceAll('\\', '/')
+            .replaceFirst('${GlobalVariables.baseDirectory}/images/', ''));
+      }).toList();
+    }
+    return [];
+  }
+
+  static Future<List<LibraryImage>> getAllAsync(
+      {Function(LibraryImage)? listen}) async {
+    debugPrint(GlobalVariables.baseDirectory);
+    final directory = Directory('${GlobalVariables.baseDirectory}/images');
+    bool exists = await directory.exists();
+    if (exists) {
+      return directory.list().map((e) {
+        if (listen != null) {
+          LibraryImage libraryImage = LibraryImage(e.path
+              .replaceAll('\\', '/')
+              .replaceFirst('${GlobalVariables.baseDirectory}/images/', ''));
+          listen(libraryImage);
+        }
+
+        return LibraryImage(e.path
+            .replaceAll('\\', '/')
+            .replaceFirst('${GlobalVariables.baseDirectory}/images/', ''));
+      }).toList();
+    }
+    return [];
   }
 }

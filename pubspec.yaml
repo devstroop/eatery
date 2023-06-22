@@ -14,6 +14,7 @@ dependencies:
   hive: ^2.2.3
   hive_flutter: ^1.1.0
 
+  mime: ^1.0.0
   path: ^1.8.2
   uicons: ^1.0.1
   flutter_bluetooth_basic: ^0.1.7

@@ -7,6 +7,7 @@ import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
+import '../../../../services/utility/library_image.dart';
 import '../../../../widgets/buttons/upload.button.dart';
 
 class AddProductCategoryPage extends StatefulWidget {
@@ -17,7 +18,7 @@ class AddProductCategoryPage extends StatefulWidget {
 }
 
 class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
-  String? pickedImagePath;
+  LibraryImage? pickedLibraryImage;
   final TextEditingController _controllerCategoryName = TextEditingController();
   final TextEditingController _controllerCategoryDescription =
       TextEditingController();
@@ -56,10 +57,10 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
                 label: 'Product Category Image',
                 primaryColor: getThemeColor(),
                 secondaryColor: ColorStyle.text200,
-                filePath: pickedImagePath,
+                image: pickedLibraryImage?.image,
                 onChanged: (pickedImagePath) {
                   setState(() {
-                    this.pickedImagePath = pickedImagePath;
+                    pickedLibraryImage = pickedImagePath;
                   });
                 },
               ),
@@ -121,7 +122,7 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
                       id: EateryDB.instance.productCategoryBox.nextId(),
                       name: _controllerCategoryName.text,
                       description: _controllerCategoryDescription.text,
-                      image: pickedImagePath))
+                      image: pickedLibraryImage?.filename))
                   .then((response) {
                 if (response == 1) {
                   showSnackBar(context, 'Created successfully');

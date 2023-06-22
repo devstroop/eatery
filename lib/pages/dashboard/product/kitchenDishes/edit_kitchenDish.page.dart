@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:eatery/constants/extensions/string_extension.dart';
+import 'package:eatery/services/utility/library_image.dart';
 
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +24,7 @@ class EditKitchenDish extends StatefulWidget {
 }
 
 class _EditKitchenDishState extends State<EditKitchenDish> {
-  String? image;
+  LibraryImage? image;
   ProductCategory? _category;
 
   FoodType? _foodType;
@@ -47,7 +48,7 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
           .singleWhere((element) => element.id == GlobalVariables.company!.currencyId)
           .symbol;
     } catch (_) {}
-    image = widget.product.image;
+    image = LibraryImage(widget.product.image);
     _ctrlName.text = widget.product.name;
     _ctrlMRP.text = widget.product.mrpPrice.toString();
     _ctrlSP.text = widget.product.salePrice != null
@@ -138,7 +139,7 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                     label: 'Product Image',
                     primaryColor: getThemeColor(),
                     secondaryColor: ColorStyle.text200,
-                    filePath: image,
+                    image: image?.image,
                     onChanged: (image) {
                       setState(() {
                         this.image = image;
@@ -445,7 +446,7 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
               _formKey.currentState!.save();
 
               try {
-                widget.product.image = image;
+                widget.product.image = image?.filename;
                 widget.product.name = _ctrlName.text;
                 widget.product.mrpPrice = _ctrlMRP.text.toDouble() ?? 0;
                 widget.product.salePrice = _ctrlSP.text.toDouble();

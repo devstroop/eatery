@@ -10,6 +10,8 @@ import '../../../../constants/global_variables.dart';
 import '../../../../widgets/bottomSheets/productInternalView.bottomsheet.dart';
 import 'edit_inventoryItem.page.dart';
 
+Color _pageColor = ColorStyle.secondary;
+
 class InventoryPage extends StatefulWidget {
   const InventoryPage({Key? key}) : super(key: key);
 
@@ -27,22 +29,18 @@ class _InventoryPageState extends State<InventoryPage> {
     super.initState();
     try {
       _currencySymbol = EateryDB.instance.currencyBox.values
-          .singleWhere((element) => element.id == GlobalVariables.company!.currencyId)
+          .singleWhere(
+              (element) => element.id == GlobalVariables.company!.currencyId)
           .symbol;
     } catch (_) {}
     selectedCategory = null;
     setState(() {});
   }
 
-  Color getThemeColor() {
-    return ColorStyle.secondary;
-  }
-
   _edit(Product product) => Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                EditInventoryItem(product: product)),
+            builder: (context) => EditInventoryItem(product: product)),
       ).then((_) {
         setState(() {});
         Navigator.of(context).pop();
@@ -59,7 +57,14 @@ class _InventoryPageState extends State<InventoryPage> {
   Widget build(BuildContext context) {
     final appBar = AppBar(
       title: const Text('Inventory'),
-      backgroundColor: getThemeColor(),
+      backgroundColor: _pageColor,
+      foregroundColor: Colors.white,
+      leading: IconButton(
+        icon: Icon(UIcons.regularStraight.arrow_left),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
       bottom: PreferredSize(
         preferredSize: Size(MediaQuery.of(context).size.width, 72),
         child: Padding(
@@ -73,7 +78,7 @@ class _InventoryPageState extends State<InventoryPage> {
             decoration: InputDecoration(
               prefixIcon: Icon(
                 Icons.search,
-                color: getThemeColor(),
+                color: _pageColor,
               ),
               hintText: 'Search an item...',
               hintStyle: TextStyle(
@@ -92,7 +97,7 @@ class _InventoryPageState extends State<InventoryPage> {
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(
-                  color: getThemeColor().withOpacity(0.5),
+                  color: _pageColor.withOpacity(0.5),
                   width: 2,
                 ),
                 borderRadius: BorderRadius.circular(8),
@@ -178,7 +183,7 @@ class _InventoryPageState extends State<InventoryPage> {
                 ProductCard(
                   currencySymbol: _currencySymbol,
                   product: product,
-                  themeColor: getThemeColor(),
+                  themeColor: _pageColor,
                   onTap: () => showModalBottomSheet(
                       context: context,
                       shape: const RoundedRectangleBorder(
@@ -191,7 +196,7 @@ class _InventoryPageState extends State<InventoryPage> {
                       ),
                       builder: (context) {
                         return ProductInternalViewBottomsheet(
-                          color: getThemeColor(),
+                          color: _pageColor,
                           product: product,
                           onEdit: () => _edit(product),
                           onDelete: () => _delete(product),
@@ -225,13 +230,12 @@ class _InventoryPageState extends State<InventoryPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: getThemeColor(),
+        backgroundColor: _pageColor,
         child: const Icon(Icons.add),
         onPressed: () async {
           Navigator.push(
             context,
-            MaterialPageRoute(
-                builder: (context) => const AddInventoryItem()),
+            MaterialPageRoute(builder: (context) => const AddInventoryItem()),
           ).then((_) => setState(() {}));
         },
       ),

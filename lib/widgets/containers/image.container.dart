@@ -7,7 +7,7 @@ class ImageContainer extends StatelessWidget {
       this.height,
       this.width,
       required this.onTap,
-      required this.file,
+      required this.image,
       this.onLongPress})
       : super(key: key);
   final double? height;
@@ -15,7 +15,7 @@ class ImageContainer extends StatelessWidget {
   final VoidCallback onTap;
   final VoidCallback? onLongPress;
 
-  final File file;
+  final ImageProvider image;
   @override
   Widget build(BuildContext context) {
     // double imageSizeS = screenWidth / 4 - 15;
@@ -27,27 +27,13 @@ class ImageContainer extends StatelessWidget {
       onLongPress: onLongPress,
       child: Container(
         height: height,
-        // screenWidth < 600
-        //     ? imageSizeS
-        //     : screenWidth < 1200
-        //         ? imageSizeM
-        //         : screenWidth < 1600
-        //             ? imageSizeL
-        //             : imageSizeXL,
         width: width,
-        // screenWidth < 600
-        //     ? imageSizeS
-        //     : screenWidth < 1200
-        //         ? imageSizeM
-        //         : screenWidth < 1600
-        //             ? imageSizeL
-        //             : imageSizeXL,
         decoration: BoxDecoration(
           color: const Color(0xFFF7F7F8),
           borderRadius: BorderRadius.circular(4),
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: Image.file(file).image,
+            image: image,
           ),
         ),
       ),

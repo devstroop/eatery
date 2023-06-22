@@ -1,7 +1,9 @@
 import 'dart:io';
+import 'package:eatery/services/utility/library_image.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/constants/style/color_style.dart';
+import '../../../../services/utility/file.utility.service.dart';
 import 'add_productCategory.page.dart';
 import 'edit_productCategory.page.dart';
 
@@ -57,6 +59,7 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
             onTap: () {},
           ),
           ...EateryDB.instance.productCategoryBox.values.map((e) {
+            debugPrint(e.image ?? '');
             return ListTile(
               title: Text(e.name,
                   style: const TextStyle(fontWeight: FontWeight.w600)),
@@ -71,13 +74,8 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.0),
                       image: DecorationImage(
-                        image: (e.image != null && File(e.image!).existsSync()
-                                ? Image.file(File(e.image!))
-                                : Image.asset(
-                                    'assets/images/no-image.jpg',
-                                    fit: BoxFit.cover,
-                                  ))
-                            .image,
+                        image: LibraryImage(
+                            e.image ?? '').image,
                         fit: BoxFit.cover,
                       ),
                     )),

@@ -10,13 +10,13 @@ class GlobalVariables {
 
   // Relative paths
   static String? dataDirectory = '/data';
-  static String? resourcesDirectory = '/resources';
+  static String? imagesDirectory = '/images';
   static String? backupDirectory = '/backup';
   // Absolute paths
   static String? dataDirectoryAbs =
       '${GlobalVariables.baseDirectory}$dataDirectory';
   static String? resourcesDirectoryAbs =
-      '${GlobalVariables.baseDirectory}$resourcesDirectory';
+      '${GlobalVariables.baseDirectory}$imagesDirectory';
   static String? backupDirectoryAbs =
       '${GlobalVariables.baseDirectory}$backupDirectory';
 
@@ -34,9 +34,9 @@ class GlobalVariables {
         }
       });
       Directory resourcesDirectory = Directory(
-          '${GlobalVariables.baseDirectory}${GlobalVariables.resourcesDirectory}');
+          '${GlobalVariables.baseDirectory}${GlobalVariables.imagesDirectory}');
       resourcesDirectory.exists().then((value) {
-        debugPrint('resourcesDirectory: $value');
+        debugPrint('imagesDirectory: $value');
         if (!value) {
           resourcesDirectory.createSync(recursive: true);
         }

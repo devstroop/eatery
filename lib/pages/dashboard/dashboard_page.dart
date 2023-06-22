@@ -17,7 +17,7 @@ import 'package:eatery/pages/dashboard/waiter/waiters_page.dart';
 import 'package:eatery/services/utility/file.utility.service.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import '../../services/utility/library_image.dart';
 import '../auth/logout_page.dart';
 import 'importExport/importExport.page.dart';
 
@@ -79,8 +79,8 @@ class _DashboardPageState extends State<DashboardPage> {
       subtitleSize = 12;
     }
 
-    menuSize = (screenWidth - (spacing * (crossAxisItemCount + 1))) / crossAxisItemCount;
-
+    menuSize = (screenWidth - (spacing * (crossAxisItemCount + 1))) /
+        crossAxisItemCount;
 
     return WillPopScope(
       onWillPop: () {
@@ -93,41 +93,50 @@ class _DashboardPageState extends State<DashboardPage> {
           children: [
             DashboardHeader(
               companyName: GlobalVariables.company!.name,
-              logoPath: FileUtilityService.getAbsolutePath(GlobalVariables.company?.logo ?? ''),
+              image: GlobalVariables.company?.logo != null
+                  ? LibraryImage(GlobalVariables.company?.logo).image
+                  : null,
               suffix: [
-                IconButton(icon: Icon(UIcons.regularStraight.log_out,), onPressed: (){
-                  showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text('Logout'),
-                          content: const Text('Are you sure you want to logout?'),
-                          actions: [
-                            TextButton(
-                              onPressed: () async {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const LogoutPage(),
-                                  ),
-                                );
-                              },
-                              child: const Text('Yes'),
-                            ),
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text('No'),
-                            ),
-                          ],
-                        );
-                      });
-                },)
+                IconButton(
+                  icon: Icon(
+                    UIcons.regularStraight.log_out,
+                  ),
+                  onPressed: () {
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Logout'),
+                            content:
+                                const Text('Are you sure you want to logout?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () async {
+                                  Navigator.pushReplacement(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => const LogoutPage(),
+                                    ),
+                                  );
+                                },
+                                child: const Text('Yes'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('No'),
+                              ),
+                            ],
+                          );
+                        });
+                  },
+                )
               ],
             ),
             UpgradeNotification(
-                company: GlobalVariables.company,),
+              company: GlobalVariables.company,
+            ),
             const LowBatteryWarningNotification(),
             const SizedBox(height: 16),
             Wrap(
@@ -168,8 +177,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            const ProductCategoriesPage(),
+                        builder: (context) => const ProductCategoriesPage(),
                       ),
                     );
                   },

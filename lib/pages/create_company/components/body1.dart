@@ -4,6 +4,7 @@ import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/constants/style/spacing_style.dart';
 import 'package:eatery/constants/utils/email_validator.dart';
 import 'package:eatery/constants/validators/phone_validator.dart';
+import 'package:eatery/services/utility/library_image.dart';
 
 import 'package:eatery_components/titles/page.title.dart';
 import 'package:flutter/material.dart';
@@ -11,14 +12,14 @@ import 'package:flutter/material.dart';
 import '../../../widgets/buttons/upload.button.dart';
 
 class Body1 extends StatelessWidget {
-  final Function(String? logoPath) onChanged;
+  final Function(LibraryImage? logoPath) onChanged;
   final Color themeColor;
   final GlobalKey<FormState> formKey;
   final TextEditingController restaurantNameController;
   final TextEditingController emailController;
   final TextEditingController phoneController;
   final TextEditingController addressController;
-  final String? selectedLogoPath;
+  final LibraryImage? selectedLibraryImage;
   final Function(GlobalKey<FormState> formKey)? callbackFormKey;
   Body1(
       {Key? key,
@@ -28,7 +29,7 @@ class Body1 extends StatelessWidget {
       required this.emailController,
       required this.phoneController,
       required this.addressController,
-      this.selectedLogoPath,
+      this.selectedLibraryImage,
       required this.formKey,
       this.callbackFormKey})
       : super(key: key);
@@ -54,7 +55,7 @@ class Body1 extends StatelessWidget {
             label: 'Restaurant Logo',
             primaryColor: themeColor,
             secondaryColor: ColorStyle.text200,
-            filePath: selectedLogoPath,
+            image: selectedLibraryImage?.image,
             onChanged: onChanged,
           ),
           SpacingStyle.defaultVerticalSpacing,

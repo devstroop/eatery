@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:eatery/services/utility/file.utility.service.dart';
+import 'package:eatery/services/utility/library_image.dart';
 import 'package:flutter/material.dart';
 import 'package:uicons/uicons.dart';
 
@@ -8,15 +9,15 @@ import '../bottomSheets/imageLibrary.bottomSheet.dart';
 class UploadButton extends StatefulWidget {
   const UploadButton(
       {Key? key,
-      this.filePath,
+      this.image,
       this.onChanged,
       this.primaryColor = const Color(0xFF30A8CF),
       this.secondaryColor = const Color(0xFF2F2F2F),
       this.title,
       this.label})
       : super(key: key);
-  final String? filePath;
-  final Function(String? path)? onChanged;
+  final ImageProvider? image;
+  final Function(LibraryImage? libraryImage)? onChanged;
   final Color primaryColor;
   final Color secondaryColor;
   final String? title;
@@ -27,7 +28,7 @@ class UploadButton extends StatefulWidget {
 }
 
 class _UploadButtonState extends State<UploadButton> {
-  String? filePath;
+  LibraryImage? libraryImage;
   @override
   void initState() {
     super.initState();
@@ -43,10 +44,10 @@ class _UploadButtonState extends State<UploadButton> {
           bottomRight: Radius.circular(0),
         ),
       ),
-      builder: (context) => ImageLibraryBottomSheet(context, (path) {
-            filePath = path;
+      builder: (context) => ImageLibraryBottomSheet(context, (LibraryImage? libraryImage) {
+        this.libraryImage = libraryImage;
             if (widget.onChanged != null) {
-              widget.onChanged!(path);
+              widget.onChanged!(libraryImage);
             }
             setState(() {});
           }));
@@ -73,37 +74,32 @@ class _UploadButtonState extends State<UploadButton> {
                   width: 72,
                   child: Stack(
                     children: [
-                      if (widget.filePath == null)
+                      if (widget.image == null)
                         Center(
                             child: Icon(
                           UIcons.regularStraight.mode_landscape,
                           size: 54,
                           color: widget.primaryColor.withOpacity(0.50),
                         )),
-                      if (widget.filePath != null)
+                      if (widget.image != null)
                         Container(
                           margin: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
                             color: const Color(0xFFF7F7F8),
                             borderRadius: BorderRadius.circular(4),
-                            image: widget.filePath != null
-                                ? DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: Image.file(File(
-                                            FileUtilityService.getAbsolutePath(
-                                                widget.filePath!)))
-                                        .image,
-                                  )
-                                : null,
+                            image: DecorationImage(
+                              fit: BoxFit.cover,
+                              image: widget.image ?? const AssetImage('assets/images.default.jpg'),
+                            ),
                           ),
                         ),
-                      if (widget.filePath != null)
+                      if (widget.image != null)
                         Positioned(
                             top: 0,
                             right: 0,
                             child: InkWell(
                               onTap: () {
-                                filePath = null;
+                                libraryImage = null;
                                 if (widget.onChanged != null) {
                                   widget.onChanged!(null);
                                 }
@@ -126,7 +122,9 @@ class _UploadButtonState extends State<UploadButton> {
                     ],
                   ),
                 ),
-                SizedBox(width: 6,),
+                const SizedBox(
+                  width: 6,
+                ),
                 Container(
                   height: 96,
                   decoration: const BoxDecoration(),

@@ -13,6 +13,8 @@ import 'package:eatery/components/bottomsheets/forgot_password_bottomsheet.dart'
 import 'package:eatery/components/bottomsheets/upgrade_to_access_bottomsheet.dart';
 import 'package:eatery_db/eatery_db.dart';
 
+import '../../services/utility/library_image.dart';
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -31,7 +33,6 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         company = EateryDB.instance.companyBox.values.single;
       });
-      debugPrint(FileUtilityService.getAbsolutePath(company?.logo ?? ''));
     });
   }
 
@@ -119,16 +120,9 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(24),
                             image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: company?.logo != null &&
-                                      File(FileUtilityService.getAbsolutePath(
-                                              company?.logo ?? ''))
-                                          .existsSync()
-                                  ? Image.file(
-                                      File(FileUtilityService.getAbsolutePath(
-                                          company!.logo!)),
-                                    ).image
-                                  : Image.asset('assets/images/default.jpg')
-                                      .image,
+                              image:
+                                  LibraryImage(
+                                      company?.logo ?? '').image,
                             ),
                           ),
                         ),

@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:eatery/constants/extensions/string_extension.dart';
 import 'package:eatery/constants/global_variables.dart';
+import 'package:eatery/services/utility/library_image.dart';
 
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class AddKitchenDish extends StatefulWidget {
 }
 
 class _AddKitchenDishState extends State<AddKitchenDish> {
-  String? image;
+  LibraryImage? image;
   ProductCategory? selectedCategory;
 
   FoodType? _foodType;
@@ -123,7 +124,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                     label: 'Product Image',
                     primaryColor: getThemeColor(),
                     secondaryColor: ColorStyle.text200,
-                    filePath: image,
+                    image: image?.image,
                     onChanged: (image) {
                       setState(() {
                         this.image = image;
@@ -417,7 +418,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                   name: _ctrlName.text,
                   categoryId: selectedCategory?.id,
                   description: _ctrlDesc.text,
-                  image: image,
+                  image: image?.filename,
                   mrpPrice: _ctrlMRP.text.toDouble() ?? 0.0,
                   salePrice: _ctrlSP.text.toDouble(),
                   taxSlabId: _taxSlab?.id,

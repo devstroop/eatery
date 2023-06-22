@@ -1,3 +1,4 @@
+import 'package:eatery/services/utility/library_image.dart';
 import 'package:eatery/widgets/buttons/upload.button.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +23,7 @@ class _AddDiningTableCategoryPageState
   final TextEditingController _controllerCategoryName = TextEditingController();
   final TextEditingController _controllerCategoryDescription =
       TextEditingController();
-  String? image;
+  LibraryImage? image;
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
@@ -56,7 +57,7 @@ class _AddDiningTableCategoryPageState
                 },
                 title: '+ Upload Icon',
                 label: 'Table Category Icon',
-                filePath: image,
+                image: image?.image,
               ),
               const SizedBox(
                 height: 6.0,
@@ -106,7 +107,7 @@ class _AddDiningTableCategoryPageState
                   id: id,
                   name: _controllerCategoryName.text.trim(),
                   description: _controllerCategoryDescription.text.trim(),
-                  image: image,
+                  image: image?.filename,
                   isActive: true),
             )
                 .then((value) {

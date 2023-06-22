@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:eatery/constants/utils/utils.dart';
+import 'package:eatery/services/utility/library_image.dart';
 import 'package:eatery_components/others/bottom_sheet.grip.dart';
 import 'package:eatery_components/titles/page.title.dart';
 import 'package:file_picker/file_picker.dart';
@@ -16,7 +17,7 @@ import '../dialogs/showConfirmationDialog.dart';
 
 class ImageLibraryBottomSheet extends StatefulWidget {
   final BuildContext context;
-  final Function(String? path) action;
+  final Function(LibraryImage? libraryImage) action;
 
   const ImageLibraryBottomSheet(this.context, this.action, {Key? key})
       : super(key: key);
@@ -27,7 +28,7 @@ class ImageLibraryBottomSheet extends StatefulWidget {
 }
 
 class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
-  List<String> _images = [];
+  List<LibraryImage> _images = [];
 
   @override
   void initState() {
@@ -35,30 +36,47 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
     fetchLibrary();
   }
 
-
   void fetchLibrary() {
     _images.clear();
     bool flag = false;
-    Directory(GlobalVariables.resourcesDirectoryAbs!).list().listen((event) {
-      if (event.path.toLowerCase().endsWith(".jpg") ||
-          event.path.toLowerCase().endsWith(".jpeg") ||
-          event.path.toLowerCase().endsWith(".png")) {
-        setState(() {
-          _images.add(event.path);
-          flag = true;
-        });
-      }
-    }).onDone(() {
+    LibraryImageProvider.getAllAsync(listen: (LibraryImage libraryImage) {
+      setState(() {
+        _images.add(libraryImage);
+        flag = true;
+      });
+    }).then((List<LibraryImage> libraryImages) {
       if (flag) {
         setState(() {
-          _images.sort((a, b) => File(a).lastModifiedSync().compareTo(File(b).lastModifiedSync()));
+          libraryImages
+              .sort((a, b) => a.lastModified.compareTo(b.lastModified));
         });
-      }else{
+      } else {
         setState(() {
           _images = [];
         });
       }
     });
+    // Directory(GlobalVariables.resourcesDirectoryAbs!).list().listen((event) {
+    //   if (event.path.toLowerCase().endsWith(".jpg") ||
+    //       event.path.toLowerCase().endsWith(".jpeg") ||
+    //       event.path.toLowerCase().endsWith(".png")) {
+    //     setState(() {
+    //       _images.add(event.path);
+    //       flag = true;
+    //     });
+    //   }
+    // }).onDone(() {
+    //   if (flag) {
+    //     setState(() {
+    //       _images.sort((a, b) =>
+    //           File(a).lastModifiedSync().compareTo(File(b).lastModifiedSync()));
+    //     });
+    //   } else {
+    //     setState(() {
+    //       _images = [];
+    //     });
+    //   }
+    // });
   }
 
   Future pickImageFromFile() async {
@@ -68,9 +86,9 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
     ).then((value) async {
       if (value != null && value.files.isNotEmpty) {
         try {
-          String relativeImagePath =
-              FileUtilityService.importInResources(value.files.single.path!);
-          // widget.action(relativeImagePath);
+          LibraryImage image =
+              LibraryImageProvider.importFromPath(value.files.first.path!);
+          widget.action(image);
           fetchLibrary();
         } catch (e) {
           showSnackBar(context, e.toString());
@@ -202,32 +220,24 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
                 shrinkWrap: true,
                 children: [
                   for (var each in _images)
-                    if (File(each).existsSync())
-                      ImageContainer(
-                        onTap: () {
-                          widget.action(path.relative(each));
-                          Navigator.pop(context);
-                        },
-                        onLongPress: () {
-                          showConfirmationDialog(context, 'Are you sure?',
-                              'Do you want to remove this image from library.',
-                              () {
-                            bool result =
-                                FileUtilityService.deleteResource(each);
-                            if (result) {
-                              showSnackBar(
-                                  context, 'Image removed from library.');
-                            } else {
-                              showSnackBar(context,
-                                  'Failed to remove image from library.');
-                            }
-                            fetchLibrary();
-                          }, () {
-                            // Do nothing
-                          });
-                        },
-                        file: File(each),
-                      ),
+                    ImageContainer(
+                      onTap: () {
+                        widget.action(each);
+                        Navigator.pop(context);
+                      },
+                      onLongPress: () {
+                        showConfirmationDialog(context, 'Are you sure?',
+                            'Do you want to remove this image from library.',
+                            () {
+                          each.delete();
+                          showSnackBar(context, 'Image removed from library.');
+                          fetchLibrary();
+                        }, () {
+                          // Do nothing
+                        });
+                      },
+                      image: each.image,
+                    ),
                 ],
               )
           ],

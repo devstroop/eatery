@@ -4,6 +4,7 @@ import 'package:currency_picker/currency_picker.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/constants/style/spacing_style.dart';
 import 'package:eatery/constants/utils/utils.dart';
+import 'package:eatery/services/utility/library_image.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'components/body1.dart';
@@ -24,7 +25,7 @@ class CreateCompanyPage extends StatefulWidget {
 
 class _CreateCompanyPageState extends State<CreateCompanyPage> {
   int viewIndex = 0;
-  String? logoPath; // used
+  LibraryImage? libraryImageLogo; // used
   Edition edition = Edition.gst;
   SubscriptionType subscriptionType = SubscriptionType.free;
   String? deviceSerial;
@@ -52,7 +53,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
   List<Widget> bodies() => [
         Body1(
           formKey: formKeys[0],
-          selectedLogoPath: logoPath,
+          selectedLibraryImage: libraryImageLogo,
           themeColor: themeColor,
           restaurantNameController: _controllerRestaurantName,
           emailController: _controllerEmailAddress,
@@ -60,7 +61,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
           addressController: _controllerAddress,
           onChanged: (logoPath) async {
             setState(() {
-              this.logoPath = logoPath;
+              this.libraryImageLogo = logoPath;
             });
           },
           callbackFormKey: (formKey) => setState(() {
@@ -253,7 +254,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                 Company company = Company(
                   id: 1,
                   name: _controllerRestaurantName.text,
-                  logo: logoPath,
+                  logo: libraryImageLogo?.filename,
                   email: _controllerEmailAddress.text,
                   phone: _controllerPhoneNumber.text,
                   address: _controllerAddress.text,
