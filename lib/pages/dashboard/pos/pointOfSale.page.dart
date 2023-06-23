@@ -40,18 +40,19 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
   @override
   void initState() {
     super.initState();
-
-    setState(() {
-      orderType = OrderType.dine;
-      selectedProductCategory = null;
-      selectedDiningTableCategory = null;
-      selectedDiningTableId = null;
-      selectedDiningTableName = null;
-      productCategoriesData = [];
-      productsData = [];
+    Future.delayed(Duration.zero, (){
+      setState(() {
+        orderType = OrderType.dine;
+        selectedProductCategory = null;
+        selectedDiningTableCategory = null;
+        selectedDiningTableId = null;
+        selectedDiningTableName = null;
+        productCategoriesData = [];
+        productsData = [];
+      });
+      loadCategories();
+      loadProducts();  
     });
-    loadCategories();
-    loadProducts();
   }
 
   void loadCategories() async {

@@ -20,8 +20,10 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      selectedCategory = null;
+    Future.delayed(Duration.zero, (){
+      setState(() {
+        selectedCategory = null;
+      });
     });
   }
 

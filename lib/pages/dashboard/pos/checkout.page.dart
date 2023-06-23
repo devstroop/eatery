@@ -67,16 +67,18 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   initState() {
     super.initState();
-    loadWaiters();
-    setState(() {
-      customerName = widget.openOrderCustomerName ?? "Cash";
-      customerPhone = widget.openOrderCustomerPhone;
-      customerAddress = widget.openOrderCustomerAddress;
-      selectedWaiterId = widget.openOrderWaiterId;
-      selectedWaiterName = widget.openOrderWaiterName;
-      _controllerCustomerName.text = customerName;
-      _controllerCustomerPhone.text = customerPhone ?? '';
-      _controllerCustomerAddress.text = customerAddress ?? '';
+    Future.delayed(Duration.zero, (){
+      loadWaiters();
+      setState(() {
+        customerName = widget.openOrderCustomerName ?? "Cash";
+        customerPhone = widget.openOrderCustomerPhone;
+        customerAddress = widget.openOrderCustomerAddress;
+        selectedWaiterId = widget.openOrderWaiterId;
+        selectedWaiterName = widget.openOrderWaiterName;
+        _controllerCustomerName.text = customerName;
+        _controllerCustomerPhone.text = customerPhone ?? '';
+        _controllerCustomerAddress.text = customerAddress ?? '';
+      });  
     });
   }
 

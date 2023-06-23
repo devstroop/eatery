@@ -41,14 +41,17 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
   @override
   void initState() {
     super.initState();
-    try {
-      _currencySymbol = EateryDB.instance.currencyBox.values
-          .singleWhere((element) => element.id == GlobalVariables.company?.currencyId)
-          .symbol;
-    } catch (_) {}
-    _taxSlab = EateryDB.instance.taxSlabBox.values.singleWhere(
-        (element) => element.id == GlobalVariables.company?.defaultTaxSlabId);
-    debugPrint('${_taxSlab!.id}');
+    Future.delayed(Duration.zero, (){
+      try {
+        _currencySymbol = EateryDB.instance.currencyBox.values
+            .singleWhere((element) => element.id == GlobalVariables.company?.currencyId)
+            .symbol;
+      } catch (_) {}
+      _taxSlab = EateryDB.instance.taxSlabBox.values.singleWhere(
+          (element) => element.id == GlobalVariables.company?.defaultTaxSlabId);
+      debugPrint('${_taxSlab!.id}');
+    });
+    
   }
 
   final ScrollController _scrollController = ScrollController();

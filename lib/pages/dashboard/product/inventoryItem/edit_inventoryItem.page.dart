@@ -45,7 +45,8 @@ class _EditInventoryItemState extends State<EditInventoryItem> {
   @override
   void initState() {
     super.initState();
-    try {
+    Future.delayed(Duration.zero, (){
+     try {
       _currencySymbol = EateryDB.instance.currencyBox.values
           .singleWhere((element) => element.id == GlobalVariables.company?.currencyId)
           .symbol;
@@ -62,7 +63,9 @@ class _EditInventoryItemState extends State<EditInventoryItem> {
     _category = EateryDB.instance.productCategoryBox.values
         .singleWhere((element) => element.id == widget.product.categoryId);
     _ctrlDesc.text = widget.product.description ?? '';
-    setState(() {});
+    setState(() {}); 
+    });
+    
   }
 
   final ScrollController _scrollController = ScrollController();

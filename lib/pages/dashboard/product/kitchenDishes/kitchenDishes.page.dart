@@ -25,6 +25,9 @@ class _KitchenPageState extends State<KitchenPage> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, (){
+      
+    });
     selectedCategory = null;
     setState(() {});
   }

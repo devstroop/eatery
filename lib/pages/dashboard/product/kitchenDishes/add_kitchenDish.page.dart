@@ -42,6 +42,9 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, (){
+      
+    });
     _taxSlab = EateryDB.instance.taxSlabBox.values.singleWhere(
         (element) => element.id == widget.company.defaultTaxSlabId);
     setState(() {});

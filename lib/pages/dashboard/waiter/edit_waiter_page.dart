@@ -22,6 +22,9 @@ class _EditWaiterPageState extends State<EditWaiterPage> {
   @override
   initState() {
     super.initState();
+    Future.delayed(Duration.zero, (){
+      
+    });
     loadData();
   }
 

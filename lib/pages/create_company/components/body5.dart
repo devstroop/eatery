@@ -29,7 +29,11 @@ class _Body5State extends State<Body5> {
   @override
   void initState() {
     super.initState();
-    selectedCurrency = widget.currency;
+    Future.delayed(Duration.zero, (){
+      setState((){
+        selectedCurrency = widget.currency;
+      });
+    });
   }
 
   @override

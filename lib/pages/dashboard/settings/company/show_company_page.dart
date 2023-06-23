@@ -23,6 +23,9 @@ class _ShowCompanyPageState extends State<ShowCompanyPage> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, (){
+      
+    });
     postInit();
     //WidgetsBinding.instance.addPostFrameCallback((_) => loadCompany());
   }

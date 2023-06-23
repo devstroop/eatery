@@ -73,7 +73,9 @@ class _Body6State extends State<Body6> {
   @override
   void initState() {
     super.initState();
-    fetchDeviceInfo();
+    Future.delayed(Duration.zero, (){
+      fetchDeviceInfo();
+    });
   }
 
   @override

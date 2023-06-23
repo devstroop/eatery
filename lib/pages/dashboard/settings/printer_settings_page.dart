@@ -115,6 +115,9 @@ class _PrinterSettingsPageState extends State<PrinterSettingsPage> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, (){
+      
+    });
     WidgetsBinding.instance.addPostFrameCallback((_) => loadDevicesFromDatabase());
     //loadDevicesFromDatabase();
 

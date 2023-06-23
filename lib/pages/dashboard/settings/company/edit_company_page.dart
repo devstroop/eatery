@@ -23,6 +23,9 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, (){
+      
+    });
     postInit();
     //WidgetsBinding.instance.addPostFrameCallback((_) => loadCompany());
   }
