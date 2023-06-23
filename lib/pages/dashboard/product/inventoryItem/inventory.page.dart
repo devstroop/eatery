@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:eatery/pages/dashboard/product/inventoryItem/add_inventoryItem.page.dart';
+import 'package:eatery/pages/dashboard/product/inventoryItem/addInventoryItem.page.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/pos_category_widget.dart';
@@ -9,7 +9,7 @@ import 'package:eatery/constants/style/color_style.dart';
 import '../../../../constants/global_variables.dart';
 import '../../../../widgets/bottomSheets/productInternalView.bottomsheet.dart';
 import '../../../../widgets/textFields/search.textField.dart';
-import 'edit_inventoryItem.page.dart';
+import 'editInventoryItem.page.dart';
 
 Color _pageColor = ColorStyle.alternate;
 

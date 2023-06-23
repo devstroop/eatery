@@ -53,7 +53,7 @@ class CustomTextFromField extends StatefulWidget {
 }
 
 class _CustomTextFromFieldState extends State<CustomTextFromField> {
-  bool obscureText = true;
+  bool? obscureText;
   @override
   void initState() {
     super.initState();
@@ -91,7 +91,7 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
           validator: widget.validator,
           keyboardType: widget.keyboardType,
           controller: widget.controller,
-          obscureText: obscureText,
+          obscureText: obscureText ?? false,
           minLines: widget.minLines ?? 1,
           maxLines: widget.maxLines ?? 1,
           textInputAction: widget.textInputAction,
@@ -105,9 +105,9 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
                 : widget.isPassword
                     ? IconButton(
                         onPressed: () => setState(() {
-                          obscureText = !obscureText;
+                          obscureText = !(obscureText ?? false);
                         }),
-                        icon: obscureText
+                        icon: obscureText ?? false
                             ? Icon(UIcons.regularStraight.eye)
                             : Icon(UIcons.regularStraight.crossed_eye),
                         color: ColorStyle.text400,

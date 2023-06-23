@@ -1,11 +1,9 @@
-import 'dart:io';
 import 'package:eatery/services/utility/library_image.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/constants/style/color_style.dart';
-import '../../../../services/utility/file.utility.service.dart';
-import 'add_productCategory.page.dart';
-import 'edit_productCategory.page.dart';
+import 'addProductCategory.page.dart';
+import 'editProductCategory.page.dart';
 
 class ProductCategoriesPage extends StatefulWidget {
   const ProductCategoriesPage({Key? key}) : super(key: key);
@@ -37,10 +35,10 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
             title: const Text('Default',
                 style: TextStyle(fontWeight: FontWeight.w600)),
             subtitle: const Text('Uncategorized'),
-            trailing: Icon(
-              UIcons.regularStraight.arrow_small_right,
-              size: 18,
-            ),
+            // trailing: Icon(
+            //   UIcons.regularStraight.arrow_small_right,
+            //   size: 18,
+            // ),
             leading: Material(
               elevation: 2.0,
               borderRadius: BorderRadius.circular(12.0),

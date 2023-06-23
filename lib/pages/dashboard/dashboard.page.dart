@@ -1,24 +1,22 @@
 import 'package:eatery/components/menu_widget.dart';
-import 'package:eatery/components/menu_widget_extended.dart';
 import 'package:eatery/constants/global_variables.dart';
 import 'package:eatery/constants/style/color_style.dart';
-import 'package:eatery/pages/backup_restore/backup_restore_page.dart';
-import 'package:eatery/pages/dashboard/components/dashboard_header.dart';
-import 'package:eatery/pages/dashboard/components/notifications/low_battery_warning_notification.dart';
-import 'package:eatery/pages/dashboard/components/notifications/upgrade_notification.dart';
+import 'package:eatery/pages/backupRestore/backupRestore.page.dart';
+import 'package:eatery/pages/dashboard/components/dashboardHeader.dart';
+import 'package:eatery/pages/dashboard/components/notifications/lowBatteryWarning.notification.dart';
+import 'package:eatery/pages/dashboard/components/notifications/upgrade.notification.dart';
 import 'package:eatery/pages/dashboard/diningTable/diningTables.page.dart';
 import 'package:eatery/pages/dashboard/product/productCategory/productCategories.page.dart';
 import 'package:eatery/pages/dashboard/product/inventoryItem/inventory.page.dart';
 import 'package:eatery/pages/dashboard/product/kitchenDishes/kitchenDishes.page.dart';
 import 'package:eatery/pages/dashboard/pos/pointOfSale.page.dart';
-import 'package:eatery/pages/dashboard/reports/reports_page.dart';
+import 'package:eatery/pages/dashboard/reports/reports.page.dart';
 import 'package:eatery/pages/dashboard/settings/settings.page.dart';
-import 'package:eatery/pages/dashboard/waiter/waiters_page.dart';
-import 'package:eatery/services/utility/file.utility.service.dart';
+import 'package:eatery/pages/dashboard/waiter/waiters.page.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import '../../services/utility/library_image.dart';
-import '../auth/logout_page.dart';
+import '../authentication/logout.page.dart';
 import 'importExport/importExport.page.dart';
 
 class DashboardPage extends StatefulWidget {

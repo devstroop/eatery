@@ -1,9 +1,9 @@
-import 'package:eatery/pages/dashboard/settings/tax_slab/add.tax_slab.settings.page.dart';
+import 'package:eatery_components/bottomsheets/tax_slab.bottomsheet.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/constants/style/color_style.dart';
-import 'package:eatery_components/bottomsheets/tax_slab.bottomsheet.dart';
-import 'edit.tax_slab.settings.page.dart';
+import './addTaxSlab.page.dart';
+import 'editTaxSlab.page.dart';
 
 class TaxSlabsSettingsPage extends StatefulWidget {
   const TaxSlabsSettingsPage({Key? key})

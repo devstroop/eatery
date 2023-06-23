@@ -8,7 +8,7 @@ import 'package:eatery/constants/style/spacing_style.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 
-import 'edit_company_page.dart';
+import 'editCompany.page.dart';
 
 class ShowCompanyPage extends StatefulWidget {
   const ShowCompanyPage({Key? key}) : super(key: key);

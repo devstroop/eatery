@@ -13,8 +13,8 @@ import 'components/body3.dart';
 import 'components/body4.dart';
 import 'components/body5.dart';
 import 'components/body6.dart';
-import 'components/create_company.bottomappbar.dart';
-import 'create_account_result_page.dart';
+import 'components/createCompany.bottomAppBar.dart';
+import 'createAccountResult.page.dart';
 
 class CreateCompanyPage extends StatefulWidget {
   const CreateCompanyPage({Key? key}) : super(key: key);
@@ -61,7 +61,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
           addressController: _controllerAddress,
           onChanged: (logoPath) async {
             setState(() {
-              this.libraryImageLogo = logoPath;
+              libraryImageLogo = logoPath;
             });
           },
           callbackFormKey: (formKey) => setState(() {

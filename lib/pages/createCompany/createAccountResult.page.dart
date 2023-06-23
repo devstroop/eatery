@@ -1,9 +1,10 @@
 import 'package:eatery/constants/style/spacing_style.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:flutter/material.dart';
-import 'package:eatery/pages/auth/login_page.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:lottie/lottie.dart';
+
+import '../authentication/login.page.dart';
 
 class CreateAccountResultPage extends StatefulWidget {
   const CreateAccountResultPage({Key? key}) : super(key: key);

@@ -6,8 +6,8 @@ import 'package:eatery/constants/style/color_style.dart';
 import 'package:googleapis/appengine/v1.dart';
 
 import '../../../../services/utility/library_image.dart';
-import 'add_diningTable_category.page.dart';
-import 'edit_diningTable_category.page.dart';
+import 'addDiningTableCategory.page.dart';
+import 'editDiningTableCategory.page.dart';
 
 Color _pageColor = ColorStyle.tertiary;
 

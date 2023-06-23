@@ -1,26 +1,31 @@
+import 'package:eatery/constants/global_variables.dart';
 import 'package:eatery/services/utility/library_image.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/constants/style/color_style.dart';
-import 'add_diningTable.page.dart';
-import 'category/diningTable_categories.page.dart';
-import 'edit_diningTable.page.dart';
+import '../../../widgets/imageWidgets/leading.imageWidget.dart';
+import '../../../widgets/labels/caption.label.dart';
+import '../../../widgets/posWidgets/circularCategory.posWidget.dart';
+import 'addDiningTable.page.dart';
+import 'category/diningTableCategories.page.dart';
+import 'editDiningTable.page.dart';
 
 Color _pageColor = ColorStyle.tertiary;
 
 class DiningTablesPage extends StatefulWidget {
   const DiningTablesPage({Key? key}) : super(key: key);
+
   @override
   State<DiningTablesPage> createState() => _DiningTablesPageState();
 }
 
 class _DiningTablesPageState extends State<DiningTablesPage> {
-  late dynamic selectedCategory;
+  DiningTableCategory? selectedCategory;
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, (){
+    Future.delayed(Duration.zero, () {
       setState(() {
         selectedCategory = null;
       });
@@ -53,87 +58,6 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
             },
           ),
         ]);
-/*
-Positioned(
-            top: 0.0,
-            left: 0.0,
-            right: 0.0,
-            child: Container(
-              width: double.maxFinite,
-              height: 60,
-              margin: const EdgeInsets.symmetric(vertical: 12.0),
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.symmetric(horizontal: 12.0),
-                children: [
-                  PosCategoryWidget(
-                      active: selectedCategory == null,
-                      image: Image.asset(
-                        'assets/images/all.png',
-                        width: 18,
-                        height: 18,
-                        fit: BoxFit.cover,
-                      ),
-                      label: 'All Categories',
-                      onTap: () {
-                        setState(
-                          () {
-                            selectedCategory = null;
-                          },
-                        );
-                      }),
-                  ...EateryDB.instance.diningTableCategoryBox.values.map((e) {
-                    return PosCategoryWidget(
-                      active: selectedCategory == e.id,
-                      label: e.name,
-                      image: Image(
-                        image: LibraryImage(
-                            e.image ?? '').image,
-                        width: 18,
-                        height: 18,
-                        fit: BoxFit.cover,
-                      ),
-                      onTap: () {
-                        setState(() {
-                          selectedCategory = e.id;
-                        });
-                      },
-                    );
-                  }),
-                ],
-              ),
-            ),
-          ),
-          Positioned(
-            top: 60.0,
-            left: 0.0,
-            right: 0.0,
-            bottom: 72,
-            child: Wrap(
-              children: [
-                ...EateryDB.instance.diningTableBox.values
-                    .where((element) =>
-                        selectedCategory == null ||
-                        element.categoryId == selectedCategory)
-                    .map((e) {
-                  return DiningTableCard(
-                    diningTable: e,
-                    order: EateryDB.instance.orderBox.get(e.orderId),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                EditDiningTablePage(id: e.id)),
-                      ).then((_) => setState(() {}));
-                    },
-                  );
-                }),
-              ],
-            ),
-          ),
-
-*/
     return Scaffold(
       appBar: appBar,
       body: Row(
@@ -143,50 +67,31 @@ Positioned(
             child: ListView(
               padding: const EdgeInsets.all(6.0),
               children: [
+                CircularCategoryPOSWidget(
+                  margin: const EdgeInsets.only(bottom: 6),
+                  onTap: () {
+                    setState(() {
+                      selectedCategory = null;
+                    });
+                  },
+                  themeColor: _pageColor,
+                  selected: selectedCategory?.id == null,
+                  label: 'All',
+                  image: const AssetImage('assets/icons/all.png'),
+                ),
                 ...EateryDB.instance.diningTableCategoryBox.values.map((e) {
-                  return Column(
-                    children: [
-                      const SizedBox(height: 6),
-                      Material(
-                        elevation: 2.0,
-                        borderRadius: BorderRadius.circular(12.0),
-                        child: Container(
-                          height: 54,
-                          width: 54,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(12.0),
-                            color: Colors.white,
-                            image: DecorationImage(
-                                image: LibraryImage(e.image ?? '').image,
-                                fit: BoxFit.cover,
-                                scale: 5),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 3),
-                      Text(
-                        e.name,
-                        style: const TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w500),
-                      ),
-                      const SizedBox(height: 6),
-                    ],
+                  return CircularCategoryPOSWidget(
+                    margin: const EdgeInsets.only(bottom: 6),
+                    onTap: () {
+                      setState(() {
+                        selectedCategory = e;
+                      });
+                    },
+                    themeColor: _pageColor,
+                    selected: selectedCategory?.id == e.id,
+                    label: e.name,
+                    image: LibraryImage(e.image ?? '').image,
                   );
-                  // return PosCategoryWidget(
-                  //   active: selectedCategory == e.id,
-                  //   label: e.name,
-                  //   image: Image(
-                  //     image: LibraryImage(e.image ?? '').image,
-                  //     width: 18,
-                  //     height: 18,
-                  //     fit: BoxFit.cover,
-                  //   ),
-                  //   onTap: () {
-                  //     setState(() {
-                  //       selectedCategory = e.id;
-                  //     });
-                  //   },
-                  // );
                 }),
               ],
             ),
@@ -203,10 +108,42 @@ Positioned(
                 ...EateryDB.instance.diningTableBox.values
                     .where((element) =>
                         selectedCategory == null ||
-                        element.categoryId == selectedCategory)
+                        element.categoryId == selectedCategory?.id)
                     .map((e) {
+                  DiningTableCategory? category = e.categoryId != null
+                      ? EateryDB.instance.diningTableCategoryBox.values
+                          .singleWhere((element) => element.id == e.categoryId)
+                      : null;
+                  Order? order = e.orderId != null
+                      ? EateryDB.instance.orderBox.values
+                          .singleWhere((elem) => elem.id == e.orderId)
+                      : null;
                   return ListTile(
-                    title: Text(e.name),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          e.name,
+                          style: const TextStyle(fontWeight: FontWeight.w600),
+                        ),
+                        const SizedBox(width: 6),
+                        if (category != null)
+                          CaptionLabel(label: category.name)
+                      ],
+                    ),
+                    leading: LeadingImageWidget(
+                        image: LibraryImage(e.image ?? '').image,
+                      elevation: 0.0,
+                    ),
+                    trailing: order != null
+                        ? Text(
+                            '${GlobalVariables.currency?.symbol ?? ''}${order.finalTotal}',
+                            style: TextStyle(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w500,
+                                color: ColorStyle.error),
+                          )
+                        : null,
                     subtitle:
                         e.description != null && e.description?.trim() != ''
                             ? Text(e.description!)
@@ -226,11 +163,12 @@ Positioned(
           ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
+        label: const Text('Add Dining Table'),
         foregroundColor: Colors.white,
         backgroundColor: _pageColor,
-        child: Icon(
-          UIcons.regularStraight.plus,
+            icon: Icon(
+          UIcons.regularStraight.plus_small,
         ),
         onPressed: () async {
           Navigator.push(

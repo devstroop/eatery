@@ -1,11 +1,11 @@
 import 'package:eatery/components/bottomsheets/help_bottom_sheet.dart';
-import 'package:eatery/pages/dashboard/settings/tax_slab/tax_slabs.settings.page.dart';
+import 'package:eatery/pages/dashboard/settings/taxSlab/taxSlabs.page.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/menu_tile.dart';
 import 'package:eatery/constants/style/color_style.dart';
-import 'company/show_company_page.dart';
-import 'currency/show_currency_region_page.dart';
+import 'company/showCompany.page.dart';
+import 'currency/showCurrencyRegion.page.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -64,7 +64,7 @@ class _SettingPageState extends State<SettingPage> {
             context,
             MaterialPageRoute(
                 builder: (context) =>
-                    TaxSlabsSettingsPage()),
+                    const TaxSlabsSettingsPage()),
           ),
         ),
         MenuTile(

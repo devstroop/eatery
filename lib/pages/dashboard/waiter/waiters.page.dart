@@ -1,9 +1,9 @@
 import 'package:eatery/components/loaders/loading_screen.dart';
-import 'package:eatery/pages/dashboard/waiter/add_waiter_page.dart';
+import 'package:eatery/pages/dashboard/waiter/addWaiter.page.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/waiter_card.dart';
-import 'edit_waiter_page.dart';
+import 'editWaiter.page.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
 class WaitersPage extends StatefulWidget {

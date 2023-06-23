@@ -1,5 +1,7 @@
 import 'dart:io';
 import 'package:eatery/constants/global_variables.dart';
+import 'package:eatery/services/utility/library_image.dart';
+import 'package:eatery/widgets/posWidgets/circularCategory.posWidget.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/pos_category_widget.dart';
@@ -22,12 +24,11 @@ class KitchenPage extends StatefulWidget {
 class _KitchenPageState extends State<KitchenPage> {
   ProductCategory? selectedCategory;
   final TextEditingController _controllerSearch = TextEditingController();
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, (){
-      
-    });
+    Future.delayed(Duration.zero, () {});
     selectedCategory = null;
     setState(() {});
   }
@@ -50,7 +51,7 @@ class _KitchenPageState extends State<KitchenPage> {
 
   @override
   Widget build(BuildContext context) {
-    final categoryBar = SizedBox(
+    /*final categoryBar = SizedBox(
       width: double.maxFinite,
       height: 60,
       child: SingleChildScrollView(
@@ -97,9 +98,8 @@ class _KitchenPageState extends State<KitchenPage> {
           ),
         ),
       ),
-    );
-
-    final productsPanel = SizedBox(
+    );*/
+    /*final productsPanel = SizedBox(
       child: SingleChildScrollView(
           scrollDirection: Axis.vertical,
           child: Wrap(
@@ -140,8 +140,9 @@ class _KitchenPageState extends State<KitchenPage> {
           )),
     );
 
-    final detailedProduct = Container();
+    final detailedProduct = Container();*/
 
+    List<Product> products = EateryDB.instance.productBox.values.where((element) => element.type == ProductType.kitchenDish).toList();
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(120),
@@ -169,27 +170,79 @@ class _KitchenPageState extends State<KitchenPage> {
           ),
         ),
       ),
-      body: Stack(
+      body: Row(
         children: [
-          Positioned(
-            top: 0.0,
-            left: 0.0,
-            right: 0.0,
-            child: categoryBar,
+          Flexible(
+            flex: 2,
+            child: ListView(
+              padding: const EdgeInsets.all(6.0),
+              children: [
+                CircularCategoryPOSWidget(
+                  margin: const EdgeInsets.only(bottom: 6),
+                  image: const AssetImage('assets/icons/all.png'),
+                  themeColor: _pageColor,
+                  selected: selectedCategory?.id == null,
+                  onTap: () {
+                    setState(() {
+                      selectedCategory = null;
+                    });
+                  },
+                  label: 'All',
+                ),
+                ...EateryDB.instance.productCategoryBox.values.map((each) {
+                  return CircularCategoryPOSWidget(
+                    margin: const EdgeInsets.only(bottom: 6),
+                    image: LibraryImage(each.image).image,
+                    themeColor: _pageColor,
+                    selected: selectedCategory?.id == each.id,
+                    onTap: () {
+                      setState(() {
+                        selectedCategory = each;
+                      });
+                    },
+                    label: each.name,
+                  );
+                })
+              ],
+            ),
           ),
-          Positioned(
-              top: 60.0,
-              left: 0.0,
-              right: 0.0,
-              bottom: 0,
-              child: productsPanel),
-          Positioned(
-              bottom: 0.0, left: 0.0, right: 0.0, child: detailedProduct),
+          Container(
+            width: 1,
+            height: MediaQuery.of(context).size.height - 215,
+            color: Colors.grey[200],
+          ),
+          Flexible(
+            flex: 8,
+            child: products.isNotEmpty ? SingleChildScrollView(
+              child: Wrap(
+                children: [
+                  ...products.map((each) {
+                    return Card(child: Text(each.name),);
+                  })
+                ],
+              ),
+            ) : Center(
+              child: Opacity(
+                opacity: 0.50,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset('assets/images/empty-folder.png', width: 100, height: 100,),
+                    const SizedBox(height: 16,),
+                    const Text('No dish found', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
+                    const Text('Add a dish to get started', style: TextStyle(fontSize: 16, color: Colors.black54),),
+                    const SizedBox(height: 48,),
+                  ],
+                ),
+              ),
+            )
+          ),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         backgroundColor: _pageColor,
-        child: const Icon(Icons.add),
+        foregroundColor: Colors.white,
+        icon: Icon(UIcons.regularStraight.plus_small),
         onPressed: () async {
           Navigator.push(
             context,
@@ -198,7 +251,7 @@ class _KitchenPageState extends State<KitchenPage> {
                       company: GlobalVariables.company!,
                     )),
           ).then((_) => setState(() {}));
-        },
+        }, label: const Text('Add Dish'),
       ),
     );
   }
