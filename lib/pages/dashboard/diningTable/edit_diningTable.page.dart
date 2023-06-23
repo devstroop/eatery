@@ -24,10 +24,12 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
   @override
   initState() {
     super.initState();
-    setState(() {
-      diningTable = EateryDB.instance.diningTableBox.get(widget.id);
-      diningTableCategory =
-          EateryDB.instance.diningTableCategoryBox.get(diningTable?.categoryId);
+    Future.delayed(Duration.zero, (){
+      setState(() {
+        diningTable = EateryDB.instance.diningTableBox.get(widget.id);
+        diningTableCategory =
+            EateryDB.instance.diningTableCategoryBox.get(diningTable?.categoryId);
+      }); 
     });
   }
 

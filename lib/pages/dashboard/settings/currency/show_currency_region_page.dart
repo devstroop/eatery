@@ -19,6 +19,9 @@ class _ShowCurrencyRegionPageState extends State<ShowCurrencyRegionPage> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, (){
+      
+    });
     postInit();
   }
 

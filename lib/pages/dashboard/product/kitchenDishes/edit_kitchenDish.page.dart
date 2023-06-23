@@ -43,6 +43,9 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, (){
+      
+    });
     try {
       _currencySymbol = EateryDB.instance.currencyBox.values
           .singleWhere((element) => element.id == GlobalVariables.company!.currencyId)

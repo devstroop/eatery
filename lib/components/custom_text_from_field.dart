@@ -57,8 +57,10 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      obscureText = widget.obscureText;
+    Future.delayed(Duration.zero, (){
+      setState(() {
+        obscureText = widget.obscureText;
+      });
     });
   }
 

@@ -35,11 +35,14 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState() {
     super.initState();
-    setState(() {
-      GlobalVariables.company = widget.company;
-      GlobalVariables.currency = EateryDB.instance.currencyBox
-          .get(GlobalVariables.company?.currencyId);
+    Future.delayed(Duration.zero, (){
+      setState(() {
+        GlobalVariables.company = widget.company;
+        GlobalVariables.currency = EateryDB.instance.currencyBox
+            .get(GlobalVariables.company?.currencyId);
+      });
     });
+
   }
 
   @override

@@ -29,6 +29,9 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
   @override
   initState() {
     super.initState();
+    Future.delayed(Duration.zero, (){
+      
+    });
     setState(() {
       pickedLibraryImage = LibraryImage(widget.category.image);
       _controllerCategoryName.text = widget.category.name;

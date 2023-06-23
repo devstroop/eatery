@@ -30,6 +30,9 @@ class _EditTaxSlabSettingsPageState extends State<EditTaxSlabSettingsPage> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, (){
+      
+    });
     controllerSlabName.text = widget.taxSlab.name;
     controllerTaxRate.text = '${widget.taxSlab.rate}';
     _taxType = widget.taxSlab.type;

@@ -39,6 +39,9 @@ class _ReportsPageState extends State<ReportsPage> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, (){
+      
+    });
     loadOrders();
   }
 

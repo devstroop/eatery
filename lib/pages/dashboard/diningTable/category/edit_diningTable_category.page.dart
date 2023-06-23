@@ -28,13 +28,16 @@ class _EditDiningTableCategoryPageState
   @override
   initState() {
     super.initState();
-    setState(() {
-      diningTableCategory =
-          EateryDB.instance.diningTableCategoryBox.get(widget.id);
-      _controllerCategoryName.text = diningTableCategory?.name ?? '';
-      _controllerCategoryDescription.text =
-          diningTableCategory?.description ?? '';
+    Future.delayed(Duration.zero, (){
+      setState(() {
+        diningTableCategory =
+            EateryDB.instance.diningTableCategoryBox.get(widget.id);
+        _controllerCategoryName.text = diningTableCategory?.name ?? '';
+        _controllerCategoryDescription.text =
+            diningTableCategory?.description ?? '';
+      }); 
     });
+    
   }
 
   @override

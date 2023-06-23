@@ -28,7 +28,10 @@ class _UploadImageBottomSheetState extends State<UploadImageBottomSheet> {
   @override
   void initState() {
     super.initState();
-    fetchLinkFromClipboard();
+    
+    Future.delayed(Duration.zero, (){
+      fetchLinkFromClipboard();
+    });
   }
 
   void fetchLinkFromClipboard() async {

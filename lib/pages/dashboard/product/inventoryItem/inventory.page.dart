@@ -27,6 +27,9 @@ class _InventoryPageState extends State<InventoryPage> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero, (){
+      
+    });
     try {
       _currencySymbol = EateryDB.instance.currencyBox.values
           .singleWhere(
