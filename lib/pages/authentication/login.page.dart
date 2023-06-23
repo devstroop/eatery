@@ -6,7 +6,7 @@ import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
-import 'package:eatery/pages/dashboard/dashboard_page.dart';
+import 'package:eatery/pages/dashboard/dashboard.page.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/components/bottomsheets/forgot_password_bottomsheet.dart';

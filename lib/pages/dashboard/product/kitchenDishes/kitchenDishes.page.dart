@@ -7,8 +7,8 @@ import 'package:eatery/components/product_card.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import '../../../../widgets/bottomSheets/productInternalView.bottomsheet.dart';
 import '../../../../widgets/textFields/search.textField.dart';
-import 'add_kitchenDish.page.dart';
-import 'edit_kitchenDish.page.dart';
+import 'addKitchenDish.page.dart';
+import 'editKitchenDish.page.dart';
 
 Color _pageColor = ColorStyle.secondary;
 

@@ -1,40 +1,30 @@
+import 'package:eatery/components/labeled_custom_text_from_field.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
-import 'package:eatery/components/dialog_box.dart';
 import 'package:eatery/components/pos_category_widget.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
-import '../../../components/labeled_custom_text_from_field.dart';
+import '../../../services/utility/library_image.dart';
+import '../../../widgets/buttons/upload.button.dart';
 
 Color _pageColor = ColorStyle.tertiary;
 
-class EditDiningTablePage extends StatefulWidget {
-  const EditDiningTablePage({Key? key, required this.id}) : super(key: key);
-  final int id;
+class AddDiningTablePage extends StatefulWidget {
+  const AddDiningTablePage({Key? key}) : super(key: key);
+
   @override
-  State<EditDiningTablePage> createState() => _EditDiningTablePageState();
+  State<AddDiningTablePage> createState() => _AddDiningTablePageState();
 }
 
-class _EditDiningTablePageState extends State<EditDiningTablePage> {
+class _AddDiningTablePageState extends State<AddDiningTablePage> {
   DiningTable? diningTable;
   DiningTableCategory? diningTableCategory;
   final TextEditingController _controllerCategoryName = TextEditingController();
   final TextEditingController _controllerCategoryDescription =
       TextEditingController();
-
-  @override
-  initState() {
-    super.initState();
-    Future.delayed(Duration.zero, (){
-      setState(() {
-        diningTable = EateryDB.instance.diningTableBox.get(widget.id);
-        diningTableCategory =
-            EateryDB.instance.diningTableCategoryBox.get(diningTable?.categoryId);
-      }); 
-    });
-  }
+  LibraryImage? image;
 
   @override
   Widget build(BuildContext context) {
@@ -48,41 +38,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
             Navigator.pop(context);
           },
         ),
-        title: const Text('Edit Dining Table'),
-        actions: [
-          IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return DialogBox(
-                    title: 'Delete',
-                    message: 'Are you sure?',
-                    actions: [
-                      TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Cancel')),
-                      TextButton(
-                          onPressed: () async {
-                            Navigator.pop(context);
-                            EateryDB.instance.diningTableBox
-                                .delete(widget.id)
-                                .whenComplete(() {
-                              showSnackBar(context, 'Deleted successfully');
-                              Navigator.pop(context);
-                            });
-                          },
-                          child: const Text('OK'))
-                    ],
-                  );
-                },
-              );
-            },
-            icon: Icon(UIcons.regularStraight.trash),
-          )
-        ],
+        title: const Text('Add Dining Table'),
       ),
       body: InkWell(
         onTap: () {
@@ -92,6 +48,20 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
           padding: const EdgeInsets.all(12.0),
           child: ListView(
             children: [
+              UploadButton(
+                onChanged: (value) {
+                  setState(() {
+                    image = value;
+                  });
+                },
+                title: '+ Upload Icon',
+                label: 'Dining Table Icon',
+                image: image?.image,
+                primaryColor: _pageColor,
+              ),
+              const SizedBox(
+                height: 6.0,
+              ),
               LabeledCustomTextFromField(
                 label: 'Dining Table Name',
                 controller: _controllerCategoryName,
@@ -159,7 +129,6 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: ColorStyle.backgroundColorAlter,
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {
@@ -167,26 +136,28 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
               showSnackBar(context, '* Dining table name required');
               return;
             }
-            if (diningTableCategory == null) {
-              showSnackBar(context, '* Select category');
+            setState(() {
+              diningTable = DiningTable(
+                image: image?.filename,
+                name: _controllerCategoryName.text,
+                description: _controllerCategoryDescription.text,
+                categoryId: diningTableCategory?.id,
+                id: EateryDB.instance.diningTableBox.nextId(),
+                isActive: true,
+              );
+            });
+            if (diningTable == null) {
+              showSnackBar(context, 'Failed to create');
               return;
             }
-            if (diningTable != null) {
-              diningTable!.name = _controllerCategoryName.text;
-              diningTable!.categoryId = diningTableCategory!.id;
-              EateryDB.instance.diningTableBox
-                  .put(widget.id, diningTable!)
-                  .whenComplete(() {
-                showSnackBar(context, 'Successfully updated');
-                Navigator.of(context).pop();
-              }).onError((error, stackTrace) {
-                showSnackBar(context, 'Something went wrong');
-              });
-            } else {
-              showSnackBar(context, 'Something went wrong');
-            }
+            EateryDB.instance.diningTableBox.add(diningTable!).then((value) {
+              showSnackBar(context, 'Successfully created');
+              Navigator.pop(context);
+            }).onError((error, stackTrace) {
+              showSnackBar(context, 'Failed to create');
+            });
           },
-          child: const Text('Update'),
+          child: const Text('Save'),
         ),
       ),
     );

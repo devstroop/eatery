@@ -1,6 +1,6 @@
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
-import 'package:eatery/pages/auth/login_page.dart';
+import 'package:eatery/pages/authentication/login_page.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
 class LogoutPage extends StatefulWidget {

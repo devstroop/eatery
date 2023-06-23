@@ -51,6 +51,7 @@ class _AddDiningTableCategoryPageState
               title: '+ Upload Icon',
               label: 'Table Category Icon',
               image: image?.image,
+              primaryColor: _pageColor,
             ),
             const SizedBox(
               height: 6.0,

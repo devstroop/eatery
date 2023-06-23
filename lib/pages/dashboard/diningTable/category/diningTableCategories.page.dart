@@ -61,11 +61,11 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
             ),
             onTap: () {},
           ),
-          ...EateryDB.instance.diningTableCategoryBox.values.map((e) {
+          ...EateryDB.instance.diningTableCategoryBox.values.map((each) {
             return ListTile(
-              title: Text(e.name,
+              title: Text(each.name,
                   style: const TextStyle(fontWeight: FontWeight.w600)),
-              subtitle: Text(e.description ?? ''),
+              subtitle: Text(each.description ?? ''),
               trailing: Icon(UIcons.regularStraight.arrow_small_right),
               leading: Material(
                 elevation: 2.0,
@@ -76,7 +76,7 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.0),
                       image: DecorationImage(
-                        image: LibraryImage(e.image).image,
+                        image: LibraryImage(each.image).image,
                         fit: BoxFit.cover,
                       ),
                     )),
@@ -86,7 +86,7 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
                   context,
                   MaterialPageRoute(
                       builder: (context) => EditDiningTableCategoryPage(
-                            id: e.id,
+                            id: each.id,
                           )),
                 ).then((_) => setState(() {}));
               },

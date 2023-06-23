@@ -1,7 +1,7 @@
 import 'package:eatery/components/notification_widget.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
-import '../../../activation/upgrade_page.dart';
+import '../../../activation/upgrade.page.dart';
 
 class UpgradeNotification extends StatefulWidget {
   final Company? company;

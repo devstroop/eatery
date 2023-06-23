@@ -124,11 +124,7 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
                       description: _controllerCategoryDescription.text,
                       image: pickedLibraryImage?.filename))
                   .then((response) {
-                if (response > 0) {
-                  showSnackBar(context, 'Created successfully');
-                } else {
-                  showSnackBar(context, 'Failed to create');
-                }
+                showSnackBar(context, 'Created successfully');
               }).whenComplete(() {
                 Navigator.pop(context);
               });

@@ -84,7 +84,9 @@ class _DashboardPageState extends State<DashboardPage> {
 
     menuSize = (screenWidth - (spacing * (crossAxisItemCount + 1))) /
         crossAxisItemCount;
-
+    if(GlobalVariables.company == null){
+      return const Center(child: CircularProgressIndicator(),);
+    }
     return WillPopScope(
       onWillPop: () {
         return Future.value(false);
@@ -114,6 +116,12 @@ class _DashboardPageState extends State<DashboardPage> {
                                 const Text('Are you sure you want to logout?'),
                             actions: [
                               TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('No'),
+                              ),
+                              TextButton(
                                 onPressed: () async {
                                   Navigator.pushReplacement(
                                     context,
@@ -123,12 +131,6 @@ class _DashboardPageState extends State<DashboardPage> {
                                   );
                                 },
                                 child: const Text('Yes'),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('No'),
                               ),
                             ],
                           );

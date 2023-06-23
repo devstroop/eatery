@@ -35,10 +35,11 @@ class _EditDiningTableCategoryPageState
     super.initState();
     setState(() {
       diningTableCategory =
-          EateryDB.instance.diningTableCategoryBox.get(widget.id);
+          EateryDB.instance.diningTableCategoryBox.values.singleWhere((element) => element.id == widget.id);
       _controllerCategoryName.text = diningTableCategory?.name ?? '';
       _controllerCategoryDescription.text =
           diningTableCategory?.description ?? '';
+      image = LibraryImage(diningTableCategory?.image);
     });
   }
 
