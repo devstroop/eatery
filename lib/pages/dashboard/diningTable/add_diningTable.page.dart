@@ -24,19 +24,18 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
 
   @override
   Widget build(BuildContext context) {
-    final appBar = AppBar(
-      backgroundColor: _pageColor,
-      foregroundColor: Colors.white,
-      leading: IconButton(
-        icon: Icon(UIcons.regularStraight.arrow_left),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
-      title: const Text('Add Dining Table'),
-    );
     return Scaffold(
-      appBar: appBar,
+      appBar: AppBar(
+        backgroundColor: _pageColor,
+        foregroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(UIcons.regularStraight.arrow_left),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: const Text('Add Dining Table'),
+      ),
       body: InkWell(
         onTap: () {
           FocusScope.of(context).unfocus();

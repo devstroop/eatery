@@ -18,14 +18,6 @@ class DiningTableCard extends StatelessWidget {
       child: Container(
         margin: const EdgeInsets.fromLTRB(9, 0, 9, 0),
         decoration: BoxDecoration(
-          /*boxShadow: const [
-            BoxShadow(
-              color: Color(0x2F000000),
-              blurRadius: 6,
-              offset: Offset(0, 4),
-              spreadRadius: 1,
-            )
-          ],*/
           borderRadius: BorderRadius.circular(6),
         ),
         width: ((MediaQuery.of(context).size.width <

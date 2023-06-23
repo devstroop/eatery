@@ -1,11 +1,12 @@
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
-import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery/components/dialog_box.dart';
 import 'package:eatery/components/pos_category_widget.dart';
 import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
+
+import '../../../components/labeled_custom_text_from_field.dart';
 
 Color _pageColor = ColorStyle.tertiary;
 
@@ -17,9 +18,11 @@ class EditDiningTablePage extends StatefulWidget {
 }
 
 class _EditDiningTablePageState extends State<EditDiningTablePage> {
-  DiningTableCategory? diningTableCategory;
-  final TextEditingController _controllerName = TextEditingController();
   DiningTable? diningTable;
+  DiningTableCategory? diningTableCategory;
+  final TextEditingController _controllerCategoryName = TextEditingController();
+  final TextEditingController _controllerCategoryDescription =
+      TextEditingController();
 
   @override
   initState() {
@@ -79,104 +82,109 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
           )
         ],
       ),
-      body: ListView(
-        children: [
-          Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Category Name',
-                  style: TextStyle(
-                    color: ColorStyle.text200,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
+      body: InkWell(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: ListView(
+            children: [
+              LabeledCustomTextFromField(
+                label: 'Dining Table Name',
+                controller: _controllerCategoryName,
+                hint: 'eg. Table 1 ',
+                obscureText: false,
+                backgroundColor: _pageColor,
+                foregroundColor: ColorStyle.text200,
+              ),
+              const SizedBox(
+                height: 12.0,
+              ),
+              LabeledCustomTextFromField(
+                label: 'Description',
+                controller: _controllerCategoryDescription,
+                hint: 'eg. Table description',
+                obscureText: false,
+                backgroundColor: _pageColor,
+                foregroundColor: ColorStyle.text200,
+                multiline: true,
+              ),
+              const SizedBox(
+                height: 12.0,
+              ),
+              Text(
+                'Category',
+                style: TextStyle(
+                  color: ColorStyle.text200,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
                 ),
-                const SizedBox(
-                  height: 3.0,
-                ),
-                CustomTextFromField(
-                  controller: _controllerName,
-                  hint: 'eg. Table 1 ',
-                  obscureText: false,
-                  themeColor: _pageColor,
-                ),
-              ]),
-          const SizedBox(
-            height: 6.0,
-          ),
-          Container(
-            width: double.maxFinite,
-            height: 60,
-            margin: const EdgeInsets.symmetric(vertical: 16.0),
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              children: [
-                PosCategoryWidget(
-                    active: diningTableCategory == null,
-                    image: Image.asset(
-                      'assets/images/all.png',
-                      width: 18,
-                      height: 18,
-                      fit: BoxFit.cover,
-                    ),
-                    label: 'All',
-                    onTap: () {
-                      setState(
-                        () {
-                          diningTableCategory = null;
+              ),
+              Container(
+                width: double.maxFinite,
+                height: 60,
+                margin: const EdgeInsets.symmetric(vertical: 8.0),
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    PosCategoryWidget(
+                        active: diningTableCategory == null,
+                        label: 'None',
+                        onTap: () {
+                          setState(
+                            () {
+                              diningTableCategory = null;
+                            },
+                          );
+                        }),
+                    ...EateryDB.instance.diningTableCategoryBox.values.map((e) {
+                      return PosCategoryWidget(
+                        active: diningTableCategory?.id == e.id,
+                        label: e.name,
+                        onTap: () {
+                          setState(() {
+                            diningTableCategory = e;
+                          });
                         },
                       );
                     }),
-                ...EateryDB.instance.diningTableCategoryBox.values.map((e) {
-                  return PosCategoryWidget(
-                    active: diningTableCategory?.id == e.id,
-                    label: e.name,
-                    onTap: () {
-                      setState(() {
-                        diningTableCategory = e;
-                      });
-                    },
-                  );
-                }),
-              ],
-            ),
+                  ],
+                ),
+              ),
+            ],
           ),
-        ],
+        ),
       ),
       bottomNavigationBar: BottomAppBar(
         color: ColorStyle.backgroundColorAlter,
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: PrimaryButton(
-            color: _pageColor,
-            onPressed: () async {
-              if (_controllerName.text.trim() == '') {
-                showSnackBar(context, '* Dining table name required');
-                return;
-              }
-              if (diningTableCategory == null) {
-                showSnackBar(context, '* Select category');
-                return;
-              }
-              if (diningTable != null) {
-                diningTable!.name = _controllerName.text;
-                diningTable!.categoryId = diningTableCategory!.id;
-                EateryDB.instance.diningTableBox
-                    .put(widget.id, diningTable!)
-                    .whenComplete(() {
-                  showSnackBar(context, 'Successfully updated');
-                  Navigator.of(context).pop();
-                }).onError((error, stackTrace) {
-                  showSnackBar(context, 'Something went wrong');
-                });
-              } else {
+        child: PrimaryButton(
+          color: _pageColor,
+          onPressed: () async {
+            if (_controllerCategoryName.text.trim() == '') {
+              showSnackBar(context, '* Dining table name required');
+              return;
+            }
+            if (diningTableCategory == null) {
+              showSnackBar(context, '* Select category');
+              return;
+            }
+            if (diningTable != null) {
+              diningTable!.name = _controllerCategoryName.text;
+              diningTable!.categoryId = diningTableCategory!.id;
+              EateryDB.instance.diningTableBox
+                  .put(widget.id, diningTable!)
+                  .whenComplete(() {
+                showSnackBar(context, 'Successfully updated');
+                Navigator.of(context).pop();
+              }).onError((error, stackTrace) {
                 showSnackBar(context, 'Something went wrong');
-              }
-            },
-            child: const Text('Update'),
-          ),
+              });
+            } else {
+              showSnackBar(context, 'Something went wrong');
+            }
+          },
+          child: const Text('Update'),
         ),
       ),
     );

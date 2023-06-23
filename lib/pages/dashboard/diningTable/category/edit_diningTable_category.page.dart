@@ -6,6 +6,10 @@ import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
+import '../../../../components/labeled_custom_text_from_field.dart';
+import '../../../../services/utility/library_image.dart';
+import '../../../../widgets/buttons/upload.button.dart';
+
 Color _pageColor = ColorStyle.tertiary;
 
 class EditDiningTableCategoryPage extends StatefulWidget {
@@ -23,17 +27,21 @@ class _EditDiningTableCategoryPageState
   final TextEditingController _controllerCategoryName = TextEditingController();
   final TextEditingController _controllerCategoryDescription =
       TextEditingController();
+  LibraryImage? image;
   DiningTableCategory? diningTableCategory;
 
   @override
   initState() {
     super.initState();
-    setState(() {
-      diningTableCategory =
-          EateryDB.instance.diningTableCategoryBox.get(widget.id);
-      _controllerCategoryName.text = diningTableCategory?.name ?? '';
-      _controllerCategoryDescription.text =
-          diningTableCategory?.description ?? '';
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        diningTableCategory =
+            EateryDB.instance.diningTableCategoryBox.get(widget.id);
+        _controllerCategoryName.text = diningTableCategory?.name ?? '';
+        _controllerCategoryDescription.text =
+            diningTableCategory?.description ?? '';
+        image = LibraryImage(diningTableCategory?.image ?? '');
+      });
     });
   }
 
@@ -50,115 +58,114 @@ class _EditDiningTableCategoryPageState
       ),
       title: const Text('Edit Dining Table Category'),
       actions: [
-        TextButton(
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return DialogBox(
-                  title: 'Delete',
-                  message: 'Are you sure?',
-                  actions: [
-                    TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Cancel')),
-                    TextButton(
-                        onPressed: () async {
-                          Navigator.pop(context);
-                          // DiningTable.getAll(category: widget.id).then((value) {
-                          //   if (value.isNotEmpty) {
-                          //     showSnackBar(context, 'Can\'t delete');
-                          //     return;
-                          //   }
-                          // });
-                          // DiningTableCategory.delete(widget.id).then((value) {
-                          //   showSnackBar(context, 'Deleted successfully');
-                          //   Navigator.pop(context);
-                          // });
-                        },
-                        child: const Text('OK'))
-                  ],
-                );
-              },
-            );
-          },
-          child: Text(
-            'Delete',
-            style: TextStyle(color: ColorStyle.backgroundColorAlter),
-          ),
-        )
+        deleteButton(context),
       ],
     );
     return Scaffold(
       appBar: appBar,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              const SizedBox(
-                height: 12.0,
-              ),
-              Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Category Name',
-                      style: TextStyle(
-                        color: ColorStyle.text200,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 3.0,
-                    ),
-                    CustomTextFromField(
-                      controller: _controllerCategoryName,
-                      hint: 'eg. Terrace',
-                      obscureText: false,
-                      themeColor: _pageColor,
-                    ),
-                  ]),
-              const SizedBox(
-                height: 6.0,
-              ),
-            ],
-          ),
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: ListView(
+          children: [
+            UploadButton(
+              onChanged: (value) {
+                setState(() {
+                  image = value;
+                });
+              },
+              title: '+ Upload Icon',
+              label: 'Table Category Icon',
+              image: image?.image,
+            ),
+            const SizedBox(
+              height: 6.0,
+            ),
+            LabeledCustomTextFromField(
+              keyboardType: TextInputType.text,
+              controller: _controllerCategoryName,
+              label: 'Category Name',
+              hint: 'eg. Terrace',
+              obscureText: false,
+              backgroundColor: _pageColor,
+              foregroundColor: ColorStyle.text200,
+            ),
+            const SizedBox(
+              height: 6.0,
+            ),
+            LabeledCustomTextFromField(
+              keyboardType: TextInputType.text,
+              controller: _controllerCategoryDescription,
+              label: 'Description',
+              hint: 'eg. Terrace',
+              obscureText: false,
+              backgroundColor: _pageColor,
+              foregroundColor: ColorStyle.text200,
+              multiline: true,
+            ),
+            const SizedBox(
+              height: 6.0,
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: BottomAppBar(
         color: ColorStyle.backgroundColorAlter,
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: PrimaryButton(
-            color: _pageColor,
-            onPressed: () async {
-              if (_controllerCategoryName.text.trim() == '') {
-                showSnackBar(context, '* Category name required');
-                return;
-              }
-              // DiningTableCategory.update(
-              //         {'id': widget.id, 'name': _controllerCategoryName.text})
-              //     .then((response) {
-              //   if (response) {
-              //     showSnackBar(context, 'Successfully updated');
-              //     Navigator.of(context).pop();
-              //   } else {
-              //     showSnackBar(context, 'Failed to update');
-              //   }
-              // });
-            },
-            child: const Text('Update'),
-          ),
+        child: PrimaryButton(
+          color: _pageColor,
+          onPressed: () async {
+            if (_controllerCategoryName.text.trim() == '') {
+              showSnackBar(context, '* Category name required');
+              return;
+            }
+            try {
+              diningTableCategory?.name = _controllerCategoryName.text;
+              diningTableCategory?.description =
+                  _controllerCategoryDescription.text;
+              diningTableCategory?.image = image?.filename ?? '';
+              diningTableCategory?.save();
+              showSnackBar(context, 'Successfully updated');
+              Navigator.pop(context);
+            } catch (e) {
+              showSnackBar(context, 'Something went wrong');
+            }
+          },
+          child: const Text('Update'),
         ),
       ),
     );
   }
+
+  deleteButton(BuildContext context) => IconButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return DialogBox(
+                title: 'Delete',
+                message: 'Are you sure?',
+                actions: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Cancel')),
+                  TextButton(
+                      onPressed: () async {
+                        diningTableCategory?.delete().then((value) {
+                          showSnackBar(context, 'Deleted successfully');
+                          Navigator.pop(context);
+                          Navigator.pop(context);
+                        }).onError((error, stackTrace) {
+                          showSnackBar(context, 'Can\'t delete');
+                          Navigator.pop(context);
+                        });
+                      },
+                      child: const Text('OK'))
+                ],
+              );
+            },
+          );
+        },
+        icon: Icon(UIcons.regularStraight.trash),
+      );
 }

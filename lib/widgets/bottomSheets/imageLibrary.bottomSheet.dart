@@ -56,27 +56,6 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
         });
       }
     });
-    // Directory(GlobalVariables.resourcesDirectoryAbs!).list().listen((event) {
-    //   if (event.path.toLowerCase().endsWith(".jpg") ||
-    //       event.path.toLowerCase().endsWith(".jpeg") ||
-    //       event.path.toLowerCase().endsWith(".png")) {
-    //     setState(() {
-    //       _images.add(event.path);
-    //       flag = true;
-    //     });
-    //   }
-    // }).onDone(() {
-    //   if (flag) {
-    //     setState(() {
-    //       _images.sort((a, b) =>
-    //           File(a).lastModifiedSync().compareTo(File(b).lastModifiedSync()));
-    //     });
-    //   } else {
-    //     setState(() {
-    //       _images = [];
-    //     });
-    //   }
-    // });
   }
 
   Future pickImageFromFile() async {

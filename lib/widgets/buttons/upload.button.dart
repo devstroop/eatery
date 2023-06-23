@@ -44,8 +44,9 @@ class _UploadButtonState extends State<UploadButton> {
           bottomRight: Radius.circular(0),
         ),
       ),
-      builder: (context) => ImageLibraryBottomSheet(context, (LibraryImage? libraryImage) {
-        this.libraryImage = libraryImage;
+      builder: (context) =>
+          ImageLibraryBottomSheet(context, (LibraryImage? libraryImage) {
+            this.libraryImage = libraryImage;
             if (widget.onChanged != null) {
               widget.onChanged!(libraryImage);
             }
@@ -55,10 +56,10 @@ class _UploadButtonState extends State<UploadButton> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      elevation: 0,
+      elevation: 2,
       borderRadius: BorderRadius.circular(12),
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        padding: const EdgeInsets.all(12),
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(12)),
             color: const Color(0xFFF0F0F0),
@@ -89,7 +90,8 @@ class _UploadButtonState extends State<UploadButton> {
                             borderRadius: BorderRadius.circular(4),
                             image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: widget.image ?? const AssetImage('assets/images.default.jpg'),
+                              image: widget.image ??
+                                  const AssetImage('assets/images.default.jpg'),
                             ),
                           ),
                         ),
@@ -125,34 +127,30 @@ class _UploadButtonState extends State<UploadButton> {
                 const SizedBox(
                   width: 6,
                 ),
-                Container(
-                  height: 96,
-                  decoration: const BoxDecoration(),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      if (widget.label != null)
-                        Text(
-                          widget.label!,
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              color: widget.secondaryColor),
-                        ),
-                      InkWell(
-                        onTap: onUploadPressed,
-                        child: Text(
-                          widget.title ?? "+ Attach Media",
-                          style: TextStyle(
-                              fontSize: 14,
-                              color: widget.primaryColor,
-                              fontWeight: FontWeight.bold),
-                        ),
+                Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (widget.label != null)
+                      Text(
+                        widget.label!,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: widget.secondaryColor),
                       ),
-                    ],
-                  ),
+                    InkWell(
+                      onTap: onUploadPressed,
+                      child: Text(
+                        widget.title ?? "+ Attach Media",
+                        style: TextStyle(
+                            fontSize: 14,
+                            color: widget.primaryColor,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -164,8 +162,8 @@ class _UploadButtonState extends State<UploadButton> {
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(9)),
                   child: SizedBox(
-                    width: 54,
-                    height: 84,
+                    width: 72,
+                    height: 72,
                     child: Icon(
                       UIcons.regularStraight.clip,
                       size: 24,

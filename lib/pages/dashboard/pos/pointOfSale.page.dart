@@ -9,6 +9,8 @@ import 'package:eatery/components/special_button.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery_db/eatery_db.dart';
 
+import '../../../widgets/textFields/search.textField.dart';
+
 class PointOfSalePage extends StatefulWidget {
   const PointOfSalePage({Key? key}) : super(key: key);
 
@@ -388,44 +390,13 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
         flexibleSpace: Container(
           margin: const EdgeInsets.only(top: 102, left: 12, right: 12),
           width: double.maxFinite,
-          child: TextFormField(
+          child: SearchTextField(
+            controller: _controllerSearch,
             onChanged: (value) {
               loadProducts();
             },
-            keyboardType: TextInputType.text,
-            controller: _controllerSearch,
-            decoration: InputDecoration(
-              prefixIcon: Icon(UIcons.regularStraight.search, color: ColorStyle.text400),
-              hintText: 'Search a product...',
-              hintStyle: TextStyle(
-                color: ColorStyle.text400,
-                fontSize: 16,
-                fontWeight: FontWeight.normal,
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: ColorStyle.text400,
-                  width: 1,
-                ),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: _pageColor.withOpacity(0.5),
-                  width: 2,
-                ),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              filled: true,
-              fillColor: Colors.white,
-              contentPadding:
-                  const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
-            ),
-            style: TextStyle(
-              color: ColorStyle.text200,
-              fontSize: 16,
-              fontWeight: FontWeight.normal,
-            ),
+            themeColor: _pageColor,
+            hintText: 'Search a product...',
           ),
         ),
       ),

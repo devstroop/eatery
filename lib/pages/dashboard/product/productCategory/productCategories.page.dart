@@ -63,7 +63,9 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
             return ListTile(
               title: Text(e.name,
                   style: const TextStyle(fontWeight: FontWeight.w600)),
-              subtitle: Text(e.description ?? ''),
+              subtitle: e.description != null && e.description?.trim() != ''
+                  ? Text(e.description ?? '')
+                  : null,
               trailing: Icon(UIcons.regularStraight.arrow_small_right),
               leading: Material(
                 elevation: 2.0,
@@ -74,8 +76,7 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.0),
                       image: DecorationImage(
-                        image: LibraryImage(
-                            e.image ?? '').image,
+                        image: LibraryImage(e.image ?? '').image,
                         fit: BoxFit.cover,
                       ),
                     )),

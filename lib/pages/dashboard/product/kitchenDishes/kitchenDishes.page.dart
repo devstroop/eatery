@@ -6,8 +6,11 @@ import 'package:eatery/components/pos_category_widget.dart';
 import 'package:eatery/components/product_card.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import '../../../../widgets/bottomSheets/productInternalView.bottomsheet.dart';
+import '../../../../widgets/textFields/search.textField.dart';
 import 'add_kitchenDish.page.dart';
 import 'edit_kitchenDish.page.dart';
+
+Color _pageColor = ColorStyle.secondary;
 
 class KitchenPage extends StatefulWidget {
   const KitchenPage({Key? key}) : super(key: key);
@@ -26,15 +29,10 @@ class _KitchenPageState extends State<KitchenPage> {
     setState(() {});
   }
 
-  Color getThemeColor() {
-    return ColorStyle.secondary;
-  }
-
   _edit(Product product) => Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) =>
-                EditKitchenDish(product: product)),
+            builder: (context) => EditKitchenDish(product: product)),
       ).then((_) {
         setState(() {});
         Navigator.of(context).pop();
@@ -49,61 +47,6 @@ class _KitchenPageState extends State<KitchenPage> {
 
   @override
   Widget build(BuildContext context) {
-    final appBar = AppBar(
-      title: const Text('Kitchen'),
-      backgroundColor: getThemeColor(),
-      bottom: PreferredSize(
-        preferredSize: Size(MediaQuery.of(context).size.width, 72),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: TextFormField(
-            onChanged: (value) {
-              setState(() {});
-            },
-            keyboardType: TextInputType.text,
-            controller: _controllerSearch,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.search,
-                color: getThemeColor(),
-              ),
-              hintText: 'Search a dish...',
-              hintStyle: TextStyle(
-                color: ColorStyle.text400,
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-              ),
-              //prefixIcon: const Icon(Icons.search),
-              //prefixIconColor: ColorStyle.text100,
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: ColorStyle.text400,
-                  width: 1,
-                ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: getThemeColor().withOpacity(0.5),
-                  width: 2,
-                ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              filled: true,
-              fillColor: Colors.white,
-              contentPadding:
-                  const EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
-            ),
-            style: TextStyle(
-              color: ColorStyle.text200,
-              fontSize: 14,
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-        ),
-      ),
-    );
-
     final categoryBar = SizedBox(
       width: double.maxFinite,
       height: 60,
@@ -170,7 +113,7 @@ class _KitchenPageState extends State<KitchenPage> {
                 ProductCard(
                   currencySymbol: GlobalVariables.currency?.symbol,
                   product: product,
-                  themeColor: getThemeColor(),
+                  themeColor: _pageColor,
                   onTap: () => showModalBottomSheet(
                       context: context,
                       shape: const RoundedRectangleBorder(
@@ -183,7 +126,7 @@ class _KitchenPageState extends State<KitchenPage> {
                       ),
                       builder: (context) {
                         return ProductInternalViewBottomsheet(
-                          color: getThemeColor(),
+                          color: _pageColor,
                           product: product,
                           onEdit: () => _edit(product),
                           onDelete: () => _delete(product),
@@ -197,7 +140,32 @@ class _KitchenPageState extends State<KitchenPage> {
     final detailedProduct = Container();
 
     return Scaffold(
-      appBar: appBar,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(120),
+        child: AppBar(
+          title: const Text('Kitchen'),
+          backgroundColor: _pageColor,
+          foregroundColor: Colors.white,
+          leading: IconButton(
+            icon: Icon(UIcons.regularStraight.arrow_left),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          flexibleSpace: Container(
+            margin: const EdgeInsets.only(top: 102, left: 12, right: 12),
+            width: double.maxFinite,
+            child: SearchTextField(
+              controller: _controllerSearch,
+              onChanged: (value) {
+                setState(() {});
+              },
+              themeColor: _pageColor,
+              hintText: 'Search a dish...',
+            ),
+          ),
+        ),
+      ),
       body: Stack(
         children: [
           Positioned(
@@ -217,7 +185,7 @@ class _KitchenPageState extends State<KitchenPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: getThemeColor(),
+        backgroundColor: _pageColor,
         child: const Icon(Icons.add),
         onPressed: () async {
           Navigator.push(

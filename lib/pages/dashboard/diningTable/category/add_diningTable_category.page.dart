@@ -38,57 +38,49 @@ class _AddDiningTableCategoryPageState
         ));
     return Scaffold(
       appBar: appBar,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              const SizedBox(
-                height: 12.0,
-              ),
-              UploadButton(
-                onChanged: (value) {
-                  setState(() {
-                    image = value;
-                  });
-                },
-                title: '+ Upload Icon',
-                label: 'Table Category Icon',
-                image: image?.image,
-              ),
-              const SizedBox(
-                height: 6.0,
-              ),
-              LabeledCustomTextFromField(
-                keyboardType: TextInputType.text,
-                controller: _controllerCategoryName,
-                label: 'Category Name',
-                hint: 'eg. Terrace',
-                obscureText: false,
-                backgroundColor: _pageColor,
-                foregroundColor: ColorStyle.text200,
-              ),
-              const SizedBox(
-                height: 6.0,
-              ),
-              LabeledCustomTextFromField(
-                keyboardType: TextInputType.text,
-                controller: _controllerCategoryDescription,
-                label: 'Description',
-                hint: 'eg. Terrace',
-                obscureText: false,
-                backgroundColor: _pageColor,
-                foregroundColor: ColorStyle.text200,
-                multiline: true,
-              ),
-              const SizedBox(
-                height: 6.0,
-              ),
-            ],
-          ),
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: ListView(
+          children: [
+            UploadButton(
+              onChanged: (value) {
+                setState(() {
+                  image = value;
+                });
+              },
+              title: '+ Upload Icon',
+              label: 'Table Category Icon',
+              image: image?.image,
+            ),
+            const SizedBox(
+              height: 6.0,
+            ),
+            LabeledCustomTextFromField(
+              keyboardType: TextInputType.text,
+              controller: _controllerCategoryName,
+              label: 'Category Name',
+              hint: 'eg. Terrace',
+              obscureText: false,
+              backgroundColor: _pageColor,
+              foregroundColor: ColorStyle.text200,
+            ),
+            const SizedBox(
+              height: 6.0,
+            ),
+            LabeledCustomTextFromField(
+              keyboardType: TextInputType.text,
+              controller: _controllerCategoryDescription,
+              label: 'Description',
+              hint: 'eg. Terrace',
+              obscureText: false,
+              backgroundColor: _pageColor,
+              foregroundColor: ColorStyle.text200,
+              multiline: true,
+            ),
+            const SizedBox(
+              height: 6.0,
+            ),
+          ],
         ),
       ),
       bottomNavigationBar: BottomAppBar(

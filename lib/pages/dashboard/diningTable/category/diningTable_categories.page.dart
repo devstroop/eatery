@@ -2,9 +2,10 @@ import 'dart:io';
 
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
-import 'package:eatery/components/dining_table_category_card.dart';
 import 'package:eatery/constants/style/color_style.dart';
+import 'package:googleapis/appengine/v1.dart';
 
+import '../../../../services/utility/library_image.dart';
 import 'add_diningTable_category.page.dart';
 import 'edit_diningTable_category.page.dart';
 
@@ -39,10 +40,10 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
             title: const Text('Default',
                 style: TextStyle(fontWeight: FontWeight.w600)),
             subtitle: const Text('Uncategorized'),
-            trailing: Icon(
-              UIcons.regularStraight.arrow_small_right,
-              size: 18,
-            ),
+            // trailing: Icon(
+            //   UIcons.regularStraight.arrow_small_right,
+            //   size: 18,
+            // ),
             leading: Material(
               elevation: 2.0,
               borderRadius: BorderRadius.circular(12.0),
@@ -75,13 +76,7 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.0),
                       image: DecorationImage(
-                        image: (e.image != null && File(e.image!).existsSync()
-                            ? Image.file(File(e.image!))
-                            : Image.asset(
-                          'assets/images/default.jpg',
-                          fit: BoxFit.cover,
-                        ))
-                            .image,
+                        image: LibraryImage(e.image).image,
                         fit: BoxFit.cover,
                       ),
                     )),

@@ -8,9 +8,10 @@ import 'package:eatery/constants/style/color_style.dart';
 
 import '../../../../constants/global_variables.dart';
 import '../../../../widgets/bottomSheets/productInternalView.bottomsheet.dart';
+import '../../../../widgets/textFields/search.textField.dart';
 import 'edit_inventoryItem.page.dart';
 
-Color _pageColor = ColorStyle.secondary;
+Color _pageColor = ColorStyle.alternate;
 
 class InventoryPage extends StatefulWidget {
   const InventoryPage({Key? key}) : super(key: key);
@@ -55,68 +56,6 @@ class _InventoryPageState extends State<InventoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final appBar = AppBar(
-      title: const Text('Inventory'),
-      backgroundColor: _pageColor,
-      foregroundColor: Colors.white,
-      leading: IconButton(
-        icon: Icon(UIcons.regularStraight.arrow_left),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
-      bottom: PreferredSize(
-        preferredSize: Size(MediaQuery.of(context).size.width, 72),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: TextFormField(
-            onChanged: (value) {
-              setState(() {});
-            },
-            keyboardType: TextInputType.text,
-            controller: _controllerSearch,
-            decoration: InputDecoration(
-              prefixIcon: Icon(
-                Icons.search,
-                color: _pageColor,
-              ),
-              hintText: 'Search an item...',
-              hintStyle: TextStyle(
-                color: ColorStyle.text400,
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-              ),
-              //prefixIcon: const Icon(Icons.search),
-              //prefixIconColor: ColorStyle.text100,
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: ColorStyle.text400,
-                  width: 1,
-                ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: _pageColor.withOpacity(0.5),
-                  width: 2,
-                ),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              filled: true,
-              fillColor: Colors.white,
-              contentPadding:
-                  const EdgeInsetsDirectional.fromSTEB(12, 12, 12, 12),
-            ),
-            style: TextStyle(
-              color: ColorStyle.text200,
-              fontSize: 14,
-              fontWeight: FontWeight.normal,
-            ),
-          ),
-        ),
-      ),
-    );
-
     final categoryBar = SizedBox(
       width: double.maxFinite,
       height: 60,
@@ -210,7 +149,32 @@ class _InventoryPageState extends State<InventoryPage> {
     final detailedProduct = Container();
 
     return Scaffold(
-      appBar: appBar,
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(120),
+        child: AppBar(
+          title: const Text('Inventory'),
+          backgroundColor: _pageColor,
+          foregroundColor: Colors.white,
+          leading: IconButton(
+            icon: Icon(UIcons.regularStraight.arrow_left),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+          flexibleSpace: Container(
+            margin: const EdgeInsets.only(top: 102, left: 12, right: 12),
+            width: double.maxFinite,
+            child: SearchTextField(
+              controller: _controllerSearch,
+              onChanged: (value) {
+                setState(() {});
+              },
+              themeColor: _pageColor,
+              hintText: 'Search a dish...',
+            ),
+          ),
+        ),
+      ),
       body: Stack(
         children: [
           Positioned(
