@@ -211,7 +211,7 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                         child: CustomTextFromField(
                             controller: _ctrlMRP,
                             keyboardType: TextInputType.number,
-                            prefixWidget: _currencySymbol != null
+                            prefix: _currencySymbol != null
                                 ? Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -263,7 +263,7 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
                         child: CustomTextFromField(
                             controller: _ctrlSP,
                             keyboardType: TextInputType.number,
-                            prefixWidget: _currencySymbol != null
+                            prefix: _currencySymbol != null
                                 ? Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [

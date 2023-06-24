@@ -213,7 +213,7 @@ class _EditInventoryItemState extends State<EditInventoryItem> {
                         child: CustomTextFromField(
                             controller: _ctrlMRP,
                             keyboardType: TextInputType.number,
-                            prefixWidget: _currencySymbol != null
+                            prefix: _currencySymbol != null
                                 ? Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -265,7 +265,7 @@ class _EditInventoryItemState extends State<EditInventoryItem> {
                         child: CustomTextFromField(
                             controller: _ctrlSP,
                             keyboardType: TextInputType.number,
-                            prefixWidget: _currencySymbol != null
+                            prefix: _currencySymbol != null
                                 ? Column(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [

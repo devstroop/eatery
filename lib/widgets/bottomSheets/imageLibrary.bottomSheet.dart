@@ -111,10 +111,14 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    int crossAxisCount = screenWidth ~/ 100;
+    debugPrint('$screenWidth $crossAxisCount');
     return StatefulBuilder(builder: (context, state) {
       return Padding(
         padding: const EdgeInsets.all(12),
-        child: Column(
+        child: ListView(
+          shrinkWrap: true,
           children: [
             const Center(
               child: BottomSheetGrip(),
@@ -129,7 +133,6 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
                 ),
                 Row(
                   children: [
-                    // if clipboard text is link to image
                     FutureBuilder<ClipboardData?>(
                       future: Clipboard.getData('text/plain'),
                       builder: (context, snapshot) {
@@ -196,7 +199,7 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
               ),
             if (_images.isNotEmpty)
               GridView.count(
-                crossAxisCount: 3,
+                crossAxisCount: crossAxisCount,
                 crossAxisSpacing: 12.0,
                 mainAxisSpacing: 12.0,
                 shrinkWrap: true,

@@ -62,7 +62,7 @@ class _AddDiningTableCategoryPageState
               label: 'Category Name',
               hint: 'eg. Terrace',
               obscureText: false,
-              backgroundColor: _pageColor,
+              themeColor: _pageColor,
               foregroundColor: ColorStyle.text200,
             ),
             const SizedBox(
@@ -74,7 +74,7 @@ class _AddDiningTableCategoryPageState
               label: 'Description',
               hint: 'eg. Terrace',
               obscureText: false,
-              backgroundColor: _pageColor,
+              themeColor: _pageColor,
               foregroundColor: ColorStyle.text200,
               multiline: true,
             ),

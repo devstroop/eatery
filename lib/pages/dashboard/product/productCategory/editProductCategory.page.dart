@@ -129,7 +129,7 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
                 controller: _controllerCategoryName,
                 hint: 'eg. Starters',
                 obscureText: false,
-                backgroundColor: _pageColor,
+                themeColor: _pageColor,
                 foregroundColor: ColorStyle.text200,
               ),
               const SizedBox(
@@ -140,7 +140,7 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
                 controller: _controllerDescription,
                 hint: 'eg. Starters are the best',
                 obscureText: false,
-                backgroundColor: _pageColor,
+                themeColor: _pageColor,
                 foregroundColor: ColorStyle.text200,
                 multiline: true,
               ),

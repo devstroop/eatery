@@ -28,9 +28,11 @@ class _KitchenPageState extends State<KitchenPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {});
-    selectedCategory = null;
-    setState(() {});
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        selectedCategory = null;
+      });
+    });
   }
 
   _edit(Product product) => Navigator.push(
@@ -142,7 +144,9 @@ class _KitchenPageState extends State<KitchenPage> {
 
     final detailedProduct = Container();*/
 
-    List<Product> products = EateryDB.instance.productBox.values.where((element) => element.type == ProductType.kitchenDish).toList();
+    List<Product> products = EateryDB.instance.productBox.values
+        .where((element) => element.type == ProductType.kitchenDish)
+        .toList();
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(120),
@@ -212,37 +216,57 @@ class _KitchenPageState extends State<KitchenPage> {
             color: Colors.grey[200],
           ),
           Flexible(
-            flex: 8,
-            child: products.isNotEmpty ? SingleChildScrollView(
-              child: Wrap(
-                children: [
-                  ...products.map((each) {
-                    return Card(child: Text(each.name),);
-                  })
-                ],
-              ),
-            ) : Center(
-              child: Opacity(
-                opacity: 0.50,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset('assets/images/empty-folder.png', width: 100, height: 100,),
-                    const SizedBox(height: 16,),
-                    const Text('No dish found', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),),
-                    const Text('Add a dish to get started', style: TextStyle(fontSize: 16, color: Colors.black54),),
-                    const SizedBox(height: 48,),
-                  ],
-                ),
-              ),
-            )
-          ),
+              flex: 8,
+              child: products.isNotEmpty
+                  ? SingleChildScrollView(
+                      child: Wrap(
+                        children: [
+                          ...products.map((each) {
+                            return Card(
+                              child: Text(each.name),
+                            );
+                          })
+                        ],
+                      ),
+                    )
+                  : Center(
+                      child: Opacity(
+                        opacity: 0.50,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/images/empty-folder.png',
+                              width: 100,
+                              height: 100,
+                            ),
+                            const SizedBox(
+                              height: 16,
+                            ),
+                            const Text(
+                              'No dish found',
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
+                            ),
+                            const Text(
+                              'Add a dish to get started',
+                              style: TextStyle(
+                                  fontSize: 16, color: Colors.black54),
+                            ),
+                            const SizedBox(
+                              height: 48,
+                            ),
+                          ],
+                        ),
+                      ),
+                    )),
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
         icon: Icon(UIcons.regularStraight.plus_small),
+        label: const Text('Add Kitchen Dish'),
         onPressed: () async {
           Navigator.push(
             context,
@@ -251,7 +275,7 @@ class _KitchenPageState extends State<KitchenPage> {
                       company: GlobalVariables.company!,
                     )),
           ).then((_) => setState(() {}));
-        }, label: const Text('Add Dish'),
+        },
       ),
     );
   }

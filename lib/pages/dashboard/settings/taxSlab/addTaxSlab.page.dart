@@ -110,7 +110,7 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
                       hint: '',
                       themeColor: localColor,
                       focusNode: focus2,
-                      suffixWidget: Icon(
+                      suffix: Icon(
                         Icons.percent,
                         color: ColorStyle.text400,
                       ),

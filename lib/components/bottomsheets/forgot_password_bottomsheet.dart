@@ -97,7 +97,7 @@ class _ForgotPasswordBottomSheetState extends State<ForgotPasswordBottomSheet> {
                   hint: 'Enter purchase code...',
                   autofocus: true,
                   textInputAction: TextInputAction.done,
-                  suffixWidget: IconButton(
+                  suffix: IconButton(
                     onPressed: () async {
                       String val = await FlutterClipboard.paste();
                       setState(() {

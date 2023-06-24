@@ -211,7 +211,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                         'Default ${Edition.values.singleWhere((element) => element.id == company?.edition.id).name} Rate',
                     hint:
                         'Enter default ${Edition.values.singleWhere((element) => element.id == company?.edition.id).name} rate...',
-                    suffixWidget: Icon(
+                    suffix: Icon(
                       Icons.percent,
                       color: ColorStyle.text400,
                     ),

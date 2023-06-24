@@ -10,6 +10,8 @@ import 'package:eatery/constants/style/color_style.dart';
 import '../../../../services/utility/library_image.dart';
 import '../../../../widgets/buttons/upload.button.dart';
 
+Color _pageColor = ColorStyle.tertiary;
+
 class AddProductCategoryPage extends StatefulWidget {
   const AddProductCategoryPage({Key? key}) : super(key: key);
 
@@ -23,15 +25,11 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
   final TextEditingController _controllerCategoryDescription =
       TextEditingController();
 
-  Color getThemeColor() {
-    return ColorStyle.tertiary;
-  }
-
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
       foregroundColor: Colors.white,
-      backgroundColor: getThemeColor(),
+      backgroundColor: _pageColor,
       leading: IconButton(
         icon: Icon(UIcons.regularStraight.arrow_left),
         onPressed: () {
@@ -55,7 +53,7 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
               ),
               UploadButton(
                 label: 'Product Category Image',
-                primaryColor: getThemeColor(),
+                primaryColor: _pageColor,
                 secondaryColor: ColorStyle.text200,
                 image: pickedLibraryImage?.image,
                 onChanged: (pickedImagePath) {
@@ -67,38 +65,22 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
               const SizedBox(
                 height: 6.0,
               ),
-              Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Category Name',
-                      style: TextStyle(
-                        color: ColorStyle.text200,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(
-                      height: 3.0,
-                    ),
-                    CustomTextFromField(
-                      controller: _controllerCategoryName,
-                      hint: 'eg. Starters',
-                      obscureText: false,
-                      themeColor: getThemeColor(),
-                    ),
-                  ]),
+              LabeledCustomTextFromField(
+                  label: 'Category Name',
+                  hint: 'Enter product category name', // Write a hint for category name field
+                  foregroundColor: ColorStyle.text200,
+                  themeColor: _pageColor,
+                  controller: _controllerCategoryName),
               const SizedBox(
                 height: 6.0,
               ),
               LabeledCustomTextFromField(
                 label: 'Description',
                 foregroundColor: ColorStyle.text200,
-                backgroundColor: getThemeColor(),
+                themeColor: _pageColor,
                 controller: _controllerCategoryDescription,
                 multiline: true,
-                hint: 'eg. Starters are the best',
+                hint: 'Enter product category description',
               ),
               const SizedBox(
                 height: 6.0,
@@ -110,7 +92,7 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
       bottomNavigationBar: BottomAppBar(
         color: ColorStyle.backgroundColorAlter,
         child: PrimaryButton(
-          color: getThemeColor(),
+          color: _pageColor,
           onPressed: () async {
             if (_controllerCategoryName.text.trim() == '') {
               showSnackBar(context, '* Category name required');

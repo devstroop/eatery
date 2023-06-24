@@ -164,7 +164,7 @@ class _Body6State extends State<Body6> {
                   hint: 'Enter purchase code...',
                   textInputAction: TextInputAction.done,
                   autofocus: true,
-                  suffixWidget: IconButton(
+                  suffix: IconButton(
                     onPressed: () async {
                       String val = await FlutterClipboard.paste();
                       setState(() {

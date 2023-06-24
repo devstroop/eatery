@@ -25,13 +25,14 @@ class AddKitchenDish extends StatefulWidget {
 class _AddKitchenDishState extends State<AddKitchenDish> {
   LibraryImage? image;
   ProductCategory? selectedCategory;
+  FoodType? selectedFoodType;
+  TaxSlab? selectedTaxSlab;
+  
+  final TextEditingController _controllerName = TextEditingController();
+  final TextEditingController _controllerMRP = TextEditingController();
+  final TextEditingController _controllerSalePrice = TextEditingController();
+  final TextEditingController _controllerDescription = TextEditingController();
 
-  FoodType? _foodType;
-  TaxSlab? _taxSlab;
-  final TextEditingController _ctrlName = TextEditingController();
-  final TextEditingController _ctrlMRP = TextEditingController();
-  final TextEditingController _ctrlSP = TextEditingController();
-  final TextEditingController _ctrlDesc = TextEditingController();
 
   final focus1 = FocusNode();
   final focus2 = FocusNode();
@@ -43,11 +44,9 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, (){
-      
+      // TODO: If company has default tax slab then set it as selected
     });
-    _taxSlab = EateryDB.instance.taxSlabBox.values.singleWhere(
-        (element) => element.id == widget.company.defaultTaxSlabId);
-    setState(() {});
+
   }
 
   final ScrollController _scrollController = ScrollController();
@@ -156,7 +155,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                         flex: 4,
                         child: CustomTextFromField(
                             keyboardType: TextInputType.text,
-                            controller: _ctrlName,
+                            controller: _controllerName,
                             hint: '',
                             obscureText: false,
                             themeColor: getThemeColor(),
@@ -194,9 +193,9 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                       Flexible(
                         flex: 2,
                         child: CustomTextFromField(
-                            controller: _ctrlMRP,
+                            controller: _controllerMRP,
                             keyboardType: TextInputType.number,
-                            prefixWidget: Text(
+                            prefix: Text(
                               GlobalVariables.currency?.symbol ?? '',
                               style: const TextStyle(
                                   fontWeight: FontWeight.w500, fontSize: 18.0),
@@ -238,9 +237,9 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                       Flexible(
                         flex: 2,
                         child: CustomTextFromField(
-                            controller: _ctrlSP,
+                            controller: _controllerSalePrice,
                             keyboardType: TextInputType.number,
-                            prefixWidget: Text(
+                            prefix: Text(
                               GlobalVariables.currency?.symbol ?? '',
                               style: const TextStyle(
                                   fontWeight: FontWeight.w500, fontSize: 18.0),
@@ -275,14 +274,14 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                       ToggleSwitch(
                         nullableValue: 'None',
                         color:
-                            _foodType != null ? _foodType!.color : Colors.grey,
+                            selectedFoodType != null ? selectedFoodType!.color : Colors.grey,
                         options: [for (var each in FoodType.values) each.name],
-                        index: _foodType?.index,
+                        index: selectedFoodType?.index,
                         onChange: (int? index) {
                           if (index == null) {
-                            _foodType = null;
+                            selectedFoodType = null;
                           } else {
-                            _foodType = FoodType.values
+                            selectedFoodType = FoodType.values
                                 .singleWhere((element) => element.id == index);
                           }
                           setState(() {});
@@ -308,7 +307,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                         children: [
                           ToggleSwitch(
                             nullableValue: 'None',
-                            color: _taxSlab != null
+                            color: selectedTaxSlab != null
                                 ? getThemeColor()
                                 : Colors.grey,
                             options: [
@@ -316,23 +315,23 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                                   in EateryDB.instance.taxSlabBox.values)
                                 each.name
                             ],
-                            index: _taxSlab?.id,
+                            index: selectedTaxSlab?.id,
                             onChange: (int? index) {
                               if (index == null) {
-                                _taxSlab = null;
+                                selectedTaxSlab = null;
                               } else {
-                                _taxSlab = EateryDB.instance.taxSlabBox.values
+                                selectedTaxSlab = EateryDB.instance.taxSlabBox.values
                                     .singleWhere(
                                         (element) => element.id == index);
                               }
                               setState(() {});
                             },
                           ),
-                          if (_taxSlab != null)
+                          if (selectedTaxSlab != null)
                             Padding(
                               padding: const EdgeInsets.all(12.0),
                               child: Text(
-                                '${_taxSlab!.rate}% (${_taxSlab!.type.name})',
+                                '${selectedTaxSlab!.rate}% (${selectedTaxSlab!.type.name})',
                                 style: TextStyle(
                                     color: getThemeColor(),
                                     fontSize: 16.0,
@@ -383,7 +382,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                         ),
                         CustomTextFromField(
                             keyboardType: TextInputType.multiline,
-                            controller: _ctrlDesc,
+                            controller: _controllerDescription,
                             hint:
                                 '- Describe your dish \n- Highlight ingredients used\n- Keep it simple',
                             obscureText: false,
@@ -406,38 +405,35 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
       ),
       bottomNavigationBar: BottomAppBar(
         color: ColorStyle.backgroundColorAlter,
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: PrimaryButton(
-            color: getThemeColor(),
-            onPressed: () async {
-              final isValid = _formKey.currentState!.validate();
-              if (!isValid) {
-                return;
-              }
-              _formKey.currentState!.save();
-              Product product = Product(
-                  id: EateryDB.instance.productBox.nextId(),
-                  name: _ctrlName.text,
-                  categoryId: selectedCategory?.id,
-                  description: _ctrlDesc.text,
-                  image: image?.filename,
-                  mrpPrice: _ctrlMRP.text.toDouble() ?? 0.0,
-                  salePrice: _ctrlSP.text.toDouble(),
-                  taxSlabId: _taxSlab?.id,
-                  foodType: _foodType,
-                  type: ProductType.kitchenDish,
-                  isActive: true);
-              EateryDB.instance.productBox.add(product).whenComplete(() {
-                showSnackBar(context, 'Successfully created');
-                Navigator.pop(context);
-              }).onError((error, stackTrace) {
-                showSnackBar(context, 'Failed to create');
-                return Future.error(false);
-              });
-            },
-            child: const Text('Save'),
-          ),
+        child: PrimaryButton(
+          color: getThemeColor(),
+          onPressed: () async {
+            final isValid = _formKey.currentState!.validate();
+            if (!isValid) {
+              return;
+            }
+            _formKey.currentState!.save();
+            Product product = Product(
+                id: EateryDB.instance.productBox.nextId(),
+                name: _controllerName.text,
+                categoryId: selectedCategory?.id,
+                description: _controllerDescription.text,
+                image: image?.filename,
+                mrpPrice: _controllerMRP.text.toDouble() ?? 0.0,
+                salePrice: _controllerSalePrice.text.toDouble(),
+                taxSlabId: selectedTaxSlab?.id,
+                foodType: selectedFoodType,
+                type: ProductType.kitchenDish,
+                isActive: true);
+            EateryDB.instance.productBox.add(product).whenComplete(() {
+              showSnackBar(context, 'Successfully created');
+              Navigator.pop(context);
+            }).onError((error, stackTrace) {
+              showSnackBar(context, 'Failed to create');
+              return Future.error(false);
+            });
+          },
+          child: const Text('Save'),
         ),
       ),
     );

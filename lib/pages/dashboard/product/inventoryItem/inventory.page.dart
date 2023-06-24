@@ -7,7 +7,9 @@ import 'package:eatery/components/product_card.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
 import '../../../../constants/global_variables.dart';
+import '../../../../services/utility/library_image.dart';
 import '../../../../widgets/bottomSheets/productInternalView.bottomsheet.dart';
+import '../../../../widgets/posWidgets/circularCategory.posWidget.dart';
 import '../../../../widgets/textFields/search.textField.dart';
 import 'editInventoryItem.page.dart';
 
@@ -23,22 +25,15 @@ class InventoryPage extends StatefulWidget {
 class _InventoryPageState extends State<InventoryPage> {
   ProductCategory? selectedCategory;
   final TextEditingController _controllerSearch = TextEditingController();
-  String? _currencySymbol;
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, (){
-      
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        selectedCategory = null;
+      });
     });
-    try {
-      _currencySymbol = EateryDB.instance.currencyBox.values
-          .singleWhere(
-              (element) => element.id == GlobalVariables.company!.currencyId)
-          .symbol;
-    } catch (_) {}
-    selectedCategory = null;
-    setState(() {});
   }
 
   _edit(Product product) => Navigator.push(
@@ -59,98 +54,100 @@ class _InventoryPageState extends State<InventoryPage> {
 
   @override
   Widget build(BuildContext context) {
-    final categoryBar = SizedBox(
-      width: double.maxFinite,
-      height: 60,
-      child: SingleChildScrollView(
-        scrollDirection: Axis.horizontal,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              PosCategoryWidget(
-                  active: selectedCategory == null,
-                  image: Image.asset(
-                    'assets/images/all.png',
-                    width: 18,
-                    height: 18,
-                    fit: BoxFit.cover,
-                  ),
-                  label: 'All',
-                  onTap: () {
-                    setState(() {
-                      selectedCategory = null;
-                    });
-                  }),
-              Row(
-                children: [
-                  for (var category
-                      in EateryDB.instance.productCategoryBox.values)
-                    PosCategoryWidget(
-                        active: selectedCategory == category,
-                        image: category.image != null &&
-                                File(category.image!).existsSync()
-                            ? Image.file(File(category.image!))
-                            : null,
-                        label: category.name,
-                        onTap: () {
-                          setState(() {
-                            selectedCategory = category;
-                            _controllerSearch.text = '';
-                          });
-                        }),
-                ],
-              )
-            ],
-          ),
-        ),
-      ),
-    );
+    // final categoryBar = SizedBox(
+    //   width: double.maxFinite,
+    //   height: 60,
+    //   child: SingleChildScrollView(
+    //     scrollDirection: Axis.horizontal,
+    //     child: Padding(
+    //       padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
+    //       child: Row(
+    //         mainAxisSize: MainAxisSize.max,
+    //         children: [
+    //           PosCategoryWidget(
+    //               active: selectedCategory == null,
+    //               image: Image.asset(
+    //                 'assets/images/all.png',
+    //                 width: 18,
+    //                 height: 18,
+    //                 fit: BoxFit.cover,
+    //               ),
+    //               label: 'All',
+    //               onTap: () {
+    //                 setState(() {
+    //                   selectedCategory = null;
+    //                 });
+    //               }),
+    //           Row(
+    //             children: [
+    //               for (var category
+    //                   in EateryDB.instance.productCategoryBox.values)
+    //                 PosCategoryWidget(
+    //                     active: selectedCategory == category,
+    //                     image: category.image != null &&
+    //                             File(category.image!).existsSync()
+    //                         ? Image.file(File(category.image!))
+    //                         : null,
+    //                     label: category.name,
+    //                     onTap: () {
+    //                       setState(() {
+    //                         selectedCategory = category;
+    //                         _controllerSearch.text = '';
+    //                       });
+    //                     }),
+    //             ],
+    //           )
+    //         ],
+    //       ),
+    //     ),
+    //   ),
+    // );
+    //
+    // final productsPanel = SizedBox(
+    //   child: SingleChildScrollView(
+    //       scrollDirection: Axis.vertical,
+    //       child: Wrap(
+    //         alignment: WrapAlignment.center,
+    //         children: [
+    //           for (var product in EateryDB.instance.productBox.values.where(
+    //               (element) => element.type == ProductType.inventoryItem &&
+    //                       selectedCategory != null
+    //                   ? element.categoryId == selectedCategory?.id
+    //                   : true &&
+    //                       element.name
+    //                           .toLowerCase()
+    //                           .contains(_controllerSearch.text.toLowerCase())))
+    //             ProductCard(
+    //               currencySymbol: '\$',
+    //               product: product,
+    //               themeColor: _pageColor,
+    //               onTap: () => showModalBottomSheet(
+    //                   context: context,
+    //                   shape: const RoundedRectangleBorder(
+    //                     borderRadius: BorderRadius.only(
+    //                       topLeft: Radius.circular(24),
+    //                       topRight: Radius.circular(24),
+    //                       bottomLeft: Radius.circular(0),
+    //                       bottomRight: Radius.circular(0),
+    //                     ),
+    //                   ),
+    //                   builder: (context) {
+    //                     return ProductInternalViewBottomsheet(
+    //                       color: _pageColor,
+    //                       product: product,
+    //                       onEdit: () => _edit(product),
+    //                       onDelete: () => _delete(product),
+    //                     );
+    //                   }).then((value) => setState(() {})),
+    //             )
+    //         ],
+    //       )),
+    // );
+    //
+    // final detailedProduct = Container();
 
-    final productsPanel = SizedBox(
-      child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
-          child: Wrap(
-            alignment: WrapAlignment.center,
-            children: [
-              for (var product in EateryDB.instance.productBox.values.where(
-                  (element) => element.type == ProductType.inventoryItem &&
-                          selectedCategory != null
-                      ? element.categoryId == selectedCategory?.id
-                      : true &&
-                          element.name
-                              .toLowerCase()
-                              .contains(_controllerSearch.text.toLowerCase())))
-                ProductCard(
-                  currencySymbol: _currencySymbol,
-                  product: product,
-                  themeColor: _pageColor,
-                  onTap: () => showModalBottomSheet(
-                      context: context,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(24),
-                          topRight: Radius.circular(24),
-                          bottomLeft: Radius.circular(0),
-                          bottomRight: Radius.circular(0),
-                        ),
-                      ),
-                      builder: (context) {
-                        return ProductInternalViewBottomsheet(
-                          color: _pageColor,
-                          product: product,
-                          onEdit: () => _edit(product),
-                          onDelete: () => _delete(product),
-                        );
-                      }).then((value) => setState(() {})),
-                )
-            ],
-          )),
-    );
-
-    final detailedProduct = Container();
-
+    List<Product> products = EateryDB.instance.productBox.values
+        .where((element) => element.type == ProductType.inventoryItem).toList();
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(120),
@@ -173,32 +170,104 @@ class _InventoryPageState extends State<InventoryPage> {
                 setState(() {});
               },
               themeColor: _pageColor,
-              hintText: 'Search a dish...',
+              hintText: 'Search an item...',
             ),
           ),
         ),
       ),
-      body: Stack(
+      body:Row(
         children: [
-          Positioned(
-            top: 0.0,
-            left: 0.0,
-            right: 0.0,
-            child: categoryBar,
+          Flexible(
+            flex: 2,
+            child: ListView(
+              padding: const EdgeInsets.all(6.0),
+              children: [
+                CircularCategoryPOSWidget(
+                  margin: const EdgeInsets.only(bottom: 6),
+                  image: const AssetImage('assets/icons/all.png'),
+                  themeColor: _pageColor,
+                  selected: selectedCategory?.id == null,
+                  onTap: () {
+                    setState(() {
+                      selectedCategory = null;
+                    });
+                  },
+                  label: 'All',
+                ),
+                ...EateryDB.instance.productCategoryBox.values.map((each) {
+                  return CircularCategoryPOSWidget(
+                    margin: const EdgeInsets.only(bottom: 6),
+                    image: LibraryImage(each.image).image,
+                    themeColor: _pageColor,
+                    selected: selectedCategory?.id == each.id,
+                    onTap: () {
+                      setState(() {
+                        selectedCategory = each;
+                      });
+                    },
+                    label: each.name,
+                  );
+                })
+              ],
+            ),
           ),
-          Positioned(
-              top: 60.0,
-              left: 0.0,
-              right: 0.0,
-              bottom: 0,
-              child: productsPanel),
-          Positioned(
-              bottom: 0.0, left: 0.0, right: 0.0, child: detailedProduct),
+          Container(
+            width: 1,
+            height: MediaQuery.of(context).size.height - 215,
+            color: Colors.grey[200],
+          ),
+          Flexible(
+              flex: 8,
+              child: products.isNotEmpty
+                  ? SingleChildScrollView(
+                child: Wrap(
+                  children: [
+                    ...products.map((each) {
+                      return Card(
+                        child: Text(each.name),
+                      );
+                    })
+                  ],
+                ),
+              )
+                  : Center(
+                child: Opacity(
+                  opacity: 0.50,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image.asset(
+                        'assets/images/empty-folder.png',
+                        width: 100,
+                        height: 100,
+                      ),
+                      const SizedBox(
+                        height: 16,
+                      ),
+                      const Text(
+                        'No dish found',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      const Text(
+                        'Add a dish to get started',
+                        style: TextStyle(
+                            fontSize: 16, color: Colors.black54),
+                      ),
+                      const SizedBox(
+                        height: 48,
+                      ),
+                    ],
+                  ),
+                ),
+              )),
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
         backgroundColor: _pageColor,
-        child: const Icon(Icons.add),
+        foregroundColor: Colors.white,
+        icon: Icon(UIcons.regularStraight.plus_small),
+        label: const Text('Add Inventory Item'),
         onPressed: () async {
           Navigator.push(
             context,

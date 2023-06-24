@@ -97,11 +97,11 @@ class Body4 extends StatelessWidget {
               Flexible(
                 child: CustomTextFromField(
                   themeColor: themeColor,
-                  keyboardType: TextInputType.numberWithOptions(decimal: true),
+                  keyboardType: const TextInputType.numberWithOptions(decimal: true),
                   controller: defaultTaxController,
                   title: 'Default ${edition.name} Rate',
                   hint: '${edition.name} Rate',
-                  suffixWidget: Icon(
+                  suffix: Icon(
                     UIcons.regularStraight.percentage,
                     color: ColorStyle.text400,
                     size: 18,

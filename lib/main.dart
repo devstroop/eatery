@@ -75,6 +75,7 @@ class MyApp extends StatelessWidget {
     FlutterNativeSplash.remove(); // remove splash
     return MaterialApp(
         title: 'Eatery',
+        debugShowCheckedModeBanner: false,
         theme: ThemeData(
           useMaterial3: true,
           primarySwatch: Colors.blue,

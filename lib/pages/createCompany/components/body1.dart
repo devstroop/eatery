@@ -120,7 +120,7 @@ class Body1 extends StatelessWidget {
               }),
           SpacingStyle.defaultVerticalSpacing,
           LabeledCustomTextFromField(
-            backgroundColor: themeColor,
+            themeColor: themeColor,
             foregroundColor: ColorStyle.text200,
             controller: addressController,
             label: 'Address',

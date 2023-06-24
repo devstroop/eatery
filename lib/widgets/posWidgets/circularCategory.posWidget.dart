@@ -21,7 +21,7 @@ class CircularCategoryPOSWidget extends StatelessWidget {
           children: [
             const SizedBox(height: 6),
             Material(
-              elevation: selected ? 5 : 0,
+              elevation: selected ? 6 : 0,
               shadowColor: selected ?  themeColor : null,
               borderRadius: BorderRadius.circular(imageBlockSize/2),
               child: Container(
@@ -30,7 +30,7 @@ class CircularCategoryPOSWidget extends StatelessWidget {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(imageBlockSize/2),
                   border: Border.all(
-                      width: 0.5,
+                      width: selected ? 2: 1,
                       color: (selected ? themeColor ?? ColorStyle.primary : ColorStyle.text400).withOpacity(0.5)
                   ),
                   color: Colors.white,

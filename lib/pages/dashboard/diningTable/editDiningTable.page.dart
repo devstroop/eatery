@@ -116,7 +116,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                 controller: _controllerCategoryName,
                 hint: 'eg. Table 1 ',
                 obscureText: false,
-                backgroundColor: _pageColor,
+                themeColor: _pageColor,
                 foregroundColor: ColorStyle.text200,
               ),
               const SizedBox(
@@ -127,7 +127,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                 controller: _controllerCategoryDescription,
                 hint: 'eg. Table description',
                 obscureText: false,
-                backgroundColor: _pageColor,
+                themeColor: _pageColor,
                 foregroundColor: ColorStyle.text200,
                 multiline: true,
               ),

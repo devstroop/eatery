@@ -17,8 +17,8 @@ class CustomTextFromField extends StatefulWidget {
     this.minLines,
     this.maxLines,
     this.enabled,
-    this.prefixWidget,
-    this.suffixWidget,
+    this.prefix,
+    this.suffix,
     this.title,
     this.autofocus = false,
     this.onFieldSubmitted,
@@ -40,8 +40,8 @@ class CustomTextFromField extends StatefulWidget {
   final int? minLines;
   final int? maxLines;
   final bool? enabled;
-  final Widget? prefixWidget;
-  final Widget? suffixWidget;
+  final Widget? prefix;
+  final Widget? suffix;
   final String? title;
   final TextInputAction? textInputAction;
   final bool autofocus;
@@ -99,9 +99,9 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
           focusNode: widget.focusNode,
           onFieldSubmitted: widget.onFieldSubmitted,
           decoration: InputDecoration(
-            prefixIcon: widget.prefixWidget,
-            suffixIcon: widget.suffixWidget != null
-                ? widget.suffixWidget!
+            prefixIcon: widget.prefix,
+            suffixIcon: widget.suffix != null
+                ? widget.suffix!
                 : widget.isPassword
                     ? IconButton(
                         onPressed: () => setState(() {
