@@ -138,7 +138,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
   Widget buildCustomerDetailsFormBottomSheet() =>
       StatefulBuilder(builder: (context, state) {
-        return ListView(shrinkWrap: true, children: [
+        return InkWell(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child:ListView(shrinkWrap: true, children: [
           const Center(
             child: BottomViewGrip(),
           ),

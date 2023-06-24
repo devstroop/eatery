@@ -169,7 +169,9 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
       child:
           ListView(scrollDirection: Axis.vertical, shrinkWrap: true, children: [
         InkWell(
-          onTap: () {},
+          onTap:(){
+                  FocusScope.of(context).unfocus();
+                },
           child: MenuTile(
             prefixIcon: UIcons.regularStraight.time_past,
             title: 'Backup',
@@ -180,7 +182,9 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
           ),
         ),
         InkWell(
-          onTap: () {},
+          onTap:(){
+                  FocusScope.of(context).unfocus();
+                },
           child: MenuTile(
             prefixIcon: UIcons.regularStraight.time_forward,
             title: 'Restore',

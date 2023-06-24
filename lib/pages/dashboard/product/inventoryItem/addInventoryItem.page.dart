@@ -66,7 +66,11 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
         ),
         title: const Text('Add Inventory Item'),
       ),
-      body: Padding(
+      body: InkWell(
+        onTap: () {
+            Focus.of(context).unfocus();
+          },
+        child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Form(
           key: _formKey,

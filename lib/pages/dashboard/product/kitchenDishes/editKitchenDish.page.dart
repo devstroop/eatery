@@ -122,7 +122,11 @@ class _EditKitchenDishState extends State<EditKitchenDish> {
 
     return Scaffold(
       appBar: appBar,
-      body: SizedBox(
+      body: InkWell(
+        onTap: () {
+            Focus.of(context).unfocus();
+          },
+        child: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(

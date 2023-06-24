@@ -80,7 +80,11 @@ class _Body6State extends State<Body6> {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
+    return Inkwell(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child:Form(
       key: widget.formKey,
       child: ListView(
         scrollDirection: Axis.vertical,
@@ -228,6 +232,7 @@ class _Body6State extends State<Body6> {
         ],
       ),
     );
+    )
   }
 
   void copyDeviceIdToClipboard() {

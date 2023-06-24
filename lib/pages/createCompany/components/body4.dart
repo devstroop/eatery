@@ -36,7 +36,11 @@ class Body4 extends StatelessWidget {
   final focus3 = FocusNode();
   @override
   Widget build(BuildContext context) {
-    return Form(
+    return Inkwell(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child:Form(
       key: formKey,
       child: ListView(
         scrollDirection: Axis.vertical,
@@ -131,6 +135,7 @@ class Body4 extends StatelessWidget {
             ],
           ),
         ],
+      )
       ),
     );
   }

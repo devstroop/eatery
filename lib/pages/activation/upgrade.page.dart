@@ -157,6 +157,9 @@ class _UpgradePageState extends State<UpgradePage> {
                 height: 12.0,
               ),
               InkWell(
+                onTap:(){
+                  FocusScope.of(context).unfocus();
+                },
                 child: SelectableCard(
                   header: 'PREMIUM',
                   title: 'UPGRADE TO PREMIUM',

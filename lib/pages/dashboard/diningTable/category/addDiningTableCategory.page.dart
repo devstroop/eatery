@@ -38,7 +38,11 @@ class _AddDiningTableCategoryPageState
         ));
     return Scaffold(
       appBar: appBar,
-      body: Padding(
+      body: Inkwell(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child:Padding(
         padding: const EdgeInsets.all(12.0),
         child: ListView(
           children: [

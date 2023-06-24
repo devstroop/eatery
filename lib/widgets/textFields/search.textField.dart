@@ -19,7 +19,11 @@ class SearchTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
+    return Inkwell(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child:TextFormField(
       onChanged: onChanged,
       onFieldSubmitted: onSubmitted,
       keyboardType: TextInputType.text,

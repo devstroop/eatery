@@ -69,7 +69,11 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
               backgroundColor: themeColor,
               title: const Text('Company Details'),
             ),
-            body: Padding(
+            body: Inkwell(
+              onTap: () {
+                FocusScope.of(context).unfocus();
+              },
+              child: Padding(
               padding: SpacingStyle.defaultPadding,
               child: ListView(
                 shrinkWrap: true,

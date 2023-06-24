@@ -151,7 +151,9 @@ class _ImportExportPageState extends State<ImportExportPage> {
       child:
           ListView(scrollDirection: Axis.vertical, shrinkWrap: true, children: [
         InkWell(
-          onTap: () {},
+          onTap: () {
+            Focus.of(context).unfocus();
+          },
           child: MenuTile(
             prefixIcon: Icons.input,
             title: 'Import Products',
@@ -162,7 +164,9 @@ class _ImportExportPageState extends State<ImportExportPage> {
           ),
         ),
         InkWell(
-          onTap: () {},
+          onTap: () {
+            Focus.of(context).unfocus();
+          },
           child: MenuTile(
             prefixIcon: Icons.output,
             title: 'Export Products',

@@ -60,7 +60,11 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
         ]);
     return Scaffold(
       appBar: appBar,
-      body: Row(
+      body: InkWell(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child:Row(
         children: [
           Flexible(
             flex: 2,

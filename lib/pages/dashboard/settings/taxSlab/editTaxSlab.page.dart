@@ -65,7 +65,11 @@ class _EditTaxSlabSettingsPageState extends State<EditTaxSlabSettingsPage> {
         backgroundColor: localColor,
         title: const Text('Edit Tax Slab'),
       ),
-      body: Padding(
+      body:InkWell(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,

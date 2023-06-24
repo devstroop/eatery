@@ -52,7 +52,11 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
         backgroundColor: localColor,
         title: const Text('Add Tax Slab'),
       ),
-      body: Padding(
+      body:InkWell(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,

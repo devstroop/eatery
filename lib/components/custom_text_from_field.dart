@@ -66,7 +66,13 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return InkWell(
+      onTap: () {
+        if (widget.focusNode != null) {
+          FocusScope.of(context).requestFocus(widget.focusNode);
+        }
+      },
+      child: Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [

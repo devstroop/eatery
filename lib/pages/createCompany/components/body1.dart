@@ -40,7 +40,11 @@ class Body1 extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Form(
+    return InkWell(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },    
+    child:Form(
       key: formKey,
       child: ListView(
         scrollDirection: Axis.vertical,
@@ -140,5 +144,6 @@ class Body1 extends StatelessWidget {
         ],
       ),
     );
+    )
   }
 }

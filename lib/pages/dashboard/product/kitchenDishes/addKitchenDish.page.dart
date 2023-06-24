@@ -61,7 +61,11 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
       backgroundColor: getThemeColor(),
       title: const Text('Add Dish'),
     );
-    final categoryBar = SizedBox(
+    final categoryBar = InkWell(
+        onTap: () {
+            Focus.of(context).unfocus();
+          },
+          child: SizedBox(
       width: double.maxFinite,
       height: 60,
       child: SingleChildScrollView(
@@ -106,7 +110,11 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
 
     return Scaffold(
       appBar: appBar,
-      body: SizedBox(
+      body: InkWell(
+        onTap: () {
+            Focus.of(context).unfocus();
+          },
+        child: SizedBox(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
         child: SingleChildScrollView(

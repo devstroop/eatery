@@ -174,7 +174,11 @@ class _KitchenPageState extends State<KitchenPage> {
           ),
         ),
       ),
-      body: Row(
+      body: Inkwell(
+        onTap: () {
+            Focus.of(context).unfocus();
+          },
+        child: Row(
         children: [
           Flexible(
             flex: 2,

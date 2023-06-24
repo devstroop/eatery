@@ -164,7 +164,11 @@ class _InventoryPageState extends State<InventoryPage> {
           flexibleSpace: Container(
             margin: const EdgeInsets.only(top: 102, left: 12, right: 12),
             width: double.maxFinite,
-            child: SearchTextField(
+            child: InkWell(
+              onTap: () {
+            Focus.of(context).unfocus();
+          },
+            child:SearchTextField(
               controller: _controllerSearch,
               onChanged: (value) {
                 setState(() {});

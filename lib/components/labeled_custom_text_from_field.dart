@@ -33,7 +33,11 @@ class LabeledCustomTextFromField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return InkWell(
+      onTap: () {
+        FocusScope.of(context).requestFocus(focusNode);
+      },
+      child:Column(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

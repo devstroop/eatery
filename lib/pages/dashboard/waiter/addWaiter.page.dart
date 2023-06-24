@@ -25,7 +25,11 @@ class _AddWaiterPageState extends State<AddWaiterPage> {
     );
     return Scaffold(
       appBar: appBar,
-      body: SingleChildScrollView(
+      body: InkWell(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: Column(
