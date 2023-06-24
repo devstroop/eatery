@@ -113,7 +113,6 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     int crossAxisCount = screenWidth ~/ 100;
-    debugPrint('$screenWidth $crossAxisCount');
     return StatefulBuilder(builder: (context, state) {
       return Padding(
         padding: const EdgeInsets.all(12),
@@ -137,12 +136,23 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
                       future: Clipboard.getData('text/plain'),
                       builder: (context, snapshot) {
                         Uri? uri = Uri.tryParse(snapshot.data?.text ?? '');
+                        debugPrint(uri.toString());
                         if (uri?.isAbsolute ?? false) {
                           return IconButton(
                             icon: Icon(UIcons.regularStraight.link),
                             iconSize: 24,
                             color: const Color(0xFF888888),
-                            onPressed: () async {},
+                            onPressed: (){
+                              showConfirmationDialog(
+                                context, "Import from link?", "This will download the image from the link and import it to the library.", (){
+                                  LibraryImageProvider.importFromURL((uri ??'').toString()).then((value) {
+                                    widget.action(value);
+                                    fetchLibrary();
+                                  });
+                                },(){
+                              }
+                              );
+                            },
                           );
                         } else {
                           return const SizedBox.shrink();

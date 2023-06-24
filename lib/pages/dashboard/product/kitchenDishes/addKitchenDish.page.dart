@@ -7,16 +7,17 @@ import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery/components/pos_category_widget.dart';
-import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:eatery_components/switches/toggle.switch.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
+import '../../../../components/labeled_custom_text_from_field.dart';
+import '../../../../widgets/buttons/primary.button.dart';
 import '../../../../widgets/buttons/upload.button.dart';
+import '../../../../widgets/switches/toggle.swich.dart';
 
+Color _pageColor = ColorStyle.secondary;
 class AddKitchenDish extends StatefulWidget {
-  const AddKitchenDish({Key? key, required this.company}) : super(key: key);
-  final Company company;
+  const AddKitchenDish({Key? key}) : super(key: key);
 
   @override
   State<AddKitchenDish> createState() => _AddKitchenDishState();
@@ -53,14 +54,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
 
   @override
   Widget build(BuildContext context) {
-    Color getThemeColor() {
-      return ColorStyle.secondary;
-    }
 
-    final appBar = AppBar(
-      backgroundColor: getThemeColor(),
-      title: const Text('Add Dish'),
-    );
     final categoryBar = SizedBox(
       width: double.maxFinite,
       height: 60,
@@ -105,308 +99,144 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
     );
 
     return Scaffold(
-      appBar: appBar,
-      body: SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.start,
-                mainAxisSize: MainAxisSize.max,
+      appBar: AppBar(
+        backgroundColor: _pageColor,
+        foregroundColor: Colors.white,
+        leading: IconButton(
+          icon: Icon(UIcons.regularStraight.arrow_left),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: const Text('Add Kitchen Dish'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(12.0),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            controller: _scrollController,
+            children: [
+              UploadButton(
+                label: 'Product Image',
+                primaryColor: _pageColor,
+                secondaryColor: ColorStyle.text200,
+                image: image?.image,
+                onChanged: (image) {
+                  setState(() {
+                    this.image = image;
+                  });
+                },
+              ),
+              const SizedBox(
+                height: 6.0,
+              ),
+              LabeledCustomTextFromField(
+                  label: 'Category Name',
+                  hint: 'Enter product category name',
+                  // Write a hint for category name field
+                  focusNode: focus1,
+                  onFieldSubmitted: (v) {
+                    FocusScope.of(context).requestFocus(focus2);
+                  },
+                  foregroundColor: ColorStyle.text200,
+                  themeColor: _pageColor,
+                  controller: _controllerName),
+              const SizedBox(
+                height: 6.0,
+              ),
+              Row(
                 children: [
-                  const SizedBox(
-                    height: 12.0,
-                  ),
-                  UploadButton(
-                    label: 'Product Image',
-                    primaryColor: getThemeColor(),
-                    secondaryColor: ColorStyle.text200,
-                    image: image?.image,
-                    onChanged: (image) {
-                      setState(() {
-                        this.image = image;
-                      });
-                    },
-                  ),
-                  const SizedBox(
-                    height: 6.0,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        flex: 1,
-                        child: Text(
-                          'Name',
-                          style: TextStyle(
-                            color: ColorStyle.text400,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                      const Flexible(flex: 1, child: SizedBox()),
-                      Flexible(
-                        flex: 4,
-                        child: CustomTextFromField(
-                            keyboardType: TextInputType.text,
-                            controller: _controllerName,
-                            hint: '',
-                            obscureText: false,
-                            themeColor: getThemeColor(),
-                            focusNode: focus1,
-                            onFieldSubmitted: (v) {
-                              FocusScope.of(context).requestFocus(focus2);
-                            },
-                            validator: (value) {
-                              if (value!.trim().isEmpty) {
-                                return 'Product name cannot be blank';
-                              }
-                              return null;
-                            }),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 12.0,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        flex: 2,
-                        child: Text(
-                          'M.R.P.',
-                          style: TextStyle(
-                            color: ColorStyle.text400,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                      const Flexible(flex: 1, child: SizedBox()),
-                      Flexible(
-                        flex: 2,
-                        child: CustomTextFromField(
-                            controller: _controllerMRP,
-                            keyboardType: TextInputType.number,
-                            prefix: Text(
-                              GlobalVariables.currency?.symbol ?? '',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w500, fontSize: 18.0),
-                            ),
-                            hint: '0.00',
-                            obscureText: false,
-                            themeColor: getThemeColor(),
-                            focusNode: focus2,
-                            onFieldSubmitted: (v) {
-                              FocusScope.of(context).requestFocus(focus3);
-                            },
-                            validator: (value) {
-                              if (value!.trim().isEmpty) {
-                                return 'Price cannot be blank';
-                              }
-                              return null;
-                            }),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 12.0,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Flexible(
-                        flex: 2,
-                        child: Text(
-                          'Sale price',
-                          style: TextStyle(
-                            color: ColorStyle.text400,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                      const Flexible(flex: 1, child: SizedBox()),
-                      Flexible(
-                        flex: 2,
-                        child: CustomTextFromField(
-                            controller: _controllerSalePrice,
-                            keyboardType: TextInputType.number,
-                            prefix: Text(
-                              GlobalVariables.currency?.symbol ?? '',
-                              style: const TextStyle(
-                                  fontWeight: FontWeight.w500, fontSize: 18.0),
-                            ),
-                            hint: '0.00',
-                            obscureText: false,
-                            themeColor: getThemeColor(),
-                            focusNode: focus3,
-                            onFieldSubmitted: (v) {
-                              FocusScope.of(context).requestFocus(focus4);
-                            },
-                            validator: (value) {
-                              return null;
-                            }),
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 12.0,
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Type',
-                        style: TextStyle(
-                          color: ColorStyle.text400,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      ToggleSwitch(
-                        nullableValue: 'None',
-                        color:
-                            selectedFoodType != null ? selectedFoodType!.color : Colors.grey,
-                        options: [for (var each in FoodType.values) each.name],
-                        index: selectedFoodType?.index,
-                        onChange: (int? index) {
-                          if (index == null) {
-                            selectedFoodType = null;
-                          } else {
-                            selectedFoodType = FoodType.values
-                                .singleWhere((element) => element.id == index);
-                          }
-                          setState(() {});
+                  Flexible(
+                    child: LabeledCustomTextFromField(
+                        label: 'MRP (Max. retail price)',
+                        prefix: Icon(UIcons.regularStraight.rupee_sign, size: 14,),
+                        hint: '0.00',
+                        themeColor: _pageColor,
+                        focusNode: focus2,
+                        onFieldSubmitted: (v) {
+                          FocusScope.of(context).requestFocus(focus3);
                         },
-                      ),
-                    ],
+                        validator: (value) {
+                          if (value!.trim().isEmpty) {
+                            return 'Price cannot be blank';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.number,
+                        foregroundColor: ColorStyle.text200,
+                        controller: _controllerMRP),
                   ),
-                  const SizedBox(
-                    height: 12.0,
+                  const SizedBox(width: 12.0,),
+                  Flexible(
+                    child: LabeledCustomTextFromField(
+                        label: 'Sale Price',
+                        prefix: Icon(UIcons.regularStraight.rupee_sign, size: 14,),
+                        hint: '0.00',
+                        themeColor: _pageColor,
+                        focusNode: focus3,
+                        onFieldSubmitted: (v) {
+                          FocusScope.of(context).unfocus();
+                        },
+                        validator: (value) {
+                          if (value!.trim().isEmpty) {
+                            return 'Price cannot be blank';
+                          }
+                          return null;
+                        },
+                        keyboardType: TextInputType.number,
+                        foregroundColor: ColorStyle.text200,
+                        controller: _controllerSalePrice),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        'Tax slab',
-                        style: TextStyle(
-                          color: ColorStyle.text400,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
-                      Column(
-                        children: [
-                          ToggleSwitch(
-                            nullableValue: 'None',
-                            color: selectedTaxSlab != null
-                                ? getThemeColor()
-                                : Colors.grey,
-                            options: [
-                              for (var each
-                                  in EateryDB.instance.taxSlabBox.values)
-                                each.name
-                            ],
-                            index: selectedTaxSlab?.id,
-                            onChange: (int? index) {
-                              if (index == null) {
-                                selectedTaxSlab = null;
-                              } else {
-                                selectedTaxSlab = EateryDB.instance.taxSlabBox.values
-                                    .singleWhere(
-                                        (element) => element.id == index);
-                              }
-                              setState(() {});
-                            },
-                          ),
-                          if (selectedTaxSlab != null)
-                            Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Text(
-                                '${selectedTaxSlab!.rate}% (${selectedTaxSlab!.type.name})',
-                                style: TextStyle(
-                                    color: getThemeColor(),
-                                    fontSize: 16.0,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                        ],
-                      ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 12.0,
-                  ),
-                  Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Choose a category',
-                          style: TextStyle(
-                            color: ColorStyle.text400,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 3.0,
-                        ),
-                        categoryBar
-                      ]),
-                  const SizedBox(
-                    height: 6.0,
-                  ),
-                  Column(
-                      mainAxisSize: MainAxisSize.max,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Description',
-                          style: TextStyle(
-                            color: ColorStyle.text400,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 3.0,
-                        ),
-                        CustomTextFromField(
-                            keyboardType: TextInputType.multiline,
-                            controller: _controllerDescription,
-                            hint:
-                                '- Describe your dish \n- Highlight ingredients used\n- Keep it simple',
-                            obscureText: false,
-                            themeColor: getThemeColor(),
-                            minLines: 4,
-                            maxLines: 8,
-                            focusNode: focus4,
-                            onFieldSubmitted: (v) {
-                              FocusScope.of(context).unfocus();
-                            },
-                            validator: (value) {
-                              return null;
-                            }),
-                      ]),
                 ],
               ),
-            ),
+              const SizedBox(
+                height: 6.0,
+              ),
+              Text(
+                'Select Food Type',
+                style: TextStyle(
+                  color: ColorStyle.text400,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              const SizedBox(
+                height: 3.0,
+              ),
+              ToggleSwitch(
+                highlightColor: selectedFoodType?.color ?? _pageColor,
+                backgroundColor: const Color(0xFFE5E5E5),
+                foregroundColor: Colors.white,
+                inactiveForegroundColor: ColorStyle.text200,
+
+                children: [
+                  'None',
+                  ...FoodType.values.map((e) => e.name),
+                ],
+                selectedIndex: selectedFoodType!= null ? selectedFoodType!.index + 1 : 0,
+                onChange: (int? index) {
+                  if (index == 0) {
+                    setState(() {
+                      selectedFoodType = null;
+                    });
+                  } else {
+                    setState(() {
+                      selectedFoodType = FoodType.values[index! - 1];
+                    });
+                  }
+                },
+              ),
+
+
+
+            ],
           ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
         color: ColorStyle.backgroundColorAlter,
         child: PrimaryButton(
-          color: getThemeColor(),
+          color: _pageColor,
           onPressed: () async {
             final isValid = _formKey.currentState!.validate();
             if (!isValid) {

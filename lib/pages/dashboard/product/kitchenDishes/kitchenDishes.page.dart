@@ -271,8 +271,7 @@ class _KitchenPageState extends State<KitchenPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => AddKitchenDish(
-                      company: GlobalVariables.company!,
+                builder: (context) => const AddKitchenDish(
                     )),
           ).then((_) => setState(() {}));
         },
