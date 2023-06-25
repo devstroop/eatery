@@ -4,6 +4,7 @@ import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 
 class GlobalVariables {
+  static bool expressMode = false;
   static List<Product> cart = [];
   static Company? company;
   static kCurrency? currency;

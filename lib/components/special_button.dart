@@ -1,3 +1,4 @@
+import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 
 class SpecialButton extends StatelessWidget {
@@ -31,7 +32,7 @@ class SpecialButton extends StatelessWidget {
           ],
         ),
         child: Padding(
-          padding: const EdgeInsets.all(12.0),
+          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -40,7 +41,7 @@ class SpecialButton extends StatelessWidget {
                   Icon(
                     icon,
                     color: foreColor,
-                    size: 36.0,
+                    size: 24.0,
                   ),
                   const SizedBox(width: 8.0),
                   Text(
@@ -48,12 +49,12 @@ class SpecialButton extends StatelessWidget {
                     style: TextStyle(
                         color: foreColor,
                         fontWeight: FontWeight.w600,
-                        fontSize: 18.0),
+                        fontSize: 16.0),
                   ),
                 ],
               ),
               Icon(
-                Icons.arrow_forward_ios_sharp,
+                UIcons.regularStraight.arrow_small_right,
                 color: foreColor,
               ),
             ],

@@ -128,7 +128,7 @@ class _KitchenPageState extends State<KitchenPage> {
                 scrollDirection: Axis.vertical,
                 controller: _scrollControllerProducts,
                 child: Wrap(
-                  alignment: WrapAlignment.center,
+                  alignment: WrapAlignment.start,
                   children: [
                     ...products.map((each) {
                       final width = ((MediaQuery.of(context).size.width * 0.8 - 1).abs() - (crossAxisCount + 1) * spacing) / crossAxisCount;
