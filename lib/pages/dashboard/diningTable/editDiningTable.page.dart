@@ -13,14 +13,13 @@ import '../../../widgets/buttons/upload.button.dart';
 Color _pageColor = ColorStyle.tertiary;
 
 class EditDiningTablePage extends StatefulWidget {
-  const EditDiningTablePage({Key? key, required this.id}) : super(key: key);
-  final int id;
+  const EditDiningTablePage({Key? key, required this.diningTable}) : super(key: key);
+  final DiningTable diningTable;
   @override
   State<EditDiningTablePage> createState() => _EditDiningTablePageState();
 }
 
 class _EditDiningTablePageState extends State<EditDiningTablePage> {
-  DiningTable? diningTable;
   DiningTableCategory? diningTableCategory;
   final TextEditingController _controllerCategoryName = TextEditingController();
   final TextEditingController _controllerCategoryDescription =
@@ -32,11 +31,10 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
     super.initState();
     Future.delayed(Duration.zero, (){
       setState(() {
-        diningTable = EateryDB.instance.diningTableBox.values.singleWhere((elem) => elem.id == widget.id);
-        diningTableCategory = diningTable?.categoryId != null ? EateryDB.instance.diningTableCategoryBox.values.singleWhere((elem) => elem.id == diningTable?.categoryId) : null;
-        _controllerCategoryName.text = diningTable?.name ?? '';
-        _controllerCategoryDescription.text = diningTable?.description ?? '';
-        image = diningTable?.image != null ? LibraryImage(diningTable?.image) : null;
+        diningTableCategory = EateryDB.instance.diningTableCategoryBox.values.where((elem) => elem.id == widget.diningTable.categoryId).isNotEmpty ? EateryDB.instance.diningTableCategoryBox.values.where((elem) => elem.id == widget.diningTable.categoryId).first : null;
+        _controllerCategoryName.text = widget.diningTable.name ?? '';
+        _controllerCategoryDescription.text = widget.diningTable.description ?? '';
+        image = widget.diningTable.image != null ? LibraryImage(widget.diningTable.image) : null;
       }); 
     });
   }
@@ -72,8 +70,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                       TextButton(
                           onPressed: () async {
                             Navigator.pop(context);
-                            EateryDB.instance.diningTableBox
-                                .delete(widget.id)
+                            widget.diningTable.delete()
                                 .whenComplete(() {
                               showSnackBar(context, 'Deleted successfully');
                               Navigator.pop(context);
@@ -190,22 +187,18 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
               showSnackBar(context, '* Select category');
               return;
             }
-            if (diningTable != null) {
-              diningTable!.name = _controllerCategoryName.text;
-              diningTable!.categoryId = diningTableCategory!.id;
-              diningTable!.description = _controllerCategoryDescription.text;
-              diningTable!.image = image?.filename;
-              EateryDB.instance.diningTableBox
-                  .put(widget.id, diningTable!)
-                  .whenComplete(() {
-                showSnackBar(context, 'Successfully updated');
-                Navigator.of(context).pop();
-              }).onError((error, stackTrace) {
-                showSnackBar(context, 'Something went wrong');
-              });
-            } else {
+            widget.diningTable.name = _controllerCategoryName.text;
+            widget.diningTable.categoryId = diningTableCategory!.id;
+            widget.diningTable.description = _controllerCategoryDescription.text;
+            widget.diningTable.image = image?.filename;
+            EateryDB.instance.diningTableBox
+                .put(widget.diningTable.key, widget.diningTable)
+                .whenComplete(() {
+              showSnackBar(context, 'Successfully updated');
+              Navigator.of(context).pop();
+            }).onError((error, stackTrace) {
               showSnackBar(context, 'Something went wrong');
-            }
+            });
           },
           child: const Text('Update'),
         ),

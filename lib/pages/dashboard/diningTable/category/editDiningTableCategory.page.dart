@@ -13,9 +13,9 @@ import '../../../../widgets/buttons/upload.button.dart';
 Color _pageColor = ColorStyle.tertiary;
 
 class EditDiningTableCategoryPage extends StatefulWidget {
-  const EditDiningTableCategoryPage({Key? key, required this.id})
+  const EditDiningTableCategoryPage({Key? key, required this.category})
       : super(key: key);
-  final int id;
+  final DiningTableCategory category;
 
   @override
   State<EditDiningTableCategoryPage> createState() =>
@@ -24,22 +24,20 @@ class EditDiningTableCategoryPage extends StatefulWidget {
 
 class _EditDiningTableCategoryPageState
     extends State<EditDiningTableCategoryPage> {
+
   final TextEditingController _controllerCategoryName = TextEditingController();
   final TextEditingController _controllerCategoryDescription =
       TextEditingController();
   LibraryImage? image;
-  DiningTableCategory? diningTableCategory;
 
   @override
   initState() {
     super.initState();
     setState(() {
-      diningTableCategory =
-          EateryDB.instance.diningTableCategoryBox.values.singleWhere((element) => element.id == widget.id);
-      _controllerCategoryName.text = diningTableCategory?.name ?? '';
-      _controllerCategoryDescription.text =
-          diningTableCategory?.description ?? '';
-      image = LibraryImage(diningTableCategory?.image);
+      _controllerCategoryName.text = widget.category.name ?? '';
+      _controllerCategoryDescription.text = widget.category.description ?? '';
+
+      image = LibraryImage(widget.category.image);
     });
   }
 
@@ -54,9 +52,59 @@ class _EditDiningTableCategoryPageState
           Navigator.pop(context);
         },
       ),
-      title: const Text('Edit Dining Table Category'),
+      title: const Text('Edit Table Category'),
       actions: [
-        deleteButton(context),
+        IconButton(
+          icon: Icon(
+            UIcons.regularStraight.trash,
+          ),
+          onPressed: () {
+            showDialog(
+              context: context,
+              builder: (context) {
+                // category exists in dining table then show message and return
+                if (EateryDB.instance.diningTableBox.values
+                    .any((element) => element.categoryId == widget.category.id)) {
+                  return AlertDialog(
+                    title: const Text('Delete Category'),
+                    content: const Text(
+                        'This category is currently in use. Please remove it from dining tables before deleting.'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Ok'),
+                      ),
+                    ],
+                  );
+                }
+                return AlertDialog(
+                  title: const Text('Delete Category'),
+                  content: const Text(
+                      'Are you sure you want to delete this category?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        widget.category.delete().whenComplete(() {
+                          Navigator.pop(context);
+                          setState(() {});
+                        });
+                      },
+                      child: const Text('Delete'),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+        ),
       ],
     );
     return Scaffold(
@@ -116,11 +164,11 @@ class _EditDiningTableCategoryPageState
               return;
             }
             try {
-              diningTableCategory?.name = _controllerCategoryName.text;
-              diningTableCategory?.description =
+              widget.category.name = _controllerCategoryName.text;
+              widget.category.description =
                   _controllerCategoryDescription.text;
-              diningTableCategory?.image = image?.filename ?? '';
-              diningTableCategory?.save();
+              widget.category.image = image?.filename ?? '';
+              widget.category.save();
               showSnackBar(context, 'Successfully updated');
               Navigator.pop(context);
             } catch (e) {
@@ -133,8 +181,33 @@ class _EditDiningTableCategoryPageState
     );
   }
 
-  deleteButton(BuildContext context) => IconButton(
+  /*deleteButton(BuildContext context) => IconButton(
         onPressed: () {
+          if (EateryDB.instance.diningTableBox.values
+              .any((element) => element.categoryId == widget.category.id)) {
+            return AlertDialog(
+              title: const Text('Delete Category'),
+              content: const Text(
+                  'This category is currently in use. Please remove it from dining tables before deleting.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Ok'),
+                ),
+              ],
+            );
+          }
+          if(EateryDB.instance.diningTableBox.values.where((element) => element.categoryId == widget.category.id).isNotEmpty){
+            showSnackBar(context, 'Can\'t delete, some dining table is using this category');
+            return;
+
+
+
+
+
+          }
           showDialog(
             context: context,
             builder: (BuildContext context) {
@@ -149,7 +222,8 @@ class _EditDiningTableCategoryPageState
                       child: const Text('Cancel')),
                   TextButton(
                       onPressed: () async {
-                        diningTableCategory?.delete().then((value) {
+
+                        widget.category.delete().then((value) {
                           showSnackBar(context, 'Deleted successfully');
                           Navigator.pop(context);
                           Navigator.pop(context);
@@ -165,5 +239,5 @@ class _EditDiningTableCategoryPageState
           );
         },
         icon: Icon(UIcons.regularStraight.trash),
-      );
+      );*/
 }

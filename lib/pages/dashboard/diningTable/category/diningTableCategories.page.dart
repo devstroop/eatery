@@ -1,10 +1,6 @@
-import 'dart:io';
-
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/constants/style/color_style.dart';
-import 'package:googleapis/appengine/v1.dart';
-
 import '../../../../services/utility/library_image.dart';
 import 'addDiningTableCategory.page.dart';
 import 'editDiningTableCategory.page.dart';
@@ -40,10 +36,6 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
             title: const Text('Default',
                 style: TextStyle(fontWeight: FontWeight.w600)),
             subtitle: const Text('Uncategorized'),
-            // trailing: Icon(
-            //   UIcons.regularStraight.arrow_small_right,
-            //   size: 18,
-            // ),
             leading: Material(
               elevation: 2.0,
               borderRadius: BorderRadius.circular(12.0),
@@ -65,8 +57,78 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
             return ListTile(
               title: Text(each.name,
                   style: const TextStyle(fontWeight: FontWeight.w600)),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(
+                      UIcons.regularStraight.pencil,
+                      color: _pageColor,
+                    ),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                EditDiningTableCategoryPage(category: each,)),
+                      ).then((_) => setState(() {}));
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(
+                      UIcons.regularStraight.trash,
+                      color: _pageColor,
+                    ),
+                    onPressed: () {
+                      showDialog(
+                        context: context,
+                        builder: (context) {
+                          // category exists in dining table then show message and return
+                          if (EateryDB.instance.diningTableBox.values
+                              .any((element) => element.categoryId == each.id)) {
+                            return AlertDialog(
+                              title: const Text('Delete Category'),
+                              content: const Text(
+                                  'This category is currently in use. Please remove it from dining tables before deleting.'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Ok'),
+                                ),
+                              ],
+                            );
+                          }
+                          return AlertDialog(
+                            title: const Text('Delete Category'),
+                            content: const Text(
+                                'Are you sure you want to delete this category?'),
+                            actions: [
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  each.delete().whenComplete(() {
+                                    Navigator.pop(context);
+                                    setState(() {});
+                                  });
+                                },
+                                child: const Text('Delete'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
               subtitle: Text(each.description ?? ''),
-              trailing: Icon(UIcons.regularStraight.arrow_small_right),
               leading: Material(
                 elevation: 2.0,
                 borderRadius: BorderRadius.circular(12.0),
@@ -81,24 +143,17 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
                       ),
                     )),
               ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => EditDiningTableCategoryPage(
-                            id: each.id,
-                          )),
-                ).then((_) => setState(() {}));
-              },
+              onTap: () {},
             );
           })
         ],
       ),
-      floatingActionButton: FloatingActionButton(
+      floatingActionButton: FloatingActionButton.extended(
+        label: const Text('Add Category'),
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
-        child: Icon(
-          UIcons.regularStraight.plus,
+        icon: Icon(
+          UIcons.regularStraight.plus_small,
         ),
         onPressed: () {
           Navigator.push(

@@ -61,6 +61,7 @@ class LabeledCustomTextFromField extends StatelessWidget {
             textInputAction: textInputAction,
             validator: validator,
             onFieldSubmitted: onFieldSubmitted,
+            keyboardType: keyboardType,
           ),
         ]);
   }

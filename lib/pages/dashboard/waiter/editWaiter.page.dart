@@ -1,168 +1,202 @@
-//
+import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/components/custom_text_from_field.dart';
 import 'package:eatery/components/dialog_box.dart';
-//import 'package:eatery_components/buttons/primary.button.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
+import '../../../components/labeled_custom_text_from_field.dart';
+import '../../../services/utility/library_image.dart';
+import '../../../widgets/buttons/primary.button.dart';
+import '../../../widgets/buttons/upload.button.dart';
+
+Color _pageColor = ColorStyle.primary;
+
 class EditWaiterPage extends StatefulWidget {
-  const EditWaiterPage({Key? key, required this.id}) : super(key: key);
-  final String id;
+  const EditWaiterPage({Key? key, required this.waiter}) : super(key: key);
+  final Waiter waiter;
 
   @override
   State<EditWaiterPage> createState() => _EditWaiterPageState();
 }
 
 class _EditWaiterPageState extends State<EditWaiterPage> {
-  String? pickedImagePath;
+  LibraryImage? image;
+  bool isActive = true;
   final TextEditingController _controllerWaiterName = TextEditingController();
-  late Map<String, dynamic>? waiter;
+  final TextEditingController _controllerWaiterPhone = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
 
   @override
   initState() {
     super.initState();
     Future.delayed(Duration.zero, (){
-      
+      setState(() {
+        _controllerWaiterName.text = widget.waiter.name;
+        _controllerWaiterPhone.text = widget.waiter.phone ?? '';
+        isActive = widget.waiter.isActive;
+        image = LibraryImage(widget.waiter.photo ?? '');
+        
+      });
     });
-    loadData();
-  }
-
-  loadData() async {
-    // var waiter = await Waiter.get(widget.id);
-    // if(waiter != null){
-    //   setState((){
-    //     this.waiter = waiter;
-    //     pickedImagePath = this.waiter!['image'];
-    //     _controllerWaiterName.text = this.waiter!['name'];
-    //   });
-    // }
-  }
-
-  Color getThemeColor() {
-    return ColorStyle.tertiary;
   }
 
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
-      backgroundColor: getThemeColor(),
+      backgroundColor: _pageColor,
+      foregroundColor: Colors.white,
+      leading: IconButton(
+        icon: Icon(UIcons.regularStraight.arrow_left),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
       title: const Text('Edit Waiter'),
       actions: [
-        TextButton(
+        IconButton(
+          icon: Icon(UIcons.regularStraight.trash),
           onPressed: () {
             showDialog(
               context: context,
-              builder: (BuildContext context) {
-                return DialogBox(
-                  title: 'Delete',
-                  message: 'Are you sure?',
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text('Delete Waiter'),
+                  content: const Text(
+                      'Are you sure you want to delete this waiter?'),
                   actions: [
                     TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Cancel')),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Cancel'),
+                    ),
                     TextButton(
-                        onPressed: () async {
+                      onPressed: () {
+                        widget.waiter.delete()
+                            .whenComplete(() {
                           Navigator.pop(context);
-                          // Waiter.delete(widget.id);
-                          showSnackBar(context, 'Deleted successfully');
                           Navigator.pop(context);
-                        },
-                        child: const Text('OK'))
+                          setState(() {});
+                        });
+                      },
+                      child: const Text('Delete'),
+                    ),
                   ],
                 );
               },
             );
           },
-          child: Text(
-            'Delete',
-            style: TextStyle(color: ColorStyle.backgroundColorAlter),
-          ),
-        )
+        ),
       ],
     );
     return Scaffold(
       appBar: appBar,
-      body: SingleChildScrollView(
+      body: InkWell(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
         child: Padding(
           padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              const SizedBox(
-                height: 12.0,
-              ),
-              /*UploadButton(
-                label: 'Waiter Image',
-                primaryColor: getThemeColor(),
-                secondaryColor: ColorStyle.text200,
-                uploadType: UploadType.image,
-                path: pickedImagePath,
-                onChanged: (pickedImagePath) {
-                  setState(() {
-                    this.pickedImagePath = pickedImagePath;
-                  });
-                },
-              ),*/
-              const SizedBox(
-                height: 6.0,
-              ),
-              Column(
-                  mainAxisSize: MainAxisSize.max,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              children: [
+                UploadButton(
+                  label: 'Waiter Photo',
+                  primaryColor: _pageColor,
+                  secondaryColor: ColorStyle.text200,
+                  image: image?.image,
+                  onChanged: (image) {
+                    setState(() {
+                      this.image = image;
+                    });
+                  },
+                ),
+                const SizedBox(
+                  height: 6.0,
+                ),
+                LabeledCustomTextFromField(
+                  controller: _controllerWaiterName,
+                  label: 'Waiter Name',
+                  themeColor: _pageColor,
+                  foregroundColor: ColorStyle.text200,
+                  hint: 'Enter Waiter Name',
+                ),
+                const SizedBox(
+                  height: 6.0,
+                ),
+                LabeledCustomTextFromField(
+                  controller: _controllerWaiterPhone,
+                  label: 'Phone Number',
+                  themeColor: _pageColor,
+                  foregroundColor: ColorStyle.text200,
+                  keyboardType: TextInputType.phone,
+                  hint: 'Enter Phone Number',
+                ),
+                const SizedBox(
+                  height: 6.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
+                    Checkbox(
+                        value: isActive,
+                        onChanged: (value) {
+                          setState(() {
+                            isActive = value ?? false;
+                          });
+                        }),
+                    const SizedBox(
+                      width: 6.0,
+                    ),
                     Text(
-                      'Waiter Name',
+                      'Active',
                       style: TextStyle(
                         color: ColorStyle.text200,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 16.0,
                       ),
                     ),
-                    const SizedBox(
-                      height: 3.0,
-                    ),
-                    CustomTextFromField(
-                      controller: _controllerWaiterName,
-                      hint: 'Waiter Name',
-                      obscureText: false,
-                      themeColor: getThemeColor(),
-                    ),
-                  ]),
-              const SizedBox(
-                height: 6.0,
-              ),
-            ],
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
         color: ColorStyle.backgroundColorAlter,
-        child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child:
-                Container() /*PrimaryButton(
-            child: const Text('Update'),
-            color: getThemeColor(),
-            onPressed: () async {
-              if (_controllerWaiterName.text.trim() == '') {
-                showSnackBar(context, '* Waiter name required');
-                return;
-              }
-              var response = await Waiter.update({'id':widget.id, 'image': pickedImagePath, 'name': _controllerWaiterName.text});
-              if (response) {
-                showSnackBar(context, 'Successfully updated');
-                Navigator.of(context).pop();
-              } else {
-                showSnackBar(context, 'Failed to update');
-              }
-            },
-          ),*/
-            ),
+        child: PrimaryButton(
+          color: _pageColor,
+          onPressed: () async {
+            if (_controllerWaiterName.text.isEmpty) {
+              showSnackBar(context, 'Waiter Name is required');
+              return;
+            }
+            final isValid = _formKey.currentState!.validate();
+            if (!isValid) {
+              return;
+            }
+            _formKey.currentState!.save();
+
+            widget.waiter.name = _controllerWaiterName.text;
+            widget.waiter.phone = _controllerWaiterPhone.text;
+            widget.waiter.photo = image?.filename;
+            widget.waiter.isActive = isActive;
+            try {
+              EateryDB.instance.waiterBox.put(widget.waiter.key,
+                widget.waiter,
+              ).whenComplete(() {
+                showSnackBar(context, 'Waiter updated successfully');
+                Navigator.pop(context);
+              });
+            } catch (_) {
+              showSnackBar(context, 'Failed to add waiter');
+            }
+          },
+          child: const Text('Save'),
+        ),
       ),
     );
   }

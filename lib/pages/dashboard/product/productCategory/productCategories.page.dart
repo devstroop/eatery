@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'addProductCategory.page.dart';
 import 'editProductCategory.page.dart';
-
+Color _pageColor = ColorStyle.tertiary;
 class ProductCategoriesPage extends StatefulWidget {
   const ProductCategoriesPage({Key? key}) : super(key: key);
 
@@ -13,14 +13,13 @@ class ProductCategoriesPage extends StatefulWidget {
 }
 
 class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
-  final themeColor = ColorStyle.tertiary;
   @override
   Widget build(BuildContext context) {
     List<ProductCategory> categories = EateryDB.instance.productCategoryBox.values.toList();
     return Scaffold(
       backgroundColor: ColorStyle.backgroundColor,
       appBar: AppBar(
-          backgroundColor: themeColor,
+          backgroundColor: _pageColor,
           foregroundColor: Colors.white,
           title: const Text('Product Categories'),
           leading: IconButton(
@@ -52,14 +51,76 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
             ),
             onTap: () {},
           ),
-          ...categories.map((e) {
+          ...categories.map((category) {
             return ListTile(
-              title: Text(e.name,
+              title: Text(category.name,
                   style: const TextStyle(fontWeight: FontWeight.w600)),
-              subtitle: e.description != null && e.description?.trim() != ''
-                  ? Text(e.description ?? '')
+              subtitle: category.description != null && category.description?.trim() != ''
+                  ? Text(category.description ?? '')
                   : null,
-              trailing: Icon(UIcons.regularStraight.arrow_small_right),
+              trailing: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                    icon: Icon(UIcons.regularStraight.pencil, color: _pageColor,),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EditProductCategoryPage(
+                                  category: category,
+                                )),
+                      ).then((_) => setState(() {}));
+                    },
+                  ),
+                  IconButton(
+                    icon: Icon(UIcons.regularStraight.trash, color: _pageColor,),
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (context) {
+                            if(EateryDB.instance.productBox.values.any((element) => element.categoryId == category.id)) {
+                              return AlertDialog(
+                                title: const Text('Delete Category'),
+                                content: const Text(
+                                    'This category is being used by some products. Please change the category of those products before deleting this category.'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: const Text('Ok'),
+                                  ),
+                                ],
+                              );
+                            }
+                            return AlertDialog(
+                              title: const Text('Delete Category'),
+                              content: const Text(
+                                  'Are you sure you want to delete this category?'),
+                              actions: [
+                                TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: const Text('Cancel'),
+                                ),
+                                TextButton(
+                                  onPressed: () {
+                                    category.delete().whenComplete((){
+                                      Navigator.pop(context);
+                                      setState(() {});
+                                    });
+                                  },
+                                  child: const Text('Delete'),
+                                ),
+                              ],
+                            );
+                          });
+                    },
+                  )
+                ],
+              ),
               leading: Material(
                 elevation: 2.0,
                 borderRadius: BorderRadius.circular(12.0),
@@ -69,20 +130,12 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12.0),
                       image: DecorationImage(
-                        image: LibraryImage(e.image ?? '').image,
+                        image: LibraryImage(category.image ?? '').image,
                         fit: BoxFit.cover,
                       ),
                     )),
               ),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => EditProductCategoryPage(
-                            category: e,
-                          )),
-                ).then((_) => setState(() {}));
-              },
+              onTap: () {},
             );
           }),
         ],
@@ -103,7 +156,7 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         foregroundColor: Colors.white,
-        backgroundColor: themeColor,
+        backgroundColor: _pageColor,
         icon: Icon(UIcons.regularStraight.plus_small),
         label: const Text('Add Product Category'),
         onPressed: () {

@@ -53,47 +53,50 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
       title: const Text('Edit Product Category'),
       actions: [
         IconButton(
-          onPressed: () async {
+          icon: Icon(UIcons.regularStraight.trash,),
+          onPressed: () {
             showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return DialogBox(
-                  title: 'Delete',
-                  message: 'Are you sure?',
-                  actions: [
-                    TextButton(
+                context: context,
+                builder: (context) {
+                  if(EateryDB.instance.productBox.values.any((element) => element.categoryId == widget.category.id)) {
+                    return AlertDialog(
+                      title: const Text('Delete Category'),
+                      content: const Text(
+                          'This category is being used by some products. Please change the category of those products before deleting this category.'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Ok'),
+                        ),
+                      ],
+                    );
+                  }
+                  return AlertDialog(
+                    title: const Text('Delete Category'),
+                    content: const Text(
+                        'Are you sure you want to delete this category?'),
+                    actions: [
+                      TextButton(
                         onPressed: () {
                           Navigator.pop(context);
                         },
-                        child: const Text('Cancel')),
-                    TextButton(
-                        onPressed: () async {
-                          Navigator.pop(context);
-                          bool isLinkedToProduct = EateryDB
-                              .instance.productBox.values
-                              .where((element) =>
-                                  element.categoryId == widget.category.id)
-                              .isNotEmpty;
-                          if (isLinkedToProduct) {
-                            showSnackBar(
-                                context, 'Linked to product, Can\'t delete');
-                            return;
-                          }
-                          widget.category.delete().whenComplete(() {
-                            showSnackBar(context, 'Deleted successfully');
+                        child: const Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          widget.category.delete().whenComplete((){
                             Navigator.pop(context);
+                            setState(() {});
                           });
                         },
-                        child: const Text('OK'))
-                  ],
-                );
-              },
-            );
+                        child: const Text('Delete'),
+                      ),
+                    ],
+                  );
+                });
           },
-          icon: Icon(
-            UIcons.regularStraight.trash,
-            color: Colors.white.withAlpha(200),
-          ),
         )
       ],
     );

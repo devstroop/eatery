@@ -110,9 +110,10 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                         selectedCategory == null ||
                         element.categoryId == selectedCategory?.id)
                     .map((e) {
-                  DiningTableCategory? category = e.categoryId != null
+                  DiningTableCategory? category = EateryDB.instance.diningTableCategoryBox.values
+                      .where((element) => element.id == e.categoryId).isNotEmpty
                       ? EateryDB.instance.diningTableCategoryBox.values
-                          .singleWhere((element) => element.id == e.categoryId)
+                          .where((element) => element.id == e.categoryId).first
                       : null;
                   Order? order = e.orderId != null
                       ? EateryDB.instance.orderBox.values
@@ -153,7 +154,7 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                EditDiningTablePage(id: e.id)),
+                                EditDiningTablePage(diningTable: e)),
                       ).then((_) => setState(() {}));
                     },
                   );
