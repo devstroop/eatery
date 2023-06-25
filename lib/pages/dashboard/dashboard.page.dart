@@ -13,8 +13,10 @@ import 'package:eatery/pages/dashboard/pos/pointOfSale.page.dart';
 import 'package:eatery/pages/dashboard/reports/reports.page.dart';
 import 'package:eatery/pages/dashboard/settings/settings.page.dart';
 import 'package:eatery/pages/dashboard/waiter/waiters.page.dart';
+import 'package:eatery/widgets/bottomSheets/imageLibrary.bottomSheet.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
+import 'package:googleapis/appengine/v1.dart';
 import '../../services/utility/library_image.dart';
 import '../authentication/logout.page.dart';
 import 'importExport/importExport.page.dart';
@@ -56,28 +58,28 @@ class _DashboardPageState extends State<DashboardPage> {
 
     if (screenWidth >= 1200) {
       crossAxisItemCount = 5;
-      spacing = 32;
-      iconSize = 72;
-      titleSize = 24;
-      subtitleSize = 18;
-    } else if (screenWidth >= 800) {
-      crossAxisItemCount = 4;
       spacing = 24;
-      iconSize = 60;
+      iconSize = 48;
       titleSize = 20;
       subtitleSize = 16;
-    } else if (screenWidth >= 600) {
-      crossAxisItemCount = 3;
+    } else if (screenWidth >= 800) {
+      crossAxisItemCount = 4;
       spacing = 20;
-      iconSize = 48;
+      iconSize = 44;
       titleSize = 18;
       subtitleSize = 14;
-    } else {
-      crossAxisItemCount = 2;
+    } else if (screenWidth >= 600) {
+      crossAxisItemCount = 3;
       spacing = 16;
-      iconSize = 36;
+      iconSize = 40;
       titleSize = 16;
       subtitleSize = 12;
+    } else {
+      crossAxisItemCount = 2;
+      spacing = 12;
+      iconSize = 36;
+      titleSize = 14;
+      subtitleSize = 10;
     }
 
     menuSize = (screenWidth - (spacing * (crossAxisItemCount + 1))) /
@@ -166,63 +168,141 @@ class _DashboardPageState extends State<DashboardPage> {
                     );
                   },
                 ),
-                MenuWidget(
-                  iconData: UIcons.regularStraight.table_tree,
-                  iconSize: iconSize,
-                  title: 'Categories',
-                  subtitle: 'Manage your product categories here',
-                  titleSize: titleSize,
-                  subtitleSize: subtitleSize,
-                  color: ColorStyle.tertiary,
+
+
+
+
+
+
+
+                SizedBox(
                   width: menuSize,
                   height: menuSize,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ProductCategoriesPage(),
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
+
+                      MenuWidget(
+                        iconData: UIcons.regularStraight.table_tree,
+                        iconSize: iconSize / 1.5,
+                        title: 'Product Categories',
+                        // subtitle: 'Manage product categories',
+                        titleSize: titleSize * 0.7,
+                        subtitleSize: subtitleSize * 0.7,
+                        color: ColorStyle.tertiary,
+                        width: (menuSize),
+                        height: (menuSize - 8)/2,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ProductCategoriesPage(),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
-                MenuWidget(
-                  iconData: UIcons.regularStraight.restaurant,
-                  iconSize: iconSize,
-                  title: 'Kitchen',
-                  subtitle: 'Manage your dishes here',
-                  titleSize: titleSize,
-                  subtitleSize: subtitleSize,
-                  color: const Color(0xFF2FC289),
-                  width: menuSize,
-                  height: menuSize,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const KitchenPage(),
+                      MenuWidget(
+                        iconData: UIcons.regularStraight.restaurant,
+                        iconSize: iconSize / 1.5,
+                        title: 'Kitchen',
+                        // subtitle: 'Manage kitchen dishes',
+                        titleSize: titleSize * 0.7,
+                        subtitleSize: subtitleSize * 0.7,
+                        color: ColorStyle.secondary,
+                        width: (menuSize - 8)/2,
+                        height: (menuSize - 8)/2,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const KitchenPage(),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
-                ),
-                MenuWidget(
-                  iconData: UIcons.regularStraight.boxes,
-                  iconSize: iconSize,
-                  title: 'Inventory',
-                  subtitle: 'Manage your items here',
-                  titleSize: titleSize,
-                  subtitleSize: subtitleSize,
-                  color: const Color(0xFF6850EF),
-                  width: menuSize,
-                  height: menuSize,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const InventoryPage(),
+                      MenuWidget(
+                        iconData: UIcons.regularStraight.boxes,
+                        iconSize: iconSize / 1.5,
+                        title: 'Inventory',
+                        // subtitle: 'Manage product categories',
+                        titleSize: titleSize * 0.7,
+                        subtitleSize: subtitleSize * 0.7,
+                        color: ColorStyle.alternate,
+                        width: (menuSize - 8)/2,
+                        height: (menuSize - 8)/2,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const InventoryPage(),
+                            ),
+                          );
+                        },
                       ),
-                    );
-                  },
+                  ],),
                 ),
+
+
+
+
+                // MenuWidget(
+                //   iconData: UIcons.regularStraight.table_tree,
+                //   iconSize: iconSize,
+                //   title: 'Categories',
+                //   subtitle: 'Manage your product categories here',
+                //   titleSize: titleSize,
+                //   subtitleSize: subtitleSize,
+                //   color: ColorStyle.tertiary,
+                //   width: menuSize,
+                //   height: menuSize,
+                //   onTap: () {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (context) => const ProductCategoriesPage(),
+                //       ),
+                //     );
+                //   },
+                // ),
+                // MenuWidget(
+                //   iconData: UIcons.regularStraight.restaurant,
+                //   iconSize: iconSize,
+                //   title: 'Kitchen',
+                //   subtitle: 'Manage your dishes here',
+                //   titleSize: titleSize,
+                //   subtitleSize: subtitleSize,
+                //   color: const Color(0xFF2FC289),
+                //   width: menuSize,
+                //   height: menuSize,
+                //   onTap: () {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (context) => const KitchenPage(),
+                //       ),
+                //     );
+                //   },
+                // ),
+                // MenuWidget(
+                //   iconData: UIcons.regularStraight.boxes,
+                //   iconSize: iconSize,
+                //   title: 'Inventory',
+                //   subtitle: 'Manage your items here',
+                //   titleSize: titleSize,
+                //   subtitleSize: subtitleSize,
+                //   color: const Color(0xFF6850EF),
+                //   width: menuSize,
+                //   height: menuSize,
+                //   onTap: () {
+                //     Navigator.push(
+                //       context,
+                //       MaterialPageRoute(
+                //         builder: (context) => const InventoryPage(),
+                //       ),
+                //     );
+                //   },
+                // ),
                 MenuWidget(
                   iconData: UIcons.regularStraight.terrace,
                   iconSize: iconSize,
@@ -337,6 +417,54 @@ class _DashboardPageState extends State<DashboardPage> {
                         builder: (context) => const BackupRestorePage(),
                       ),
                     );
+                  },
+                ),
+                MenuWidget(
+                  iconData: UIcons.regularStraight.gallery,
+                  iconSize: iconSize,
+                  title: 'Library',
+                  subtitle: 'Images and resources are here',
+                  titleSize: titleSize * 1.25,
+                  subtitleSize: subtitleSize * 1.25,
+                  width: menuSize * 2 + spacing,
+                  height: menuSize,
+                  color: const Color(0xFF2FC289),
+                  onTap: () {
+
+                    showModalBottomSheet(context: context,
+                        isScrollControlled: true,
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(24),
+                            topRight: Radius.circular(24),
+                            bottomLeft: Radius.circular(0),
+                            bottomRight: Radius.circular(0),
+                          ),
+                        ),
+                        builder: (context) => ImageLibraryBottomSheet(context, (value){
+                      // Display in full screen view
+
+                      showDialog(context: context, builder: (context) {
+
+                        final image = Image(image: (value ?? LibraryImage('')).image);
+                        return Dialog(
+                          // Add close button to dialog (top right)
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              image: DecorationImage(
+                                image: image.image,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            width: MediaQuery.of(context).size.width * 0.80,
+                            // Set height with aspect ratio to image size and screen width
+                            // height: MediaQuery.of(context).size.width * 0.80 * (image.height ?? 1) / (image.width ?? 1),
+                            // height: MediaQuery.of(context).size.height * 0.80,
+                          ),
+                        );
+                      });
+                    }));
                   },
                 ),
                 // MenuWidgetExtended(

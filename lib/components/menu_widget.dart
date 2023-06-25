@@ -5,14 +5,20 @@ class MenuWidget extends StatelessWidget {
     Key? key,
     required this.iconData,
     required this.title,
-    required this.subtitle,
+    this.subtitle,
     required this.color,
-    this.onTap, this.width, this.height, this.iconSize, this.titleSize, this.subtitleSize, this.padding,
+    this.onTap,
+    this.width,
+    this.height,
+    this.iconSize,
+    this.titleSize,
+    this.subtitleSize,
+    this.padding,
   }) : super(key: key);
 
   final IconData iconData;
   final String title;
-  final String subtitle;
+  final String? subtitle;
   final Color color;
   final VoidCallback? onTap;
   final double? width;
@@ -24,7 +30,6 @@ class MenuWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return InkWell(
       onTap: onTap,
       child: Container(
@@ -64,16 +69,17 @@ class MenuWidget extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            Flexible(
-              child: Text(
-                subtitle,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: const Color(0xB3FFFFFF),
-                  fontSize: subtitleSize,
+            if (subtitle != null)
+              Flexible(
+                child: Text(
+                  subtitle!,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: const Color(0xB3FFFFFF),
+                    fontSize: subtitleSize,
+                  ),
                 ),
               ),
-            ),
           ],
         ),
       ),

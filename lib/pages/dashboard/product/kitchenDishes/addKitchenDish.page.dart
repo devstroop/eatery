@@ -13,6 +13,7 @@ import 'package:eatery/constants/style/color_style.dart';
 import '../../../../components/labeled_custom_text_from_field.dart';
 import '../../../../widgets/buttons/primary.button.dart';
 import '../../../../widgets/buttons/upload.button.dart';
+import '../../../../widgets/posWidgets/circularCategory.posWidget.dart';
 import '../../../../widgets/switches/toggle.swich.dart';
 
 Color _pageColor = ColorStyle.secondary;
@@ -55,49 +56,6 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
   @override
   Widget build(BuildContext context) {
 
-    final categoryBar = SizedBox(
-      width: double.maxFinite,
-      height: 60,
-      child: SingleChildScrollView(
-        controller: _scrollController,
-        scrollDirection: Axis.horizontal,
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(12, 12, 12, 0),
-          child: Row(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              PosCategoryWidget(
-                  active: selectedCategory == null,
-                  image: null,
-                  label: "Uncategorized",
-                  onTap: () {
-                    setState(
-                      () {
-                        selectedCategory = null;
-                      },
-                    );
-                  }),
-              for (var category in EateryDB.instance.productCategoryBox.values)
-                PosCategoryWidget(
-                    active: selectedCategory == category,
-                    image: category.image != null &&
-                            File(category.image!).existsSync()
-                        ? Image.file(File(category.image!))
-                        : null,
-                    label: category.name,
-                    onTap: () {
-                      setState(
-                        () {
-                          selectedCategory = category;
-                        },
-                      );
-                    }),
-            ],
-          ),
-        ),
-      ),
-    );
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: _pageColor,
@@ -132,8 +90,8 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                 height: 6.0,
               ),
               LabeledCustomTextFromField(
-                  label: 'Category Name',
-                  hint: 'Enter product category name',
+                  label: 'Name',
+                  hint: 'Enter product name',
                   // Write a hint for category name field
                   focusNode: focus1,
                   onFieldSubmitted: (v) {
@@ -226,7 +184,111 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                   }
                 },
               ),
+              const SizedBox(
+                height: 6.0,
+              ),
 
+
+              Text(
+                'Select Tax Slab',
+                style: TextStyle(
+                  color: ColorStyle.text400,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              const SizedBox(
+                height: 3.0,
+              ),
+              ToggleSwitch(
+                highlightColor: _pageColor,
+                backgroundColor: const Color(0xFFE5E5E5),
+                foregroundColor: selectedTaxSlab == null ? Colors.white : ColorStyle.text200,
+                children: [
+                  'None',
+                  for (var each in EateryDB.instance.taxSlabBox.values)
+                    each.name
+                ],
+                selectedIndex: (selectedTaxSlab?.id == null) ? 0 : selectedTaxSlab?.id,
+                onChange: (int? index) {
+                  if (index == 0) {
+                    selectedTaxSlab = null;
+                  } else {
+                    selectedTaxSlab = EateryDB
+                        .instance.taxSlabBox.values
+                        .singleWhere((element) => element.id == index);
+                  }
+                  setState(() {});
+                },
+              ),
+              if (selectedTaxSlab != null)
+                Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Text(
+                    '${selectedTaxSlab?.rate}% (${selectedTaxSlab?.type.name})',
+                    style: TextStyle(
+                        color: _pageColor,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w500),
+                  ),
+                ),
+              const SizedBox(
+                height: 6.0,
+              ),
+              Text(
+                'Select Category',
+                style: TextStyle(
+                  color: ColorStyle.text400,
+                  fontWeight: FontWeight.w400,
+                ),
+              ),
+              const SizedBox(
+                height: 3.0,
+              ),
+              SizedBox(
+                width: double.maxFinite,
+                height: 97,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    CircularCategoryPOSWidget(
+                      themeColor: _pageColor,
+                      margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                      image: const AssetImage('assets/images/default.jpg'), label: 'None', selected: selectedCategory == null, onTap: (){
+                      setState(() {
+                        selectedCategory = null;
+                      });
+                    },),
+                    ...EateryDB.instance.productCategoryBox.values.map((e) {
+                      return CircularCategoryPOSWidget(
+                        themeColor: _pageColor,
+                        margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                        image: LibraryImage(e.image).image,
+                        label: e.name,
+                        selected: selectedCategory == e,
+                        onTap: () {
+                          setState(() {
+                            selectedCategory = e;
+                          });
+                        },
+                      );
+                    }),
+                  ],
+                ),
+              ),
+              const SizedBox(
+                height: 6.0,
+              ),
+              LabeledCustomTextFromField(
+                  label: 'Description',
+                  hint: 'Enter product description',
+                  multiline: true,
+                  focusNode: focus4,
+                  onFieldSubmitted: (v) {
+                    FocusScope.of(context).unfocus();
+                  },
+                  foregroundColor: ColorStyle.text200,
+                  themeColor: _pageColor,
+                  controller: _controllerDescription),
 
 
             ],
@@ -243,7 +305,9 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
               return;
             }
             _formKey.currentState!.save();
-            Product product = Product(
+
+            try{
+              Product product = Product(
                 id: EateryDB.instance.productBox.nextId(),
                 name: _controllerName.text,
                 categoryId: selectedCategory?.id,
@@ -254,14 +318,16 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                 taxSlabId: selectedTaxSlab?.id,
                 foodType: selectedFoodType,
                 type: ProductType.kitchenDish,
-                isActive: true);
-            EateryDB.instance.productBox.add(product).whenComplete(() {
-              showSnackBar(context, 'Successfully created');
-              Navigator.pop(context);
-            }).onError((error, stackTrace) {
+                isActive: true,
+              );
+              await EateryDB.instance.productBox.add(product).whenComplete(() {
+                showSnackBar(context, 'Successfully created');
+                Navigator.pop(context);
+              });
+            }catch(_){
               showSnackBar(context, 'Failed to create');
               return Future.error(false);
-            });
+            }
           },
           child: const Text('Save'),
         ),

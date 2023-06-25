@@ -83,8 +83,8 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
                 height: 6.0,
               ),
               LabeledCustomTextFromField(
-                  label: 'Category Name',
-                  hint: 'Enter product category name',
+                  label: 'Name',
+                  hint: 'Enter product name',
                   // Write a hint for category name field
                   focusNode: focus1,
                   onFieldSubmitted: (v) {

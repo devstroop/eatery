@@ -36,7 +36,7 @@ class _LowQtyLabelWidgetState extends State<LowQtyLabelWidget> {
             ),
           ),
           child: Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(6, 6, 6, 6),
+            padding: const EdgeInsetsDirectional.all(6),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -44,30 +44,20 @@ class _LowQtyLabelWidgetState extends State<LowQtyLabelWidget> {
                 Padding(
                   padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 3, 0),
                   child: Text(
-                    'Only',
-                    style: TextStyle(
-                      color: ColorStyle.backgroundColorAlter,
-                      fontSize: 12,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 3, 0),
-                  child: Text(
                     '${widget.qty%1 != 0 ? widget.qty: widget.qty.round()}',
                     style: TextStyle(
                       color: ColorStyle.backgroundColorAlter,
-                      fontSize: 12,
+                      fontSize: 10,
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 3, 0),
                   child: Text(
-                    'left',
+                    'in stock',
                     style: TextStyle(
                       color: ColorStyle.backgroundColorAlter,
-                      fontSize: 12,
+                      fontSize: 10,
                     ),
                   ),
                 ),

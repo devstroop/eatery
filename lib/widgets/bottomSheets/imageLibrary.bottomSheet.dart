@@ -116,8 +116,8 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
     return StatefulBuilder(builder: (context, state) {
       return Padding(
         padding: const EdgeInsets.all(12),
-        child: ListView(
-          shrinkWrap: true,
+        child: Column(
+          // shrinkWrap: true,
           children: [
             const Center(
               child: BottomSheetGrip(),
@@ -126,9 +126,20 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               mainAxisSize: MainAxisSize.max,
               children: [
-                const PageTitle(
-                  title: "Library",
-                  subtitle: "Previously imported images",
+                Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(UIcons.regularStraight.arrow_left),
+                      onPressed: (){
+                        Navigator.of(context).pop();
+                      },
+                    ),
+                    const SizedBox(width: 6,),
+                    const PageTitle(
+                      title: "Library",
+                      subtitle: "Previously imported images",
+                    ),
+                  ],
                 ),
                 Row(
                   children: [
@@ -146,7 +157,6 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
                               showConfirmationDialog(
                                 context, "Import from link?", "This will download the image from the link and import it to the library.", (){
                                   LibraryImageProvider.importFromURL((uri ??'').toString()).then((value) {
-                                    widget.action(value);
                                     fetchLibrary();
                                   });
                                 },(){
@@ -218,7 +228,6 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
                     ImageContainer(
                       onTap: () {
                         widget.action(each);
-                        Navigator.pop(context);
                       },
                       onLongPress: () {
                         showConfirmationDialog(context, 'Are you sure?',

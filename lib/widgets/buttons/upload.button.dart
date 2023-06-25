@@ -36,6 +36,7 @@ class _UploadButtonState extends State<UploadButton> {
 
   void onUploadPressed() => showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24),
@@ -49,6 +50,7 @@ class _UploadButtonState extends State<UploadButton> {
             this.libraryImage = libraryImage;
             if (widget.onChanged != null) {
               widget.onChanged!(libraryImage);
+              Navigator.pop(context);
             }
             setState(() {});
           }));

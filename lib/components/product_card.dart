@@ -5,36 +5,32 @@ import 'package:flutter/material.dart';
 import 'package:eatery_components/badges/food_type.badge.dart';
 import 'package:eatery/constants/style/color_style.dart';
 
+import '../constants/global_variables.dart';
+import '../services/utility/library_image.dart';
+import 'low_qty_label_widget.dart';
+
 class ProductCard extends StatelessWidget {
   const ProductCard(
       {Key? key,
-      this.cartQuantity,
-      this.themeColor,
-      this.currencySymbol,
+      this.qtyInCart,
+      required this.themeColor,
       this.onRemove,
       this.onAdd,
       this.onTap,
-      required this.product})
+      required this.product, required this.width, required this.height})
       : super(key: key);
   final Product product;
 
-  final double? cartQuantity;
-  final String? currencySymbol;
-  final Color? themeColor;
+  final double? qtyInCart;
+  final Color themeColor;
   final Function()? onRemove;
   final Function()? onAdd;
   final Function()? onTap;
+  final double width;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
-    double base = MediaQuery.of(context).size.height - 48;
-    double width = base < 360
-        ? base / 1
-        : base < 600
-            ? base / 2
-            : base < 1200
-                ? base / 4
-                : base / 6;
     return Padding(
       padding: const EdgeInsets.fromLTRB(0, 9, 0, 9),
       child: Stack(
@@ -60,31 +56,31 @@ class ProductCard extends StatelessWidget {
               borderRadius: BorderRadius.circular(6),
             ),
             width: width,
+            height: height,
             child: InkWell(
               onTap: onTap,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SizedBox(
-                    height: width * 2 / 3,
+                  Flexible(
                     child: Stack(
-                      fit: StackFit.loose,
+                      fit: StackFit.expand,
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: ColorStyle.backgroundColorAlter,
-                            borderRadius: const BorderRadius.only(
-                                topLeft: Radius.circular(6),
-                                topRight: Radius.circular(6)),
-                            image: product.image != null &&
-                                    File(product.image ?? '').existsSync()
-                                ? DecorationImage(
-                                    image: FileImage(File(product.image!)),
-                                    fit: BoxFit.cover)
-                                : const DecorationImage(
-                                    image:
-                                        AssetImage('assets/images/default.jpg'),
-                                    fit: BoxFit.cover),
+                        Positioned(
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: ColorStyle.backgroundColorAlter,
+                              borderRadius: const BorderRadius.only(
+                                  topLeft: Radius.circular(6),
+                                  topRight: Radius.circular(6)),
+                              image: DecorationImage(
+                                      image: LibraryImage(product.image ?? '').image,
+                                      fit: BoxFit.contain),
+                            ),
                           ),
                         ),
                         Positioned(
@@ -101,10 +97,10 @@ class ProductCard extends StatelessWidget {
                     fit: StackFit.loose,
                     children: [
                       Container(
-                        padding: const EdgeInsets.all(12.0),
-                        decoration: BoxDecoration(
-                          color: ColorStyle.backgroundColorAlter,
-                          borderRadius: const BorderRadius.only(
+                        padding: const EdgeInsets.all(6.0),
+                        decoration: const BoxDecoration(
+                          color: Color(0xFFF5F5F5),
+                          borderRadius: BorderRadius.only(
                               bottomLeft: Radius.circular(6),
                               bottomRight: Radius.circular(6)),
                         ),
@@ -121,7 +117,7 @@ class ProductCard extends StatelessWidget {
                                   product.name,
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                      fontSize: 16.0,
+                                      fontSize: 12.0,
                                       fontWeight: FontWeight.w600,
                                       color: ColorStyle.text200),
                                 ),
@@ -129,7 +125,7 @@ class ProductCard extends StatelessWidget {
                                   product.description ?? '',
                                   overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
-                                      fontSize: 14.0,
+                                      fontSize: 10.0,
                                       fontWeight: FontWeight.w400,
                                       color: ColorStyle.text400),
                                 ),
@@ -141,14 +137,15 @@ class ProductCard extends StatelessWidget {
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: [
                                 Column(
+                                  mainAxisSize: MainAxisSize.min,
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
-                                    if (product.salePrice != null)
+                                    if (product.salePrice != null && product.salePrice != product.mrpPrice)
                                       Text(
-                                        '${currencySymbol ?? ''}${product.mrpPrice}',
+                                        '${GlobalVariables.currency?.symbol ?? ''}${product.mrpPrice}',
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                            fontSize: 12.0,
+                                            fontSize: 10.0,
                                             fontWeight: FontWeight.w600,
                                             color: ColorStyle.text200,
                                             decoration:
@@ -156,27 +153,27 @@ class ProductCard extends StatelessWidget {
                                       ),
                                     if (product.salePrice != null)
                                       Text(
-                                        '${currencySymbol ?? ''}${product.salePrice}',
+                                        '${GlobalVariables.currency?.symbol ?? ''}${product.salePrice}',
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.w600,
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.bold,
                                             color: ColorStyle.success),
                                       ),
                                     if (product.salePrice == null)
                                       Text(
-                                        '${currencySymbol ?? ''}${product.mrpPrice}',
+                                        '${GlobalVariables.currency?.symbol ?? ''}${product.mrpPrice}',
                                         overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
-                                            fontSize: 16.0,
-                                            fontWeight: FontWeight.w600,
+                                            fontSize: 12.0,
+                                            fontWeight: FontWeight.bold,
                                             color: ColorStyle.success),
                                       ),
                                   ],
                                 ),
                                 onAdd != null &&
                                         onRemove != null &&
-                                        cartQuantity != null
+                                        qtyInCart != null
                                     ? Container(
                                         decoration: BoxDecoration(
                                           borderRadius:
@@ -190,12 +187,12 @@ class ProductCard extends StatelessWidget {
                                         child: Padding(
                                           padding: const EdgeInsetsDirectional
                                               .fromSTEB(2, 1, 2, 1),
-                                          child: cartQuantity != null
+                                          child: qtyInCart != null
                                               ? Row(
                                                   mainAxisSize:
                                                       MainAxisSize.min,
                                                   children: [
-                                                    cartQuantity! > 0
+                                                    qtyInCart! > 0
                                                         ? InkWell(
                                                             onTap: onRemove,
                                                             child: Icon(
@@ -205,7 +202,7 @@ class ProductCard extends StatelessWidget {
                                                             ),
                                                           )
                                                         : Container(),
-                                                    cartQuantity! > 0
+                                                    qtyInCart! > 0
                                                         ? Padding(
                                                             padding:
                                                                 const EdgeInsetsDirectional
@@ -214,7 +211,7 @@ class ProductCard extends StatelessWidget {
                                                             child: Text(
                                                               Calculations
                                                                   .compressDoubleToString(
-                                                                      cartQuantity),
+                                                                      qtyInCart),
                                                               style:
                                                                   const TextStyle(
                                                                 fontWeight:
@@ -249,15 +246,11 @@ class ProductCard extends StatelessWidget {
               ),
             ),
           ),
-          /*Positioned(
-            top: 12.0,
-            left: 0.0,
-            child: quantity != null && warningQuantity != null
-                ? quantity! <= warningQuantity!
-                    ? LowQtyLabelWidget(qty: quantity!)
-                    : Container()
-                : Container(),
-          ),*/
+          // Positioned(
+          //   top: 12.0,
+          //   left: 0.0,
+          //   child: LowQtyLabelWidget(qty: 5),
+          // ),
         ],
       ),
     );
