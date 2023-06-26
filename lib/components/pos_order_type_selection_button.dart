@@ -15,26 +15,22 @@ class PosOrderTypeSelectionButton extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-            child: Icon(iconData, color: themeColor,),
-          ),
-          Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-            child: Text(
-              text,
-              textAlign: TextAlign.start,
-              style: TextStyle(
-                color: ColorStyle.text200,
-                fontSize: 18,
-                fontWeight: FontWeight.w600,
-              ),
+          Icon(iconData, color: themeColor,),
+          const SizedBox(width: 6.0),
+          Text(
+            text,
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              color: ColorStyle.text200,
+              fontSize: 16,
+              fontWeight: FontWeight.w600,
             ),
           ),
+          const SizedBox(width: 3.0),
           Icon(
             UIcons.regularStraight.arrow_small_up,
             color: themeColor,
-            size: 18,
+            size: 16,
           ),
         ],
       ),

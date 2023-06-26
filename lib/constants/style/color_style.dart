@@ -8,7 +8,6 @@ class ColorStyle{
 
   static Color brandColor = const Color(0xFF74B952);
   static Color brandColorAlter = const Color(0xFF0F0F0F);
-
   static Color backgroundColor = const Color(0xFFEBECEE);
   static Color backgroundColorAlter = const Color(0xFFFFFFFF);
 
