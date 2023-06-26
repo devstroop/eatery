@@ -3,7 +3,6 @@ import 'package:eatery/constants/global_variables.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import 'package:eatery/pages/backupRestore/backupRestore.page.dart';
 import 'package:eatery/pages/dashboard/components/dashboardHeader.dart';
-import 'package:eatery/pages/dashboard/components/notifications/lowBatteryWarning.notification.dart';
 import 'package:eatery/pages/dashboard/components/notifications/upgrade.notification.dart';
 import 'package:eatery/pages/dashboard/diningTable/diningTables.page.dart';
 import 'package:eatery/pages/dashboard/product/productCategory/productCategories.page.dart';
@@ -142,7 +141,7 @@ class _DashboardPageState extends State<DashboardPage> {
             UpgradeNotification(
               company: GlobalVariables.company,
             ),
-            const LowBatteryWarningNotification(),
+            // const LowBatteryWarningNotification(),
             const SizedBox(height: 16),
             Wrap(
               spacing: spacing,
