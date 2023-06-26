@@ -57,9 +57,11 @@ dependencies:
   lottie: ^2.3.2
   flutter_slidable: ^3.0.0
   devdart_windows_hdsn: ^0.0.2
+  hex: ^0.2.0
+  gbk_codec: ^0.4.0
   # bluetooth esc printer
-  bluetooth_thermal_printer:
-    path: ../bluetooth_thermal_printer
+  # bluetooth_thermal_printer:
+    # path: ../bluetooth_thermal_printer
     # git:
       # url: 'https://github.com/devstroop/bluetooth_thermal_printer.git'
       # ref: 'master'
