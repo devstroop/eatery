@@ -53,3 +53,9 @@ app.*.map.json
 /pubspec.lock
 ios/Podfile.lock
 .dart_tool 3/flutter_build/d8d009d718601037ea3e2a8e5e7b65a7/debug_unpack_ios.stamp
+
+# Ignore Gradle project-specific cache directory
+.gradle
+
+# Ignore Gradle build output directory
+build
