@@ -13,7 +13,6 @@ class KProductView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-        mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           AppBar(
@@ -58,7 +57,7 @@ class KProductView extends StatelessWidget {
                   'Description',
                   style: TextStyle(fontWeight: FontWeight.w600, fontSize: 16),
                 ),
-                Text(product.description ?? ''),
+                Text(product.description ?? '', style: TextStyle(color: ColorStyle.text300, fontSize: 12),),
               ],
             ),
           ),
