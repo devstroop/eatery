@@ -244,77 +244,64 @@ class _DashboardPageState extends State<DashboardPage> {
 
 
 
-
-                // MenuWidget(
-                //   iconData: UIcons.regularStraight.table_tree,
-                //   iconSize: iconSize,
-                //   title: 'Categories',
-                //   subtitle: 'Manage your product categories here',
-                //   titleSize: titleSize,
-                //   subtitleSize: subtitleSize,
-                //   color: ColorStyle.tertiary,
-                //   width: menuSize,
-                //   height: menuSize,
-                //   onTap: () {
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //         builder: (context) => const ProductCategoriesPage(),
-                //       ),
-                //     );
-                //   },
-                // ),
-                // MenuWidget(
-                //   iconData: UIcons.regularStraight.restaurant,
-                //   iconSize: iconSize,
-                //   title: 'Kitchen',
-                //   subtitle: 'Manage your dishes here',
-                //   titleSize: titleSize,
-                //   subtitleSize: subtitleSize,
-                //   color: const Color(0xFF2FC289),
-                //   width: menuSize,
-                //   height: menuSize,
-                //   onTap: () {
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //         builder: (context) => const KitchenPage(),
-                //       ),
-                //     );
-                //   },
-                // ),
-                // MenuWidget(
-                //   iconData: UIcons.regularStraight.boxes,
-                //   iconSize: iconSize,
-                //   title: 'Inventory',
-                //   subtitle: 'Manage your items here',
-                //   titleSize: titleSize,
-                //   subtitleSize: subtitleSize,
-                //   color: const Color(0xFF6850EF),
-                //   width: menuSize,
-                //   height: menuSize,
-                //   onTap: () {
-                //     Navigator.push(
-                //       context,
-                //       MaterialPageRoute(
-                //         builder: (context) => const InventoryPage(),
-                //       ),
-                //     );
-                //   },
-                // ),
-                MenuWidget(
-                  iconData: UIcons.regularStraight.people_poll,
-                  iconSize: iconSize,
-                  title: 'Customers',
-                  subtitle: 'Manage your customers here',
-                  titleSize: titleSize,
-                  subtitleSize: subtitleSize,
+                SizedBox(
                   width: menuSize,
                   height: menuSize,
-                  color: const Color(0xFF2FC289),
-                  onTap: () {
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
 
-                  },
+                      MenuWidget(
+                        iconSize: iconSize / 1.5,
+                        titleSize: titleSize * 0.7,
+                        subtitleSize: subtitleSize * 0.7,
+                        width: (menuSize - 8)/2,
+                        height: (menuSize - 8)/2,
+                        iconData: UIcons.regularStraight.people_poll,
+                        title: 'Customers',
+                        color: const Color(0xFF2FC289),
+                        onTap: () {
+
+                        },
+                      ),
+                      MenuWidget(
+                        iconSize: iconSize / 1.5,
+                        titleSize: titleSize * 0.7,
+                        subtitleSize: subtitleSize * 0.7,
+                        width: (menuSize - 8)/2,
+                        height: (menuSize - 8)/2,
+                        iconData: UIcons.regularStraight.people_poll,
+                        title: 'Waiters',
+                        color: const Color(0xFFC2592F),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const WaitersPage(),
+                            ),
+                          );
+                        },
+                      ),
+                      MenuWidget(
+                        iconSize: iconSize / 1.5,
+                        titleSize: titleSize * 0.7,
+                        subtitleSize: subtitleSize * 0.7,
+                        width: (menuSize),
+                        height: (menuSize - 8)/2,
+                        iconData: UIcons.regularStraight.terrace,
+                        title: 'Dining Tables',
+                        color: const Color(0xFFEF9050),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const DiningTablesPage(),
+                            ),
+                          );
+                        },
+                      ),
+                    ],),
                 ),
                 MenuWidget(
                   iconData: UIcons.regularStraight.time_past,
@@ -335,44 +322,20 @@ class _DashboardPageState extends State<DashboardPage> {
                     );
                   },
                 ),
+
                 MenuWidget(
-                  iconData: UIcons.regularStraight.people_poll,
+                  iconData: UIcons.regularStraight.gallery,
                   iconSize: iconSize,
-                  title: 'Waiters',
-                  subtitle: 'Manage your waiters here',
-                  titleSize: titleSize,
+                  title: 'Library',
+                  subtitle: 'Images and resources are here',
+                  titleSize: titleSize ,
                   subtitleSize: subtitleSize,
-                  color: const Color(0xFFC2592F),
                   width: menuSize,
                   height: menuSize,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const WaitersPage(),
-                      ),
-                    );
-                  },
+                  color: const Color(0xFF2FC289),
+                  onTap: _showLibrary,
                 ),
-                MenuWidget(
-                  iconData: UIcons.regularStraight.terrace,
-                  iconSize: iconSize,
-                  title: 'Dining Tables',
-                  subtitle: 'Manage your dining tables here',
-                  titleSize: titleSize,
-                  subtitleSize: subtitleSize,
-                  color: const Color(0xFFEF9050),
-                  width: menuSize,
-                  height: menuSize,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const DiningTablesPage(),
-                      ),
-                    );
-                  },
-                ),
+
                 MenuWidget(
                   iconData: UIcons.regularStraight.settings,
                   iconSize: iconSize,
@@ -393,7 +356,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       setState(() {});
                     });
                   },
-                ),
+                ), // Settings
                 MenuWidget(
                   iconData: UIcons.regularStraight.exchange,
                   iconSize: iconSize,
@@ -431,18 +394,6 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                     );
                   },
-                ),
-                MenuWidget(
-                  iconData: UIcons.regularStraight.gallery,
-                  iconSize: iconSize,
-                  title: 'Library',
-                  subtitle: 'Images and resources are here',
-                  titleSize: titleSize ,
-                  subtitleSize: subtitleSize,
-                  width: menuSize,
-                  height: menuSize,
-                  color: const Color(0xFF2FC289),
-                  onTap: _showLibrary,
                 ),/*
                 MenuWidget(
                   iconData: UIcons.regularStraight.gallery,
