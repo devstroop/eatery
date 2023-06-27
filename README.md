@@ -1,4 +1,4 @@
-![image info](./assets/images/logo.svg)
+![image info](./assets/logo.svg)
 
 # Eatery
 
