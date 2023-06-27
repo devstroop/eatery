@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-
-import '../../constants/style/color_style.dart';
+import 'package:eatery/references.dart';
 
 class LeadingImageWidget extends StatelessWidget {
   const LeadingImageWidget({super.key, required this.image, this.size = 48, this.elevation = 0, this.borderRadius, this.backgroundCo0lor, this.border});

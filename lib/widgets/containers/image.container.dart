@@ -1,5 +1,4 @@
-import 'dart:io';
-import 'package:flutter/material.dart';
+import 'package:eatery/references.dart';
 
 class ImageContainer extends StatelessWidget {
   const ImageContainer(

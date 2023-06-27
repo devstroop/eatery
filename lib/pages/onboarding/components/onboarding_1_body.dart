@@ -1,9 +1,7 @@
-import 'package:eatery/constants/style/spacing_style.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:eatery/references.dart';
 
-class Onboarding1Body extends StatelessWidget {
-  const Onboarding1Body({Key? key}) : super(key: key);
+class OnBoarding1Body extends StatelessWidget {
+  const OnBoarding1Body({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

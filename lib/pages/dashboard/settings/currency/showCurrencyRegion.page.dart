@@ -1,8 +1,4 @@
-import 'package:currency_picker/currency_picker.dart';
-import 'package:eatery/components/loaders/loading_screen.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import 'package:eatery/constants/style/spacing_style.dart';
-import 'package:flutter/material.dart';
+import 'package:eatery/references.dart';
 
 class ShowCurrencyRegionPage extends StatefulWidget {
   const ShowCurrencyRegionPage({Key? key})

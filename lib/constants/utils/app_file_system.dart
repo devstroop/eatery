@@ -1,16 +1,4 @@
-import 'dart:convert';
-import 'dart:io';
-import 'package:eatery/components/bottom_view_grip.dart';
-import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:eatery/components/secondary_button.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter_archive/flutter_archive.dart';
-
-import 'package:image_picker/image_picker.dart';
-import 'package:eatery/services/utility/generate.dart';
-
-import 'file_utils.dart';
+import 'package:eatery/references.dart';
 
 class AppFileSystem {
   static Future<Directory> appDataRoot() async {

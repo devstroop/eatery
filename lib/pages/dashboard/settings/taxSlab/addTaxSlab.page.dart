@@ -1,10 +1,4 @@
-import 'package:eatery/components/custom_text_from_field.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import 'package:eatery/constants/style/spacing_style.dart';
-import 'package:eatery/services/utility/show_snack_bar.dart';
-import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
+import 'package:eatery/references.dart';
 
 class AddTaxSlabSettingsPage extends StatefulWidget {
   const AddTaxSlabSettingsPage({Key? key})
@@ -37,11 +31,11 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
           rate: double.parse(controllerTaxRate.text),
           type: _taxType);
       await EateryDB.instance.taxSlabBox.add(taxSlab).whenComplete(() {
-        showSnackBar(context, 'Successfully created!');
-        Navigator.of(context).pop();
+        showSnackBar(this.context, 'Successfully created!');
+        Navigator.of(this.context).pop();
       });
     } catch (_) {
-      showSnackBar(context, 'Failed to created!');
+      showSnackBar(this.context, 'Failed to created!');
     }
   }
 

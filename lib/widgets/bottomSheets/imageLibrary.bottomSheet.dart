@@ -1,19 +1,4 @@
-import 'dart:io';
-import 'package:eatery/constants/utils/utils.dart';
-import 'package:eatery/services/utility/library_image.dart';
-import 'package:eatery_components/others/bottom_sheet.grip.dart';
-import 'package:eatery_components/titles/page.title.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:uicons/uicons.dart';
-import 'package:path/path.dart' as path;
-
-import '../../constants/global_variables.dart';
-import '../../services/utility/file.utility.service.dart';
-import '../containers/image.container.dart';
-import '../dialogs/showConfirmationDialog.dart';
+import 'package:eatery/references.dart';
 
 class ImageLibraryBottomSheet extends StatefulWidget {
   final BuildContext context;
@@ -73,7 +58,7 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
           widget.action(image);
           fetchLibrary();
         } catch (e) {
-          showSnackBar(context, e.toString());
+          showSnackBar(this.context, e.toString());
         }
       }
     });

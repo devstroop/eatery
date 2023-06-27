@@ -1,8 +1,4 @@
-import 'package:eatery/constants/style/color_style.dart';
-import 'package:eatery/constants/style/spacing_style.dart';
-import 'package:eatery_components/titles/page.title.dart';
-import 'package:flutter/material.dart';
-import 'package:currency_picker/currency_picker.dart';
+import 'package:eatery/references.dart';
 
 class Body5 extends StatefulWidget {
   final Color themeColor;

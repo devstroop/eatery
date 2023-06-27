@@ -1,7 +1,4 @@
-import 'dart:io';
-import 'package:eatery/constants/utils/calculations.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery/constants/style/color_style.dart';
+import 'package:eatery/references.dart';
 
 class CheckoutProductCard extends StatelessWidget {
   const CheckoutProductCard(

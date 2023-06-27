@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:eatery/constants/style/color_style.dart';
+import 'package:eatery/references.dart';
+
 class LowQtyLabelWidget extends StatefulWidget {
   const LowQtyLabelWidget({
     Key? key,

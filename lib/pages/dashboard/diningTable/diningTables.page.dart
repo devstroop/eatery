@@ -1,14 +1,4 @@
-import 'package:eatery/constants/global_variables.dart';
-import 'package:eatery/services/utility/library_image.dart';
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import '../../../widgets/imageWidgets/leading.imageWidget.dart';
-import '../../../widgets/labels/caption.label.dart';
-import '../../../widgets/posWidgets/circularCategory.posWidget.dart';
-import 'addDiningTable.page.dart';
-import 'category/diningTableCategories.page.dart';
-import 'editDiningTable.page.dart';
+import 'package:eatery/references.dart';
 
 Color _pageColor = ColorStyle.tertiary;
 

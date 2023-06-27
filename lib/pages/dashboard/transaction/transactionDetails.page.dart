@@ -1,14 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:eatery/components/checkout_product_card.dart';
-import 'package:eatery/components/dialog_box.dart';
-import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:eatery/services/printing/print_invoice.dart';
-import 'package:eatery/services/utility/show_snack_bar.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import 'package:eatery_db/eatery_db.dart';
+import 'package:eatery/references.dart';
 
-class DetailedHistoryPage extends StatefulWidget {
-  const DetailedHistoryPage(
+class TransactionDetailsPage extends StatefulWidget {
+  const TransactionDetailsPage(
       {Key? key,
       required this.account,
       required this.order,
@@ -19,10 +12,10 @@ class DetailedHistoryPage extends StatefulWidget {
   final OrderType? orderType;
 
   @override
-  State<DetailedHistoryPage> createState() => _DetailedHistoryPageState();
+  State<TransactionDetailsPage> createState() => _TransactionDetailsPageState();
 }
 
-class _DetailedHistoryPageState extends State<DetailedHistoryPage> {
+class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
   @override
   initState() {
     super.initState();

@@ -1,13 +1,4 @@
-import 'package:eatery/components/labeled_custom_text_from_field.dart';
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery/components/pos_category_widget.dart';
-import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:eatery/services/utility/show_snack_bar.dart';
-import 'package:eatery/constants/style/color_style.dart';
-
-import '../../../services/utility/library_image.dart';
-import '../../../widgets/buttons/upload.button.dart';
+import 'package:eatery/references.dart';
 
 Color _pageColor = ColorStyle.tertiary;
 

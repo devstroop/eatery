@@ -1,6 +1,4 @@
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery/constants/style/color_style.dart';
+import 'package:eatery/references.dart';
 
 class PosOrderTypeSelectionButton extends StatelessWidget {
   const PosOrderTypeSelectionButton({Key? key, required this.iconData, required this.text, this.onTap, required this.themeColor}) : super(key: key);

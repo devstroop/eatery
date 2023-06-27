@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:eatery/references.dart';
 
 class ColorStyle{
   static Color primary = const Color(0xFF30A8CF);

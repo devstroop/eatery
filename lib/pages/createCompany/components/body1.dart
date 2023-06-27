@@ -1,15 +1,4 @@
-import 'package:eatery/components/custom_text_from_field.dart';
-import 'package:eatery/components/labeled_custom_text_from_field.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import 'package:eatery/constants/style/spacing_style.dart';
-import 'package:eatery/constants/utils/email_validator.dart';
-import 'package:eatery/constants/validators/phone_validator.dart';
-import 'package:eatery/services/utility/library_image.dart';
-
-import 'package:eatery_components/titles/page.title.dart';
-import 'package:flutter/material.dart';
-
-import '../../../widgets/buttons/upload.button.dart';
+import 'package:eatery/references.dart';
 
 class Body1 extends StatelessWidget {
   final Function(LibraryImage? logoPath) onChanged;

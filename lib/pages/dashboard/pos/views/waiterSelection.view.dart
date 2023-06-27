@@ -1,7 +1,4 @@
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-
-import '../../../../constants/style/color_style.dart';
+import 'package:eatery/references.dart';
 
 
 class WaiterSelectionView extends StatelessWidget {

@@ -1,7 +1,4 @@
-import 'dart:io';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:path/path.dart' as path;
+import 'package:eatery/references.dart';
 
 Future<List<File>> pickImages() async {
   List<File> images = [];
@@ -24,7 +21,7 @@ Future<List<File>> pickImages() async {
 Future<String> baseDirectoryPath() async {
   String deviceRoot = Directory("/storage/emulated/0").path;
   String appName = 'Eatery';
-  String appRoot = path.join(deviceRoot, appName);
+  String appRoot = join(deviceRoot, appName);
   var appRootDir = Directory(appRoot);
   if (!(await appRootDir.exists())) appRootDir.create(recursive: true);
   return appRoot;

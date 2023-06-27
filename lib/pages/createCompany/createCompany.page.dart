@@ -1,20 +1,4 @@
-// ignore_for_file: no_leading_underscores_for_local_identifiers
-
-import 'package:currency_picker/currency_picker.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import 'package:eatery/constants/style/spacing_style.dart';
-import 'package:eatery/constants/utils/utils.dart';
-import 'package:eatery/services/utility/library_image.dart';
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-import 'components/body1.dart';
-import 'components/body2.dart';
-import 'components/body3.dart';
-import 'components/body4.dart';
-import 'components/body5.dart';
-import 'components/body6.dart';
-import 'components/createCompany.bottomAppBar.dart';
-import 'createAccountResult.page.dart';
+import 'package:eatery/references.dart';
 
 class CreateCompanyPage extends StatefulWidget {
   const CreateCompanyPage({Key? key}) : super(key: key);
@@ -268,15 +252,15 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                 );
                 int result = await EateryDB.instance.companyBox
                     .add(company)
-                    .whenComplete(() => Navigator.of(context)
+                    .whenComplete(() => Navigator.of(this.context)
                         .pushAndRemoveUntil(
                             MaterialPageRoute(
                                 builder: (BuildContext context) =>
-                                    const CreateAccountResultPage()),
+                                    const CreateCompanyResultPage()),
                             (route) => false));
                 debugPrint('Company Added: $result');
               } catch (e) {
-                showSnackBar(context, e.toString());
+                showSnackBar(this.context, e.toString());
               }
             })
       ];

@@ -1,7 +1,4 @@
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery/pages/authentication/login.page.dart';
-import 'package:eatery/constants/style/color_style.dart';
+import 'package:eatery/references.dart';
 
 class LogoutPage extends StatefulWidget {
   const LogoutPage({Key? key}) : super(key: key);
@@ -16,7 +13,7 @@ class _LogoutPageState extends State<LogoutPage> {
     super.initState();
     Future.delayed(Duration.zero, () {
       Navigator.pushAndRemoveUntil(
-        context,
+        this.context,
         MaterialPageRoute(builder: (context) => const LoginPage()),
         (Route<dynamic> route) => false,
       );

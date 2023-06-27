@@ -1,5 +1,4 @@
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
+import 'package:eatery/references.dart';
 
 class FoodTypeBadge extends StatelessWidget {
   const FoodTypeBadge({Key? key, required this.foodType, this.backgroundColor})

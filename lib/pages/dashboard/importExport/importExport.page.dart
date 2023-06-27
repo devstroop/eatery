@@ -1,12 +1,5 @@
-import 'dart:io';
 import 'package:excel/excel.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery/components/dialog_box.dart';
-import 'package:eatery/components/menu_tile.dart';
-import 'package:eatery/services/utility/show_snack_bar.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import 'package:eatery_db/eatery_db.dart';
+import 'package:eatery/references.dart';
 
 class ImportExportPage extends StatefulWidget {
   const ImportExportPage({Key? key}) : super(key: key);
@@ -39,10 +32,10 @@ class _ImportExportPageState extends State<ImportExportPage> {
             product['as'] = rows[index][7]!.value;
             //await Product.add(product);
           } catch (_) {
-            showSnackBar(context, 'Failed to add ${index + 1}th row');
+            showSnackBar(this.context, 'Failed to add ${index + 1}th row');
           }
         }
-        showSnackBar(context, "Imported successfully");
+        showSnackBar(this.context, "Imported successfully");
       } else {
         // User canceled the picker
       }
@@ -110,9 +103,9 @@ class _ImportExportPageState extends State<ImportExportPage> {
     String filePath = '${await AppFileSystem.getExportDir()}/export-${getRandomString(8)}.xlsx';
     File(filePath).writeAsBytes(excel.encode()!);*/
 
-    showSnackBar(context, "Exported successfully");
+    showSnackBar(this.context, "Exported successfully");
     showDialog(
-      context: context,
+      context: this.context,
       builder: (BuildContext context) {
         return DialogBox(
           title: 'Confirm',

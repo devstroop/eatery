@@ -1,15 +1,6 @@
-import 'dart:io';
-import 'package:clipboard/clipboard.dart';
-import 'package:eatery/components/bottom_view_grip.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import 'package:eatery/constants/style/spacing_style.dart';
-import 'package:eatery/constants/utils/app_file_system.dart';
-import 'package:eatery/constants/utils/utils.dart';
-import 'package:eatery/services/utility/generate.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:path/path.dart' as path;
 import 'package:http/http.dart' as http;
+import 'package:eatery/references.dart';
 
 class UploadImageBottomSheet extends StatefulWidget {
   final BuildContext context;
@@ -68,7 +59,7 @@ class _UploadImageBottomSheetState extends State<UploadImageBottomSheet> {
       Navigator.pop(widget.context);
     } catch (e) {
       Navigator.pop(widget.context);
-      showSnackBar(context, e.toString());
+      showSnackBar(this.context, e.toString());
     }
   }
 

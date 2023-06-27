@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:eatery/references.dart';
 
 class SpacingStyle {
   static const defaultPadding = EdgeInsets.all(12.0);

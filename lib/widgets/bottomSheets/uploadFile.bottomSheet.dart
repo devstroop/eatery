@@ -1,6 +1,4 @@
-import 'package:eatery_components/others/bottom_sheet.grip.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:flutter/material.dart';
+import 'package:eatery/references.dart';
 
 class UploadFileBottomSheet extends StatefulWidget {
   final BuildContext context;

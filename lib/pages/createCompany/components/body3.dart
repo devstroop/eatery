@@ -1,8 +1,4 @@
-import 'package:eatery/components/selectable_card.dart';
-import 'package:eatery/constants/style/spacing_style.dart';
-import 'package:eatery_components/titles/page.title.dart';
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
+import 'package:eatery/references.dart';
 
 class Body3 extends StatelessWidget {
   final Function(Edition edition) callback;

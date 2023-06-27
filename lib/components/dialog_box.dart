@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:eatery/references.dart';
 
 class DialogBox extends StatelessWidget {
   const DialogBox({Key? key, this.title, required this.message, this.actions}) : super(key: key);

@@ -1,5 +1,4 @@
-import 'package:eatery/components/custom_text_from_field.dart';
-import 'package:flutter/material.dart';
+import 'package:eatery/references.dart';
 
 class LabeledCustomTextFromField extends StatelessWidget {
   const LabeledCustomTextFromField(

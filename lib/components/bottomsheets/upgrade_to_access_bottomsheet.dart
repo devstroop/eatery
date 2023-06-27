@@ -1,9 +1,4 @@
-import 'package:eatery/constants/style/spacing_style.dart';
-import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:eatery_db/eatery_db.dart';
-import '../../../pages/activation/upgrade.page.dart';
-import '../bottom_view_grip.dart';
-import 'package:flutter/material.dart';
+import 'package:eatery/references.dart';
 
 class UpgradeToAccessBottomSheet extends StatefulWidget {
   final BuildContext context;
@@ -35,7 +30,7 @@ class _UpgradeToAccessBottomSheetState
       setState(() {
         // DO CHANGE HERE
       });
-      Navigator.pop(context);
+      Navigator.pop(this.context);
     });
   }
 

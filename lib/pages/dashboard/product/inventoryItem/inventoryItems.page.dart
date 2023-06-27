@@ -1,23 +1,15 @@
-import 'package:eatery/pages/dashboard/product/inventoryItem/addInventoryItem.page.dart';
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery/components/product_card.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import '../../../../services/utility/library_image.dart';
-import '../../../../widgets/posWidgets/circularCategory.posWidget.dart';
-import '../../../../widgets/textFields/search.textField.dart';
-import 'editInventoryItem.page.dart';
+import 'package:eatery/references.dart';
 
 Color _pageColor = ColorStyle.alternate;
 
-class InventoryPage extends StatefulWidget {
-  const InventoryPage({Key? key}) : super(key: key);
+class InventoryItemsPage extends StatefulWidget {
+  const InventoryItemsPage({Key? key}) : super(key: key);
 
   @override
-  State<InventoryPage> createState() => _InventoryPageState();
+  State<InventoryItemsPage> createState() => _InventoryItemsPageState();
 }
 
-class _InventoryPageState extends State<InventoryPage> {
+class _InventoryItemsPageState extends State<InventoryItemsPage> {
   ProductCategory? selectedCategory;
   final TextEditingController _controllerSearch = TextEditingController();
 

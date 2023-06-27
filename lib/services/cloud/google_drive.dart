@@ -1,10 +1,7 @@
-import 'dart:io';
-import 'package:eatery/services/cloud/secure_storage.dart';
 import 'package:googleapis/drive/v3.dart' as ga;
-import 'package:googleapis_auth/auth_io.dart';
 import 'package:http/http.dart' as http;
-import 'package:path/path.dart' as p;
-import 'package:url_launcher/url_launcher.dart';
+import 'package:path/path.dart' as path;
+import 'package:eatery/references.dart';
 
 const _clientId =
     "43263799198-3k39t047lg9rabjbefeepl045mihsdlg.apps.googleusercontent.com";
@@ -46,7 +43,7 @@ class GoogleDrive {
       var client = await getHttpClient();
       var drive = ga.DriveApi(client);
       var response = await drive.files.create(
-          ga.File()..name = p.basename(file.absolute.path),
+          ga.File()..name = path.basename(file.absolute.path),
           uploadMedia: ga.Media(file.openRead(), file.lengthSync()));
       return response;
     } catch (_) {
@@ -61,7 +58,7 @@ class GoogleDrive {
       var client = await getHttpClient();
       var drive = ga.DriveApi(client);
       var response = await drive.files.update(
-        ga.File()..name = p.basename(file.absolute.path),
+        ga.File()..name = path.basename(file.absolute.path),
         fileId,
         uploadMedia: ga.Media(file.openRead(), file.lengthSync()),
       );
