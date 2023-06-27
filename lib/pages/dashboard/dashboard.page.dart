@@ -262,7 +262,12 @@ class _DashboardPageState extends State<DashboardPage> {
                         title: 'Customers',
                         color: const Color(0xFF2FC289),
                         onTap: () {
-
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const CustomersPage(),
+                            ),
+                          );
                         },
                       ),
                       MenuCard(
@@ -336,130 +341,100 @@ class _DashboardPageState extends State<DashboardPage> {
                   onTap: _showLibrary,
                 ),
 
-                MenuCard(
-                  iconData: UIcons.regularStraight.settings,
-                  iconSize: iconSize,
-                  title: 'Settings',
-                  subtitle: 'Manage your settings here',
-                  titleSize: titleSize,
-                  subtitleSize: subtitleSize,
+                SizedBox(
                   width: menuSize,
                   height: menuSize,
-                  color: const Color(0xFF222222),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SettingPage(),
-                      ),
-                    ).then((_) async {
-                      setState(() {});
-                    });
-                  },
-                ), // Settings
-                MenuCard(
-                  iconData: UIcons.regularStraight.exchange,
-                  iconSize: iconSize,
-                  title: 'Import / Export',
-                  subtitle: 'Import Products/Invoices here',
-                  titleSize: titleSize,
-                  subtitleSize: subtitleSize,
-                  width: menuSize,
-                  height: menuSize,
-                  color: const Color(0xFFEF9050),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const ImportExportPage(),
-                      ),
-                    );
-                  },
-                ),
-                MenuCard(
-                  iconData: UIcons.regularStraight.time_past,
-                  iconSize: iconSize,
-                  title: 'Backup / Restore',
-                  subtitle: 'Backup and Restore is here',
-                  titleSize: titleSize,
-                  subtitleSize: subtitleSize,
-                  width: menuSize,
-                  height: menuSize,
-                  color: const Color(0xFF2FC289),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const BackupRestorePage(),
-                      ),
-                    );
-                  },
-                ),/*
-                MenuCard(
-                  iconData: UIcons.regularStraight.gallery,
-                  iconSize: iconSize,
-                  title: 'Library',
-                  subtitle: 'Images and resources are here',
-                  titleSize: titleSize * 1.25,
-                  subtitleSize: subtitleSize * 1.25,
-                  width: menuSize * 2 + spacing,
-                  height: menuSize,
-                  color: const Color(0xFF2FC289),
-                  onTap: () {
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
 
-                    showModalBottomSheet(context: context,
-                        isScrollControlled: true,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(24),
-                            topRight: Radius.circular(24),
-                            bottomLeft: Radius.circular(0),
-                            bottomRight: Radius.circular(0),
-                          ),
-                        ),
-                        builder: (context) => ImageLibraryBottomSheet(context, (value){
-                      // Display in full screen view
-
-                      showDialog(context: context, builder: (context) {
-
-                        final image = Image(image: (value ?? LibraryImage('')).image);
-                        return Dialog(
-                          // Add close button to dialog (top right)
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              image: DecorationImage(
-                                image: image.image,
-                                fit: BoxFit.contain,
-                              ),
+                      MenuCard(
+                        iconData: UIcons.regularStraight.exchange,
+                        iconSize: iconSize / 1.5,
+                        title: 'Import Export',
+                        titleSize: titleSize * 0.7,
+                        subtitleSize: subtitleSize * 0.7,
+                        width: (menuSize - 8)/2,
+                        height: (menuSize - 8)/2,
+                        color: const Color(0xFFEF9050),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ImportExportPage(),
                             ),
-                            width: MediaQuery.of(context).size.width * 0.80,
-                            // Set height with aspect ratio to image size and screen width
-                            // height: MediaQuery.of(context).size.width * 0.80 * (image.height ?? 1) / (image.width ?? 1),
-                            // height: MediaQuery.of(context).size.height * 0.80,
-                          ),
-                        );
-                      });
-                    }));
-                  },
-                ),*/
-                // MenuCardExtended(
-                //   iconData: UIcons.regularStraight.log_out,
-                //   title: 'Logout',
-                //   subtitle: 'Close the session',
-                //   color: const Color(0xFFEF5350),
-                //   onTap: () async {
-                //     final prefs = await SharedPreferences.getInstance();
-                //     await prefs.remove('companyId').then((value) {
-                //       Navigator.push(
-                //         context,
-                //         MaterialPageRoute(
-                //           builder: (context) => const LogoutPage(),
-                //         ),
-                //       );
-                //     });
-                //   },
-                // ),
+                          );
+                        },
+                      ),
+                      MenuCard(
+                        iconData: UIcons.regularStraight.time_past,
+                        iconSize: iconSize / 1.5,
+                        title: 'Backup Restore',
+                        titleSize: titleSize * 0.7,
+                        subtitleSize: subtitleSize * 0.7,
+                        width: (menuSize - 8)/2,
+                        height: (menuSize - 8)/2,
+                        color: const Color(0xFF2FC289),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const BackupRestorePage(),
+                            ),
+                          );
+                        },
+                      ),
+
+                      MenuCard(
+                        iconData: UIcons.regularStraight.calculator,
+                        iconSize: iconSize / 1.5,
+                        title: 'Calculator',
+                        titleSize: titleSize * 0.7,
+                        subtitleSize: subtitleSize * 0.7,
+                        width: (menuSize - 8)/2,
+                        height: (menuSize - 8)/2,
+                        color: ColorStyle.primary,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const CalculatorPage(),
+                            ),
+                          );
+                        },
+                      ),
+
+
+
+
+                      MenuCard(
+                        iconData: UIcons.regularStraight.settings,
+                        iconSize: iconSize / 1.5,
+                        title: 'Settings',
+                        titleSize: titleSize * 0.7,
+                        subtitleSize: subtitleSize * 0.7,
+                        width: (menuSize - 8)/2,
+                        height: (menuSize - 8)/2,
+                        color: const Color(0xFF222222),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const SettingPage(),
+                            ),
+                          ).then((_) async {
+                            setState(() {});
+                          });
+                        },
+                      ), // Settings
+
+
+
+                    ],),
+                ),
+
+
               ],
             ),
           ],

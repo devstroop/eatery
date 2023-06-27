@@ -71,12 +71,12 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        widget.customer.delete()
-                            .whenComplete(() {
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          setState(() {});
-                        });
+                        // widget.customer.delete()
+                        //     .whenComplete(() {
+                        //   Navigator.pop(context);
+                        //   Navigator.pop(context);
+                        //   setState(() {});
+                        // });
                       },
                       child: const Text('Delete'),
                     ),
@@ -168,12 +168,12 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
             widget.customer.phone = _controllerCustomerPhone.text;
             widget.customer.isActive = isActive;
             try {
-              EateryDB.instance.customerBox.put(widget.customer.key,
-                widget.customer,
-              ).whenComplete(() {
-                showSnackBar(context, 'Customer updated successfully');
-                Navigator.pop(context);
-              });
+              // EateryDB.instance.customerBox.put(widget.customer.key,
+              //   widget.customer,
+              // ).whenComplete(() {
+              //   showSnackBar(context, 'Customer updated successfully');
+              //   Navigator.pop(context);
+              // });
             } catch (_) {
               showSnackBar(context, 'Failed to add customer');
             }
