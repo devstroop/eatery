@@ -1,5 +1,5 @@
 name: eatery
-description: A new Flutter project.
+description: A simple and sober restaurant management with pos application.
 
 publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
@@ -15,7 +15,6 @@ dependencies:
   # hive database
   hive: ^2.2.3
   hive_flutter: ^1.1.0
-
   mime: ^1.0.0
   path: ^1.8.2
   uicons: ^1.0.1

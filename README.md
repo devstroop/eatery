@@ -1,6 +1,9 @@
+[image](https://github.com/devstroop/eatery/blob/master/assets/logo.svg)
+[]: # Path: README.md
+
 # Eatery
 
-A simple and sober restaurant management with pos app for Android.
+A simple and sober restaurant management with pos application.
 
 ## Project Information
 
