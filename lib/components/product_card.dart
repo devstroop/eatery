@@ -2,11 +2,9 @@ import 'package:eatery/constants/utils/calculations.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 import 'package:eatery/constants/style/color_style.dart';
-
 import '../constants/global_variables.dart';
 import '../services/utility/library_image.dart';
 import '../widgets/badges/foodType.badge.dart';
-import 'low_qty_label_widget.dart';
 
 class ProductCard extends StatelessWidget {
   const ProductCard(
