@@ -1,24 +1,5 @@
-import 'package:eatery/components/menu_widget.dart';
-import 'package:eatery/constants/global_variables.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import 'package:eatery/pages/backupRestore/backupRestore.page.dart';
-import 'package:eatery/pages/dashboard/components/dashboardHeader.dart';
-import 'package:eatery/pages/dashboard/components/notifications/upgrade.notification.dart';
-import 'package:eatery/pages/dashboard/diningTable/diningTables.page.dart';
-import 'package:eatery/pages/dashboard/product/productCategory/productCategories.page.dart';
-import 'package:eatery/pages/dashboard/product/inventoryItem/inventory.page.dart';
-import 'package:eatery/pages/dashboard/product/kitchenDishes/kitchenDishes.page.dart';
-import 'package:eatery/pages/dashboard/pos/pointOfSale.page.dart';
-import 'package:eatery/pages/dashboard/reports/reports.page.dart';
-import 'package:eatery/pages/dashboard/settings/settings.page.dart';
-import 'package:eatery/pages/dashboard/waiter/waiters.page.dart';
-import 'package:eatery/widgets/bottomSheets/imageLibrary.bottomSheet.dart';
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-import 'package:googleapis/appengine/v1.dart';
-import '../../services/utility/library_image.dart';
-import '../authentication/logout.page.dart';
-import 'importExport/importExport.page.dart';
+import 'package:eatery/references.dart';
+
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key, required this.company}) : super(key: key);
@@ -148,7 +129,7 @@ class _DashboardPageState extends State<DashboardPage> {
               runSpacing: spacing,
               alignment: WrapAlignment.spaceBetween,
               children: [
-                MenuWidget(
+                MenuCard(
                   iconData: UIcons.regularStraight.calculator,
                   iconSize: iconSize,
                   title: 'Point of Sale',
@@ -182,7 +163,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     runSpacing: 8,
                     children: [
 
-                      MenuWidget(
+                      MenuCard(
                         iconData: UIcons.regularStraight.table_tree,
                         iconSize: iconSize / 1.5,
                         title: 'Product Categories',
@@ -190,7 +171,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         titleSize: titleSize * 0.7,
                         subtitleSize: subtitleSize * 0.7,
                         color: ColorStyle.tertiary,
-                        width: (menuSize),
+                        width: (menuSize - 8)/2,
                         height: (menuSize - 8)/2,
                         onTap: () {
                           Navigator.push(
@@ -201,7 +182,26 @@ class _DashboardPageState extends State<DashboardPage> {
                           );
                         },
                       ),
-                      MenuWidget(
+                      MenuCard(
+                        iconData: UIcons.regularStraight.data_transfer,
+                        iconSize: iconSize / 1.5,
+                        title: 'Stock Transfer',
+                        // subtitle: 'Manage product categories',
+                        titleSize: titleSize * 0.7,
+                        subtitleSize: subtitleSize * 0.7,
+                        color: ColorStyle.warning,
+                        width: (menuSize - 8)/2,
+                        height: (menuSize - 8)/2,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const StocksPage(),
+                            ),
+                          );
+                        },
+                      ),
+                      MenuCard(
                         iconData: UIcons.regularStraight.restaurant,
                         iconSize: iconSize / 1.5,
                         title: 'Kitchen',
@@ -220,7 +220,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           );
                         },
                       ),
-                      MenuWidget(
+                      MenuCard(
                         iconData: UIcons.regularStraight.boxes,
                         iconSize: iconSize / 1.5,
                         title: 'Inventory',
@@ -234,7 +234,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const InventoryPage(),
+                              builder: (context) => const InventoryItemsPage(),
                             ),
                           );
                         },
@@ -252,38 +252,38 @@ class _DashboardPageState extends State<DashboardPage> {
                     runSpacing: 8,
                     children: [
 
-                      MenuWidget(
+                      MenuCard(
                         iconSize: iconSize / 1.5,
                         titleSize: titleSize * 0.7,
                         subtitleSize: subtitleSize * 0.7,
                         width: (menuSize - 8)/2,
                         height: (menuSize - 8)/2,
-                        iconData: UIcons.regularStraight.people_poll,
+                        iconData: UIcons.regularStraight.users,
                         title: 'Customers',
                         color: const Color(0xFF2FC289),
                         onTap: () {
 
                         },
                       ),
-                      MenuWidget(
+                      MenuCard(
                         iconSize: iconSize / 1.5,
                         titleSize: titleSize * 0.7,
                         subtitleSize: subtitleSize * 0.7,
                         width: (menuSize - 8)/2,
                         height: (menuSize - 8)/2,
+                        title: 'Staffs',
                         iconData: UIcons.regularStraight.people_poll,
-                        title: 'Waiters',
                         color: const Color(0xFFC2592F),
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const WaitersPage(),
+                              builder: (context) => const StaffsPage(),
                             ),
                           );
                         },
                       ),
-                      MenuWidget(
+                      MenuCard(
                         iconSize: iconSize / 1.5,
                         titleSize: titleSize * 0.7,
                         subtitleSize: subtitleSize * 0.7,
@@ -303,7 +303,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                     ],),
                 ),
-                MenuWidget(
+                MenuCard(
                   iconData: UIcons.regularStraight.time_past,
                   iconSize: iconSize,
                   title: 'History',
@@ -317,13 +317,13 @@ class _DashboardPageState extends State<DashboardPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ReportsPage(),
+                        builder: (context) => const TransactionsPage(),
                       ),
                     );
                   },
                 ),
 
-                MenuWidget(
+                MenuCard(
                   iconData: UIcons.regularStraight.gallery,
                   iconSize: iconSize,
                   title: 'Library',
@@ -336,7 +336,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   onTap: _showLibrary,
                 ),
 
-                MenuWidget(
+                MenuCard(
                   iconData: UIcons.regularStraight.settings,
                   iconSize: iconSize,
                   title: 'Settings',
@@ -350,14 +350,14 @@ class _DashboardPageState extends State<DashboardPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => SettingPage(),
+                        builder: (context) => const SettingPage(),
                       ),
                     ).then((_) async {
                       setState(() {});
                     });
                   },
                 ), // Settings
-                MenuWidget(
+                MenuCard(
                   iconData: UIcons.regularStraight.exchange,
                   iconSize: iconSize,
                   title: 'Import / Export',
@@ -376,7 +376,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     );
                   },
                 ),
-                MenuWidget(
+                MenuCard(
                   iconData: UIcons.regularStraight.time_past,
                   iconSize: iconSize,
                   title: 'Backup / Restore',
@@ -395,7 +395,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     );
                   },
                 ),/*
-                MenuWidget(
+                MenuCard(
                   iconData: UIcons.regularStraight.gallery,
                   iconSize: iconSize,
                   title: 'Library',
@@ -443,7 +443,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     }));
                   },
                 ),*/
-                // MenuWidgetExtended(
+                // MenuCardExtended(
                 //   iconData: UIcons.regularStraight.log_out,
                 //   title: 'Logout',
                 //   subtitle: 'Close the session',
@@ -469,7 +469,7 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void _showLibrary() {
-    showModalBottomSheet(context: context,
+    showModalBottomSheet(context: this.context,
         isScrollControlled: true,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(

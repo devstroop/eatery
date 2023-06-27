@@ -1,8 +1,4 @@
-import 'dart:io';
-import 'package:eatery/services/utility/library_image.dart';
-import 'package:flutter/material.dart';
-
-import '../../../services/utility/file.utility.service.dart';
+import 'package:eatery/references.dart';
 
 class DashboardHeader extends StatelessWidget {
   final String companyName;

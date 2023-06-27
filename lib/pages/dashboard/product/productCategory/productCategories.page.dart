@@ -1,10 +1,7 @@
-import 'package:eatery/services/utility/library_image.dart';
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import 'addProductCategory.page.dart';
-import 'editProductCategory.page.dart';
+import 'package:eatery/references.dart';
+
 Color _pageColor = ColorStyle.tertiary;
+
 class ProductCategoriesPage extends StatefulWidget {
   const ProductCategoriesPage({Key? key}) : super(key: key);
 

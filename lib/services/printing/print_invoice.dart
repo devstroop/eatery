@@ -1,7 +1,7 @@
-import 'package:eatery/constants/utils/calculations.dart';
+
 import '../../support/bluetooth_thermal_printer/bluetooth_thermal_printer.dart';
-import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 import 'package:intl/intl.dart';
+import 'package:eatery/references.dart';
 
 class PrintInvoice {
   static BluetoothPrinterService printerManager = BluetoothPrinterService();

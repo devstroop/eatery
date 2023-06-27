@@ -1,5 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:eatery/constants/style/color_style.dart';
+import 'package:eatery/references.dart';
 
 class StickyButton extends StatelessWidget {
   const StickyButton({

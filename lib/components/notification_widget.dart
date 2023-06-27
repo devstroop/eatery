@@ -1,5 +1,5 @@
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:eatery/references.dart';
 
 class NotificationWidget extends StatelessWidget {
   const NotificationWidget({Key? key, required this.message, this.timestamp, this.header, this.leading, this.onTap}) : super(key: key);

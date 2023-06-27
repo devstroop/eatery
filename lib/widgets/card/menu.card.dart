@@ -1,7 +1,7 @@
-import 'package:flutter/material.dart';
+import 'package:eatery/references.dart';
 
-class MenuWidget extends StatelessWidget {
-  const MenuWidget({
+class MenuCard extends StatelessWidget {
+  const MenuCard({
     Key? key,
     required this.iconData,
     required this.title,

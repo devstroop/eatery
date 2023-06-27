@@ -1,23 +1,15 @@
-import 'package:eatery/components/loaders/loading_screen.dart';
-import 'package:eatery/pages/dashboard/waiter/addWaiter.page.dart';
-import 'package:eatery/services/utility/library_image.dart';
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery/components/waiter_card.dart';
-import '../../../widgets/imageWidgets/leading.imageWidget.dart';
-import 'editWaiter.page.dart';
-import 'package:eatery/constants/style/color_style.dart';
+import 'package:eatery/references.dart';
 
 Color _pageColor = ColorStyle.primary;
 
-class WaitersPage extends StatefulWidget {
-  const WaitersPage({Key? key}) : super(key: key);
+class StaffsPage extends StatefulWidget {
+  const StaffsPage({Key? key}) : super(key: key);
 
   @override
-  State<WaitersPage> createState() => _WaitersPageState();
+  State<StaffsPage> createState() => _StaffsPageState();
 }
 
-class _WaitersPageState extends State<WaitersPage> {
+class _StaffsPageState extends State<StaffsPage> {
   @override
   void initState() {
     super.initState();
@@ -63,7 +55,7 @@ class _WaitersPageState extends State<WaitersPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        EditWaiterPage(waiter: e)),
+                                        EditStaffPage(waiter: e)),
                               ).then((_) => setState(() {}));
                             },
                           ),
@@ -141,7 +133,7 @@ class _WaitersPageState extends State<WaitersPage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AddWaiterPage()),
+            MaterialPageRoute(builder: (context) => const AddStaffPage()),
           ).then((_) => setState(() {}));
         },
       ),

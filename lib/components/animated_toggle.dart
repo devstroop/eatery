@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:eatery/references.dart';
 import 'package:get/get.dart';
 
 class AnimatedToggle extends StatefulWidget {

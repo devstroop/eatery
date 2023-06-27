@@ -1,9 +1,4 @@
-import 'package:eatery_components/bottomsheets/tax_slab.bottomsheet.dart';
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import './addTaxSlab.page.dart';
-import 'editTaxSlab.page.dart';
+import 'package:eatery/references.dart';
 
 class TaxSlabsSettingsPage extends StatefulWidget {
   const TaxSlabsSettingsPage({Key? key})
@@ -24,18 +19,18 @@ class _TaxSlabsSettingsPageState extends State<TaxSlabsSettingsPage> {
   }
 
   _edit(TaxSlab taxSlab) => Navigator.push(
-        context,
+        this.context,
         MaterialPageRoute(
             builder: (context) => EditTaxSlabSettingsPage(taxSlab: taxSlab)),
       ).then((_) {
         setState(() {});
-        Navigator.of(context).pop();
+        Navigator.of(this.context).pop();
       });
 
   _delete(TaxSlab taxSlab) async {
     await taxSlab.delete().whenComplete(() {
       setState(() {});
-      Navigator.of(context).pop();
+      Navigator.of(this.context).pop();
     });
   }
 

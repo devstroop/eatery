@@ -1,5 +1,4 @@
-import 'package:eatery/constants/style/color_style.dart';
-import 'package:flutter/material.dart';
+import 'package:eatery/references.dart';
 
 class MenuTile extends StatelessWidget {
   const MenuTile({Key? key, required this.title, this.subtitle, required this.prefixIcon, required this.postfixIcon, this.color, this.onTap}) : super(key: key);

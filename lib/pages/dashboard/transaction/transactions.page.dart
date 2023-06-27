@@ -1,27 +1,15 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui' as ui;
-import 'package:date_time_picker/date_time_picker.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
-import 'package:eatery/components/custom_dialog_box.dart';
-import 'package:eatery/constants/utils/app_file_system.dart';
-import 'package:eatery/services/utility/generate.dart';
-import 'package:eatery/services/utility/share.dart';
-import 'package:eatery/services/utility/show_snack_bar.dart';
-import 'package:eatery/constants/style/color_style.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
-import 'package:eatery_db/eatery_db.dart';
+import 'package:eatery/references.dart';
 
-class ReportsPage extends StatefulWidget {
-  const ReportsPage({Key? key}) : super(key: key);
+class TransactionsPage extends StatefulWidget {
+  const TransactionsPage({Key? key}) : super(key: key);
   @override
-  State<ReportsPage> createState() => _ReportsPageState();
+  State<TransactionsPage> createState() => _TransactionsPageState();
 }
 
-class _ReportsPageState extends State<ReportsPage> {
+class _TransactionsPageState extends State<TransactionsPage> {
   final GlobalKey genKey = GlobalKey();
   late List<Map<String, dynamic>> orders = [];
   DateTime? filterFrom;

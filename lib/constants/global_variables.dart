@@ -1,7 +1,4 @@
-import 'dart:io';
-
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
+import 'package:eatery/references.dart';
 
 class GlobalVariables {
   static bool expressMode = false;

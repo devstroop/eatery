@@ -1,19 +1,6 @@
-import 'dart:convert';
-import 'dart:io';
-import 'dart:typed_data';
-import 'package:eatery/constants/utils/calculations.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:intl/intl.dart';
-import 'package:number_to_words/number_to_words.dart';
-import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:eatery/constants/utils/app_file_system.dart';
-import 'package:eatery/services/printing/print_invoice.dart';
-import 'package:eatery/services/utility/generate.dart';
-import 'package:eatery/services/utility/share.dart';
-import 'package:eatery/services/utility/show_snack_bar.dart';
-import 'package:eatery/constants/style/color_style.dart';
 import 'dart:ui' as ui;
+import 'package:eatery/references.dart';
 
 class OrderConfirmation extends StatefulWidget {
   const OrderConfirmation(

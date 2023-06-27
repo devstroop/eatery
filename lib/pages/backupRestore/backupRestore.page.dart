@@ -1,8 +1,4 @@
-import 'package:eatery/services/cloud/google_drive.dart';
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import 'package:sn_progress_dialog/sn_progress_dialog.dart';
+import 'package:eatery/references.dart';
 
 Color _pageColor = ColorStyle.tertiary;
 class BackupRestorePage extends StatefulWidget {

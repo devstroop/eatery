@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:eatery/references.dart';
 
 class MenuWidgetExtended extends StatelessWidget {
   const MenuWidgetExtended({

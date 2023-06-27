@@ -1,9 +1,4 @@
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import '../../../../services/utility/library_image.dart';
-import 'addDiningTableCategory.page.dart';
-import 'editDiningTableCategory.page.dart';
+import 'package:eatery/references.dart';
 
 Color _pageColor = ColorStyle.tertiary;
 

@@ -1,9 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:eatery_db/eatery_db.dart';
-
-import '../../../../constants/style/color_style.dart';
-import '../../../../services/utility/library_image.dart';
-import '../../../../widgets/badges/foodType.badge.dart';
+import 'package:eatery/references.dart';
 
 class KProductView extends StatelessWidget {
   const KProductView({super.key, required this.product});

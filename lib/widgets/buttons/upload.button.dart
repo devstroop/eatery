@@ -1,10 +1,4 @@
-import 'dart:io';
-import 'package:eatery/services/utility/file.utility.service.dart';
-import 'package:eatery/services/utility/library_image.dart';
-import 'package:flutter/material.dart';
-import 'package:uicons/uicons.dart';
-
-import '../bottomSheets/imageLibrary.bottomSheet.dart';
+import 'package:eatery/references.dart';
 
 class UploadButton extends StatefulWidget {
   const UploadButton(
@@ -35,7 +29,7 @@ class _UploadButtonState extends State<UploadButton> {
   }
 
   void onUploadPressed() => showModalBottomSheet(
-      context: context,
+      context: this.context,
       isScrollControlled: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(

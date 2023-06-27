@@ -1,15 +1,7 @@
-import 'package:eatery/components/custom_text_from_field.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import 'package:eatery/constants/style/spacing_style.dart';
-import 'package:eatery/services/utility/show_snack_bar.dart';
-import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:eatery_components/switches/toggle.switch.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery_db/eatery_db.dart';
+import 'package:eatery/references.dart';
 
 class EditTaxSlabSettingsPage extends StatefulWidget {
-  const EditTaxSlabSettingsPage(
-      {Key? key, required this.taxSlab})
+  const EditTaxSlabSettingsPage({Key? key, required this.taxSlab})
       : super(key: key);
   final TaxSlab taxSlab;
 
@@ -30,9 +22,7 @@ class _EditTaxSlabSettingsPageState extends State<EditTaxSlabSettingsPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, (){
-      
-    });
+    Future.delayed(Duration.zero, () {});
     controllerSlabName.text = widget.taxSlab.name;
     controllerTaxRate.text = '${widget.taxSlab.rate}';
     _taxType = widget.taxSlab.type;
@@ -51,10 +41,10 @@ class _EditTaxSlabSettingsPageState extends State<EditTaxSlabSettingsPage> {
       widget.taxSlab.rate = double.parse(controllerTaxRate.text);
       widget.taxSlab.type = _taxType;
       widget.taxSlab.save();
-      showSnackBar(context, 'Successfully updated!');
-      Navigator.of(context).pop();
+      showSnackBar(this.context, 'Successfully updated!');
+      Navigator.of(this.context).pop();
     } catch (_) {
-      showSnackBar(context, 'Failed to created!');
+      showSnackBar(this.context, 'Failed to created!');
     }
   }
 
@@ -156,16 +146,25 @@ class _EditTaxSlabSettingsPageState extends State<EditTaxSlabSettingsPage> {
                       fontWeight: FontWeight.w400,
                     ),
                   ),
+                  // ToggleSwitch(
+                  //   color: localColor,
+                  //   options: [for (var each in TaxType.values) each.name!],
+                  //   index: _taxType.index,
+                  //   onChange: (int? index) {
+                  //     _taxType = TaxType.values
+                  //         .singleWhere((element) => element.id == index);
+                  //     setState(() {});
+                  //   },
+                  // ),
                   ToggleSwitch(
-                    color: localColor,
-                    options: [for (var each in TaxType.values) each.name!],
-                    index: _taxType.index,
-                    onChange: (int? index) {
-                      _taxType = TaxType.values
-                          .singleWhere((element) => element.id == index);
-                      setState(() {});
-                    },
-                  ),
+                    highlightColor: localColor,
+                      selectedIndex: _taxType.index,
+                      children: [...TaxType.values.map((e) => e.name!)],
+                      onChange: (int? index) {
+                        _taxType = TaxType.values
+                            .singleWhere((element) => element.id == index);
+                        setState(() {});
+                      }),
                 ],
               ),
             ],

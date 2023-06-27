@@ -1,14 +1,4 @@
-import 'dart:io';
-
-import 'package:eatery/components/bottomsheets/upload_image_bottomsheet.dart';
-import 'package:eatery/components/loaders/loading_screen.dart';
-import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import 'package:eatery/constants/style/spacing_style.dart';
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-
-import 'editCompany.page.dart';
+import 'package:eatery/references.dart';
 
 class ShowCompanyPage extends StatefulWidget {
   const ShowCompanyPage({Key? key}) : super(key: key);
@@ -35,7 +25,7 @@ class _ShowCompanyPageState extends State<ShowCompanyPage> {
     setState(() {});*/
   }
   void _changeLogo() => showModalBottomSheet(
-      context: context,
+      context: this.context,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24),

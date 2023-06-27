@@ -1,19 +1,13 @@
-import 'package:eatery/constants/style/spacing_style.dart';
-import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import 'package:lottie/lottie.dart';
+import 'package:eatery/references.dart';
 
-import '../authentication/login.page.dart';
-
-class CreateAccountResultPage extends StatefulWidget {
-  const CreateAccountResultPage({Key? key}) : super(key: key);
+class CreateCompanyResultPage extends StatefulWidget {
+  const CreateCompanyResultPage({Key? key}) : super(key: key);
   @override
-  State<CreateAccountResultPage> createState() =>
-      _CreateAccountResultPageState();
+  State<CreateCompanyResultPage> createState() =>
+      _CreateCompanyResultPageState();
 }
 
-class _CreateAccountResultPageState extends State<CreateAccountResultPage> {
+class _CreateCompanyResultPageState extends State<CreateCompanyResultPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

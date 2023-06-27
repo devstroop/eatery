@@ -1,5 +1,4 @@
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:googleapis_auth/auth_io.dart';
+import 'package:eatery/references.dart';
 
 class SecureStorage {
   final storage = const FlutterSecureStorage();

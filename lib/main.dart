@@ -1,12 +1,4 @@
-import 'dart:io';
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery/pages/authentication/login.page.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
-
-import 'constants/global_variables.dart';
-import 'pages/createCompany/createCompany.page.dart';
+import 'package:eatery/references.dart';
 
 Future main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();

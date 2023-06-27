@@ -1,22 +1,15 @@
-import 'package:eatery/constants/utils/utils.dart';
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import '../../../components/labeled_custom_text_from_field.dart';
-import '../../../services/utility/library_image.dart';
-import '../../../widgets/buttons/primary.button.dart';
-import '../../../widgets/buttons/upload.button.dart';
+import 'package:eatery/references.dart';
 
 Color _pageColor = ColorStyle.primary;
 
-class AddWaiterPage extends StatefulWidget {
-  const AddWaiterPage({Key? key}) : super(key: key);
+class AddStaffPage extends StatefulWidget {
+  const AddStaffPage({Key? key}) : super(key: key);
 
   @override
-  State<AddWaiterPage> createState() => _AddWaiterPageState();
+  State<AddStaffPage> createState() => _AddStaffPageState();
 }
 
-class _AddWaiterPageState extends State<AddWaiterPage> {
+class _AddStaffPageState extends State<AddStaffPage> {
   LibraryImage? image;
   bool isActive = true;
   final TextEditingController _controllerWaiterName = TextEditingController();

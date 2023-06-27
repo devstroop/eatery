@@ -1,12 +1,6 @@
-import 'package:eatery/components/custom_text_from_field.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import 'package:eatery/constants/style/spacing_style.dart';
-import 'package:eatery/constants/validators/gstin_validator.dart';
-import 'package:eatery_components/switches/toggle.switch.dart';
-import 'package:eatery_components/titles/page.title.dart';
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:eatery/references.dart';
+
 
 class Body4 extends StatelessWidget {
   final Color themeColor;
@@ -122,12 +116,18 @@ class Body4 extends StatelessWidget {
                 ),
               ),
               SpacingStyle.defaultHorizontalSpacing,
+              // ToggleSwitch(
+              //   color: themeColor,
+              //   options: [for (var each in TaxType.values) each.name!],
+              //   index: taxType.index,
+              //   onChange: onTaxTypeChanged,
+              // ),
               ToggleSwitch(
-                color: themeColor,
-                options: [for (var each in TaxType.values) each.name!],
-                index: taxType.index,
                 onChange: onTaxTypeChanged,
-              ),
+                  children: [...TaxType.values.map((e) => e.name!)],
+                selectedIndex: taxType.index,
+                highlightColor: themeColor,
+              )
             ],
           ),
         ],

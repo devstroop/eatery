@@ -1,18 +1,5 @@
-import 'dart:io';
-import 'package:eatery/constants/style/spacing_style.dart';
-import 'package:eatery/pages/backupRestore/backupRestore.page.dart';
-import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:eatery/components/custom_text_from_field.dart';
-import 'package:eatery/pages/dashboard/dashboard.page.dart';
-import 'package:eatery/services/utility/show_snack_bar.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import 'package:eatery/components/bottomsheets/forgot_password_bottomsheet.dart';
-import 'package:eatery/components/bottomsheets/upgrade_to_access_bottomsheet.dart';
-import 'package:eatery_db/eatery_db.dart';
-
-import '../../services/utility/library_image.dart';
+import 'package:eatery/references.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -43,7 +30,7 @@ class _LoginPageState extends State<LoginPage> {
     _formKey.currentState!.save();
     if (_controllerPassword.text == company!.password) {
       Navigator.pushAndRemoveUntil(
-        context,
+        this.context,
         MaterialPageRoute(
           builder: (context) => DashboardPage(
             company: company!,
@@ -52,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
         (Route<dynamic> route) => false,
       );
     } else {
-      showSnackBar(context, "Invalid credentials");
+      showSnackBar(this.context, "Invalid credentials");
     }
   }
 

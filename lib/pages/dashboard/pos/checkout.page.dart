@@ -1,16 +1,4 @@
-import 'package:eatery/constants/utils/calculations.dart';
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery/components/bottom_view_grip.dart';
-import 'package:eatery/components/checkout_product_card.dart';
-import 'package:eatery/components/custom_button.dart';
-import 'package:eatery/components/custom_text_from_field.dart';
-import 'package:eatery/components/pos_waiter_card.dart';
-import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:eatery/services/utility/show_snack_bar.dart';
-import 'package:eatery/constants/style/color_style.dart';
-
-import 'orderConfirmation.page.dart';
+import 'package:eatery/references.dart';
 
 class CheckoutPage extends StatefulWidget {
   const CheckoutPage(

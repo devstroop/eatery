@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:eatery/references.dart';
 
 class CaptionLabel extends StatelessWidget {
   const CaptionLabel({super.key, required this.label, this.borderRadius, this.border, this.color, this.fontSize, this.fontWeight, this.padding, this.margin});

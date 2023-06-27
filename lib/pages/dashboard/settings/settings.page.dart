@@ -1,11 +1,4 @@
-import 'package:eatery/components/bottomsheets/help_bottom_sheet.dart';
-import 'package:eatery/pages/dashboard/settings/taxSlab/taxSlabs.page.dart';
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery/components/menu_tile.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import 'company/showCompany.page.dart';
-import 'currency/showCurrencyRegion.page.dart';
+import 'package:eatery/references.dart';
 
 class SettingPage extends StatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
@@ -37,7 +30,7 @@ class _SettingPageState extends State<SettingPage> {
           color: getThemeColor(),
           onTap: () {
             Navigator.push(
-              context,
+              this.context,
               MaterialPageRoute(builder: (context) => const ShowCompanyPage()),
             ).then((_) => setState(() {}));
           },
@@ -49,7 +42,7 @@ class _SettingPageState extends State<SettingPage> {
           postfixIcon: Icons.arrow_forward_ios_sharp,
           color: getThemeColor(),
           onTap: () => Navigator.push(
-            context,
+            this.context,
             MaterialPageRoute(
                 builder: (context) => const ShowCurrencyRegionPage()),
           ),
@@ -61,7 +54,7 @@ class _SettingPageState extends State<SettingPage> {
           postfixIcon: Icons.arrow_forward_ios_sharp,
           color: getThemeColor(),
           onTap: () => Navigator.push(
-            context,
+            this.context,
             MaterialPageRoute(
                 builder: (context) =>
                     const TaxSlabsSettingsPage()),
@@ -93,7 +86,7 @@ class _SettingPageState extends State<SettingPage> {
                   bottomRight: Radius.circular(0),
                 ),
               ),
-              context: context,
+              context: this.context,
               builder: (context) => const HelpBottomSheet()),
         ),
       ]),

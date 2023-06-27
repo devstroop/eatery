@@ -1,10 +1,4 @@
-import 'dart:io';
-
-import 'package:eatery/constants/global_variables.dart';
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery_components/badges/food_type.badge.dart';
-import 'package:eatery/constants/style/color_style.dart';
+import 'package:eatery/references.dart';
 
 class DetailedProductView extends StatefulWidget {
   const DetailedProductView(

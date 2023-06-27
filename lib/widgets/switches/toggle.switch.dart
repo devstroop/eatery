@@ -1,4 +1,5 @@
-import 'package:flutter/material.dart';
+// TODO Implement this library.
+import 'package:eatery/references.dart';
 
 class ToggleSwitch extends StatelessWidget {
   const ToggleSwitch({super.key, this.padding, this.margin, this.borderRadius, required this.children, this.onChange, this.selectedIndex, this.highlightColor, this.backgroundColor, this.foregroundColor, this.inactiveForegroundColor});

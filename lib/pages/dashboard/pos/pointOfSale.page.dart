@@ -1,20 +1,4 @@
-import 'package:eatery/constants/global_variables.dart';
-import 'package:eatery/pages/dashboard/pos/views/dininigTableSelection.view.dart';
-import 'package:eatery/pages/dashboard/pos/views/kProduct.view.dart';
-import 'package:eatery/pages/dashboard/pos/views/waiterSelection.view.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery/components/bottom_view_grip.dart';
-import 'package:eatery/components/pos_category_widget.dart';
-import 'package:eatery/components/pos_order_type_selection_button.dart';
-import 'package:eatery/components/special_button.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import 'package:eatery_db/eatery_db.dart';
-
-import '../../../components/product_card.dart';
-import '../../../services/utility/library_image.dart';
-import '../../../widgets/posWidgets/circularCategory.posWidget.dart';
-import '../../../widgets/textFields/search.textField.dart';
-import 'views/cart.view.dart';
+import 'package:eatery/references.dart';
 
 class PointOfSalePage extends StatefulWidget {
   const PointOfSalePage({Key? key}) : super(key: key);
@@ -253,6 +237,24 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
           title: const Text('Point of Sale'),
           backgroundColor: _pageColor,
           foregroundColor: Colors.white,
+          actions: [
+            IconButton(
+              icon: Icon(UIcons.regularStraight.barcode_read),
+              onPressed: (){}
+            ),
+            IconButton(
+              icon: Icon(UIcons.regularStraight.calculator),
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const CalculatorPage()));
+              },
+            ),
+            IconButton(onPressed: (){
+              Navigator.push(context, MaterialPageRoute(builder: (context) => const TransactionsPage()));
+            }, icon: Icon(UIcons.regularStraight.time_past)),
+          ],
           leading: IconButton(
             icon: Icon(UIcons.regularStraight.arrow_left),
             onPressed: () {
@@ -411,6 +413,13 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                     UIcons.regularStraight.map_marker,
                     color: _pageColor,
                   )),
+            if (orderType == OrderType.delivery)
+              IconButton(
+                  onPressed: _pickDeliveryStaff,
+                  icon: Icon(
+                    UIcons.regularStraight.biking,
+                    color: _pageColor,
+                  )),
 
 
             IconButton(
@@ -461,7 +470,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
 
   void _pickDiningTable() {
     showModalBottomSheet(
-        context: context,
+        context: this.context,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(24),
@@ -484,7 +493,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
 
   void _cartView() {
     showModalBottomSheet(
-        context: context,
+        context: this.context,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(24),
@@ -509,14 +518,14 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
             bottomRight: Radius.circular(0),
           ),
         ),
-        context: context,
+        context: this.context,
         builder: (context) =>
             KProductView(product: product));
   }
 
   void _pickWaiter() {
     showModalBottomSheet(
-        context: context,
+        context: this.context,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             topLeft: Radius.circular(24),
@@ -538,7 +547,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
             bottomRight: Radius.circular(0),
           ),
         ),
-        context: context,
+        context: this.context,
         builder: (context) => ListView(
           shrinkWrap: true,
           children: [
@@ -577,5 +586,8 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
             ),
           ],
         ));
+  }
+
+  void _pickDeliveryStaff() {
   }
 }

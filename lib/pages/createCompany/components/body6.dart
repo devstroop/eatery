@@ -1,22 +1,5 @@
-// ignore_for_file: must_be_immutable
-
-import 'dart:io';
-
-import 'package:clipboard/clipboard.dart';
-import 'package:eatery/components/custom_text_from_field.dart';
-import 'package:eatery/components/selectable_card.dart';
-import 'package:eatery/constants/plugins/license.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import 'package:eatery/constants/style/spacing_style.dart';
-import 'package:eatery/constants/utils/utils.dart';
-import 'package:eatery_components/titles/page.title.dart';
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:platform_device_id/platform_device_id.dart';
-import 'package:devdart_windows_hdsn/devdart_windows_hdsn.dart';
-import 'package:devdart_windows_hdsn/drive.dart';
+import 'package:eatery/references.dart';
 
 class Body6 extends StatefulWidget {
   final Color themeColor;
@@ -234,11 +217,11 @@ class _Body6State extends State<Body6> {
     // Implement copy to clipboard 'deviceSerial'
     String? deviceSerial = this.deviceSerial;
     if (deviceSerial == null) {
-      showSnackBar(context, 'Device Id can\'t be copied in clipboard');
+      showSnackBar(this.context, 'Device Id can\'t be copied in clipboard');
       return;
     }
     Clipboard.setData(ClipboardData(text: deviceSerial)).whenComplete(() {
-      showSnackBar(context, 'Copied to clipboard');
+      showSnackBar(this.context, 'Copied to clipboard');
     });
   }
 }

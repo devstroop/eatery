@@ -1,8 +1,4 @@
-import 'package:eatery_components/buttons/primary.button.dart';
-import 'package:flutter/material.dart';
-
-import '../../../constants/style/color_style.dart';
-import '../../../constants/style/spacing_style.dart';
+import 'package:eatery/references.dart';
 
 class CreateCompanyBottomAppBar extends StatelessWidget {
   final Color themeColor;

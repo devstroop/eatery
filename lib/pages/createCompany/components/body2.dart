@@ -1,8 +1,5 @@
-import 'package:eatery/components/custom_text_from_field.dart';
-import 'package:eatery/constants/style/spacing_style.dart';
-import 'package:eatery_components/titles/page.title.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:eatery/references.dart';
 
 class Body2 extends StatelessWidget {
   final Color themeColor;
