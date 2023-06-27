@@ -20,7 +20,13 @@ class WaiterSelectionView extends StatelessWidget {
               Navigator.pop(context);
             },
           )
-      )
+      ),
+
+      Container(
+        margin: const EdgeInsets.symmetric(horizontal: 12.0),
+        height: 0.5,
+        color: ColorStyle.text400,
+      ),
     ]);
   }
 }

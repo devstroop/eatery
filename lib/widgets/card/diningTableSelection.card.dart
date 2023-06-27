@@ -2,6 +2,7 @@ import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 
 import '../../constants/style/color_style.dart';
+import '../../services/utility/library_image.dart';
 
 class DiningTableSelectionCard extends StatelessWidget {
   const DiningTableSelectionCard(
@@ -15,46 +16,83 @@ class DiningTableSelectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool active = diningTable.isActive;
-    bool available =
-        active && order != null ? order!.id == diningTable.orderId : false;
-    Color color = active
-        ? (available ? ColorStyle.success : ColorStyle.text300)
-        : ColorStyle.text300;
-    return InkWell(
-      onTap: onTap,
-      child: Container(
-        decoration: BoxDecoration(
-          color: color.withOpacity(0.24),
-          borderRadius: BorderRadius.circular(12.0),
-          border: Border.all(
-            width: 2.0,
-            color: color,
-          ),
-        ),
-        child: Stack(
-          children: [
-            Center(
-              child: Text(
-                diningTable.name,
-                style: TextStyle(
-                  color: color,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+    bool available = active && order != null ? order!.id == diningTable.orderId : true;
+    Color color = active && available
+        ? ColorStyle.success : active && !available ? ColorStyle.error : ColorStyle.text300;
+    return Material(
+      borderRadius: BorderRadius.circular(12.0),
+      child: InkWell(
+        onTap: onTap,
+        child: Container(
+          decoration: BoxDecoration(
+            color: color.withOpacity(selected ? 0.24 : 0.12),
+            borderRadius: BorderRadius.circular(12.0),
+            border: Border.all(
+              width: selected ? 2.0 : 1.0,
+              color: color,
             ),
-            if(selected)
+          ),
+          child: Stack(
+            children: [
               Positioned(
-                top: 6,
-                right: 6,
-                child: Icon(
-                  UIcons.regularStraight.check,
-                  color: color,
-                  size: 18.0,
+                  top: 6,
+                  left: 6,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(vertical: 3.0, horizontal: 6.0),
+                    decoration: BoxDecoration(
+                      color: color,
+                      borderRadius: BorderRadius.circular(12.0),
+                    ),
+                    child: Text(
+                      available && active ? 'Available' : active ? 'Not Available' : 'Inactive',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10.0,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                  )),
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      diningTable.name,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: color,
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    if(diningTable.description != null)
+                      Text(
+                        diningTable.description!,
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          color: color,
+                          fontSize: 10.0,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                  ],
                 ),
               ),
+              if(selected)
+                Positioned(
+                  top: 6,
+                  right: 6,
+                  child: Icon(
+                    UIcons.regularStraight.check,
+                    color: color,
+                    size: 18.0,
+                  ),
+                ),
 
-          ],
+            ],
+          ),
         ),
       ),
     );

@@ -303,20 +303,34 @@ class _DashboardPageState extends State<DashboardPage> {
                 //   },
                 // ),
                 MenuWidget(
-                  iconData: UIcons.regularStraight.terrace,
+                  iconData: UIcons.regularStraight.people_poll,
                   iconSize: iconSize,
-                  title: 'Dining Tables',
-                  subtitle: 'Manage your dining tables here',
+                  title: 'Customers',
+                  subtitle: 'Manage your customers here',
                   titleSize: titleSize,
                   subtitleSize: subtitleSize,
-                  color: const Color(0xFFEF9050),
+                  width: menuSize,
+                  height: menuSize,
+                  color: const Color(0xFF2FC289),
+                  onTap: () {
+
+                  },
+                ),
+                MenuWidget(
+                  iconData: UIcons.regularStraight.time_past,
+                  iconSize: iconSize,
+                  title: 'History',
+                  subtitle: 'All record and logs are here',
+                  titleSize: titleSize,
+                  subtitleSize: subtitleSize,
+                  color: const Color(0xFFF5B942),
                   width: menuSize,
                   height: menuSize,
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const DiningTablesPage(),
+                        builder: (context) => const ReportsPage(),
                       ),
                     );
                   },
@@ -341,20 +355,20 @@ class _DashboardPageState extends State<DashboardPage> {
                   },
                 ),
                 MenuWidget(
-                  iconData: UIcons.regularStraight.list,
+                  iconData: UIcons.regularStraight.terrace,
                   iconSize: iconSize,
-                  title: 'Reports',
-                  subtitle: 'All reports and record are here',
+                  title: 'Dining Tables',
+                  subtitle: 'Manage your dining tables here',
                   titleSize: titleSize,
                   subtitleSize: subtitleSize,
-                  color: const Color(0xFFF5B942),
+                  color: const Color(0xFFEF9050),
                   width: menuSize,
                   height: menuSize,
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const ReportsPage(),
+                        builder: (context) => const DiningTablesPage(),
                       ),
                     );
                   },
@@ -423,6 +437,18 @@ class _DashboardPageState extends State<DashboardPage> {
                   iconSize: iconSize,
                   title: 'Library',
                   subtitle: 'Images and resources are here',
+                  titleSize: titleSize ,
+                  subtitleSize: subtitleSize,
+                  width: menuSize,
+                  height: menuSize,
+                  color: const Color(0xFF2FC289),
+                  onTap: _showLibrary,
+                ),/*
+                MenuWidget(
+                  iconData: UIcons.regularStraight.gallery,
+                  iconSize: iconSize,
+                  title: 'Library',
+                  subtitle: 'Images and resources are here',
                   titleSize: titleSize * 1.25,
                   subtitleSize: subtitleSize * 1.25,
                   width: menuSize * 2 + spacing,
@@ -465,7 +491,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       });
                     }));
                   },
-                ),
+                ),*/
                 // MenuWidgetExtended(
                 //   iconData: UIcons.regularStraight.log_out,
                 //   title: 'Logout',
@@ -489,5 +515,42 @@ class _DashboardPageState extends State<DashboardPage> {
         ),
       ),
     );
+  }
+
+  void _showLibrary() {
+    showModalBottomSheet(context: context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(24),
+            topRight: Radius.circular(24),
+            bottomLeft: Radius.circular(0),
+            bottomRight: Radius.circular(0),
+          ),
+        ),
+        builder: (context) => ImageLibraryBottomSheet(context, (value){
+          // Display in full screen view
+
+          showDialog(context: context, builder: (context) {
+
+            final image = Image(image: (value ?? LibraryImage('')).image);
+            return Dialog(
+              // Add close button to dialog (top right)
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  image: DecorationImage(
+                    image: image.image,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                width: MediaQuery.of(context).size.width * 0.80,
+                // Set height with aspect ratio to image size and screen width
+                // height: MediaQuery.of(context).size.width * 0.80 * (image.height ?? 1) / (image.width ?? 1),
+                // height: MediaQuery.of(context).size.height * 0.80,
+              ),
+            );
+          });
+        }));
   }
 }

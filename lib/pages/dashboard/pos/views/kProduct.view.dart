@@ -25,6 +25,12 @@ class KProductView extends StatelessWidget {
                   Navigator.pop(context);
                 },
               )),
+
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 12.0),
+            height: 0.5,
+            color: ColorStyle.text400,
+          ),
           Container(
             height: 200,
             margin: const EdgeInsets.all(12.0),
