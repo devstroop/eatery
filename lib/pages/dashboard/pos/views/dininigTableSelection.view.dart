@@ -7,9 +7,10 @@ import '../../../../services/utility/library_image.dart';
 import '../../../../widgets/posWidgets/circularCategory.posWidget.dart';
 
 class DiningTableSelectionView extends StatefulWidget {
-  const DiningTableSelectionView({super.key, this.themeColor});
-
+  const DiningTableSelectionView({super.key, this.themeColor, this.onDiningTableSelected, this.selectedDiningTable});
+  final DiningTable? selectedDiningTable;
   final Color? themeColor;
+  final Function(DiningTable diningTable)? onDiningTableSelected;
 
   @override
   State<DiningTableSelectionView> createState() =>
@@ -18,7 +19,9 @@ class DiningTableSelectionView extends StatefulWidget {
 
 class _DiningTableSelectionViewState extends State<DiningTableSelectionView> {
   DiningTableCategory? selectedCategory;
-
+  set selectedDiningTable(DiningTable value){
+    widget.onDiningTableSelected?.call(value);
+  }
   @override
   void initState() {
     super.initState();
@@ -89,6 +92,8 @@ class _DiningTableSelectionViewState extends State<DiningTableSelectionView> {
             ...EateryDB.instance.diningTableBox.values
                 .map((e) => DiningTableSelectionCard(
                       diningTable: e,
+                      selected: e.categoryId == selectedCategory?.id,
+                      onTap: () => _onDiningTableSelected(e),
                       order: e.orderId != null
                           ? EateryDB.instance.orderBox.values
                               .singleWhere((element) => element.id == e.orderId)
@@ -99,5 +104,9 @@ class _DiningTableSelectionViewState extends State<DiningTableSelectionView> {
         ),
       )
     ]);
+  }
+
+  _onDiningTableSelected(DiningTable e) {
+
   }
 }

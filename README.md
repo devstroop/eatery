@@ -1,6 +1,6 @@
 # Eatery
 
-A simple restaurant management with pos app for Android.
+A simple and sober restaurant management with pos app for Android.
 
 ## Project Information
 
@@ -12,6 +12,8 @@ Dart Tool version: `3.0.5`
 
 DevTools version: `2.23.1`
 
-## Developer TODO's
+## Dependencies
 
-TODO: Add developer reference here.
+- [eatery_db](https://github.com/devstroop/eatery_db.git): Database support for Eatery app.
+- [eatery_components](https://github.com/devstroop/eatery_components.git): Common components for Eatery app.
+- [platform_device_id](https://github.com/devstroop/platform_device_id.git): Get device id for Android and iOS.

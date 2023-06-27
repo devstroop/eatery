@@ -119,6 +119,7 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                       ? EateryDB.instance.orderBox.values
                           .singleWhere((elem) => elem.id == e.orderId)
                       : null;
+                  bool isAvailable = order == null || order.isPaid;
                   return ListTile(
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -129,7 +130,10 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                         ),
                         const SizedBox(width: 6),
                         if (category != null)
-                          CaptionLabel(label: category.name)
+                          CaptionLabel(label: category.name),
+                        const SizedBox(width: 3),
+                        if(e.isActive)
+                          CaptionLabel(label: 'Inactive', color: ColorStyle.text300,)
                       ],
                     ),
                     leading: LeadingImageWidget(

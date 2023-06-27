@@ -5,11 +5,12 @@ import '../../constants/style/color_style.dart';
 
 class DiningTableSelectionCard extends StatelessWidget {
   const DiningTableSelectionCard(
-      {super.key, required this.diningTable, this.order, this.selected = false});
+      {super.key, required this.diningTable, this.order, this.selected = false, this.onTap});
 
   final DiningTable diningTable;
   final Order? order;
   final bool selected;
+  final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -19,39 +20,42 @@ class DiningTableSelectionCard extends StatelessWidget {
     Color color = active
         ? (available ? ColorStyle.success : ColorStyle.text300)
         : ColorStyle.text300;
-    return Container(
-      decoration: BoxDecoration(
-        color: color.withOpacity(0.24),
-        borderRadius: BorderRadius.circular(12.0),
-        border: Border.all(
-          width: 2.0,
-          color: color,
-        ),
-      ),
-      child: Stack(
-        children: [
-          Center(
-            child: Text(
-              diningTable.name,
-              style: TextStyle(
-                color: color,
-                fontSize: 18.0,
-                fontWeight: FontWeight.w600,
-              ),
-            ),
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          color: color.withOpacity(0.24),
+          borderRadius: BorderRadius.circular(12.0),
+          border: Border.all(
+            width: 2.0,
+            color: color,
           ),
-          if(selected)
-            Positioned(
-              top: 6,
-              right: 6,
-              child: Icon(
-                UIcons.regularStraight.check,
-                color: color,
-                size: 18.0,
+        ),
+        child: Stack(
+          children: [
+            Center(
+              child: Text(
+                diningTable.name,
+                style: TextStyle(
+                  color: color,
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
+            if(selected)
+              Positioned(
+                top: 6,
+                right: 6,
+                child: Icon(
+                  UIcons.regularStraight.check,
+                  color: color,
+                  size: 18.0,
+                ),
+              ),
 
-        ],
+          ],
+        ),
       ),
     );
   }
