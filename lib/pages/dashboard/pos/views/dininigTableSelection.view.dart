@@ -1,3 +1,4 @@
+import 'package:eatery/widgets/card/diningTableSelection.card.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
 
@@ -30,8 +31,7 @@ class _DiningTableSelectionViewState extends State<DiningTableSelectionView> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-        children: [
+    return Column(children: [
       AppBar(
           title: const Text('Select Dining Table'),
           backgroundColor: Colors.transparent,
@@ -42,7 +42,6 @@ class _DiningTableSelectionViewState extends State<DiningTableSelectionView> {
               Navigator.pop(context);
             },
           )),
-
       SizedBox(
         height: 100,
         child: ListView(
@@ -87,67 +86,14 @@ class _DiningTableSelectionViewState extends State<DiningTableSelectionView> {
             mainAxisSpacing: 12.0,
           ),
           children: [
-            Container(
-              decoration: BoxDecoration(
-                color: ColorStyle.success.withOpacity(0.12),
-                borderRadius: BorderRadius.circular(12.0),
-                border: Border.all(
-                    width: 1.0,
-                    color: ColorStyle.success),
-              ),
-              child: Stack(
-                children: [
-
-                ],
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                color: ColorStyle.success.withOpacity(0.24),
-                borderRadius: BorderRadius.circular(12.0),
-                border: Border.all(
-                  width: 2.0,
-                    color: ColorStyle.success,
-                ),
-              ),
-              child: Stack(
-                children: [
-                  Positioned(
-                    top: 6,
-                    right: 6,
-                    child: Icon(UIcons.regularStraight.check, color: ColorStyle.success, size: 18.0,),
-                  )
-                ],
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                color: ColorStyle.error.withOpacity(0.12),
-                borderRadius: BorderRadius.circular(12.0),
-                border: Border.all(
-                    width: 1.0,
-                    color: ColorStyle.error),
-              ),
-              child: Stack(
-                children: [
-
-                ],
-              ),
-            ),
-            Container(
-              decoration: BoxDecoration(
-                color: ColorStyle.error.withOpacity(0.24),
-                borderRadius: BorderRadius.circular(12.0),
-                border: Border.all(
-                  width: 2.0,
-                    color: ColorStyle.error,
-                ),
-              ),
-              child: Stack(
-                children: [
-
-                ],
-              ),
+            ...EateryDB.instance.diningTableBox.values
+                .map((e) => DiningTableSelectionCard(
+                      diningTable: e,
+                      order: e.orderId != null
+                          ? EateryDB.instance.orderBox.values
+                              .singleWhere((element) => element.id == e.orderId)
+                          : null,
+                    )
             ),
           ],
         ),

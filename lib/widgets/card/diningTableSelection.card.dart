@@ -5,10 +5,11 @@ import '../../constants/style/color_style.dart';
 
 class DiningTableSelectionCard extends StatelessWidget {
   const DiningTableSelectionCard(
-      {super.key, required this.diningTable, this.order});
+      {super.key, required this.diningTable, this.order, this.selected = false});
 
   final DiningTable diningTable;
   final Order? order;
+  final bool selected;
 
   @override
   Widget build(BuildContext context) {
@@ -29,15 +30,27 @@ class DiningTableSelectionCard extends StatelessWidget {
       ),
       child: Stack(
         children: [
-          Positioned(
-            top: 6,
-            right: 6,
-            child: Icon(
-              UIcons.regularStraight.check,
-              color: color,
-              size: 18.0,
+          Center(
+            child: Text(
+              diningTable.name,
+              style: TextStyle(
+                color: color,
+                fontSize: 18.0,
+                fontWeight: FontWeight.w600,
+              ),
             ),
-          )
+          ),
+          if(selected)
+            Positioned(
+              top: 6,
+              right: 6,
+              child: Icon(
+                UIcons.regularStraight.check,
+                color: color,
+                size: 18.0,
+              ),
+            ),
+
         ],
       ),
     );
