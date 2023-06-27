@@ -1,5 +1,4 @@
-[image](https://github.com/devstroop/eatery/blob/master/assets/logo.svg)
-[]: # Path: README.md
+![image info](./assets/images/logo.svg)
 
 # Eatery
 
