@@ -101,7 +101,6 @@ export './pages/dashboard/product/kitchenDishes/addKitchenDish.page.dart';
 export './pages/dashboard/product/kitchenDishes/editKitchenDish.page.dart';
 export './pages/dashboard/product/kitchenDishes/kitchenDishes.page.dart';
 // Internal references
-
 export './pages/dashboard/product/inventoryItem/addInventoryItem.page.dart';
 export './pages/dashboard/product/inventoryItem/editInventoryItem.page.dart';
 export './pages/dashboard/product/inventoryItem/inventoryItems.page.dart';
@@ -119,6 +118,10 @@ export './pages/dashboard/diningTable/editDiningTable.page.dart';
 export './pages/dashboard/diningTable/diningTables.page.dart';
 // Internal references
 export './pages/dashboard/stock/stocks.page.dart';
+// Internal references
+export './pages/dashboard/customer/addCustomer.page.dart';
+export './pages/dashboard/customer/editCustomer.page.dart';
+export './pages/dashboard/customer/customers.page.dart';
 // Internal references
 export './pages/dashboard/staff/staffs.page.dart';
 export './pages/dashboard/staff/addStaff.page.dart';

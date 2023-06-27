@@ -1,8 +1,4 @@
-import 'package:eatery/pages/dashboard/customer/addCustomer.page.dart';
-import 'package:eatery/pages/dashboard/customer/editCustomer.page.dart';
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery/constants/style/color_style.dart';
+import 'package:eatery/references.dart';
 
 Color _pageColor = ColorStyle.primary;
 
@@ -79,10 +75,10 @@ class _CustomersPageState extends State<CustomersPage> {
                                       ),
                                       TextButton(
                                         onPressed: () {
-                                          e.delete().whenComplete(() {
-                                            Navigator.pop(context);
-                                            setState(() {});
-                                          });
+                                          // e.delete().whenComplete(() {
+                                          //   Navigator.pop(context);
+                                          //   setState(() {});
+                                          // });
                                         },
                                         child: const Text('Delete'),
                                       ),
