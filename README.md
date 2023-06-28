@@ -1,4 +1,4 @@
-<img src="./assets/logo.svg" width="60%" height="30%">
+<img src="./assets/logo.svg" width="40%" height="20%">
 
 # Eatery
 
