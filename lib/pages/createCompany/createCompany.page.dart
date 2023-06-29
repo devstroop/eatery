@@ -243,7 +243,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                   phone: _controllerPhoneNumber.text,
                   address: _controllerAddress.text,
                   password: _controllerPassword.text,
-                  edition: edition,
+                  taxEdition: edition,
                   foodLicenseNo: _controllerFoodLicNo.text,
                   salesTaxNumber: _controllerTaxLicNo.text,
                   defaultTaxSlabId: taxSlab?.id,

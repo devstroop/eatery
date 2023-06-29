@@ -50,7 +50,7 @@ Future flushDatabase() async {
   await EateryDB.instance.printerTypeBox.clear();
   await EateryDB.instance.subscriptionBox.clear();
   await EateryDB.instance.subscriptionTypeBox.clear();
-  await EateryDB.instance.editionBox.clear();
+  await EateryDB.instance.taxEditionTypeBox.clear();
   await EateryDB.instance.foodTypeBox.clear();
   await EateryDB.instance.taxSlabBox.clear();
   await EateryDB.instance.taxTypeBox.clear();

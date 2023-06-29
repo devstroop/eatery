@@ -13,9 +13,7 @@ class _ShowCompanyPageState extends State<ShowCompanyPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, (){
-      
-    });
+    Future.delayed(Duration.zero, () {});
     postInit();
     //WidgetsBinding.instance.addPostFrameCallback((_) => loadCompany());
   }
@@ -118,14 +116,14 @@ class _ShowCompanyPageState extends State<ShowCompanyPage> {
                     trailing: Text(
                       Edition.values
                           .singleWhere(
-                              (element) => element.id == company!.edition.id)
+                              (element) => element.id == company!.taxEdition.id)
                           .name,
                       style: const TextStyle(fontWeight: FontWeight.w500),
                     ),
                   ),
                   ListTile(
                     leading: Text(
-                        '${Edition.values.singleWhere((element) => element.id == company!.edition.id).name} License No'),
+                        '${Edition.values.singleWhere((element) => element.id == company!.taxEdition.id).name} License No'),
                     trailing: Text(
                       company!.salesTaxNumber ?? 'Not Available',
                       style: const TextStyle(fontWeight: FontWeight.w500),
@@ -133,7 +131,7 @@ class _ShowCompanyPageState extends State<ShowCompanyPage> {
                   ),
                   ListTile(
                     leading: Text(
-                        '${Edition.values.singleWhere((element) => element.id == company!.edition.id) == Edition.gst ? 'FSSAI' : 'Food'} License No'),
+                        '${Edition.values.singleWhere((element) => element.id == company!.taxEdition.id) == Edition.gst ? 'FSSAI' : 'Food'} License No'),
                     trailing: Text(
                       company!.foodLicenseNo ?? 'Not Available',
                       style: const TextStyle(fontWeight: FontWeight.w500),
