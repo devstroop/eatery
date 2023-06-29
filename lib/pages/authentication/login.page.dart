@@ -28,19 +28,19 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
     _formKey.currentState!.save();
-    if (_controllerPassword.text == company!.password) {
-      Navigator.pushAndRemoveUntil(
-        this.context,
-        MaterialPageRoute(
-          builder: (context) => DashboardPage(
-            company: company!,
-          ),
-        ),
-        (Route<dynamic> route) => false,
-      );
-    } else {
-      showSnackBar(this.context, "Invalid credentials");
-    }
+    // if (_controllerPassword.text == company!.passHash) {
+    //   Navigator.pushAndRemoveUntil(
+    //     this.context,
+    //     MaterialPageRoute(
+    //       builder: (context) => DashboardPage(
+    //         company: company!,
+    //       ),
+    //     ),
+    //     (Route<dynamic> route) => false,
+    //   );
+    // } else {
+    //   showSnackBar(this.context, "Invalid credentials");
+    // }
   }
 
   Color themeColor = ColorStyle.brandColor;
@@ -189,14 +189,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         builder: (context) =>
-                            EateryDB.instance.subscriptionBox.values
-                                        .singleWhere(
-                                          (element) =>
-                                              element.id ==
-                                              company!.subscriptionId!,
-                                        )
-                                        .purchaseCode !=
-                                    null
+                            EateryDB.instance.subscriptionBox?.values.isNotEmpty ?? false
                                 ? ForgotPasswordBottomSheet(
                                     context,
                                     themeColor: themeColor,

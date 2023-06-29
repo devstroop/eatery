@@ -216,9 +216,9 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                     subscriptionType: subscriptionType);
                 await EateryDB.instance.subscriptionBox.add(subscription);
 
-                kCurrency? _kCurrency;
+                KCurrency? _kCurrency;
                 if (currency != null) {
-                  _kCurrency = kCurrency(
+                  _kCurrency = KCurrency(
                       id: 1,
                       name: currency!.name,
                       code: currency!.code,

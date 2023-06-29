@@ -31,33 +31,11 @@ Future setupDirectory() async {
 }
 
 Future setupDatabase() async {
-  await EateryDB.instance.init(GlobalVariables.dataDirectoryAbs);
+  await EateryDB.instance.connectDB(GlobalVariables.dataDirectoryAbs);
   return;
 }
 
-Future flushDatabase() async {
-  await EateryDB.instance.companyBox.clear();
-  await EateryDB.instance.currencyBox.clear();
-  await EateryDB.instance.autoPrintBox.clear();
-  await EateryDB.instance.customerBox.clear();
-  await EateryDB.instance.diningTableBox.clear();
-  await EateryDB.instance.diningTableCategoryBox.clear();
-  await EateryDB.instance.orderBox.clear();
-  await EateryDB.instance.productBox.clear();
-  await EateryDB.instance.productCategoryBox.clear();
-  await EateryDB.instance.printerBox.clear();
-  await EateryDB.instance.printerTypeBox.clear();
-  await EateryDB.instance.printerTypeBox.clear();
-  await EateryDB.instance.subscriptionBox.clear();
-  await EateryDB.instance.subscriptionTypeBox.clear();
-  await EateryDB.instance.taxEditionTypeBox.clear();
-  await EateryDB.instance.foodTypeBox.clear();
-  await EateryDB.instance.taxSlabBox.clear();
-  await EateryDB.instance.taxTypeBox.clear();
-  await EateryDB.instance.waiterBox.clear();
-
-  return;
-}
+Future<void> flushDatabase({bool confirm = false}) => EateryDB.instance.clearDB(confirm: confirm);
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
@@ -73,7 +51,7 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: Scaffold(
-          body: EateryDB.instance.companyBox.isNotEmpty
+          body: EateryDB.instance.companyBox!.values.isNotEmpty
               ? const LoginPage()
               : const CreateCompanyPage(),
         ));

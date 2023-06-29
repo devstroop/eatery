@@ -105,10 +105,8 @@ class _ForgotPasswordBottomSheetState extends State<ForgotPasswordBottomSheet> {
                     return null;
                   },
                   onChanged: (value) {
-                    var temp = EateryDB.instance.subscriptionBox.values
-                        .singleWhere((element) =>
-                            element.id == company!.subscriptionId!);
-                    if (value == temp.purchaseCode) {
+                    Subscription? activeSubscription = EateryDB.instance.subscriptionBox?.get(company!.activeSubscriptionKey!);
+                    if (value == activeSubscription?.activationKey) {
                       setState(() {
                         verified = true;
                       });

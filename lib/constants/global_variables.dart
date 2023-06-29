@@ -4,7 +4,7 @@ class GlobalVariables {
   static bool expressMode = false;
   static List<Product> cart = [];
   static Company? company;
-  static kCurrency? currency;
+  static KCurrency? currency;
 
   // Relative paths
   static String? dataDirectory = '/data';

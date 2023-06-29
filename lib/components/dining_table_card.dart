@@ -2,10 +2,10 @@ import 'package:eatery/references.dart';
 
 class DiningTableCard extends StatelessWidget {
   const DiningTableCard(
-      {Key? key, required this.diningTable, this.onTap, this.order})
+      {Key? key, required this.diningTable, this.onTap, this.voucher})
       : super(key: key);
   final DiningTable diningTable;
-  final Order? order;
+  final Voucher? voucher;
   final Function()? onTap;
 
   @override
@@ -67,14 +67,14 @@ class DiningTableCard extends StatelessWidget {
                         ),
                       ],
                     ),
-                    order != null
+                    voucher != null
                         ? Row(
                             mainAxisSize: MainAxisSize.max,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                '${GlobalVariables.currency?.symbol ?? ''}${order?.finalTotal} due',
+                                '${GlobalVariables.currency?.symbol ?? ''}${voucher?.finalTotal} due',
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     fontSize: 12.0,

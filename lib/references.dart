@@ -35,7 +35,7 @@ export 'package:flutter_svg/svg.dart';
 export 'package:flutter_secure_storage/flutter_secure_storage.dart';
 export 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 // Google packages
-export 'package:googleapis_auth/auth_io.dart';
+//export 'package:googleapis_auth/auth_io.dart';
 // Internal references
 export './constants/style/color_style.dart';
 export './constants/style/spacing_style.dart';
@@ -173,3 +173,4 @@ export './widgets/bottomSheets/imageLibrary.bottomSheet.dart';
 export './widgets/containers/image.container.dart';
 export './widgets/dialogs/showConfirmationDialog.dart';
 
+export 'package:uicons/uicons.dart';

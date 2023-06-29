@@ -97,7 +97,7 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                           children: [
                             GlobalVariables.cart
                                     .where((element) =>
-                                        element.id == widget.product.id)
+                                        element.key == widget.product.key)
                                     .isNotEmpty
                                 ? InkWell(
                                     onTap: widget.onRemove,
@@ -109,7 +109,7 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                                 : const SizedBox.shrink(),
                             GlobalVariables.cart
                                     .where((element) =>
-                                        element.id == widget.product.id)
+                                        element.key == widget.product.key)
                                     .isNotEmpty
                                 ? Padding(
                                     padding:
@@ -118,7 +118,7 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                                     child: Text(
                                       GlobalVariables.cart
                                           .where((element) =>
-                                              element.id == widget.product.id)
+                                              element.key == widget.product.key)
                                           .length
                                           .toString(),
                                       style: const TextStyle(
