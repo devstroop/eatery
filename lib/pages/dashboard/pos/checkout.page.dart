@@ -15,7 +15,7 @@ class CheckoutPage extends StatefulWidget {
       this.openOrderWaiterId,
       this.openOrderWaiterName})
       : super(key: key);
-  final OrderType orderType;
+  final SaleOrderType orderType;
   final Map<String, Map<String, dynamic>> cart;
   final String? diningTable;
   final String? diningTableName;
@@ -284,7 +284,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
           'taxTotal': taxTotal,
           'roundOff': roundOff,
           'finalTotal': finalTotalAfterRoundOff,
-          'open': OrderType.dine == widget.orderType ? true : false
+          'open': SaleOrderType.dine == widget.orderType ? true : false
         };
 
         // String? id;
@@ -375,7 +375,11 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             padding: const EdgeInsetsDirectional.fromSTEB(
                                 0, 0, 6, 0),
                             child: Icon(
-                              widget.orderType.icon,
+                              widget.orderType == SaleOrderType.dine
+                                  ? UIcons.regularStraight.restaurant
+                                  : widget.orderType == SaleOrderType.delivery
+                                      ? UIcons.regularStraight.bike
+                                      : UIcons.regularStraight.package,
                               color: _pageColor,
                             ),
                           ),
@@ -681,7 +685,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ],
               ),
             ),
-            widget.orderType == OrderType.dine
+            widget.orderType == SaleOrderType.dine
                 ? Container(
                     padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
                     margin: const EdgeInsets.only(bottom: 12.0),

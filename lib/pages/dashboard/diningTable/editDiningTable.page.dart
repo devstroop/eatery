@@ -21,7 +21,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
     super.initState();
     Future.delayed(Duration.zero, (){
       setState(() {
-        diningTableCategory = EateryDB.instance.diningTableCategoryBox.values.where((elem) => elem.id == widget.diningTable.categoryId).isNotEmpty ? EateryDB.instance.diningTableCategoryBox.values.where((elem) => elem.id == widget.diningTable.categoryId).first : null;
+        diningTableCategory = EateryDB.instance.diningTableCategoryBox!.values.where((elem) => elem.key == widget.diningTable.categoryId).isNotEmpty ? EateryDB.instance.diningTableCategoryBox!.values.where((elem) => elem.key == widget.diningTable.categoryId).first : null;
         _controllerCategoryName.text = widget.diningTable.name ?? '';
         _controllerCategoryDescription.text = widget.diningTable.description ?? '';
         image = widget.diningTable.image != null ? LibraryImage(widget.diningTable.image) : null;
@@ -146,9 +146,9 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                             },
                           );
                         }),
-                    ...EateryDB.instance.diningTableCategoryBox.values.map((e) {
+                    ...EateryDB.instance.diningTableCategoryBox!.values.map((e) {
                       return PosCategoryWidget(
-                        active: diningTableCategory?.id == e.id,
+                        active: diningTableCategory?.key == e.key,
                         label: e.name,
                         onTap: () {
                           setState(() {
@@ -178,10 +178,10 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
               return;
             }
             widget.diningTable.name = _controllerCategoryName.text;
-            widget.diningTable.categoryId = diningTableCategory!.id;
+            widget.diningTable.categoryId = diningTableCategory!.key;
             widget.diningTable.description = _controllerCategoryDescription.text;
             widget.diningTable.image = image?.filename;
-            EateryDB.instance.diningTableBox
+            EateryDB.instance.diningTableBox!
                 .put(widget.diningTable.key, widget.diningTable)
                 .whenComplete(() {
               showSnackBar(context, 'Successfully updated');

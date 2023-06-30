@@ -40,10 +40,10 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
             ? widget.product.salePrice.toString()
             : '';
         selectedFoodType = widget.product.foodType;
-        selectedTaxSlab = widget.product.taxSlabId != null ? EateryDB.instance.taxSlabBox.values
-            .singleWhere((element) => element.id == widget.product.taxSlabId) : null;
-        selectedCategory = widget.product.categoryId != null ?EateryDB.instance.productCategoryBox.values
-            .singleWhere((element) => element.id == widget.product.categoryId) : null;
+        selectedTaxSlab = widget.product.taxSlabId != null ? EateryDB.instance.taxSlabBox?.values
+            .singleWhere((element) => element.key == widget.product.taxSlabId) : null;
+        selectedCategory = widget.product.categoryKey != null ?EateryDB.instance.productCategoryBox?.values
+            .singleWhere((element) => element.key == widget.product.categoryKey) : null;
         _controllerDescription.text = widget.product.description ?? '';
       });
     });
@@ -159,7 +159,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
                 height: 3.0,
               ),
               ToggleSwitch(
-                highlightColor: selectedFoodType?.color ?? _pageColor,
+                highlightColor: Color(selectedFoodType?.color ?? _pageColor.value),
                 backgroundColor: const Color(0xFFE5E5E5),
                 foregroundColor: Colors.white,
                 inactiveForegroundColor: ColorStyle.text200,
@@ -202,17 +202,17 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
                 foregroundColor: selectedTaxSlab == null ? Colors.white : ColorStyle.text200,
                 children: [
                   'None',
-                  for (var each in EateryDB.instance.taxSlabBox.values)
+                  for (TaxSlab each in EateryDB.instance.taxSlabBox?.values ?? [])
                     each.name
                 ],
-                selectedIndex: (selectedTaxSlab?.id == null) ? 0 : selectedTaxSlab?.id,
+                selectedIndex: (selectedTaxSlab?.key == null) ? 0 : selectedTaxSlab?.key,
                 onChange: (int? index) {
                   if (index == 0) {
                     selectedTaxSlab = null;
                   } else {
                     selectedTaxSlab = EateryDB
-                        .instance.taxSlabBox.values
-                        .singleWhere((element) => element.id == index);
+                        .instance.taxSlabBox?.values
+                        .singleWhere((element) => element.key == index);
                   }
                   setState(() {});
                 },
@@ -255,7 +255,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
                         selectedCategory = null;
                       });
                     },),
-                    ...EateryDB.instance.productCategoryBox.values.map((e) {
+                    ...EateryDB.instance.productCategoryBox!.values.map((e) {
                       return CircularCategoryPOSWidget(
                         themeColor: _pageColor,
                         margin: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -309,8 +309,8 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
               widget.product.mrpPrice = _controllerMRP.text.toDouble() ?? 0;
               widget.product.salePrice = _controllerSalePrice.text.toDouble();
               widget.product.foodType = selectedFoodType;
-              widget.product.taxSlabId = selectedTaxSlab?.id;
-              widget.product.categoryId = selectedCategory?.id;
+              widget.product.taxSlabId = selectedTaxSlab?.key;
+              widget.product.categoryKey = selectedCategory?.key;
               widget.product.description = _controllerDescription.text;
               await widget.product.save().whenComplete(() {
                 showSnackBar(context, 'Successfully updated');

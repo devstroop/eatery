@@ -48,7 +48,7 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
             ),
             onTap: () {},
           ),
-          ...EateryDB.instance.diningTableCategoryBox.values.map((each) {
+          ...EateryDB.instance.diningTableCategoryBox!.values.map((each) {
             return ListTile(
               title: Text(each.name,
                   style: const TextStyle(fontWeight: FontWeight.w600)),
@@ -79,8 +79,8 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
                         context: context,
                         builder: (context) {
                           // category exists in dining table then show message and return
-                          if (EateryDB.instance.diningTableBox.values
-                              .any((element) => element.categoryId == each.id)) {
+                          if (EateryDB.instance.diningTableBox!.values
+                              .any((element) => element.categoryId == each.key)) {
                             return AlertDialog(
                               title: const Text('Delete Category'),
                               content: const Text(

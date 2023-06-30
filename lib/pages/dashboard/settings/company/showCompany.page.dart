@@ -114,16 +114,16 @@ class _ShowCompanyPageState extends State<ShowCompanyPage> {
                   ListTile(
                     leading: const Text('Edition'),
                     trailing: Text(
-                      Edition.values
+                      TaxEditionType.values
                           .singleWhere(
-                              (element) => element.id == company!.taxEdition.id)
+                              (element) => element == company!.taxEdition)
                           .name,
                       style: const TextStyle(fontWeight: FontWeight.w500),
                     ),
                   ),
                   ListTile(
                     leading: Text(
-                        '${Edition.values.singleWhere((element) => element.id == company!.taxEdition.id).name} License No'),
+                        '${TaxEditionType.values.singleWhere((element) => element == company!.taxEdition).name} License No'),
                     trailing: Text(
                       company!.salesTaxNumber ?? 'Not Available',
                       style: const TextStyle(fontWeight: FontWeight.w500),
@@ -131,7 +131,7 @@ class _ShowCompanyPageState extends State<ShowCompanyPage> {
                   ),
                   ListTile(
                     leading: Text(
-                        '${Edition.values.singleWhere((element) => element.id == company!.taxEdition.id) == Edition.gst ? 'FSSAI' : 'Food'} License No'),
+                        '${TaxEditionType.values.singleWhere((element) => element == company!.taxEdition) == TaxEditionType.gst ? 'FSSAI' : 'Food'} License No'),
                     trailing: Text(
                       company!.foodLicenseNo ?? 'Not Available',
                       style: const TextStyle(fontWeight: FontWeight.w500),
@@ -140,8 +140,8 @@ class _ShowCompanyPageState extends State<ShowCompanyPage> {
                   ListTile(
                     leading: const Text('Default tax_slab rate'),
                     trailing: Text(
-                      company!.defaultTaxSlabId != null
-                          ? '${EateryDB.instance.taxSlabBox.values.singleWhere((element) => element.id == company!.defaultTaxSlabId).rate.toString()}%'
+                      company!.defaultTaxSlabKey != null
+                          ? '${EateryDB.instance.taxSlabBox?.values.singleWhere((element) => element.key == company!.defaultTaxSlabKey).rate.toString()}%'
                           : 'Not Available',
                       style: const TextStyle(fontWeight: FontWeight.w500),
                     ),

@@ -12,7 +12,7 @@ class AddStaffPage extends StatefulWidget {
 class _AddStaffPageState extends State<AddStaffPage> {
   LibraryImage? image;
   bool isActive = true;
-  final TextEditingController _controllerWaiterName = TextEditingController();
+  final TextEditingController _controllerFullName = TextEditingController();
   final TextEditingController _controllerWaiterPhone = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
@@ -51,7 +51,7 @@ class _AddStaffPageState extends State<AddStaffPage> {
                 height: 6.0,
               ),
               LabeledCustomTextFromField(
-                controller: _controllerWaiterName,
+                controller: _controllerFullName,
                 label: 'Waiter Name',
                 themeColor: _pageColor,
                 foregroundColor: ColorStyle.text200,
@@ -102,7 +102,7 @@ class _AddStaffPageState extends State<AddStaffPage> {
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {
-            if (_controllerWaiterName.text.isEmpty) {
+            if (_controllerFullName.text.isEmpty) {
               showSnackBar(context, 'Waiter Name is required');
               return;
             }
@@ -113,12 +113,14 @@ class _AddStaffPageState extends State<AddStaffPage> {
             _formKey.currentState!.save();
 
             try {
-              EateryDB.instance.waiterBox.add(
-                Waiter(
-                  id: EateryDB.instance.waiterBox.nextId(),
-                  name: _controllerWaiterName.text,
+              EateryDB.instance.userBox?.add(
+                User(
+                  // TODO: Implement ahead
+                  type: UserType.other,
+                  username: '',
+                  fullName: _controllerFullName.text,
                   phone: _controllerWaiterPhone.text,
-                  photo: image?.filename,
+                  image: image?.filename,
                   isActive: isActive
                 ),
               ).whenComplete(() {

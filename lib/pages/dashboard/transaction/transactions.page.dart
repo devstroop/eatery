@@ -11,7 +11,6 @@ class TransactionsPage extends StatefulWidget {
 
 class _TransactionsPageState extends State<TransactionsPage> {
   final GlobalKey genKey = GlobalKey();
-  late List<Map<String, dynamic>> orders = [];
   DateTime? filterFrom;
   DateTime? filterTill;
 
@@ -126,173 +125,168 @@ class _TransactionsPageState extends State<TransactionsPage> {
     return double.parse(total.toStringAsFixed(2));
   }
 
-  bodyWidget(BuildContext context, Widget ordersPanel) => RepaintBoundary(
-      key: genKey,
-      child: Container(
-        color: ColorStyle.backgroundColorAlter,
-        child: ordersPanel,
-      ));
   @override
   Widget build(BuildContext context) {
-    final appBar = AppBar(
-      backgroundColor: getThemeColor(),
-      title: const Text('Reports'),
-      actions: [
-        IconButton(
-            onPressed: () async {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return CustomDialogBox(
-                    title: 'Filter',
-                    actions: [
-                      TextButton(
-                          onPressed: () async {
-                            // Order.getAll()
-                            //     .then((List<Map<String, dynamic>> orders) {
-                            //   setState(() {
-                            //     this.orders = orders;
-                            //     filterFrom = null;
-                            //     filterTill = null;
-                            //   });
-                            //   Navigator.pop(context);
-                            // });
-                          },
-                          child: const Text('Clear')),
-                      TextButton(
-                          onPressed: () async {
-                            if (filterFrom != null && filterTill != null) {
+    List<Voucher> vouchers = EateryDB.instance.voucherBox?.values.toList() ?? [];
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: getThemeColor(),
+        title: const Text('Reports'),
+        actions: [
+          IconButton(
+              onPressed: () async {
+                showDialog(
+                  context: context,
+                  builder: (BuildContext context) {
+                    return CustomDialogBox(
+                      title: 'Filter',
+                      actions: [
+                        TextButton(
+                            onPressed: () async {
                               // Order.getAll()
                               //     .then((List<Map<String, dynamic>> orders) {
-                              //   orders = orders
-                              //       .where((order) =>
-                              //           DateTime.fromMicrosecondsSinceEpoch(
-                              //                   order['timestamp'])
-                              //               .isAfter(filterFrom!) &&
-                              //           DateTime.fromMicrosecondsSinceEpoch(
-                              //                   order['timestamp'])
-                              //               .isBefore(filterTill!
-                              //                   .add(const Duration(days: 1))))
-                              //       .toList();
                               //   setState(() {
                               //     this.orders = orders;
+                              //     filterFrom = null;
+                              //     filterTill = null;
                               //   });
+                              //   Navigator.pop(context);
                               // });
-                            } else {
-                              showSnackBar(
-                                  context, "Select date range to filter");
-                            }
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Filter'))
-                    ],
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text('Select date range to filter'),
-                        Column(children: [
-                          DateTimePicker(
-                            cursorColor: getThemeColor(),
-                            initialValue: filterFrom != null
-                                ? DateFormat("yyyy-MM-dd").format(filterFrom!)
-                                : '',
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
-                            dateLabelText: 'From',
-                            onChanged: (val) {
-                              setState(() {
-                                filterFrom =
-                                    DateFormat("yyyy-MM-dd").parse(val);
-                              });
                             },
-                            validator: (val) {
-                              return null;
+                            child: const Text('Clear')),
+                        TextButton(
+                            onPressed: () async {
+                              if (filterFrom != null && filterTill != null) {
+                                // Order.getAll()
+                                //     .then((List<Map<String, dynamic>> orders) {
+                                //   orders = orders
+                                //       .where((order) =>
+                                //           DateTime.fromMicrosecondsSinceEpoch(
+                                //                   order['timestamp'])
+                                //               .isAfter(filterFrom!) &&
+                                //           DateTime.fromMicrosecondsSinceEpoch(
+                                //                   order['timestamp'])
+                                //               .isBefore(filterTill!
+                                //                   .add(const Duration(days: 1))))
+                                //       .toList();
+                                //   setState(() {
+                                //     this.orders = orders;
+                                //   });
+                                // });
+                              } else {
+                                showSnackBar(
+                                    context, "Select date range to filter");
+                              }
+                              Navigator.pop(context);
                             },
-                            onSaved: (val) => debugPrint(val),
-                          ),
-                          DateTimePicker(
-                            cursorColor: getThemeColor(),
-                            initialValue: filterTill != null
-                                ? DateFormat("yyyy-MM-dd").format(filterTill!)
-                                : '',
-                            firstDate: DateTime(2000),
-                            lastDate: DateTime(2100),
-                            dateLabelText: 'Till',
-                            onChanged: (val) {
-                              setState(() {
-                                filterTill =
-                                    DateFormat("yyyy-MM-dd").parse(val);
-                              });
-                            },
-                            onSaved: (val) => debugPrint(val),
-                          )
-                        ])
+                            child: const Text('Filter'))
                       ],
-                    ),
-                  );
-                },
-              );
-            },
-            icon: const Icon(Icons.filter_alt)),
-        IconButton(
-            onPressed: () async {
-              try {
-                /*String message = await PrintReport.printReceipt(orders: orders, account: widget.account, from: filterFrom, till: filterTill);
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text('Select date range to filter'),
+                          Column(children: [
+                            DateTimePicker(
+                              cursorColor: getThemeColor(),
+                              initialValue: filterFrom != null
+                                  ? DateFormat("yyyy-MM-dd").format(filterFrom!)
+                                  : '',
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                              dateLabelText: 'From',
+                              onChanged: (val) {
+                                setState(() {
+                                  filterFrom =
+                                      DateFormat("yyyy-MM-dd").parse(val);
+                                });
+                              },
+                              validator: (val) {
+                                return null;
+                              },
+                              onSaved: (val) => debugPrint(val),
+                            ),
+                            DateTimePicker(
+                              cursorColor: getThemeColor(),
+                              initialValue: filterTill != null
+                                  ? DateFormat("yyyy-MM-dd").format(filterTill!)
+                                  : '',
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2100),
+                              dateLabelText: 'Till',
+                              onChanged: (val) {
+                                setState(() {
+                                  filterTill =
+                                      DateFormat("yyyy-MM-dd").parse(val);
+                                });
+                              },
+                              onSaved: (val) => debugPrint(val),
+                            )
+                          ])
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+              icon: const Icon(Icons.filter_alt)),
+          IconButton(
+              onPressed: () async {
+                try {
+                  /*String message = await PrintReport.printReceipt(orders: orders, account: widget.account, from: filterFrom, till: filterTill);
                 showSnackBar(context, message);*/
-              } catch (_) {
-                showSnackBar(context, 'Print error');
-                return;
-              }
-            },
-            icon: const Icon(Icons.print)),
-        IconButton(
-            onPressed: () async {
-              final temp = await AppFileSystem.getShareDir();
-              final path = '$temp/${getRandomString(8)}.png';
-              await File(path).writeAsBytes(await _capturePng());
-              await shareFile(
-                  path, 'Sales Report', 'Autogenerated by RestaurantPOS');
-            },
-            icon: const Icon(Icons.share))
-      ],
-    );
-
-    final ordersView = ListView.separated(
-      itemCount: orders.length,
-      shrinkWrap: false,
-      scrollDirection: Axis.vertical,
-      addAutomaticKeepAlives: true,
-      separatorBuilder: (_, __) => const Divider(),
-      itemBuilder: (_, index) => ListTile(
-        isThreeLine: false,
-        dense: false,
-        leading: Icon(
-          orders[index]['orderType'] == 'dineIn'
-              ? OrderType.dine.icon
-              : orders[index]['orderType'] == 'delivery'
-                  ? OrderType.delivery.icon
-                  : orders[index]['orderType'] == 'takeAway'
-                      ? OrderType.takeout.icon
-                      : Icons.block,
-          // color: orders[index]['orderType'] == 'dineIn'
-          //     ? OrderType.dine.color
-          //     : orders[index]['orderType'] == 'delivery'
-          //         ? OrderType.delivery.color
-          //         : orders[index]['orderType'] == 'takeAway'
-          //             ? OrderType.takeout.color
-          //             : ColorStyle.text200,
-        ),
-        title: Text(orders[index]['customerName']),
-        subtitle: Text(
-          '#${orders[index]['id']} on ${DateFormat().format(DateTime.fromMicrosecondsSinceEpoch(orders[index]['timestamp'] ?? 0))}',
-          style: const TextStyle(fontSize: 12),
-        ),
-        trailing: const Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            /*Text(
+                } catch (_) {
+                  showSnackBar(context, 'Print error');
+                  return;
+                }
+              },
+              icon: const Icon(Icons.print)),
+          IconButton(
+              onPressed: () async {
+                final temp = await AppFileSystem.getShareDir();
+                final path = '$temp/${getRandomString(8)}.png';
+                await File(path).writeAsBytes(await _capturePng());
+                await shareFile(
+                    path, 'Sales Report', 'Autogenerated by RestaurantPOS');
+              },
+              icon: const Icon(Icons.share))
+        ],
+      ),
+      body: ListView.separated(
+        itemCount: vouchers.length,
+        shrinkWrap: false,
+        scrollDirection: Axis.vertical,
+        addAutomaticKeepAlives: true,
+        separatorBuilder: (_, __) => const Divider(),
+        itemBuilder: (_, index) => ListTile(
+          isThreeLine: false,
+          dense: false,
+          leading: Icon(
+            vouchers[index].saleOrderType == SaleOrderType.dine
+                ? UIcons.regularStraight.restaurant
+                : vouchers[index].saleOrderType == SaleOrderType.delivery
+                ? UIcons.regularStraight.bike
+                : vouchers[index].saleOrderType == SaleOrderType.takeout
+                ? UIcons.regularStraight.package
+                : Icons.block,
+            // color: orders[index]['orderType'] == 'dineIn'
+            //     ? OrderType.dine.color
+            //     : orders[index]['orderType'] == 'delivery'
+            //         ? OrderType.delivery.color
+            //         : orders[index]['orderType'] == 'takeAway'
+            //             ? OrderType.takeout.color
+            //             : ColorStyle.text200,
+          ),
+          title: Text(vouchers[index].master.name),
+          subtitle: Text(
+            '#${vouchers[index].key} on ${DateFormat().format(vouchers[index].createdAt)}',
+            style: const TextStyle(fontSize: 12),
+          ),
+          trailing: const Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              /*Text(
               '${widget.account['currencySymbol']}${orders[index]['finalTotal']}',
               style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
             ),
@@ -304,10 +298,10 @@ class _TransactionsPageState extends State<TransactionsPage> {
               'Tax : ${widget.account['currencySymbol']}${orders[index]['taxTotal']}',
               style: TextStyle(fontSize: 10.0, fontWeight: FontWeight.w500, color: ColorStyle.text400),
             ),*/
-          ],
-        ),
-        onTap: () {
-          /*Navigator.push(
+            ],
+          ),
+          onTap: () {
+            /*Navigator.push(
             context,
             MaterialPageRoute(
                 builder: (context) => DetailedHistoryPage(
@@ -327,13 +321,9 @@ class _TransactionsPageState extends State<TransactionsPage> {
               this.orders = orders;
             });
           });*/
-        },
+          },
+        ),
       ),
-    );
-
-    return Scaffold(
-      appBar: appBar,
-      body: bodyWidget(context, ordersView),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: getThemeColor(),

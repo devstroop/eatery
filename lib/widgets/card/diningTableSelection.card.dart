@@ -2,17 +2,17 @@ import 'package:eatery/references.dart';
 
 class DiningTableSelectionCard extends StatelessWidget {
   const DiningTableSelectionCard(
-      {super.key, required this.diningTable, this.order, this.selected = false, this.onTap});
+      {super.key, required this.diningTable, this.voucher, this.selected = false, this.onTap});
 
   final DiningTable diningTable;
-  final Order? order;
+  final Voucher? voucher;
   final bool selected;
   final Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
     bool active = diningTable.isActive;
-    bool available = active && order != null ? order!.id == diningTable.orderId : true;
+    bool available = active && voucher != null ? voucher!.key == diningTable.voucherKey : true;
     Color color = active && available
         ? ColorStyle.success : active && !available ? ColorStyle.error : ColorStyle.text300;
     return Material(

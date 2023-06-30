@@ -1,9 +1,4 @@
-import 'package:eatery/constants/utils/utils.dart';
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import '../../../components/labeled_custom_text_from_field.dart';
-import '../../../widgets/buttons/primary.button.dart';
+import '../../../references.dart';
 
 Color _pageColor = ColorStyle.primary;
 
@@ -104,10 +99,9 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
             _formKey.currentState!.save();
 
             try {
-              EateryDB.instance.customerBox
+              EateryDB.instance.masterBox!
                   .add(
-                Customer(
-                    id: EateryDB.instance.customerBox.nextId(),
+                Master(
                     name: _controllerCustomerName.text,
                     phone: _controllerCustomerPhone.text,
                     isActive: isActive),

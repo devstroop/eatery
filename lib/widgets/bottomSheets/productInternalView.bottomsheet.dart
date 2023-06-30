@@ -34,10 +34,10 @@ class _ProductInternalViewBottomsheetState
             children: [
               PageTitle(
                   title: widget.product.name,
-                  subtitle: widget.product.categoryId != null
-                      ? EateryDB.instance.productCategoryBox.values
+                  subtitle: widget.product.categoryKey != null
+                      ? EateryDB.instance.productCategoryBox?.values
                           .singleWhere((element) =>
-                              element.id == widget.product.categoryId)
+                              element.key == widget.product.categoryKey)
                           .name
                       : 'Uncategorized'),
               Switch(

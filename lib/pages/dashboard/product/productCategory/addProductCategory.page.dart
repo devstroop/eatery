@@ -89,9 +89,8 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
               return;
             }
             try {
-              EateryDB.instance.productCategoryBox
+              EateryDB.instance.productCategoryBox!
                   .add(ProductCategory(
-                      id: EateryDB.instance.productCategoryBox.nextId(),
                       name: _controllerCategoryName.text,
                       description: _controllerCategoryDescription.text,
                       image: pickedLibraryImage?.filename))

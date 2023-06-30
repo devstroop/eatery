@@ -35,7 +35,7 @@ export 'package:flutter_svg/svg.dart';
 export 'package:flutter_secure_storage/flutter_secure_storage.dart';
 export 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 // Google packages
-//export 'package:googleapis_auth/auth_io.dart';
+export 'package:googleapis_auth/auth_io.dart';
 // Internal references
 export './constants/style/color_style.dart';
 export './constants/style/spacing_style.dart';
@@ -123,9 +123,9 @@ export './pages/dashboard/customer/addCustomer.page.dart';
 export './pages/dashboard/customer/editCustomer.page.dart';
 export './pages/dashboard/customer/customers.page.dart';
 // Internal references
-export './pages/dashboard/staff/staffs.page.dart';
-export './pages/dashboard/staff/addStaff.page.dart';
-export './pages/dashboard/staff/editStaff.page.dart';
+export './pages/dashboard/user/users.page.dart';
+export './pages/dashboard/user/addUser.page.dart';
+export './pages/dashboard/user/editUser.page.dart';
 // Internal references
 export './pages/dashboard/help/help.page.dart';
 // Internal references
@@ -172,5 +172,6 @@ export './pages/backupRestore/backupRestore.page.dart';
 export './widgets/bottomSheets/imageLibrary.bottomSheet.dart';
 export './widgets/containers/image.container.dart';
 export './widgets/dialogs/showConfirmationDialog.dart';
+
 
 export 'package:uicons/uicons.dart';

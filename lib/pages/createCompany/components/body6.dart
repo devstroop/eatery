@@ -79,10 +79,10 @@ class _Body6State extends State<Body6> {
             title: 'Try It Free',
             highlights: const ['100 invoices a month', '10 products'],
             footer: 'Enjoy with limited access',
-            selected: widget.subscriptionType == SubscriptionType.free,
+            selected: widget.subscriptionType == SubscriptionType.basic,
             highlightColor: ColorStyle.warning,
             onTap: () {
-              widget.callback(SubscriptionType.free, null, null, null);
+              widget.callback(SubscriptionType.basic, null, null, null);
 
               if (widget.callbackFormKey != null) {
                 widget.callbackFormKey!(widget.formKey);
@@ -95,7 +95,7 @@ class _Body6State extends State<Body6> {
             title: 'Activate License',
             highlights: const ['Everything Unlimited'],
             footer: 'Get unlocked to all premium features',
-            selected: widget.subscriptionType == SubscriptionType.premium,
+            selected: widget.subscriptionType == SubscriptionType.professional,
             highlightColor: ColorStyle.success,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -162,7 +162,7 @@ class _Body6State extends State<Body6> {
                     color: ColorStyle.text400,
                   ),
                   validator: (value) {
-                    if (widget.subscriptionType == SubscriptionType.premium) {
+                    if (widget.subscriptionType == SubscriptionType.professional) {
                       if (value!.isEmpty) {
                         return 'Purchase code cannot be blank';
                       }
@@ -183,7 +183,7 @@ class _Body6State extends State<Body6> {
                         this.validFrom = validFrom;
                         this.validTill = validTill;
                       });
-                      widget.callback(SubscriptionType.premium,
+                      widget.callback(SubscriptionType.professional,
                           _controllerPurchaseCode.text, validFrom, validTill);
 
                       if (widget.callbackFormKey != null) {
@@ -201,7 +201,7 @@ class _Body6State extends State<Body6> {
               ],
             ),
             onTap: () {
-              widget.callback(SubscriptionType.premium, null, null, null);
+              widget.callback(SubscriptionType.professional, null, null, null);
 
               if (widget.callbackFormKey != null) {
                 widget.callbackFormKey!(widget.formKey);

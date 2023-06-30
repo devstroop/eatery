@@ -85,11 +85,9 @@ class _AddDiningTableCategoryPageState
               showSnackBar(context, '* Category name required');
               return;
             }
-            int id = EateryDB.instance.diningTableCategoryBox.nextId();
-            EateryDB.instance.diningTableCategoryBox
+            EateryDB.instance.diningTableCategoryBox!
                 .add(
               DiningTableCategory(
-                  id: id,
                   name: _controllerCategoryName.text.trim(),
                   description: _controllerCategoryDescription.text.trim(),
                   image: image?.filename,

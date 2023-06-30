@@ -150,9 +150,9 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                     keyboardType: TextInputType.text,
                     controller: _controllerTaxNo,
                     title:
-                        '${Edition.values.singleWhere((element) => element.id == company?.taxEdition.id).name} License No',
+                        '${TaxEditionType.values.singleWhere((element) => element == company?.taxEdition).name} License No',
                     hint:
-                        'Enter ${Edition.values.singleWhere((element) => element.id == company?.taxEdition.id).name} license number...',
+                        'Enter ${TaxEditionType.values.singleWhere((element) => element == company?.taxEdition).name} license number...',
                     focusNode: focus5,
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (v) {
@@ -161,7 +161,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                     validator: (value) {
                       if (value!.trim().isNotEmpty &&
                           !value.trim().isValidGSTIN()) {
-                        return '${Edition.values.singleWhere((element) => element.id == company?.taxEdition.id).name} license number is not valid';
+                        return '${TaxEditionType.values.singleWhere((element) => element == company?.taxEdition).name} license number is not valid';
                       }
                       return null;
                     },
@@ -172,9 +172,9 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                     keyboardType: TextInputType.number,
                     controller: _controllerFoodLicNo,
                     title:
-                        '${Edition.values.singleWhere((element) => element.id == company?.taxEdition.id) == Edition.gst ? 'FSSAI' : 'Food'} License No',
+                        '${TaxEditionType.values.singleWhere((element) => element == company?.taxEdition) == TaxEditionType.gst ? 'FSSAI' : 'Food'} License No',
                     hint:
-                        'Enter ${Edition.values.singleWhere((element) => element.id == company?.taxEdition.id) == Edition.gst ? 'FSSAI' : 'Food'} license number...',
+                        'Enter ${TaxEditionType.values.singleWhere((element) => element == company?.taxEdition) == TaxEditionType.gst ? 'FSSAI' : 'Food'} license number...',
                     focusNode: focus6,
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (v) {
@@ -184,7 +184,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                       if (value!.trim().isNotEmpty &&
                           (value.trim().length < 10 ||
                               !value.trim().isNumericOnly)) {
-                        return '${Edition.values.singleWhere((element) => element.id == company?.taxEdition.id) == Edition.gst ? 'FSSAI' : 'Food'} license number is not valid';
+                        return '${TaxEditionType.values.singleWhere((element) => element == company?.taxEdition) == TaxEditionType.gst ? 'FSSAI' : 'Food'} license number is not valid';
                       }
                       // if (edition == Edition.gst && !value!.trim().isValidGSTIN()) return '${edition.name} license number is not valid';
                       return null;
@@ -197,9 +197,9 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                         const TextInputType.numberWithOptions(decimal: true),
                     controller: _controllerDefaultTax,
                     title:
-                        'Default ${Edition.values.singleWhere((element) => element.id == company?.taxEdition.id).name} Rate',
+                        'Default ${TaxEditionType.values.singleWhere((element) => element == company?.taxEdition).name} Rate',
                     hint:
-                        'Enter default ${Edition.values.singleWhere((element) => element.id == company?.taxEdition.id).name} rate...',
+                        'Enter default ${TaxEditionType.values.singleWhere((element) => element == company?.taxEdition).name} rate...',
                     suffix: Icon(
                       Icons.percent,
                       color: ColorStyle.text400,
@@ -208,7 +208,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                     textInputAction: TextInputAction.done,
                     validator: (value) {
                       if (value!.trim().isNotEmpty && !value.trim().isNum) {
-                        return 'Default ${Edition.values.singleWhere((element) => element.id == company?.taxEdition.id).name} license number is not valid';
+                        return 'Default ${TaxEditionType.values.singleWhere((element) => element == company?.taxEdition).name} license number is not valid';
                       }
                       // if (edition == Edition.gst && !value!.trim().isValidGSTIN()) return '${edition.name} license number is not valid';
                       return null;

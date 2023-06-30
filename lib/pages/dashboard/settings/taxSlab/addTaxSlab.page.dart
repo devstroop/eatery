@@ -26,11 +26,10 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
 
     try {
       TaxSlab taxSlab = TaxSlab(
-          id: EateryDB.instance.taxSlabBox.nextId(),
           name: controllerSlabName.text,
           rate: double.parse(controllerTaxRate.text),
           type: _taxType);
-      await EateryDB.instance.taxSlabBox.add(taxSlab).whenComplete(() {
+      await EateryDB.instance.taxSlabBox?.add(taxSlab).whenComplete(() {
         showSnackBar(this.context, 'Successfully created!');
         Navigator.of(this.context).pop();
       });
@@ -143,7 +142,7 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
                     index: _taxType.index,
                     onChange: (int? index){
                       _taxType = TaxType.values
-                          .singleWhere((element) => element.id == index);
+                          .singleWhere((element) => element.key == index);
                       setState(() {});
 
                     },

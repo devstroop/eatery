@@ -49,7 +49,7 @@ class _TaxSlabsSettingsPageState extends State<TaxSlabsSettingsPage> {
           ListView(
             shrinkWrap: true,
             children: [
-              for (TaxSlab taxSlab in EateryDB.instance.taxSlabBox.values)
+              for (TaxSlab taxSlab in EateryDB.instance.taxSlabBox?.values ?? [])
                 TextButton(
                   onPressed: () => showModalBottomSheet(
                       context: context,

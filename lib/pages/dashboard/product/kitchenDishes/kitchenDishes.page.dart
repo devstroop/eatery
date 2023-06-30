@@ -28,9 +28,9 @@ class _KitchenPageState extends State<KitchenPage> {
   final ScrollController _scrollControllerProducts = ScrollController();
   @override
   Widget build(BuildContext context) {
-    List<Product> products = EateryDB.instance.productBox.values
+    List<Product> products = EateryDB.instance.productBox?.values
         .where((element) => element.type == ProductType.kitchenDish)
-        .toList();
+        .toList() ?? [];
     double crossAxisCount;
     double spacing;
     if (MediaQuery.of(context).size.width < 600) {
@@ -83,7 +83,7 @@ class _KitchenPageState extends State<KitchenPage> {
                   margin: const EdgeInsets.only(bottom: 6),
                   image: const AssetImage('assets/icons/all.png'),
                   themeColor: _pageColor,
-                  selected: selectedCategory?.id == null,
+                  selected: selectedCategory?.key == null,
                   onTap: () {
                     setState(() {
                       selectedCategory = null;
@@ -91,12 +91,12 @@ class _KitchenPageState extends State<KitchenPage> {
                   },
                   label: 'All',
                 ),
-                ...EateryDB.instance.productCategoryBox.values.map((each) {
+                ...EateryDB.instance.productCategoryBox!.values.map((each) {
                   return CircularCategoryPOSWidget(
                     margin: const EdgeInsets.only(bottom: 6),
                     image: LibraryImage(each.image).image,
                     themeColor: _pageColor,
-                    selected: selectedCategory?.id == each.id,
+                    selected: selectedCategory?.key == each.key,
                     onTap: () {
                       setState(() {
                         selectedCategory = each;

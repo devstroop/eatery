@@ -17,7 +17,7 @@ class _StaffsPageState extends State<StaffsPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Waiter> waiters = EateryDB.instance.waiterBox.values.toList();
+    List<User> waiters = EateryDB.instance.userBox?.values.toList() ?? [];
     return Scaffold(
       appBar: AppBar(
         backgroundColor: _pageColor,
@@ -36,12 +36,12 @@ class _StaffsPageState extends State<StaffsPage> {
                 ...waiters.map((e) {
                   return ListTile(
                       title: Text(
-                        e.name,
+                        e.fullName,
                         style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                       subtitle: e.phone != null ? Text(e.phone!) : null,
                       leading: LeadingImageWidget(
-                        image: LibraryImage(e.photo ?? '').image,
+                        image: LibraryImage(e.image ?? '').image,
                         size: 48,
                       ),
                       trailing: Row(
@@ -55,7 +55,7 @@ class _StaffsPageState extends State<StaffsPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        EditStaffPage(waiter: e)),
+                                        EditStaffPage(user: e)),
                               ).then((_) => setState(() {}));
                             },
                           ),

@@ -101,9 +101,9 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                             },
                           );
                         }),
-                    ...EateryDB.instance.diningTableCategoryBox.values.map((e) {
+                    ...EateryDB.instance.diningTableCategoryBox!.values.map((e) {
                       return PosCategoryWidget(
-                        active: diningTableCategory?.id == e.id,
+                        active: diningTableCategory?.key == e.key,
                         label: e.name,
                         onTap: () {
                           setState(() {
@@ -132,8 +132,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                 image: image?.filename,
                 name: _controllerCategoryName.text,
                 description: _controllerCategoryDescription.text,
-                categoryId: diningTableCategory?.id,
-                id: EateryDB.instance.diningTableBox.nextId(),
+                categoryId: diningTableCategory?.key,
                 isActive: true,
               );
             });
@@ -141,7 +140,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
               showSnackBar(context, 'Failed to create');
               return;
             }
-            EateryDB.instance.diningTableBox.add(diningTable!).then((value) {
+            EateryDB.instance.diningTableBox!.add(diningTable!).then((value) {
               showSnackBar(context, 'Successfully created');
               Navigator.pop(context);
             }).onError((error, stackTrace) {

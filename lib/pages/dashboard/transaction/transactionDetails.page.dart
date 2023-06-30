@@ -9,7 +9,7 @@ class TransactionDetailsPage extends StatefulWidget {
       : super(key: key);
   final Map<String, dynamic> order;
   final dynamic account;
-  final OrderType? orderType;
+  final SaleOrderType? orderType;
 
   @override
   State<TransactionDetailsPage> createState() => _TransactionDetailsPageState();
@@ -23,9 +23,9 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final _pageColor = Color(widget.orderType!.color!);
+    final pageColor = Color(widget.orderType!.color!);
     final appBar = AppBar(
-      backgroundColor: _pageColor,
+      backgroundColor: pageColor,
       title: const Text('Order detail'),
       actions: [
         IconButton(
@@ -98,8 +98,12 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                             padding: const EdgeInsetsDirectional.fromSTEB(
                                 0, 0, 6, 0),
                             child: Icon(
-                              widget.orderType!.icon,
-                              color: _pageColor,
+                              widget.orderType == SaleOrderType.dine
+                                  ? UIcons.regularStraight.restaurant
+                                  : widget.orderType == SaleOrderType.delivery
+                                  ? UIcons.regularStraight.bike
+                                  : UIcons.regularStraight.package,
+                              color: pageColor,
                             ),
                           ),
                           Padding(
@@ -362,7 +366,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                 ],
               ),
             ),
-            widget.orderType == OrderType.dine
+            widget.orderType == SaleOrderType.dine
                 ? Container(
                     padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
                     margin: const EdgeInsets.only(bottom: 12.0),
@@ -621,7 +625,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: PrimaryButton(
-            color: _pageColor,
+            color: pageColor,
             onPressed: () async {
               try {
                 await PrintInvoice.printReceipt(

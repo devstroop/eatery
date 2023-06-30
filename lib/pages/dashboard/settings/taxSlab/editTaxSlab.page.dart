@@ -152,17 +152,17 @@ class _EditTaxSlabSettingsPageState extends State<EditTaxSlabSettingsPage> {
                   //   index: _taxType.index,
                   //   onChange: (int? index) {
                   //     _taxType = TaxType.values
-                  //         .singleWhere((element) => element.id == index);
+                  //         .singleWhere((element) => element.key == index);
                   //     setState(() {});
                   //   },
                   // ),
                   ToggleSwitch(
                     highlightColor: localColor,
                       selectedIndex: _taxType.index,
-                      children: [...TaxType.values.map((e) => e.name!)],
+                      children: [...TaxType.values.map((e) => e.name)],
                       onChange: (int? index) {
                         _taxType = TaxType.values
-                            .singleWhere((element) => element.id == index);
+                            .singleWhere((element) => element.index == index);
                         setState(() {});
                       }),
                 ],

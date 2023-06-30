@@ -16,8 +16,8 @@ class _UpgradeNotificationState extends State<UpgradeNotification> {
   Widget build(BuildContext context) {
     return EateryDB.instance.subscriptionBox.values
                 .singleWhere(
-                    (element) => element.id == widget.company!.subscriptionId!)
-                .purchaseCode ==
+                    (element) => element.key == widget.company!.activeSubscriptionKey!)
+                .activationKey ==
             null
         ? Container(
       margin: widget.margin,

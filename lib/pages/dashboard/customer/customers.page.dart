@@ -17,7 +17,7 @@ class _CustomersPageState extends State<CustomersPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Customer> customers = EateryDB.instance.customerBox.values.toList();
+    List<Master> customers = EateryDB.instance.masterBox!.values.toList();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: _pageColor,
@@ -51,7 +51,7 @@ class _CustomersPageState extends State<CustomersPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        EditCustomerPage(customer: e)),
+                                        EditCustomerPage(master: e)),
                               ).then((_) => setState(() {}));
                             },
                           ),

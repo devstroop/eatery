@@ -1,9 +1,9 @@
 import 'package:eatery/references.dart';
 
 class Body3 extends StatelessWidget {
-  final Function(Edition edition) callback;
+  final Function(TaxEditionType edition) callback;
   final Color themeColor;
-  final Edition edition;
+  final TaxEditionType edition;
   final GlobalKey<FormState> formKey;
   final Function(GlobalKey<FormState> formKey)? callbackFormKey;
   const Body3(
@@ -30,23 +30,23 @@ class Body3 extends StatelessWidget {
           SpacingStyle.defaultVerticalSpacing,
           SelectableCard(
             header: "Edition",
-            title: Edition.gst.name,
-            footer: Edition.gst.description,
-            selected: edition == Edition.gst,
+            title: TaxEditionType.gst.name,
+            footer: 'TaxEditionType.gst.description',
+            selected: edition == TaxEditionType.gst,
             onTap: () {
               if (callbackFormKey != null) callbackFormKey!(formKey);
-              callback(Edition.gst);
+              callback(TaxEditionType.gst);
             },
           ),
           SpacingStyle.defaultVerticalSpacing,
           SelectableCard(
             header: "Edition",
-            title: Edition.vat.name,
-            footer: Edition.vat.description,
-            selected: edition == Edition.vat,
+            title: TaxEditionType.vat.name,
+            footer: 'TaxEditionType.vat.description',
+            selected: edition == TaxEditionType.vat,
             onTap: () {
               if (callbackFormKey != null) callbackFormKey!(formKey);
-              callback(Edition.vat);
+              callback(TaxEditionType.vat);
             },
           ),
         ],

@@ -3,8 +3,8 @@ import 'package:eatery/references.dart';
 Color _pageColor = ColorStyle.primary;
 
 class EditStaffPage extends StatefulWidget {
-  const EditStaffPage({Key? key, required this.waiter}) : super(key: key);
-  final Waiter waiter;
+  const EditStaffPage({Key? key, required this.user}) : super(key: key);
+  final User user;
 
   @override
   State<EditStaffPage> createState() => _EditStaffPageState();
@@ -23,10 +23,10 @@ class _EditStaffPageState extends State<EditStaffPage> {
     super.initState();
     Future.delayed(Duration.zero, (){
       setState(() {
-        _controllerWaiterName.text = widget.waiter.name;
-        _controllerWaiterPhone.text = widget.waiter.phone ?? '';
-        isActive = widget.waiter.isActive;
-        image = LibraryImage(widget.waiter.photo ?? '');
+        _controllerWaiterName.text = widget.user.fullName;
+        _controllerWaiterPhone.text = widget.user.phone ?? '';
+        isActive = widget.user.isActive;
+        image = LibraryImage(widget.user.image ?? '');
         
       });
     });
@@ -64,7 +64,7 @@ class _EditStaffPageState extends State<EditStaffPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        widget.waiter.delete()
+                        widget.user.delete()
                             .whenComplete(() {
                           Navigator.pop(context);
                           Navigator.pop(context);
@@ -170,13 +170,13 @@ class _EditStaffPageState extends State<EditStaffPage> {
             }
             _formKey.currentState!.save();
 
-            widget.waiter.name = _controllerWaiterName.text;
-            widget.waiter.phone = _controllerWaiterPhone.text;
-            widget.waiter.photo = image?.filename;
-            widget.waiter.isActive = isActive;
+            widget.user.fullName = _controllerWaiterName.text;
+            widget.user.phone = _controllerWaiterPhone.text;
+            widget.user.image = image?.filename;
+            widget.user.isActive = isActive;
             try {
-              EateryDB.instance.waiterBox.put(widget.waiter.key,
-                widget.waiter,
+              EateryDB.instance.userBox?.put(widget.user.key,
+                widget.user,
               ).whenComplete(() {
                 showSnackBar(context, 'Waiter updated successfully');
                 Navigator.pop(context);

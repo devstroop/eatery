@@ -65,11 +65,11 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                     });
                   },
                   themeColor: _pageColor,
-                  selected: selectedCategory?.id == null,
+                  selected: selectedCategory?.key == null,
                   label: 'All',
                   image: const AssetImage('assets/icons/all.png'),
                 ),
-                ...EateryDB.instance.diningTableCategoryBox.values.map((e) {
+                ...EateryDB.instance.diningTableCategoryBox!.values.map((e) {
                   return CircularCategoryPOSWidget(
                     margin: const EdgeInsets.only(bottom: 6),
                     onTap: () {
@@ -78,7 +78,7 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                       });
                     },
                     themeColor: _pageColor,
-                    selected: selectedCategory?.id == e.id,
+                    selected: selectedCategory?.key == e.key,
                     label: e.name,
                     image: LibraryImage(e.image ?? '').image,
                   );
@@ -95,19 +95,19 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
             flex: 8,
             child: ListView(
               children: [
-                ...EateryDB.instance.diningTableBox.values
+                ...EateryDB.instance.diningTableBox!.values
                     .where((element) =>
                         selectedCategory == null ||
-                        element.categoryId == selectedCategory?.id)
+                        element.categoryId == selectedCategory?.key)
                     .map((e) {
-                  DiningTableCategory? category = EateryDB.instance.diningTableCategoryBox.values
-                      .where((element) => element.id == e.categoryId).isNotEmpty
-                      ? EateryDB.instance.diningTableCategoryBox.values
-                          .where((element) => element.id == e.categoryId).first
+                  DiningTableCategory? category = EateryDB.instance.diningTableCategoryBox!.values
+                      .where((element) => element.key == e.categoryId).isNotEmpty
+                      ? EateryDB.instance.diningTableCategoryBox!.values
+                          .where((element) => element.key == e.categoryId).first
                       : null;
-                  Order? order = e.orderId != null
-                      ? EateryDB.instance.orderBox.values
-                          .singleWhere((elem) => elem.id == e.orderId)
+                  Voucher? order = e.voucherKey != null
+                      ? EateryDB.instance.voucherBox!.values
+                          .singleWhere((elem) => elem.key == e.voucherKey)
                       : null;
                   bool isAvailable = order == null || order.isPaid;
                   return ListTile(

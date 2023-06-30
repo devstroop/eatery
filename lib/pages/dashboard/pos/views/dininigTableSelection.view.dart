@@ -11,7 +11,7 @@ class DiningTableSelectionView extends StatefulWidget {
   final DiningTable? selectedDiningTable;
   final Color? themeColor;
   final Function(DiningTable diningTable)? onDiningTableSelected;
-  final Function(Order? order)? onOrderInitiated;
+  final Function(Voucher? voucher)? onOrderInitiated;
 
   @override
   State<DiningTableSelectionView> createState() =>
@@ -21,7 +21,7 @@ class DiningTableSelectionView extends StatefulWidget {
 class _DiningTableSelectionViewState extends State<DiningTableSelectionView> {
   DiningTableCategory? selectedCategory;
 
-  set selectedOrder(Order? value) {
+  set selectedOrder(Voucher? value) {
     widget.onOrderInitiated?.call(value);
   }
 
@@ -71,11 +71,11 @@ class _DiningTableSelectionViewState extends State<DiningTableSelectionView> {
                 });
               },
               themeColor: widget.themeColor,
-              selected: selectedCategory?.id == null,
+              selected: selectedCategory?.key == null,
               label: 'All',
               image: const AssetImage('assets/icons/all.png'),
             ),
-            ...EateryDB.instance.diningTableCategoryBox.values.map((e) {
+            ...EateryDB.instance.diningTableCategoryBox!.values.map((e) {
               return CircularCategoryPOSWidget(
                 margin: const EdgeInsets.only(right: 12),
                 onTap: () {
@@ -84,7 +84,7 @@ class _DiningTableSelectionViewState extends State<DiningTableSelectionView> {
                   });
                 },
                 themeColor: widget.themeColor,
-                selected: selectedCategory?.id == e.id,
+                selected: selectedCategory?.key == e.key,
                 label: e.name,
                 image: LibraryImage(e.image ?? '').image,
               );
@@ -106,20 +106,20 @@ class _DiningTableSelectionViewState extends State<DiningTableSelectionView> {
             mainAxisSpacing: 12.0,
           ),
           children: [
-            ...EateryDB.instance.diningTableBox.values
+            ...EateryDB.instance.diningTableBox!.values
                 .where((element) =>
-                    selectedCategory?.id == null ||
-                    element.categoryId == selectedCategory?.id)
+                    selectedCategory?.key == null ||
+                    element.categoryId == selectedCategory?.key)
                 .map((diningTable) {
-              Order? order = diningTable.orderId != null
-                  ? EateryDB.instance.orderBox.values.singleWhere(
-                      (element) => element.id == diningTable.orderId)
+              Voucher? voucher = diningTable.voucherKey != null
+                  ? EateryDB.instance.voucherBox!.values.singleWhere(
+                      (element) => element.key == diningTable.voucherKey)
                   : null;
               return DiningTableSelectionCard(
                 diningTable: diningTable,
-                selected: diningTable.id == widget.selectedDiningTable?.id,
-                onTap: () => _onDiningTableSelected(diningTable, order),
-                order: order,
+                selected: diningTable.key == widget.selectedDiningTable?.key,
+                onTap: () => _onDiningTableSelected(diningTable, voucher),
+                voucher: voucher,
               );
             }),
           ],
@@ -128,11 +128,11 @@ class _DiningTableSelectionViewState extends State<DiningTableSelectionView> {
     ]);
   }
 
-  _onDiningTableSelected(DiningTable diningTable, Order? order) {
-    if (diningTable.id == widget.selectedDiningTable?.id) {
+  _onDiningTableSelected(DiningTable diningTable, Voucher? voucher) {
+    if (diningTable.key == widget.selectedDiningTable?.key) {
       return;
     }
-    if (order != null && diningTable.orderId == order.id && order.isClosed) {
+    if (voucher != null && diningTable.voucherKey == voucher.key && voucher.isClosed) {
       // TODO: Show dialog that order is closed
 
       return;
@@ -140,32 +140,29 @@ class _DiningTableSelectionViewState extends State<DiningTableSelectionView> {
     // TODO: Take phone number (*mandatory), Additional info (optional)
     // TODO: Find customer by phone number or create new customer with phone number and additional info or name 'Walk in ${EateryDB.instance.customerBox.nextId()}'
     String phoneNumber = '7488797047';
-    String? name = 'Walk in ${EateryDB.instance.customerBox.nextId()}';
+    String? name = 'Walk in X';
     String? email = '';
     String? address = '';
 
-    Customer customer = EateryDB.instance.customerBox.values.firstWhere(
+    Master customer = EateryDB.instance.masterBox!.values.firstWhere(
         (element) =>
             element.phone?.replaceFirst('+', '').trim() ==
             phoneNumber.replaceFirst('+', '').trim(), orElse: () {
-      int newCustomerId = EateryDB.instance.customerBox.nextId();
-      return order?.customer ??
-          Customer(
-              id: newCustomerId,
+      return voucher?.master ??
+          Master(
               name: name,
               phone: phoneNumber,
               address: address,
               email: email);
     });
 
-    order ??
-        Order(
-            id: EateryDB.instance.orderBox.nextId(),
-            customer: customer,
-            type: OrderType.dine);
+    voucher ??
+        Voucher(
+            master: customer,
+            saleOrderType: SaleOrderType.dine, voucherType: VoucherType.saleOrder);
     setState(() {
       selectedDiningTable = diningTable;
-      selectedOrder = order;
+      selectedOrder = voucher;
     });
   }
 }

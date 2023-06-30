@@ -1,20 +1,10 @@
-import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery/components/custom_text_from_field.dart';
-import 'package:eatery/components/dialog_box.dart';
-import 'package:eatery/services/utility/show_snack_bar.dart';
-import 'package:eatery/constants/style/color_style.dart';
-
-import '../../../components/labeled_custom_text_from_field.dart';
-import '../../../services/utility/library_image.dart';
-import '../../../widgets/buttons/primary.button.dart';
-import '../../../widgets/buttons/upload.button.dart';
+import '../../../references.dart';
 
 Color _pageColor = ColorStyle.primary;
 
 class EditCustomerPage extends StatefulWidget {
-  const EditCustomerPage({Key? key, required this.customer}) : super(key: key);
-  final Customer customer;
+  const EditCustomerPage({Key? key, required this.master}) : super(key: key);
+  final Master master;
 
   @override
   State<EditCustomerPage> createState() => _EditCustomerPageState();
@@ -32,9 +22,9 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
     super.initState();
     Future.delayed(Duration.zero, (){
       setState(() {
-        _controllerCustomerName.text = widget.customer.name;
-        _controllerCustomerPhone.text = widget.customer.phone ?? '';
-        isActive = widget.customer.isActive;
+        _controllerCustomerName.text = widget.master.name;
+        _controllerCustomerPhone.text = widget.master.phone ?? '';
+        isActive = widget.master.isActive;
        });
     });
   }
@@ -164,9 +154,9 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
             }
             _formKey.currentState!.save();
 
-            widget.customer.name = _controllerCustomerName.text;
-            widget.customer.phone = _controllerCustomerPhone.text;
-            widget.customer.isActive = isActive;
+            widget.master.name = _controllerCustomerName.text;
+            widget.master.phone = _controllerCustomerPhone.text;
+            widget.master.isActive = isActive;
             try {
               // EateryDB.instance.customerBox.put(widget.customer.key,
               //   widget.customer,

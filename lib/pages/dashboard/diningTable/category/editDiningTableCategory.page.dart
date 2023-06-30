@@ -53,8 +53,8 @@ class _EditDiningTableCategoryPageState
               context: context,
               builder: (context) {
                 // category exists in dining table then show message and return
-                if (EateryDB.instance.diningTableBox.values
-                    .any((element) => element.categoryId == widget.category.id)) {
+                if (EateryDB.instance.diningTableBox!.values
+                    .any((element) => element.categoryId == widget.category.key)) {
                   return AlertDialog(
                     title: const Text('Delete Category'),
                     content: const Text(
@@ -174,7 +174,7 @@ class _EditDiningTableCategoryPageState
   /*deleteButton(BuildContext context) => IconButton(
         onPressed: () {
           if (EateryDB.instance.diningTableBox.values
-              .any((element) => element.categoryId == widget.category.id)) {
+              .any((element) => element.categoryId == widget.category.key)) {
             return AlertDialog(
               title: const Text('Delete Category'),
               content: const Text(
@@ -189,7 +189,7 @@ class _EditDiningTableCategoryPageState
               ],
             );
           }
-          if(EateryDB.instance.diningTableBox.values.where((element) => element.categoryId == widget.category.id).isNotEmpty){
+          if(EateryDB.instance.diningTableBox.values.where((element) => element.categoryId == widget.category.key).isNotEmpty){
             showSnackBar(context, 'Can\'t delete, some dining table is using this category');
             return;
 

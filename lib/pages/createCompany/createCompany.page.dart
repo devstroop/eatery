@@ -10,8 +10,8 @@ class CreateCompanyPage extends StatefulWidget {
 class _CreateCompanyPageState extends State<CreateCompanyPage> {
   int viewIndex = 0;
   LibraryImage? libraryImageLogo; // used
-  Edition edition = Edition.gst;
-  SubscriptionType subscriptionType = SubscriptionType.free;
+  TaxEditionType edition = TaxEditionType.gst;
+  SubscriptionType subscriptionType = SubscriptionType.basic;
   String? deviceSerial;
   final TextEditingController _controllerRestaurantName =
       TextEditingController(); // used
@@ -65,7 +65,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
           formKey: formKeys[2],
           edition: edition,
           themeColor: themeColor,
-          callback: (Edition edition) {
+          callback: (TaxEditionType edition) {
             setState(() {
               this.edition = edition;
             });
@@ -82,9 +82,8 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
           foodLicNoController: _controllerFoodLicNo,
           defaultTaxController: _controllerDefaultTaxPercent,
           taxType: _taxType,
-          onTaxTypeChanged: (int? index) {
-            _taxType =
-                TaxType.values.singleWhere((element) => element.id == index);
+          onTaxTypeChanged: (TaxType? _taxType) {
+            _taxType = TaxType.values[index];
             setState(() {});
           },
           callbackFormKey: (formKey) => setState(() {
@@ -246,9 +245,9 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                   taxEdition: edition,
                   foodLicenseNo: _controllerFoodLicNo.text,
                   salesTaxNumber: _controllerTaxLicNo.text,
-                  defaultTaxSlabId: taxSlab?.id,
-                  subscriptionId: subscription.id,
-                  currencyId: _kCurrency?.id,
+                  defaultTaxSlabId: taxSlab?.key,
+                  subscriptionId: subscription.key,
+                  currencyId: _kCurrency?.key,
                 );
                 int result = await EateryDB.instance.companyBox
                     .add(company)

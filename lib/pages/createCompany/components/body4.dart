@@ -4,7 +4,7 @@ import 'package:eatery/references.dart';
 
 class Body4 extends StatelessWidget {
   final Color themeColor;
-  final Edition edition;
+  final TaxEditionType edition;
   final TextEditingController taxNoController;
   final TextEditingController foodLicNoController;
   final TextEditingController defaultTaxController;
@@ -66,9 +66,9 @@ class Body4 extends StatelessWidget {
             keyboardType: TextInputType.number,
             controller: foodLicNoController,
             title:
-                '${edition == Edition.gst ? 'FSSAI' : 'Food'} Registration Number',
+                '${edition == TaxEditionType.gst ? 'FSSAI' : 'Food'} Registration Number',
             hint:
-                'Enter ${edition == Edition.gst ? 'FSSAI' : 'Food'} registration number',
+                'Enter ${edition == TaxEditionType.gst ? 'FSSAI' : 'Food'} registration number',
             focusNode: focus2,
             textInputAction: TextInputAction.next,
             onFieldSubmitted: (v) {
@@ -78,7 +78,7 @@ class Body4 extends StatelessWidget {
             validator: (value) {
               if (value!.trim().isNotEmpty &&
                   (value.trim().length < 10 || !value.trim().isNumericOnly)) {
-                return '${edition == Edition.gst ? 'FSSAI' : 'Food'} license number is not valid';
+                return '${edition == TaxEditionType.gst ? 'FSSAI' : 'Food'} license number is not valid';
               }
               // if (edition == Edition.gst && !value!.trim().isValidGSTIN()) return '${edition.name} license number is not valid';
               return null;

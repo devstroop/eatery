@@ -145,7 +145,7 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
                 height: 3.0,
               ),
               ToggleSwitch(
-                highlightColor: selectedFoodType?.color ?? _pageColor,
+                highlightColor: Color(selectedFoodType?.color ?? _pageColor.value),
                 backgroundColor: const Color(0xFFE5E5E5),
                 foregroundColor: Colors.white,
                 inactiveForegroundColor: ColorStyle.text200,
@@ -188,17 +188,17 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
                 foregroundColor: selectedTaxSlab == null ? Colors.white : ColorStyle.text200,
                 children: [
                   'None',
-                  for (var each in EateryDB.instance.taxSlabBox.values)
+                  for (TaxSlab each in EateryDB.instance.taxSlabBox?.values ?? [])
                     each.name
                 ],
-                selectedIndex: (selectedTaxSlab?.id == null) ? 0 : selectedTaxSlab?.id,
+                selectedIndex: (selectedTaxSlab?.key == null) ? 0 : selectedTaxSlab?.key,
                 onChange: (int? index) {
                   if (index == 0) {
                     selectedTaxSlab = null;
                   } else {
                     selectedTaxSlab = EateryDB
-                        .instance.taxSlabBox.values
-                        .singleWhere((element) => element.id == index);
+                        .instance.taxSlabBox?.values
+                        .singleWhere((element) => element.key == index);
                   }
                   setState(() {});
                 },
@@ -241,7 +241,7 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
                         selectedCategory = null;
                       });
                     },),
-                    ...EateryDB.instance.productCategoryBox.values.map((e) {
+                    ...EateryDB.instance.productCategoryBox!.values.map((e) {
                       return CircularCategoryPOSWidget(
                         themeColor: _pageColor,
                         margin: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -289,18 +289,17 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
 
             try {
               Product product = Product(
-                  id: EateryDB.instance.productBox.nextId(),
                   name: _controllerName.text,
-                  categoryId: selectedCategory?.id,
+                  categoryKey: selectedCategory?.key,
                   description: _controllerDescription.text,
                   image: image?.filename,
                   mrpPrice: _controllerMRP.text.toDouble() ?? 0.0,
                   salePrice: _controllerSalePrice.text.toDouble(),
-                  taxSlabId: selectedTaxSlab?.id,
+                  taxSlabId: selectedTaxSlab?.key,
                   foodType: selectedFoodType,
                   type: ProductType.inventoryItem,
                   isActive: true);
-              await EateryDB.instance.productBox
+              await EateryDB.instance.productBox!
                   .add(product)
                   .whenComplete(() {
                 showSnackBar(context, 'Successfully created');

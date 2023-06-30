@@ -8,7 +8,7 @@ class PointOfSalePage extends StatefulWidget {
 }
 
 class _PointOfSalePageState extends State<PointOfSalePage> {
-  OrderType orderType = OrderType.dine;
+  SaleOrderType orderType = SaleOrderType.dine;
   ProductCategory? selectedProductCategory;
   DiningTable? selectedDiningTable;
 
@@ -212,12 +212,12 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
 
     Color _pageColor = Color(orderType.color ?? 0);
     List<ProductCategory> categories =
-        EateryDB.instance.productCategoryBox.values.toList();
+        EateryDB.instance.productCategoryBox?.values.toList() ?? [];
     List<Product> products =
-        EateryDB.instance.productBox.values.where((element) {
+        EateryDB.instance.productBox?.values.where((element) {
       // TODO: implement build
       return true;
-    }).toList();
+    }).toList() ?? [];
     double crossAxisCount;
     double spacing;
     if (MediaQuery.of(context).size.width < 600) {
@@ -287,7 +287,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                   margin: const EdgeInsets.only(bottom: 6),
                   image: const AssetImage('assets/icons/all.png'),
                   themeColor: _pageColor,
-                  selected: selectedProductCategory?.id == null,
+                  selected: selectedProductCategory?.key == null,
                   onTap: () {
                     setState(() {
                       selectedProductCategory = null;
@@ -295,12 +295,12 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                   },
                   label: 'All',
                 ),
-                ...EateryDB.instance.productCategoryBox.values.map((each) {
+                ...EateryDB.instance.productCategoryBox!.values.map((each) {
                   return CircularCategoryPOSWidget(
                     margin: const EdgeInsets.only(bottom: 6),
                     image: LibraryImage(each.image).image,
                     themeColor: _pageColor,
-                    selected: selectedProductCategory?.id == each.id,
+                    selected: selectedProductCategory?.key == each.key,
                     onTap: () {
                       setState(() {
                         selectedProductCategory = each;
@@ -388,32 +388,36 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
           children: [
             PosOrderTypeSelectionButton(
               onTap: _showOrderTypeSelection,
-              iconData: orderType.icon!,
+              iconData: orderType == SaleOrderType.dine
+                  ? UIcons.regularStraight.restaurant
+                  : orderType == SaleOrderType.delivery
+                      ? UIcons.regularStraight.bike
+                      : UIcons.regularStraight.shopping_cart,
               themeColor: _pageColor,
               text: orderType.name!,
             ),
-            if (orderType == OrderType.dine) // dining table selection
+            if (orderType == SaleOrderType.dine) // dining table selection
               IconButton(
                   onPressed: _pickDiningTable,
                   icon: Icon(
                     UIcons.regularStraight.chair,
                     color: _pageColor,
                   )),
-            if (orderType == OrderType.dine) // waiter selection
+            if (orderType == SaleOrderType.dine) // waiter selection
               IconButton(
                   onPressed: _pickWaiter,
                   icon: Icon(
                     UIcons.regularStraight.man_head,
                     color: _pageColor,
                   )),
-            if (orderType == OrderType.delivery)
+            if (orderType == SaleOrderType.delivery)
               IconButton(
                   onPressed: _pickDeliveryLocation,
                   icon: Icon(
                     UIcons.regularStraight.map_marker,
                     color: _pageColor,
                   )),
-            if (orderType == OrderType.delivery)
+            if (orderType == SaleOrderType.delivery)
               IconButton(
                   onPressed: _pickDeliveryStaff,
                   icon: Icon(
@@ -565,11 +569,15 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                     color: ColorStyle.text200),
               ),
             ),
-            for (var orderType in OrderType.values)
+            for (var orderType in SaleOrderType.values)
               Padding(
                 padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
                 child: SpecialButton(
-                  icon: orderType.icon!,
+                  icon: orderType == SaleOrderType.dine
+                      ? UIcons.regularStraight.restaurant
+                      : orderType == SaleOrderType.delivery
+                      ? UIcons.regularStraight.bike
+                      : UIcons.regularStraight.shopping_cart,
                   text: orderType.name!,
                   color: Color(orderType.color!),
                   foreColor: Colors.white,
