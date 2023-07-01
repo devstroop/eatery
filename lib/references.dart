@@ -49,7 +49,7 @@ export './widgets/card/menu.card.dart';
 export './widgets/buttons/upload.button.dart';
 export './widgets/card/dining_table_selection.card.dart';
 export './widgets/badges/foodType.badge.dart';
-export './widgets/text_fields/search.textField.dart';
+export './widgets/text_fields/search.text_field.dart';
 export './widgets/switches/toggle.switch.dart';
 // Internal references
 export './components/bottom_sheets/forgot_password_bottomsheet.dart';
@@ -129,19 +129,18 @@ export './pages/dashboard/user/editUser.page.dart';
 // Internal references
 export './pages/dashboard/help/help.page.dart';
 // Internal references
-export './pages/dashboard/importExport/importExport.page.dart';
-// Internal references
+export './pages/dashboard/import_export/import_export.page.dart';// Internal references
 export './pages/dashboard/transaction/transactions.page.dart';
-export './pages/dashboard/transaction/transactionDetails.page.dart';
-export './pages/dashboard/transaction/printSalesReport.page.dart';
+export './pages/dashboard/transaction/transaction_details.page.dart';
+export './pages/dashboard/transaction/print_sales_report.page.dart';
 // Internal references
-export './pages/dashboard/pos/pointOfSale.page.dart';
+export './pages/dashboard/pos/point_of_sale.page.dart';
 export './pages/dashboard/pos/checkout.page.dart';
-export './pages/dashboard/pos/orderConfirmation.page.dart';
+export './pages/dashboard/pos/order_confirmation.page.dart';
 // Internal references
 export './pages/dashboard/pos/views/cart.view.dart';
-export './pages/dashboard/pos/views/dininigTableSelection.view.dart';
-export './pages/dashboard/pos/views/kProduct.view.dart';
+export './pages/dashboard/pos/views/dining_table_selection.view.dart';
+export './pages/dashboard/pos/views/k_product.view.dart';
 export './pages/dashboard/pos/views/waiterSelection.view.dart';
 // Internal references
 export './pages/authentication/login.page.dart';
