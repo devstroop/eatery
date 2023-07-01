@@ -2,15 +2,15 @@ import '../../../references.dart';
 
 Color _pageColor = ColorStyle.primary;
 
-class EditCustomerPage extends StatefulWidget {
-  const EditCustomerPage({Key? key, required this.master}) : super(key: key);
+class EditMasterPage extends StatefulWidget {
+  const EditMasterPage({Key? key, required this.master}) : super(key: key);
   final Master master;
 
   @override
-  State<EditCustomerPage> createState() => _EditCustomerPageState();
+  State<EditMasterPage> createState() => _EditMasterPageState();
 }
 
-class _EditCustomerPageState extends State<EditCustomerPage> {
+class _EditMasterPageState extends State<EditMasterPage> {
   bool isActive = true;
   final TextEditingController _controllerCustomerName = TextEditingController();
   final TextEditingController _controllerCustomerPhone = TextEditingController();

@@ -42,22 +42,24 @@ export './constants/style/spacing_style.dart';
 export './constants/validators/gstin_validator.dart';
 export './constants/utils/app_file_system.dart';
 // Internal references
-export './widgets/imageWidgets/leading.imageWidget.dart';
+export './widgets/image_widgets/leading.image_widget.dart';
 export './widgets/labels/caption.label.dart';
-export './widgets/posWidgets/circularCategory.posWidget.dart';
+export './widgets/pos_widgets/circular_category.pos_widget.dart';
 export './widgets/card/menu.card.dart';
 export './widgets/buttons/upload.button.dart';
-export './widgets/card/diningTableSelection.card.dart';
+export './widgets/card/dining_table_selection.card.dart';
 export './widgets/badges/foodType.badge.dart';
-export './widgets/textFields/search.textField.dart';
+export './widgets/text_fields/search.textField.dart';
 export './widgets/switches/toggle.switch.dart';
 // Internal references
+export './components/bottom_sheets/forgot_password_bottomsheet.dart';
+export './components/bottom_sheets/upgrade_to_access_bottomsheet.dart';
+export './components/bottom_sheets/upload_image_bottomsheet.dart';
+export './components/bottom_sheets/help_bottom_sheet.dart';
 export './components/bottom_view_grip.dart';
 export './components/secondary_button.dart';
 export './components/custom_text_from_field.dart';
 export './components/selectable_card.dart';
-export './components/bottomsheets/forgot_password_bottomsheet.dart';
-export './components/bottomsheets/upgrade_to_access_bottomsheet.dart';
 export './components/labeled_custom_text_from_field.dart';
 export './components/notification_widget.dart';
 export './components/pos_category_widget.dart';
@@ -70,8 +72,6 @@ export './components/pos_order_type_selection_button.dart';
 export './components/special_button.dart';
 export './components/product_card.dart';
 export './components/loaders/loading_screen.dart';
-export './components/bottomsheets/upload_image_bottomsheet.dart';
-export './components/bottomsheets/help_bottom_sheet.dart';
 export './components/custom_dialog_box.dart';
 // Internal references
 export './constants/global_variables.dart';
@@ -94,34 +94,34 @@ export './pages/activation/upgrade.page.dart';
 // Internal references
 export './pages/dashboard/dashboard.page.dart';
 // Internal references
-export './pages/dashboard/components/dashboardHeader.dart';
+export './pages/dashboard/components/dashboard_header.dart';
 export './pages/dashboard/components/notifications/upgrade.notification.dart';
 // Internal references
-export './pages/dashboard/product/kitchenDishes/addKitchenDish.page.dart';
-export './pages/dashboard/product/kitchenDishes/editKitchenDish.page.dart';
-export './pages/dashboard/product/kitchenDishes/kitchenDishes.page.dart';
+export './pages/dashboard/product/kitchenDishes/add_kitchen_dish.page.dart';
+export './pages/dashboard/product/kitchenDishes/edit_kitchen_dish.page.dart';
+export './pages/dashboard/product/kitchenDishes/kitchen_dishes.page.dart';
 // Internal references
-export './pages/dashboard/product/inventoryItem/addInventoryItem.page.dart';
-export './pages/dashboard/product/inventoryItem/editInventoryItem.page.dart';
-export './pages/dashboard/product/inventoryItem/inventoryItems.page.dart';
+export './pages/dashboard/product/inventoryItem/add_inventory_item.page.dart';
+export './pages/dashboard/product/inventoryItem/edit_inventory_item.page.dart';
+export './pages/dashboard/product/inventoryItem/inventory_items.page.dart';
 // Internal references
-export './pages/dashboard/product/productCategory/addProductCategory.page.dart';
-export './pages/dashboard/product/productCategory/editProductCategory.page.dart';
-export './pages/dashboard/product/productCategory/productCategories.page.dart';
+export './pages/dashboard/product/productCategory/add_product_category.page.dart';
+export './pages/dashboard/product/productCategory/edit_product_category.page.dart';
+export './pages/dashboard/product/productCategory/product_categories.page.dart';
 // Internal references
-export './pages/dashboard/diningTable/category/addDiningTableCategory.page.dart';
-export './pages/dashboard/diningTable/category/editDiningTableCategory.page.dart';
-export './pages/dashboard/diningTable/category/diningTableCategories.page.dart';
+export './pages/dashboard/dining_table/category/add_dining_table_category.page.dart';
+export './pages/dashboard/dining_table/category/edit_dining_table_category.page.dart';
+export './pages/dashboard/dining_table/category/dining_table_categories.page.dart';
 // Internal references
-export './pages/dashboard/diningTable/addDiningTable.page.dart';
-export './pages/dashboard/diningTable/editDiningTable.page.dart';
-export './pages/dashboard/diningTable/diningTables.page.dart';
+export './pages/dashboard/dining_table/add_dining_table.page.dart';
+export './pages/dashboard/dining_table/edit_dining_table.page.dart';
+export './pages/dashboard/dining_table/dining_tables.page.dart';
 // Internal references
 export './pages/dashboard/stock/stocks.page.dart';
 // Internal references
-export './pages/dashboard/customer/addCustomer.page.dart';
-export './pages/dashboard/customer/editCustomer.page.dart';
-export './pages/dashboard/customer/customers.page.dart';
+export './pages/dashboard/master/add_master.page.dart';
+export './pages/dashboard/master/edit_master.page.dart';
+export './pages/dashboard/master/masters.page.dart';
 // Internal references
 export './pages/dashboard/user/users.page.dart';
 export './pages/dashboard/user/addUser.page.dart';
@@ -149,29 +149,29 @@ export './pages/authentication/logout.page.dart';
 // Internal references
 export './pages/dashboard/utility/calculator.page.dart';
 // Internal references
-export './pages/createCompany/createCompany.page.dart';
-export './pages/createCompany/components/body1.dart';
-export './pages/createCompany/components/body2.dart';
-export './pages/createCompany/components/body3.dart';
-export './pages/createCompany/components/body4.dart';
-export './pages/createCompany/components/body5.dart';
-export './pages/createCompany/components/body6.dart';
-export './pages/createCompany/components/createCompany.bottomAppBar.dart';
-export './pages/createCompany/createCompanyResult.page.dart';
+export './pages/create_company/create_company.page.dart';
+export './pages/create_company/components/body1.dart';
+export './pages/create_company/components/body2.dart';
+export './pages/create_company/components/body3.dart';
+export './pages/create_company/components/body4.dart';
+export './pages/create_company/components/body5.dart';
+export './pages/create_company/components/body6.dart';
+export './pages/create_company/components/create_company.bottom_app_bar.dart';
+export './pages/create_company/create_company_result.page.dart';
 // Internal references
 export './pages/dashboard/settings/settings.page.dart';
-export './pages/dashboard/settings/company/showCompany.page.dart';
-export './pages/dashboard/settings/company/editCompany.page.dart';
-export './pages/dashboard/settings/taxSlab/addTaxSlab.page.dart';
-export './pages/dashboard/settings/taxSlab/editTaxSlab.page.dart';
-export './pages/dashboard/settings/taxSlab/taxSlabs.page.dart';
-export './pages/dashboard/settings/currency/showCurrencyRegion.page.dart';
+export './pages/dashboard/settings/company/show_company.page.dart';
+export './pages/dashboard/settings/company/edit_company.page.dart';
+export './pages/dashboard/settings/taxSlab/add_tax_slab.page.dart';
+export './pages/dashboard/settings/taxSlab/edit_tax_slab.page.dart';
+export './pages/dashboard/settings/taxSlab/tax_slabs.page.dart';
+export './pages/dashboard/settings/currency/show_currency_region.page.dart';
 // Internal references
-export './pages/backupRestore/backupRestore.page.dart';
+export './pages/backup_restore/backup_restore.page.dart';
 // Internal references
-export './widgets/bottomSheets/imageLibrary.bottomSheet.dart';
+export './widgets/bottomSheets/image_library.bottomsheet.dart';
 export './widgets/containers/image.container.dart';
-export './widgets/dialogs/showConfirmationDialog.dart';
+export './widgets/dialogs/show_confirmation_dialog.dart';
 
 
 export 'package:uicons/uicons.dart';

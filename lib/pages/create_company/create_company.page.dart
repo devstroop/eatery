@@ -82,9 +82,11 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
           foodLicNoController: _controllerFoodLicNo,
           defaultTaxController: _controllerDefaultTaxPercent,
           taxType: _taxType,
-          onTaxTypeChanged: (TaxType? _taxType) {
-            _taxType = TaxType.values[index];
-            setState(() {});
+          onTaxTypeChanged: (int? index) {
+            if(index == null) return;
+            setState(() {
+              _taxType = TaxType.values[index];
+            });
           },
           callbackFormKey: (formKey) => setState(() {
             formKeys[3] = formKey;
@@ -189,12 +191,11 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
               try {
                 TaxSlab? taxSlab = _controllerDefaultTaxPercent.text.isNotEmpty
                     ? TaxSlab(
-                        id: EateryDB.instance.taxSlabBox.nextId(),
                         name: 'default',
                         rate: double.parse(_controllerDefaultTaxPercent.text),
                         type: _taxType)
                     : null;
-                List<TaxSlab> isMatch = EateryDB.instance.taxSlabBox.values
+                List<TaxSlab> isMatch = EateryDB.instance.taxSlabBox!.values
                     .where((element) => element.name == 'default')
                     .toList();
                 if (taxSlab != null) {
@@ -203,22 +204,18 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                       await each.delete();
                     }
                   }
-                  await EateryDB.instance.taxSlabBox.add(taxSlab);
+                  await EateryDB.instance.taxSlabBox!.add(taxSlab);
                 }
 
                 // Subscription
                 Subscription subscription = Subscription(
-                    id: EateryDB.instance.subscriptionBox.nextId(),
-                    purchaseCode: purchaseCode,
-                    validFrom: validFrom,
-                    validTill: validTill,
-                    subscriptionType: subscriptionType);
+                  serialNo: deviceSerial ?? '',
+                    activationKey: '',);
                 await EateryDB.instance.subscriptionBox.add(subscription);
 
                 KCurrency? _kCurrency;
                 if (currency != null) {
                   _kCurrency = KCurrency(
-                      id: 1,
                       name: currency!.name,
                       code: currency!.code,
                       symbol: currency!.symbol,
@@ -231,23 +228,21 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                           currency!.spaceBetweenAmountAndSymbol,
                       decimalSeparator: currency!.decimalSeparator,
                       symbolOnLeft: currency!.symbolOnLeft);
-                  await EateryDB.instance.currencyBox.add(_kCurrency);
+                  await EateryDB.instance.currencyBox!.add(_kCurrency);
                 }
                 // COMPANY
                 Company company = Company(
-                  id: 1,
                   name: _controllerRestaurantName.text,
                   logo: libraryImageLogo?.filename,
                   email: _controllerEmailAddress.text,
                   phone: _controllerPhoneNumber.text,
                   address: _controllerAddress.text,
-                  password: _controllerPassword.text,
                   taxEdition: edition,
                   foodLicenseNo: _controllerFoodLicNo.text,
                   salesTaxNumber: _controllerTaxLicNo.text,
-                  defaultTaxSlabId: taxSlab?.key,
-                  subscriptionId: subscription.key,
-                  currencyId: _kCurrency?.key,
+                  defaultTaxSlabKey: taxSlab?.key,
+                  activeSubscriptionKey: subscription.key,
+                  defaultCurrencyKey: _kCurrency?.key,
                 );
                 int result = await EateryDB.instance.companyBox
                     .add(company)
