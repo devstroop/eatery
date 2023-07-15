@@ -211,25 +211,25 @@ class AppFileSystem {
   static Future<void> doZip(
       {required String dataDirPath, required String zipFilePath}) async {
     final dataDir = Directory(dataDirPath);
-    try {
+    /*try {
       final zipFile = File(zipFilePath);
       ZipFile.createFromDirectory(
           sourceDir: dataDir, zipFile: zipFile, recurseSubDirs: true);
     } catch (e) {
       rethrow;
-    }
+    }*/
   }
 
   static Future<void> doUnZip(
       {required String dataDirPath, required String zipFilePath}) async {
     final zipFile = File(zipFilePath);
     final destinationDir = Directory(dataDirPath);
-    try {
+    /*try {
       ZipFile.extractToDirectory(
           zipFile: zipFile, destinationDir: destinationDir);
     } catch (e) {
       rethrow;
-    }
+    }*/
   }
 
   static Future<void> saveBackupFile(
