@@ -1,4 +1,6 @@
 import 'package:eatery/references.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class CreateCompanyPage extends StatefulWidget {
   const CreateCompanyPage({Key? key}) : super(key: key);
@@ -8,28 +10,29 @@ class CreateCompanyPage extends StatefulWidget {
 }
 
 class _CreateCompanyPageState extends State<CreateCompanyPage> {
+
+
+
+
+
   int viewIndex = 0;
-  LibraryImage? libraryImageLogo; // used
+  LibraryImage? logo; // used
   TaxEditionType edition = TaxEditionType.gst;
   SubscriptionType subscriptionType = SubscriptionType.basic;
   String? deviceSerial;
-  final TextEditingController _controllerRestaurantName =
-      TextEditingController(); // used
-  final TextEditingController _controllerEmailAddress = TextEditingController();
-  final TextEditingController _controllerPhoneNumber = TextEditingController();
-  final TextEditingController _controllerAddress = TextEditingController();
-  final TextEditingController _controllerPassword = TextEditingController();
-  final TextEditingController _controllerRetypePassword =
-      TextEditingController();
-  final TextEditingController _controllerTaxLicNo = TextEditingController();
-  final TextEditingController _controllerFoodLicNo = TextEditingController();
-  final TextEditingController _controllerDefaultTaxPercent =
-      TextEditingController();
 
+  final TextEditingController _ctrName = TextEditingController(); // used
+  final TextEditingController _ctrEmail = TextEditingController();
+  final TextEditingController _ctrPhone = TextEditingController();
+  final TextEditingController _ctrAddress = TextEditingController();
+  final TextEditingController _ctrSalesTaxNo = TextEditingController();
+  final TextEditingController _ctrFoodLicNo = TextEditingController();
+  final TextEditingController _controllerDefaultTaxPercent = TextEditingController();
+
+  Currency? currency;
   String? purchaseCode;
   DateTime? validFrom;
   DateTime? validTill;
-  Currency? currency;
   TaxType _taxType = TaxType.inclusive;
 
   Color themeColor = ColorStyle.brandColor;
@@ -37,22 +40,22 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
   List<Widget> bodies() => [
         Body1(
           formKey: formKeys[0],
-          selectedLibraryImage: libraryImageLogo,
+          selectedLibraryImage: logo,
           themeColor: themeColor,
-          restaurantNameController: _controllerRestaurantName,
-          emailController: _controllerEmailAddress,
-          phoneController: _controllerPhoneNumber,
-          addressController: _controllerAddress,
+          restaurantNameController: _ctrName,
+          emailController: _ctrEmail,
+          phoneController: _ctrPhone,
+          addressController: _ctrAddress,
           onChanged: (logoPath) async {
             setState(() {
-              libraryImageLogo = logoPath;
+              logo = logoPath;
             });
           },
           callbackFormKey: (formKey) => setState(() {
             formKeys[0] = formKey;
           }),
         ),
-        Body2(
+        /*Body2(
           formKey: formKeys[1],
           themeColor: themeColor,
           passwordController: _controllerPassword,
@@ -60,8 +63,8 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
           callbackFormKey: (formKey) => setState(() {
             formKeys[1] = formKey;
           }),
-        ),
-        Body3(
+        ),*/
+        Body2(
           formKey: formKeys[2],
           edition: edition,
           themeColor: themeColor,
@@ -74,16 +77,16 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
             formKeys[2] = formKey;
           }),
         ),
-        Body4(
+        Body3(
           formKey: formKeys[3],
           themeColor: themeColor,
           edition: edition,
-          taxNoController: _controllerTaxLicNo,
-          foodLicNoController: _controllerFoodLicNo,
+          taxNoController: _ctrSalesTaxNo,
+          foodLicNoController: _ctrFoodLicNo,
           defaultTaxController: _controllerDefaultTaxPercent,
           taxType: _taxType,
           onTaxTypeChanged: (int? index) {
-            if(index == null) return;
+            if (index == null) return;
             setState(() {
               _taxType = TaxType.values[index];
             });
@@ -92,7 +95,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
             formKeys[3] = formKey;
           }),
         ),
-        Body5(
+        Body4(
           formKey: formKeys[4],
           themeColor: themeColor,
           currency: currency,
@@ -103,7 +106,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
             formKeys[4] = formKey;
           }),
         ),
-        Body6(
+        Body5(
           formKey: formKeys[5],
           themeColor: themeColor,
           subscriptionType: subscriptionType,
@@ -127,136 +130,163 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
     GlobalKey<FormState>(),
     GlobalKey<FormState>(),
     GlobalKey<FormState>(),
-    GlobalKey<FormState>()
+    // GlobalKey<FormState>()
   ];
+
+  void _submit(
+      {required GlobalKey<FormState> formKey,
+      required int index,
+      Function(int? index)? callback}) {
+    final isValid = formKey.currentState?.validate() ?? false;
+    if (!isValid) {
+      return;
+    }
+    formKey.currentState!.save();
+    if (callback != null) {
+      callback(index);
+    }
+  }
+
   List<Widget> bottomAppBars() => [
-        CreateCompanyBottomAppBar(
-            formKey: formKeys[0],
-            index: 1,
-            themeColor: themeColor,
-            title: 'Next',
-            callback: (index) {
-              setState(() {
-                viewIndex++;
-              });
-            }),
-        CreateCompanyBottomAppBar(
-            formKey: formKeys[1],
-            index: 2,
-            themeColor: themeColor,
-            title: 'Next',
-            callback: (index) {
-              setState(() {
-                viewIndex++;
-              });
-            }),
-        CreateCompanyBottomAppBar(
-            formKey: formKeys[2],
-            index: 3,
-            themeColor: themeColor,
-            title: 'Next',
-            callback: (index) {
-              setState(() {
-                viewIndex++;
-              });
-            }),
-        CreateCompanyBottomAppBar(
-          formKey: formKeys[3],
-          index: 4,
-          themeColor: themeColor,
-          callback: (index) {
-            setState(() {
-              viewIndex++;
-            });
-          },
-          title: 'Next',
+        BottomAppBar(
+          color: ColorStyle.backgroundColorAlter,
+          child: PrimaryButton(
+              color: themeColor,
+              onPressed: () => _submit(
+                  formKey: formKeys[0],
+                  index: 1,
+                  callback: (index) {
+                    setState(() {
+                      viewIndex++;
+                    });
+                  }),
+              child: const Text('Next')),
         ),
-        CreateCompanyBottomAppBar(
-          formKey: formKeys[4],
-          index: 5,
-          themeColor: themeColor,
-          callback: (index) {
-            setState(() {
-              viewIndex++;
-            });
-          },
-          title: 'Next',
+        BottomAppBar(
+          color: ColorStyle.backgroundColorAlter,
+          child: PrimaryButton(
+              color: themeColor,
+              onPressed: () => _submit(
+                  formKey: formKeys[1],
+                  index: 2,
+                  callback: (index) {
+                    setState(() {
+                      viewIndex++;
+                    });
+                  }),
+              child: const Text('Next')),
         ),
-        CreateCompanyBottomAppBar(
-            title: 'Finish',
-            formKey: formKeys[5],
-            index: 6,
-            themeColor: themeColor,
-            callback: (index) async {
-              try {
-                TaxSlab? taxSlab = _controllerDefaultTaxPercent.text.isNotEmpty
-                    ? TaxSlab(
-                        name: 'default',
-                        rate: double.parse(_controllerDefaultTaxPercent.text),
-                        type: _taxType)
-                    : null;
-                List<TaxSlab> isMatch = EateryDB.instance.taxSlabBox!.values
-                    .where((element) => element.name == 'default')
-                    .toList();
-                if (taxSlab != null) {
-                  if (isMatch.isNotEmpty) {
-                    for (var each in isMatch) {
-                      await each.delete();
+        BottomAppBar(
+          color: ColorStyle.backgroundColorAlter,
+          child: PrimaryButton(
+              color: themeColor,
+              onPressed: () => _submit(
+                  formKey: formKeys[2],
+                  index: 3,
+                  callback: (index) {
+                    setState(() {
+                      viewIndex++;
+                    });
+                  }),
+              child: const Text('Next')),
+        ),
+        BottomAppBar(
+          color: ColorStyle.backgroundColorAlter,
+          child: PrimaryButton(
+              color: themeColor,
+              onPressed: () => _submit(
+                  formKey: formKeys[3],
+                  index: 4,
+                  callback: (index) {
+                    setState(() {
+                      viewIndex++;
+                    });
+                  }),
+              child: const Text('Next')),
+        ),
+        BottomAppBar(
+          color: ColorStyle.backgroundColorAlter,
+          child: PrimaryButton(
+            color: themeColor,
+            child: const Text('Finish'),
+            onPressed: () => _submit(
+                formKey: formKeys[4],
+                index: 5,
+                callback: (index) async {
+                  try {
+                    TaxSlab? taxSlab = _controllerDefaultTaxPercent
+                            .text.isNotEmpty
+                        ? TaxSlab(
+                            name: 'default',
+                            rate:
+                                double.parse(_controllerDefaultTaxPercent.text),
+                            type: _taxType)
+                        : null;
+                    List<TaxSlab> isMatch = EateryDB.instance.taxSlabBox!.values
+                        .where((element) => element.name == 'default')
+                        .toList();
+                    if (taxSlab != null) {
+                      if (isMatch.isNotEmpty) {
+                        for (var each in isMatch) {
+                          await each.delete();
+                        }
+                      }
+                      await EateryDB.instance.taxSlabBox!.add(taxSlab);
                     }
+
+                    // Subscription
+                    Subscription subscription = Subscription(
+                      serialNo: deviceSerial ?? '',
+                      activationKey: '',
+                    );
+                    await EateryDB.instance.subscriptionBox.add(subscription);
+
+                    KCurrency? kCurrency;
+                    if (currency != null) {
+                      kCurrency = KCurrency(
+                          name: currency!.name,
+                          code: currency!.code,
+                          symbol: currency!.symbol,
+                          flag: currency!.flag,
+                          decimalDigits: currency!.decimalDigits,
+                          number: currency!.number,
+                          namePlural: currency!.namePlural,
+                          thousandsSeparator: currency!.thousandsSeparator,
+                          spaceBetweenAmountAndSymbol:
+                              currency!.spaceBetweenAmountAndSymbol,
+                          decimalSeparator: currency!.decimalSeparator,
+                          symbolOnLeft: currency!.symbolOnLeft);
+                      await EateryDB.instance.currencyBox!.add(kCurrency);
+                    }
+                    // COMPANY
+                    Company company = Company(
+                      name: _ctrName.text,
+                      logo: logo?.filename,
+                      email: _ctrEmail.text,
+                      phone: _ctrPhone.text,
+                      address: _ctrAddress.text,
+                      taxEdition: edition,
+                      foodLicenseNo: _ctrFoodLicNo.text,
+                      salesTaxNumber: _ctrSalesTaxNo.text,
+                      defaultTaxSlabKey: taxSlab?.key,
+                      activeSubscriptionKey: subscription.key,
+                      defaultCurrencyKey: kCurrency?.key,
+                    );
+                    int result = await EateryDB.instance.companyBox
+                        .add(company)
+                        .whenComplete(() => Navigator.of(this.context)
+                            .pushAndRemoveUntil(
+                                MaterialPageRoute(
+                                    builder: (BuildContext context) =>
+                                        const CreateCompanyResultPage()),
+                                (route) => false));
+                    debugPrint('Company Added: $result');
+                  } catch (e) {
+                    showSnackBar(this.context, e.toString());
                   }
-                  await EateryDB.instance.taxSlabBox!.add(taxSlab);
-                }
-
-                // Subscription
-                Subscription subscription = Subscription(
-                  serialNo: deviceSerial ?? '',
-                    activationKey: '',);
-                await EateryDB.instance.subscriptionBox.add(subscription);
-
-                KCurrency? _kCurrency;
-                if (currency != null) {
-                  _kCurrency = KCurrency(
-                      name: currency!.name,
-                      code: currency!.code,
-                      symbol: currency!.symbol,
-                      flag: currency!.flag,
-                      decimalDigits: currency!.decimalDigits,
-                      number: currency!.number,
-                      namePlural: currency!.namePlural,
-                      thousandsSeparator: currency!.thousandsSeparator,
-                      spaceBetweenAmountAndSymbol:
-                          currency!.spaceBetweenAmountAndSymbol,
-                      decimalSeparator: currency!.decimalSeparator,
-                      symbolOnLeft: currency!.symbolOnLeft);
-                  await EateryDB.instance.currencyBox!.add(_kCurrency);
-                }
-                // COMPANY
-                Company company = Company(
-                  name: _controllerRestaurantName.text,
-                  logo: libraryImageLogo?.filename,
-                  email: _controllerEmailAddress.text,
-                  phone: _controllerPhoneNumber.text,
-                  address: _controllerAddress.text,
-                  taxEdition: edition,
-                  foodLicenseNo: _controllerFoodLicNo.text,
-                  salesTaxNumber: _controllerTaxLicNo.text,
-                  defaultTaxSlabKey: taxSlab?.key,
-                  activeSubscriptionKey: subscription.key,
-                  defaultCurrencyKey: _kCurrency?.key,
-                );
-                int result = await EateryDB.instance.companyBox
-                    .add(company)
-                    .whenComplete(() => Navigator.of(this.context)
-                        .pushAndRemoveUntil(
-                            MaterialPageRoute(
-                                builder: (BuildContext context) =>
-                                    const CreateCompanyResultPage()),
-                            (route) => false));
-                debugPrint('Company Added: $result');
-              } catch (e) {
-                showSnackBar(this.context, e.toString());
-              }
-            })
+                }),
+          ),
+        ),
       ];
 
   @override
@@ -303,5 +333,671 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
       ),
       bottomNavigationBar: bottomAppBars()[viewIndex],
     );
+  }
+}
+
+// Bodies
+
+class Body1 extends StatelessWidget {
+  final Function(LibraryImage? logoPath) onChanged;
+  final Color themeColor;
+  final GlobalKey<FormState> formKey;
+  final TextEditingController restaurantNameController;
+  final TextEditingController emailController;
+  final TextEditingController phoneController;
+  final TextEditingController addressController;
+  final LibraryImage? selectedLibraryImage;
+  final Function(GlobalKey<FormState> formKey)? callbackFormKey;
+
+  Body1(
+      {Key? key,
+      required this.onChanged,
+      required this.themeColor,
+      required this.restaurantNameController,
+      required this.emailController,
+      required this.phoneController,
+      required this.addressController,
+      this.selectedLibraryImage,
+      required this.formKey,
+      this.callbackFormKey})
+      : super(key: key);
+
+  final focus1 = FocusNode();
+  final focus2 = FocusNode();
+  final focus3 = FocusNode();
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: formKey,
+      child: ListView(
+        scrollDirection: Axis.vertical,
+        children: [
+          const PageTitle(
+            title: "Create new company",
+            subtitle: "Let's create an account with us",
+          ),
+          SpacingStyle.defaultVerticalSpacing,
+          SpacingStyle.defaultVerticalSpacing,
+          UploadButton(
+            label: 'Restaurant Logo',
+            primaryColor: themeColor,
+            secondaryColor: ColorStyle.text200,
+            image: selectedLibraryImage?.image,
+            onChanged: onChanged,
+          ),
+          SpacingStyle.defaultVerticalSpacing,
+          CustomTextFromField(
+              themeColor: themeColor,
+              keyboardType: TextInputType.name,
+              controller: restaurantNameController,
+              title: 'Company name',
+              hint: 'Enter company name...',
+              textInputAction: TextInputAction.next,
+              onFieldSubmitted: (v) {
+                if (callbackFormKey != null) callbackFormKey!(formKey);
+                FocusScope.of(context).requestFocus(focus1);
+              },
+              validator: (value) {
+                if (value!.trim().isEmpty) {
+                  return 'Restaurant name cannot be blank';
+                }
+                return null;
+              }),
+          SpacingStyle.defaultVerticalSpacing,
+          CustomTextFromField(
+              themeColor: themeColor,
+              keyboardType: TextInputType.emailAddress,
+              controller: emailController,
+              title: 'Email address',
+              hint: 'Enter email address...',
+              focusNode: focus1,
+              textInputAction: TextInputAction.next,
+              onFieldSubmitted: (v) {
+                if (callbackFormKey != null) callbackFormKey!(formKey);
+                FocusScope.of(context).requestFocus(focus2);
+              },
+              validator: (value) {
+                if (value!.trim().isEmpty) return 'Email cannot be blank';
+                if (!value.trim().isValidEmail()) {
+                  return 'Email address is not valid';
+                }
+                return null;
+              }),
+          SpacingStyle.defaultVerticalSpacing,
+          CustomTextFromField(
+              themeColor: themeColor,
+              keyboardType: TextInputType.phone,
+              controller: phoneController,
+              title: 'Phone no',
+              hint: 'Enter phone no...',
+              focusNode: focus2,
+              textInputAction: TextInputAction.next,
+              onFieldSubmitted: (v) {
+                if (callbackFormKey != null) callbackFormKey!(formKey);
+                FocusScope.of(context).requestFocus(focus3);
+              },
+              validator: (value) {
+                if (value!.trim().isEmpty) {
+                  return 'Phone number cannot be blank';
+                }
+                if (!value.trim().isValidPhone()) {
+                  return 'Phone number is not valid';
+                }
+                return null;
+              }),
+          SpacingStyle.defaultVerticalSpacing,
+          LabeledCustomTextFromField(
+            themeColor: themeColor,
+            foregroundColor: ColorStyle.text200,
+            controller: addressController,
+            label: 'Address',
+            hint: 'Enter address...',
+            focusNode: focus3,
+            textInputAction: TextInputAction.done,
+            multiline: true,
+            validator: (value) {
+              if (value!.trim().isEmpty) return 'Address cannot be blank';
+              return null;
+            },
+            onFieldSubmitted: (v) {
+              if (callbackFormKey != null) callbackFormKey!(formKey);
+              FocusScope.of(context).unfocus();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Body2 extends StatelessWidget {
+  final Function(TaxEditionType edition) callback;
+  final Color themeColor;
+  final TaxEditionType edition;
+  final GlobalKey<FormState> formKey;
+  final Function(GlobalKey<FormState> formKey)? callbackFormKey;
+
+  const Body2(
+      {Key? key,
+      required this.themeColor,
+      required this.callback,
+      required this.edition,
+      required this.formKey,
+      this.callbackFormKey})
+      : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: formKey,
+      child: ListView(
+        scrollDirection: Axis.vertical,
+        children: [
+          const PageTitle(
+            title: "Edition",
+            subtitle: "Choose a suitable edition",
+          ),
+          SpacingStyle.defaultVerticalSpacing,
+          SpacingStyle.defaultVerticalSpacing,
+          SelectableCard(
+            header: "Edition",
+            title: TaxEditionType.gst.label,
+            footer: TaxEditionType.gst.description,
+            selected: edition == TaxEditionType.gst,
+            onTap: () {
+              if (callbackFormKey != null) callbackFormKey!(formKey);
+              callback(TaxEditionType.gst);
+            },
+          ),
+          SpacingStyle.defaultVerticalSpacing,
+          SelectableCard(
+            header: "Edition",
+            title: TaxEditionType.vat.label,
+            footer: TaxEditionType.vat.description,
+            selected: edition == TaxEditionType.vat,
+            onTap: () {
+              if (callbackFormKey != null) callbackFormKey!(formKey);
+              callback(TaxEditionType.vat);
+            },
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Body3 extends StatelessWidget {
+  final Color themeColor;
+  final TaxEditionType edition;
+  final TextEditingController taxNoController;
+  final TextEditingController foodLicNoController;
+  final TextEditingController defaultTaxController;
+  final TaxType taxType;
+  final Function(int? index) onTaxTypeChanged;
+  final GlobalKey<FormState> formKey;
+  final Function(GlobalKey<FormState> formKey)? callbackFormKey;
+
+  Body3(
+      {Key? key,
+      required this.themeColor,
+      required this.edition,
+      required this.taxNoController,
+      required this.foodLicNoController,
+      required this.defaultTaxController,
+      required this.onTaxTypeChanged,
+      required this.taxType,
+      required this.formKey,
+      this.callbackFormKey})
+      : super(key: key);
+
+  final focus1 = FocusNode();
+  final focus2 = FocusNode();
+  final focus3 = FocusNode();
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: formKey,
+      child: ListView(
+        scrollDirection: Axis.vertical,
+        children: [
+          const PageTitle(
+            title: "Registration info (optional)",
+            subtitle: "Help us to know more about your business",
+          ),
+          SpacingStyle.defaultVerticalSpacing,
+          SpacingStyle.defaultVerticalSpacing,
+          CustomTextFromField(
+            themeColor: themeColor,
+            keyboardType: TextInputType.text,
+            controller: taxNoController,
+            title: '${edition.name} Registration No',
+            hint: 'Enter ${edition.name} registration number',
+            focusNode: focus1,
+            textInputAction: TextInputAction.next,
+            onFieldSubmitted: (v) {
+              if (callbackFormKey != null) callbackFormKey!(formKey);
+              FocusScope.of(context).requestFocus(focus2);
+            },
+            validator: (value) {
+              if (value!.trim().isNotEmpty && !value.trim().isValidGSTIN()) {
+                return '${edition.name} license number is not valid';
+              }
+              return null;
+            },
+          ),
+          SpacingStyle.defaultVerticalSpacing,
+          CustomTextFromField(
+            themeColor: themeColor,
+            keyboardType: TextInputType.number,
+            controller: foodLicNoController,
+            title:
+                '${edition == TaxEditionType.gst ? 'FSSAI' : 'Food'} Registration Number',
+            hint:
+                'Enter ${edition == TaxEditionType.gst ? 'FSSAI' : 'Food'} registration number',
+            focusNode: focus2,
+            textInputAction: TextInputAction.next,
+            onFieldSubmitted: (v) {
+              if (callbackFormKey != null) callbackFormKey!(formKey);
+              FocusScope.of(context).requestFocus(focus3);
+            },
+            validator: (value) {
+              if (value!.trim().isNotEmpty &&
+                  (value.trim().length < 10 || !value.trim().isNumericOnly)) {
+                return '${edition == TaxEditionType.gst ? 'FSSAI' : 'Food'} license number is not valid';
+              }
+              // if (edition == Edition.gst && !value!.trim().isValidGSTIN()) return '${edition.name} license number is not valid';
+              return null;
+            },
+          ),
+          SpacingStyle.defaultVerticalSpacing,
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Flexible(
+                child: CustomTextFromField(
+                  themeColor: themeColor,
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  controller: defaultTaxController,
+                  title: 'Default ${edition.name} Rate',
+                  hint: '${edition.name} Rate',
+                  suffix: Icon(
+                    UIcons.regularStraight.percentage,
+                    color: ColorStyle.text400,
+                    size: 18,
+                  ),
+                  focusNode: focus3,
+                  textInputAction: TextInputAction.done,
+                  validator: (value) {
+                    if (value!.trim().isNotEmpty && !value.trim().isNum) {
+                      return 'Default ${edition.name} registration number is not valid';
+                    }
+                    // if (edition == Edition.gst && !value!.trim().isValidGSTIN()) return '${edition.name} license number is not valid';
+                    return null;
+                  },
+                  onFieldSubmitted: (v) {
+                    if (callbackFormKey != null) callbackFormKey!(formKey);
+                    FocusScope.of(context).unfocus();
+                  },
+                ),
+              ),
+              SpacingStyle.defaultHorizontalSpacing,
+              // ToggleSwitch(
+              //   color: themeColor,
+              //   options: [for (var each in TaxType.values) each.name!],
+              //   index: taxType.index,
+              //   onChange: onTaxTypeChanged,
+              // ),
+              ToggleSwitch(
+                onChange: onTaxTypeChanged,
+                children: [...TaxType.values.map((e) => e.name)],
+                selectedIndex: taxType.index,
+                highlightColor: themeColor,
+              )
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Body4 extends StatefulWidget {
+  final Color themeColor;
+  final Currency? currency;
+  final Function(Currency? currency) callback;
+  final GlobalKey<FormState> formKey;
+  final Function(GlobalKey<FormState> formKey)? callbackFormKey;
+
+  const Body4({
+    Key? key,
+    required this.themeColor,
+    required this.callback,
+    this.currency,
+    required this.formKey,
+    this.callbackFormKey,
+  }) : super(key: key);
+
+  @override
+  State<Body4> createState() => _Body4State();
+}
+
+class _Body4State extends State<Body4> {
+  Currency? selectedCurrency;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        selectedCurrency = widget.currency;
+      });
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: widget.formKey,
+      child: ListView(
+        scrollDirection: Axis.vertical,
+        children: [
+          const PageTitle(
+            title: "Region and Currency",
+            subtitle: "Select the default currency as per region",
+          ),
+          SpacingStyle.defaultVerticalSpacing,
+          InkWell(
+            onTap: () => showCurrencyPicker(
+              context: context,
+              showSearchField: false,
+              showFlag: true,
+              showCurrencyName: true,
+              showCurrencyCode: true,
+              currencyFilter: const ['INR', 'AED'],
+              onSelect: (Currency currency) {
+                setState(() {
+                  selectedCurrency = currency;
+                });
+                if (widget.callbackFormKey != null) {
+                  widget.callbackFormKey!(widget.formKey);
+                }
+                widget.callback(currency);
+              },
+            ),
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(6),
+                border: Border.all(
+                  color: ColorStyle.brandColor,
+                  width: 2,
+                ),
+              ),
+              child: ListTile(
+                leading: selectedCurrency != null
+                    ? Column(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            CurrencyUtils.currencyToEmoji(selectedCurrency!),
+                            style: const TextStyle(
+                              fontSize: 32,
+                            ),
+                          ),
+                        ],
+                      )
+                    : null,
+                trailing: selectedCurrency != null
+                    ? Text(
+                        selectedCurrency!.symbol,
+                        style: const TextStyle(
+                          fontSize: 18,
+                        ),
+                      )
+                    : null,
+                title: Text(
+                  selectedCurrency != null
+                      ? selectedCurrency!.code
+                      : 'Not Selected',
+                ),
+                subtitle: selectedCurrency != null
+                    ? Text(selectedCurrency!.name)
+                    : null,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Body5 extends StatefulWidget {
+  final Color themeColor;
+  final Function(SubscriptionType subscriptionType, String? purchaseCde,
+      DateTime? validFrom, DateTime? validTill) callback;
+  SubscriptionType? subscriptionType;
+  final GlobalKey<FormState> formKey;
+  final Function(GlobalKey<FormState> formKey)? callbackFormKey;
+
+  Body5(
+      {Key? key,
+      required this.themeColor,
+      required this.callback,
+      required this.subscriptionType,
+      required this.formKey,
+      this.callbackFormKey})
+      : super(key: key);
+
+  @override
+  State<Body5> createState() => _Body5State();
+}
+
+class _Body5State extends State<Body5> {
+  final TextEditingController _controllerPurchaseCode = TextEditingController();
+  DateTime? validFrom;
+  DateTime? validTill;
+  String? deviceSerial;
+
+  Future fetchDeviceInfo() async {
+    String? deviceId;
+    if (Platform.isAndroid || Platform.isIOS) {
+      try {
+        deviceId = await PlatformDeviceId.getDeviceId;
+      } on Exception {
+        deviceId = null;
+      }
+    } else if (Platform.isWindows) {
+      List<Drive> drives = WindowsHDSN().getDrives();
+      for (Drive drive in drives) {
+        debugPrint(drive.model);
+        debugPrint(drive.serial);
+      }
+    } else {
+      deviceId = null;
+    }
+
+    if (widget.callbackFormKey != null) {
+      widget.callbackFormKey!(widget.formKey);
+    }
+    setState(() {
+      deviceSerial = deviceId;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () {
+      fetchDeviceInfo();
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Form(
+      key: widget.formKey,
+      child: ListView(
+        scrollDirection: Axis.vertical,
+        children: [
+          const PageTitle(
+            title: "Choose your plan",
+            subtitle: "Get access to whole product in one go",
+          ),
+          SpacingStyle.defaultVerticalSpacing,
+          SpacingStyle.defaultVerticalSpacing,
+          SelectableCard(
+            header: 'EVALUATION',
+            title: 'Try It Free',
+            highlights: const ['100 invoices a month', '10 products'],
+            footer: 'Enjoy with limited access',
+            selected: widget.subscriptionType == SubscriptionType.basic,
+            highlightColor: ColorStyle.warning,
+            onTap: () {
+              widget.callback(SubscriptionType.basic, null, null, null);
+
+              if (widget.callbackFormKey != null) {
+                widget.callbackFormKey!(widget.formKey);
+              }
+            },
+          ),
+          SpacingStyle.defaultVerticalSpacing,
+          SelectableCard(
+            header: 'PREMIUM',
+            title: 'Activate License',
+            highlights: const ['Everything Unlimited'],
+            footer: 'Get unlocked to all premium features',
+            selected: widget.subscriptionType == SubscriptionType.professional,
+            highlightColor: ColorStyle.success,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SpacingStyle.defaultVerticalSpacing,
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        const Text('Device ID'),
+                        IconButton(
+                          onPressed: fetchDeviceInfo,
+                          iconSize: 14,
+                          icon: Icon(
+                            UIcons.regularStraight.refresh,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: copyDeviceIdToClipboard,
+                          iconSize: 14,
+                          icon: Icon(
+                            UIcons.regularStraight.copy,
+                          ),
+                        ),
+                      ],
+                    ),
+                    InkWell(
+                      onTap: copyDeviceIdToClipboard,
+                      child: Text(
+                        deviceSerial ?? 'Undefined',
+                        style: const TextStyle(
+                            fontWeight: FontWeight.w600, fontSize: 14),
+                      ),
+                    ),
+                    const Divider()
+                  ],
+                ),
+                SpacingStyle.defaultVerticalSpacing,
+                if (validTill != null)
+                  Text('Validity: ${DateFormat.yMMMd().format(validTill!)}'),
+                if (validTill != null) SpacingStyle.defaultVerticalSpacing,
+                CustomTextFromField(
+                  themeColor: widget.themeColor,
+                  controller: _controllerPurchaseCode,
+                  title: 'Purchase code',
+                  hint: 'Enter purchase code...',
+                  textInputAction: TextInputAction.done,
+                  autofocus: true,
+                  suffix: IconButton(
+                    onPressed: () async {
+                      String val = await FlutterClipboard.paste();
+                      setState(() {
+                        _controllerPurchaseCode.text = val;
+                      });
+
+                      if (widget.callbackFormKey != null) {
+                        widget.callbackFormKey!(widget.formKey);
+                      }
+                    },
+                    icon: Icon(UIcons.regularStraight.clipboard_list),
+                    color: ColorStyle.text400,
+                  ),
+                  validator: (value) {
+                    if (widget.subscriptionType ==
+                        SubscriptionType.professional) {
+                      if (value!.isEmpty) {
+                        return 'Purchase code cannot be blank';
+                      }
+                      if (value.contains(' ')) {
+                        return 'Purchase code is not valid';
+                      }
+                      if (validFrom == null || validTill == null) {
+                        return 'Purchase code is not valid';
+                      }
+                    }
+                    return null;
+                  },
+                  onChanged: (value) {
+                    // VALIDATE_LICENSE_HERE
+                    License(purchaseCode: value)
+                        .validate((validFrom, validTill) {
+                      setState(() {
+                        this.validFrom = validFrom;
+                        this.validTill = validTill;
+                      });
+                      widget.callback(SubscriptionType.professional,
+                          _controllerPurchaseCode.text, validFrom, validTill);
+
+                      if (widget.callbackFormKey != null) {
+                        widget.callbackFormKey!(widget.formKey);
+                      }
+                    });
+                  },
+                  onFieldSubmitted: (v) {
+                    if (widget.callbackFormKey != null) {
+                      widget.callbackFormKey!(widget.formKey);
+                    }
+                    FocusScope.of(context).unfocus();
+                  },
+                ),
+              ],
+            ),
+            onTap: () {
+              widget.callback(SubscriptionType.professional, null, null, null);
+
+              if (widget.callbackFormKey != null) {
+                widget.callbackFormKey!(widget.formKey);
+              }
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void copyDeviceIdToClipboard() {
+    // Implement copy to clipboard 'deviceSerial'
+    String? deviceSerial = this.deviceSerial;
+    if (deviceSerial == null) {
+      showSnackBar(this.context, 'Device Id can\'t be copied in clipboard');
+      return;
+    }
+    Clipboard.setData(ClipboardData(text: deviceSerial)).whenComplete(() {
+      showSnackBar(this.context, 'Copied to clipboard');
+    });
   }
 }

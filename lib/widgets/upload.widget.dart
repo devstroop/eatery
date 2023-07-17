@@ -40,7 +40,7 @@ class _UploadButtonState extends State<UploadButton> {
         ),
       ),
       builder: (context) =>
-          ImageLibraryBottomSheet(context, (LibraryImage? libraryImage) {
+          ImageLibraryPage(context, (LibraryImage? libraryImage) {
             this.libraryImage = libraryImage;
             if (widget.onChanged != null) {
               widget.onChanged!(libraryImage);

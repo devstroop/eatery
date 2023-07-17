@@ -1,26 +1,23 @@
 import 'package:eatery/references.dart';
 
-class ImageLibraryBottomSheet extends StatefulWidget {
+class ImageLibraryPage extends StatefulWidget {
   final BuildContext context;
   final Function(LibraryImage? libraryImage) action;
 
-  const ImageLibraryBottomSheet(this.context, this.action, {Key? key})
+  const ImageLibraryPage(this.context, this.action, {Key? key})
       : super(key: key);
 
   @override
-  State<ImageLibraryBottomSheet> createState() =>
-      _ImageLibraryBottomSheetState();
+  State<ImageLibraryPage> createState() =>
+      _ImageLibraryPageState();
 }
 
-class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
+class _ImageLibraryPageState extends State<ImageLibraryPage> {
   List<LibraryImage> _images = [];
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, (){
-      
-    });
     fetchLibrary();
   }
 
@@ -55,7 +52,6 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
         try {
           LibraryImage image =
               LibraryImageProvider.importFromPath(value.files.first.path!);
-          widget.action(image);
           fetchLibrary();
         } catch (e) {
           showSnackBar(this.context, e.toString());

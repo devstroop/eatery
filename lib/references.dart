@@ -46,11 +46,12 @@ export './widgets/image_widgets/leading.image_widget.dart';
 export './widgets/labels/caption.label.dart';
 export './widgets/pos_widgets/circular_category.pos_widget.dart';
 export './widgets/card/menu.card.dart';
-export './widgets/buttons/upload.button.dart';
+export 'widgets/upload.widget.dart';
 export './widgets/card/dining_table_selection.card.dart';
 export './widgets/badges/foodType.badge.dart';
 export './widgets/text_fields/search.text_field.dart';
 export './widgets/switches/toggle.switch.dart';
+export './pages/utils/image_library.page.dart';
 // Internal references
 export './components/bottom_sheets/forgot_password_bottomsheet.dart';
 export './components/bottom_sheets/upgrade_to_access_bottomsheet.dart';
@@ -149,13 +150,6 @@ export './pages/authentication/logout.page.dart';
 export './pages/dashboard/utility/calculator.page.dart';
 // Internal references
 export './pages/create_company/create_company.page.dart';
-export './pages/create_company/components/body1.dart';
-export './pages/create_company/components/body2.dart';
-export './pages/create_company/components/body3.dart';
-export './pages/create_company/components/body4.dart';
-export './pages/create_company/components/body5.dart';
-export './pages/create_company/components/body6.dart';
-export './pages/create_company/components/create_company.bottom_app_bar.dart';
 export './pages/create_company/create_company_result.page.dart';
 // Internal references
 export './pages/dashboard/settings/settings.page.dart';
@@ -168,7 +162,6 @@ export './pages/dashboard/settings/currency/show_currency_region.page.dart';
 // Internal references
 export './pages/backup_restore/backup_restore.page.dart';
 // Internal references
-export './widgets/bottomSheets/image_library.bottomsheet.dart';
 export './widgets/containers/image.container.dart';
 export './widgets/dialogs/show_confirmation_dialog.dart';
 

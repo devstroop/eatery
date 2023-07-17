@@ -3,11 +3,11 @@ import 'package:eatery/references.dart';
 Future main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding); // bind splash
-  await setupPermission();
+  // await setupPermission();
   await setupDirectory();
   await setupDatabase();
 
-  // TODO: Uncomment to flush companies
+  // TODO: Uncomment to flush companies7/
   // await flushDatabase();
 
   runApp(const MyApp());

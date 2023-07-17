@@ -453,9 +453,7 @@ class _DashboardPageState extends State<DashboardPage> {
             bottomRight: Radius.circular(0),
           ),
         ),
-        builder: (context) => ImageLibraryBottomSheet(context, (value){
-          // Display in full screen view
-
+        builder: (context) => ImageLibraryPage(context, (value){
           showDialog(context: context, builder: (context) {
 
             final image = Image(image: (value ?? LibraryImage('')).image);
