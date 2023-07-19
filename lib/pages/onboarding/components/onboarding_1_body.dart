@@ -9,21 +9,21 @@ class OnBoarding1Body extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Lottie.asset('assets/lottie/animation_lk9p1ks4.json', width: 300),
+        Lottie.asset('assets/lottie/animation_lk9syi35.json', width: 300),
         SpacingStyle.defaultVerticalSpacing,
         Text(
-          'Embrace Techno-Revolution',
-          style: Theme.of(context).textTheme.headline6?.copyWith(
+          'Let\'s Start the Journey to the Futuristic Restaurant Management Odyssey',
+          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
               fontWeight: FontWeight.w600
           ),
         ),
         SpacingStyle.defaultVerticalSpacing,
-        Text(
-          'Step into the future, bid adieu to pen and paper. Embrace state-of-the-art technology for a fully managed restaurant system.',
-          overflow: TextOverflow.clip,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyText2,
-        ),
+        // Text(
+        //   'Step into the future, bid adieu to pen and paper. Embrace state-of-the-art technology for a fully managed restaurant system.',
+        //   overflow: TextOverflow.clip,
+        //   textAlign: TextAlign.center,
+        //   style: Theme.of(context).textTheme.bodyText2,
+        // ),
         SpacingStyle.defaultVerticalSpacing,
         SpacingStyle.defaultVerticalSpacing,
         SpacingStyle.defaultVerticalSpacing,

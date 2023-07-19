@@ -213,7 +213,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                           decimalSeparator: currency!.decimalSeparator,
                           symbolOnLeft: currency!.symbolOnLeft);
 
-                      await EateryDB.instance.currencyBox!.add(kCurrency); // TODO: Throwing error null check operator used on a null value (currencyBox) // TODO: Important!!!
+                      await EateryDB.instance.currencyBox.add(kCurrency); // TODO: Throwing error null check operator used on a null value (currencyBox) // TODO: Important!!!
                     }
                     // COMPANY
                     Company company = Company(
