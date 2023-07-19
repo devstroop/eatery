@@ -12,13 +12,24 @@ class OnBoarding2Body extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Lottie.asset('assets/lottie/onboarding_2.json', width: 300),
+            Container(
+              width: 200, // Adjust the width and height as needed
+              height: 200,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle, // Create a circular container
+                color: Colors.blue, // Set a background color if desired
+              ),
+                child: Lottie.asset('assets/lottie/onboarding_2.json'),
+            ),
             SpacingStyle.defaultVerticalSpacing,
             Text(
               'Hang Up the Traditional Approach',
               textAlign: TextAlign.center,
+              maxLines: 1, // Set maxLines to 1 to make the title fit in one line
+              overflow: TextOverflow.ellipsis, // Add ellipsis in case the title overflows
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.w600,
+                fontSize: 20, // Adjust the fontSize as needed
               ),
             ),
             SpacingStyle.defaultVerticalSpacing,

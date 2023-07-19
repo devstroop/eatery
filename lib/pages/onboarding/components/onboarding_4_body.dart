@@ -12,12 +12,21 @@ class OnBoarding4Body extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Lottie.asset('assets/lottie/animation_lk9p1ks4.json', width: 300),
+            Container(
+              width: 200,
+              height: 200,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Colors.blue,
+              ),
+              child: Lottie.asset('assets/lottie/animation_lk9p1ks4.json'),
+            ),
             SpacingStyle.defaultVerticalSpacing,
             Text(
               'Navigate with Ease',
               style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                 fontWeight: FontWeight.w600,
+                fontSize: 20,
               ),
             ),
             SpacingStyle.defaultVerticalSpacing,
@@ -32,12 +41,35 @@ class OnBoarding4Body extends StatelessWidget {
             SpacingStyle.defaultVerticalSpacing,
             SpacingStyle.defaultVerticalSpacing,
             SpacingStyle.defaultVerticalSpacing,
-            IconButton(
-              onPressed: () {},
-              icon: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Icon(UIcons.regularStraight.arrow_right),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: () {
+                    // Add your action for "Let's Start" button here
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Theme.of(context).colorScheme.secondary,
+                    // primary: Colors.blue, // Set the color to blue
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16), // Increase button padding
+                    textStyle: const TextStyle(fontSize: 18, color: Colors.white), // Increase font size
+                  ),
+                  child: const Text("Let's Start"),
+                ),
+                const SizedBox(width: 16), // Add some space between the buttons
+                ElevatedButton(
+                  onPressed: () {
+                    // Add your action for "Login" button here
+                  },
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Theme.of(context).colorScheme.secondary,
+                    // primary: Colors.blue, // Set the color to blue
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16), // Increase button padding
+                    textStyle: const TextStyle(fontSize: 18, color: Colors.white), // Increase font size
+                  ),
+                  child: const Text("Login"),
+                ),
+              ],
             ),
           ],
         ),
