@@ -5,36 +5,43 @@ class OnBoarding1Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Lottie.asset('assets/lottie/animation_lk9p1ks4.json', width: 300),
-        SpacingStyle.defaultVerticalSpacing,
-        Text(
-          'Embrace Techno-Revolution',
-          style: Theme.of(context).textTheme.headline6?.copyWith(
-              fontWeight: FontWeight.w600
-          ),
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 20.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Lottie.asset('assets/lottie/animation_lk9p1ks4.json', width: 300),
+            SpacingStyle.defaultVerticalSpacing,
+            Text(
+              'Let\'s Start the Journey',
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            SpacingStyle.defaultVerticalSpacing,
+            Text(
+              'Join us on an adventure into the future of dining. Embrace revolutionary technology that redefines your dining experience.',
+              overflow: TextOverflow.clip,
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                fontSize: 15,
+              ),
+            ),
+            SpacingStyle.defaultVerticalSpacing,
+            SpacingStyle.defaultVerticalSpacing,
+            SpacingStyle.defaultVerticalSpacing,
+            IconButton(
+              onPressed: () {},
+              icon: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Icon(UIcons.regularStraight.arrow_right),
+              ),
+            ),
+          ],
         ),
-        SpacingStyle.defaultVerticalSpacing,
-        Text(
-          'Step into the future, bid adieu to pen and paper. Embrace state-of-the-art technology for a fully managed restaurant system.',
-          overflow: TextOverflow.clip,
-          textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyText2,
-        ),
-        SpacingStyle.defaultVerticalSpacing,
-        SpacingStyle.defaultVerticalSpacing,
-        SpacingStyle.defaultVerticalSpacing,
-        IconButton(
-          onPressed: () {},
-          icon: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Icon(UIcons.regularStraight.arrow_right),
-          ),
-        )
-      ],
+      ),
     );
   }
 }

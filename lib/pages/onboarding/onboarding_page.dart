@@ -17,6 +17,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
     const OnBoarding3Body(),
     const OnBoarding4Body(),
   ];
+
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
