@@ -167,3 +167,11 @@ export './widgets/dialogs/show_confirmation_dialog.dart';
 
 
 export 'package:uicons/uicons.dart';
+
+
+
+export './pages/onboarding/components/onboarding_1_body.dart';
+export './pages/onboarding/components/onboarding_2_body.dart';
+export './pages/onboarding/components/onboarding_3_body.dart';
+export './pages/onboarding/components/onboarding_4_body.dart';
+export './pages/onboarding/onboarding_page.dart';

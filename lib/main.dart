@@ -50,10 +50,12 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           primarySwatch: Colors.blue,
         ),
-        home: Scaffold(
-          body: EateryDB.instance.companyBox!.values.isNotEmpty
-              ? const LoginPage()
-              : const CreateCompanyPage(),
-        ));
+        // home: Scaffold(
+        //   body: EateryDB.instance.companyBox!.values.isNotEmpty
+        //       ? const LoginPage()
+        //       : const CreateCompanyPage(),
+        // )
+        home: const OnboardingPage()
+        );
   }
 }

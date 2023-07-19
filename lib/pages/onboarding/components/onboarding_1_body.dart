@@ -9,21 +9,31 @@ class OnBoarding1Body extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        SvgPicture.asset(
-          'assets/images/onboarding/onboarding1.svg',
+        Lottie.asset('assets/lottie/animation_lk9p1ks4.json', width: 300),
+        SpacingStyle.defaultVerticalSpacing,
+        Text(
+          'Embrace Techno-Revolution',
+          style: Theme.of(context).textTheme.headline6?.copyWith(
+              fontWeight: FontWeight.w600
+          ),
         ),
         SpacingStyle.defaultVerticalSpacing,
         Text(
-          'Fast & easy to access',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        SpacingStyle.defaultVerticalSpacing,
-        Text(
-          'A well thought POS system keeping user\nexperience and accessibility as priority',
+          'Step into the future, bid adieu to pen and paper. Embrace state-of-the-art technology for a fully managed restaurant system.',
           overflow: TextOverflow.clip,
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.bodyMedium,
+          style: Theme.of(context).textTheme.bodyText2,
         ),
+        SpacingStyle.defaultVerticalSpacing,
+        SpacingStyle.defaultVerticalSpacing,
+        SpacingStyle.defaultVerticalSpacing,
+        IconButton(
+          onPressed: () {},
+          icon: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Icon(UIcons.regularStraight.arrow_right),
+          ),
+        )
       ],
     );
   }

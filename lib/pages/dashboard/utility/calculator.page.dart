@@ -1,6 +1,20 @@
 import 'package:eatery/references.dart';
 import 'package:flutter/material.dart';
 
+void main() {
+  runApp(CalculatorApp());
+}
+
+class CalculatorApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: CalculatorPage(),
+    );
+  }
+}
+
 class CalculatorPage extends StatefulWidget {
   const CalculatorPage({Key? key}) : super(key: key);
 
@@ -16,14 +30,6 @@ class _CalculatorPageState extends State<CalculatorPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Calculator'),
-        backgroundColor: Color.fromARGB(0, 47, 24, 130),
-        foregroundColor: const Color.fromARGB(255, 0, 0, 0),
-        leading: IconButton(
-          icon: Icon(UIcons.regularStraight.arrow_left),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
       ),
       body: Container(
         color: Colors.white,
@@ -49,41 +55,26 @@ class _CalculatorPageState extends State<CalculatorPage> {
                   childAspectRatio: 1.5,
                   children: [
                     buildButton('AC',
-                        textColor: Colors.red,
-                        fontSize: 18,
-                        onPressed: clearInput),
-                    buildButton('=', textColor: Colors.orange, fontSize: 24),
-                    buildButton('+', textColor: Colors.orange, fontSize: 24),
+                        textColor: Colors.red, onPressed: clearInput),
+                    buildButton('=', textColor: Colors.orange),
+                    buildButton('+', textColor: Colors.orange),
                     buildButton('DEL',
-                        textColor: Colors.grey,
-                        fontSize: 16,
-                        onPressed: deleteLastChar),
-                    buildButton('/', textColor: Colors.orange, fontSize: 24),
-                    buildButton('7',
-                        fontSize: 24, onPressed: () => addInput('7')),
-                    buildButton('8',
-                        fontSize: 24, onPressed: () => addInput('8')),
-                    buildButton('9',
-                        fontSize: 24, onPressed: () => addInput('9')),
-                    buildButton('x', textColor: Colors.orange, fontSize: 24),
-                    buildButton('4',
-                        fontSize: 24, onPressed: () => addInput('4')),
-                    buildButton('5',
-                        fontSize: 24, onPressed: () => addInput('5')),
-                    buildButton('6',
-                        fontSize: 24, onPressed: () => addInput('6')),
-                    buildButton('-', textColor: Colors.orange, fontSize: 24),
-                    buildButton('1',
-                        fontSize: 24, onPressed: () => addInput('1')),
-                    buildButton('2',
-                        fontSize: 24, onPressed: () => addInput('2')),
-                    buildButton('3',
-                        fontSize: 24, onPressed: () => addInput('3')),
+                        textColor: Colors.grey, onPressed: deleteLastChar),
+                    buildButton('/', textColor: Colors.orange),
+                    buildButton('7', onPressed: () => addInput('7')),
+                    buildButton('8', onPressed: () => addInput('8')),
+                    buildButton('9', onPressed: () => addInput('9')),
+                    buildButton('x', textColor: Colors.orange),
+                    buildButton('4', onPressed: () => addInput('4')),
+                    buildButton('5', onPressed: () => addInput('5')),
+                    buildButton('6', onPressed: () => addInput('6')),
+                    buildButton('-', textColor: Colors.orange),
+                    buildButton('1', onPressed: () => addInput('1')),
+                    buildButton('2', onPressed: () => addInput('2')),
+                    buildButton('3', onPressed: () => addInput('3')),
                     buildButton('', fontSize: 20),
-                    buildButton('0',
-                        fontSize: 24, onPressed: () => addInput('0')),
-                    buildButton('.',
-                        fontSize: 24, onPressed: () => addInput('.')),
+                    buildButton('0', onPressed: () => addInput('0')),
+                    buildButton('.', onPressed: () => addInput('.')),
                   ],
                 ),
               ),

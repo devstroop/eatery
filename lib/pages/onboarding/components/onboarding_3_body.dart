@@ -1,7 +1,7 @@
 import 'package:eatery/references.dart';
 
-class Onboarding3Body extends StatelessWidget {
-  const Onboarding3Body({Key? key}) : super(key: key);
+class OnBoarding3Body extends StatelessWidget {
+  const OnBoarding3Body({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
