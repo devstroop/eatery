@@ -1,3 +1,5 @@
+import 'package:path/path.dart' as path;
+
 import 'package:eatery/references.dart';
 
 class GlobalVariables {
@@ -7,46 +9,32 @@ class GlobalVariables {
   static kCurrency? currency;
 
   // Relative paths
-  static String? dataDirectory = '/data';
-  static String? imagesDirectory = '/images';
-  static String? backupDirectory = '/backup';
-  // Absolute paths
-  static String? dataDirectoryAbs =
-      '${GlobalVariables.baseDirectory}$dataDirectory';
-  static String? resourcesDirectoryAbs =
-      '${GlobalVariables.baseDirectory}$imagesDirectory';
-  static String? backupDirectoryAbs =
-      '${GlobalVariables.baseDirectory}$backupDirectory';
+  static String? dataDirectory =
+      _baseDirectory != null ? path.join(_baseDirectory!, 'data') : null;
+  static String? imagesDirectory =
+      _baseDirectory != null ? path.join(_baseDirectory!, 'images') : null;
+  static String? backupDirectory =
+      _baseDirectory != null ? path.join(_baseDirectory!, 'backup') : null;
 
+  // Absolute paths
   static String? _baseDirectory;
+
   static String? get baseDirectory => _baseDirectory;
+
   static set baseDirectory(String? value) {
     _baseDirectory = value;
-    Future.delayed(Duration.zero, () {
-      Directory dataDirectory = Directory(
-          '${GlobalVariables.baseDirectory}${GlobalVariables.dataDirectory}');
-      dataDirectory.exists().then((value) {
-        debugPrint('dataDirectory: $value');
-        if (!value) {
-          dataDirectory.createSync(recursive: true);
-        }
-      });
-      Directory resourcesDirectory = Directory(
-          '${GlobalVariables.baseDirectory}${GlobalVariables.imagesDirectory}');
-      resourcesDirectory.exists().then((value) {
-        debugPrint('imagesDirectory: $value');
-        if (!value) {
-          resourcesDirectory.createSync(recursive: true);
-        }
-      });
-      Directory backupDirectory = Directory(
-          '${GlobalVariables.baseDirectory}${GlobalVariables.backupDirectory}');
-      backupDirectory.exists().then((value) {
-        debugPrint('backupDirectory: $value');
-        if (!value) {
-          backupDirectory.createSync(recursive: true);
-        }
-      });
-    });
+    if (value != null) {
+      _createDirectoryIfNotExists(path.join(value, dataDirectory));
+      _createDirectoryIfNotExists(path.join(value, imagesDirectory));
+      _createDirectoryIfNotExists(path.join(value, backupDirectory));
+    }
+  }
+
+  static void _createDirectoryIfNotExists(String directoryPath) async {
+    final directory = Directory(directoryPath);
+    final exists = await directory.exists();
+    if (!exists) {
+      await directory.create(recursive: true);
+    }
   }
 }

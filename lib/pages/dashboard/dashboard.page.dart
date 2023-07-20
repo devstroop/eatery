@@ -171,32 +171,13 @@ class _DashboardPageState extends State<DashboardPage> {
                         titleSize: titleSize * 0.7,
                         subtitleSize: subtitleSize * 0.7,
                         color: ColorStyle.tertiary,
-                        width: (menuSize - 8)/2,
+                        width: menuSize,
                         height: (menuSize - 8)/2,
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const ProductCategoriesPage(),
-                            ),
-                          );
-                        },
-                      ),
-                      MenuCard(
-                        iconData: UIcons.regularStraight.data_transfer,
-                        iconSize: iconSize / 1.5,
-                        title: 'Stock Transfer',
-                        // subtitle: 'Manage product categories',
-                        titleSize: titleSize * 0.7,
-                        subtitleSize: subtitleSize * 0.7,
-                        color: ColorStyle.warning,
-                        width: (menuSize - 8)/2,
-                        height: (menuSize - 8)/2,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const StocksPage(),
                             ),
                           );
                         },
@@ -276,14 +257,14 @@ class _DashboardPageState extends State<DashboardPage> {
                         subtitleSize: subtitleSize * 0.7,
                         width: (menuSize - 8)/2,
                         height: (menuSize - 8)/2,
-                        title: 'Staffs',
+                        title: 'Waiter',
                         iconData: UIcons.regularStraight.people_poll,
                         color: const Color(0xFFC2592F),
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const StaffsPage(),
+                              builder: (context) => const WaitersPage(),
                             ),
                           );
                         },
@@ -386,26 +367,6 @@ class _DashboardPageState extends State<DashboardPage> {
                         },
                       ),
 
-                      MenuCard(
-                        iconData: UIcons.regularStraight.calculator,
-                        iconSize: iconSize / 1.5,
-                        title: 'Calculator',
-                        titleSize: titleSize * 0.7,
-                        subtitleSize: subtitleSize * 0.7,
-                        width: (menuSize - 8)/2,
-                        height: (menuSize - 8)/2,
-                        color: ColorStyle.primary,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const CalculatorPage(),
-                            ),
-                          );
-                        },
-                      ),
-
-
 
 
                       MenuCard(
@@ -414,7 +375,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         title: 'Settings',
                         titleSize: titleSize * 0.7,
                         subtitleSize: subtitleSize * 0.7,
-                        width: (menuSize - 8)/2,
+                        width: menuSize,
                         height: (menuSize - 8)/2,
                         color: const Color(0xFF222222),
                         onTap: () {

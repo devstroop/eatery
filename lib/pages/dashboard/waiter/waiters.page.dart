@@ -1,15 +1,15 @@
 import 'package:eatery/references.dart';
 
-Color _pageColor = ColorStyle.primary;
+Color _pageColor = const Color(0xFFC2592F);
 
-class StaffsPage extends StatefulWidget {
-  const StaffsPage({Key? key}) : super(key: key);
+class WaitersPage extends StatefulWidget {
+  const WaitersPage({Key? key}) : super(key: key);
 
   @override
-  State<StaffsPage> createState() => _StaffsPageState();
+  State<WaitersPage> createState() => _WaitersPageState();
 }
 
-class _StaffsPageState extends State<StaffsPage> {
+class _WaitersPageState extends State<WaitersPage> {
   @override
   void initState() {
     super.initState();
@@ -55,7 +55,7 @@ class _StaffsPageState extends State<StaffsPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        EditStaffPage(waiter: e)),
+                                        EditWaiterPage(waiter: e)),
                               ).then((_) => setState(() {}));
                             },
                           ),
@@ -133,7 +133,7 @@ class _StaffsPageState extends State<StaffsPage> {
         onPressed: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AddStaffPage()),
+            MaterialPageRoute(builder: (context) => const AddWaiterPage()),
           ).then((_) => setState(() {}));
         },
       ),

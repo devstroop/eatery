@@ -52,6 +52,9 @@ class _Body5State extends State<Body5> {
               showCurrencyName: true,
               showCurrencyCode: true,
               currencyFilter: const ['INR', 'AED'],
+              theme: CurrencyPickerThemeData(
+                  bottomSheetHeight: MediaQuery.of(context).size.height * 4/5
+              ),
               onSelect: (Currency currency) {
                 setState(() {
                   selectedCurrency = currency;

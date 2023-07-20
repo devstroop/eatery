@@ -1,15 +1,15 @@
 import 'package:eatery/references.dart';
 
-Color _pageColor = ColorStyle.primary;
+Color _pageColor = const Color(0xFFC2592F);
 
-class AddStaffPage extends StatefulWidget {
-  const AddStaffPage({Key? key}) : super(key: key);
+class AddWaiterPage extends StatefulWidget {
+  const AddWaiterPage({Key? key}) : super(key: key);
 
   @override
-  State<AddStaffPage> createState() => _AddStaffPageState();
+  State<AddWaiterPage> createState() => _AddWaiterPageState();
 }
 
-class _AddStaffPageState extends State<AddStaffPage> {
+class _AddWaiterPageState extends State<AddWaiterPage> {
   LibraryImage? image;
   bool isActive = true;
   final TextEditingController _controllerWaiterName = TextEditingController();

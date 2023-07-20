@@ -3,7 +3,7 @@ import 'package:eatery/references.dart';
 Future main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding); // bind splash
-  await setupPermission();
+  // await setupPermission();
   await setupDirectory();
   await setupDatabase();
 
@@ -11,11 +11,6 @@ Future main() async {
   // await flushDatabase();
 
   runApp(const MyApp());
-}
-
-Future setupPermission() async {
-  // setup permission
-  return;
 }
 
 Future setupDirectory() async {
@@ -31,7 +26,7 @@ Future setupDirectory() async {
 }
 
 Future setupDatabase() async {
-  await EateryDB.instance.init(GlobalVariables.dataDirectoryAbs);
+  await EateryDB.instance.init(GlobalVariables.dataDirectory);
   return;
 }
 
