@@ -29,6 +29,7 @@ Future setupDirectory() async {
   } else {
     throw Exception('Unsupported platform');
   }
+  debugPrint(GlobalVariables.baseDirectory);
 }
 
 Future setupDatabase() async {

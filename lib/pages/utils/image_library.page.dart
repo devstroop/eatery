@@ -64,14 +64,13 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
     final ImagePicker picker = ImagePicker();
     XFile? xFile = await picker.pickImage(source: ImageSource.gallery);
     if (xFile != null) {
-      // FileServices.copy(
-      //         target: xFile.path, directory: await FileServices.libraryPath())
-      //     .then((value) {
-      //   if (value != null) {
-      //     widget.action(path.relative(value.path));
-      //   }
-      //   Navigator.of(context).pop();
-      // });
+      try {
+        LibraryImage image =
+        LibraryImageProvider.importFromPath(xFile.path);
+        fetchLibrary();
+      } catch (e) {
+        showSnackBar(this.context, e.toString());
+      }
     }
   }
 
@@ -79,14 +78,13 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
     final ImagePicker picker = ImagePicker();
     XFile? xFile = await picker.pickImage(source: ImageSource.camera);
     if (xFile != null) {
-      // FileServices.copy(
-      //         target: xFile.path, directory: await FileServices.libraryPath())
-      //     .then((value) {
-      //   if (value != null) {
-      //     widget.action(path.relative(value.path));
-      //   }
-      //   Navigator.of(context).pop();
-      // });
+      try {
+        LibraryImage image =
+        LibraryImageProvider.importFromPath(xFile.path);
+        fetchLibrary();
+      } catch (e) {
+        showSnackBar(this.context, e.toString());
+      }
     }
   }
 
