@@ -285,9 +285,12 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
           )
         ],
       ),
-      body: Padding(
-        padding: SpacingStyle.defaultPadding,
-        child: bodies()[viewIndex],
+      body: InkWell(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Padding(
+          padding: SpacingStyle.defaultPadding,
+          child: bodies()[viewIndex],
+        ),
       ),
       bottomNavigationBar: bottomAppBars()[viewIndex],
     );

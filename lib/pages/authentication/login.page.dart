@@ -49,6 +49,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     List<User> users = (EateryDB.instance.userBox?.values ?? []).toList();
+    String? selectedUsername;
     return Scaffold(
       backgroundColor: ColorStyle.backgroundColorAlter,
       appBar: AppBar(
@@ -140,15 +141,20 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     SpacingStyle.defaultVerticalSpacing,
                     // If it has users
-                    DropdownButtonFormField(items: [
-                      ...users.map((e) => Dropdow)
-                    ], onChanged: onChanged),
+
                     Form(
                       key: _formKey,
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
+                          DropdownButtonFormField(items: [
+                            ...users.map((e) => DropdownMenuItem(value: e.username, child: Text(e.username)))
+                          ], onChanged: (String? username){
+                            setState(() {
+                              selectedUsername = username;
+                            });
+                          }),
                           CustomTextFromField(
                             themeColor: themeColor,
                             keyboardType: const TextInputType.numberWithOptions(
@@ -194,7 +200,7 @@ class _LoginPageState extends State<LoginPage> {
                           ),
                         ),
                         builder: (context) =>
-                            EateryDB.instance.subscriptionBox?.values.isNotEmpty ?? false
+                            EateryDB.instance.subscriptionBox.values.isNotEmpty ?? false
                                 ? ForgotPasswordBottomSheet(
                                     context,
                                     themeColor: themeColor,
