@@ -53,7 +53,7 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
         try {
           LibraryImage image =
               LibraryImageProvider.importFromPath(value.files.first.path!);
-          widget.action(image);
+          // widget.action(image);
           fetchLibrary();
         } catch (e) {
           showSnackBar(this.context, e.toString());
@@ -68,7 +68,7 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
     if (xFile != null) {
       try {
         LibraryImage image = LibraryImageProvider.importFromPath(xFile.path);
-        widget.action(image);
+        // widget.action(image);
         fetchLibrary();
       } catch (e) {
         showSnackBar(this.context, e.toString());
@@ -82,7 +82,7 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
     if (xFile != null) {
       try {
         LibraryImage image = LibraryImageProvider.importFromPath(xFile.path);
-        widget.action(image);
+        // widget.action(image);
         fetchLibrary();
       } catch (e) {
         showSnackBar(this.context, e.toString());
