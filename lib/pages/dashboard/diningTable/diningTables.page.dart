@@ -127,14 +127,14 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                   children: [
                     Icon(
                       UIcons.regularStraight.user,
-                      size: 48,
+                      size: 64,
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 16),
                     const Text(
                       'No dining tables found',
                       style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 12),
