@@ -28,6 +28,7 @@ Future setupDirectory() async {
   } else {
     throw Exception('Unsupported platform');
   }
+  debugPrint(GlobalVariables.baseDirectory);
 }
 
 Future setupDatabase() async {
@@ -50,12 +51,12 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           primarySwatch: Colors.blue,
         ),
-        // home: Scaffold(
-        //   body: EateryDB.instance.companyBox!.values.isNotEmpty
-        //       ? const LoginPage()
-        //       : const CreateCompanyPage(),
-        // )
-        home: const OnboardingPage()
+        home: Scaffold(
+          body: EateryDB.instance.companyBox!.values.isNotEmpty
+              ? const LoginPage()
+              : const CreateCompanyPage(),
+        )
+        // home: const OnboardingPage()
         );
   }
 }

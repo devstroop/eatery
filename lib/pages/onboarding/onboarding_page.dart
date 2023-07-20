@@ -11,14 +11,18 @@ class OnboardingPage extends StatefulWidget {
 class _OnboardingPageState extends State<OnboardingPage> {
   @override
   int index = 0;
-  List<Widget> bodies = [
-    const OnBoarding1Body(),
-    const OnBoarding2Body(),
-    const OnBoarding3Body(),
-    const OnBoarding4Body(),
-  ];
+
 
   Widget build(BuildContext context) {
+    List<Widget> bodies = [
+      const OnBoarding1Body(),
+      SvgPicture.asset('assets/vectors/FrameVector.svg', width: 72,),
+      const OnBoarding2Body(),
+      SvgPicture.asset('assets/vectors/vector_arrow_rounded.svg', width: 72,),
+      const OnBoarding3Body(),
+      SvgPicture.asset('assets/vectors/vector_arrow_rounded.svg', width: 72,),
+      const OnBoarding4Body(),
+    ];
     return Scaffold(
       body: SafeArea(
         child: ListView(

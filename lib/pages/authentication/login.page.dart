@@ -48,6 +48,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<User> users = (EateryDB.instance.userBox?.values ?? []).toList();
     return Scaffold(
       backgroundColor: ColorStyle.backgroundColorAlter,
       appBar: AppBar(
@@ -138,6 +139,10 @@ class _LoginPageState extends State<LoginPage> {
                       ],
                     ),
                     SpacingStyle.defaultVerticalSpacing,
+                    // If it has users
+                    DropdownButtonFormField(items: [
+                      ...users.map((e) => Dropdow)
+                    ], onChanged: onChanged),
                     Form(
                       key: _formKey,
                       child: Column(

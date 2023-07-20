@@ -236,6 +236,8 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                                     builder: (BuildContext context) =>
                                         const CreateCompanyResultPage()),
                                 (route) => false));
+                    await EateryDB.instance.openCompany(result);
+                    await EateryDB.instance.userBox?.add(User(type: UserType.admin, username: 'admin', fullName: 'Administrator', isActive: true,));
                     debugPrint('Company Added: $result');
                   } catch (e) {
                     showSnackBar(this.context, e.toString());
