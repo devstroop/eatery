@@ -18,9 +18,7 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, (){
-      
-    });
+    Future.delayed(Duration.zero, () {});
     fetchLibrary();
   }
 
@@ -68,14 +66,13 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
     final ImagePicker picker = ImagePicker();
     XFile? xFile = await picker.pickImage(source: ImageSource.gallery);
     if (xFile != null) {
-      // FileServices.copy(
-      //         target: xFile.path, directory: await FileServices.libraryPath())
-      //     .then((value) {
-      //   if (value != null) {
-      //     widget.action(path.relative(value.path));
-      //   }
-      //   Navigator.of(context).pop();
-      // });
+      try {
+        LibraryImage image = LibraryImageProvider.importFromPath(xFile.path);
+        widget.action(image);
+        fetchLibrary();
+      } catch (e) {
+        showSnackBar(this.context, e.toString());
+      }
     }
   }
 
@@ -83,14 +80,13 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
     final ImagePicker picker = ImagePicker();
     XFile? xFile = await picker.pickImage(source: ImageSource.camera);
     if (xFile != null) {
-      // FileServices.copy(
-      //         target: xFile.path, directory: await FileServices.libraryPath())
-      //     .then((value) {
-      //   if (value != null) {
-      //     widget.action(path.relative(value.path));
-      //   }
-      //   Navigator.of(context).pop();
-      // });
+      try {
+        LibraryImage image = LibraryImageProvider.importFromPath(xFile.path);
+        widget.action(image);
+        fetchLibrary();
+      } catch (e) {
+        showSnackBar(this.context, e.toString());
+      }
     }
   }
 
@@ -112,14 +108,17 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
                       icon: Icon(UIcons.regularStraight.arrow_left),
-                      onPressed: (){
+                      onPressed: () {
                         Navigator.of(context).pop();
                       },
                     ),
-                    const SizedBox(width: 6,),
+                    const SizedBox(
+                      width: 6,
+                    ),
                     const PageTitle(
                       title: "Library",
                       subtitle: "Previously imported images",
@@ -127,8 +126,9 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
                   ],
                 ),
                 Row(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    FutureBuilder<ClipboardData?>(
+                    /*FutureBuilder<ClipboardData?>(
                       future: Clipboard.getData('text/plain'),
                       builder: (context, snapshot) {
                         Uri? uri = Uri.tryParse(snapshot.data?.text ?? '');
@@ -138,40 +138,43 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
                             icon: Icon(UIcons.regularStraight.link),
                             iconSize: 24,
                             color: const Color(0xFF888888),
-                            onPressed: (){
+                            onPressed: () {
                               showConfirmationDialog(
-                                context, "Import from link?", "This will download the image from the link and import it to the library.", (){
-                                  LibraryImageProvider.importFromURL((uri ??'').toString()).then((value) {
-                                    fetchLibrary();
-                                  });
-                                },(){
-                              }
-                              );
+                                  context,
+                                  "Import from link?",
+                                  "This will download the image from the link and import it to the library.",
+                                  () {
+                                LibraryImageProvider.importFromURL(
+                                        (uri ?? '').toString())
+                                    .then((value) {
+                                  fetchLibrary();
+                                });
+                              }, () {});
                             },
                           );
                         } else {
                           return const SizedBox.shrink();
                         }
                       },
-                    ),
+                    ),*/
                     if (Platform.isAndroid)
                       IconButton(
                         icon: Icon(UIcons.regularStraight.camera),
-                        iconSize: 24,
+                        iconSize: 18,
                         color: const Color(0xFF888888),
                         onPressed: pickFromCamera,
                       ),
                     if (Platform.isAndroid)
                       IconButton(
                         icon: Icon(UIcons.regularStraight.gallery),
-                        iconSize: 24,
+                        iconSize: 18,
                         color: const Color(0xFF888888),
                         onPressed: pickFromGallery,
                       ),
                     if (Platform.isIOS)
                       IconButton(
                         icon: Icon(UIcons.regularStraight.download),
-                        iconSize: 24,
+                        iconSize: 18,
                         color: const Color(0xFF888888),
                         onPressed: pickImageFromFile,
                       ),
