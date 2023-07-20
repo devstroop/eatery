@@ -46,21 +46,10 @@ class OnBoarding4Body extends StatelessWidget {
               children: [
                 ElevatedButton(
                   onPressed: () {
-                    // Add your action for "Let's Start" button here
-                  },
-                  style: ElevatedButton.styleFrom(
-                    foregroundColor: Theme.of(context).colorScheme.secondary,
-                    // primary: Colors.blue, // Set the color to blue
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16), // Increase button padding
-                    textStyle: const TextStyle(fontSize: 18, color: Colors.white), // Increase font size
-                  ),
-                  child: const Text("Let's Start"),
-                ),
-                const SizedBox(width: 16), // Add some space between the buttons
-                ElevatedButton(
-                  onPressed: () {
                     // Add your action for "Login" button here
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+                    SharedPreferences.getInstance().then((value) => value.setBool('onBoarded', true)).then((value) {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
+                    });
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Theme.of(context).colorScheme.secondary,
@@ -68,7 +57,7 @@ class OnBoarding4Body extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16), // Increase button padding
                     textStyle: const TextStyle(fontSize: 18, color: Colors.white), // Increase font size
                   ),
-                  child: const Text("Login"),
+                  child: const Text("Continue"),
                 ),
               ],
             ),
