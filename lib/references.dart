@@ -175,3 +175,6 @@ export './pages/onboarding/components/onboarding_2_body.dart';
 export './pages/onboarding/components/onboarding_3_body.dart';
 export './pages/onboarding/components/onboarding_4_body.dart';
 export './pages/onboarding/onboarding_page.dart';
+
+
+export 'package:shared_preferences/shared_preferences.dart';

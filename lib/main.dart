@@ -6,6 +6,7 @@ Future main() async {
   // await setupPermission();
   await setupDirectory();
   await setupDatabase();
+  await initSharedPrefs();
 
   // TODO: Uncomment to flush companies7/
   // await flushDatabase();
@@ -36,13 +37,18 @@ Future setupDatabase() async {
   return;
 }
 
+SharedPreferences? sharedPreferences;
 Future<void> flushDatabase({bool confirm = false}) => EateryDB.instance.clearDB(confirm: confirm);
+Future initSharedPrefs() async {
+  sharedPreferences = await SharedPreferences.getInstance();
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    bool onBoarded = sharedPreferences?.getBool('onBoarded') ?? false;
     FlutterNativeSplash.remove(); // remove splash
     return MaterialApp(
         title: 'Eatery',
@@ -51,11 +57,11 @@ class MyApp extends StatelessWidget {
           useMaterial3: true,
           primarySwatch: Colors.blue,
         ),
-        home: Scaffold(
-          body: EateryDB.instance.companyBox!.values.isNotEmpty
+        home: onBoarded ? Scaffold(
+          body: EateryDB.instance.companyBox.values.isNotEmpty
               ? const LoginPage()
               : const CreateCompanyPage(),
-        )
+        ) : const OnboardingPage()
         // home: const OnboardingPage()
         );
   }
