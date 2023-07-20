@@ -60,6 +60,7 @@ class OnBoarding4Body extends StatelessWidget {
                 ElevatedButton(
                   onPressed: () {
                     // Add your action for "Login" button here
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => const LoginPage()));
                   },
                   style: ElevatedButton.styleFrom(
                     foregroundColor: Theme.of(context).colorScheme.secondary,
