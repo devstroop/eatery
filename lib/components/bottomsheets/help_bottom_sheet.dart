@@ -41,7 +41,8 @@ class HelpBottomSheet extends StatelessWidget {
                         throw "Could not launch $url";
                       }
                     },
-                    icon: Icon(Icons.link, color: ColorStyle.brandColor))
+                    icon: Icon(UIcons.regularStraight.link,
+                        color: ColorStyle.brandColor))
               ],
             ),
             const SizedBox(
@@ -50,7 +51,7 @@ class HelpBottomSheet extends StatelessWidget {
             Row(
               children: [
                 Icon(
-                  Icons.phone,
+                  UIcons.regularStraight.phone_call,
                   size: 24,
                   color: ColorStyle.brandColor,
                 ),
@@ -69,7 +70,7 @@ class HelpBottomSheet extends StatelessWidget {
             Row(
               children: [
                 Icon(
-                  Icons.email,
+                  UIcons.regularStraight.comment_user,
                   size: 24,
                   color: ColorStyle.brandColor,
                 ),

@@ -45,6 +45,12 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
       appBar: AppBar(
         backgroundColor: localColor,
         title: const Text('Add Tax Slab'),
+        leading: IconButton(
+          icon: Icon(UIcons.regularStraight.arrow_left),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -105,7 +111,7 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
                       themeColor: localColor,
                       focusNode: focus2,
                       suffix: Icon(
-                        Icons.percent,
+                        UIcons.regularStraight.percentage,
                         color: ColorStyle.text400,
                       ),
                       keyboardType:
@@ -159,6 +165,7 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
           padding: const EdgeInsets.all(16.0),
           child: PrimaryButton(
             color: localColor,
+            height: 48.0,
             onPressed: _submit,
             child: const Text('Save'),
           ),

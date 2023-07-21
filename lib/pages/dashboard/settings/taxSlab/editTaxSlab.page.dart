@@ -54,6 +54,12 @@ class _EditTaxSlabSettingsPageState extends State<EditTaxSlabSettingsPage> {
       appBar: AppBar(
         backgroundColor: localColor,
         title: const Text('Edit Tax Slab'),
+        leading: IconButton(
+          icon: Icon(UIcons.regularStraight.arrow_left),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -114,7 +120,7 @@ class _EditTaxSlabSettingsPageState extends State<EditTaxSlabSettingsPage> {
                       themeColor: localColor,
                       focusNode: focus2,
                       suffix: Icon(
-                        Icons.percent,
+                        UIcons.regularStraight.percentage,
                         color: ColorStyle.text400,
                       ),
                       keyboardType:

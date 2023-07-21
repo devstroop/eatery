@@ -39,6 +39,12 @@ class _TaxSlabsSettingsPageState extends State<TaxSlabsSettingsPage> {
     final appBar = AppBar(
       backgroundColor: getThemeColor(),
       title: const Text('Tax Slab Settings'),
+      leading: IconButton(
+        icon: Icon(UIcons.regularStraight.arrow_left),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      )
     );
     return Scaffold(
       appBar: appBar,
@@ -83,7 +89,7 @@ class _TaxSlabsSettingsPageState extends State<TaxSlabsSettingsPage> {
                               color: ColorStyle.backgroundColorAlter),
                         )),
                     subtitle: Text(taxSlab.type.name ?? 'None'),
-                    trailing: const Icon(Icons.arrow_forward_ios),
+                    trailing:  Icon(UIcons.regularStraight.arrow_right),
                   ),
                 ),
             ],
@@ -98,7 +104,7 @@ class _TaxSlabsSettingsPageState extends State<TaxSlabsSettingsPage> {
                   const AddTaxSlabSettingsPage()),
         ).then((_) => setState(() {})),
         backgroundColor: getThemeColor(),
-        child: const Icon(Icons.add),
+        child: Icon(UIcons.regularStraight.plus_small),
       ),
     );
   }

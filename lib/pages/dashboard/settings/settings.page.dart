@@ -23,10 +23,10 @@ class _SettingPageState extends State<SettingPage> {
       child:
           ListView(scrollDirection: Axis.vertical, shrinkWrap: true, children: [
         MenuTile(
-          prefixIcon: Icons.business,
+          prefixIcon: UIcons.regularStraight.business_time,
           title: 'Company',
           subtitle: 'Manage Company Profile',
-          postfixIcon: Icons.arrow_forward_ios_sharp,
+          postfixIcon: UIcons.regularStraight.arrow_right,
           color: getThemeColor(),
           onTap: () {
             Navigator.push(
@@ -36,10 +36,10 @@ class _SettingPageState extends State<SettingPage> {
           },
         ),
         MenuTile(
-          prefixIcon: Icons.currency_exchange,
+          prefixIcon: UIcons.regularStraight.dollar,
           title: 'Currency and Region',
           subtitle: 'Manage Currency and Region Settings',
-          postfixIcon: Icons.arrow_forward_ios_sharp,
+          postfixIcon: UIcons.regularStraight.arrow_right,
           color: getThemeColor(),
           onTap: () => Navigator.push(
             this.context,
@@ -48,10 +48,10 @@ class _SettingPageState extends State<SettingPage> {
           ),
         ),
         MenuTile(
-          prefixIcon: Icons.percent,
+          prefixIcon: UIcons.regularStraight.percentage,
           title: 'Tax',
           subtitle: 'Manage Tax Slabs',
-          postfixIcon: Icons.arrow_forward_ios_sharp,
+          postfixIcon: UIcons.regularStraight.arrow_right,
           color: getThemeColor(),
           onTap: () => Navigator.push(
             this.context,
@@ -61,10 +61,10 @@ class _SettingPageState extends State<SettingPage> {
           ),
         ),
         MenuTile(
-          prefixIcon: Icons.print,
+          prefixIcon: UIcons.regularStraight.print,
           title: 'Printer',
           subtitle: 'Manage Printing Devices',
-          postfixIcon: Icons.arrow_forward_ios_sharp,
+          postfixIcon: UIcons.regularStraight.arrow_right,
           color: getThemeColor(),
           /*onTap: () => Navigator.push(
             context,
@@ -72,10 +72,10 @@ class _SettingPageState extends State<SettingPage> {
           ),*/
         ),
         MenuTile(
-          prefixIcon: Icons.help,
+          prefixIcon: UIcons.regularStraight.comment_user,
           title: 'Help',
           subtitle: 'Get support',
-          postfixIcon: Icons.arrow_forward_ios_sharp,
+          postfixIcon: UIcons.regularStraight.arrow_right,
           color: getThemeColor(),
           onTap: () => showModalBottomSheet(
               shape: const RoundedRectangleBorder(
@@ -98,6 +98,13 @@ class _SettingPageState extends State<SettingPage> {
     final appBar = AppBar(
       backgroundColor: getThemeColor(),
       title: const Text('Settings'),
+      foregroundColor: Colors.white,
+      leading: IconButton(
+        icon: Icon(UIcons.regularStraight.arrow_left),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      )
     );
     return Scaffold(
       appBar: appBar,

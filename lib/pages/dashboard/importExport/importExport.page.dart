@@ -146,10 +146,10 @@ class _ImportExportPageState extends State<ImportExportPage> {
         InkWell(
           onTap: () {},
           child: MenuTile(
-            prefixIcon: Icons.input,
+            prefixIcon: UIcons.regularStraight.inbox_in,
             title: 'Import Products',
             subtitle: 'Import invoices and vouchers',
-            postfixIcon: Icons.arrow_forward_ios_sharp,
+            postfixIcon: UIcons.regularStraight.arrow_right,
             color: getThemeColor(),
             onTap: doImportProducts,
           ),
@@ -157,10 +157,10 @@ class _ImportExportPageState extends State<ImportExportPage> {
         InkWell(
           onTap: () {},
           child: MenuTile(
-            prefixIcon: Icons.output,
+            prefixIcon: UIcons.regularStraight.inbox_out,
             title: 'Export Products',
             subtitle: 'Export invoices and vouchers',
-            postfixIcon: Icons.arrow_forward_ios_sharp,
+            postfixIcon: UIcons.regularStraight.arrow_right,
             color: getThemeColor(),
             onTap: doExportProducts,
           ),
@@ -174,6 +174,12 @@ class _ImportExportPageState extends State<ImportExportPage> {
     final appBar = AppBar(
       backgroundColor: getThemeColor(),
       title: const Text('Import / Export'),
+      leading: IconButton(
+        icon: Icon(UIcons.regularStraight.arrow_left),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
     );
 
     return Scaffold(
