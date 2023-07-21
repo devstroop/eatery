@@ -36,7 +36,7 @@ class _SettingPageState extends State<SettingPage> {
           },
         ),
         MenuTile(
-          prefixIcon: UIcons.regularStraight.user,
+          prefixIcon: UIcons.regularStraight.dollar,
           title: 'Currency and Region',
           subtitle: 'Manage Currency and Region Settings',
           postfixIcon: UIcons.regularStraight.arrow_right,
@@ -98,6 +98,7 @@ class _SettingPageState extends State<SettingPage> {
     final appBar = AppBar(
       backgroundColor: getThemeColor(),
       title: const Text('Settings'),
+      foregroundColor: Colors.white,
       leading: IconButton(
         icon: Icon(UIcons.regularStraight.arrow_left),
         onPressed: () {
