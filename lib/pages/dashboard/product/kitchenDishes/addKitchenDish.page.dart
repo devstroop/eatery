@@ -292,7 +292,6 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
 
             try{
               Product product = Product(
-                id: EateryDB.instance.productBox.nextId(),
                 name: _controllerName.text,
                 categoryId: selectedCategory?.id,
                 description: _controllerDescription.text,

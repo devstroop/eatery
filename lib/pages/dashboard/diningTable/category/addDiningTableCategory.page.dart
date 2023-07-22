@@ -89,7 +89,6 @@ class _AddDiningTableCategoryPageState
             EateryDB.instance.diningTableCategoryBox
                 .add(
               DiningTableCategory(
-                  id: id,
                   name: _controllerCategoryName.text.trim(),
                   description: _controllerCategoryDescription.text.trim(),
                   image: image?.filename,

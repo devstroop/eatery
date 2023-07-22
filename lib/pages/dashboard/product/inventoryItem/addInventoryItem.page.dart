@@ -289,7 +289,6 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
 
             try {
               Product product = Product(
-                  id: EateryDB.instance.productBox.nextId(),
                   name: _controllerName.text,
                   categoryId: selectedCategory?.id,
                   description: _controllerDescription.text,

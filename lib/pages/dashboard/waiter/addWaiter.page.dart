@@ -115,7 +115,6 @@ class _AddWaiterPageState extends State<AddWaiterPage> {
             try {
               EateryDB.instance.waiterBox.add(
                 Waiter(
-                  id: EateryDB.instance.waiterBox.nextId(),
                   name: _controllerWaiterName.text,
                   phone: _controllerWaiterPhone.text,
                   photo: image?.filename,

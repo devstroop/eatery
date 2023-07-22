@@ -60,13 +60,15 @@ class MenuCard extends StatelessWidget {
             const SizedBox(
               height: 8,
             ),
-            Text(
-              title,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: titleSize,
-                fontWeight: FontWeight.w700,
+            Flexible(
+              child: Text(
+                title,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: titleSize,
+                  fontWeight: FontWeight.w700,
+                ),
               ),
             ),
             if (subtitle != null)

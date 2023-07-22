@@ -151,7 +151,6 @@ class _DiningTableSelectionViewState extends State<DiningTableSelectionView> {
       int newCustomerId = EateryDB.instance.customerBox.nextId();
       return order?.customer ??
           Customer(
-              id: newCustomerId,
               name: name,
               phone: phoneNumber,
               address: address,
@@ -160,7 +159,6 @@ class _DiningTableSelectionViewState extends State<DiningTableSelectionView> {
 
     order ??
         Order(
-            id: EateryDB.instance.orderBox.nextId(),
             customer: customer,
             type: OrderType.dine);
     setState(() {

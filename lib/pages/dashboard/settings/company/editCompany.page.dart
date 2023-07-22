@@ -22,17 +22,18 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
   }
 
   void postInit() async {
-    /*company = await CompanyLoader(widget.database).load(context);
+    company = await EateryDB.instance.companyBox.values.first;
+    // company = await CompanyLoader(widget.database).load(context);
     setState(() {
       _controllerCompanyName.text = company!.name;
       _controllerEmail.text = company!.email;
       _controllerPhone.text = company!.phone;
       _controllerPhone.text = company!.phone;
       _controllerAddress.text = company!.address;
-      _controllerTaxNo.text = company!.taxLicNo ?? '';
-      _controllerFoodLicNo.text = company!.foodLicNo ?? '';
-      _controllerDefaultTax.text = company!.defaultTaxRate != null ? company!.defaultTaxRate.toString() : '';
-    });*/
+      // _controllerTaxNo.text = company!.taxLicNo ?? '';
+      // _controllerFoodLicNo.text = company!.foodLicNo ?? '';
+      // _controllerDefaultTax.text = company!.defaultTaxRate != null ? company!.defaultTaxRate.toString() : '';
+    });
   }
   final themeColor = ColorStyle.brandColor;
 
@@ -59,6 +60,12 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
             appBar: AppBar(
               backgroundColor: themeColor,
               title: const Text('Company Details'),
+              leading: IconButton(
+                icon: Icon(UIcons.regularStraight.arrow_left),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
             ),
             body: Padding(
               padding: SpacingStyle.defaultPadding,

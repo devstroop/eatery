@@ -107,7 +107,6 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
               EateryDB.instance.customerBox
                   .add(
                 Customer(
-                    id: EateryDB.instance.customerBox.nextId(),
                     name: _controllerCustomerName.text,
                     phone: _controllerCustomerPhone.text,
                     isActive: isActive),

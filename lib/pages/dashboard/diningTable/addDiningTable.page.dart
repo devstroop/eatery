@@ -133,7 +133,6 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                 name: _controllerCategoryName.text,
                 description: _controllerCategoryDescription.text,
                 categoryId: diningTableCategory?.id,
-                id: EateryDB.instance.diningTableBox.nextId(),
                 isActive: true,
               );
             });

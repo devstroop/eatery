@@ -165,7 +165,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
                       MenuCard(
                         iconData: UIcons.regularStraight.table_tree,
-                        iconSize: iconSize / 1.5,
+                        iconSize: iconSize / 1.75,
                         title: 'Product Categories',
                         // subtitle: 'Manage product categories',
                         titleSize: titleSize * 0.7,
@@ -184,7 +184,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                       MenuCard(
                         iconData: UIcons.regularStraight.restaurant,
-                        iconSize: iconSize / 1.5,
+                        iconSize: iconSize / 1.75,
                         title: 'Kitchen',
                         // subtitle: 'Manage kitchen dishes',
                         titleSize: titleSize * 0.7,
@@ -203,7 +203,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                       MenuCard(
                         iconData: UIcons.regularStraight.boxes,
-                        iconSize: iconSize / 1.5,
+                        iconSize: iconSize / 1.75,
                         title: 'Inventory',
                         // subtitle: 'Manage product categories',
                         titleSize: titleSize * 0.7,
@@ -234,7 +234,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     children: [
 
                       MenuCard(
-                        iconSize: iconSize / 1.5,
+                        iconSize: iconSize / 1.75,
                         titleSize: titleSize * 0.7,
                         subtitleSize: subtitleSize * 0.7,
                         width: (menuSize - 8)/2,
@@ -252,7 +252,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         },
                       ),
                       MenuCard(
-                        iconSize: iconSize / 1.5,
+                        iconSize: iconSize / 1.75,
                         titleSize: titleSize * 0.7,
                         subtitleSize: subtitleSize * 0.7,
                         width: (menuSize - 8)/2,
@@ -270,7 +270,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         },
                       ),
                       MenuCard(
-                        iconSize: iconSize / 1.5,
+                        iconSize: iconSize / 1.75,
                         titleSize: titleSize * 0.7,
                         subtitleSize: subtitleSize * 0.7,
                         width: (menuSize),
@@ -332,7 +332,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
                       MenuCard(
                         iconData: UIcons.regularStraight.exchange,
-                        iconSize: iconSize / 1.5,
+                        iconSize: iconSize / 1.75,
                         title: 'Import Export',
                         titleSize: titleSize * 0.7,
                         subtitleSize: subtitleSize * 0.7,
@@ -350,7 +350,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       ),
                       MenuCard(
                         iconData: UIcons.regularStraight.time_past,
-                        iconSize: iconSize / 1.5,
+                        iconSize: iconSize / 1.75,
                         title: 'Backup Restore',
                         titleSize: titleSize * 0.7,
                         subtitleSize: subtitleSize * 0.7,
@@ -371,7 +371,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
                       MenuCard(
                         iconData: UIcons.regularStraight.settings,
-                        iconSize: iconSize / 1.5,
+                        iconSize: iconSize / 1.75,
                         title: 'Settings',
                         titleSize: titleSize * 0.7,
                         subtitleSize: subtitleSize * 0.7,

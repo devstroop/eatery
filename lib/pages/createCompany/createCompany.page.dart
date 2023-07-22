@@ -190,7 +190,6 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
               try {
                 TaxSlab? taxSlab = _controllerDefaultTaxPercent.text.isNotEmpty
                     ? TaxSlab(
-                        id: EateryDB.instance.taxSlabBox.nextId(),
                         name: 'default',
                         rate: double.parse(_controllerDefaultTaxPercent.text),
                         type: _taxType)
@@ -209,17 +208,15 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
 
                 // Subscription
                 Subscription subscription = Subscription(
-                    id: EateryDB.instance.subscriptionBox.nextId(),
                     purchaseCode: purchaseCode,
                     validFrom: validFrom,
                     validTill: validTill,
                     subscriptionType: subscriptionType);
                 await EateryDB.instance.subscriptionBox.add(subscription);
 
-                kCurrency? _kCurrency;
+                KCurrency? _kCurrency;
                 if (currency != null) {
-                  _kCurrency = kCurrency(
-                      id: 1,
+                  _kCurrency = KCurrency(
                       name: currency!.name,
                       code: currency!.code,
                       symbol: currency!.symbol,
@@ -236,7 +233,6 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                 }
                 // COMPANY
                 Company company = Company(
-                  id: 1,
                   name: _controllerRestaurantName.text,
                   logo: libraryImageLogo?.filename,
                   email: _controllerEmailAddress.text,

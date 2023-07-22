@@ -26,7 +26,6 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
 
     try {
       TaxSlab taxSlab = TaxSlab(
-          id: EateryDB.instance.taxSlabBox.nextId(),
           name: controllerSlabName.text,
           rate: double.parse(controllerTaxRate.text),
           type: _taxType);
