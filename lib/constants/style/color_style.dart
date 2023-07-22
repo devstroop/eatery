@@ -20,4 +20,7 @@ class ColorStyle{
   static Color success = const Color(0xFF5CAA4B);
   static Color warning = const Color(0xFFAD8D3B);
   static Color error = const Color(0xFFB63A3A);
+
+  static Color textColorDark = const Color(0xFF2F2F2F);
+  static Color textColorLight = const Color(0xFFF5F5F5);
 }

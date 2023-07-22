@@ -1,115 +1,153 @@
 import 'package:eatery/references.dart';
 
 class ShowCurrencyRegionPage extends StatefulWidget {
-  const ShowCurrencyRegionPage({Key? key})
-      : super(key: key);
+  const ShowCurrencyRegionPage({Key? key}) : super(key: key);
 
   @override
   State<ShowCurrencyRegionPage> createState() => _ShowCurrencyRegionPageState();
 }
 
 class _ShowCurrencyRegionPageState extends State<ShowCurrencyRegionPage> {
-  final themeColor = ColorStyle.brandColor;
-  Currency? currency;
+  final themeColor = ColorStyle.primary;
+  Currency? selectedCurrency;
+  GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, (){
-      
+    Future.delayed(Duration.zero, () {
+      setState(() {
+        // TODO: Get the currency from the database
+        int? currencyId = GlobalVariables.company?.currencyId;
+        KCurrency? currencyObj = currencyId != null ? EateryDB.instance.currencyBox.values
+            .singleWhere((element) => element.id == currencyId) : null;
+        selectedCurrency = currencyObj?.toCurrency();
+      });
     });
-    postInit();
-  }
-
-  void postInit() async {
-    /*Stream<CurrencyInfo?> _stream = widget.database.currencyInfoDao.findCurrencyInfo(1);
-    if(!(await _stream.isEmpty)){
-      CurrencyInfo? currencyInfo = await _stream.first;
-      currency = Currency(
-          code: currencyInfo!.code,
-          name: currencyInfo.name,
-          symbol: currencyInfo.symbol,
-          flag: currencyInfo.flag,
-          number: currencyInfo.number,
-          decimalDigits: currencyInfo.decimalDigits,
-          namePlural: currencyInfo.namePlural,
-          symbolOnLeft: currencyInfo.symbolOnLeft,
-          decimalSeparator: currencyInfo.decimalSeparator,
-          thousandsSeparator: currencyInfo.thousandsSeparator,
-          spaceBetweenAmountAndSymbol: currencyInfo.spaceBetweenAmountAndSymbol);
-      setState(() {});
-    }*/
   }
 
   @override
   Widget build(BuildContext context) {
-    return currency != null ? Scaffold(
+    return Scaffold(
       appBar: AppBar(
         backgroundColor: themeColor,
-        title: const Text('Currency and Region'),
-      ),
-      body: Padding(
-        padding: SpacingStyle.defaultPadding,
-        child: ListView(
-          shrinkWrap: true,
-          scrollDirection: Axis.vertical,
-          children: [
-            InkWell(
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(6),
-                  border: Border.all(
-                    color: ColorStyle.brandColor,
-                    width: 1,
-                  ),
-                ),
-                child: ListView(
-                  shrinkWrap: true,
-                  children: [
-                    ListTile(
-                      leading: currency != null
-                          ? Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            CurrencyUtils.currencyToEmoji(currency!),
-                            style: const TextStyle(
-                              fontSize: 32,
-                            ),
-                          ),
-                        ],
-                      )
-                          : null,
-                      trailing: currency != null
-                          ? Text(currency!.symbol,
-                          style: const TextStyle(
-                            fontSize: 18,
-                          ))
-                          : null,
-                      title: Text(currency != null ? currency!.code : 'Not Selected'),
-                      subtitle: currency != null ? Text(currency!.name) : null,
-                    )
-                  ],
-                ),
-              ),
-              onTap: () => showCurrencyPicker(
-                context: context,
-                showSearchField: false,
-                showFlag: true,
-                showCurrencyName: true,
-                showCurrencyCode: true,
-                currencyFilter: <String>['INR', 'AED'],
-                onSelect: (Currency currency) {
-                  setState(() {
-                    currency = currency;
-                  });
-                },
-              ),
-            ),
-          ],
+        foregroundColor: ColorStyle.textColorLight,
+        title: const Text('Region and Currency'),
+        leading: IconButton(
+          icon: Icon(UIcons.regularStraight.arrow_left),
+          onPressed: () {
+            Navigator.pop(context);
+          },
         ),
       ),
-    ) : LoadingScreen();
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: formKey,
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            children: [
+              const PageTitle(
+                title: "Region and Currency",
+                subtitle: "Select the default currency as per region",
+              ),
+              SpacingStyle.defaultVerticalSpacing,
+              InkWell(
+                onTap: () => showCurrencyPicker(
+                  context: context,
+                  showSearchField: false,
+                  showFlag: true,
+                  showCurrencyName: true,
+                  showCurrencyCode: true,
+                  currencyFilter: const ['INR', 'AED'],
+                  theme: CurrencyPickerThemeData(
+                      bottomSheetHeight:
+                          MediaQuery.of(context).size.height * 4 / 5),
+                  onSelect: _onCurrencySelected,
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(
+                      color: themeColor,
+                      width: 2,
+                    ),
+                  ),
+                  child: ListTile(
+                    leading: selectedCurrency != null
+                        ? Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                CurrencyUtils.currencyToEmoji(
+                                    selectedCurrency!),
+                                style: const TextStyle(
+                                  fontSize: 32,
+                                ),
+                              ),
+                            ],
+                          )
+                        : null,
+                    trailing: selectedCurrency != null
+                        ? Text(
+                            selectedCurrency!.symbol,
+                            style: const TextStyle(
+                              fontSize: 18,
+                            ),
+                          )
+                        : null,
+                    title: Text(
+                      selectedCurrency != null
+                          ? selectedCurrency!.code
+                          : 'Not Selected',
+                    ),
+                    subtitle: selectedCurrency != null
+                        ? Text(selectedCurrency!.name)
+                        : null,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: PrimaryButton(
+          color: themeColor,
+          child: const Text('Save'),
+          onPressed: () {
+            if (formKey.currentState!.validate()) {
+              Company company = EateryDB.instance.companyBox.values.first;
+              company.currencyId = 0; //selectedCurrency?.id;
+              company.save();
+
+              // Display dialog successfully saved
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text('Success'),
+                  content: const Text('Successfully saved'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('OK'),
+                    ),
+                  ],
+                ),
+              ).then((value) => Navigator.pop(context));
+            }
+          },
+        ),
+      ),
+    );
+  }
+
+  void _onCurrencySelected(Currency value) {
+    setState(() {
+      selectedCurrency = value;
+    });
   }
 }
