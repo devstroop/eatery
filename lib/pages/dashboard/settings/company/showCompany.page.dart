@@ -21,7 +21,7 @@ class _ShowCompanyPageState extends State<ShowCompanyPage> {
   }
 
   void postInit() async {
-    company = await EateryDB.instance.companyBox.values.first;
+    company = EateryDB.instance.companyBox.values.first;
     setState(() {});
   }
   void _changeLogo() => showModalBottomSheet(
@@ -50,12 +50,6 @@ class _ShowCompanyPageState extends State<ShowCompanyPage> {
             appBar: AppBar(
               backgroundColor: themeColor,
               title: const Text('Company Details'),
-              leading: IconButton(
-                icon: Icon(UIcons.regularStraight.arrow_left),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
             ),
             body: Padding(
               padding: SpacingStyle.defaultPadding,
