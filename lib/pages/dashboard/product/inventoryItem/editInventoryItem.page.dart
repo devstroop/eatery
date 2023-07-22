@@ -40,9 +40,9 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
           ? widget.product.salePrice.toString()
           : '';
       selectedFoodType = widget.product.foodType;
-      selectedTaxSlab = widget.product.taxSlabId != null ? EateryDB.instance.taxSlabBox.values
+      selectedTaxSlab = widget.product.taxSlabId != null ? EateryDB.instance.taxSlabBox!.values
           .singleWhere((element) => element.id == widget.product.taxSlabId) : null;
-      selectedCategory = widget.product.categoryId != null ?EateryDB.instance.productCategoryBox.values
+      selectedCategory = widget.product.categoryId != null ?EateryDB.instance.productCategoryBox!.values
           .singleWhere((element) => element.id == widget.product.categoryId) : null;
       _controllerDescription.text = widget.product.description ?? '';
     }); 
@@ -53,7 +53,7 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
   final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
-    List<TaxSlab> slabs = EateryDB.instance.taxSlabBox.values.toList();
+    List<TaxSlab> slabs = EateryDB.instance.taxSlabBox!.values.toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -251,7 +251,7 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
                         selectedCategory = null;
                       });
                     },),
-                    ...EateryDB.instance.productCategoryBox.values.map((e) {
+                    ...EateryDB.instance.productCategoryBox!.values.map((e) {
                       return CircularCategoryPOSWidget(
                         themeColor: _pageColor,
                         margin: const EdgeInsets.symmetric(horizontal: 8.0),

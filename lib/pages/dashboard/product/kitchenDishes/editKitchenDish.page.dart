@@ -40,9 +40,9 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
             ? widget.product.salePrice.toString()
             : '';
         selectedFoodType = widget.product.foodType;
-        selectedTaxSlab = widget.product.taxSlabId != null ? EateryDB.instance.taxSlabBox.values
+        selectedTaxSlab = widget.product.taxSlabId != null ? EateryDB.instance.taxSlabBox!.values
             .singleWhere((element) => element.id == widget.product.taxSlabId) : null;
-        selectedCategory = widget.product.categoryId != null ?EateryDB.instance.productCategoryBox.values
+        selectedCategory = widget.product.categoryId != null ?EateryDB.instance.productCategoryBox!.values
             .singleWhere((element) => element.id == widget.product.categoryId) : null;
         _controllerDescription.text = widget.product.description ?? '';
       });
@@ -197,7 +197,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
                 foregroundColor: selectedTaxSlab == null ? Colors.white : ColorStyle.text200,
                 children: [
                   'None',
-                  for (var each in EateryDB.instance.taxSlabBox.values)
+                  for (var each in EateryDB.instance.taxSlabBox!.values)
                     each.name
                 ],
                 selectedIndex: (selectedTaxSlab?.id == null) ? 0 : selectedTaxSlab?.id,
@@ -206,7 +206,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
                     selectedTaxSlab = null;
                   } else {
                     selectedTaxSlab = EateryDB
-                        .instance.taxSlabBox.values
+                        .instance.taxSlabBox!.values
                         .singleWhere((element) => element.id == index);
                   }
                   setState(() {});
@@ -250,7 +250,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
                         selectedCategory = null;
                       });
                     },),
-                    ...EateryDB.instance.productCategoryBox.values.map((e) {
+                    ...EateryDB.instance.productCategoryBox!.values.map((e) {
                       return CircularCategoryPOSWidget(
                         themeColor: _pageColor,
                         margin: const EdgeInsets.symmetric(horizontal: 8.0),

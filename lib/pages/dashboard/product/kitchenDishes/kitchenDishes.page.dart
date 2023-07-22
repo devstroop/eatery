@@ -28,7 +28,7 @@ class _KitchenPageState extends State<KitchenPage> {
   final ScrollController _scrollControllerProducts = ScrollController();
   @override
   Widget build(BuildContext context) {
-    List<Product> products = EateryDB.instance.productBox.values
+    List<Product> products = EateryDB.instance.productBox!.values
         .where((element) => element.type == ProductType.kitchenDish)
         .toList();
     double crossAxisCount;
@@ -86,7 +86,7 @@ class _KitchenPageState extends State<KitchenPage> {
                   },
                   label: 'All',
                 ),
-                ...EateryDB.instance.productCategoryBox.values.map((each) {
+                ...EateryDB.instance.productCategoryBox!.values.map((each) {
                   return CircularCategoryPOSWidget(
                     margin: const EdgeInsets.only(bottom: 6),
                     image: LibraryImage(each.image).image,

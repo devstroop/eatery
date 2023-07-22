@@ -30,25 +30,25 @@ Future setupDatabase() async {
 }
 
 Future flushDatabase() async {
-  await EateryDB.instance.companyBox.clear();
-  await EateryDB.instance.currencyBox.clear();
-  await EateryDB.instance.autoPrintBox.clear();
-  await EateryDB.instance.customerBox.clear();
-  await EateryDB.instance.diningTableBox.clear();
-  await EateryDB.instance.diningTableCategoryBox.clear();
-  await EateryDB.instance.orderBox.clear();
-  await EateryDB.instance.productBox.clear();
-  await EateryDB.instance.productCategoryBox.clear();
-  await EateryDB.instance.printerBox.clear();
-  await EateryDB.instance.printerTypeBox.clear();
-  await EateryDB.instance.printerTypeBox.clear();
-  await EateryDB.instance.subscriptionBox.clear();
-  await EateryDB.instance.subscriptionTypeBox.clear();
-  await EateryDB.instance.editionBox.clear();
-  await EateryDB.instance.foodTypeBox.clear();
-  await EateryDB.instance.taxSlabBox.clear();
-  await EateryDB.instance.taxTypeBox.clear();
-  await EateryDB.instance.staffBox.clear();
+  await EateryDB.instance.companyBox?.clear();
+  await EateryDB.instance.currencyBox?.clear();
+  await EateryDB.instance.autoPrintBox?.clear();
+  await EateryDB.instance.customerBox?.clear();
+  await EateryDB.instance.diningTableBox?.clear();
+  await EateryDB.instance.diningTableCategoryBox?.clear();
+  await EateryDB.instance.orderBox?.clear();
+  await EateryDB.instance.productBox?.clear();
+  await EateryDB.instance.productCategoryBox?.clear();
+  await EateryDB.instance.printerBox?.clear();
+  await EateryDB.instance.printerTypeBox?.clear();
+  await EateryDB.instance.printerTypeBox?.clear();
+  await EateryDB.instance.subscriptionBox?.clear();
+  await EateryDB.instance.subscriptionTypeBox?.clear();
+  await EateryDB.instance.editionBox?.clear();
+  await EateryDB.instance.foodTypeBox?.clear();
+  await EateryDB.instance.taxSlabBox?.clear();
+  await EateryDB.instance.taxTypeBox?.clear();
+  await EateryDB.instance.staffBox?.clear();
 
   return;
 }
@@ -67,9 +67,9 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         home: Scaffold(
-          body: EateryDB.instance.companyBox.isNotEmpty
+          body: EateryDB.instance.companyBox != null ? EateryDB.instance.companyBox!.isNotEmpty
               ? const LoginPage()
-              : const CreateCompanyPage(),
+              : const CreateCompanyPage() : Center(child: CircularProgressIndicator(color: ColorStyle.brandColor,)),
         ));
   }
 }
