@@ -17,8 +17,10 @@ class Body2 extends StatelessWidget {
       this.callbackFormKey})
       : super(key: key);
 
-  final focus1 = FocusNode();
-  final focus2 = FocusNode();
+  List<FocusNode> focusNodes = [
+    FocusNode(),
+    FocusNode(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -41,11 +43,11 @@ class Body2 extends StatelessWidget {
             isPassword: true,
             title: 'Secure PIN',
             hint: 'Enter secure pin...',
-            focusNode: focus1,
+            focusNode: focusNodes[0],
             textInputAction: TextInputAction.next,
             onFieldSubmitted: (v) {
               if (callbackFormKey != null) callbackFormKey!(formKey);
-              FocusScope.of(context).requestFocus(focus2);
+              FocusScope.of(context).requestFocus(focusNodes[1]);
             },
             validator: (value) {
               if (value!.trim().isEmpty) return 'Pin cannot be blank';
@@ -63,7 +65,7 @@ class Body2 extends StatelessWidget {
             isPassword: true,
             title: 'Confirm Secure PIN',
             hint: 'Confirm secure pin...',
-            focusNode: focus2,
+            focusNode: focusNodes[1],
             textInputAction: TextInputAction.done,
             validator: (value) {
               if (!value!.trim().isNumericOnly) return 'Invalid character';

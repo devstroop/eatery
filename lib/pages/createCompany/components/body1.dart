@@ -23,9 +23,12 @@ class Body1 extends StatelessWidget {
       this.callbackFormKey})
       : super(key: key);
 
-  final focus1 = FocusNode();
-  final focus2 = FocusNode();
-  final focus3 = FocusNode();
+  List<FocusNode> focusNodes = [
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -55,9 +58,10 @@ class Body1 extends StatelessWidget {
               title: 'Company name',
               hint: 'Enter company name...',
               textInputAction: TextInputAction.next,
+              focusNode: focusNodes[0],
               onFieldSubmitted: (v) {
                 if (callbackFormKey != null) callbackFormKey!(formKey);
-                FocusScope.of(context).requestFocus(focus1);
+                FocusScope.of(context).requestFocus(focusNodes[1]);
               },
               validator: (value) {
                 if (value!.trim().isEmpty) {
@@ -72,11 +76,11 @@ class Body1 extends StatelessWidget {
               controller: emailController,
               title: 'Email address',
               hint: 'Enter email address...',
-              focusNode: focus1,
+              focusNode: focusNodes[1],
               textInputAction: TextInputAction.next,
               onFieldSubmitted: (v) {
                 if (callbackFormKey != null) callbackFormKey!(formKey);
-                FocusScope.of(context).requestFocus(focus2);
+                FocusScope.of(context).requestFocus(focusNodes[2]);
               },
               validator: (value) {
                 if (value!.trim().isEmpty) return 'Email cannot be blank';
@@ -92,11 +96,11 @@ class Body1 extends StatelessWidget {
               controller: phoneController,
               title: 'Phone no',
               hint: 'Enter phone no...',
-              focusNode: focus2,
+              focusNode: focusNodes[2],
               textInputAction: TextInputAction.next,
               onFieldSubmitted: (v) {
                 if (callbackFormKey != null) callbackFormKey!(formKey);
-                FocusScope.of(context).requestFocus(focus3);
+                FocusScope.of(context).requestFocus(focusNodes[3]);
               },
               validator: (value) {
                 if (value!.trim().isEmpty) {
@@ -114,7 +118,7 @@ class Body1 extends StatelessWidget {
             controller: addressController,
             label: 'Address',
             hint: 'Enter address...',
-            focusNode: focus3,
+            focusNode: focusNodes[3],
             textInputAction: TextInputAction.done,
             multiline: true,
             validator: (value) {
