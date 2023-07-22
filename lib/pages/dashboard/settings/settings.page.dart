@@ -99,12 +99,6 @@ class _SettingPageState extends State<SettingPage> {
       backgroundColor: getThemeColor(),
       title: const Text('Settings'),
       foregroundColor: Colors.white,
-      leading: IconButton(
-        icon: Icon(Icons.arrow_left),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      )
     );
     return Scaffold(
       appBar: appBar,
