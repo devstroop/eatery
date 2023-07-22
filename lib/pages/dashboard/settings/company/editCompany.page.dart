@@ -58,12 +58,6 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
             appBar: AppBar(
               backgroundColor: themeColor,
               title: const Text('Company Details'),
-              leading: IconButton(
-                icon: Icon(UIcons.regularStraight.arrow_left),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              ),
             ),
             body: Padding(
               padding: SpacingStyle.defaultPadding,

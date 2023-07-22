@@ -21,7 +21,8 @@ class _ShowCurrencyRegionPageState extends State<ShowCurrencyRegionPage> {
         int? currencyId = GlobalVariables.company?.currencyId;
         KCurrency? currencyObj = currencyId != null ? EateryDB.instance.currencyBox.values
             .singleWhere((element) => element.id == currencyId) : null;
-        selectedCurrency = currencyObj?.toCurrency();
+        var map = currencyObj?.toMap();
+        selectedCurrency = map != null ? Currency.from(json: map) : null;
       });
     });
   }
@@ -33,12 +34,6 @@ class _ShowCurrencyRegionPageState extends State<ShowCurrencyRegionPage> {
         backgroundColor: themeColor,
         foregroundColor: ColorStyle.textColorLight,
         title: const Text('Region and Currency'),
-        leading: IconButton(
-          icon: Icon(UIcons.regularStraight.arrow_left),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

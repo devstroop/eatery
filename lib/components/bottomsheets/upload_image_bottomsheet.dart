@@ -44,19 +44,17 @@ class _UploadImageBottomSheetState extends State<UploadImageBottomSheet> {
       final response = await http.get(Uri.parse(urlImage!));
       // Get the image name
       final imageName = path.basename(urlImage!);
-
       if (!(Directory('${(await AppFileSystem.appDataRoot()).path}/images'))
           .existsSync()) {
         await Directory('${(await AppFileSystem.appDataRoot()).path}/images')
             .create(recursive: true);
       }
-      localPath =
-          '${'${(await AppFileSystem.appDataRoot()).path}/images'}/${getRandomString(32)}.${imageName.split('.').last}';
-
+      localPath = '${'${(await AppFileSystem.appDataRoot()).path}/images'}/${getRandomString(32)}.${imageName.split('.').last}';
       final imageFile = File(localPath);
-      await imageFile.writeAsBytes(response.bodyBytes);
-      widget.action(localPath);
-      Navigator.pop(widget.context);
+      imageFile.writeAsBytes(response.bodyBytes).then((value) {
+        widget.action(localPath);
+        Navigator.pop(widget.context);
+      });
     } catch (e) {
       Navigator.pop(widget.context);
       showSnackBar(this.context, e.toString());
@@ -79,7 +77,9 @@ class _UploadImageBottomSheetState extends State<UploadImageBottomSheet> {
       photo.saveTo(path);
     }
     widget.action(path);
-    Navigator.pop(widget.context);
+    Future.delayed(Duration.zero, () {
+      Navigator.pop(widget.context);
+    });
   }
 
   Future pickFromCamera() async {
@@ -93,12 +93,15 @@ class _UploadImageBottomSheetState extends State<UploadImageBottomSheet> {
         await Directory('${(await AppFileSystem.appDataRoot()).path}/images')
             .create(recursive: true);
       }
-      path =
-          '${'${(await AppFileSystem.appDataRoot()).path}/images'}/${getRandomString(32)}.${photo.name.split('.').last}';
-      photo.saveTo(path);
+      AppFileSystem.appDataRoot().then((appDataRoot) async {
+        path = '${'${appDataRoot.path}/images'}/${getRandomString(32)}.${photo.name.split('.').last}';
+        photo.saveTo(path!);
+      });
     }
     widget.action(path);
-    Navigator.pop(widget.context);
+    Future.delayed(Duration.zero, () {
+      Navigator.pop(widget.context);
+    });
   }
 
   @override
@@ -121,7 +124,7 @@ class _UploadImageBottomSheetState extends State<UploadImageBottomSheet> {
                   Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: IconButton(
-                        icon: Icon(UIcons.regularStraight.upload),
+                        icon: const Icon(Icons.upload),
                         iconSize: 72.0,
                         color: ColorStyle.information,
                         onPressed: pickFromUrl,
@@ -129,7 +132,7 @@ class _UploadImageBottomSheetState extends State<UploadImageBottomSheet> {
                 Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: IconButton(
-                      icon: Icon(UIcons.regularStraight.upload),
+                      icon: const Icon(Icons.photo_library),
                       iconSize: urlImage != null ? 36.0 : 60,
                       color: ColorStyle.text300,
                       onPressed: pickFromGallery,
@@ -137,7 +140,7 @@ class _UploadImageBottomSheetState extends State<UploadImageBottomSheet> {
                 Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: IconButton(
-                      icon: Icon(UIcons.regularStraight.camera),
+                      icon: const Icon(Icons.camera),
                       iconSize: urlImage != null ? 36.0 : 60,
                       color: ColorStyle.text300,
                       onPressed: pickFromCamera,
