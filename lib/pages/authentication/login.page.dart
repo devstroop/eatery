@@ -60,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
         actions: [
           IconButton(
             icon: Icon(
-              UIcons.regularStraight.time_past,
+              Icons.settings_backup_restore,
               color: ColorStyle.text200,
             ),
             onPressed: () {

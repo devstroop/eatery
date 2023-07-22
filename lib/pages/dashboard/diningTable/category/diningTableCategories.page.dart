@@ -17,12 +17,7 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
       appBar: AppBar(
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(UIcons.regularStraight.arrow_left),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+
         title: const Text('Dining Table Categories'),
       ),
       body: ListView(
@@ -57,7 +52,7 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
                 children: [
                   IconButton(
                     icon: Icon(
-                      UIcons.regularStraight.pencil,
+                      Icons.edit,
                       color: _pageColor,
                     ),
                     onPressed: () {
@@ -71,7 +66,7 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
                   ),
                   IconButton(
                     icon: Icon(
-                      UIcons.regularStraight.trash,
+                      Icons.delete,
                       color: _pageColor,
                     ),
                     onPressed: () {
@@ -147,8 +142,8 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
         label: const Text('Add Category'),
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
-        icon: Icon(
-          UIcons.regularStraight.plus_small,
+        icon: const Icon(
+          Icons.add,
         ),
         onPressed: () {
           Navigator.push(

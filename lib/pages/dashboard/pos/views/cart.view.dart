@@ -10,12 +10,6 @@ class CartView extends StatelessWidget {
           title: const Text('Cart'),
           backgroundColor: Colors.transparent,
           foregroundColor: ColorStyle.text200,
-          leading: IconButton(
-            icon: Icon(UIcons.regularStraight.arrow_left),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
       ),
 
       Container(

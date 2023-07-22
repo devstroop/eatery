@@ -38,16 +38,12 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
 
   @override
   Widget build(BuildContext context) {
+    List<TaxSlab> slabs = EateryDB.instance.taxSlabBox.values.toList();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(UIcons.regularStraight.arrow_left),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        
         title: const Text('Add Inventory Item'),
       ),
       body: Padding(
@@ -90,7 +86,7 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
                   Flexible(
                     child: LabeledCustomTextFromField(
                         label: 'MRP (Max. retail price)',
-                        prefix: Icon(UIcons.regularStraight.rupee_sign, size: 14,),
+                        prefix: const Icon(Icons.currency_rupee, size: 14,),
                         hint: '0.00',
                         themeColor: _pageColor,
                         focusNode: focus2,
@@ -111,7 +107,7 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
                   Flexible(
                     child: LabeledCustomTextFromField(
                         label: 'Sale Price',
-                        prefix: Icon(UIcons.regularStraight.rupee_sign, size: 14,),
+                        prefix: const Icon(Icons.currency_rupee, size: 14,),
                         hint: '0.00',
                         themeColor: _pageColor,
                         focusNode: focus3,
@@ -188,17 +184,14 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
                 foregroundColor: selectedTaxSlab == null ? Colors.white : ColorStyle.text200,
                 children: [
                   'None',
-                  for (var each in EateryDB.instance.taxSlabBox.values)
-                    each.name
+                  ...slabs.map((e) => e.name)
                 ],
-                selectedIndex: (selectedTaxSlab?.id == null) ? 0 : selectedTaxSlab?.id,
+                selectedIndex: (selectedTaxSlab == null) ? 0 : slabs.indexOf(selectedTaxSlab!),
                 onChange: (int? index) {
-                  if (index == 0) {
+                  if (index == 0 || index == null) {
                     selectedTaxSlab = null;
                   } else {
-                    selectedTaxSlab = EateryDB
-                        .instance.taxSlabBox.values
-                        .singleWhere((element) => element.id == index);
+                    selectedTaxSlab = slabs[index];
                   }
                   setState(() {});
                 },
@@ -289,7 +282,6 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
 
             try {
               Product product = Product(
-                  id: EateryDB.instance.productBox.nextId(),
                   name: _controllerName.text,
                   categoryId: selectedCategory?.id,
                   description: _controllerDescription.text,

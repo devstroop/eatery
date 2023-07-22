@@ -40,7 +40,7 @@ class _TaxSlabsSettingsPageState extends State<TaxSlabsSettingsPage> {
       backgroundColor: getThemeColor(),
       title: const Text('Tax Slab Settings'),
       leading: IconButton(
-        icon: Icon(UIcons.regularStraight.arrow_left),
+        icon: Icon(Icons.arrow_left),
         onPressed: () {
           Navigator.pop(context);
         },
@@ -89,7 +89,7 @@ class _TaxSlabsSettingsPageState extends State<TaxSlabsSettingsPage> {
                               color: ColorStyle.backgroundColorAlter),
                         )),
                     subtitle: Text(taxSlab.type.name ?? 'None'),
-                    trailing:  Icon(UIcons.regularStraight.arrow_right),
+                    trailing:  Icon(Icons.arrow_right),
                   ),
                 ),
             ],
@@ -104,7 +104,7 @@ class _TaxSlabsSettingsPageState extends State<TaxSlabsSettingsPage> {
                   const AddTaxSlabSettingsPage()),
         ).then((_) => setState(() {})),
         backgroundColor: getThemeColor(),
-        child: Icon(UIcons.regularStraight.plus_small),
+        child: const Icon(Icons.add),
       ),
     );
   }

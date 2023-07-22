@@ -81,7 +81,7 @@ class DiningTableSelectionCard extends StatelessWidget {
                   top: 6,
                   right: 6,
                   child: Icon(
-                    UIcons.regularStraight.check,
+                    Icons.check,
                     color: color,
                     size: 18.0,
                   ),

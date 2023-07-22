@@ -18,12 +18,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
         title: const Text('Calculator'),
         backgroundColor: Color.fromARGB(0, 47, 24, 130),
         foregroundColor: const Color.fromARGB(255, 0, 0, 0),
-        leading: IconButton(
-          icon: Icon(UIcons.regularStraight.arrow_left),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        
       ),
       body: Container(
         color: Colors.white,

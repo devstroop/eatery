@@ -97,7 +97,7 @@ class Body4 extends StatelessWidget {
           //         title: 'Default ${edition.name} Rate',
           //         hint: '${edition.name} Rate',
           //         suffix: Icon(
-          //           UIcons.regularStraight.percentage,
+          //           Icons.percentage,
           //           color: ColorStyle.text400,
           //           size: 18,
           //         ),

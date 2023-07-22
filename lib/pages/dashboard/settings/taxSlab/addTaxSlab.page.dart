@@ -26,7 +26,6 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
 
     try {
       TaxSlab taxSlab = TaxSlab(
-          id: EateryDB.instance.taxSlabBox.nextId(),
           name: controllerSlabName.text,
           rate: double.parse(controllerTaxRate.text),
           type: _taxType);
@@ -45,12 +44,7 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
       appBar: AppBar(
         backgroundColor: localColor,
         title: const Text('Add Tax Slab'),
-        leading: IconButton(
-          icon: Icon(UIcons.regularStraight.arrow_left),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -111,7 +105,7 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
                       themeColor: localColor,
                       focusNode: focus2,
                       suffix: Icon(
-                        UIcons.regularStraight.percentage,
+                        Icons.percent,
                         color: ColorStyle.text400,
                       ),
                       keyboardType:

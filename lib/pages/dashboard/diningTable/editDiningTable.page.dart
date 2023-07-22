@@ -35,12 +35,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
       appBar: AppBar(
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(UIcons.regularStraight.arrow_left),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        
         title: const Text('Edit Dining Table'),
         actions: [
           IconButton(
@@ -72,7 +67,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                 },
               );
             },
-            icon: Icon(UIcons.regularStraight.trash),
+            icon: const Icon(Icons.delete),
           )
         ],
       ),
@@ -182,7 +177,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
             widget.diningTable.description = _controllerCategoryDescription.text;
             widget.diningTable.image = image?.filename;
             EateryDB.instance.diningTableBox
-                .put(widget.diningTable.key, widget.diningTable)
+                .put(widget.diningTable.id, widget.diningTable)
                 .whenComplete(() {
               showSnackBar(context, 'Successfully updated');
               Navigator.of(context).pop();

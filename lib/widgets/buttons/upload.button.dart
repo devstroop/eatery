@@ -74,7 +74,7 @@ class _UploadButtonState extends State<UploadButton> {
                       if (widget.image == null)
                         Center(
                             child: Icon(
-                          UIcons.regularStraight.mode_landscape,
+                          Icons.photo_library,
                           size: 54,
                           color: widget.primaryColor.withOpacity(0.50),
                         )),
@@ -110,8 +110,8 @@ class _UploadButtonState extends State<UploadButton> {
                                   borderRadius: BorderRadius.circular(8),
                                   color: const Color(0xFFB63A3A),
                                 ),
-                                child: Icon(
-                                  UIcons.regularStraight.minus_small,
+                                child: const Icon(
+                                  Icons.remove,
                                   size: 16,
                                   color: Colors.white,
                                 ),
@@ -161,7 +161,7 @@ class _UploadButtonState extends State<UploadButton> {
                     width: 72,
                     height: 72,
                     child: Icon(
-                      UIcons.regularStraight.clip,
+                      Icons.attach_file,
                       size: 24,
                       color: widget.primaryColor,
                     ),

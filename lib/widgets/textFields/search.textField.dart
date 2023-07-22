@@ -23,7 +23,7 @@ class SearchTextField extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(
         prefixIcon:
-            Icon(UIcons.regularStraight.search, color: ColorStyle.text400),
+            Icon(Icons.search, color: ColorStyle.text400),
         hintText: hintText,
         hintStyle: TextStyle(
           color: ColorStyle.text400,

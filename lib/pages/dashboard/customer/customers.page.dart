@@ -17,24 +17,17 @@ class _CustomersPageState extends State<CustomersPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Customer> customers = EateryDB.instance.customerBox.values.toList();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: _pageColor,
         title: const Text('Customers'),
         foregroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(UIcons.regularStraight.arrow_left),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
       ),
-      body: customers.isNotEmpty
+      body: EateryDB.instance.customerBox.values.isNotEmpty
           ? ListView(
               children: [
-                ...customers.map((e) {
-                  return ListTile(
+                for(var e in EateryDB.instance.customerBox.values)
+                  ListTile(
                       title: Text(
                         e.name,
                         style: const TextStyle(fontWeight: FontWeight.w600),
@@ -44,19 +37,19 @@ class _CustomersPageState extends State<CustomersPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
-                            icon: Icon(UIcons.regularStraight.pencil,
+                            icon: Icon(Icons.edit,
                                 color: _pageColor),
                             onPressed: () {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        EditCustomerPage(customer: e)),
+                                        EditCustomerPage(customerKey: e.id!)),
                               ).then((_) => setState(() {}));
                             },
                           ),
                           IconButton(
-                            icon: Icon(UIcons.regularStraight.trash,
+                            icon: Icon(Icons.delete,
                                 color: _pageColor),
                             onPressed: () {
                               showDialog(
@@ -89,29 +82,28 @@ class _CustomersPageState extends State<CustomersPage> {
                             },
                           ),
                         ],
-                      ));
-                })
+                      )),
               ],
             )
-          : Center(
+          : const Center(
               child: Opacity(
               opacity: 0.5,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    UIcons.regularStraight.user,
+                    Icons.person,
                     size: 64,
                   ),
-                  const SizedBox(height: 16),
-                  const Text(
+                  SizedBox(height: 16),
+                  Text(
                     'No Customers',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const Text(
+                  Text(
                     'Add a customer to get started',
                     style: TextStyle(
                       fontSize: 16,
@@ -124,7 +116,7 @@ class _CustomersPageState extends State<CustomersPage> {
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
         label: const Text('Add Customer'),
-        icon: Icon(UIcons.regularStraight.plus_small),
+        icon: const Icon(Icons.add),
         onPressed: () {
           Navigator.push(
             context,

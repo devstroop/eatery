@@ -2,14 +2,14 @@ import 'package:eatery/references.dart';
 
 Color _pageColor = const Color(0xFFC2592F);
 
-class AddWaiterPage extends StatefulWidget {
-  const AddWaiterPage({Key? key}) : super(key: key);
+class AddStaffPage extends StatefulWidget {
+  const AddStaffPage({Key? key}) : super(key: key);
 
   @override
-  State<AddWaiterPage> createState() => _AddWaiterPageState();
+  State<AddStaffPage> createState() => _AddStaffPageState();
 }
 
-class _AddWaiterPageState extends State<AddWaiterPage> {
+class _AddStaffPageState extends State<AddStaffPage> {
   LibraryImage? image;
   bool isActive = true;
   final TextEditingController _controllerWaiterName = TextEditingController();
@@ -24,12 +24,7 @@ class _AddWaiterPageState extends State<AddWaiterPage> {
           backgroundColor: _pageColor,
           foregroundColor: Colors.white,
           title: const Text('Add Waiter'),
-          leading: IconButton(
-            icon: Icon(UIcons.regularStraight.arrow_left),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )),
+          ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Form(
@@ -113,13 +108,12 @@ class _AddWaiterPageState extends State<AddWaiterPage> {
             _formKey.currentState!.save();
 
             try {
-              EateryDB.instance.waiterBox.add(
-                Waiter(
-                  id: EateryDB.instance.waiterBox.nextId(),
+              EateryDB.instance.staffBox.add(
+                Staff(
                   name: _controllerWaiterName.text,
                   phone: _controllerWaiterPhone.text,
                   photo: image?.filename,
-                  isActive: isActive
+                  isActive: isActive, type: StaffType.other // TODO: Fix this section
                 ),
               ).whenComplete(() {
                 showSnackBar(context, 'Waiter added successfully');

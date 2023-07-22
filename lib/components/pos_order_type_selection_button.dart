@@ -1,8 +1,8 @@
 import 'package:eatery/references.dart';
 
 class PosOrderTypeSelectionButton extends StatelessWidget {
-  const PosOrderTypeSelectionButton({Key? key, required this.iconData, required this.text, this.onTap, required this.themeColor}) : super(key: key);
-  final IconData iconData;
+  const PosOrderTypeSelectionButton({Key? key, required this.icon, required this.text, this.onTap, required this.themeColor}) : super(key: key);
+  final Widget icon;
   final Color themeColor;
   final String text;
   final Function()? onTap;
@@ -13,7 +13,7 @@ class PosOrderTypeSelectionButton extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(iconData, color: themeColor,),
+          icon, // TODO: Implement icon color override
           const SizedBox(width: 6.0),
           Text(
             text,
@@ -26,7 +26,7 @@ class PosOrderTypeSelectionButton extends StatelessWidget {
           ),
           const SizedBox(width: 3.0),
           Icon(
-            UIcons.regularStraight.arrow_small_up,
+            Icons.arrow_drop_up,
             color: themeColor,
             size: 16,
           ),

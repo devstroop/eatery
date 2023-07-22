@@ -36,17 +36,12 @@ class _EditDiningTableCategoryPageState
     final appBar = AppBar(
       backgroundColor: _pageColor,
       foregroundColor: Colors.white,
-      leading: IconButton(
-        icon: Icon(UIcons.regularStraight.arrow_left),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
+      
       title: const Text('Edit Table Category'),
       actions: [
         IconButton(
-          icon: Icon(
-            UIcons.regularStraight.trash,
+          icon: const Icon(
+            Icons.delete,
           ),
           onPressed: () {
             showDialog(
@@ -228,6 +223,6 @@ class _EditDiningTableCategoryPageState
             },
           );
         },
-        icon: Icon(UIcons.regularStraight.trash),
+        icon: Icon(Icons.trash),
       );*/
 }

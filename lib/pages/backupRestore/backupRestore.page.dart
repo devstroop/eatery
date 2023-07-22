@@ -55,12 +55,6 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
-      leading: IconButton(
-        icon: Icon(UIcons.regularStraight.arrow_left),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
       backgroundColor: _pageColor,
       foregroundColor: Colors.white,
       title: const Text('Backup / Restore'),
@@ -72,17 +66,17 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
           children: [
             ListTile(
               onTap: doBackup,
-              leading: Icon(UIcons.regularStraight.time_past),
+              leading: const Icon(Icons.backup),
               title: const Text('Backup'),
               subtitle: const Text('Backup data to Google Drive'),
-              trailing: Icon(UIcons.regularStraight.arrow_small_right),
+              trailing: const Icon(Icons.restore),
             ),
             ListTile(
               onTap: doRestore,
-              leading: Icon(UIcons.regularStraight.time_forward),
+              leading: const Icon(Icons.restore),
               title: const Text('Restore'),
               subtitle: const Text('Restore data from Google Drive'),
-              trailing: Icon(UIcons.regularStraight.arrow_small_right),
+              trailing: const Icon(Icons.chevron_right),
             ),
         
       ]),

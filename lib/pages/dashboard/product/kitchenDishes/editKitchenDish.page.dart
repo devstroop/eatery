@@ -57,12 +57,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
       appBar: AppBar(
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(UIcons.regularStraight.arrow_left),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        
         title: const Text('Edit Kitchen Dish'),
       ),
       body: Padding(
@@ -105,7 +100,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
                   Flexible(
                     child: LabeledCustomTextFromField(
                         label: 'MRP (Max. retail price)',
-                        prefix: Icon(UIcons.regularStraight.rupee_sign, size: 14,),
+                        prefix: const Icon(Icons.currency_rupee, size: 14,),
                         hint: '0.00',
                         themeColor: _pageColor,
                         focusNode: focus2,
@@ -126,7 +121,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
                   Flexible(
                     child: LabeledCustomTextFromField(
                         label: 'Sale Price',
-                        prefix: Icon(UIcons.regularStraight.rupee_sign, size: 14,),
+                        prefix: const Icon(Icons.currency_rupee, size: 14,),
                         hint: '0.00',
                         themeColor: _pageColor,
                         focusNode: focus3,

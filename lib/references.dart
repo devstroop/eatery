@@ -123,9 +123,9 @@ export './pages/dashboard/customer/addCustomer.page.dart';
 export './pages/dashboard/customer/editCustomer.page.dart';
 export './pages/dashboard/customer/customers.page.dart';
 // Internal references
-export './pages/dashboard/waiter/waiters.page.dart';
-export './pages/dashboard/waiter/addWaiter.page.dart';
-export './pages/dashboard/waiter/editWaiter.page.dart';
+export './pages/dashboard/staff/staffs.page.dart';
+export './pages/dashboard/staff/addStaff.page.dart';
+export './pages/dashboard/staff/editStaff.page.dart';
 // Internal references
 export './pages/dashboard/help/help.page.dart';
 // Internal references

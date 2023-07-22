@@ -38,7 +38,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
         Body1(
           formKey: formKeys[0],
           selectedLibraryImage: libraryImageLogo,
-          themeColor: themeColor,
+          pageColor: themeColor,
           restaurantNameController: _controllerRestaurantName,
           emailController: _controllerEmailAddress,
           phoneController: _controllerPhoneNumber,
@@ -84,7 +84,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
           taxType: _taxType,
           onTaxTypeChanged: (int? index) {
             _taxType =
-                TaxType.values.singleWhere((element) => element.id == index);
+                TaxType.values.singleWhere((element) => element.index == index);
             setState(() {});
           },
           callbackFormKey: (formKey) => setState(() {
@@ -188,9 +188,8 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
             themeColor: themeColor,
             callback: (index) async {
               try {
-                TaxSlab? taxSlab = _controllerDefaultTaxPercent.text.isNotEmpty
+                /*TaxSlab? taxSlab = _controllerDefaultTaxPercent.text.isNotEmpty
                     ? TaxSlab(
-                        id: EateryDB.instance.taxSlabBox.nextId(),
                         name: 'default',
                         rate: double.parse(_controllerDefaultTaxPercent.text),
                         type: _taxType)
@@ -205,21 +204,19 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                     }
                   }
                   await EateryDB.instance.taxSlabBox.add(taxSlab);
-                }
+                }*/
 
                 // Subscription
                 Subscription subscription = Subscription(
-                    id: EateryDB.instance.subscriptionBox.nextId(),
                     purchaseCode: purchaseCode,
                     validFrom: validFrom,
                     validTill: validTill,
                     subscriptionType: subscriptionType);
                 await EateryDB.instance.subscriptionBox.add(subscription);
 
-                kCurrency? _kCurrency;
+                KCurrency? _kCurrency;
                 if (currency != null) {
-                  _kCurrency = kCurrency(
-                      id: 1,
+                  _kCurrency = KCurrency(
                       name: currency!.name,
                       code: currency!.code,
                       symbol: currency!.symbol,
@@ -236,7 +233,6 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                 }
                 // COMPANY
                 Company company = Company(
-                  id: 1,
                   name: _controllerRestaurantName.text,
                   logo: libraryImageLogo?.filename,
                   email: _controllerEmailAddress.text,
@@ -246,7 +242,6 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                   edition: edition,
                   foodLicenseNo: _controllerFoodLicNo.text,
                   salesTaxNumber: _controllerTaxLicNo.text,
-                  defaultTaxSlabId: taxSlab?.id,
                   subscriptionId: subscription.id,
                   currencyId: _kCurrency?.id,
                 );
@@ -278,7 +273,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
         leading: viewIndex != 0
             ? IconButton(
                 icon: Icon(
-                  UIcons.regularStraight.arrow_small_left,
+                  Icons.arrow_back,
                   color: themeColor,
                 ),
                 onPressed: () {

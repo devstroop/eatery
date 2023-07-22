@@ -1,20 +1,15 @@
 import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
-import 'package:eatery/components/custom_text_from_field.dart';
-import 'package:eatery/components/dialog_box.dart';
 import 'package:eatery/services/utility/show_snack_bar.dart';
 import 'package:eatery/constants/style/color_style.dart';
-
 import '../../../components/labeled_custom_text_from_field.dart';
-import '../../../services/utility/library_image.dart';
+import '../../../constants/style/spacing_style.dart';
 import '../../../widgets/buttons/primary.button.dart';
-import '../../../widgets/buttons/upload.button.dart';
 
 Color _pageColor = ColorStyle.primary;
 
 class EditCustomerPage extends StatefulWidget {
-  const EditCustomerPage({Key? key, required this.customer}) : super(key: key);
-  final Customer customer;
+  const EditCustomerPage({Key? key, required this.customerKey}) : super(key: key);
+  final int customerKey;
 
   @override
   State<EditCustomerPage> createState() => _EditCustomerPageState();
@@ -23,19 +18,30 @@ class EditCustomerPage extends StatefulWidget {
 class _EditCustomerPageState extends State<EditCustomerPage> {
   bool isActive = true;
   final TextEditingController _controllerCustomerName = TextEditingController();
-  final TextEditingController _controllerCustomerPhone = TextEditingController();
-
+  final TextEditingController _controllerCustomerPhone =
+      TextEditingController();
+  final TextEditingController _controllerCustomerEmail =
+      TextEditingController();
+  final TextEditingController _controllerCustomerAddress =
+      TextEditingController();
+  final TextEditingController _controllerCustomerLandmark =
+      TextEditingController();
   final _formKey = GlobalKey<FormState>();
+  Customer? customer;
 
   @override
   initState() {
     super.initState();
-    Future.delayed(Duration.zero, (){
+    Future.delayed(Duration.zero, () {
+      customer = EateryDB.instance.customerBox.get(widget.customerKey);
       setState(() {
-        _controllerCustomerName.text = widget.customer.name;
-        _controllerCustomerPhone.text = widget.customer.phone ?? '';
-        isActive = widget.customer.isActive;
-       });
+        _controllerCustomerName.text = customer?.name ?? '';
+        _controllerCustomerPhone.text = customer?.phone ?? '';
+        _controllerCustomerEmail.text = customer?.email ?? '';
+        _controllerCustomerAddress.text = customer?.address ?? '';
+        _controllerCustomerLandmark.text = customer?.landmark ?? '';
+        isActive = customer?.isActive ?? false;
+      });
     });
   }
 
@@ -44,16 +50,10 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
     final appBar = AppBar(
       backgroundColor: _pageColor,
       foregroundColor: Colors.white,
-      leading: IconButton(
-        icon: Icon(UIcons.regularStraight.arrow_left),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
       title: const Text('Edit Customer'),
       actions: [
         IconButton(
-          icon: Icon(UIcons.regularStraight.trash),
+          icon: const Icon(Icons.delete),
           onPressed: () {
             showDialog(
               context: context,
@@ -100,13 +100,12 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
             key: _formKey,
             child: ListView(
               children: [
-                
                 LabeledCustomTextFromField(
                   controller: _controllerCustomerName,
                   label: 'Customer Name',
                   themeColor: _pageColor,
                   foregroundColor: ColorStyle.text200,
-                  hint: 'Enter Customer Name',
+                  hint: 'Enter customer name',
                 ),
                 const SizedBox(
                   height: 6.0,
@@ -117,11 +116,44 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
                   themeColor: _pageColor,
                   foregroundColor: ColorStyle.text200,
                   keyboardType: TextInputType.phone,
-                  hint: 'Enter Phone Number',
+                  hint: 'Enter phone number',
                 ),
-                const SizedBox(
-                  height: 6.0,
+                SpacingStyle.defaultVerticalSpacing,
+                LabeledCustomTextFromField(
+                    controller: _controllerCustomerEmail,
+                    label: 'Email Address',
+                    hint: 'Enter email address',
+                    themeColor: _pageColor,
+                    foregroundColor: ColorStyle.text200,
+                    keyboardType: TextInputType.emailAddress,
+                    textInputAction: TextInputAction.next,
+                    validator: (value) {
+                      if (value!.trim().isEmpty) return 'Email cannot be blank';
+                      if (!value.trim().isValidEmail()) {
+                        return 'Email address is not valid';
+                      }
+                      return null;
+                    }),
+                SpacingStyle.defaultVerticalSpacing,
+                LabeledCustomTextFromField(
+                  controller: _controllerCustomerAddress,
+                  label: 'Address',
+                  themeColor: _pageColor,
+                  foregroundColor: ColorStyle.text200,
+                  keyboardType: TextInputType.streetAddress,
+                  hint: 'Enter full address',
+                  multiline: true,
                 ),
+                SpacingStyle.defaultVerticalSpacing,
+                LabeledCustomTextFromField(
+                  controller: _controllerCustomerLandmark,
+                  label: 'Landmark (Optional)',
+                  themeColor: _pageColor,
+                  foregroundColor: ColorStyle.text200,
+                  keyboardType: TextInputType.text,
+                  hint: 'Enter landmark',
+                ),
+                SpacingStyle.defaultVerticalSpacing,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -164,16 +196,23 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
             }
             _formKey.currentState!.save();
 
-            widget.customer.name = _controllerCustomerName.text;
-            widget.customer.phone = _controllerCustomerPhone.text;
-            widget.customer.isActive = isActive;
+            customer?.name = _controllerCustomerName.text;
+            customer?.phone = _controllerCustomerPhone.text;
+            customer?.email = _controllerCustomerEmail.text;
+            customer?.address = _controllerCustomerAddress.text;
+            customer?.landmark = _controllerCustomerLandmark.text;
+            customer?.isActive = isActive;
+
             try {
-              // EateryDB.instance.customerBox.put(widget.customer.key,
-              //   widget.customer,
-              // ).whenComplete(() {
-              //   showSnackBar(context, 'Customer updated successfully');
-              //   Navigator.pop(context);
-              // });
+              EateryDB.instance.customerBox
+                  .put(
+                widget.customerKey,
+                customer!,
+              )
+                  .whenComplete(() {
+                showSnackBar(context, 'Customer updated successfully');
+                Navigator.pop(context);
+              });
             } catch (_) {
               showSnackBar(context, 'Failed to add customer');
             }

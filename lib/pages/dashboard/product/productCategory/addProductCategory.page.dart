@@ -20,12 +20,7 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
     final appBar = AppBar(
       foregroundColor: Colors.white,
       backgroundColor: _pageColor,
-      leading: IconButton(
-        icon: Icon(UIcons.regularStraight.arrow_left),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
+      
       title: const Text('Add Product Category'),
     );
     return Scaffold(
@@ -91,7 +86,6 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
             try {
               EateryDB.instance.productCategoryBox
                   .add(ProductCategory(
-                      id: EateryDB.instance.productCategoryBox.nextId(),
                       name: _controllerCategoryName.text,
                       description: _controllerCategoryDescription.text,
                       image: pickedLibraryImage?.filename))

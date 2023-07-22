@@ -88,7 +88,7 @@ class DiningTableCard extends StatelessWidget {
                 ),
                 if (diningTable.isActive)
                   Icon(
-                    UIcons.regularStraight.check,
+                    Icons.check,
                     color: ColorStyle.success,
                   )
               ],

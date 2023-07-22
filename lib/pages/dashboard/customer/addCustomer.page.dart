@@ -1,3 +1,4 @@
+import 'package:eatery/constants/style/spacing_style.dart';
 import 'package:eatery/constants/utils/utils.dart';
 import 'package:eatery_db/eatery_db.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,12 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
   final TextEditingController _controllerCustomerName = TextEditingController();
   final TextEditingController _controllerCustomerPhone =
       TextEditingController();
+  final TextEditingController _controllerCustomerEmail =
+      TextEditingController();
+  final TextEditingController _controllerCustomerAddress =
+      TextEditingController();
+  final TextEditingController _controllerCustomerLandmark =
+      TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
 
@@ -28,13 +35,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
       appBar: AppBar(
           backgroundColor: _pageColor,
           foregroundColor: Colors.white,
-          title: const Text('Add Customer'),
-          leading: IconButton(
-            icon: Icon(UIcons.regularStraight.arrow_left),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )),
+          title: const Text('Add Customer'),),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Form(
@@ -46,7 +47,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                 label: 'Customer Name',
                 themeColor: _pageColor,
                 foregroundColor: ColorStyle.text200,
-                hint: 'Enter Customer Name',
+                hint: 'Enter customer name',
               ),
               const SizedBox(
                 height: 6.0,
@@ -57,11 +58,47 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                 themeColor: _pageColor,
                 foregroundColor: ColorStyle.text200,
                 keyboardType: TextInputType.phone,
-                hint: 'Enter Phone Number',
+                hint: 'Enter phone number',
               ),
-              const SizedBox(
-                height: 6.0,
+
+              SpacingStyle.defaultVerticalSpacing,
+              LabeledCustomTextFromField(
+                controller: _controllerCustomerEmail,
+                label: 'Email Address',
+                hint: 'Enter email address',
+                themeColor: _pageColor,
+                foregroundColor: ColorStyle.text200,
+                keyboardType: TextInputType.emailAddress,
+                textInputAction: TextInputAction.next,
+                  validator: (value) {
+                    if (value!.trim().isEmpty) return 'Email cannot be blank';
+                    if (!value.trim().isValidEmail()) {
+                      return 'Email address is not valid';
+                    }
+                    return null;
+                  }
               ),
+              SpacingStyle.defaultVerticalSpacing,
+              LabeledCustomTextFromField(
+                controller: _controllerCustomerAddress,
+                label: 'Address',
+                themeColor: _pageColor,
+                foregroundColor: ColorStyle.text200,
+                keyboardType: TextInputType.streetAddress,
+                hint: 'Enter full address',
+                multiline: true,
+              ),
+              SpacingStyle.defaultVerticalSpacing,
+              LabeledCustomTextFromField(
+                controller: _controllerCustomerLandmark,
+                label: 'Landmark (Optional)',
+                themeColor: _pageColor,
+                foregroundColor: ColorStyle.text200,
+                keyboardType: TextInputType.text,
+                hint: 'Enter landmark',
+              ),
+
+              SpacingStyle.defaultVerticalSpacing,
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -107,9 +144,11 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
               EateryDB.instance.customerBox
                   .add(
                 Customer(
-                    id: EateryDB.instance.customerBox.nextId(),
                     name: _controllerCustomerName.text,
                     phone: _controllerCustomerPhone.text,
+                    email: _controllerCustomerEmail.text,
+                    address: _controllerCustomerAddress.text,
+                    landmark: _controllerCustomerLandmark.text,
                     isActive: isActive),
               )
                   .whenComplete(() {

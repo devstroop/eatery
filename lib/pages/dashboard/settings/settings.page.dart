@@ -23,10 +23,10 @@ class _SettingPageState extends State<SettingPage> {
       child:
           ListView(scrollDirection: Axis.vertical, shrinkWrap: true, children: [
         MenuTile(
-          prefixIcon: UIcons.regularStraight.business_time,
+          prefixIcon: Icons.business,
           title: 'Company',
           subtitle: 'Manage Company Profile',
-          postfixIcon: UIcons.regularStraight.arrow_right,
+          postfixIcon: Icons.arrow_right,
           color: getThemeColor(),
           onTap: () {
             Navigator.push(
@@ -36,10 +36,10 @@ class _SettingPageState extends State<SettingPage> {
           },
         ),
         MenuTile(
-          prefixIcon: UIcons.regularStraight.dollar,
+          prefixIcon: Icons.attach_money,
           title: 'Currency and Region',
           subtitle: 'Manage Currency and Region Settings',
-          postfixIcon: UIcons.regularStraight.arrow_right,
+          postfixIcon: Icons.arrow_right,
           color: getThemeColor(),
           onTap: () => Navigator.push(
             this.context,
@@ -48,10 +48,10 @@ class _SettingPageState extends State<SettingPage> {
           ),
         ),
         MenuTile(
-          prefixIcon: UIcons.regularStraight.percentage,
+          prefixIcon: Icons.percent,
           title: 'Tax',
           subtitle: 'Manage Tax Slabs',
-          postfixIcon: UIcons.regularStraight.arrow_right,
+          postfixIcon: Icons.arrow_right,
           color: getThemeColor(),
           onTap: () => Navigator.push(
             this.context,
@@ -61,10 +61,10 @@ class _SettingPageState extends State<SettingPage> {
           ),
         ),
         MenuTile(
-          prefixIcon: UIcons.regularStraight.print,
+          prefixIcon: Icons.print,
           title: 'Printer',
           subtitle: 'Manage Printing Devices',
-          postfixIcon: UIcons.regularStraight.arrow_right,
+          postfixIcon: Icons.arrow_right,
           color: getThemeColor(),
           /*onTap: () => Navigator.push(
             context,
@@ -72,10 +72,10 @@ class _SettingPageState extends State<SettingPage> {
           ),*/
         ),
         MenuTile(
-          prefixIcon: UIcons.regularStraight.comment_user,
+          prefixIcon: Icons.comment,
           title: 'Help',
           subtitle: 'Get support',
-          postfixIcon: UIcons.regularStraight.arrow_right,
+          postfixIcon: Icons.arrow_right,
           color: getThemeColor(),
           onTap: () => showModalBottomSheet(
               shape: const RoundedRectangleBorder(
@@ -100,7 +100,7 @@ class _SettingPageState extends State<SettingPage> {
       title: const Text('Settings'),
       foregroundColor: Colors.white,
       leading: IconButton(
-        icon: Icon(UIcons.regularStraight.arrow_left),
+        icon: Icon(Icons.arrow_left),
         onPressed: () {
           Navigator.pop(context);
         },

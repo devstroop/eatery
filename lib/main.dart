@@ -2,8 +2,7 @@ import 'package:eatery/references.dart';
 
 Future main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
-  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding); // bind splash
-  // await setupPermission();
+  FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await setupDirectory();
   await setupDatabase();
 
@@ -49,7 +48,7 @@ Future flushDatabase() async {
   await EateryDB.instance.foodTypeBox.clear();
   await EateryDB.instance.taxSlabBox.clear();
   await EateryDB.instance.taxTypeBox.clear();
-  await EateryDB.instance.waiterBox.clear();
+  await EateryDB.instance.staffBox.clear();
 
   return;
 }

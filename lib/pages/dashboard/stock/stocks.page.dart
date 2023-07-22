@@ -15,12 +15,7 @@ class _StocksPageState extends State<StocksPage> {
           title: const Text('Stocks'),
           backgroundColor: Colors.transparent,
           foregroundColor: Colors.white,
-          leading: IconButton(
-            icon: Icon(UIcons.regularStraight.arrow_left),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
+          
       ),
     );
   }

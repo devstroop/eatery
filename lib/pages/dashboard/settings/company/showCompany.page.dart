@@ -139,15 +139,6 @@ class _ShowCompanyPageState extends State<ShowCompanyPage> {
                       style: const TextStyle(fontWeight: FontWeight.w500),
                     ),
                   ),
-                  ListTile(
-                    leading: const Text('Default tax_slab rate'),
-                    trailing: Text(
-                      company!.defaultTaxSlabId != null
-                          ? '${EateryDB.instance.taxSlabBox.values.singleWhere((element) => element.id == company!.defaultTaxSlabId).rate.toString()}%'
-                          : 'Not Available',
-                      style: const TextStyle(fontWeight: FontWeight.w500),
-                    ),
-                  ),
                 ],
               ),
             ),

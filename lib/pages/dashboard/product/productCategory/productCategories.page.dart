@@ -19,12 +19,7 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
           backgroundColor: _pageColor,
           foregroundColor: Colors.white,
           title: const Text('Product Categories'),
-          leading: IconButton(
-            icon: Icon(UIcons.regularStraight.arrow_left),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )),
+          ),
       body: categories.isNotEmpty ? ListView(
         children: [
           ListTile(
@@ -59,7 +54,7 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   IconButton(
-                    icon: Icon(UIcons.regularStraight.pencil, color: _pageColor,),
+                    icon: Icon(Icons.edit, color: _pageColor,),
                     onPressed: () {
                       Navigator.push(
                         context,
@@ -71,7 +66,7 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
                     },
                   ),
                   IconButton(
-                    icon: Icon(UIcons.regularStraight.trash, color: _pageColor,),
+                    icon: Icon(Icons.delete, color: _pageColor,),
                     onPressed: () {
                       showDialog(
                           context: context,
@@ -154,7 +149,7 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
       floatingActionButton: FloatingActionButton.extended(
         foregroundColor: Colors.white,
         backgroundColor: _pageColor,
-        icon: Icon(UIcons.regularStraight.plus_small),
+        icon: const Icon(Icons.add),
         label: const Text('Add Product Category'),
         onPressed: () {
           Navigator.push(

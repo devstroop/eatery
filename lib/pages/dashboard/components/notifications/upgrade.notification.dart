@@ -26,8 +26,8 @@ class _UpgradeNotificationState extends State<UpgradeNotification> {
             child: NotificationWidget(
               message: 'Activate License',
               header: "Upgrade",
-              leading: Icon(
-                UIcons.regularStraight.badge,
+              leading: const Icon(
+                Icons.workspace_premium,
                 color: Colors.white,
               ),
               onTap: () {

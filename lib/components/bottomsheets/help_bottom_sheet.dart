@@ -41,7 +41,7 @@ class HelpBottomSheet extends StatelessWidget {
                         throw "Could not launch $url";
                       }
                     },
-                    icon: Icon(UIcons.regularStraight.link,
+                    icon: Icon(Icons.link,
                         color: ColorStyle.brandColor))
               ],
             ),
@@ -51,7 +51,7 @@ class HelpBottomSheet extends StatelessWidget {
             Row(
               children: [
                 Icon(
-                  UIcons.regularStraight.phone_call,
+                  Icons.call,
                   size: 24,
                   color: ColorStyle.brandColor,
                 ),
@@ -70,7 +70,7 @@ class HelpBottomSheet extends StatelessWidget {
             Row(
               children: [
                 Icon(
-                  UIcons.regularStraight.comment_user,
+                  Icons.comment,
                   size: 24,
                   color: ColorStyle.brandColor,
                 ),

@@ -11,12 +11,7 @@ class WaiterSelectionView extends StatelessWidget {
           title: const Text('Select Waiter'),
           backgroundColor: Colors.transparent,
           foregroundColor: ColorStyle.text200,
-          leading: IconButton(
-            icon: Icon(UIcons.regularStraight.arrow_left),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          )
+          
       ),
 
       Container(

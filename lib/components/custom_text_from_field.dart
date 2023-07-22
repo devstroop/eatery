@@ -106,8 +106,8 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
                           obscureText = !(obscureText ?? false);
                         }),
                         icon: obscureText ?? false
-                            ? Icon(UIcons.regularStraight.eye)
-                            : Icon(UIcons.regularStraight.crossed_eye),
+                            ? const Icon(Icons.remove_red_eye)
+                            : const Icon(Icons.visibility_off),
                         color: ColorStyle.text400,
                       )
                     : null,

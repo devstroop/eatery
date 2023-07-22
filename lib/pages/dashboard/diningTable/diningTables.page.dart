@@ -34,16 +34,11 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
         backgroundColor: _pageColor,
         title: const Text('Dining Tables'),
         foregroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(UIcons.regularStraight.arrow_left),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        
         actions: [
           IconButton(
-            icon: Icon(
-              UIcons.regularStraight.list,
+            icon: const Icon(
+              Icons.category,
             ),
             onPressed: () {
               Navigator.push(
@@ -71,7 +66,7 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                       ? EateryDB.instance.orderBox.values
                           .singleWhere((elem) => elem.id == e.orderId)
                       : null;
-                  bool isAvailable = order == null || order.isPaid;
+                  // bool isAvailable = order == null || order.isPaid;
                   return ListTile(
                     title: Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -119,26 +114,26 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                 })
               ],
             )
-          : Center(
+          : const Center(
               child: Opacity(
                 opacity: 0.5,
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
-                      UIcons.regularStraight.user,
+                      Icons.person,
                       size: 64,
                     ),
-                    const SizedBox(height: 16),
-                    const Text(
+                    SizedBox(height: 16),
+                    Text(
                       'No dining tables found',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 12),
-                    const Text(
+                    SizedBox(height: 12),
+                    Text(
                       'Add a dining table to get started',
                       style: TextStyle(
                         fontSize: 14,
@@ -153,8 +148,8 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
         label: const Text('Add Dining Table'),
         foregroundColor: Colors.white,
         backgroundColor: _pageColor,
-        icon: Icon(
-          UIcons.regularStraight.plus_small,
+        icon: const Icon(
+          Icons.add,
         ),
         onPressed: () async {
           Navigator.push(

@@ -112,15 +112,15 @@ class _Body6State extends State<Body6> {
                         IconButton(
                           onPressed: fetchDeviceInfo,
                           iconSize: 14,
-                          icon: Icon(
-                            UIcons.regularStraight.refresh,
+                          icon: const Icon(
+                            Icons.refresh,
                           ),
                         ),
                         IconButton(
                           onPressed: copyDeviceIdToClipboard,
                           iconSize: 14,
-                          icon: Icon(
-                            UIcons.regularStraight.copy,
+                          icon: const Icon(
+                            Icons.copy,
                           ),
                         ),
                       ],
@@ -158,7 +158,7 @@ class _Body6State extends State<Body6> {
                         widget.callbackFormKey!(widget.formKey);
                       }
                     },
-                    icon: Icon(UIcons.regularStraight.clipboard_list),
+                    icon: const Icon(Icons.paste),
                     color: ColorStyle.text400,
                   ),
                   validator: (value) {

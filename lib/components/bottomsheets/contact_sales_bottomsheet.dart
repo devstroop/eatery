@@ -41,7 +41,7 @@ class ContactSalesBottomSheet extends StatelessWidget {
                         throw "Could not launch $url";
                       }
                     },
-                    icon: Icon(UIcons.regularStraight.link))
+                    icon: Icon(Icons.link))
               ],
             ),
             const SizedBox(
@@ -50,7 +50,7 @@ class ContactSalesBottomSheet extends StatelessWidget {
             Row(
               children: [
                 Icon(
-                  UIcons.regularStraight.phone_call,
+                  Icons.call,
                   size: 24,
                   color: ColorStyle.brandColor,
                 ),
@@ -69,7 +69,7 @@ class ContactSalesBottomSheet extends StatelessWidget {
             Row(
               children: [
                 Icon(
-                  UIcons.regularStraight.envelope,
+                  Icons.email,
                   size: 24,
                   color: ColorStyle.brandColor,
                 ),

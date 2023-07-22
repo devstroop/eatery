@@ -10,7 +10,7 @@ class SpecialButton extends StatelessWidget {
       required this.foreColor})
       : super(key: key);
   final Function()? onTap;
-  final IconData icon;
+  final Widget icon;
   final String text;
   final Color color;
   final Color foreColor;
@@ -37,10 +37,10 @@ class SpecialButton extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  Icon(
-                    icon,
-                    color: foreColor,
-                    size: 24.0,
+                  SizedBox(
+                    height: 24,
+                    width: 24,
+                    child: icon,
                   ),
                   const SizedBox(width: 8.0),
                   Text(
@@ -53,7 +53,7 @@ class SpecialButton extends StatelessWidget {
                 ],
               ),
               Icon(
-                UIcons.regularStraight.arrow_small_right,
+                Icons.chevron_right,
                 color: foreColor,
               ),
             ],

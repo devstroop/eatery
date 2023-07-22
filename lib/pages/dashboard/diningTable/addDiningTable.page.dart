@@ -23,12 +23,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
       appBar: AppBar(
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
-        leading: IconButton(
-          icon: Icon(UIcons.regularStraight.arrow_left),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
+        
         title: const Text('Add Dining Table'),
       ),
       body: InkWell(
@@ -133,7 +128,6 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                 name: _controllerCategoryName.text,
                 description: _controllerCategoryDescription.text,
                 categoryId: diningTableCategory?.id,
-                id: EateryDB.instance.diningTableBox.nextId(),
                 isActive: true,
               );
             });

@@ -2,15 +2,15 @@ import 'package:eatery/references.dart';
 
 Color _pageColor = const Color(0xFFC2592F);
 
-class EditWaiterPage extends StatefulWidget {
-  const EditWaiterPage({Key? key, required this.waiter}) : super(key: key);
-  final Waiter waiter;
+class EditStaffPage extends StatefulWidget {
+  const EditStaffPage({Key? key, required this.staff}) : super(key: key);
+  final Staff staff;
 
   @override
-  State<EditWaiterPage> createState() => _EditWaiterPageState();
+  State<EditStaffPage> createState() => _EditStaffPageState();
 }
 
-class _EditWaiterPageState extends State<EditWaiterPage> {
+class _EditStaffPageState extends State<EditStaffPage> {
   LibraryImage? image;
   bool isActive = true;
   final TextEditingController _controllerWaiterName = TextEditingController();
@@ -23,10 +23,10 @@ class _EditWaiterPageState extends State<EditWaiterPage> {
     super.initState();
     Future.delayed(Duration.zero, (){
       setState(() {
-        _controllerWaiterName.text = widget.waiter.name;
-        _controllerWaiterPhone.text = widget.waiter.phone ?? '';
-        isActive = widget.waiter.isActive;
-        image = LibraryImage(widget.waiter.photo ?? '');
+        _controllerWaiterName.text = widget.staff.name;
+        _controllerWaiterPhone.text = widget.staff.phone ?? '';
+        isActive = widget.staff.isActive;
+        image = LibraryImage(widget.staff.photo ?? '');
         
       });
     });
@@ -37,16 +37,11 @@ class _EditWaiterPageState extends State<EditWaiterPage> {
     final appBar = AppBar(
       backgroundColor: _pageColor,
       foregroundColor: Colors.white,
-      leading: IconButton(
-        icon: Icon(UIcons.regularStraight.arrow_left),
-        onPressed: () {
-          Navigator.pop(context);
-        },
-      ),
+      
       title: const Text('Edit Waiter'),
       actions: [
         IconButton(
-          icon: Icon(UIcons.regularStraight.trash),
+          icon: const Icon(Icons.delete),
           onPressed: () {
             showDialog(
               context: context,
@@ -64,7 +59,7 @@ class _EditWaiterPageState extends State<EditWaiterPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        widget.waiter.delete()
+                        widget.staff.delete()
                             .whenComplete(() {
                           Navigator.pop(context);
                           Navigator.pop(context);
@@ -170,13 +165,13 @@ class _EditWaiterPageState extends State<EditWaiterPage> {
             }
             _formKey.currentState!.save();
 
-            widget.waiter.name = _controllerWaiterName.text;
-            widget.waiter.phone = _controllerWaiterPhone.text;
-            widget.waiter.photo = image?.filename;
-            widget.waiter.isActive = isActive;
+            widget.staff.name = _controllerWaiterName.text;
+            widget.staff.phone = _controllerWaiterPhone.text;
+            widget.staff.photo = image?.filename;
+            widget.staff.isActive = isActive;
             try {
-              EateryDB.instance.waiterBox.put(widget.waiter.key,
-                widget.waiter,
+              EateryDB.instance.staffBox.put(widget.staff.id,
+                widget.staff,
               ).whenComplete(() {
                 showSnackBar(context, 'Waiter updated successfully');
                 Navigator.pop(context);

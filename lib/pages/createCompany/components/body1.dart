@@ -2,7 +2,7 @@ import 'package:eatery/references.dart';
 
 class Body1 extends StatelessWidget {
   final Function(LibraryImage? logoPath) onChanged;
-  final Color themeColor;
+  final Color pageColor;
   final GlobalKey<FormState> formKey;
   final TextEditingController restaurantNameController;
   final TextEditingController emailController;
@@ -13,7 +13,7 @@ class Body1 extends StatelessWidget {
   Body1(
       {Key? key,
       required this.onChanged,
-      required this.themeColor,
+      required this.pageColor,
       required this.restaurantNameController,
       required this.emailController,
       required this.phoneController,
@@ -42,14 +42,14 @@ class Body1 extends StatelessWidget {
           SpacingStyle.defaultVerticalSpacing,
           UploadButton(
             label: 'Restaurant Logo',
-            primaryColor: themeColor,
+            primaryColor: pageColor,
             secondaryColor: ColorStyle.text200,
             image: selectedLibraryImage?.image,
             onChanged: onChanged,
           ),
           SpacingStyle.defaultVerticalSpacing,
           CustomTextFromField(
-              themeColor: themeColor,
+              themeColor: pageColor,
               keyboardType: TextInputType.name,
               controller: restaurantNameController,
               title: 'Company name',
@@ -67,7 +67,7 @@ class Body1 extends StatelessWidget {
               }),
           SpacingStyle.defaultVerticalSpacing,
           CustomTextFromField(
-              themeColor: themeColor,
+              themeColor: pageColor,
               keyboardType: TextInputType.emailAddress,
               controller: emailController,
               title: 'Email address',
@@ -87,7 +87,7 @@ class Body1 extends StatelessWidget {
               }),
           SpacingStyle.defaultVerticalSpacing,
           CustomTextFromField(
-              themeColor: themeColor,
+              themeColor: pageColor,
               keyboardType: TextInputType.phone,
               controller: phoneController,
               title: 'Phone no',
@@ -109,7 +109,7 @@ class Body1 extends StatelessWidget {
               }),
           SpacingStyle.defaultVerticalSpacing,
           LabeledCustomTextFromField(
-            themeColor: themeColor,
+            themeColor: pageColor,
             foregroundColor: ColorStyle.text200,
             controller: addressController,
             label: 'Address',

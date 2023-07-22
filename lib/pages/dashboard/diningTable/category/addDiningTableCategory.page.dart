@@ -22,12 +22,7 @@ class _AddDiningTableCategoryPageState
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
         title: const Text('Add Dining Table Category'),
-        leading: IconButton(
-          onPressed: () {
-            Navigator.pop(context);
-          },
-          icon: Icon(UIcons.regularStraight.arrow_left),
-        ));
+        );
     return Scaffold(
       appBar: appBar,
       body: Padding(
@@ -89,7 +84,6 @@ class _AddDiningTableCategoryPageState
             EateryDB.instance.diningTableCategoryBox
                 .add(
               DiningTableCategory(
-                  id: id,
                   name: _controllerCategoryName.text.trim(),
                   description: _controllerCategoryDescription.text.trim(),
                   image: image?.filename,

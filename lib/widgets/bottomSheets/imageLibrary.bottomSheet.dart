@@ -64,30 +64,45 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
 
   Future pickFromGallery() async {
     final ImagePicker picker = ImagePicker();
-    XFile? xFile = await picker.pickImage(source: ImageSource.gallery);
-    if (xFile != null) {
-      try {
-        LibraryImage image = LibraryImageProvider.importFromPath(xFile.path);
-        // widget.action(image);
-        fetchLibrary();
-      } catch (e) {
-        showSnackBar(this.context, e.toString());
+    picker.pickImage(source: ImageSource.gallery).then((value) {
+      if (value != null) {
+        try {
+          LibraryImage image =
+              LibraryImageProvider.importFromPath(value.path);
+          // widget.action(image);
+          fetchLibrary();
+        } catch (e) {
+          showSnackBar(this.context, e.toString());
+        }
       }
-    }
+    });
+
   }
 
   Future pickFromCamera() async {
     final ImagePicker picker = ImagePicker();
-    XFile? xFile = await picker.pickImage(source: ImageSource.camera);
-    if (xFile != null) {
-      try {
-        LibraryImage image = LibraryImageProvider.importFromPath(xFile.path);
-        // widget.action(image);
-        fetchLibrary();
-      } catch (e) {
-        showSnackBar(this.context, e.toString());
+    // XFile? xFile = await picker.pickImage(source: ImageSource.camera);
+    // if (xFile != null) {
+    //   try {
+    //     LibraryImage image = LibraryImageProvider.importFromPath(xFile.path);
+    //     // widget.action(image);
+    //     fetchLibrary();
+    //   } catch (e) {
+    //     showSnackBar(this.context, e.toString());
+    //   }
+    // }
+picker.pickImage(source: ImageSource.camera).then((value) {
+      if (value != null) {
+        try {
+          LibraryImage image =
+              LibraryImageProvider.importFromPath(value.path);
+          // widget.action(image);
+          fetchLibrary();
+        } catch (e) {
+          showSnackBar(this.context, e.toString());
+        }
       }
-    }
+    });
   }
 
   @override
@@ -111,7 +126,7 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     IconButton(
-                      icon: Icon(UIcons.regularStraight.arrow_left),
+                      icon: const Icon(Icons.arrow_left),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
@@ -135,7 +150,7 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
                         debugPrint(uri.toString());
                         if (uri?.isAbsolute ?? false) {
                           return IconButton(
-                            icon: Icon(UIcons.regularStraight.link),
+                            icon: Icon(Icons.link),
                             iconSize: 24,
                             color: const Color(0xFF888888),
                             onPressed: () {
@@ -159,21 +174,21 @@ class _ImageLibraryBottomSheetState extends State<ImageLibraryBottomSheet> {
                     ),*/
                     if (Platform.isAndroid)
                       IconButton(
-                        icon: Icon(UIcons.regularStraight.camera),
+                        icon: const Icon(Icons.camera),
                         iconSize: 18,
                         color: const Color(0xFF888888),
                         onPressed: pickFromCamera,
                       ),
                     if (Platform.isAndroid)
                       IconButton(
-                        icon: Icon(UIcons.regularStraight.gallery),
+                        icon: const Icon(Icons.photo_library),
                         iconSize: 18,
                         color: const Color(0xFF888888),
                         onPressed: pickFromGallery,
                       ),
                     if (Platform.isIOS)
                       IconButton(
-                        icon: Icon(UIcons.regularStraight.download),
+                        icon: const Icon(Icons.download),
                         iconSize: 18,
                         color: const Color(0xFF888888),
                         onPressed: pickImageFromFile,

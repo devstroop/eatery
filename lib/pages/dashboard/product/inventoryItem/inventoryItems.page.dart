@@ -49,12 +49,7 @@ class _InventoryItemsPageState extends State<InventoryItemsPage> {
           title: const Text('Inventory'),
           backgroundColor: _pageColor,
           foregroundColor: Colors.white,
-          leading: IconButton(
-            icon: Icon(UIcons.regularStraight.arrow_left),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
+          
           flexibleSpace: Container(
             margin: const EdgeInsets.only(top: 102, left: 12, right: 12),
             width: double.maxFinite,
@@ -170,7 +165,7 @@ class _InventoryItemsPageState extends State<InventoryItemsPage> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
-        icon: Icon(UIcons.regularStraight.plus_small),
+        icon: const Icon(Icons.add),
         label: const Text('Add Inventory Item'),
         onPressed: () async {
           Navigator.push(

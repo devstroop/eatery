@@ -126,7 +126,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
     // final diningTableSelectionButton = orderType == OrderType.dine
     //     ? selectedDiningTableId != null
     //         ? FloatingActionButton.extended(
-    //             backgroundColor: _pageColor,
+    //             backgroundColor: pageColor,
     //             icon: const Icon(Icons.chair),
     //             label: Text(selectedDiningTableName!),
     //             onPressed: () => showModalBottomSheet(
@@ -142,7 +142,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
     //                 builder: (context) => buildDiningTableViewBottomSheet()),
     //           )
     //         : FloatingActionButton.extended(
-    //             backgroundColor: _pageColor,
+    //             backgroundColor: pageColor,
     //             icon: const Icon(Icons.add),
     //             label: const Text('Select Table'),
     //             onPressed: () => showModalBottomSheet(
@@ -210,7 +210,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
     //       )
     //     : Container();
 
-    Color _pageColor = Color(orderType.color ?? 0);
+    Color pageColor = Color(orderType.color ?? 0);
     List<ProductCategory> categories =
         EateryDB.instance.productCategoryBox.values.toList();
     List<Product> products =
@@ -235,32 +235,18 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
         preferredSize: const Size.fromHeight(120),
         child: AppBar(
           title: const Text('Point of Sale'),
-          backgroundColor: _pageColor,
+          backgroundColor: pageColor,
           foregroundColor: Colors.white,
           actions: [
             IconButton(
-              icon: Icon(UIcons.regularStraight.barcode_read),
+              icon: const Icon(Icons.barcode_reader),
               onPressed: (){}
-            ),
-            IconButton(
-              icon: Icon(UIcons.regularStraight.calculator),
-              onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const CalculatorPage()));
-              },
             ),
             IconButton(onPressed: (){
               Navigator.push(context, MaterialPageRoute(builder: (context) => const TransactionsPage()));
-            }, icon: Icon(UIcons.regularStraight.time_past)),
+            }, icon: const Icon(Icons.receipt_long))
           ],
-          leading: IconButton(
-            icon: Icon(UIcons.regularStraight.arrow_left),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
-          ),
+
           flexibleSpace: Container(
             margin: const EdgeInsets.only(top: 102, left: 12, right: 12),
             width: double.maxFinite,
@@ -269,7 +255,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
               onChanged: (value) {
                 // loadProducts();
               },
-              themeColor: _pageColor,
+              themeColor: pageColor,
               hintText: 'Search a product...',
             ),
           ),
@@ -286,7 +272,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                 CircularCategoryPOSWidget(
                   margin: const EdgeInsets.only(bottom: 6),
                   image: const AssetImage('assets/icons/all.png'),
-                  themeColor: _pageColor,
+                  themeColor: pageColor,
                   selected: selectedProductCategory?.id == null,
                   onTap: () {
                     setState(() {
@@ -299,7 +285,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                   return CircularCategoryPOSWidget(
                     margin: const EdgeInsets.only(bottom: 6),
                     image: LibraryImage(each.image).image,
-                    themeColor: _pageColor,
+                    themeColor: pageColor,
                     selected: selectedProductCategory?.id == each.id,
                     onTap: () {
                       setState(() {
@@ -332,7 +318,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                               product: product,
                               width: width,
                               height: height,
-                              themeColor: _pageColor,
+                              themeColor: pageColor,
                               onAdd: () {
                                 setState(() {
                                   GlobalVariables.cart.add(product);
@@ -388,37 +374,37 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
           children: [
             PosOrderTypeSelectionButton(
               onTap: _showOrderTypeSelection,
-              iconData: orderType.icon!,
-              themeColor: _pageColor,
+              icon: orderType.icon!,
+              themeColor: pageColor,
               text: orderType.name!,
             ),
             if (orderType == OrderType.dine) // dining table selection
               IconButton(
                   onPressed: _pickDiningTable,
                   icon: Icon(
-                    UIcons.regularStraight.chair,
-                    color: _pageColor,
+                    Icons.chair,
+                    color: pageColor,
                   )),
             if (orderType == OrderType.dine) // waiter selection
               IconButton(
                   onPressed: _pickWaiter,
                   icon: Icon(
-                    UIcons.regularStraight.man_head,
-                    color: _pageColor,
+                    Icons.person,
+                    color: pageColor,
                   )),
             if (orderType == OrderType.delivery)
               IconButton(
                   onPressed: _pickDeliveryLocation,
                   icon: Icon(
-                    UIcons.regularStraight.map_marker,
-                    color: _pageColor,
+                    Icons.pin_drop,
+                    color: pageColor,
                   )),
             if (orderType == OrderType.delivery)
               IconButton(
                   onPressed: _pickDeliveryStaff,
                   icon: Icon(
-                    UIcons.regularStraight.biking,
-                    color: _pageColor,
+                    Icons.directions_bike,
+                    color: pageColor,
                   )),
 
 
@@ -427,12 +413,12 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                 icon: Container(
                   padding: const EdgeInsets.all(10.0),
                   decoration: BoxDecoration(
-                      color: _pageColor,
+                      color: pageColor,
                       borderRadius: BorderRadius.circular(20)),
                   child: Row(
                     children: [
                       Icon(
-                        UIcons.regularStraight.shopping_cart,
+                        Icons.shopping_cart,
                         color: Colors.white,
                         size: 20,
                       ),
@@ -452,15 +438,15 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
               IconButton(
                   onPressed: _expressCheckout,
                   icon: Icon(
-                    UIcons.regularStraight.angle_double_right,
-                    color: _pageColor,
+                    Icons.fast_forward,
+                    color: pageColor,
                   )),
             if (GlobalVariables.cart.isNotEmpty && !GlobalVariables.expressMode)
               IconButton(
                   onPressed: _checkout,
                   icon: Icon(
-                    UIcons.regularStraight.angle_right,
-                    color: _pageColor,
+                    Icons.arrow_circle_right,
+                    color: pageColor,
                   )),
           ],
         ),

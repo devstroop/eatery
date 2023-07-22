@@ -14,12 +14,7 @@ class KProductView extends StatelessWidget {
               title: Text(product.name),
               backgroundColor: Colors.transparent,
               foregroundColor: ColorStyle.text200,
-              leading: IconButton(
-                icon: Icon(UIcons.regularStraight.arrow_left),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )),
+              ),
 
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 12.0),
