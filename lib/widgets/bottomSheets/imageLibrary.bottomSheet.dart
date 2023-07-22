@@ -127,6 +127,7 @@ picker.pickImage(source: ImageSource.camera).then((value) {
                   children: [
                     IconButton(
                       icon: const Icon(Icons.arrow_left),
+                      icon: const Icon(Icons.arrow_back),
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
