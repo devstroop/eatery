@@ -121,7 +121,7 @@ class _UploadImageBottomSheetState extends State<UploadImageBottomSheet> {
                   Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: IconButton(
-                        icon: const Icon(Icons.link),
+                        icon: Icon(UIcons.regularStraight.upload),
                         iconSize: 72.0,
                         color: ColorStyle.information,
                         onPressed: pickFromUrl,
@@ -129,7 +129,7 @@ class _UploadImageBottomSheetState extends State<UploadImageBottomSheet> {
                 Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: IconButton(
-                      icon: const Icon(Icons.upload),
+                      icon: Icon(UIcons.regularStraight.upload),
                       iconSize: urlImage != null ? 36.0 : 60,
                       color: ColorStyle.text300,
                       onPressed: pickFromGallery,
@@ -137,7 +137,7 @@ class _UploadImageBottomSheetState extends State<UploadImageBottomSheet> {
                 Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: IconButton(
-                      icon: const Icon(Icons.camera_alt),
+                      icon: Icon(UIcons.regularStraight.camera),
                       iconSize: urlImage != null ? 36.0 : 60,
                       color: ColorStyle.text300,
                       onPressed: pickFromCamera,

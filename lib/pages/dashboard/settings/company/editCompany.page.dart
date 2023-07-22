@@ -22,17 +22,17 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
   }
 
   void postInit() async {
-    /*company = await CompanyLoader(widget.database).load(context);
+    company = await EateryDB.instance.companyBox.values.first;
+    // company = await CompanyLoader(widget.database).load(context);
     setState(() {
       _controllerCompanyName.text = company!.name;
       _controllerEmail.text = company!.email;
       _controllerPhone.text = company!.phone;
       _controllerPhone.text = company!.phone;
       _controllerAddress.text = company!.address;
-      _controllerTaxNo.text = company!.taxLicNo ?? '';
-      _controllerFoodLicNo.text = company!.foodLicNo ?? '';
-      _controllerDefaultTax.text = company!.defaultTaxRate != null ? company!.defaultTaxRate.toString() : '';
-    });*/
+      _controllerSalesTaxNo.text = company!.salesTaxNumber ?? '';
+      _controllerFoodLicNo.text = company!.foodLicenseNo ?? '';
+    });
   }
   final themeColor = ColorStyle.brandColor;
 
@@ -40,9 +40,8 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPhone = TextEditingController();
   final TextEditingController _controllerAddress = TextEditingController();
-  final TextEditingController _controllerTaxNo = TextEditingController();
+  final TextEditingController _controllerSalesTaxNo = TextEditingController();
   final TextEditingController _controllerFoodLicNo = TextEditingController();
-  final TextEditingController _controllerDefaultTax = TextEditingController();
 
   final focus1 = FocusNode();
   final focus2 = FocusNode();
@@ -59,6 +58,12 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
             appBar: AppBar(
               backgroundColor: themeColor,
               title: const Text('Company Details'),
+              leading: IconButton(
+                icon: Icon(UIcons.regularStraight.arrow_left),
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+              ),
             ),
             body: Padding(
               padding: SpacingStyle.defaultPadding,
@@ -150,7 +155,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                   CustomTextFromField(
                     themeColor: themeColor,
                     keyboardType: TextInputType.text,
-                    controller: _controllerTaxNo,
+                    controller: _controllerSalesTaxNo,
                     title:
                         '${Edition.values.singleWhere((element) => element.id == company?.edition.id).name} License No',
                     hint:
@@ -192,33 +197,6 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                       return null;
                     },
                   ),
-                  SpacingStyle.defaultVerticalSpacing,
-                  CustomTextFromField(
-                    themeColor: themeColor,
-                    keyboardType:
-                        const TextInputType.numberWithOptions(decimal: true),
-                    controller: _controllerDefaultTax,
-                    title:
-                        'Default ${Edition.values.singleWhere((element) => element.id == company?.edition.id).name} Rate',
-                    hint:
-                        'Enter default ${Edition.values.singleWhere((element) => element.id == company?.edition.id).name} rate...',
-                    suffix: Icon(
-                      Icons.percent,
-                      color: ColorStyle.text400,
-                    ),
-                    focusNode: focus7,
-                    textInputAction: TextInputAction.done,
-                    validator: (value) {
-                      if (value!.trim().isNotEmpty && !value.trim().isNum) {
-                        return 'Default ${Edition.values.singleWhere((element) => element.id == company?.edition.id).name} license number is not valid';
-                      }
-                      // if (edition == Edition.gst && !value!.trim().isValidGSTIN()) return '${edition.name} license number is not valid';
-                      return null;
-                    },
-                    onFieldSubmitted: (v) {
-                      FocusScope.of(context).unfocus();
-                    },
-                  ),
                 ],
               ),
             ),
@@ -232,18 +210,22 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                       color: themeColor,
                       child: const Text('Save'),
                       onPressed: () async {
-                        /*company!.name = _controllerCompanyName.text;
-                company!.email = _controllerEmail.text;
-                company!.phone = _controllerPhone.text;
-                company!.address = _controllerAddress.text;
-                company!.taxLicNo = _controllerTaxNo.text;
-                company!.foodLicNo = _controllerFoodLicNo.text;
-                company!.defaultTaxRate = _controllerDefaultTax.text.isNotEmpty ? double.parse(_controllerDefaultTax.text) : null;
+                        // Update the company object with the new data
+                        company!.name = _controllerCompanyName.text;
+                        company!.email = _controllerEmail.text;
+                        company!.phone = _controllerPhone.text;
+                        company!.address = _controllerAddress.text;
+                        company!.foodLicenseNo = _controllerFoodLicNo.text;
+                        // _controllerDefaultTax.text.isNotEmpty ? double.parse(_controllerDefaultTax.text) : null;
 
-                await widget.database.companyDao.updateEntity(company!);
-                Navigator.pop(context);
-                showSnackBar(context, 'Successfully updated');*/
+                        // Update the company in the Hive database
+                        await company!.save();
+
+                        // Display a success message and navigate back
+                        showSnackBar(context, 'Company details successfully updated');
+                        Navigator.pop(context);
                       },
+
                     )
                   ],
                 ),
