@@ -84,7 +84,7 @@ class _DashboardPageState extends State<DashboardPage> {
               suffix: [
                 IconButton(
                   icon: const Icon(
-                    Icons.logout,
+                    Icons.power_settings_new,
                   ),
                   onPressed: () {
                     showDialog(
