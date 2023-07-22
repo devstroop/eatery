@@ -170,7 +170,7 @@ class _EditStaffPageState extends State<EditStaffPage> {
             widget.staff.photo = image?.filename;
             widget.staff.isActive = isActive;
             try {
-              EateryDB.instance.staffBox.put(widget.staff.id,
+              EateryDB.instance.staffBox!.put(widget.staff.id,
                 widget.staff,
               ).whenComplete(() {
                 showSnackBar(context, 'Waiter updated successfully');

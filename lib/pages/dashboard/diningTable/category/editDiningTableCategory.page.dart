@@ -48,7 +48,7 @@ class _EditDiningTableCategoryPageState
               context: context,
               builder: (context) {
                 // category exists in dining table then show message and return
-                if (EateryDB.instance.diningTableBox.values
+                if (EateryDB.instance.diningTableBox!.values
                     .any((element) => element.categoryId == widget.category.id)) {
                   return AlertDialog(
                     title: const Text('Delete Category'),

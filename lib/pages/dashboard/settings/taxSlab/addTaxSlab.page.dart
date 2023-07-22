@@ -29,7 +29,7 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
           name: controllerSlabName.text,
           rate: double.parse(controllerTaxRate.text),
           type: _taxType);
-      await EateryDB.instance.taxSlabBox.add(taxSlab).whenComplete(() {
+      await EateryDB.instance.taxSlabBox!.add(taxSlab).whenComplete(() {
         showSnackBar(this.context, 'Successfully created!');
         Navigator.of(this.context).pop();
       });

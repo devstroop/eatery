@@ -23,10 +23,10 @@ class _CustomersPageState extends State<CustomersPage> {
         title: const Text('Customers'),
         foregroundColor: Colors.white,
       ),
-      body: EateryDB.instance.customerBox.values.isNotEmpty
+      body: EateryDB.instance.customerBox?.values.isNotEmpty ?? false
           ? ListView(
               children: [
-                for(var e in EateryDB.instance.customerBox.values)
+                for(var e in EateryDB.instance.customerBox!.values)
                   ListTile(
                       title: Text(
                         e.name,
