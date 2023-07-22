@@ -21,10 +21,10 @@ class _AddStaffPageState extends State<AddStaffPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: _pageColor,
-          foregroundColor: Colors.white,
-          title: const Text('Add Waiter'),
-          ),
+        backgroundColor: _pageColor,
+        foregroundColor: Colors.white,
+        title: const Text('Add Staff'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Form(
@@ -32,7 +32,7 @@ class _AddStaffPageState extends State<AddStaffPage> {
           child: ListView(
             children: [
               UploadButton(
-                label: 'Waiter Photo',
+                label: 'Staff Photo',
                 primaryColor: _pageColor,
                 secondaryColor: ColorStyle.text200,
                 image: image?.image,
@@ -47,7 +47,7 @@ class _AddStaffPageState extends State<AddStaffPage> {
               ),
               LabeledCustomTextFromField(
                 controller: _controllerWaiterName,
-                label: 'Waiter Name',
+                label: 'Staff Name',
                 themeColor: _pageColor,
                 foregroundColor: ColorStyle.text200,
                 hint: 'Enter Waiter Name',
@@ -63,6 +63,39 @@ class _AddStaffPageState extends State<AddStaffPage> {
                 keyboardType: TextInputType.phone,
                 hint: 'Enter Phone Number',
               ),
+              const SizedBox(
+                height: 6.0,
+              ),
+
+              // Drop down for staff type
+              DropdownButtonFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Staff Type',
+                    labelStyle: TextStyle(
+                      color: ColorStyle.text200,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: ColorStyle.text200,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: _pageColor,
+                      ),
+                    ),
+                  ),
+                  hint: const Text('Select Staff Type'),
+                  items: [
+                    ...StaffType.values.map((e) => DropdownMenuItem(
+                          value: e,
+                          child: Text(e.toString().split('.').last),
+                        ))
+                  ],
+                  onChanged: (value) {
+                    debugPrint(value?.name ?? '');
+                  }),
+
               const SizedBox(
                 height: 6.0,
               ),
@@ -108,14 +141,17 @@ class _AddStaffPageState extends State<AddStaffPage> {
             _formKey.currentState!.save();
 
             try {
-              EateryDB.instance.staffBox.add(
+              EateryDB.instance.staffBox
+                  .add(
                 Staff(
-                  name: _controllerWaiterName.text,
-                  phone: _controllerWaiterPhone.text,
-                  photo: image?.filename,
-                  isActive: isActive, type: StaffType.other // TODO: Fix this section
-                ),
-              ).whenComplete(() {
+                    name: _controllerWaiterName.text,
+                    phone: _controllerWaiterPhone.text,
+                    photo: image?.filename,
+                    isActive: isActive,
+                    type: StaffType.other // TODO: Fix this section
+                    ),
+              )
+                  .whenComplete(() {
                 showSnackBar(context, 'Waiter added successfully');
                 Navigator.pop(context);
               });
