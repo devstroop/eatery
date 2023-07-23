@@ -226,11 +226,11 @@ StaffType? staffType;
               EateryDB.instance.staffBox!.put(widget.staff.id,
                 widget.staff,
               ).whenComplete(() {
-                showSnackBar(context, 'Staff updated successfully');
+                showSnackBar(context, 'staff updated successfully');
                 Navigator.pop(context);
               });
             } catch (_) {
-              showSnackBar(context, 'Failed to add Staff');
+              showSnackBar(context, 'Failed to add staff');
             }
           },
           child: const Text('Save'),
