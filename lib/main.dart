@@ -3,12 +3,10 @@ import 'package:eatery/references.dart';
 Future main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  await setupDirectory();
-  await setupDatabase();
-
-  // TODO: Uncomment to flush companies
-  // await flushDatabase();
-
+  setupDirectory().then((value) {
+    EateryDB.dataDir = GlobalVariables.dataDirectory;
+  });
+  await EateryDB.instance.waitUntilInitialized();
   runApp(const MyApp());
 }
 
@@ -22,11 +20,6 @@ Future setupDirectory() async {
   } else {
     throw Exception('Unsupported platform');
   }
-}
-
-Future setupDatabase() async {
-  await EateryDB.instance.init(GlobalVariables.dataDirectory);
-  return;
 }
 
 Future flushDatabase() async {
