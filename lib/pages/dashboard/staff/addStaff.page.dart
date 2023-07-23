@@ -164,7 +164,7 @@ class _AddStaffPageState extends State<AddStaffPage> {
             _formKey.currentState!.save();
 
             try {
-              EateryDB.instance.staffBox
+              EateryDB.instance.staffBox!
                   .add(
                 Staff(
                     name: _controllerStaffName.text,

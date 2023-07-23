@@ -12,7 +12,7 @@ class ProductCategoriesPage extends StatefulWidget {
 class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
   @override
   Widget build(BuildContext context) {
-    List<ProductCategory> categories = EateryDB.instance.productCategoryBox.values.toList();
+    List<ProductCategory> categories = EateryDB.instance.productCategoryBox!.values.toList();
     return Scaffold(
       backgroundColor: ColorStyle.backgroundColor,
       appBar: AppBar(
@@ -71,7 +71,7 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
                       showDialog(
                           context: context,
                           builder: (context) {
-                            if(EateryDB.instance.productBox.values.any((element) => element.categoryId == category.id)) {
+                            if(EateryDB.instance.productBox!.values.any((element) => element.categoryId == category.id)) {
                               return AlertDialog(
                                 title: const Text('Delete Category'),
                                 content: const Text(

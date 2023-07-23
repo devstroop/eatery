@@ -80,7 +80,7 @@ class _AddDiningTableCategoryPageState
               showSnackBar(context, '* Category name required');
               return;
             }
-            EateryDB.instance.diningTableCategoryBox
+            EateryDB.instance.diningTableCategoryBox!
                 .add(
               DiningTableCategory(
                   name: _controllerCategoryName.text.trim(),

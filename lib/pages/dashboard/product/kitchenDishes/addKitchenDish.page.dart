@@ -39,7 +39,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
 
   @override
   Widget build(BuildContext context) {
-    List<TaxSlab> slabs = EateryDB.instance.taxSlabBox.values.toList();
+    List<TaxSlab> slabs = EateryDB.instance.taxSlabBox!.values.toList();
 
     return Scaffold(
       appBar: AppBar(
@@ -235,7 +235,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                         selectedCategory = null;
                       });
                     },),
-                    ...EateryDB.instance.productCategoryBox.values.map((e) {
+                    ...EateryDB.instance.productCategoryBox!.values.map((e) {
                       return CircularCategoryPOSWidget(
                         themeColor: _pageColor,
                         margin: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -296,7 +296,7 @@ class _AddKitchenDishState extends State<AddKitchenDish> {
                 type: ProductType.kitchenDish,
                 isActive: true,
               );
-              await EateryDB.instance.productBox.add(product).whenComplete(() {
+              await EateryDB.instance.productBox!.add(product).whenComplete(() {
                 showSnackBar(context, 'Successfully created');
                 Navigator.pop(context);
               });

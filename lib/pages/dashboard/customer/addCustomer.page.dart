@@ -1,7 +1,6 @@
 import 'package:eatery/constants/style/spacing_style.dart';
 import 'package:eatery/constants/utils/utils.dart';
 import 'package:eatery_db/eatery_db.dart';
-import 'package:flutter/material.dart';
 import 'package:eatery/constants/style/color_style.dart';
 import '../../../components/labeled_custom_text_from_field.dart';
 import '../../../widgets/buttons/primary.button.dart';
@@ -141,7 +140,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
             _formKey.currentState!.save();
 
             try {
-              EateryDB.instance.customerBox
+              EateryDB.instance.customerBox!
                   .add(
                 Customer(
                     name: _controllerCustomerName.text,

@@ -33,7 +33,7 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
   initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      customer = EateryDB.instance.customerBox.get(widget.customerKey);
+      customer = EateryDB.instance.customerBox!.get(widget.customerKey);
       setState(() {
         _controllerCustomerName.text = customer?.name ?? '';
         _controllerCustomerPhone.text = customer?.phone ?? '';
@@ -204,7 +204,7 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
             customer?.isActive = isActive;
 
             try {
-              EateryDB.instance.customerBox
+              EateryDB.instance.customerBox!
                   .put(
                 widget.customerKey,
                 customer!,

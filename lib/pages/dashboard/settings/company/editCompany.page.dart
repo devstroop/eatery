@@ -22,7 +22,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
   }
 
   Future postInit() async {
-    company = EateryDB.instance.companyBox.values.first;
+    company = EateryDB.instance.companyBox!.values.first;
     // company = await CompanyLoader(widget.database).load(context);
     setState(() {
       _controllerCompanyName.text = company!.name;

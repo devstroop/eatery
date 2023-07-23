@@ -38,7 +38,7 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
 
   @override
   Widget build(BuildContext context) {
-    List<TaxSlab> slabs = EateryDB.instance.taxSlabBox.values.toList();
+    List<TaxSlab> slabs = EateryDB.instance.taxSlabBox!.values.toList();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: _pageColor,
@@ -234,7 +234,7 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
                         selectedCategory = null;
                       });
                     },),
-                    ...EateryDB.instance.productCategoryBox.values.map((e) {
+                    ...EateryDB.instance.productCategoryBox!.values.map((e) {
                       return CircularCategoryPOSWidget(
                         themeColor: _pageColor,
                         margin: const EdgeInsets.symmetric(horizontal: 8.0),
@@ -292,7 +292,7 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
                   foodType: selectedFoodType,
                   type: ProductType.inventoryItem,
                   isActive: true);
-              await EateryDB.instance.productBox
+              await EateryDB.instance.productBox!
                   .add(product)
                   .whenComplete(() {
                 showSnackBar(context, 'Successfully created');

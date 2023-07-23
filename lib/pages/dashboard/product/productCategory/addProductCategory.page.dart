@@ -84,7 +84,7 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
               return;
             }
             try {
-              EateryDB.instance.productCategoryBox
+              EateryDB.instance.productCategoryBox!
                   .add(ProductCategory(
                       name: _controllerCategoryName.text,
                       description: _controllerCategoryDescription.text,

@@ -223,7 +223,7 @@ StaffType? staffType;
             widget.staff.type = staffType!;
             widget.staff.isActive = isActive;
             try {
-              EateryDB.instance.staffBox.put(widget.staff.id,
+              EateryDB.instance.staffBox!.put(widget.staff.id,
                 widget.staff,
               ).whenComplete(() {
                 showSnackBar(context, 'Staff updated successfully');

@@ -17,7 +17,7 @@ class _StaffsPageState extends State<StaffsPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Staff> Staffs = EateryDB.instance.staffBox.values.toList();
+    List<Staff> staffs = EateryDB.instance.staffBox!.values.toList();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: _pageColor,
@@ -25,10 +25,10 @@ class _StaffsPageState extends State<StaffsPage> {
         foregroundColor: Colors.white,
         
       ),
-      body: Staffs.isNotEmpty
+      body: staffs.isNotEmpty
           ? ListView(
               children: [
-                ...Staffs.map((e) {
+                ...staffs.map((e) {
                   return ListTile(
                       title: Text(
                         e.name,
