@@ -374,7 +374,9 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
           children: [
             PosOrderTypeSelectionButton(
               onTap: _showOrderTypeSelection,
-              icon: orderType.icon!,
+              icon: Icon(orderType == OrderType.dine
+                  ? Icons.dinner_dining
+                  : orderType == OrderType.delivery ? Icons.delivery_dining : Icons.takeout_dining),
               themeColor: pageColor,
               text: orderType.name!,
             ),
@@ -555,7 +557,11 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
               Padding(
                 padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
                 child: SpecialButton(
-                  icon: orderType.icon!,
+                  icon: Icon(orderType == OrderType.dine
+                      ? Icons.dinner_dining
+                      : orderType == OrderType.delivery
+                          ? Icons.delivery_dining
+                          : Icons.takeout_dining),
                   text: orderType.name!,
                   color: Color(orderType.color!),
                   foreColor: Colors.white,

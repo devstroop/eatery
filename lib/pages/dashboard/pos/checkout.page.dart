@@ -374,7 +374,18 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(
                                 0, 0, 6, 0),
-                            child: widget.orderType.icon,
+                            child: widget.orderType == OrderType.dine
+                                ? Icon(
+                                    Icons.dinner_dining,
+                                    color: ColorStyle.text300,
+                                  )
+                                : widget.orderType == OrderType.delivery ? Icon(
+                                    Icons.bike_scooter,
+                                    color: ColorStyle.text300,
+                                  ) : Icon(
+                                    Icons.takeout_dining,
+                                    color: ColorStyle.text300,
+                                  ),
                           ),
                           Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(

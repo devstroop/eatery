@@ -97,7 +97,11 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                           Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(
                                 0, 0, 6, 0),
-                            child: widget.orderType!.icon,
+                            child: Icon(
+                              widget.orderType == OrderType.dine
+                                  ? Icons.dinner_dining
+                                  : widget.orderType == OrderType.delivery ? Icons.delivery_dining : Icons.takeout_dining,
+                            ),
                           ),
                           Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(
