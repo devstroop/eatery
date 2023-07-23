@@ -4,6 +4,7 @@ void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   await setupDirectory();
+  await EateryDB.instance.init();
   await EateryDB.instance.waitUntilInitialized();
   runApp(const MyApp());
 }
