@@ -13,9 +13,9 @@ class EditStaffPage extends StatefulWidget {
 class _EditStaffPageState extends State<EditStaffPage> {
   LibraryImage? image;
   bool isActive = true;
-  final TextEditingController _controllerWaiterName = TextEditingController();
-  final TextEditingController _controllerWaiterPhone = TextEditingController();
-
+  final TextEditingController _controllerStaffName = TextEditingController();
+  final TextEditingController _controllerStaffPhone = TextEditingController();
+StaffType? staffType;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -23,8 +23,9 @@ class _EditStaffPageState extends State<EditStaffPage> {
     super.initState();
     Future.delayed(Duration.zero, (){
       setState(() {
-        _controllerWaiterName.text = widget.staff.name;
-        _controllerWaiterPhone.text = widget.staff.phone ?? '';
+        _controllerStaffName.text = widget.staff.name;
+        _controllerStaffPhone.text = widget.staff.phone ?? '';
+        staffType = widget.staff.type;
         isActive = widget.staff.isActive;
         image = LibraryImage(widget.staff.photo ?? '');
         
@@ -38,7 +39,7 @@ class _EditStaffPageState extends State<EditStaffPage> {
       backgroundColor: _pageColor,
       foregroundColor: Colors.white,
       
-      title: const Text('Edit Waiter'),
+      title: const Text('Edit Staff'),
       actions: [
         IconButton(
           icon: const Icon(Icons.delete),
@@ -47,9 +48,9 @@ class _EditStaffPageState extends State<EditStaffPage> {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: const Text('Delete Waiter'),
+                  title: const Text('Delete Staff'),
                   content: const Text(
-                      'Are you sure you want to delete this waiter?'),
+                      'Are you sure you want to delete this Staff?'),
                   actions: [
                     TextButton(
                       onPressed: () {
@@ -89,7 +90,7 @@ class _EditStaffPageState extends State<EditStaffPage> {
             child: ListView(
               children: [
                 UploadButton(
-                  label: 'Waiter Photo',
+                  label: 'Staff Photo',
                   primaryColor: _pageColor,
                   secondaryColor: ColorStyle.text200,
                   image: image?.image,
@@ -99,34 +100,89 @@ class _EditStaffPageState extends State<EditStaffPage> {
                     });
                   },
                 ),
-                const SizedBox(
-                  height: 6.0,
-                ),
+                SpacingStyle.defaultVerticalSpacing,
                 LabeledCustomTextFromField(
-                  controller: _controllerWaiterName,
-                  label: 'Waiter Name',
+                  controller: _controllerStaffName,
+                  label: 'Staff Name',
                   themeColor: _pageColor,
                   foregroundColor: ColorStyle.text200,
-                  hint: 'Enter Waiter Name',
+                  hint: 'Enter Staff Name',
+                  validator: (value) =>
+                      value == null || value.isEmpty ? 'Please enter staff name' : null,
                 ),
-                const SizedBox(
-                  height: 6.0,
-                ),
+                SpacingStyle.defaultVerticalSpacing,
                 LabeledCustomTextFromField(
-                  controller: _controllerWaiterPhone,
+                  controller: _controllerStaffPhone,
                   label: 'Phone Number',
                   themeColor: _pageColor,
                   foregroundColor: ColorStyle.text200,
                   keyboardType: TextInputType.phone,
                   hint: 'Enter Phone Number',
+                  validator: (value) =>
+                      value == null || value.isEmpty ? 'Please enter phone number' : null,
                 ),
-                const SizedBox(
-                  height: 6.0,
+                SpacingStyle.defaultVerticalSpacing,
+                // Drop down for staff type
+                DropdownButtonFormField(
+                  decoration: InputDecoration(
+                    labelText: 'Staff Type',
+                    labelStyle: TextStyle(
+                      color: ColorStyle.text200,
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide(
+                        color: ColorStyle.text200,
+                      ),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide(
+                        width: 2,
+                        color: _pageColor,
+                      ),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide(
+                        width: 2,
+                        color: ColorStyle.error,
+                      ),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide(
+                        width: 2,
+                        color: ColorStyle.error,
+                      ),
+                    ),
+                  ),
+                  hint: const Text('Select Staff Type'),
+                  value: staffType,
+                  items: [
+                    ...StaffType.values.map((e) => DropdownMenuItem(
+                          value: e,
+                          child: Text(e.name),
+                        ))
+                  ],
+                  onChanged: (value) {
+                    setState(() {
+                      staffType = value;
+                    });
+                  },
+                  validator: (value) =>
+                      value == null ? 'Please select staff type' : null,
                 ),
+      
+                SpacingStyle.defaultVerticalSpacing,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Checkbox(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        activeColor: _pageColor,
                         value: isActive,
                         onChanged: (value) {
                           setState(() {
@@ -155,29 +211,26 @@ class _EditStaffPageState extends State<EditStaffPage> {
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {
-            if (_controllerWaiterName.text.isEmpty) {
-              showSnackBar(context, 'Waiter Name is required');
-              return;
-            }
             final isValid = _formKey.currentState!.validate();
             if (!isValid) {
               return;
             }
             _formKey.currentState!.save();
 
-            widget.staff.name = _controllerWaiterName.text;
-            widget.staff.phone = _controllerWaiterPhone.text;
+            widget.staff.name = _controllerStaffName.text;
+            widget.staff.phone = _controllerStaffPhone.text;
             widget.staff.photo = image?.filename;
+            widget.staff.type = staffType!;
             widget.staff.isActive = isActive;
             try {
               EateryDB.instance.staffBox.put(widget.staff.id,
                 widget.staff,
               ).whenComplete(() {
-                showSnackBar(context, 'Waiter updated successfully');
+                showSnackBar(context, 'Staff updated successfully');
                 Navigator.pop(context);
               });
             } catch (_) {
-              showSnackBar(context, 'Failed to add waiter');
+              showSnackBar(context, 'Failed to add Staff');
             }
           },
           child: const Text('Save'),

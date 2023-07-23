@@ -173,6 +173,7 @@ class _ImportExportPageState extends State<ImportExportPage> {
   Widget build(BuildContext context) {
     final appBar = AppBar(
       backgroundColor: getThemeColor(),
+      foregroundColor: Colors.white,
       title: const Text('Import / Export'),
       
     );

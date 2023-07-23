@@ -12,9 +12,9 @@ class AddStaffPage extends StatefulWidget {
 class _AddStaffPageState extends State<AddStaffPage> {
   LibraryImage? image;
   bool isActive = true;
-  final TextEditingController _controllerWaiterName = TextEditingController();
-  final TextEditingController _controllerWaiterPhone = TextEditingController();
-
+  final TextEditingController _controllerStaffName = TextEditingController();
+  final TextEditingController _controllerStaffPhone = TextEditingController();
+  StaffType? staffType;
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -25,103 +25,130 @@ class _AddStaffPageState extends State<AddStaffPage> {
         foregroundColor: Colors.white,
         title: const Text('Add Staff'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              UploadButton(
-                label: 'Staff Photo',
-                primaryColor: _pageColor,
-                secondaryColor: ColorStyle.text200,
-                image: image?.image,
-                onChanged: (image) {
-                  setState(() {
-                    this.image = image;
-                  });
-                },
-              ),
-              const SizedBox(
-                height: 6.0,
-              ),
-              LabeledCustomTextFromField(
-                controller: _controllerWaiterName,
-                label: 'Staff Name',
-                themeColor: _pageColor,
-                foregroundColor: ColorStyle.text200,
-                hint: 'Enter Waiter Name',
-              ),
-              const SizedBox(
-                height: 6.0,
-              ),
-              LabeledCustomTextFromField(
-                controller: _controllerWaiterPhone,
-                label: 'Phone Number',
-                themeColor: _pageColor,
-                foregroundColor: ColorStyle.text200,
-                keyboardType: TextInputType.phone,
-                hint: 'Enter Phone Number',
-              ),
-              const SizedBox(
-                height: 6.0,
-              ),
-
-              // Drop down for staff type
-              DropdownButtonFormField(
+      body: InkWell(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              children: [
+                UploadButton(
+                  label: 'Staff Photo',
+                  primaryColor: _pageColor,
+                  secondaryColor: ColorStyle.text200,
+                  image: image?.image,
+                  onChanged: (image) {
+                    setState(() {
+                      this.image = image;
+                    });
+                  },
+                ),
+                SpacingStyle.defaultVerticalSpacing,
+                LabeledCustomTextFromField(
+                  controller: _controllerStaffName,
+                  label: 'Staff Name',
+                  themeColor: _pageColor,
+                  foregroundColor: ColorStyle.text200,
+                  hint: 'Enter Staff Name',
+                  validator: (value) =>
+                      value == null || value.isEmpty ? 'Enter Staff Name' : null,
+                ),
+                SpacingStyle.defaultVerticalSpacing,
+                LabeledCustomTextFromField(
+                  controller: _controllerStaffPhone,
+                  label: 'Phone Number',
+                  themeColor: _pageColor,
+                  foregroundColor: ColorStyle.text200,
+                  keyboardType: TextInputType.phone,
+                  hint: 'Enter Phone Number',
+                  validator: (value) =>
+                      value == null || value.isEmpty ? 'Enter Phone Number' : null,
+                ),
+                SpacingStyle.defaultVerticalSpacing,
+                // Drop down for staff type
+                DropdownButtonFormField(
                   decoration: InputDecoration(
                     labelText: 'Staff Type',
                     labelStyle: TextStyle(
                       color: ColorStyle.text200,
                     ),
                     enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
                       borderSide: BorderSide(
                         color: ColorStyle.text200,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
                       borderSide: BorderSide(
+                        width: 2,
                         color: _pageColor,
+                      ),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide(
+                        width: 2,
+                        color: ColorStyle.error,
+                      ),
+                    ),
+                    focusedErrorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.0),
+                      borderSide: BorderSide(
+                        width: 2,
+                        color: ColorStyle.error,
                       ),
                     ),
                   ),
                   hint: const Text('Select Staff Type'),
+                  value: staffType,
                   items: [
                     ...StaffType.values.map((e) => DropdownMenuItem(
                           value: e,
-                          child: Text(e.toString().split('.').last),
+                          child: Text(e.name),
                         ))
                   ],
                   onChanged: (value) {
-                    debugPrint(value?.name ?? '');
-                  }),
-
-              const SizedBox(
-                height: 6.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Checkbox(
-                      value: isActive,
-                      onChanged: (value) {
-                        setState(() {
-                          isActive = value ?? false;
-                        });
-                      }),
-                  const SizedBox(
-                    width: 6.0,
-                  ),
-                  Text(
-                    'Active',
-                    style: TextStyle(
-                      color: ColorStyle.text200,
-                      fontSize: 16.0,
+                    setState(() {
+                      staffType = value;
+                    });
+                  },
+                  validator: (value) =>
+                      value == null ? 'Please select staff type' : null,
+                ),
+      
+                SpacingStyle.defaultVerticalSpacing,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Checkbox(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(4.0),
+                        ),
+                        activeColor: _pageColor,
+                        value: isActive,
+                        onChanged: (value) {
+                          setState(() {
+                            isActive = value ?? false;
+                          });
+                        }),
+                    const SizedBox(
+                      width: 6.0,
                     ),
-                  ),
-                ],
-              )
-            ],
+                    Text(
+                      'Active',
+                      style: TextStyle(
+                        color: ColorStyle.text200,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -130,10 +157,6 @@ class _AddStaffPageState extends State<AddStaffPage> {
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {
-            if (_controllerWaiterName.text.isEmpty) {
-              showSnackBar(context, 'Waiter Name is required');
-              return;
-            }
             final isValid = _formKey.currentState!.validate();
             if (!isValid) {
               return;
@@ -144,19 +167,18 @@ class _AddStaffPageState extends State<AddStaffPage> {
               EateryDB.instance.staffBox
                   .add(
                 Staff(
-                    name: _controllerWaiterName.text,
-                    phone: _controllerWaiterPhone.text,
+                    name: _controllerStaffName.text,
+                    phone: _controllerStaffPhone.text,
                     photo: image?.filename,
                     isActive: isActive,
-                    type: StaffType.other // TODO: Fix this section
-                    ),
+                    type: staffType!),
               )
                   .whenComplete(() {
-                showSnackBar(context, 'Waiter added successfully');
+                showSnackBar(context, 'Staff added successfully');
                 Navigator.pop(context);
               });
             } catch (_) {
-              showSnackBar(context, 'Failed to add waiter');
+              showSnackBar(context, 'Failed to add Staff');
             }
           },
           child: const Text('Save'),

@@ -17,18 +17,18 @@ class _StaffsPageState extends State<StaffsPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Staff> waiters = EateryDB.instance.staffBox.values.toList();
+    List<Staff> Staffs = EateryDB.instance.staffBox.values.toList();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: _pageColor,
-        title: const Text('Waiters'),
+        title: const Text('Staffs'),
         foregroundColor: Colors.white,
         
       ),
-      body: waiters.isNotEmpty
+      body: Staffs.isNotEmpty
           ? ListView(
               children: [
-                ...waiters.map((e) {
+                ...Staffs.map((e) {
                   return ListTile(
                       title: Text(
                         e.name,
@@ -62,9 +62,9 @@ class _StaffsPageState extends State<StaffsPage> {
                                 context: context,
                                 builder: (context) {
                                   return AlertDialog(
-                                    title: const Text('Delete Waiter'),
+                                    title: const Text('Delete Staff'),
                                     content: const Text(
-                                        'Are you sure you want to delete this waiter?'),
+                                        'Are you sure you want to delete this Staff?'),
                                     actions: [
                                       TextButton(
                                         onPressed: () {
@@ -105,14 +105,14 @@ class _StaffsPageState extends State<StaffsPage> {
                   ),
                   SizedBox(height: 16),
                   Text(
-                    'No Waiters',
+                    'No Staffs',
                     style: TextStyle(
                       fontSize: 24,
                       fontWeight: FontWeight.bold,
                     ),
                   ),
                   Text(
-                    'Add a waiter to get started',
+                    'Add a staff to get started',
                     style: TextStyle(
                       fontSize: 16,
                     ),
@@ -123,7 +123,7 @@ class _StaffsPageState extends State<StaffsPage> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
-        label: const Text('Add Waiter'),
+        label: const Text('Add Staff'),
         icon: const Icon(Icons.add),
         onPressed: () {
           Navigator.push(
