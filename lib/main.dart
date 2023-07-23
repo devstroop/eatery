@@ -3,11 +3,11 @@ import 'package:eatery/references.dart';
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
-  await setupDirectory();
+  await setupDataAndInitDB();
   runApp(const MyApp());
 }
 
-Future setupDirectory() async {
+Future setupDataAndInitDB() async {
   String basePath = '';
   if (Platform.isAndroid) {
     basePath = (await getApplicationDocumentsDirectory()).path;
