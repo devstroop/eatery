@@ -70,7 +70,7 @@ class _DiningTableSelectionViewState extends State<DiningTableSelectionView> {
               label: 'All',
               image: const AssetImage('assets/icons/all.png'),
             ),
-            ...EateryDB.instance.diningTableCategoryBox!.values.map((e) {
+            ...EateryDB.instance.diningTableCategoryBox.values.map((e) {
               return CircularCategoryPOSWidget(
                 margin: const EdgeInsets.only(right: 12),
                 onTap: () {
@@ -101,13 +101,13 @@ class _DiningTableSelectionViewState extends State<DiningTableSelectionView> {
             mainAxisSpacing: 12.0,
           ),
           children: [
-            ...EateryDB.instance.diningTableBox!.values
+            ...EateryDB.instance.diningTableBox.values
                 .where((element) =>
                     selectedCategory?.id == null ||
                     element.categoryId == selectedCategory?.id)
                 .map((diningTable) {
               Order? order = diningTable.orderId != null
-                  ? EateryDB.instance.orderBox!.values.singleWhere(
+                  ? EateryDB.instance.orderBox.values.singleWhere(
                       (element) => element.id == diningTable.orderId)
                   : null;
               return DiningTableSelectionCard(
@@ -134,12 +134,13 @@ class _DiningTableSelectionViewState extends State<DiningTableSelectionView> {
     }
     // TODO: Take phone number (*mandatory), Additional info (optional)
     // TODO: Find customer by phone number or create new customer with phone number and additional info or name 'Walk in ${EateryDB.instance.customerBox.nextId()}'
-    String phoneNumber = '7488797047';
-    String? name = 'Walk in ${EateryDB.instance.customerBox!.nextId()}';
+    
+    String? name = 'Walk in customer';
+    String phoneNumber = '';
     String? email = '';
     String? address = '';
 
-    Customer customer = EateryDB.instance.customerBox!.values.firstWhere(
+    Customer customer = EateryDB.instance.customerBox.values.firstWhere(
         (element) =>
             element.phone?.replaceFirst('+', '').trim() ==
             phoneNumber.replaceFirst('+', '').trim(), orElse: () {

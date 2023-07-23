@@ -14,7 +14,7 @@ class UpgradeNotification extends StatefulWidget {
 class _UpgradeNotificationState extends State<UpgradeNotification> {
   @override
   Widget build(BuildContext context) {
-    return EateryDB.instance.subscriptionBox?.values
+    return EateryDB.instance.subscriptionBox.values
                 .singleWhere(
                     (element) => element.id == widget.company!.subscriptionId!)
                 .purchaseCode ==

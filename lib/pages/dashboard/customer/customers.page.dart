@@ -23,10 +23,10 @@ class _CustomersPageState extends State<CustomersPage> {
         title: const Text('Customers'),
         foregroundColor: Colors.white,
       ),
-      body: EateryDB.instance.customerBox?.values.isNotEmpty ?? false
+      body: EateryDB.instance.customerBox.values.isNotEmpty
           ? ListView(
               children: [
-                for(var e in EateryDB.instance.customerBox!.values)
+                for(var e in EateryDB.instance.customerBox.values)
                   ListTile(
                       title: Text(
                         e.name,
@@ -44,7 +44,7 @@ class _CustomersPageState extends State<CustomersPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        EditCustomerPage(customerKey: e.id!)),
+                                        EditCustomerPage(customerKey: e.id)),
                               ).then((_) => setState(() {}));
                             },
                           ),

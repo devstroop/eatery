@@ -212,9 +212,9 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
 
     Color pageColor = Color(orderType.color ?? 0);
     List<ProductCategory> categories =
-        EateryDB.instance.productCategoryBox!.values.toList();
+        EateryDB.instance.productCategoryBox.values.toList();
     List<Product> products =
-        EateryDB.instance.productBox!.values.where((element) {
+        EateryDB.instance.productBox.values.where((element) {
       // TODO: implement build
       return true;
     }).toList();
@@ -281,7 +281,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                   },
                   label: 'All',
                 ),
-                ...EateryDB.instance.productCategoryBox!.values.map((each) {
+                ...EateryDB.instance.productCategoryBox.values.map((each) {
                   return CircularCategoryPOSWidget(
                     margin: const EdgeInsets.only(bottom: 6),
                     image: LibraryImage(each.image).image,

@@ -142,7 +142,7 @@ class _AddStaffPageState extends State<AddStaffPage> {
 
             try {
               EateryDB.instance.staffBox
-                  !.add(
+                  .add(
                 Staff(
                     name: _controllerWaiterName.text,
                     phone: _controllerWaiterPhone.text,

@@ -19,7 +19,7 @@ class _DashboardPageState extends State<DashboardPage> {
       setState(() {
         GlobalVariables.company = widget.company;
         GlobalVariables.currency = EateryDB.instance.currencyBox
-            !.get(GlobalVariables.company?.currencyId);
+            .get(GlobalVariables.company?.currencyId);
       });
     });
 

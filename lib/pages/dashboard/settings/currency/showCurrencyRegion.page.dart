@@ -19,7 +19,7 @@ class _ShowCurrencyRegionPageState extends State<ShowCurrencyRegionPage> {
       setState(() {
         // TODO: Get the currency from the database
         int? currencyId = GlobalVariables.company?.currencyId;
-        KCurrency? currencyObj = currencyId != null ? EateryDB.instance.currencyBox!.values
+        KCurrency? currencyObj = currencyId != null ? EateryDB.instance.currencyBox.values
             .singleWhere((element) => element.id == currencyId) : null;
         var map = currencyObj?.toMap();
         selectedCurrency = map != null ? Currency.from(json: map) : null;
@@ -113,7 +113,7 @@ class _ShowCurrencyRegionPageState extends State<ShowCurrencyRegionPage> {
           child: const Text('Save'),
           onPressed: () {
             if (formKey.currentState!.validate()) {
-              Company company = EateryDB.instance.companyBox!.values.first;
+              Company company = EateryDB.instance.companyBox.values.first;
               company.currencyId = 0; //selectedCurrency?.id;
               company.save();
 

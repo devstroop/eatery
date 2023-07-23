@@ -212,11 +212,11 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                     validFrom: validFrom,
                     validTill: validTill,
                     subscriptionType: subscriptionType);
-                await EateryDB.instance.subscriptionBox?.add(subscription);
+                await EateryDB.instance.subscriptionBox.add(subscription);
 
-                KCurrency? _kCurrency;
+                KCurrency? kCurrency;
                 if (currency != null) {
-                  _kCurrency = KCurrency(
+                  kCurrency = KCurrency(
                       name: currency!.name,
                       code: currency!.code,
                       symbol: currency!.symbol,
@@ -229,7 +229,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                           currency!.spaceBetweenAmountAndSymbol,
                       decimalSeparator: currency!.decimalSeparator,
                       symbolOnLeft: currency!.symbolOnLeft);
-                  await EateryDB.instance.currencyBox?.add(_kCurrency);
+                  await EateryDB.instance.currencyBox.add(kCurrency);
                 }
                 // COMPANY
                 Company company = Company(
@@ -243,10 +243,10 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                   foodLicenseNo: _controllerFoodLicNo.text,
                   salesTaxNumber: _controllerTaxLicNo.text,
                   subscriptionId: subscription.id,
-                  currencyId: _kCurrency?.id,
+                  currencyId: kCurrency?.id,
                 );
                 int? result = await EateryDB.instance.companyBox
-                    ?.add(company)
+                    .add(company)
                     .whenComplete(() => Navigator.of(this.context)
                         .pushAndRemoveUntil(
                             MaterialPageRoute(

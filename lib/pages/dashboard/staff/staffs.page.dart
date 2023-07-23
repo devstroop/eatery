@@ -17,7 +17,7 @@ class _StaffsPageState extends State<StaffsPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Staff> waiters = EateryDB.instance.staffBox!.values.toList();
+    List<Staff> waiters = EateryDB.instance.staffBox.values.toList();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: _pageColor,

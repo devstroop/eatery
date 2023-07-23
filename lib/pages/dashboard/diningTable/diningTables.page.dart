@@ -24,7 +24,7 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<DiningTable> diningTables = EateryDB.instance.diningTableBox!.values
+    List<DiningTable> diningTables = EateryDB.instance.diningTableBox.values
         .where((element) =>
             selectedCategory == null ||
             element.categoryId == selectedCategory?.id)
@@ -55,15 +55,15 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
               children: [
                 ...diningTables.map((e) {
                   DiningTableCategory? category = EateryDB.instance
-                          .diningTableCategoryBox!.values
+                          .diningTableCategoryBox.values
                           .where((element) => element.id == e.categoryId)
                           .isNotEmpty
-                      ? EateryDB.instance.diningTableCategoryBox!.values
+                      ? EateryDB.instance.diningTableCategoryBox.values
                           .where((element) => element.id == e.categoryId)
                           .first
                       : null;
                   Order? order = e.orderId != null
-                      ? EateryDB.instance.orderBox!.values
+                      ? EateryDB.instance.orderBox.values
                           .singleWhere((elem) => elem.id == e.orderId)
                       : null;
                   // bool isAvailable = order == null || order.isPaid;

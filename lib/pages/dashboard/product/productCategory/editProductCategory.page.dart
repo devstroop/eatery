@@ -44,7 +44,7 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
             showDialog(
                 context: context,
                 builder: (context) {
-                  if(EateryDB.instance.productBox!.values.any((element) => element.categoryId == widget.category.id)) {
+                  if(EateryDB.instance.productBox.values.any((element) => element.categoryId == widget.category.id)) {
                     return AlertDialog(
                       title: const Text('Delete Category'),
                       content: const Text(

@@ -81,7 +81,7 @@ class _AddDiningTableCategoryPageState
               return;
             }
             EateryDB.instance.diningTableCategoryBox
-                ?.add(
+                .add(
               DiningTableCategory(
                   name: _controllerCategoryName.text.trim(),
                   description: _controllerCategoryDescription.text.trim(),

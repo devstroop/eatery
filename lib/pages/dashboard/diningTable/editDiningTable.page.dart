@@ -21,8 +21,8 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
     super.initState();
     Future.delayed(Duration.zero, (){
       setState(() {
-        diningTableCategory = EateryDB.instance.diningTableCategoryBox!.values.where((elem) => elem.id == widget.diningTable.categoryId).isNotEmpty ? EateryDB.instance.diningTableCategoryBox!.values.where((elem) => elem.id == widget.diningTable.categoryId).first : null;
-        _controllerCategoryName.text = widget.diningTable.name ?? '';
+        diningTableCategory = EateryDB.instance.diningTableCategoryBox.values.where((elem) => elem.id == widget.diningTable.categoryId).isNotEmpty ? EateryDB.instance.diningTableCategoryBox.values.where((elem) => elem.id == widget.diningTable.categoryId).first : null;
+        _controllerCategoryName.text = widget.diningTable.name;
         _controllerCategoryDescription.text = widget.diningTable.description ?? '';
         image = widget.diningTable.image != null ? LibraryImage(widget.diningTable.image) : null;
       }); 
@@ -141,7 +141,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                             },
                           );
                         }),
-                    ...EateryDB.instance.diningTableCategoryBox!.values.map((e) {
+                    ...EateryDB.instance.diningTableCategoryBox.values.map((e) {
                       return PosCategoryWidget(
                         active: diningTableCategory?.id == e.id,
                         label: e.name,
@@ -177,7 +177,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
             widget.diningTable.description = _controllerCategoryDescription.text;
             widget.diningTable.image = image?.filename;
             EateryDB.instance.diningTableBox
-                !.put(widget.diningTable.id, widget.diningTable)
+                .put(widget.diningTable.id, widget.diningTable)
                 .whenComplete(() {
               showSnackBar(context, 'Successfully updated');
               Navigator.of(context).pop();

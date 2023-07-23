@@ -18,7 +18,7 @@ class CustomTextFromField extends StatefulWidget {
     this.prefix,
     this.suffix,
     this.title,
-    this.autofocus = false,
+    this.autoFocus = false,
     this.onFieldSubmitted,
     this.focusNode,
     this.textInputAction,
@@ -42,7 +42,7 @@ class CustomTextFromField extends StatefulWidget {
   final Widget? suffix;
   final String? title;
   final TextInputAction? textInputAction;
-  final bool autofocus;
+  final bool autoFocus;
   final ValueChanged<String>? onFieldSubmitted;
   final FocusNode? focusNode;
 
@@ -93,7 +93,7 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
           minLines: widget.minLines ?? 1,
           maxLines: widget.maxLines ?? 1,
           textInputAction: widget.textInputAction,
-          autofocus: widget.autofocus,
+          autofocus: widget.autoFocus,
           focusNode: widget.focusNode,
           onFieldSubmitted: widget.onFieldSubmitted,
           decoration: InputDecoration(

@@ -21,8 +21,8 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
     //WidgetsBinding.instance.addPostFrameCallback((_) => loadCompany());
   }
 
-  void postInit() async {
-    company = await EateryDB.instance.companyBox!.values.first;
+  Future postInit() async {
+    company = EateryDB.instance.companyBox.values.first;
     // company = await CompanyLoader(widget.database).load(context);
     setState(() {
       _controllerCompanyName.text = company!.name;
@@ -71,7 +71,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                       themeColor: themeColor,
                       keyboardType: TextInputType.name,
                       controller: _controllerCompanyName,
-                      autofocus: true,
+                      autoFocus: true,
                       focusNode: focus1,
                       title: 'Company name',
                       hint: 'Enter company name...',

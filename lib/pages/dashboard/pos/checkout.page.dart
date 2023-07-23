@@ -269,23 +269,23 @@ class _CheckoutPageState extends State<CheckoutPage> {
       });
       try {
         // TODO: Implement license validation
-        Map<String, dynamic> order = {
-          'orderType': widget.orderType.name,
-          'orderTypeText': widget.orderType.name,
-          'customerName': customerName,
-          'customerPhone': customerPhone,
-          'customerAddress': customerAddress,
-          'timestamp': DateTime.now().microsecondsSinceEpoch,
-          'tableName': widget.diningTableName,
-          'table': widget.diningTable,
-          'cart': widget.cart,
-          'waiter': selectedWaiterName,
-          'taxableTotal': taxableTotal,
-          'taxTotal': taxTotal,
-          'roundOff': roundOff,
-          'finalTotal': finalTotalAfterRoundOff,
-          'open': OrderType.dine == widget.orderType ? true : false
-        };
+        // Map<String, dynamic> order = {
+        //   'orderType': widget.orderType.name,
+        //   'orderTypeText': widget.orderType.name,
+        //   'customerName': customerName,
+        //   'customerPhone': customerPhone,
+        //   'customerAddress': customerAddress,
+        //   'timestamp': DateTime.now().microsecondsSinceEpoch,
+        //   'tableName': widget.diningTableName,
+        //   'table': widget.diningTable,
+        //   'cart': widget.cart,
+        //   'waiter': selectedWaiterName,
+        //   'taxableTotal': taxableTotal,
+        //   'taxTotal': taxTotal,
+        //   'roundOff': roundOff,
+        //   'finalTotal': finalTotalAfterRoundOff,
+        //   'open': OrderType.dine == widget.orderType ? true : false
+        // };
 
         // String? id;
         // if (widget.openOrderId != null) {

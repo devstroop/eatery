@@ -1,5 +1,6 @@
 import 'package:eatery/references.dart';
 
+// ignore: must_be_immutable
 class Body1 extends StatelessWidget {
   final Function(LibraryImage? logoPath) onChanged;
   final Color pageColor;

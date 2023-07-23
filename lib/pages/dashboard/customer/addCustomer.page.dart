@@ -142,7 +142,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
 
             try {
               EateryDB.instance.customerBox
-                  ?.add(
+                  .add(
                 Customer(
                     name: _controllerCustomerName.text,
                     phone: _controllerCustomerPhone.text,

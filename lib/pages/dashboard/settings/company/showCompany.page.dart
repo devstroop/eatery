@@ -21,7 +21,7 @@ class _ShowCompanyPageState extends State<ShowCompanyPage> {
   }
 
   void postInit() async {
-    company = EateryDB.instance.companyBox!.values.first;
+    company = EateryDB.instance.companyBox.values.first;
     setState(() {});
   }
   void _changeLogo() => showModalBottomSheet(

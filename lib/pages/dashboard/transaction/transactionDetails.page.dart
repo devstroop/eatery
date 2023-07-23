@@ -23,9 +23,9 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
 
   @override
   Widget build(BuildContext context) {
-    final _pageColor = Color(widget.orderType!.color!);
+    final pageColor = Color(widget.orderType!.color!);
     final appBar = AppBar(
-      backgroundColor: _pageColor,
+      backgroundColor: pageColor,
       title: const Text('Order detail'),
       actions: [
         IconButton(
@@ -622,7 +622,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: PrimaryButton(
-            color: _pageColor,
+            color: pageColor,
             onPressed: () async {
               try {
                 await PrintInvoice.printReceipt(

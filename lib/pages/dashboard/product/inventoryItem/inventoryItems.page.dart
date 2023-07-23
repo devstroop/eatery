@@ -28,7 +28,7 @@ class _InventoryItemsPageState extends State<InventoryItemsPage> {
   @override
   Widget build(BuildContext context) {
 
-    List<Product> products = EateryDB.instance.productBox!.values
+    List<Product> products = EateryDB.instance.productBox.values
         .where((element) => element.type == ProductType.inventoryItem).toList();
     double crossAxisCount;
     double spacing;
@@ -85,7 +85,7 @@ class _InventoryItemsPageState extends State<InventoryItemsPage> {
                   },
                   label: 'All',
                 ),
-                ...EateryDB.instance.productCategoryBox!.values.map((each) {
+                ...EateryDB.instance.productCategoryBox.values.map((each) {
                   return CircularCategoryPOSWidget(
                     margin: const EdgeInsets.only(bottom: 6),
                     image: LibraryImage(each.image).image,

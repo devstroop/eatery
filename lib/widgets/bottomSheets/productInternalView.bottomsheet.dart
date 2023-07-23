@@ -35,7 +35,7 @@ class _ProductInternalViewBottomsheetState
               PageTitle(
                   title: widget.product.name,
                   subtitle: widget.product.categoryId != null
-                      ? EateryDB.instance.productCategoryBox!.values
+                      ? EateryDB.instance.productCategoryBox.values
                           .singleWhere((element) =>
                               element.id == widget.product.categoryId)
                           .name
