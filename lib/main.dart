@@ -18,6 +18,10 @@ Future setupDataAndInitDB() async {
   }
 
   GlobalVariables.baseDirectory = basePath;
+  debugPrint(GlobalVariables.baseDirectory);
+  debugPrint(GlobalVariables.dataDirectory);
+  debugPrint(GlobalVariables.backupDirectory);
+  debugPrint(GlobalVariables.imagesDirectory);
   await EateryDB.instance.init(GlobalVariables.dataDirectory);
 }
 

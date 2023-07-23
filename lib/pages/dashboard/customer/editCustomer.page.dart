@@ -8,8 +8,8 @@ import '../../../widgets/buttons/primary.button.dart';
 Color _pageColor = ColorStyle.primary;
 
 class EditCustomerPage extends StatefulWidget {
-  const EditCustomerPage({Key? key, required this.customerKey}) : super(key: key);
-  final int customerKey;
+  const EditCustomerPage({Key? key, required this.customerId}) : super(key: key);
+  final int customerId;
 
   @override
   State<EditCustomerPage> createState() => _EditCustomerPageState();
@@ -33,7 +33,7 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
   initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      customer = EateryDB.instance.customerBox!.get(widget.customerKey);
+      customer = EateryDB.instance.customerBox!.get(widget.customerId);
       setState(() {
         _controllerCustomerName.text = customer?.name ?? '';
         _controllerCustomerPhone.text = customer?.phone ?? '';
@@ -206,7 +206,7 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
             try {
               EateryDB.instance.customerBox!
                   .put(
-                widget.customerKey,
+                widget.customerId,
                 customer!,
               )
                   .whenComplete(() {

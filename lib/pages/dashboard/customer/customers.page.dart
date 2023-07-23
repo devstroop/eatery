@@ -26,7 +26,7 @@ class _CustomersPageState extends State<CustomersPage> {
       body: EateryDB.instance.customerBox!.values.isNotEmpty
           ? ListView(
               children: [
-                for(var e in EateryDB.instance.customerBox!.values)
+                for (var e in EateryDB.instance.customerBox!.values)
                   ListTile(
                       title: Text(
                         e.name,
@@ -37,20 +37,20 @@ class _CustomersPageState extends State<CustomersPage> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
-                            icon: Icon(Icons.edit,
-                                color: _pageColor),
+                            icon: Icon(Icons.edit, color: _pageColor),
                             onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        EditCustomerPage(customerKey: e.id)),
-                              ).then((_) => setState(() {}));
+                              if (e.id != null) {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          EditCustomerPage(customerId: e.id!)),
+                                ).then((_) => setState(() {}));
+                              }
                             },
                           ),
                           IconButton(
-                            icon: Icon(Icons.delete,
-                                color: _pageColor),
+                            icon: Icon(Icons.delete, color: _pageColor),
                             onPressed: () {
                               showDialog(
                                 context: context,

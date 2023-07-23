@@ -232,7 +232,7 @@ class Generator {
     _codeTable = codeTable;
     if (codeTable != null) {
       bytes += Uint8List.fromList(
-        List.from(cCodeTable.codeUnits)..add(_profile.getCodePageId(codeTable)),
+        List.from(cCodeTable.codeUnits)..add(_profile.getCodePageId(codeTable)!),
       );
       _styles = _styles.copyWith(codeTable: codeTable);
     }
@@ -311,14 +311,14 @@ class Generator {
     if (styles.codeTable != null) {
       bytes += Uint8List.fromList(
         List.from(cCodeTable.codeUnits)
-          ..add(_profile.getCodePageId(styles.codeTable)),
+          ..add(_profile.getCodePageId(styles.codeTable)!),
       );
       _styles =
           _styles.copyWith(align: styles.align, codeTable: styles.codeTable);
     } else if (_codeTable != null) {
       bytes += Uint8List.fromList(
         List.from(cCodeTable.codeUnits)
-          ..add(_profile.getCodePageId(_codeTable)),
+          ..add(_profile.getCodePageId(_codeTable)!),
       );
       _styles = _styles.copyWith(align: styles.align, codeTable: _codeTable);
     }
@@ -407,7 +407,7 @@ class Generator {
 
     if (codeTable != null) {
       bytes += Uint8List.fromList(
-        List.from(cCodeTable.codeUnits)..add(_profile.getCodePageId(codeTable)),
+        List.from(cCodeTable.codeUnits)..add(_profile.getCodePageId(codeTable)!),
       );
     }
 

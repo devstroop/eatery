@@ -3,7 +3,7 @@ import 'package:flutter/services.dart' show rootBundle;
 
 class CodePage {
   CodePage(this.id, this.name);
-  int id;
+  int? id;
   String name;
 }
 
@@ -34,7 +34,7 @@ class CapabilityProfile {
   String name;
   List<CodePage> codePages;
 
-  int getCodePageId(String? codePage) {
+  int? getCodePageId(String? codePage) {
     return codePages
         .firstWhere((cp) => cp.name == codePage,
             orElse: () => throw Exception(
