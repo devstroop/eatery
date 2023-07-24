@@ -35,97 +35,99 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
           backgroundColor: _pageColor,
           foregroundColor: Colors.white,
           title: const Text('Add Customer'),),
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              LabeledCustomTextFromField(
-                controller: _controllerCustomerName,
-                label: 'Customer Name',
-                themeColor: _pageColor,
-                foregroundColor: ColorStyle.text200,
-                hint: 'Enter customer name',
-              ),
-              const SizedBox(
-                height: 6.0,
-              ),
-              LabeledCustomTextFromField(
-                controller: _controllerCustomerPhone,
-                label: 'Phone Number',
-                themeColor: _pageColor,
-                foregroundColor: ColorStyle.text200,
-                keyboardType: TextInputType.phone,
-                hint: 'Enter phone number',
-              ),
+      body: InkWell(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              children: [
+                LabeledCustomTextFromField(
+                  controller: _controllerCustomerName,
+                  label: 'Customer Name',
+                  themeColor: _pageColor,
+                  foregroundColor: ColorStyle.text200,
+                  hint: 'Enter customer name',
+                ),
+                const SizedBox(
+                  height: 6.0,
+                ),
+                LabeledCustomTextFromField(
+                  controller: _controllerCustomerPhone,
+                  label: 'Phone Number',
+                  themeColor: _pageColor,
+                  foregroundColor: ColorStyle.text200,
+                  keyboardType: TextInputType.phone,
+                  hint: 'Enter phone number',
+                ),
 
-              SpacingStyle.defaultVerticalSpacing,
-              LabeledCustomTextFromField(
-                controller: _controllerCustomerEmail,
-                label: 'Email Address',
-                hint: 'Enter email address',
-                themeColor: _pageColor,
-                foregroundColor: ColorStyle.text200,
-                keyboardType: TextInputType.emailAddress,
-                textInputAction: TextInputAction.next,
-                  validator: (value) {
-                    if (value!.trim().isEmpty) return 'Email cannot be blank';
-                    if (!value.trim().isValidEmail()) {
-                      return 'Email address is not valid';
+                SpacingStyle.defaultVerticalSpacing,
+                LabeledCustomTextFromField(
+                  controller: _controllerCustomerEmail,
+                  label: 'Email Address',
+                  hint: 'Enter email address',
+                  themeColor: _pageColor,
+                  foregroundColor: ColorStyle.text200,
+                  keyboardType: TextInputType.emailAddress,
+                  textInputAction: TextInputAction.next,
+                    validator: (value) {
+                      if (value!.trim().isEmpty) return 'Email cannot be blank';
+                      if (!value.trim().isValidEmail()) {
+                        return 'Email address is not valid';
+                      }
+                      return null;
                     }
-                    return null;
-                  }
-              ),
-              SpacingStyle.defaultVerticalSpacing,
-              LabeledCustomTextFromField(
-                controller: _controllerCustomerAddress,
-                label: 'Address',
-                themeColor: _pageColor,
-                foregroundColor: ColorStyle.text200,
-                keyboardType: TextInputType.streetAddress,
-                hint: 'Enter full address',
-                multiline: true,
-              ),
-              SpacingStyle.defaultVerticalSpacing,
-              LabeledCustomTextFromField(
-                controller: _controllerCustomerLandmark,
-                label: 'Landmark (Optional)',
-                themeColor: _pageColor,
-                foregroundColor: ColorStyle.text200,
-                keyboardType: TextInputType.text,
-                hint: 'Enter landmark',
-              ),
+                ),
+                SpacingStyle.defaultVerticalSpacing,
+                LabeledCustomTextFromField(
+                  controller: _controllerCustomerAddress,
+                  label: 'Address',
+                  themeColor: _pageColor,
+                  foregroundColor: ColorStyle.text200,
+                  keyboardType: TextInputType.streetAddress,
+                  hint: 'Enter full address',
+                  multiline: true,
+                ),
+                SpacingStyle.defaultVerticalSpacing,
+                LabeledCustomTextFromField(
+                  controller: _controllerCustomerLandmark,
+                  label: 'Landmark (Optional)',
+                  themeColor: _pageColor,
+                  foregroundColor: ColorStyle.text200,
+                  keyboardType: TextInputType.text,
+                  hint: 'Enter landmark',
+                ),
 
-              SpacingStyle.defaultVerticalSpacing,
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Checkbox(
-                      value: isActive,
-                      onChanged: (value) {
-                        setState(() {
-                          isActive = value ?? false;
-                        });
-                      }),
-                  const SizedBox(
-                    width: 6.0,
-                  ),
-                  Text(
-                    'Active',
-                    style: TextStyle(
-                      color: ColorStyle.text200,
-                      fontSize: 16.0,
+                SpacingStyle.defaultVerticalSpacing,
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Checkbox(
+                        value: isActive,
+                        onChanged: (value) {
+                          setState(() {
+                            isActive = value ?? false;
+                          });
+                        }),
+                    const SizedBox(
+                      width: 6.0,
                     ),
-                  ),
-                ],
-              )
-            ],
+                    Text(
+                      'Active',
+                      style: TextStyle(
+                        color: ColorStyle.text200,
+                        fontSize: 16.0,
+                      ),
+                    ),
+                  ],
+                )
+              ],
+            ),
           ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: ColorStyle.backgroundColorAlter,
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {

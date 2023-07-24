@@ -1,8 +1,9 @@
 import 'package:eatery/references.dart';
 
+final _pageColor = ColorStyle.primary;
+
 class AddTaxSlabSettingsPage extends StatefulWidget {
-  const AddTaxSlabSettingsPage({Key? key})
-      : super(key: key);
+  const AddTaxSlabSettingsPage({Key? key}) : super(key: key);
 
   @override
   State<AddTaxSlabSettingsPage> createState() => _AddTaxSlabSettingsPageState();
@@ -11,11 +12,10 @@ class AddTaxSlabSettingsPage extends StatefulWidget {
 class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
   final TextEditingController controllerSlabName = TextEditingController();
   final TextEditingController controllerTaxRate = TextEditingController();
-  final localColor = ColorStyle.primary;
   final focus1 = FocusNode();
   final focus2 = FocusNode();
   final _formKey = GlobalKey<FormState>();
-  final TaxType _taxType = TaxType.inclusive;
+  TaxType selectedTaxType = TaxType.inclusive;
 
   Future _submit() async {
     final isValid = _formKey.currentState!.validate();
@@ -28,7 +28,7 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
       TaxSlab taxSlab = TaxSlab(
           name: controllerSlabName.text,
           rate: double.parse(controllerTaxRate.text),
-          type: _taxType);
+          type: selectedTaxType);
       await EateryDB.instance.taxSlabBox!.add(taxSlab).whenComplete(() {
         showSnackBar(this.context, 'Successfully created!');
         Navigator.of(this.context).pop();
@@ -42,127 +42,97 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: localColor,
+        backgroundColor: _pageColor,
+        foregroundColor: Colors.white,
         title: const Text('Add Tax Slab'),
-        
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Slab name',
-                    style: TextStyle(
-                      color: ColorStyle.text400,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                    ),
+      body: InkWell(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              children: [
+                LabeledCustomTextFromField(
+                  controller: controllerSlabName,
+                  label: 'Tax Slab name',
+                  themeColor: _pageColor,
+                  hint: 'Enter tax slab name',
+                  focusNode: focus1,
+                  onFieldSubmitted: (v) {
+                    FocusScope.of(context).requestFocus(focus2);
+                  },
+                  validator: (value) {
+                    if (value!.trim().isEmpty) {
+                      return 'Tax slab name cannot be blank';
+                    }
+                    return null;
+                  },
+                  foregroundColor: ColorStyle.text200,
+                ),
+                SpacingStyle.defaultVerticalSpacing,
+                LabeledCustomTextFromField(
+                  controller: controllerTaxRate,
+                  label: 'Tax Rate',
+                  hint: 'Enter tax rate',
+                  themeColor: _pageColor,
+                  focusNode: focus2,
+                  suffix: Icon(
+                    Icons.percent,
+                    color: ColorStyle.text400,
                   ),
-                  SpacingStyle.defaultHorizontalSpacing,
-                  SpacingStyle.defaultHorizontalSpacing,
-                  Flexible(
-                    flex: 2,
-                    child: CustomTextFromField(
-                      controller: controllerSlabName,
-                      hint: '',
-                      themeColor: localColor,
-                      focusNode: focus1,
-                      onFieldSubmitted: (v) {
-                        FocusScope.of(context).requestFocus(focus2);
-                      },
-                      validator: (value) {
-                        if (value!.trim().isEmpty) return 'Slab name be blank';
-                        return null;
-                      },
-                    ),
+                  keyboardType:
+                      const TextInputType.numberWithOptions(decimal: true),
+                  validator: (value) {
+                    if (value!.trim().isEmpty) return 'Tax rate cannot be blank';
+                    return null;
+                  },
+                  onFieldSubmitted: (v) {
+                    FocusScope.of(context).unfocus();
+                  },
+                  foregroundColor: ColorStyle.text200,
+                ),
+                SpacingStyle.defaultVerticalSpacing,
+                Text(
+                  'Select Tax Type',
+                  style: TextStyle(
+                    color: ColorStyle.text200,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
                   ),
-                ],
-              ),
-              const SizedBox(
-                height: 8.0,
-              ),
-              Row(
-                children: [
-                  Text(
-                    'Tax rate',
-                    style: TextStyle(
-                      color: ColorStyle.text400,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  SpacingStyle.defaultHorizontalSpacing,
-                  SpacingStyle.defaultHorizontalSpacing,
-                  Flexible(
-                    child: CustomTextFromField(
-                      controller: controllerTaxRate,
-                      hint: '',
-                      themeColor: localColor,
-                      focusNode: focus2,
-                      suffix: Icon(
-                        Icons.percent,
-                        color: ColorStyle.text400,
-                      ),
-                      keyboardType:
-                          const TextInputType.numberWithOptions(decimal: true),
-                      validator: (value) {
-                        if (value!.trim().isEmpty) {
-                          return 'Tax rate couldn\'t be blank';
-                        }
-                        return null;
-                      },
-                      onFieldSubmitted: (v) {
-                        FocusScope.of(context).unfocus();
-                      },
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(
-                height: 8.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Type',
-                    style: TextStyle(
-                      color: ColorStyle.text400,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  /*ToggleSwitch(
-                    color: localColor,
-                    options: [for (var each in TaxType.values) each.name!],
-                    index: _taxType.index,
-                    onChange: (int? index){
-                      _taxType = TaxType.values
-                          .singleWhere((element) => element.id == index);
-                      setState(() {});
-
-                    },
-                  ),*/
-                ],
-              ),
-            ],
+                ),
+                const SizedBox(
+                  height: 3.0,
+                ),
+                ToggleSwitch(
+                  highlightColor: _pageColor,
+                  backgroundColor: const Color(0xFFE5E5E5),
+                  foregroundColor: Colors.white,
+                  inactiveForegroundColor: ColorStyle.text200,
+                  children: [
+                    ...TaxType.values.map((e) => e.name!)
+                  ],
+                  selectedIndex: selectedTaxType.index,
+                  onChange: (int? index) {
+                    if (index != null) {
+                      setState(() {
+                        selectedTaxType = TaxType.values[index];
+                      });
+                    }
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: PrimaryButton(
-            color: localColor,
-            height: 48.0,
-            onPressed: _submit,
-            child: const Text('Save'),
-          ),
+        child: PrimaryButton(
+          color: _pageColor,
+          height: 48.0,
+          onPressed: _submit,
+          child: const Text('Save'),
         ),
       ),
     );

@@ -17,25 +17,13 @@ class _ShowCurrencyRegionPageState extends State<ShowCurrencyRegionPage> {
     super.initState();
     Future.delayed(Duration.zero, () {
       setState(() {
-        String? currencyId = GlobalVariables.company?.currencyCode;
-        KCurrency? curr = currencyId != null
+        String? currencyCode = GlobalVariables.company?.currencyCode;
+        KCurrency? curr = currencyCode != null
             ? EateryDB.instance.currencyBox!.values
-                .singleWhere((element) => element.code == currencyId)
+                .singleWhere((element) => element.code == currencyCode)
             : null;
         selectedCurrency = curr != null
-            ? Currency(
-                code: curr.code,
-                name: curr.name,
-                symbol: curr.symbol,
-                flag: curr.flag,
-                number: curr.number,
-                decimalDigits: curr.decimalDigits,
-                namePlural: curr.namePlural,
-                symbolOnLeft: curr.symbolOnLeft,
-                decimalSeparator: curr.decimalSeparator,
-                thousandsSeparator: curr.thousandsSeparator,
-                spaceBetweenAmountAndSymbol: curr.spaceBetweenAmountAndSymbol,
-              )
+            ? Currency.from(json: curr.toMap())
             : null;
       });
     });

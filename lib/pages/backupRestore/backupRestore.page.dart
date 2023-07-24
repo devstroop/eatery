@@ -69,7 +69,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
               leading: const Icon(Icons.backup),
               title: const Text('Backup'),
               subtitle: const Text('Backup data to Google Drive'),
-              trailing: const Icon(Icons.restore),
+              trailing: const Icon(Icons.chevron_right),
             ),
             ListTile(
               onTap: doRestore,

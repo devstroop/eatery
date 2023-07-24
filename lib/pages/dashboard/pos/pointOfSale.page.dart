@@ -26,190 +26,6 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
 
   @override
   Widget build(BuildContext context) {
-
-    // final productsPanel = SizedBox(
-    //   width: double.maxFinite,
-    //   height: double.maxFinite,
-    //   child: SingleChildScrollView(
-    //     scrollDirection: Axis.vertical,
-    //     child: productsData.isNotEmpty
-    //         ? Wrap(
-    //             alignment: WrapAlignment.center,
-    //             children: [
-    //               /*for (var product in productsData)
-    //                 ProductCard(
-    //                   currencySymbol: widget.account['currencySymbol'],
-    //                   id: product['id'],
-    //                   name: product['name'],
-    //                   description: product['description'],
-    //                   price: product['price'],
-    //                   quantity: product['quantity'],
-    //                   warningQuantity: product['warningQuantity'],
-    //                   image: product['image'],
-    //                   foodType: product['foodType'],
-    //                   themeColor: orderType.color,
-    //                   cartQuantity: Cart.cart.containsKey(product['id']) ? Cart.cart[product['id']]!['quantity'] : 0,
-    //                   onAdd: () {
-    //                     if (Cart.cart.containsKey(product['id'])) {
-    //                       setState(() {
-    //                         Cart.cart[product['id']]!['quantity'] += 1; // Unit value
-    //                       });
-    //                     } else {
-    //                       setState(() {
-    //                         Cart.cart[product['id']] = {
-    //                           'name': product['name'],
-    //                           'description': product['description'],
-    //                           'price': product['price'],
-    //                           'image': product['image'],
-    //                           'tax': product['tax'],
-    //                           'taxType': product['taxType'],
-    //                           'quantity': 1.0, // Unit value
-    //                           'unit': product['unit'],
-    //                           'customizations': [],
-    //                         };
-    //                       });
-    //                     }
-    //                   },
-    //                   onRemove: () async {
-    //                     if (Cart.cart.containsKey(product['id']) && Cart.cart[product['id']]!['quantity'] > 1) {
-    //                       setState(() {
-    //                         Cart.cart[product['id']]!['quantity'] -= 1; // Unit value
-    //                       });
-    //                     } else if (Cart.cart.containsKey(product['id']) && Cart.cart[product['id']]!['quantity'] <= 1) {
-    //                       setState(() {
-    //                         Cart.cart.remove(product['id']);
-    //                       });
-    //                     }
-    //                   },
-    //                   onTap: () => showModalBottomSheet(
-    //                       shape: const RoundedRectangleBorder(
-    //                         borderRadius: BorderRadius.only(
-    //                           topLeft: Radius.circular(24),
-    //                           topRight: Radius.circular(24),
-    //                           bottomLeft: Radius.circular(0),
-    //                           bottomRight: Radius.circular(0),
-    //                         ),
-    //                       ),
-    //                       context: context,
-    //                       builder: (context) => buildProductDetailedViewBottomSheet(product: product)),
-    //                 ),*/
-    //               // Cart.cart.isNotEmpty
-    //               //     ? orderType == OrderType.dine
-    //               //         ? Container(height: 120)
-    //               //         : Container(height: 60)
-    //               //     : Container()
-    //             ],
-    //           )
-    //         : SizedBox(
-    //             child: Padding(
-    //               padding: EdgeInsets.only(
-    //                 top: (MediaQuery.of(context).size.width <
-    //                             MediaQuery.of(context).size.height
-    //                         ? MediaQuery.of(context).size.width
-    //                         : 0.0) *
-    //                     0.5,
-    //               ),
-    //               child: Center(
-    //                   child: Image.asset(
-    //                 'assets/images/2748558.png',
-    //                 width: (MediaQuery.of(context).size.width <
-    //                             MediaQuery.of(context).size.height
-    //                         ? MediaQuery.of(context).size.width
-    //                         : MediaQuery.of(context).size.height) *
-    //                     0.5,
-    //               )),
-    //             ),
-    //           ),
-    //   ),
-    // );
-
-    // final diningTableSelectionButton = orderType == OrderType.dine
-    //     ? selectedDiningTableId != null
-    //         ? FloatingActionButton.extended(
-    //             backgroundColor: pageColor,
-    //             icon: const Icon(Icons.chair),
-    //             label: Text(selectedDiningTableName!),
-    //             onPressed: () => showModalBottomSheet(
-    //                 shape: const RoundedRectangleBorder(
-    //                   borderRadius: BorderRadius.only(
-    //                     topLeft: Radius.circular(24),
-    //                     topRight: Radius.circular(24),
-    //                     bottomLeft: Radius.circular(0),
-    //                     bottomRight: Radius.circular(0),
-    //                   ),
-    //                 ),
-    //                 context: context,
-    //                 builder: (context) => buildDiningTableViewBottomSheet()),
-    //           )
-    //         : FloatingActionButton.extended(
-    //             backgroundColor: pageColor,
-    //             icon: const Icon(Icons.add),
-    //             label: const Text('Select Table'),
-    //             onPressed: () => showModalBottomSheet(
-    //                 shape: const RoundedRectangleBorder(
-    //                   borderRadius: BorderRadius.only(
-    //                     topLeft: Radius.circular(24),
-    //                     topRight: Radius.circular(24),
-    //                     bottomLeft: Radius.circular(0),
-    //                     bottomRight: Radius.circular(0),
-    //                   ),
-    //                 ),
-    //                 context: context,
-    //                 builder: (context) => buildDiningTableViewBottomSheet()),
-    //           )
-    //     : Container();
-
-    // final cartStrip = GlobalVariables.cart.isNotEmpty
-    //     ? Container(
-    //         height: 48,
-    //         width: double.maxFinite,
-    //         color: Colors.green,
-    //         child: Padding(
-    //           padding: const EdgeInsets.fromLTRB(12, 0, 12, 0),
-    //           child: InkWell(
-    //             onTap: () => showModalBottomSheet(
-    //                 shape: const RoundedRectangleBorder(
-    //                   borderRadius: BorderRadius.only(
-    //                     topLeft: Radius.circular(24),
-    //                     topRight: Radius.circular(24),
-    //                     bottomLeft: Radius.circular(0),
-    //                     bottomRight: Radius.circular(0),
-    //                   ),
-    //                 ),
-    //                 context: context,
-    //                 builder: (context) => buildCartViewBottomSheet()),
-    //             child: Row(
-    //               mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //               children: [
-    //                 const Row(
-    //                   children: [
-    //                     /*Text(
-    //                       '${Cart.cart.length} Item | ${widget.account['currencySymbol']}${Calculations.calculateTaxableTotal(cart: Cart.cart)}',
-    //                       style: TextStyle(fontWeight: FontWeight.bold, color: ColorStyle.backgroundColorAlter),
-    //                     )*/
-    //                   ],
-    //                 ),
-    //                 Row(
-    //                   children: [
-    //                     Text(
-    //                       'Cart',
-    //                       style: TextStyle(
-    //                           fontWeight: FontWeight.bold,
-    //                           color: ColorStyle.backgroundColorAlter),
-    //                     ),
-    //                     Icon(
-    //                       Icons.arrow_right,
-    //                       color: ColorStyle.backgroundColorAlter,
-    //                     )
-    //                   ],
-    //                 ),
-    //               ],
-    //             ),
-    //           ),
-    //         ),
-    //       )
-    //     : Container();
-
     Color pageColor = Color(orderType.color ?? 0);
     List<ProductCategory> categories =
         EateryDB.instance.productCategoryBox!.values.toList();
@@ -376,7 +192,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
               onTap: _showOrderTypeSelection,
               icon: Icon(orderType == OrderType.dine
                   ? Icons.dinner_dining
-                  : orderType == OrderType.delivery ? Icons.delivery_dining : Icons.takeout_dining),
+                  : orderType == OrderType.delivery ? Icons.delivery_dining : Icons.takeout_dining, color: Color(orderType.color ?? ColorStyle.text200.value),),
               themeColor: pageColor,
               text: orderType.name!,
             ),
@@ -384,7 +200,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
               IconButton(
                   onPressed: _pickDiningTable,
                   icon: Icon(
-                    Icons.chair,
+                    Icons.table_restaurant,
                     color: pageColor,
                   )),
             if (orderType == OrderType.dine) // waiter selection
@@ -406,6 +222,14 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                   onPressed: _pickDeliveryStaff,
                   icon: Icon(
                     Icons.directions_bike,
+                    color: pageColor,
+                  )),
+
+            if (orderType == OrderType.takeout)
+              IconButton(
+                  onPressed: _pickDeliveryStaff,
+                  icon: Icon(
+                    Icons.person,
                     color: pageColor,
                   )),
 
@@ -546,7 +370,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
               padding: const EdgeInsets.fromLTRB(
                   16.0, 12.0, 16.0, 12.0),
               child: Text(
-                'Select a order type',
+                'Select an order type',
                 style: TextStyle(
                     fontSize: 18.0,
                     fontWeight: FontWeight.w600,
@@ -561,7 +385,8 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                       ? Icons.dinner_dining
                       : orderType == OrderType.delivery
                           ? Icons.delivery_dining
-                          : Icons.takeout_dining),
+                          : Icons.takeout_dining,
+                      color: Colors.white),
                   text: orderType.name!,
                   color: Color(orderType.color!),
                   foreColor: Colors.white,

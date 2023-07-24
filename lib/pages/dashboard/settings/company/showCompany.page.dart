@@ -1,5 +1,7 @@
 import 'package:eatery/references.dart';
 
+final _pageColor = ColorStyle.primary;
+
 class ShowCompanyPage extends StatefulWidget {
   const ShowCompanyPage({Key? key}) : super(key: key);
 
@@ -41,13 +43,12 @@ class _ShowCompanyPageState extends State<ShowCompanyPage> {
         setState(() {});*/
           }));
 
-  final themeColor = ColorStyle.brandColor;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: themeColor,
+        backgroundColor: _pageColor,
         foregroundColor: Colors.white,
         title: const Text('Company Details'),
       ),
@@ -143,7 +144,7 @@ class _ShowCompanyPageState extends State<ShowCompanyPage> {
       bottomNavigationBar: BottomAppBar(
         color: ColorStyle.backgroundColorAlter,
         child: PrimaryButton(
-          color: themeColor,
+          color: _pageColor,
           child: const Text('Edit'),
           onPressed: () {
             Navigator.push(

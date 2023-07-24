@@ -133,7 +133,6 @@ export './pages/dashboard/importExport/importExport.page.dart';
 // Internal references
 export './pages/dashboard/transaction/transactions.page.dart';
 export './pages/dashboard/transaction/transactionDetails.page.dart';
-export './pages/dashboard/transaction/printSalesReport.page.dart';
 // Internal references
 export './pages/dashboard/pos/pointOfSale.page.dart';
 export './pages/dashboard/pos/checkout.page.dart';
