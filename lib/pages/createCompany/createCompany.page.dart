@@ -188,24 +188,6 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
             themeColor: themeColor,
             callback: (index) async {
               try {
-                /*TaxSlab? taxSlab = _controllerDefaultTaxPercent.text.isNotEmpty
-                    ? TaxSlab(
-                        name: 'default',
-                        rate: double.parse(_controllerDefaultTaxPercent.text),
-                        type: _taxType)
-                    : null;
-                List<TaxSlab> isMatch = EateryDB.instance.taxSlabBox.values
-                    .where((element) => element.name == 'default')
-                    .toList();
-                if (taxSlab != null) {
-                  if (isMatch.isNotEmpty) {
-                    for (var each in isMatch) {
-                      await each.delete();
-                    }
-                  }
-                  await EateryDB.instance.taxSlabBox.add(taxSlab);
-                }*/
-
                 // Subscription
                 Subscription subscription = Subscription(
                     purchaseCode: purchaseCode,
