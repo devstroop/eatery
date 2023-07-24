@@ -66,10 +66,10 @@ class _ShowCompanyPageState extends State<ShowCompanyPage> {
                   width: 120,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(24),
-                    image: DecorationImage(
+                    image: company?.logo != null ? DecorationImage(
                       fit: BoxFit.cover,
                       image: LibraryImage(company!.logo!).image,
-                    ),
+                    ) : null,
                   ),
                 ),
               ),
