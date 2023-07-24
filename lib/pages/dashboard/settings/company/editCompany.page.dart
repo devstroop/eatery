@@ -176,7 +176,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                   LabeledCustomTextFromField(
                     themeColor: themeColor,
                     foregroundColor: ColorStyle.text200,
-                    keyboardType: TextInputType.number,
+                    keyboardType: TextInputType.text,
                     controller: _controllerFoodLicNo,
                     label:
                         '${Edition.values.singleWhere((element) => element.id == company?.edition.id) == Edition.gst ? 'FSSAI' : 'Food'} License No',
@@ -206,20 +206,21 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                 color: themeColor,
                 child: const Text('Save'),
                 onPressed: () async {
-                  // Update the company object with the new data
                   company!.name = _controllerCompanyName.text;
                   company!.email = _controllerEmail.text;
                   company!.phone = _controllerPhone.text;
                   company!.address = _controllerAddress.text;
                   company!.foodLicenseNo = _controllerFoodLicNo.text;
-                  // _controllerDefaultTax.text.isNotEmpty ? double.parse(_controllerDefaultTax.text) : null;
+                  company!.salesTaxNumber = _controllerSalesTaxNo.text;
 
                   // Update the company in the Hive database
-                  await company!.save();
+                  company!.save().then((value) {
+                    // Update the company in the database
+                    // Display a success message and navigate back
+                    showSnackBar(context, 'Company details successfully updated');
+                    Navigator.pop(context);
+                  });
 
-                  // Display a success message and navigate back
-                  showSnackBar(context, 'Company details successfully updated');
-                  Navigator.pop(context);
                 },
 
               ),

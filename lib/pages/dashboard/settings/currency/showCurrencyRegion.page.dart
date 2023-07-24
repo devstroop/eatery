@@ -17,11 +17,26 @@ class _ShowCurrencyRegionPageState extends State<ShowCurrencyRegionPage> {
     super.initState();
     Future.delayed(Duration.zero, () {
       setState(() {
-        int? currencyId = GlobalVariables.company?.currencyId;
-        KCurrency? currencyObj = currencyId != null ? EateryDB.instance.currencyBox!.values
-            .singleWhere((element) => element.id == currencyId) : null;
-        var map = currencyObj?.toMap();
-        selectedCurrency = map != null ? Currency.from(json: map) : null;
+        String? currencyId = GlobalVariables.company?.currencyCode;
+        KCurrency? curr = currencyId != null
+            ? EateryDB.instance.currencyBox!.values
+                .singleWhere((element) => element.code == currencyId)
+            : null;
+        selectedCurrency = curr != null
+            ? Currency(
+                code: curr.code,
+                name: curr.name,
+                symbol: curr.symbol,
+                flag: curr.flag,
+                number: curr.number,
+                decimalDigits: curr.decimalDigits,
+                namePlural: curr.namePlural,
+                symbolOnLeft: curr.symbolOnLeft,
+                decimalSeparator: curr.decimalSeparator,
+                thousandsSeparator: curr.thousandsSeparator,
+                spaceBetweenAmountAndSymbol: curr.spaceBetweenAmountAndSymbol,
+              )
+            : null;
       });
     });
   }
@@ -110,28 +125,35 @@ class _ShowCurrencyRegionPageState extends State<ShowCurrencyRegionPage> {
         child: PrimaryButton(
           color: themeColor,
           child: const Text('Save'),
-          onPressed: () {
+          onPressed: () async {
             if (formKey.currentState!.validate()) {
+              for (var element in EateryDB.instance.currencyBox!.values) {
+                await element.delete();
+              }
+              KCurrency? currency = selectedCurrency != null ? KCurrency.fromMap(selectedCurrency!.toJson()) : null;
+              if (currency != null) {
+                await EateryDB.instance.currencyBox!.add(currency);
+                currency = EateryDB.instance.currencyBox!.values.first;
+              }
               Company company = EateryDB.instance.companyBox!.values.first;
-              company.currencyId = 0; //selectedCurrency?.id;
-              company.save();
-
-              // Display dialog successfully saved
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text('Success'),
-                  content: const Text('Successfully saved'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('OK'),
-                    ),
-                  ],
-                ),
-              ).then((value) => Navigator.pop(context));
+              company.currencyCode = currency?.code;
+              company.save().then((value) {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Success'),
+                    content: const Text('Successfully saved'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+                ).then((value) => Navigator.pop(context));
+              });
             }
           },
         ),

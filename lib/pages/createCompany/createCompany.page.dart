@@ -243,7 +243,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                   foodLicenseNo: _controllerFoodLicNo.text,
                   salesTaxNumber: _controllerTaxLicNo.text,
                   subscriptionId: subscription.id,
-                  currencyId: kCurrency?.id,
+                  currencyCode: kCurrency?.code,
                 );
                 int? result = await EateryDB.instance.companyBox!
                     .add(company)
