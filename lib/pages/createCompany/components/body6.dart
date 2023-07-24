@@ -143,7 +143,7 @@ class _Body6State extends State<Body6> {
                 CustomTextFromField(
                   themeColor: widget.themeColor,
                   controller: _controllerPurchaseCode,
-                  title: 'Purchase code',
+                  label: 'Purchase code',
                   hint: 'Enter purchase code...',
                   textInputAction: TextInputAction.done,
                   autoFocus: true,

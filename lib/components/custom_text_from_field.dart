@@ -17,7 +17,7 @@ class CustomTextFromField extends StatefulWidget {
     this.enabled,
     this.prefix,
     this.suffix,
-    this.title,
+    this.label,
     this.autoFocus = false,
     this.onFieldSubmitted,
     this.focusNode,
@@ -40,7 +40,7 @@ class CustomTextFromField extends StatefulWidget {
   final bool? enabled;
   final Widget? prefix;
   final Widget? suffix;
-  final String? title;
+  final String? label;
   final TextInputAction? textInputAction;
   final bool autoFocus;
   final ValueChanged<String>? onFieldSubmitted;
@@ -68,16 +68,16 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (widget.title != null)
+        if (widget.label != null)
           Text(
-            widget.title!,
+            widget.label!,
             style: TextStyle(
               color: ColorStyle.text200,
               fontSize: 12,
               fontWeight: FontWeight.w500,
             ),
           ),
-        if (widget.title != null)
+        if (widget.label != null)
           const SizedBox(
             height: 3.0,
           ),

@@ -6,11 +6,11 @@ A simple and sober restaurant management with pos application.
 
 ## Project Information
 
-Flutter version: `3.10.5`
+Flutter version: `3.10.5` => `3.10.6`
 
-Dart SDK version: `>=2.17.2 < 3.0.0`
+Dart SDK version: `>=2.17.2 < 3.0.0` => `>=3.0.6 <4.0.0`
 
-Dart Tool version: `3.0.5`
+Dart Tool version: `3.0.5` => `3.0.6`
 
 DevTools version: `2.23.1`
 

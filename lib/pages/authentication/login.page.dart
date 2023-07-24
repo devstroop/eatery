@@ -151,7 +151,7 @@ class _LoginPageState extends State<LoginPage> {
                             controller: _controllerPassword,
                             obscureText: true,
                             isPassword: true,
-                            title: 'Secure PIN',
+                            label: 'Secure PIN',
                             hint: 'Enter secure pin...',
                             textInputAction: TextInputAction.done,
                             onFieldSubmitted: (v) {

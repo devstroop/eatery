@@ -18,7 +18,6 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
       
     });
     postInit();
-    //WidgetsBinding.instance.addPostFrameCallback((_) => loadCompany());
   }
 
   Future postInit() async {
@@ -57,6 +56,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
         ? Scaffold(
             appBar: AppBar(
               backgroundColor: themeColor,
+              foregroundColor: Colors.white,
               title: const Text('Company Details'),
             ),
             body: Padding(
@@ -67,13 +67,13 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                 children: [
                   SpacingStyle.defaultVerticalSpacing,
                   SpacingStyle.defaultVerticalSpacing,
-                  CustomTextFromField(
+                  LabeledCustomTextFromField(
                       themeColor: themeColor,
+                      foregroundColor: ColorStyle.text200,
                       keyboardType: TextInputType.name,
                       controller: _controllerCompanyName,
-                      autoFocus: true,
                       focusNode: focus1,
-                      title: 'Company name',
+                      label: 'Company name',
                       hint: 'Enter company name...',
                       textInputAction: TextInputAction.next,
                       onFieldSubmitted: (v) {
@@ -86,11 +86,12 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                         return null;
                       }),
                   SpacingStyle.defaultVerticalSpacing,
-                  CustomTextFromField(
+                  LabeledCustomTextFromField(
                       themeColor: themeColor,
+                      foregroundColor: ColorStyle.text200,
                       keyboardType: TextInputType.emailAddress,
                       controller: _controllerEmail,
-                      title: 'Email address',
+                      label: 'Email address',
                       hint: 'Enter email address...',
                       focusNode: focus2,
                       textInputAction: TextInputAction.next,
@@ -107,11 +108,12 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                         return null;
                       }),
                   SpacingStyle.defaultVerticalSpacing,
-                  CustomTextFromField(
+                  LabeledCustomTextFromField(
                       themeColor: themeColor,
+                      foregroundColor: ColorStyle.text200,
                       keyboardType: TextInputType.phone,
                       controller: _controllerPhone,
-                      title: 'Phone no',
+                      label: 'Phone no',
                       hint: 'Enter phone no...',
                       focusNode: focus3,
                       textInputAction: TextInputAction.next,
@@ -128,13 +130,15 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                         return null;
                       }),
                   SpacingStyle.defaultVerticalSpacing,
-                  CustomTextFromField(
+                  LabeledCustomTextFromField(
                     themeColor: themeColor,
+                    foregroundColor: ColorStyle.text200,
                     controller: _controllerAddress,
-                    title: 'Address',
+                    label: 'Address',
                     hint: 'Enter address...',
                     focusNode: focus4,
                     textInputAction: TextInputAction.next,
+                    multiline: true,
                     validator: (value) {
                       if (value!.trim().isEmpty) {
                         return 'Address cannot be blank';
@@ -146,11 +150,12 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                     },
                   ),
                   SpacingStyle.defaultVerticalSpacing,
-                  CustomTextFromField(
+                  LabeledCustomTextFromField(
                     themeColor: themeColor,
+                    foregroundColor: ColorStyle.text200,
                     keyboardType: TextInputType.text,
                     controller: _controllerSalesTaxNo,
-                    title:
+                    label:
                         '${Edition.values.singleWhere((element) => element.id == company?.edition.id).name} License No',
                     hint:
                         'Enter ${Edition.values.singleWhere((element) => element.id == company?.edition.id).name} license number...',
@@ -168,11 +173,12 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                     },
                   ),
                   SpacingStyle.defaultVerticalSpacing,
-                  CustomTextFromField(
+                  LabeledCustomTextFromField(
                     themeColor: themeColor,
+                    foregroundColor: ColorStyle.text200,
                     keyboardType: TextInputType.number,
                     controller: _controllerFoodLicNo,
-                    title:
+                    label:
                         '${Edition.values.singleWhere((element) => element.id == company?.edition.id) == Edition.gst ? 'FSSAI' : 'Food'} License No',
                     hint:
                         'Enter ${Edition.values.singleWhere((element) => element.id == company?.edition.id) == Edition.gst ? 'FSSAI' : 'Food'} license number...',
@@ -196,33 +202,26 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
             ),
             bottomNavigationBar: BottomAppBar(
               color: ColorStyle.backgroundColorAlter,
-              child: Padding(
-                padding: SpacingStyle.defaultPadding,
-                child: Row(
-                  children: [
-                    PrimaryButton(
-                      color: themeColor,
-                      child: const Text('Save'),
-                      onPressed: () async {
-                        // Update the company object with the new data
-                        company!.name = _controllerCompanyName.text;
-                        company!.email = _controllerEmail.text;
-                        company!.phone = _controllerPhone.text;
-                        company!.address = _controllerAddress.text;
-                        company!.foodLicenseNo = _controllerFoodLicNo.text;
-                        // _controllerDefaultTax.text.isNotEmpty ? double.parse(_controllerDefaultTax.text) : null;
+              child: PrimaryButton(
+                color: themeColor,
+                child: const Text('Save'),
+                onPressed: () async {
+                  // Update the company object with the new data
+                  company!.name = _controllerCompanyName.text;
+                  company!.email = _controllerEmail.text;
+                  company!.phone = _controllerPhone.text;
+                  company!.address = _controllerAddress.text;
+                  company!.foodLicenseNo = _controllerFoodLicNo.text;
+                  // _controllerDefaultTax.text.isNotEmpty ? double.parse(_controllerDefaultTax.text) : null;
 
-                        // Update the company in the Hive database
-                        await company!.save();
+                  // Update the company in the Hive database
+                  await company!.save();
 
-                        // Display a success message and navigate back
-                        showSnackBar(context, 'Company details successfully updated');
-                        Navigator.pop(context);
-                      },
+                  // Display a success message and navigate back
+                  showSnackBar(context, 'Company details successfully updated');
+                  Navigator.pop(context);
+                },
 
-                    )
-                  ],
-                ),
               ),
             ),
           )

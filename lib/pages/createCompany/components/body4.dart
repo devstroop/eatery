@@ -45,7 +45,7 @@ class Body4 extends StatelessWidget {
             themeColor: themeColor,
             keyboardType: TextInputType.text,
             controller: taxNoController,
-            title: '${edition.name} Registration No',
+            label: '${edition.name} Registration No',
             hint: 'Enter ${edition.name} registration number',
             focusNode: focus1,
             textInputAction: TextInputAction.next,
@@ -65,7 +65,7 @@ class Body4 extends StatelessWidget {
             themeColor: themeColor,
             keyboardType: TextInputType.number,
             controller: foodLicNoController,
-            title:
+            label:
                 '${edition == Edition.gst ? 'FSSAI' : 'Food'} Registration Number',
             hint:
                 'Enter ${edition == Edition.gst ? 'FSSAI' : 'Food'} registration number',
