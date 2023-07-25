@@ -30,13 +30,13 @@ class _ImportExportPageState extends State<ImportExportPage> {
 
         // Populate Products
         for (var row in productsTable!.rows) {
-          Product product = Product.fromIterable(row.map((e) => e?.value));
+          Product product = Product.fromIterable(row.map((e) => e?.value.toString()));
           EateryDB.instance.productBox!.put(product.id, product);
         }
 
         // Populate Product Categories
         for (var row in productCategoriesTable!.rows) {
-          ProductCategory productCategory = ProductCategory.fromIterable(row.map((e) => e?.value));
+          ProductCategory productCategory = ProductCategory.fromIterable(row.map((e) => e?.value.toString()));
           EateryDB.instance.productCategoryBox!.put(productCategory.id, productCategory);
         }
 
