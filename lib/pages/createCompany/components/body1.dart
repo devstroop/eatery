@@ -85,7 +85,7 @@ class Body1 extends StatelessWidget {
               },
               validator: (value) {
                 if (value!.trim().isEmpty) return 'Email cannot be blank';
-                if (!value.trim().isValidEmail()) {
+                if (!value.trim().isValidEmailAddress()) {
                   return 'Email address is not valid';
                 }
                 return null;

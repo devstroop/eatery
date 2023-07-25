@@ -1,9 +1,4 @@
-import 'package:eatery/constants/style/spacing_style.dart';
-import 'package:eatery/constants/utils/utils.dart';
-import 'package:eatery_db/eatery_db.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import '../../../components/labeled_custom_text_from_field.dart';
-import '../../../widgets/buttons/primary.button.dart';
+import 'package:eatery/references.dart';
 
 Color _pageColor = ColorStyle.primary;
 
@@ -73,7 +68,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                   textInputAction: TextInputAction.next,
                     validator: (value) {
                       if (value!.trim().isEmpty) return 'Email cannot be blank';
-                      if (!value.trim().isValidEmail()) {
+                      if (!(value.toString().trim().isValidEmailAddress())) {
                         return 'Email address is not valid';
                       }
                       return null;
