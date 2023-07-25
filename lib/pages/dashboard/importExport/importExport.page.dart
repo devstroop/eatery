@@ -167,8 +167,10 @@ class _ImportExportPageState extends State<ImportExportPage> {
 
     excel.setDefaultSheet(productsSheet.sheetName);
     String filename = 'EXPORT-${DateTime.now().millisecondsSinceEpoch}.xlsx';
-    String filePath =
-        '${GlobalVariables.importExportDirectory}/$filename';
+    var downloadsPath = await ExternalPath.getExternalStoragePublicDirectory(ExternalPath.DIRECTORY_DOWNLOADS);
+
+    String filePath = join(downloadsPath, filename);
+
     List<int> bytes = excel.encode()!;
     File(filePath)
         .writeAsBytes(bytes)
