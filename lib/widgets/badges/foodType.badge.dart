@@ -1,18 +1,19 @@
 import 'package:eatery/references.dart';
 
 class FoodTypeBadge extends StatelessWidget {
-  const FoodTypeBadge({Key? key, required this.foodType, this.backgroundColor})
+  const FoodTypeBadge({Key? key, required this.foodType, this.backgroundColor, this.size = 18})
       : super(key: key);
   final FoodType? foodType;
   final Color? backgroundColor;
+  final double size;
 
   @override
   Widget build(BuildContext context) {
     if (foodType != null) {
       if (foodType == FoodType.veg) {
         return Container(
-          width: 18,
-          height: 18,
+          width: size,
+          height: size,
           decoration: BoxDecoration(
             color: backgroundColor ?? Colors.white,
             borderRadius: BorderRadius.circular(3),

@@ -28,26 +28,14 @@ class _UploadButtonState extends State<UploadButton> {
     super.initState();
   }
 
-  void onUploadPressed() => showModalBottomSheet(
-      context: this.context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(24),
-          bottomLeft: Radius.circular(0),
-          bottomRight: Radius.circular(0),
-        ),
-      ),
-      builder: (context) =>
-          ImageLibraryBottomSheet(context, (LibraryImage? libraryImage) {
-            this.libraryImage = libraryImage;
-            if (widget.onChanged != null) {
-              widget.onChanged!(libraryImage);
-              Navigator.pop(context);
-            }
-            setState(() {});
-          }));
+  void onUploadPressed(BuildContext context) => Navigator.push(context, MaterialPageRoute(builder: (context) => ImageLibraryPage(context, (LibraryImage? libraryImage) {
+    this.libraryImage = libraryImage;
+    if (widget.onChanged != null) {
+      widget.onChanged!(libraryImage);
+      Navigator.pop(context);
+    }
+    setState(() {});
+  })));
 
   @override
   Widget build(BuildContext context) {
@@ -137,7 +125,7 @@ class _UploadButtonState extends State<UploadButton> {
                             color: widget.secondaryColor),
                       ),
                     InkWell(
-                      onTap: onUploadPressed,
+                      onTap: () => onUploadPressed(context),
                       child: Text(
                         widget.title ?? "+ Attach Media",
                         style: TextStyle(
@@ -154,7 +142,7 @@ class _UploadButtonState extends State<UploadButton> {
               elevation: 2,
               borderRadius: BorderRadius.circular(12),
               child: InkWell(
-                onTap: onUploadPressed,
+                onTap: () => onUploadPressed(context),
                 child: ClipRRect(
                   borderRadius: const BorderRadius.all(Radius.circular(9)),
                   child: SizedBox(

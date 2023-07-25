@@ -1,5 +1,7 @@
 import 'package:eatery/references.dart';
 
+import '../product/searchProduct.delegate.dart';
+
 class PointOfSalePage extends StatefulWidget {
   const PointOfSalePage({Key? key}) : super(key: key);
 
@@ -47,37 +49,32 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
       spacing = 24;
     }
     return Scaffold(
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(120),
-        child: AppBar(
-          title: const Text('Point of Sale'),
-          backgroundColor: pageColor,
-          foregroundColor: Colors.white,
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.barcode_reader),
-              onPressed: (){}
-            ),
-            IconButton(onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (context) => const TransactionsPage()));
-            }, icon: const Icon(Icons.receipt_long))
-          ],
-
-          flexibleSpace: Container(
-            margin: const EdgeInsets.only(top: 102, left: 12, right: 12),
-            width: double.maxFinite,
-            child: SearchTextField(
-              controller: _controllerSearch,
-              onChanged: (value) {
-                // loadProducts();
-              },
-              themeColor: pageColor,
-              hintText: 'Search a product...',
-            ),
+      appBar: AppBar(
+        title: const Text('Point of Sale'),
+        backgroundColor: pageColor,
+        foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                  context: context,
+                  delegate: SearchProductDelegate(
+                      EateryDB.instance.productBox!.values.toList(),
+                      (product) {}));
+            },
           ),
-        ),
+          IconButton(
+            icon: const Icon(Icons.barcode_reader),
+            onPressed: (){}
+          ),
+          IconButton(onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context) => const TransactionsPage()));
+          }, icon: const Icon(Icons.receipt_long))
+        ],
       ),
       body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Flexible(
             flex: 2,
@@ -114,7 +111,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
               ],
             ),
           ),
-          Flexible(
+          Expanded(
               flex: 8,
               child: products.isNotEmpty
                   ? SingleChildScrollView(

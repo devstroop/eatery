@@ -183,17 +183,18 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
               ToggleSwitch(
                 highlightColor: _pageColor,
                 backgroundColor: const Color(0xFFE5E5E5),
-                foregroundColor: selectedTaxSlab == null ? Colors.white : ColorStyle.text200,
+                foregroundColor: Colors.white,
+                inactiveForegroundColor: ColorStyle.text200,
                 children: [
                   'None',
                   ...slabs.map((e) => e.name)
                 ],
-                selectedIndex: (selectedTaxSlab == null) ? 0 : slabs.indexOf(selectedTaxSlab!),
+                selectedIndex: (selectedTaxSlab == null) ? 0 : slabs.indexOf(selectedTaxSlab!) + 1,
                 onChange: (int? index) {
                   if (index == 0 || index == null) {
                     selectedTaxSlab = null;
                   } else {
-                    selectedTaxSlab = slabs[index];
+                    selectedTaxSlab = slabs[index - 1];
                   }
                   setState(() {});
                 },

@@ -169,7 +169,7 @@ export './pages/dashboard/settings/currency/showCurrencyRegion.page.dart';
 // Internal references
 export './pages/backupRestore/backupRestore.page.dart';
 // Internal references
-export './widgets/bottomSheets/imageLibrary.bottomSheet.dart';
+export 'pages/dashboard/utility/imageLibrary.page.dart';
 export './widgets/containers/image.container.dart';
 export './widgets/dialogs/showConfirmationDialog.dart';
 

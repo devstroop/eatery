@@ -353,7 +353,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   width: menuSize,
                   height: (menuSize - 8) / 2,
                   color: const Color(0xFF2FC289),
-                  onTap: _showLibrary,
+                  onTap: () => _showLibrary(context),
                 ),
                 SizedBox(
                   width: menuSize,
@@ -412,43 +412,33 @@ class _DashboardPageState extends State<DashboardPage> {
     );
   }
 
-  void _showLibrary() {
-    showModalBottomSheet(
-        context: this.context,
-        isScrollControlled: true,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(24),
-            topRight: Radius.circular(24),
-            bottomLeft: Radius.circular(0),
-            bottomRight: Radius.circular(0),
-          ),
-        ),
-        builder: (context) => ImageLibraryBottomSheet(context, (value) {
-              // Display in full screen view
+  void _showLibrary(BuildContext context) {
 
-              showDialog(
-                  context: context,
-                  builder: (context) {
-                    final image =
-                        Image(image: (value ?? LibraryImage('')).image);
-                    return Dialog(
-                      // Add close button to dialog (top right)
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(12),
-                          image: DecorationImage(
-                            image: image.image,
-                            fit: BoxFit.contain,
-                          ),
-                        ),
-                        width: MediaQuery.of(context).size.width * 0.80,
-                        // Set height with aspect ratio to image size and screen width
-                        // height: MediaQuery.of(context).size.width * 0.80 * (image.height ?? 1) / (image.width ?? 1),
-                        // height: MediaQuery.of(context).size.height * 0.80,
-                      ),
-                    );
-                  });
-            }));
+    Navigator.push(context, MaterialPageRoute(builder: (context) => ImageLibraryPage(context, (value) {
+      // Display in full screen view
+
+      showDialog(
+          context: context,
+          builder: (context) {
+            final image =
+            Image(image: (value ?? LibraryImage('')).image);
+            return Dialog(
+              // Add close button to dialog (top right)
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  image: DecorationImage(
+                    image: image.image,
+                    fit: BoxFit.contain,
+                  ),
+                ),
+                width: MediaQuery.of(context).size.width * 0.80,
+                // Set height with aspect ratio to image size and screen width
+                // height: MediaQuery.of(context).size.width * 0.80 * (image.height ?? 1) / (image.width ?? 1),
+                // height: MediaQuery.of(context).size.height * 0.80,
+              ),
+            );
+          });
+    })));
   }
 }
