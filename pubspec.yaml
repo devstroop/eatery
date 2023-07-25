@@ -62,6 +62,7 @@ dependencies:
   flutter_slidable: ^3.0.0
   devdart_windows_hdsn: ^0.0.2
   hex: ^0.2.0
+  external_path: ^1.0.3
   gbk_codec: ^0.4.0
   # bluetooth esc printer
   # bluetooth_thermal_printer:
