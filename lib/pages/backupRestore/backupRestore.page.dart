@@ -37,12 +37,12 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
     Directory(tempBackupDirectory).createSync(recursive: true);
     Directory(GlobalVariables.dataDirectory!).listSync().forEach((element) {
       if (element is File) {
-        element.copySync(join(tempBackupDirectory, element.path.split('/').last));
+        element.copySync(join(tempBackupDirectory, 'data', element.path.split('/').last));
       }
     });
     Directory(GlobalVariables.imagesDirectory!).listSync().forEach((element) {
       if (element is File) {
-        element.copySync(join(tempBackupDirectory, element.path.split('/').last));
+        element.copySync(join(tempBackupDirectory, 'images', element.path.split('/').last));
       }
     });
     // zip
