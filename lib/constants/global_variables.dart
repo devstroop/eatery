@@ -15,6 +15,9 @@ class GlobalVariables {
       _baseDirectory != null ? path.join(_baseDirectory!, 'images') : null;
   static String? backupDirectory =
       _baseDirectory != null ? path.join(_baseDirectory!, 'backup') : null;
+  static String? importExportDirectory = _baseDirectory != null
+      ? path.join(_baseDirectory!, 'import_export')
+      : null;
 
   // Absolute paths
   static String? _baseDirectory;
@@ -27,6 +30,7 @@ class GlobalVariables {
       _createDirectoryIfNotExists(path.join(value, dataDirectory));
       _createDirectoryIfNotExists(path.join(value, imagesDirectory));
       _createDirectoryIfNotExists(path.join(value, backupDirectory));
+      _createDirectoryIfNotExists(path.join(value, importExportDirectory));
     }
   }
 
