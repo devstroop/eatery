@@ -3,8 +3,7 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 import 'package:eatery/references.dart';
 
-const _clientId =
-    "43263799198-3k39t047lg9rabjbefeepl045mihsdlg.apps.googleusercontent.com";
+const _clientId = "43263799198-3k39t047lg9rabjbefeepl045mihsdlg.apps.googleusercontent.com";
 const _clientSecret = "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";
 const _scopes = [ga.DriveApi.driveFileScope];
 

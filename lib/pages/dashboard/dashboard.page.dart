@@ -1,6 +1,5 @@
 import 'package:eatery/references.dart';
 
-
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key, required this.company}) : super(key: key);
   final Company company;
@@ -15,14 +14,13 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, (){
+    Future.delayed(Duration.zero, () {
       setState(() {
         GlobalVariables.company = widget.company;
         GlobalVariables.currency = EateryDB.instance.currencyBox!
             .get(GlobalVariables.company?.currencyCode);
       });
     });
-
   }
 
   @override
@@ -64,8 +62,10 @@ class _DashboardPageState extends State<DashboardPage> {
 
     menuSize = (screenWidth - (spacing * (crossAxisItemCount + 1))) /
         crossAxisItemCount;
-    if(GlobalVariables.company == null){
-      return const Center(child: CircularProgressIndicator(),);
+    if (GlobalVariables.company == null) {
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
     }
     return WillPopScope(
       onWillPop: () {
@@ -122,8 +122,52 @@ class _DashboardPageState extends State<DashboardPage> {
             UpgradeNotification(
               company: GlobalVariables.company,
             ),
-            // const LowBatteryWarningNotification(),
-            const SizedBox(height: 16),
+            SizedBox(
+              height: 16,
+            ),
+            // Container(
+            //   height: 96,
+            //   width: double.infinity,
+            //   padding: const EdgeInsets.symmetric(horizontal: 16),
+            //   margin: const EdgeInsets.symmetric(vertical: 8),
+            //   decoration: BoxDecoration(
+            //     color: const Color(0xFFDFDFDF),
+            //     borderRadius: BorderRadius.circular(12),
+            //     border: Border.all(
+            //       color: const Color(0xFFCFCFCF),
+            //     ),
+            //     boxShadow: [
+            //       BoxShadow(
+            //         color: Colors.black.withOpacity(0.25),
+            //         blurRadius: 8,
+            //         offset: const Offset(0, 2),
+            //       ),
+            //     ],
+            //   ),
+            //   child: Row(
+            //     mainAxisSize: MainAxisSize.max,
+            //     children: [
+            //       Flexible(
+            //           flex: 1,
+            //           child: Expanded(
+            //             child: Stack(
+            //               children: [
+            //                 Positioned(child: Text('Total Sales')),
+            //               ],
+            //             ),
+            //           )),
+            //       Flexible(
+            //           flex: 1,
+            //           child: Expanded(
+            //             child: Stack(
+            //               children: [
+            //                 Positioned(child: Text('Total Sales')),
+            //               ],
+            //             ),
+            //           )),
+            //     ],
+            //   ),
+            // ),
             Wrap(
               spacing: spacing,
               runSpacing: spacing,
@@ -148,13 +192,6 @@ class _DashboardPageState extends State<DashboardPage> {
                     );
                   },
                 ),
-
-
-
-
-
-
-
                 SizedBox(
                   width: menuSize,
                   height: menuSize,
@@ -162,7 +199,6 @@ class _DashboardPageState extends State<DashboardPage> {
                     spacing: 8,
                     runSpacing: 8,
                     children: [
-
                       MenuCard(
                         iconData: Icons.category,
                         iconSize: iconSize / 1.75,
@@ -172,12 +208,13 @@ class _DashboardPageState extends State<DashboardPage> {
                         subtitleSize: subtitleSize * 0.7,
                         color: ColorStyle.tertiary,
                         width: menuSize,
-                        height: (menuSize - 8)/2,
+                        height: (menuSize - 8) / 2,
                         onTap: () {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => const ProductCategoriesPage(),
+                              builder: (context) =>
+                                  const ProductCategoriesPage(),
                             ),
                           );
                         },
@@ -190,8 +227,8 @@ class _DashboardPageState extends State<DashboardPage> {
                         titleSize: titleSize * 0.7,
                         subtitleSize: subtitleSize * 0.7,
                         color: ColorStyle.secondary,
-                        width: (menuSize - 8)/2,
-                        height: (menuSize - 8)/2,
+                        width: (menuSize - 8) / 2,
+                        height: (menuSize - 8) / 2,
                         onTap: () {
                           Navigator.push(
                             context,
@@ -209,8 +246,8 @@ class _DashboardPageState extends State<DashboardPage> {
                         titleSize: titleSize * 0.7,
                         subtitleSize: subtitleSize * 0.7,
                         color: ColorStyle.alternate,
-                        width: (menuSize - 8)/2,
-                        height: (menuSize - 8)/2,
+                        width: (menuSize - 8) / 2,
+                        height: (menuSize - 8) / 2,
                         onTap: () {
                           Navigator.push(
                             context,
@@ -220,11 +257,9 @@ class _DashboardPageState extends State<DashboardPage> {
                           );
                         },
                       ),
-                  ],),
+                    ],
+                  ),
                 ),
-
-
-
                 SizedBox(
                   width: menuSize,
                   height: menuSize,
@@ -232,13 +267,12 @@ class _DashboardPageState extends State<DashboardPage> {
                     spacing: 8,
                     runSpacing: 8,
                     children: [
-
                       MenuCard(
                         iconSize: iconSize / 1.75,
                         titleSize: titleSize * 0.7,
                         subtitleSize: subtitleSize * 0.7,
-                        width: (menuSize - 8)/2,
-                        height: (menuSize - 8)/2,
+                        width: (menuSize - 8) / 2,
+                        height: (menuSize - 8) / 2,
                         iconData: Icons.people,
                         title: 'Customers',
                         color: const Color(0xFF2FC289),
@@ -255,8 +289,8 @@ class _DashboardPageState extends State<DashboardPage> {
                         iconSize: iconSize / 1.75,
                         titleSize: titleSize * 0.7,
                         subtitleSize: subtitleSize * 0.7,
-                        width: (menuSize - 8)/2,
-                        height: (menuSize - 8)/2,
+                        width: (menuSize - 8) / 2,
+                        height: (menuSize - 8) / 2,
                         title: 'Staffs',
                         iconData: Icons.group,
                         color: const Color(0xFFC2592F),
@@ -274,7 +308,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         titleSize: titleSize * 0.7,
                         subtitleSize: subtitleSize * 0.7,
                         width: (menuSize),
-                        height: (menuSize - 8)/2,
+                        height: (menuSize - 8) / 2,
                         iconData: Icons.table_restaurant,
                         title: 'Dining Tables',
                         color: const Color(0xFFEF9050),
@@ -287,7 +321,8 @@ class _DashboardPageState extends State<DashboardPage> {
                           );
                         },
                       ),
-                    ],),
+                    ],
+                  ),
                 ),
                 MenuCard(
                   iconData: Icons.history,
@@ -308,20 +343,18 @@ class _DashboardPageState extends State<DashboardPage> {
                     );
                   },
                 ),
-
                 MenuCard(
                   iconData: Icons.photo_library,
-                  iconSize: iconSize,
+                  iconSize: iconSize / 1.75,
                   title: 'Library',
                   subtitle: 'Images and resources are here',
-                  titleSize: titleSize ,
-                  subtitleSize: subtitleSize,
+                  titleSize: titleSize * 0.7,
+                  subtitleSize: subtitleSize * 0.7,
                   width: menuSize,
-                  height: menuSize,
+                  height: (menuSize - 8) / 2,
                   color: const Color(0xFF2FC289),
                   onTap: _showLibrary,
                 ),
-
                 SizedBox(
                   width: menuSize,
                   height: menuSize,
@@ -329,15 +362,14 @@ class _DashboardPageState extends State<DashboardPage> {
                     spacing: 8,
                     runSpacing: 8,
                     children: [
-
                       MenuCard(
                         iconData: Icons.import_export,
                         iconSize: iconSize / 1.75,
                         title: 'Import Export',
                         titleSize: titleSize * 0.7,
                         subtitleSize: subtitleSize * 0.7,
-                        width: (menuSize - 8)/2,
-                        height: (menuSize - 8)/2,
+                        width: (menuSize - 8) / 2,
+                        height: (menuSize - 8) / 2,
                         color: const Color(0xFFEF9050),
                         onTap: () {
                           Navigator.push(
@@ -348,26 +380,6 @@ class _DashboardPageState extends State<DashboardPage> {
                           );
                         },
                       ),
-                      MenuCard(
-                        iconData: Icons.settings_backup_restore,
-                        iconSize: iconSize / 1.75,
-                        title: 'Backup Restore',
-                        titleSize: titleSize * 0.7,
-                        subtitleSize: subtitleSize * 0.7,
-                        width: (menuSize - 8)/2,
-                        height: (menuSize - 8)/2,
-                        color: const Color(0xFF2FC289),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const BackupRestorePage(),
-                            ),
-                          );
-                        },
-                      ),
-
-
 
                       MenuCard(
                         iconData: Icons.settings,
@@ -375,8 +387,8 @@ class _DashboardPageState extends State<DashboardPage> {
                         title: 'Settings',
                         titleSize: titleSize * 0.7,
                         subtitleSize: subtitleSize * 0.7,
-                        width: menuSize,
-                        height: (menuSize - 8)/2,
+                        width: (menuSize - 8) / 2,
+                        height: (menuSize - 8) / 2,
                         color: const Color(0xFF222222),
                         onTap: () {
                           Navigator.push(
@@ -389,13 +401,9 @@ class _DashboardPageState extends State<DashboardPage> {
                           });
                         },
                       ), // Settings
-
-
-
-                    ],),
+                    ],
+                  ),
                 ),
-
-
               ],
             ),
           ],
@@ -405,7 +413,8 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void _showLibrary() {
-    showModalBottomSheet(context: this.context,
+    showModalBottomSheet(
+        context: this.context,
         isScrollControlled: true,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
@@ -415,29 +424,31 @@ class _DashboardPageState extends State<DashboardPage> {
             bottomRight: Radius.circular(0),
           ),
         ),
-        builder: (context) => ImageLibraryBottomSheet(context, (value){
-          // Display in full screen view
+        builder: (context) => ImageLibraryBottomSheet(context, (value) {
+              // Display in full screen view
 
-          showDialog(context: context, builder: (context) {
-
-            final image = Image(image: (value ?? LibraryImage('')).image);
-            return Dialog(
-              // Add close button to dialog (top right)
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  image: DecorationImage(
-                    image: image.image,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                width: MediaQuery.of(context).size.width * 0.80,
-                // Set height with aspect ratio to image size and screen width
-                // height: MediaQuery.of(context).size.width * 0.80 * (image.height ?? 1) / (image.width ?? 1),
-                // height: MediaQuery.of(context).size.height * 0.80,
-              ),
-            );
-          });
-        }));
+              showDialog(
+                  context: context,
+                  builder: (context) {
+                    final image =
+                        Image(image: (value ?? LibraryImage('')).image);
+                    return Dialog(
+                      // Add close button to dialog (top right)
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          image: DecorationImage(
+                            image: image.image,
+                            fit: BoxFit.contain,
+                          ),
+                        ),
+                        width: MediaQuery.of(context).size.width * 0.80,
+                        // Set height with aspect ratio to image size and screen width
+                        // height: MediaQuery.of(context).size.width * 0.80 * (image.height ?? 1) / (image.width ?? 1),
+                        // height: MediaQuery.of(context).size.height * 0.80,
+                      ),
+                    );
+                  });
+            }));
   }
 }

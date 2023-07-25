@@ -26,60 +26,53 @@ class _ImportExportPageState extends State<ImportExportPage> {
         var diningTablesTable = excel.tables['Dining Tables'];
         var diningTableCategoriesTable = excel.tables['Dining Table Categories'];
         var customersTable = excel.tables['Customers'];
-        var printersTable = excel.tables['Printers'];
         var ordersTable = excel.tables['Orders'];
 
         // Populate Products
         for (var row in productsTable!.rows) {
-          Product product = Product.fromIterable(row);
+          Product product = Product.fromIterable(row.map((e) => e?.value));
           EateryDB.instance.productBox!.put(product.id, product);
         }
 
         // Populate Product Categories
         for (var row in productCategoriesTable!.rows) {
-          ProductCategory productCategory = ProductCategory.fromIterable(row);
+          ProductCategory productCategory = ProductCategory.fromIterable(row.map((e) => e?.value));
           EateryDB.instance.productCategoryBox!.put(productCategory.id, productCategory);
         }
 
         // Populate Tax Slabs
         for (var row in taxSlabsTable!.rows) {
-          TaxSlab taxSlab = TaxSlab.fromIterable(row);
+          TaxSlab taxSlab = TaxSlab.fromIterable(row.map((e) => e?.value));
           EateryDB.instance.taxSlabBox!.put(taxSlab.id, taxSlab);
         }
 
         // Populate Staffs
         for (var row in staffsTable!.rows) {
-          Staff staff = Staff.fromIterable(row);
+          Staff staff = Staff.fromIterable(row.map((e) => e?.value));
           EateryDB.instance.staffBox!.put(staff.id, staff);
         }
 
         // Populate Dining Tables
         for (var row in diningTablesTable!.rows) {
-          DiningTable diningTable = DiningTable.fromIterable(row);
+          DiningTable diningTable = DiningTable.fromIterable(row.map((e) => e?.value));
           EateryDB.instance.diningTableBox!.put(diningTable.id, diningTable);
         }
 
         // Populate Dining Table Categories
         for (var row in diningTableCategoriesTable!.rows) {
-          DiningTableCategory diningTableCategory = DiningTableCategory.fromIterable(row);
+          DiningTableCategory diningTableCategory = DiningTableCategory.fromIterable(row.map((e) => e?.value));
           EateryDB.instance.diningTableCategoryBox!.put(diningTableCategory.id, diningTableCategory);
         }
 
         // Populate Customers
         for (var row in customersTable!.rows) {
-          Customer customer = Customer.fromIterable(row);
+          Customer customer = Customer.fromIterable(row.map((e) => e?.value));
           EateryDB.instance.customerBox!.put(customer.id, customer);
-        }
-
-        // Populate Printers
-        for (var row in printersTable!.rows) {
-          Printer printer = Printer.fromIterable(row);
-          EateryDB.instance.printerBox!.put(printer.id, printer);
         }
 
         // Populate Orders
         for (var row in ordersTable!.rows) {
-          Order order = Order.fromIterable(row);
+          Order order = Order.fromIterable(row.map((e) => e?.value));
           EateryDB.instance.orderBox!.put(order.id, order);
         }
 
@@ -105,7 +98,6 @@ class _ImportExportPageState extends State<ImportExportPage> {
     var diningTablesSheet = excel['Dining Tables'];
     var diningTableCategoriesSheet = excel['Dining Table Categories'];
     var ordersSheet = excel['Orders'];
-    var printersSheet = excel['Printers'];
     var productsSheet = excel['Products'];
     var productCategoriesSheet = excel['Product Categories'];
     var taxSlabsSheet = excel['Tax Slabs'];
@@ -143,14 +135,7 @@ class _ImportExportPageState extends State<ImportExportPage> {
       ordersSheet.insertRowIterables(element.toMap().values.toList(), index);
       index++;
     }
-
-    // Populate Printers Sheet
-    index = 0;
-    for (var element in EateryDB.instance.printerBox!.values) {
-      printersSheet.insertRowIterables(element.toMap().values.toList(), index);
-      index++;
-    }
-
+    
     // Populate Products Sheet
     index = 0;
     for (var element in EateryDB.instance.productBox!.values) {
