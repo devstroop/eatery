@@ -1,8 +1,32 @@
 import 'package:eatery/references.dart';
+import 'package:googleapis/chat/v1.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
+
+  // Implement permission check
+  if(!(await Permission.storage.isGranted)) {
+    await Permission.storage.request();
+  } else if((await Permission.storage.isPermanentlyDenied)) {
+    await openAppSettings();
+  }
+  if(!(await Permission.manageExternalStorage.isGranted)) {
+    await Permission.manageExternalStorage.request();
+  } else if((await Permission.manageExternalStorage.isPermanentlyDenied)) {
+    await openAppSettings();
+  }
+  if(!(await Permission.camera.isGranted)) {
+    await Permission.camera.request();
+  } else if((await Permission.camera.isPermanentlyDenied)) {
+    await openAppSettings();
+  }
+  if(!(await Permission.location.isGranted)) {
+    await Permission.location.request();
+  } else if((await Permission.location.isPermanentlyDenied)) {
+    await openAppSettings();
+  }
+
   await setupDataAndInitDB();
   runApp(const MyApp());
 }

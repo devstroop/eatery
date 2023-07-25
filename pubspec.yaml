@@ -56,7 +56,7 @@ dependencies:
   http: ^0.13.4
   shared_preferences: ^2.0.15
   currency_picker: ^2.0.11
-  permission_handler: ^10.0.0
+  permission_handler: ^10.4.3
   lottie: ^2.3.2
   flutter_slidable: ^3.0.0
   devdart_windows_hdsn: ^0.0.2

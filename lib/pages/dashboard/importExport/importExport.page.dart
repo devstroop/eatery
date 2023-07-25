@@ -18,25 +18,73 @@ class _ImportExportPageState extends State<ImportExportPage> {
         var bytes = file.readAsBytesSync();
         var excel = Excel.decodeBytes(bytes);
 
-        List<List<Data?>> rows = excel.tables[0]!.rows;
-        for (int index = 1; index < rows.length; index++) {
-          try {
-            Map<String, dynamic> product = {};
-            product['name'] = rows[index][0]!.value;
-            product['category'] = rows[index][1]!.value;
-            product['description'] = rows[index][2]!.value;
-            product['price'] = double.parse(rows[index][3]!.value.toString());
-            product['foodType'] = rows[index][4]!.value;
-            product['taxType'] = rows[index][5]!.value;
-            product['tax_slab'] =
-                double.parse(rows[index][6]!.value.toString());
-            product['as'] = rows[index][7]!.value;
-            //await Product.add(product);
-          } catch (_) {
-            showSnackBar(this.context, 'Failed to add ${index + 1}th row');
-          }
+        // Fetch sheet by table name
+        var productsTable = excel.tables['Products'];
+        var productCategoriesTable = excel.tables['Product Categories'];
+        var taxSlabsTable = excel.tables['Tax Slabs'];
+        var staffsTable = excel.tables['Staffs'];
+        var diningTablesTable = excel.tables['Dining Tables'];
+        var diningTableCategoriesTable = excel.tables['Dining Table Categories'];
+        var customersTable = excel.tables['Customers'];
+        var printersTable = excel.tables['Printers'];
+        var ordersTable = excel.tables['Orders'];
+
+        // Populate Products
+        for (var row in productsTable!.rows) {
+          Product product = Product.fromIterable(row);
+          EateryDB.instance.productBox!.put(product.id, product);
         }
-        showSnackBar(this.context, "Imported successfully");
+
+        // Populate Product Categories
+        for (var row in productCategoriesTable!.rows) {
+          ProductCategory productCategory = ProductCategory.fromIterable(row);
+          EateryDB.instance.productCategoryBox!.put(productCategory.id, productCategory);
+        }
+
+        // Populate Tax Slabs
+        for (var row in taxSlabsTable!.rows) {
+          TaxSlab taxSlab = TaxSlab.fromIterable(row);
+          EateryDB.instance.taxSlabBox!.put(taxSlab.id, taxSlab);
+        }
+
+        // Populate Staffs
+        for (var row in staffsTable!.rows) {
+          Staff staff = Staff.fromIterable(row);
+          EateryDB.instance.staffBox!.put(staff.id, staff);
+        }
+
+        // Populate Dining Tables
+        for (var row in diningTablesTable!.rows) {
+          DiningTable diningTable = DiningTable.fromIterable(row);
+          EateryDB.instance.diningTableBox!.put(diningTable.id, diningTable);
+        }
+
+        // Populate Dining Table Categories
+        for (var row in diningTableCategoriesTable!.rows) {
+          DiningTableCategory diningTableCategory = DiningTableCategory.fromIterable(row);
+          EateryDB.instance.diningTableCategoryBox!.put(diningTableCategory.id, diningTableCategory);
+        }
+
+        // Populate Customers
+        for (var row in customersTable!.rows) {
+          Customer customer = Customer.fromIterable(row);
+          EateryDB.instance.customerBox!.put(customer.id, customer);
+        }
+
+        // Populate Printers
+        for (var row in printersTable!.rows) {
+          Printer printer = Printer.fromIterable(row);
+          EateryDB.instance.printerBox!.put(printer.id, printer);
+        }
+
+        // Populate Orders
+        for (var row in ordersTable!.rows) {
+          Order order = Order.fromIterable(row);
+          EateryDB.instance.orderBox!.put(order.id, order);
+        }
+
+        showSnackBar(this.context, 'Imported successfully');
+
       } else {
         // User canceled the picker
       }

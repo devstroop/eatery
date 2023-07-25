@@ -144,7 +144,7 @@ class _DiningTableSelectionViewState extends State<DiningTableSelectionView> {
         (element) =>
             element.phone?.replaceFirst('+', '').trim() ==
             phoneNumber.replaceFirst('+', '').trim(), orElse: () {
-      return order?.customer ??
+      return EateryDB.instance.customerBox!.values.where((element) => element.id == order?.customerId).firstOrNull ??
           Customer(
               name: name,
               phone: phoneNumber,
@@ -154,7 +154,7 @@ class _DiningTableSelectionViewState extends State<DiningTableSelectionView> {
 
     order ??
         Order(
-            customer: customer,
+            customerId: customer.id!,
             type: OrderType.dine);
     setState(() {
       selectedDiningTable = diningTable;

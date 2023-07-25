@@ -34,6 +34,7 @@ export 'package:date_time_picker/date_time_picker.dart';
 export 'package:flutter_svg/svg.dart';
 export 'package:flutter_secure_storage/flutter_secure_storage.dart';
 export 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
+export 'package:permission_handler/permission_handler.dart';
 // Google packages
 export 'package:googleapis_auth/auth_io.dart';
 // Internal references
