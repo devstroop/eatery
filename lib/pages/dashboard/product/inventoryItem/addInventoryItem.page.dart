@@ -133,8 +133,9 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
               Text(
                 'Select Food Type',
                 style: TextStyle(
-                  color: ColorStyle.text400,
-                  fontWeight: FontWeight.w400,
+                  color: ColorStyle.text200,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               const SizedBox(
@@ -171,8 +172,9 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
               Text(
                 'Select Tax Slab',
                 style: TextStyle(
-                  color: ColorStyle.text400,
-                  fontWeight: FontWeight.w400,
+                  color: ColorStyle.text200,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               const SizedBox(
@@ -213,8 +215,9 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
               Text(
                 'Select Category',
                 style: TextStyle(
-                  color: ColorStyle.text400,
-                  fontWeight: FontWeight.w400,
+                  color: ColorStyle.text200,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               const SizedBox(

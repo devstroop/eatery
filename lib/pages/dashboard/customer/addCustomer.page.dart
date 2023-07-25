@@ -123,7 +123,6 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: ColorStyle.backgroundColorAlter,
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {

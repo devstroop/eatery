@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:eatery/references.dart';
 
+final _pageColor = ColorStyle.primary;
+
 class EditCompanyPage extends StatefulWidget {
   const EditCompanyPage({Key? key}) : super(key: key);
 
@@ -24,6 +26,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
     company = EateryDB.instance.companyBox!.values.first;
     // company = await CompanyLoader(widget.database).load(context);
     setState(() {
+      selectedLogo = LibraryImage(company!.logo);
       _controllerCompanyName.text = company!.name;
       _controllerEmail.text = company!.email;
       _controllerPhone.text = company!.phone;
@@ -33,7 +36,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
       _controllerFoodLicNo.text = company!.foodLicenseNo ?? '';
     });
   }
-  final themeColor = ColorStyle.brandColor;
+  LibraryImage? selectedLogo;
 
   final TextEditingController _controllerCompanyName = TextEditingController();
   final TextEditingController _controllerEmail = TextEditingController();
@@ -55,7 +58,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
     return company != null
         ? Scaffold(
             appBar: AppBar(
-              backgroundColor: themeColor,
+              backgroundColor: _pageColor,
               foregroundColor: Colors.white,
               title: const Text('Company Details'),
             ),
@@ -65,10 +68,21 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
                 children: [
+                  UploadButton(
+                    label: 'Restaurant Logo',
+                    primaryColor: _pageColor,
+                    secondaryColor: ColorStyle.text200,
+                    image: selectedLogo?.image,
+                    onChanged: (image){
+                      setState(() {
+                        selectedLogo = image;
+                      });
+                    },
+                  ),
                   SpacingStyle.defaultVerticalSpacing,
                   SpacingStyle.defaultVerticalSpacing,
                   LabeledCustomTextFromField(
-                      themeColor: themeColor,
+                      themeColor: _pageColor,
                       foregroundColor: ColorStyle.text200,
                       keyboardType: TextInputType.name,
                       controller: _controllerCompanyName,
@@ -87,7 +101,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                       }),
                   SpacingStyle.defaultVerticalSpacing,
                   LabeledCustomTextFromField(
-                      themeColor: themeColor,
+                      themeColor: _pageColor,
                       foregroundColor: ColorStyle.text200,
                       keyboardType: TextInputType.emailAddress,
                       controller: _controllerEmail,
@@ -109,7 +123,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                       }),
                   SpacingStyle.defaultVerticalSpacing,
                   LabeledCustomTextFromField(
-                      themeColor: themeColor,
+                      themeColor: _pageColor,
                       foregroundColor: ColorStyle.text200,
                       keyboardType: TextInputType.phone,
                       controller: _controllerPhone,
@@ -131,7 +145,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                       }),
                   SpacingStyle.defaultVerticalSpacing,
                   LabeledCustomTextFromField(
-                    themeColor: themeColor,
+                    themeColor: _pageColor,
                     foregroundColor: ColorStyle.text200,
                     controller: _controllerAddress,
                     label: 'Address',
@@ -151,7 +165,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                   ),
                   SpacingStyle.defaultVerticalSpacing,
                   LabeledCustomTextFromField(
-                    themeColor: themeColor,
+                    themeColor: _pageColor,
                     foregroundColor: ColorStyle.text200,
                     keyboardType: TextInputType.text,
                     controller: _controllerSalesTaxNo,
@@ -174,7 +188,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                   ),
                   SpacingStyle.defaultVerticalSpacing,
                   LabeledCustomTextFromField(
-                    themeColor: themeColor,
+                    themeColor: _pageColor,
                     foregroundColor: ColorStyle.text200,
                     keyboardType: TextInputType.text,
                     controller: _controllerFoodLicNo,
@@ -203,7 +217,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
             bottomNavigationBar: BottomAppBar(
               color: ColorStyle.backgroundColorAlter,
               child: PrimaryButton(
-                color: themeColor,
+                color: _pageColor,
                 child: const Text('Save'),
                 onPressed: () async {
                   company!.name = _controllerCompanyName.text;

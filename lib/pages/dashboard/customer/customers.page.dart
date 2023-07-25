@@ -17,16 +17,17 @@ class _CustomersPageState extends State<CustomersPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<Customer> customers = EateryDB.instance.customerBox!.values.toList();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: _pageColor,
         title: const Text('Customers'),
         foregroundColor: Colors.white,
       ),
-      body: EateryDB.instance.customerBox!.values.isNotEmpty
+      body: customers.isNotEmpty
           ? ListView(
               children: [
-                for (var e in EateryDB.instance.customerBox!.values)
+                for (var e in customers)
                   ListTile(
                       title: Text(
                         e.name,

@@ -292,8 +292,8 @@ class _DashboardPageState extends State<DashboardPage> {
                 MenuCard(
                   iconData: Icons.history,
                   iconSize: iconSize,
-                  title: 'History',
-                  subtitle: 'All record and logs are here',
+                  title: 'Transactions',
+                  subtitle: 'All sale records are here',
                   titleSize: titleSize,
                   subtitleSize: subtitleSize,
                   color: const Color(0xFFF5B942),
