@@ -17,73 +17,71 @@ class _CustomersPageState extends State<CustomersPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Customer> customers = EateryDB.instance.customerBox!.values.toList();
     return Scaffold(
       appBar: AppBar(
         backgroundColor: _pageColor,
         title: const Text('Customers'),
         foregroundColor: Colors.white,
       ),
-      body: customers.isNotEmpty
+      body: EateryDB.instance.customerBox!.values.isNotEmpty
           ? ListView(
               children: [
-                for (var e in customers)
-                  ListTile(
-                      title: Text(
-                        e.name,
-                        style: const TextStyle(fontWeight: FontWeight.w600),
-                      ),
-                      subtitle: e.phone != null ? Text(e.phone!) : null,
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.edit, color: _pageColor),
-                            onPressed: () {
-                              if (e.id != null) {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          EditCustomerPage(customerId: e.id!)),
-                                ).then((_) => setState(() {}));
-                              }
-                            },
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.delete, color: _pageColor),
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (context) {
-                                  return AlertDialog(
-                                    title: const Text('Delete Customer'),
-                                    content: const Text(
-                                        'Are you sure you want to delete this customer?'),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.pop(context);
-                                        },
-                                        child: const Text('Cancel'),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          // e.delete().whenComplete(() {
-                                          //   Navigator.pop(context);
-                                          //   setState(() {});
-                                          // });
-                                        },
-                                        child: const Text('Delete'),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                          ),
-                        ],
-                      )),
+                ...EateryDB.instance.customerBox!.values.map((customer) {
+                  return ListTile(
+                    title: Text(
+                      customer.name,
+                      style: const TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    subtitle: Text(customer.phone),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        IconButton(
+                          icon: Icon(Icons.edit, color: _pageColor),
+                          onPressed: () {
+                            if (customer.id != null) {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        EditCustomerPage(customerId: customer.id!)),
+                              ).then((_) => setState(() {}));
+                            }
+                          },
+                        ),
+                        IconButton(
+                          icon: Icon(Icons.delete, color: _pageColor),
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  title: const Text('Delete Customer'),
+                                  content: const Text(
+                                      'Are you sure you want to delete this customer?'),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: const Text('Cancel'),
+                                    ),
+                                    TextButton(
+                                      onPressed: () {
+                                        // (customer).delete();
+                                        setState(() {});
+                                      },
+                                      child: const Text('Delete'),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ],
+                    ));
+                }),
               ],
             )
           : const Center(

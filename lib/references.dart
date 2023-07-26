@@ -35,6 +35,8 @@ export 'package:flutter_svg/svg.dart';
 export 'package:flutter_secure_storage/flutter_secure_storage.dart';
 export 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 export 'package:permission_handler/permission_handler.dart';
+export 'package:external_path/external_path.dart';
+export 'package:fluttertoast/fluttertoast.dart';
 // Google packages
 export 'package:googleapis_auth/auth_io.dart';
 // Internal references
@@ -110,6 +112,9 @@ export './pages/dashboard/product/productCategory/addProductCategory.page.dart';
 export './pages/dashboard/product/productCategory/editProductCategory.page.dart';
 export './pages/dashboard/product/productCategory/productCategories.page.dart';
 // Internal references
+export './pages/dashboard/product/search_product.delegate.dart';
+
+// Internal references
 export './pages/dashboard/diningTable/category/addDiningTableCategory.page.dart';
 export './pages/dashboard/diningTable/category/editDiningTableCategory.page.dart';
 export './pages/dashboard/diningTable/category/diningTableCategories.page.dart';
@@ -123,6 +128,7 @@ export './pages/dashboard/stock/stocks.page.dart';
 export './pages/dashboard/customer/addCustomer.page.dart';
 export './pages/dashboard/customer/editCustomer.page.dart';
 export './pages/dashboard/customer/customers.page.dart';
+export './pages/dashboard/customer/search_customer.delegate.dart';
 // Internal references
 export './pages/dashboard/staff/staffs.page.dart';
 export './pages/dashboard/staff/addStaff.page.dart';

@@ -1,6 +1,6 @@
 import 'package:eatery/references.dart';
 
-import '../product/searchProduct.delegate.dart';
+import '../product/search_product.delegate.dart';
 
 class PointOfSalePage extends StatefulWidget {
   const PointOfSalePage({Key? key}) : super(key: key);
@@ -10,11 +10,11 @@ class PointOfSalePage extends StatefulWidget {
 }
 
 class _PointOfSalePageState extends State<PointOfSalePage> {
-  OrderType orderType = OrderType.dine;
+  OrderType? orderType;
+  Customer? selectedCustomer;
   ProductCategory? selectedProductCategory;
   DiningTable? selectedDiningTable;
 
-  final TextEditingController _controllerSearch = TextEditingController();
   final ScrollController _scrollControllerCategories = ScrollController();
   final ScrollController _scrollControllerProducts = ScrollController();
 
@@ -22,15 +22,35 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
+      if (orderType == null) {
+        _showOrderTypeSelection().then((value) {
+          if (value != null) {
+            setState(() => orderType = value);
+          } else {
+            Navigator.pop(this.context);
+            return;
+          }
+          if(selectedCustomer == null) {
+            showSearch(context: this.context, delegate: SearchCustomerDelegate(EateryDB.instance.customerBox!.values.toList(), (customer) {
+              setState(() {
+                selectedCustomer = customer;
+              });
+            })).then((value) {
+              if(value == null) {
+                Navigator.pop(this.context);
+                return;
+              }
+            });
+          }
+        });
+      }
 
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    Color pageColor = Color(orderType.color ?? 0);
-    List<ProductCategory> categories =
-        EateryDB.instance.productCategoryBox!.values.toList();
+    Color pageColor = Color(orderType?.color ?? ColorStyle.primary.value);
     List<Product> products =
         EateryDB.instance.productBox!.values.where((element) {
       // TODO: implement build
@@ -64,13 +84,15 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                       (product) {}));
             },
           ),
+          IconButton(icon: const Icon(Icons.barcode_reader), onPressed: () {}),
           IconButton(
-            icon: const Icon(Icons.barcode_reader),
-            onPressed: (){}
-          ),
-          IconButton(onPressed: (){
-            Navigator.push(context, MaterialPageRoute(builder: (context) => const TransactionsPage()));
-          }, icon: const Icon(Icons.receipt_long))
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const TransactionsPage()));
+              },
+              icon: const Icon(Icons.receipt_long))
         ],
       ),
       body: Row(
@@ -187,11 +209,16 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
           children: [
             PosOrderTypeSelectionButton(
               onTap: _showOrderTypeSelection,
-              icon: Icon(orderType == OrderType.dine
-                  ? Icons.dinner_dining
-                  : orderType == OrderType.delivery ? Icons.delivery_dining : Icons.takeout_dining, color: Color(orderType.color ?? ColorStyle.text200.value),),
+              icon: Icon(
+                orderType == OrderType.dine
+                    ? Icons.dinner_dining
+                    : orderType == OrderType.delivery
+                        ? Icons.delivery_dining
+                        : Icons.takeout_dining,
+                color: Color(orderType?.color ?? ColorStyle.text200.value),
+              ),
               themeColor: pageColor,
-              text: orderType.name!,
+              text: orderType?.name ?? 'Select order type',
             ),
             if (orderType == OrderType.dine) // dining table selection
               IconButton(
@@ -204,7 +231,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
               IconButton(
                   onPressed: _pickWaiter,
                   icon: Icon(
-                    Icons.person,
+                    Icons.man,
                     color: pageColor,
                   )),
             if (orderType == OrderType.delivery)
@@ -221,7 +248,6 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                     Icons.directions_bike,
                     color: pageColor,
                   )),
-
             if (orderType == OrderType.takeout)
               IconButton(
                   onPressed: _pickDeliveryStaff,
@@ -229,12 +255,10 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                     Icons.person,
                     color: pageColor,
                   )),
-
-
             IconButton(
                 onPressed: _cartView,
                 icon: Container(
-                  padding: const EdgeInsets.all(10.0),
+                  padding: const EdgeInsets.all(12.0),
                   decoration: BoxDecoration(
                       color: pageColor,
                       borderRadius: BorderRadius.circular(20)),
@@ -255,21 +279,41 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                     ],
                   ),
                 )),
-
-
             if (GlobalVariables.cart.isNotEmpty && GlobalVariables.expressMode)
               IconButton(
                   onPressed: _expressCheckout,
                   icon: Icon(
                     Icons.fast_forward,
                     color: pageColor,
+                    size: 48,
                   )),
             if (GlobalVariables.cart.isNotEmpty && !GlobalVariables.expressMode)
               IconButton(
-                  onPressed: _checkout,
+                  onPressed: () {
+                    if (orderType == OrderType.dine &&
+                        selectedDiningTable == null) {
+                      Fluttertoast.showToast(
+                          msg: "Please select a dining table",
+                          toastLength: Toast.LENGTH_SHORT,
+                          gravity: ToastGravity.CENTER,
+                          timeInSecForIosWeb: 1,
+                          backgroundColor: ColorStyle.error,
+                          textColor: Colors.white,
+                          fontSize: 12.0);
+                      return;
+                    }
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => CheckoutPage(
+                                  orderType: orderType!,
+                                  cart: GlobalVariables.cart,
+                                )));
+                  },
                   icon: Icon(
                     Icons.arrow_circle_right,
                     color: pageColor,
+                    size: 48,
                   )),
           ],
         ),
@@ -291,16 +335,22 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
         builder: (context) => const DiningTableSelectionView());
   }
 
-  void _pickDeliveryLocation() {
-  }
+  void _pickDeliveryLocation() {}
 
-  void _expressCheckout() {
-  }
-
-  void _checkout() {
-  }
+  void _expressCheckout() {}
 
   void _cartView() {
+    if(orderType == null) {
+      Fluttertoast.showToast(
+          msg: "Please select an order type",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: ColorStyle.error,
+          textColor: Colors.white,
+          fontSize: 12.0);
+      return;
+    }
     showModalBottomSheet(
         context: this.context,
         shape: const RoundedRectangleBorder(
@@ -312,9 +362,14 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
           ),
         ),
         builder: (context) =>
-        // StatefulBuilder(builder: (context, state) => const CartPage())
-        const CartView()
-    );
+            // StatefulBuilder(builder: (context, state) => const CartPage())
+            CartView(
+              themeColor: Color(orderType?.color ?? ColorStyle.text200.value),
+              orderType: orderType!,
+              setParentState: () {
+                setState(() {});
+              },
+            ));
   }
 
   void _showProductDetails(Product product) {
@@ -328,8 +383,23 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
           ),
         ),
         context: this.context,
-        builder: (context) =>
-            KProductView(product: product));
+        builder: (context) => KProductView(
+              product: product,
+              onAddToCart: () {
+                setState(() {
+                  GlobalVariables.cart.add(product);
+                });
+                Fluttertoast.showToast(
+                    msg: "Added to cart",
+                    toastLength: Toast.LENGTH_SHORT,
+                    gravity: ToastGravity.CENTER,
+                    timeInSecForIosWeb: 1,
+                    backgroundColor: ColorStyle.success,
+                    textColor: Colors.white,
+                    fontSize: 12.0);
+                Navigator.of(context).pop();
+              },
+            ));
   }
 
   void _pickWaiter() {
@@ -346,62 +416,59 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
         builder: (context) => const WaiterSelectionView());
   }
 
-  void _showOrderTypeSelection() {
-    showModalBottomSheet(
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.only(
-            topLeft: Radius.circular(24),
-            topRight: Radius.circular(24),
-            bottomLeft: Radius.circular(0),
-            bottomRight: Radius.circular(0),
-          ),
+  Future<OrderType?> _showOrderTypeSelection() => showModalBottomSheet(
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(24),
+          topRight: Radius.circular(24),
+          bottomLeft: Radius.circular(0),
+          bottomRight: Radius.circular(0),
         ),
-        context: this.context,
-        builder: (context) => ListView(
-          shrinkWrap: true,
-          children: [
-            const Center(
-              child: BottomViewGrip(),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(
-                  16.0, 12.0, 16.0, 12.0),
-              child: Text(
-                'Select an order type',
-                style: TextStyle(
-                    fontSize: 18.0,
-                    fontWeight: FontWeight.w600,
-                    color: ColorStyle.text200),
+      ),
+      context: this.context,
+      builder: (context) => ListView(
+            shrinkWrap: true,
+            children: [
+              const Center(
+                child: BottomViewGrip(),
               ),
-            ),
-            for (var orderType in OrderType.values)
               Padding(
-                padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
-                child: SpecialButton(
-                  icon: Icon(orderType == OrderType.dine
-                      ? Icons.dinner_dining
-                      : orderType == OrderType.delivery
-                          ? Icons.delivery_dining
-                          : Icons.takeout_dining,
-                      color: Colors.white),
-                  text: orderType.name!,
-                  color: Color(orderType.color!),
-                  foreColor: Colors.white,
-                  onTap: () {
-                    setState(() {
-                      this.orderType = orderType;
-                      Navigator.of(context).pop();
-                    });
-                  },
+                padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
+                child: Text(
+                  'Select an order type',
+                  style: TextStyle(
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.w600,
+                      color: ColorStyle.text200),
                 ),
               ),
-            const SizedBox(
-              height: 20.0,
-            ),
-          ],
-        ));
-  }
+              for (var orderType in OrderType.values)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
+                  child: SpecialButton(
+                    icon: Icon(
+                        orderType == OrderType.dine
+                            ? Icons.dinner_dining
+                            : orderType == OrderType.delivery
+                                ? Icons.delivery_dining
+                                : Icons.takeout_dining,
+                        color: Colors.white),
+                    text: orderType.name!,
+                    color: Color(orderType.color!),
+                    foreColor: Colors.white,
+                    onTap: () {
+                      setState(() {
+                        // this.orderType = orderType;
+                        Navigator.of(context).pop(orderType);
+                      });
+                    },
+                  ),
+                ),
+              const SizedBox(
+                height: 20.0,
+              ),
+            ],
+          ));
 
-  void _pickDeliveryStaff() {
-  }
+  void _pickDeliveryStaff() {}
 }

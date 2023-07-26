@@ -1,6 +1,5 @@
 import 'package:eatery/references.dart';
 
-// Implement the SearchProductDelegate class here
 class SearchProductDelegate extends SearchDelegate<Product?> {
   final List<Product> products;
   SearchProductDelegate(this.products, Function(Product product) callback);
@@ -33,8 +32,7 @@ class SearchProductDelegate extends SearchDelegate<Product?> {
     if (query.isNotEmpty) {
       List<Product> products = this.products
               .where((element) => element.name.toLowerCase().contains(query))
-              .toList() ??
-          [];
+              .toList();
       return ListView.builder(
         itemCount: products.length,
         itemBuilder: (context, index) {

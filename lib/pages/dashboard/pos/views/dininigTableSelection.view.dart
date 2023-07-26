@@ -148,8 +148,7 @@ class _DiningTableSelectionViewState extends State<DiningTableSelectionView> {
           Customer(
               name: name,
               phone: phoneNumber,
-              address: address,
-              email: email);
+              address: address);
     });
 
     order ??

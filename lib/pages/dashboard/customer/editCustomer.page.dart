@@ -20,8 +20,6 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
   final TextEditingController _controllerCustomerName = TextEditingController();
   final TextEditingController _controllerCustomerPhone =
       TextEditingController();
-  final TextEditingController _controllerCustomerEmail =
-      TextEditingController();
   final TextEditingController _controllerCustomerAddress =
       TextEditingController();
   final TextEditingController _controllerCustomerLandmark =
@@ -37,7 +35,6 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
       setState(() {
         _controllerCustomerName.text = customer?.name ?? '';
         _controllerCustomerPhone.text = customer?.phone ?? '';
-        _controllerCustomerEmail.text = customer?.email ?? '';
         _controllerCustomerAddress.text = customer?.address ?? '';
         _controllerCustomerLandmark.text = customer?.landmark ?? '';
         isActive = customer?.isActive ?? false;
@@ -71,12 +68,9 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
                     ),
                     TextButton(
                       onPressed: () {
-                        // widget.customer.delete()
-                        //     .whenComplete(() {
-                        //   Navigator.pop(context);
-                        //   Navigator.pop(context);
-                        //   setState(() {});
-                        // });
+                        EateryDB.instance.customerBox!.delete(widget.customerId);
+                        Navigator.pop(context);
+                        Navigator.pop(context);
                       },
                       child: const Text('Delete'),
                     ),
@@ -118,22 +112,6 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
                   keyboardType: TextInputType.phone,
                   hint: 'Enter phone number',
                 ),
-                SpacingStyle.defaultVerticalSpacing,
-                LabeledCustomTextFromField(
-                    controller: _controllerCustomerEmail,
-                    label: 'Email Address',
-                    hint: 'Enter email address',
-                    themeColor: _pageColor,
-                    foregroundColor: ColorStyle.text200,
-                    keyboardType: TextInputType.emailAddress,
-                    textInputAction: TextInputAction.next,
-                    validator: (value) {
-                      if (value!.trim().isEmpty) return 'Email cannot be blank';
-                      if (!value.trim().isValidEmail()) {
-                        return 'Email address is not valid';
-                      }
-                      return null;
-                    }),
                 SpacingStyle.defaultVerticalSpacing,
                 LabeledCustomTextFromField(
                   controller: _controllerCustomerAddress,
@@ -198,7 +176,6 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
 
             customer?.name = _controllerCustomerName.text;
             customer?.phone = _controllerCustomerPhone.text;
-            customer?.email = _controllerCustomerEmail.text;
             customer?.address = _controllerCustomerAddress.text;
             customer?.landmark = _controllerCustomerLandmark.text;
             customer?.isActive = isActive;

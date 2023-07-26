@@ -1,6 +1,6 @@
 import 'package:eatery/references.dart';
 
-import '../searchProduct.delegate.dart';
+import '../search_product.delegate.dart';
 
 Color _pageColor = ColorStyle.secondary;
 

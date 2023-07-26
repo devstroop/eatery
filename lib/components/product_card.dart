@@ -3,16 +3,16 @@ import 'package:eatery/references.dart';
 class ProductCard extends StatelessWidget {
   const ProductCard(
       {Key? key,
-      this.qtyInCart,
       required this.themeColor,
       this.onRemove,
       this.onAdd,
       this.onTap,
-      required this.product, required this.width, required this.height})
+      required this.product,
+      required this.width,
+      required this.height})
       : super(key: key);
   final Product product;
 
-  final double? qtyInCart;
   final Color themeColor;
   final Function()? onRemove;
   final Function()? onAdd;
@@ -69,8 +69,11 @@ class ProductCard extends StatelessWidget {
                                   topLeft: Radius.circular(6),
                                   topRight: Radius.circular(6)),
                               image: DecorationImage(
-                                      image: LibraryImage(product.image ?? '').image,
-                                fit: product.type==ProductType.inventoryItem ? BoxFit.contain : BoxFit.cover,),
+                                image: LibraryImage(product.image ?? '').image,
+                                fit: product.type == ProductType.inventoryItem
+                                    ? BoxFit.contain
+                                    : BoxFit.cover,
+                              ),
                             ),
                           ),
                         ),
@@ -133,7 +136,8 @@ class ProductCard extends StatelessWidget {
                                 mainAxisSize: MainAxisSize.min,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  if (product.salePrice != null && product.salePrice != product.mrpPrice)
+                                  if (product.salePrice != null &&
+                                      product.salePrice != product.mrpPrice)
                                     Text(
                                       '${GlobalVariables.currency?.symbol ?? ''}${product.mrpPrice}',
                                       overflow: TextOverflow.ellipsis,
@@ -164,67 +168,64 @@ class ProductCard extends StatelessWidget {
                                     ),
                                 ],
                               ),
-                              onAdd != null &&
-                                      onRemove != null &&
-                                      qtyInCart != null
+                              onAdd != null && onRemove != null
                                   ? Container(
                                       decoration: BoxDecoration(
-                                        borderRadius:
-                                            BorderRadius.circular(4),
+                                        borderRadius: BorderRadius.circular(4),
                                         border: Border.all(
-                                          color: ColorStyle
-                                              .primary /*themeColor!*/,
-                                          width: 2,
+                                          color: themeColor,
+                                          width: 1,
                                         ),
                                       ),
                                       child: Padding(
                                         padding: const EdgeInsetsDirectional
-                                            .fromSTEB(2, 1, 2, 1),
-                                        child: qtyInCart != null
-                                            ? Row(
-                                                mainAxisSize:
-                                                    MainAxisSize.min,
-                                                children: [
-                                                  qtyInCart! > 0
-                                                      ? InkWell(
-                                                          onTap: onRemove,
-                                                          child: Icon(
-                                                            Icons.remove,
-                                                            color: ColorStyle
-                                                                .primary,
-                                                          ),
-                                                        )
-                                                      : Container(),
-                                                  qtyInCart! > 0
-                                                      ? Padding(
-                                                          padding:
-                                                              const EdgeInsetsDirectional
-                                                                      .fromSTEB(
-                                                                  4, 0, 4, 0),
-                                                          child: Text(
-                                                            Calculations
-                                                                .compressDoubleToString(
-                                                                    qtyInCart),
-                                                            style:
-                                                                const TextStyle(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
-                                                            ),
-                                                          ),
-                                                        )
-                                                      : Container(),
-                                                  InkWell(
-                                                    onTap: onAdd,
+                                            .fromSTEB(1, 0.5, 1, 0.5),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.min,
+                                          children: [
+                                            GlobalVariables.cart
+                                                    .contains(product)
+                                                ? InkWell(
+                                                    onTap: onRemove,
                                                     child: Icon(
-                                                      Icons.add,
-                                                      color:
-                                                          ColorStyle.primary,
+                                                      Icons.remove,
+                                                      color: themeColor,
+                                                      size: 18,
                                                     ),
-                                                  ),
-                                                ],
-                                              )
-                                            : Container(),
+                                                  )
+                                                : Container(),
+                                            GlobalVariables.cart
+                                                    .contains(product)
+                                                ? Padding(
+                                                    padding:
+                                                        const EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                            4, 0, 4, 0),
+                                                    child: Text(
+                                                      GlobalVariables.cart
+                                                          .where((element) =>
+                                                              element.id ==
+                                                              product.id)
+                                                          .length
+                                                          .toString(),
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  )
+                                                : Container(),
+                                            InkWell(
+                                              onTap: onAdd,
+                                              child: Icon(
+                                                Icons.add,
+                                                color: themeColor,
+                                                size: 18,
+
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     )
                                   : Container()

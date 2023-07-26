@@ -2,10 +2,12 @@ import 'package:eatery/references.dart';
 
 class KProductView extends StatelessWidget {
   const KProductView(
-      {super.key, required this.product, this.onEdit, this.onDelete});
+      {super.key, required this.product, this.onEdit, this.onDelete, this.onAddToCart});
 
   final VoidCallback? onEdit;
   final VoidCallback? onDelete;
+  final VoidCallback? onAddToCart;
+
   final Product product;
 
   @override
@@ -16,8 +18,7 @@ class KProductView extends StatelessWidget {
         backgroundColor: Colors.transparent,
         foregroundColor: ColorStyle.text200,
       ),
-      Container(
-        margin: const EdgeInsets.symmetric(horizontal: 12.0),
+      Divider(
         height: 0.5,
         color: Colors.grey[300],
       ),
@@ -147,7 +148,7 @@ class KProductView extends StatelessWidget {
                 child: InkWell(
                   onTap: onEdit,
                   child: Container(
-                    height: 48,
+                    height: 60,
                     decoration: BoxDecoration(
                       color: ColorStyle.warning.withOpacity(0.25),
                       borderRadius: BorderRadius.circular(8),
@@ -176,7 +177,7 @@ class KProductView extends StatelessWidget {
                 child: InkWell(
                   onTap: onDelete,
                   child: Container(
-                    height: 48,
+                    height: 60,
                     decoration: BoxDecoration(
                       color: ColorStyle.error.withOpacity(0.25),
                       borderRadius: BorderRadius.circular(8),
@@ -199,6 +200,38 @@ class KProductView extends StatelessWidget {
                 ),
               ),
             ],
+          ),
+        ),
+      if (onEdit != null || onDelete != null)
+        const SizedBox(
+          height: 12,
+        ),
+      if (onAddToCart != null)
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12.0),
+          child: InkWell(
+            onTap: onAddToCart,
+            child: Container(
+              height: 60,
+              decoration: BoxDecoration(
+                color: ColorStyle.success.withOpacity(0.25),
+                borderRadius: BorderRadius.circular(8),
+                border: Border.all(
+                  color: ColorStyle.success,
+                  width: 1,
+                ),
+              ),
+              child: Center(
+                child: Text(
+                  'Add to Cart',
+                  style: TextStyle(
+                    color: ColorStyle.success,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+            ),
           ),
         ),
       const SizedBox(

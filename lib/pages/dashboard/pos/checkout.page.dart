@@ -16,7 +16,7 @@ class CheckoutPage extends StatefulWidget {
       this.openOrderWaiterName})
       : super(key: key);
   final OrderType orderType;
-  final Map<String, Map<String, dynamic>> cart;
+  final List<Product> cart;
   final String? diningTable;
   final String? diningTableName;
   final dynamic account;
@@ -253,15 +253,15 @@ class _CheckoutPageState extends State<CheckoutPage> {
   @override
   Widget build(BuildContext context) {
     Color _pageColor = Color(widget.orderType.color!);
-    final double taxableTotal =
-        Calculations.calculateTaxableTotal(cart: widget.cart);
-    final double taxTotal = Calculations.calculateTaxTotal(cart: widget.cart);
-    final double finalTotal =
-        Calculations.calculateFinalTotal(cart: widget.cart);
-    final int finalTotalAfterRoundOff =
-        Calculations.calculateRoundOff(finalTotal: finalTotal);
-    final double roundOff =
-        double.parse((finalTotalAfterRoundOff - finalTotal).toStringAsFixed(2));
+    // final double taxableTotal =
+    //     Calculations.calculateTaxableTotal(cart: widget.cart);
+    // final double taxTotal = Calculations.calculateTaxTotal(cart: widget.cart);
+    // final double finalTotal =
+    //     Calculations.calculateFinalTotal(cart: widget.cart);
+    // final int finalTotalAfterRoundOff =
+    //     Calculations.calculateRoundOff(finalTotal: finalTotal);
+    // final double roundOff =
+    //     double.parse((finalTotalAfterRoundOff - finalTotal).toStringAsFixed(2));
 
     Future<void> placeOrderAction() async {
       setState(() {
@@ -667,22 +667,22 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   const SizedBox(
                     height: 8.0,
                   ),
-                  for (var id in widget.cart.keys)
-                    CheckoutProductCard(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      id: id,
-                      name: widget.cart[id]!['name'],
-                      description: widget.cart[id]!['description'],
-                      priceTotal: Calculations.calculatePriceWithoutTax(
-                              taxType: widget.cart[id]!['taxType'],
-                              price: widget.cart[id]!['price'],
-                              tax: widget.cart[id]!['tax_slab']) *
-                          widget.cart[id]!['quantity'],
-                      image: widget.cart[id]!['image'],
-                      cartQuantity: widget.cart[id]!['quantity'],
-                      currencySymbol: widget.account['currencySymbol'],
-                      mode: 1,
-                    ),
+                  // for (var id in widget.cart.keys)
+                  //   CheckoutProductCard(
+                  //     padding: const EdgeInsets.only(bottom: 8.0),
+                  //     id: id,
+                  //     name: widget.cart[id]!['name'],
+                  //     description: widget.cart[id]!['description'],
+                  //     priceTotal: Calculations.calculatePriceWithoutTax(
+                  //             taxType: widget.cart[id]!['taxType'],
+                  //             price: widget.cart[id]!['price'],
+                  //             tax: widget.cart[id]!['tax_slab']) *
+                  //         widget.cart[id]!['quantity'],
+                  //     image: widget.cart[id]!['image'],
+                  //     cartQuantity: widget.cart[id]!['quantity'],
+                  //     currencySymbol: widget.account['currencySymbol'],
+                  //     mode: 1,
+                  //   ),
                   const SizedBox(
                     height: 20.0,
                   ),
@@ -786,136 +786,136 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         fontWeight: FontWeight.w600,
                         color: ColorStyle.text200),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(0, 12, 6, 0),
-                        child: Text(
-                          'Taxable',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            color: ColorStyle.text300,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ),
-                      Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                        child: Text(
-                          '${widget.account['currencySymbol']}$taxableTotal',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            color: ColorStyle.text200,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                  taxTotal > 0
-                      ? const SizedBox(
-                          height: 8.0,
-                        )
-                      : Container(),
-                  taxTotal > 0
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  0, 0, 6, 0),
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "${widget.account['taxName'] != '' ? widget.account['taxName'] : 'Tax'}",
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      color: ColorStyle.text300,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  0, 0, 6, 0),
-                              child: Text(
-                                '${widget.account['currencySymbol']}$taxTotal',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  color: ColorStyle.text200,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      : Container(),
-                  roundOff != 0
-                      ? const SizedBox(
-                          height: 8.0,
-                        )
-                      : Container(),
-                  roundOff != 0
-                      ? Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: const EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 6, 0),
-                                  child: Text(
-                                    'Round off',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      color: ColorStyle.text300,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsetsDirectional.fromSTEB(
-                                      0, 0, 6, 0),
-                                  child: Text(
-                                    '(+/-)',
-                                    textAlign: TextAlign.start,
-                                    style: TextStyle(
-                                      color: ColorStyle.text200,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w400,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                  0, 0, 6, 0),
-                              child: Text(
-                                roundOff < 0
-                                    ? '- ${widget.account['currencySymbol']}${roundOff.abs()}'
-                                    : '${widget.account['currencySymbol']}$roundOff',
-                                textAlign: TextAlign.start,
-                                style: TextStyle(
-                                  color: ColorStyle.text200,
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                            ),
-                          ],
-                        )
-                      : Container(),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //   children: [
+                  //     Padding(
+                  //       padding:
+                  //           const EdgeInsetsDirectional.fromSTEB(0, 12, 6, 0),
+                  //       child: Text(
+                  //         'Taxable',
+                  //         textAlign: TextAlign.start,
+                  //         style: TextStyle(
+                  //           color: ColorStyle.text300,
+                  //           fontSize: 16,
+                  //           fontWeight: FontWeight.w400,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //     Padding(
+                  //       padding:
+                  //           const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                  //       child: Text(
+                  //         '${widget.account['currencySymbol']}$taxableTotal',
+                  //         textAlign: TextAlign.start,
+                  //         style: TextStyle(
+                  //           color: ColorStyle.text200,
+                  //           fontSize: 16,
+                  //           fontWeight: FontWeight.w500,
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   ],
+                  // ),
+                  // taxTotal > 0
+                  //     ? const SizedBox(
+                  //         height: 8.0,
+                  //       )
+                  //     : Container(),
+                  // taxTotal > 0
+                  //     ? Row(
+                  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //         children: [
+                  //           Padding(
+                  //             padding: const EdgeInsetsDirectional.fromSTEB(
+                  //                 0, 0, 6, 0),
+                  //             child: Row(
+                  //               children: [
+                  //                 Text(
+                  //                   "${widget.account['taxName'] != '' ? widget.account['taxName'] : 'Tax'}",
+                  //                   textAlign: TextAlign.start,
+                  //                   style: TextStyle(
+                  //                     color: ColorStyle.text300,
+                  //                     fontSize: 16,
+                  //                     fontWeight: FontWeight.w400,
+                  //                   ),
+                  //                 ),
+                  //               ],
+                  //             ),
+                  //           ),
+                  //           Padding(
+                  //             padding: const EdgeInsetsDirectional.fromSTEB(
+                  //                 0, 0, 6, 0),
+                  //             child: Text(
+                  //               '${widget.account['currencySymbol']}$taxTotal',
+                  //               textAlign: TextAlign.start,
+                  //               style: TextStyle(
+                  //                 color: ColorStyle.text200,
+                  //                 fontSize: 16,
+                  //                 fontWeight: FontWeight.w500,
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       )
+                  //     : Container(),
+                  // roundOff != 0
+                  //     ? const SizedBox(
+                  //         height: 8.0,
+                  //       )
+                  //     : Container(),
+                  // roundOff != 0
+                  //     ? Row(
+                  //         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //         children: [
+                  //           Row(
+                  //             children: [
+                  //               Padding(
+                  //                 padding: const EdgeInsetsDirectional.fromSTEB(
+                  //                     0, 0, 6, 0),
+                  //                 child: Text(
+                  //                   'Round off',
+                  //                   textAlign: TextAlign.start,
+                  //                   style: TextStyle(
+                  //                     color: ColorStyle.text300,
+                  //                     fontSize: 16,
+                  //                     fontWeight: FontWeight.w400,
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //               Padding(
+                  //                 padding: const EdgeInsetsDirectional.fromSTEB(
+                  //                     0, 0, 6, 0),
+                  //                 child: Text(
+                  //                   '(+/-)',
+                  //                   textAlign: TextAlign.start,
+                  //                   style: TextStyle(
+                  //                     color: ColorStyle.text200,
+                  //                     fontSize: 12,
+                  //                     fontWeight: FontWeight.w400,
+                  //                   ),
+                  //                 ),
+                  //               ),
+                  //             ],
+                  //           ),
+                  //           Padding(
+                  //             padding: const EdgeInsetsDirectional.fromSTEB(
+                  //                 0, 0, 6, 0),
+                  //             child: Text(
+                  //               roundOff < 0
+                  //                   ? '- ${widget.account['currencySymbol']}${roundOff.abs()}'
+                  //                   : '${widget.account['currencySymbol']}$roundOff',
+                  //               textAlign: TextAlign.start,
+                  //               style: TextStyle(
+                  //                 color: ColorStyle.text200,
+                  //                 fontSize: 16,
+                  //                 fontWeight: FontWeight.w600,
+                  //               ),
+                  //             ),
+                  //           ),
+                  //         ],
+                  //       )
+                  //     : Container(),
                   const SizedBox(
                     height: 12.0,
                   ),
@@ -935,19 +935,19 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           ),
                         ),
                       ),
-                      Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
-                        child: Text(
-                          '${widget.account['currencySymbol']}$finalTotalAfterRoundOff',
-                          textAlign: TextAlign.start,
-                          style: TextStyle(
-                            color: ColorStyle.text200,
-                            fontSize: 24,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                      ),
+                      // Padding(
+                      //   padding:
+                      //       const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
+                      //   child: Text(
+                      //     '${widget.account['currencySymbol']}$finalTotalAfterRoundOff',
+                      //     textAlign: TextAlign.start,
+                      //     style: TextStyle(
+                      //       color: ColorStyle.text200,
+                      //       fontSize: 24,
+                      //       fontWeight: FontWeight.w600,
+                      //     ),
+                      //   ),
+                      // ),
                     ],
                   )
                 ],

@@ -1,22 +1,118 @@
 import 'package:eatery/references.dart';
 
-class CartView extends StatelessWidget {
-  const CartView({super.key});
+class CartView extends StatefulWidget {
+  const CartView({super.key, required this.themeColor, this.setParentState, required this.orderType});
 
+  final Color themeColor;
+  final VoidCallback? setParentState;
+  final OrderType orderType;
+
+  @override
+  State<CartView> createState() => _CartViewState();
+}
+
+class _CartViewState extends State<CartView> {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
       AppBar(
-          title: const Text('Cart'),
-          backgroundColor: Colors.transparent,
-          foregroundColor: ColorStyle.text200,
+        title: const Text('Cart'),
+        backgroundColor: Colors.transparent,
+        foregroundColor: ColorStyle.text200,
       ),
-
-      Container(
-        margin: const EdgeInsets.symmetric(horizontal: 12.0),
+      Divider(
         height: 0.5,
-        color: ColorStyle.text400,
+        color: Colors.grey[300],
       ),
+      Expanded(
+        child: ListView(
+          children: [
+            ...GlobalVariables.cart.toSet()
+                .map((product) => ListTile(
+                      title: Text(product.name),
+                      subtitle:
+                          product.description != null ? Text(product.description!) : null,
+                      leading: Container(
+                        height: 48,
+                        width: 48,
+                        decoration: BoxDecoration(
+                          color: ColorStyle.text400.withOpacity(0.36),
+                          borderRadius: BorderRadius.circular(12.0),
+                          image: DecorationImage(
+                            image: LibraryImage(product.image).image,
+                            fit: product.type == ProductType.inventoryItem
+                                ? BoxFit.contain
+                                : BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      trailing: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(
+                            color: widget.themeColor,
+                            width: 1,
+                          ),
+                        ),
+                        child: Padding(
+                          padding:
+                              const EdgeInsetsDirectional.fromSTEB(2, 1, 2, 1),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              GlobalVariables.cart.contains(product)
+                                  ? InkWell(
+                                      onTap: () {
+                                        setState(() {
+                                          GlobalVariables.cart.remove(product);
+                                        });
+                                      },
+                                      child: Icon(
+                                        Icons.remove,
+                                        color: widget.themeColor,
+                                        size: 24,
+                                      ),
+                                    )
+                                  : Container(),
+                              GlobalVariables.cart.contains(product)
+                                  ? Padding(
+                                      padding:
+                                          const EdgeInsetsDirectional.fromSTEB(
+                                              4, 0, 4, 0),
+                                      child: Text(
+                                        GlobalVariables.cart
+                                            .where(
+                                                (element) => element.id == product.id)
+                                            .length
+                                            .toString(),
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          fontSize: 14,
+                                        ),
+                                      ),
+                                    )
+                                  : Container(),
+                              InkWell(
+                                onTap: () {
+                                  setState(() {
+                                    GlobalVariables.cart.add(product);
+                                  });
+                                },
+                                child: Icon(
+                                  Icons.add,
+                                  color: widget.themeColor,
+                                  size: 24,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ))
+                .toList(),
+          ],
+        ),
+      )
     ]);
   }
 }
