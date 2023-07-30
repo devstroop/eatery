@@ -83,9 +83,9 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
               ),
               Row(
                 children: [
-                  Flexible(
+                  Container(
                     child: LabeledCustomTextFromField(
-                        label: 'MRP (Max. retail price)',
+                        label: 'MRP',
                         prefix: const Icon(Icons.currency_rupee, size: 14,),
                         hint: '0.00',
                         themeColor: _pageColor,
@@ -101,7 +101,7 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
                         },
                         keyboardType: TextInputType.number,
                         foregroundColor: ColorStyle.text200,
-                        controller: _controllerMRP),
+                        controller: _controllerMRP) 
                   ),
                   const SizedBox(width: 12.0,),
                   Flexible(

@@ -15,8 +15,7 @@ class _UpgradePageState extends State<UpgradePage> {
 
   @override
   void initState() {
-    super.initState();
-    
+    super.initState()
     Future.delayed(Duration.zero, (){
       fetchDeviceInfo();
     });
