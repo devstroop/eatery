@@ -39,7 +39,7 @@ class _EditPaymentPageState extends State<EditPaymentPage> {
       appBar: AppBar(
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
-        title: const Text('Add Payment'),
+        title: const Text('Edit Payment'),
         actions: [
           if (_focusNodes.any((element) => element.hasFocus))
             IconButton(

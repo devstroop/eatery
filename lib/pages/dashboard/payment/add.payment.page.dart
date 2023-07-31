@@ -3,7 +3,7 @@ import 'package:eatery/references.dart';
 Color _pageColor = KColors.tertiary;
 
 class AddPaymentPage extends StatefulWidget {
-  const AddPaymentPage({Key? key, required this.order}) : super(key: key);
+  const AddPaymentPage({Key? key, this.order}) : super(key: key);
   final Order? order;
   @override
   State<AddPaymentPage> createState() => _AddPaymentPageState();

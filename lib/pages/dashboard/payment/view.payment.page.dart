@@ -2,10 +2,15 @@ import 'package:eatery/references.dart';
 
 import 'edit.payment.page.dart';
 
-class ViewPaymentPage extends StatelessWidget {
+class ViewPaymentPage extends StatefulWidget {
   ViewPaymentPage({super.key, required this.payment});
   late Payment payment;
 
+  @override
+  State<ViewPaymentPage> createState() => _ViewPaymentPageState();
+}
+
+class _ViewPaymentPageState extends State<ViewPaymentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,35 +37,13 @@ class ViewPaymentPage extends StatelessWidget {
                       context,
                       MaterialPageRoute(
                           builder: (context) =>
-                              EditPaymentPage(payment: payment)),
+                              EditPaymentPage(payment: widget.payment)),
                     ).then((value) {
                       if (value != null) {
                         setState(() {
-                          payment = value;
+                          widget.payment = value;
                         });
                       }
-                    });
-                    break;
-                  case 'activate':
-                    EateryDB.instance.paymentBox!.values
-                        .where((element) => element.id == payment.id)
-                        .first
-                        .isActive = true;
-                    EateryDB.instance.paymentBox!.put(
-                        payment.id, EateryDB.instance.paymentBox!.get(payment.id));
-                    setState(() {
-                      payment = EateryDB.instance.paymentBox!.get(payment.id)!;
-                    });
-                    break;
-                  case 'suspend':
-                    EateryDB.instance.paymentBox!.values
-                        .where((element) => element.id == payment.id)
-                        .first
-                        .isActive = false;
-                    EateryDB.instance.paymentBox!.put(
-                        payment.id, EateryDB.instance.paymentBox!.get(payment.id));
-                    setState(() {
-                      payment = EateryDB.instance.paymentBox!.get(payment.id)!;
                     });
                     break;
                 }
@@ -75,19 +58,19 @@ class ViewPaymentPage extends StatelessWidget {
           children: [
             ListTile(
               title: const Text('Transaction ID'),
-              subtitle: Text(payment.id.toString()),
+              subtitle: Text(widget.payment.id.toString()),
             ),
             ListTile(
               title: const Text('Amount'),
-              subtitle: Text(payment.amount.toString()),
+              subtitle: Text(widget.payment.amount.toString()),
             ),
             ListTile(
               title: const Text('Payment Mode'),
-              subtitle: Text(payment.paymentMode.name),
+              subtitle: Text(widget.payment.paymentMode.name),
             ),
             ListTile(
               title: const Text('Payment Date'),
-              subtitle: Text(payment.date.toString()),
+              subtitle: Text(widget.payment.date.toString()),
             ),
           ],
         ),
