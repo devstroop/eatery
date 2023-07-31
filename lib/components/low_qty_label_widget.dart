@@ -24,7 +24,7 @@ class _LowQtyLabelWidgetState extends State<LowQtyLabelWidget> {
             color: const Color(0xFFC8905C),
             boxShadow: [
               BoxShadow(
-                color: KColors.text100,
+                color: KColors.black900,
               )
             ],
             borderRadius: const BorderRadius.only(
@@ -45,7 +45,7 @@ class _LowQtyLabelWidgetState extends State<LowQtyLabelWidget> {
                   child: Text(
                     '${widget.qty%1 != 0 ? widget.qty: widget.qty.round()}',
                     style: TextStyle(
-                      color: KColors.backgroundColorAlter,
+                      color: KColors.white,
                       fontSize: 10,
                     ),
                   ),
@@ -55,7 +55,7 @@ class _LowQtyLabelWidgetState extends State<LowQtyLabelWidget> {
                   child: Text(
                     'in stock',
                     style: TextStyle(
-                      color: KColors.backgroundColorAlter,
+                      color: KColors.white,
                       fontSize: 10,
                     ),
                   ),

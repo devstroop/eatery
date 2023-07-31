@@ -102,47 +102,47 @@ export './pages/dashboard/dashboard.page.dart';
 export './pages/dashboard/components/dashboardHeader.dart';
 export './pages/dashboard/components/notifications/upgrade.notification.dart';
 // Internal references
-export './pages/dashboard/product/kitchenDishes/addKitchenDish.page.dart';
-export './pages/dashboard/product/kitchenDishes/editKitchenDish.page.dart';
-export './pages/dashboard/product/kitchenDishes/kitchenDishes.page.dart';
+export './pages/dashboard/product/kitchen_dishes/add.kitchen_dish.page.dart';
+export './pages/dashboard/product/kitchen_dishes/edit.kitchen_dish.page.dart';
+export './pages/dashboard/product/kitchen_dishes/kitchen_dishes.page.dart';
 // Internal references
-export './pages/dashboard/product/inventoryItem/addInventoryItem.page.dart';
-export './pages/dashboard/product/inventoryItem/editInventoryItem.page.dart';
-export './pages/dashboard/product/inventoryItem/inventoryItems.page.dart';
+export './pages/dashboard/product/inventory_item/add.inventory_item.page.dart';
+export './pages/dashboard/product/inventory_item/edit.inventory_item.page.dart';
+export './pages/dashboard/product/inventory_item/inventory_items.page.dart';
 // Internal references
-export './pages/dashboard/product/productCategory/addProductCategory.page.dart';
-export './pages/dashboard/product/productCategory/editProductCategory.page.dart';
-export './pages/dashboard/product/productCategory/productCategories.page.dart';
+export './pages/dashboard/product/category/add.product.category.page.dart';
+export './pages/dashboard/product/category/edit.product.category.page.dart';
+export './pages/dashboard/product/category/product.categories.page.dart';
 // Internal references
 export './pages/dashboard/product/search_product.delegate.dart';
 
 // Internal references
-export './pages/dashboard/diningTable/category/addDiningTableCategory.page.dart';
-export './pages/dashboard/diningTable/category/editDiningTableCategory.page.dart';
-export './pages/dashboard/diningTable/category/diningTableCategories.page.dart';
+export './pages/dashboard/dining_table/category/add.dining_table.category.page.dart';
+export './pages/dashboard/dining_table/category/edit.dining_table.category.page.dart';
+export './pages/dashboard/dining_table/category/dining_table.categories.page.dart';
 // Internal references
-export './pages/dashboard/diningTable/addDiningTable.page.dart';
-export './pages/dashboard/diningTable/editDiningTable.page.dart';
-export './pages/dashboard/diningTable/diningTables.page.dart';
-export './pages/dashboard/diningTable/search_diningTable.delegate.dart';
+export './pages/dashboard/dining_table/add.dining_table.page.dart';
+export './pages/dashboard/dining_table/edit.dining_table.page.dart';
+export './pages/dashboard/dining_table/dining_tables.page.dart';
+export './pages/dashboard/dining_table/search.dining_table.delegate.dart';
 // Internal references
-export './pages/dashboard/customer/addCustomer.page.dart';
-export './pages/dashboard/customer/editCustomer.page.dart';
+export './pages/dashboard/customer/add.customer.page.dart';
+export './pages/dashboard/customer/edit.customer.page.dart';
 export './pages/dashboard/customer/customers.page.dart';
 export './pages/dashboard/customer/search_customer.delegate.dart';
 // Internal references
 export './pages/dashboard/staff/staffs.page.dart';
-export './pages/dashboard/staff/addStaff.page.dart';
-export './pages/dashboard/staff/editStaff.page.dart';
+export './pages/dashboard/staff/add.staff.page.dart';
+export './pages/dashboard/staff/edit.staff.page.dart';
 // Internal references
 export './pages/dashboard/help/help.page.dart';
 // Internal references
-export './pages/dashboard/importExport/importExport.page.dart';
+export './pages/dashboard/import_export/import_export.page.dart';
 // Internal references
-export './pages/dashboard/transaction/transactions.page.dart';
-export './pages/dashboard/transaction/transactionDetails.page.dart';
+export './pages/dashboard/order/orders.page.dart';
+export './pages/dashboard/order/view.page.page.dart';
 // Internal references
-export './pages/dashboard/pos/pointOfSale.page.dart';
+export './pages/dashboard/pos/pos.page.dart';
 export './pages/dashboard/pos/checkout.page.dart';
 export './pages/dashboard/pos/orderConfirmation.page.dart';
 // Internal references
@@ -166,16 +166,16 @@ export './pages/createCompany/components/createCompany.bottomAppBar.dart';
 export './pages/createCompany/createCompanyResult.page.dart';
 // Internal references
 export './pages/dashboard/settings/settings.page.dart';
-export './pages/dashboard/settings/company/showCompany.page.dart';
-export './pages/dashboard/settings/company/editCompany.page.dart';
-export './pages/dashboard/settings/taxSlab/addTaxSlab.page.dart';
-export './pages/dashboard/settings/taxSlab/editTaxSlab.page.dart';
-export './pages/dashboard/settings/taxSlab/taxSlabs.page.dart';
-export './pages/dashboard/settings/currency/showCurrencyRegion.page.dart';
+export './pages/dashboard/settings/company/view.company.page.dart';
+export './pages/dashboard/settings/company/edit.company.page.dart';
+export './pages/dashboard/settings/tax_slab/add.tax_slab.page.dart';
+export './pages/dashboard/settings/tax_slab/edit.tax_slab.page.dart';
+export './pages/dashboard/settings/tax_slab/tax_slabs.page.dart';
+export './pages/dashboard/settings/currency_region/view.currency_region.page.dart';
 // Internal references
 export './pages/backupRestore/backupRestore.page.dart';
 // Internal references
-export 'pages/dashboard/utility/imageLibrary.page.dart';
+export 'pages/dashboard/utility/image_library.page.dart';
 export './widgets/containers/image.container.dart';
 export './widgets/dialogs/showConfirmationDialog.dart';
 

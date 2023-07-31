@@ -41,7 +41,7 @@ class CartProductCard extends StatelessWidget {
                   height: 50,
                   width: 50,
                   decoration: BoxDecoration(
-                    color: KColors.backgroundColorAlter,
+                    color: KColors.white,
                     borderRadius: const BorderRadius.all(Radius.circular(6)),
                     image: File(image ?? '').existsSync()
                         ? DecorationImage(
@@ -65,7 +65,7 @@ class CartProductCard extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 16.0,
                           fontWeight: FontWeight.w600,
-                          color: KColors.text200),
+                          color: KColors.black600),
                     ),
                     Row(
                       children: [
@@ -75,7 +75,7 @@ class CartProductCard extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 14.0,
                               fontWeight: FontWeight.w400,
-                              color: KColors.text400),
+                              color: KColors.white600),
                         ),
                       ],
                     ),

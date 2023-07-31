@@ -159,7 +159,7 @@ class _Body6State extends State<Body6> {
                       }
                     },
                     icon: const Icon(Icons.paste),
-                    color: KColors.text400,
+                    color: KColors.white600,
                   ),
                   validator: (value) {
                     if (widget.subscriptionType == SubscriptionType.premium) {

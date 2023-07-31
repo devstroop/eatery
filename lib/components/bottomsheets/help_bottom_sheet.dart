@@ -42,7 +42,7 @@ class HelpBottomSheet extends StatelessWidget {
                       }
                     },
                     icon: Icon(Icons.link,
-                        color: KColors.brandColor))
+                        color: KColors.secondary2))
               ],
             ),
             const SizedBox(
@@ -53,7 +53,7 @@ class HelpBottomSheet extends StatelessWidget {
                 Icon(
                   Icons.call,
                   size: 24,
-                  color: KColors.brandColor,
+                  color: KColors.secondary2,
                 ),
                 const SizedBox(
                   width: 12,
@@ -72,7 +72,7 @@ class HelpBottomSheet extends StatelessWidget {
                 Icon(
                   Icons.comment,
                   size: 24,
-                  color: KColors.brandColor,
+                  color: KColors.secondary2,
                 ),
                 const SizedBox(
                   width: 12,

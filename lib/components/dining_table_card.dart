@@ -62,7 +62,7 @@ class DiningTableCard extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 14.0,
                               fontWeight: FontWeight.w600,
-                              color: KColors.text200),
+                              color: KColors.black600),
                         ),
                       ],
                     ),

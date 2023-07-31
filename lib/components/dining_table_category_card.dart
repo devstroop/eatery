@@ -46,7 +46,7 @@ class DiningTableCategoryCard extends StatelessWidget {
                 children: [
                   Container(
                     decoration: BoxDecoration(
-                      color: KColors.backgroundColorAlter,
+                      color: KColors.white,
                       borderRadius: const BorderRadius.all(Radius.circular(6)),
                     ),
                   ),
@@ -68,7 +68,7 @@ class DiningTableCategoryCard extends StatelessWidget {
                               style: TextStyle(
                                   fontSize: 16.0,
                                   fontWeight: FontWeight.w600,
-                                  color: KColors.text200),
+                                  color: KColors.black600),
                             ),
                           ],
                         ),

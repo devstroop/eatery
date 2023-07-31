@@ -32,7 +32,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
   Currency? currency;
   TaxType _taxType = TaxType.inclusive;
 
-  Color themeColor = KColors.brandColor;
+  Color themeColor = KColors.secondary2;
 
   List<Widget> bodies() => [
         Body1(
@@ -245,9 +245,9 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: KColors.backgroundColorAlter,
+      backgroundColor: KColors.white,
       appBar: AppBar(
-        backgroundColor: KColors.backgroundColorAlter,
+        backgroundColor: KColors.white,
         title: Image.asset(
           'assets/logo.png',
           height: 36,
@@ -275,7 +275,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                 child: Text(
               'Step ${viewIndex + 1}/${bodies().length}',
               style: TextStyle(
-                  color: KColors.text200, fontWeight: FontWeight.w500),
+                  color: KColors.black600, fontWeight: FontWeight.w500),
             )),
           )
         ],

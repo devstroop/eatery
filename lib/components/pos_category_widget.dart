@@ -29,19 +29,19 @@ class PosCategoryWidget extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               color:
-                  active ? KColors.text200 : KColors.backgroundColorAlter,
+                  active ? KColors.black600 : KColors.white,
               boxShadow: [
                 BoxShadow(
                   color: active
-                      ? KColors.text200
-                      : KColors.backgroundColorAlter,
+                      ? KColors.black600
+                      : KColors.white,
                 ),
               ],
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: active
-                    ? KColors.text200
-                    : KColors.backgroundColorAlter,
+                    ? KColors.black600
+                    : KColors.white,
                 width: 1,
               ),
             ),
@@ -68,8 +68,8 @@ class PosCategoryWidget extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       color: active
-                          ? KColors.backgroundColorAlter
-                          : KColors.text200,
+                          ? KColors.white
+                          : KColors.black600,
                     ),
                   ),
                 ],

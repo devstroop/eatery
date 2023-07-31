@@ -31,7 +31,7 @@ class SelectableCard extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
-            color: selected ? KColors.brandColor : KColors.text400,
+            color: selected ? KColors.secondary2 : KColors.white600,
             width: selected ? 2 : 1,
           ),
         ),
@@ -48,7 +48,7 @@ class SelectableCard extends StatelessWidget {
                   Text(
                     header,
                     style: TextStyle(
-                        fontWeight: FontWeight.w500, color: KColors.text300),
+                        fontWeight: FontWeight.w500, color: KColors.black500),
                   ),
                   selected
                       ? SizedBox(
@@ -62,7 +62,7 @@ class SelectableCard extends StatelessWidget {
                                     width: 24,
                                     height: 24,
                                     decoration: BoxDecoration(
-                                      color: KColors.brandColor,
+                                      color: KColors.secondary2,
                                       borderRadius: const BorderRadius.all(
                                           Radius.elliptical(24, 24)),
                                     ))),
@@ -73,7 +73,7 @@ class SelectableCard extends StatelessWidget {
                                     width: 10,
                                     height: 10,
                                     decoration: BoxDecoration(
-                                      color: KColors.backgroundColorAlter,
+                                      color: KColors.white,
                                       borderRadius: const BorderRadius.all(
                                           Radius.elliptical(10, 10)),
                                     ))),
@@ -98,7 +98,7 @@ class SelectableCard extends StatelessWidget {
                 title,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: KColors.text100,
+                  color: KColors.black900,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -114,7 +114,7 @@ class SelectableCard extends StatelessWidget {
                         margin: const EdgeInsets.only(right: 6.0),
                         padding: const EdgeInsets.all(6.0),
                         decoration: BoxDecoration(
-                          color: (highlightColor ?? KColors.brandColor)
+                          color: (highlightColor ?? KColors.secondary2)
                               .withOpacity(0.2),
                           borderRadius:
                               const BorderRadius.all(Radius.elliptical(4, 4)),
@@ -139,7 +139,7 @@ class SelectableCard extends StatelessWidget {
                   : Container(),
               Text(
                 footer,
-                style: TextStyle(color: KColors.text300),
+                style: TextStyle(color: KColors.black500),
               )
             ],
           ),

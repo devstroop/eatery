@@ -16,7 +16,7 @@ class KProductView extends StatelessWidget {
       AppBar(
         title: Text(product.name),
         backgroundColor: Colors.transparent,
-        foregroundColor: KColors.text200,
+        foregroundColor: KColors.black600,
       ),
       Divider(
         height: 0.5,
@@ -26,7 +26,7 @@ class KProductView extends StatelessWidget {
         height: 200,
         margin: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
-            color: KColors.text400.withOpacity(0.36),
+            color: KColors.white600.withOpacity(0.36),
             borderRadius: BorderRadius.circular(12.0),
             image: DecorationImage(
               image: LibraryImage(product.image).image,
@@ -61,7 +61,7 @@ class KProductView extends StatelessWidget {
                   style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 18,
-                      color: KColors.text200),
+                      color: KColors.black600),
                 ),
                 const SizedBox(
                   width: 6,
@@ -71,7 +71,7 @@ class KProductView extends StatelessWidget {
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 18,
-                      color: KColors.text200),
+                      color: KColors.black600),
                 ),
               ],
             ),
@@ -82,7 +82,7 @@ class KProductView extends StatelessWidget {
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 18,
-                    color: KColors.text200),
+                    color: KColors.black600),
               ),
             ),
             Row(
@@ -93,7 +93,7 @@ class KProductView extends StatelessWidget {
                   style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 18,
-                      color: KColors.text200),
+                      color: KColors.black600),
                 ),
                 const SizedBox(
                   width: 6,
@@ -123,11 +123,11 @@ class KProductView extends StatelessWidget {
               style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
-                  color: KColors.text200),
+                  color: KColors.black600),
             ),
             Text(
               product.description ?? '',
-              style: TextStyle(color: KColors.text300, fontSize: 12),
+              style: TextStyle(color: KColors.black500, fontSize: 12),
             ),
           ],
         ),

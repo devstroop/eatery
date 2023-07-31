@@ -98,7 +98,7 @@ class _ForgotPasswordBottomSheetState extends State<ForgotPasswordBottomSheet> {
                       });
                     },
                     icon: const Icon(Icons.paste),
-                    color: KColors.text400,
+                    color: KColors.white600,
                   ),
                   validator: (value) {
                     if (value!.isEmpty) return 'Purchase code cannot be blank';

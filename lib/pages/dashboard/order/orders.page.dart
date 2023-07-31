@@ -5,13 +5,13 @@ import 'package:eatery/references.dart';
 
 final Color _pageColor = KColors.secondary2;
 
-class TransactionsPage extends StatefulWidget {
-  const TransactionsPage({Key? key}) : super(key: key);
+class OrdersPage extends StatefulWidget {
+  const OrdersPage({Key? key}) : super(key: key);
   @override
-  State<TransactionsPage> createState() => _TransactionsPageState();
+  State<OrdersPage> createState() => _OrdersPageState();
 }
 
-class _TransactionsPageState extends State<TransactionsPage> {
+class _OrdersPageState extends State<OrdersPage> {
   final GlobalKey genKey = GlobalKey();
   late List<Map<String, dynamic>> orders = [];
   DateTime? filterFrom;

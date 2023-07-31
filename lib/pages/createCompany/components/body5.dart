@@ -69,7 +69,7 @@ class _Body5State extends State<Body5> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(6),
                 border: Border.all(
-                  color: KColors.brandColor,
+                  color: KColors.secondary2,
                   width: 2,
                 ),
               ),

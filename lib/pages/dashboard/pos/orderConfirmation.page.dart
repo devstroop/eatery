@@ -40,7 +40,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
   previewWidget(BuildContext context) => RepaintBoundary(
         key: genKey,
         child: Container(
-          color: KColors.backgroundColorAlter,
+          color: KColors.white,
           margin: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0),
           //height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -399,7 +399,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: KColors.backgroundColorAlter,
+      backgroundColor: KColors.white,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -432,7 +432,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: KColors.backgroundColorAlter,
+        color: KColors.white,
         child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Row(
@@ -461,7 +461,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                   },
                   child: Icon(
                     Icons.print,
-                    color: KColors.backgroundColorAlter,
+                    color: KColors.white,
                   ),
                 ),
                 const SizedBox(
@@ -479,7 +479,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                   },
                   child: Icon(
                     Icons.share,
-                    color: KColors.backgroundColorAlter,
+                    color: KColors.white,
                   ),
                 ),
               ],

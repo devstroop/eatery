@@ -64,7 +64,7 @@ class ProductCard extends StatelessWidget {
                           bottom: 0,
                           child: Container(
                             decoration: BoxDecoration(
-                              color: KColors.backgroundColorAlter,
+                              color: KColors.white,
                               borderRadius: const BorderRadius.only(
                                   topLeft: Radius.circular(6),
                                   topRight: Radius.circular(6)),
@@ -115,7 +115,7 @@ class ProductCard extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 12.0,
                                     fontWeight: FontWeight.w600,
-                                    color: KColors.text200),
+                                    color: KColors.black600),
                               ),
                               Text(
                                 product.description ?? '',
@@ -123,7 +123,7 @@ class ProductCard extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 10.0,
                                     fontWeight: FontWeight.w400,
-                                    color: KColors.text400),
+                                    color: KColors.white600),
                               ),
                             ],
                           ),
@@ -144,7 +144,7 @@ class ProductCard extends StatelessWidget {
                                       style: TextStyle(
                                           fontSize: 10.0,
                                           fontWeight: FontWeight.w600,
-                                          color: KColors.text200,
+                                          color: KColors.black600,
                                           decoration:
                                               TextDecoration.lineThrough),
                                     ),

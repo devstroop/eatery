@@ -27,7 +27,7 @@ class _DetailedProductViewState extends State<DetailedProductView> {
           margin: const EdgeInsets.fromLTRB(16.0, 0.0, 16.0, 8.0),
           height: MediaQuery.of(context).size.width * 4 / 7,
           decoration: BoxDecoration(
-            color: KColors.backgroundColorAlter,
+            color: KColors.white,
             borderRadius: const BorderRadius.all(Radius.circular(6)),
             image: File(widget.product.image ?? '').existsSync()
                 ? DecorationImage(
@@ -64,7 +64,7 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                     style: TextStyle(
                         fontSize: 20.0,
                         fontWeight: FontWeight.w600,
-                        color: KColors.text200),
+                        color: KColors.black600),
                   ),
                   Column(
                     children: [
@@ -74,7 +74,7 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                         style: TextStyle(
                             fontSize: 20.0,
                             fontWeight: FontWeight.w500,
-                            color: KColors.text200),
+                            color: KColors.black600),
                       ),
                     ],
                   ),
@@ -150,7 +150,7 @@ class _DetailedProductViewState extends State<DetailedProductView> {
             style: TextStyle(
                 fontSize: 18.0,
                 fontWeight: FontWeight.w400,
-                color: KColors.text400),
+                color: KColors.white600),
           ),
         ),
       ],

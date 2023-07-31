@@ -83,7 +83,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               style: TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.w600,
-                  color: KColors.text200),
+                  color: KColors.black600),
             ),
           ),
           Wrap(
@@ -137,7 +137,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
               style: TextStyle(
                   fontSize: 20.0,
                   fontWeight: FontWeight.w600,
-                  color: KColors.text200),
+                  color: KColors.black600),
             ),
           ),
           Padding(
@@ -149,7 +149,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   Text(
                     'Customer name',
                     style: TextStyle(
-                      color: KColors.text200,
+                      color: KColors.black600,
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                     ),
@@ -175,7 +175,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   Text(
                     'Phone number',
                     style: TextStyle(
-                      color: KColors.text200,
+                      color: KColors.black600,
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                     ),
@@ -201,7 +201,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                   Text(
                     'Address',
                     style: TextStyle(
-                      color: KColors.text200,
+                      color: KColors.black600,
                       fontSize: 12,
                       fontWeight: FontWeight.w500,
                     ),
@@ -275,7 +275,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       title: const Text('Checkout'),
     );
     return Scaffold(
-      backgroundColor: KColors.backgroundColorAlter,
+      backgroundColor: KColors.white,
       appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
@@ -286,7 +286,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             Container(
               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
               margin: const EdgeInsets.only(bottom: 12.0),
-              color: KColors.backgroundColorAlter,
+              color: KColors.white,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -297,7 +297,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.w600,
-                        color: KColors.text200),
+                        color: KColors.black600),
                   ),
                   const SizedBox(
                     height: 8.0,
@@ -313,14 +313,14 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             child: widget.orderType == OrderType.dine
                                 ? Icon(
                                     Icons.dinner_dining,
-                                    color: KColors.text300,
+                                    color: KColors.black500,
                                   )
                                 : widget.orderType == OrderType.delivery ? Icon(
                                     Icons.bike_scooter,
-                                    color: KColors.text300,
+                                    color: KColors.black500,
                                   ) : Icon(
                                     Icons.takeout_dining,
-                                    color: KColors.text300,
+                                    color: KColors.black500,
                                   ),
                           ),
                           Padding(
@@ -330,7 +330,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                               widget.orderType.name!,
                               textAlign: TextAlign.start,
                               style: TextStyle(
-                                color: KColors.text200,
+                                color: KColors.black600,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -364,7 +364,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             Container(
               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
               margin: const EdgeInsets.only(bottom: 12.0),
-              color: KColors.backgroundColorAlter,
+              color: KColors.white,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -378,7 +378,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         style: TextStyle(
                             fontSize: 18.0,
                             fontWeight: FontWeight.w600,
-                            color: KColors.text200),
+                            color: KColors.black600),
                       ),
                       CustomButton(
                         text: 'Edit',
@@ -407,7 +407,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                             const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
                         child: Icon(
                           Icons.person,
-                          color: KColors.text300,
+                          color: KColors.black500,
                         ),
                       ),
                       Padding(
@@ -420,7 +420,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 'Customer Name',
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                  color: KColors.text300,
+                                  color: KColors.black500,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -429,7 +429,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                 customerName,
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                  color: KColors.text200,
+                                  color: KColors.black600,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -451,7 +451,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   0, 0, 6, 0),
                               child: Icon(
                                 Icons.call,
-                                color: KColors.text300,
+                                color: KColors.black500,
                               ),
                             ),
                             Padding(
@@ -464,7 +464,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       'Phone Number',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        color: KColors.text300,
+                                        color: KColors.black500,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -473,7 +473,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       customerPhone!,
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        color: KColors.text200,
+                                        color: KColors.black600,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
                                       ),
@@ -496,7 +496,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   0, 0, 6, 0),
                               child: Icon(
                                 Icons.pin_drop,
-                                color: KColors.text300,
+                                color: KColors.black500,
                               ),
                             ),
                             Padding(
@@ -509,7 +509,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       'Address',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        color: KColors.text300,
+                                        color: KColors.black500,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -518,7 +518,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       customerAddress!,
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                          color: KColors.text200,
+                                          color: KColors.black600,
                                           fontSize: 16,
                                           fontWeight: FontWeight.w600,
                                           overflow: TextOverflow.clip),
@@ -541,7 +541,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                   0, 0, 6, 0),
                               child: Icon(
                                 Icons.chair_sharp,
-                                color: KColors.text300,
+                                color: KColors.black500,
                               ),
                             ),
                             Padding(
@@ -554,7 +554,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       'Table No.',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        color: KColors.text300,
+                                        color: KColors.black500,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -563,7 +563,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       widget.diningTableName!,
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        color: KColors.text200,
+                                        color: KColors.black600,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
                                       ),
@@ -579,7 +579,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             Container(
               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
               margin: const EdgeInsets.only(bottom: 12.0),
-              color: KColors.backgroundColorAlter,
+              color: KColors.white,
               child: Column(
                 children: [
                   Row(
@@ -590,7 +590,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                         style: TextStyle(
                             fontSize: 18.0,
                             fontWeight: FontWeight.w600,
-                            color: KColors.text200),
+                            color: KColors.black600),
                       ),
                       CustomButton(
                         text: 'Edit',
@@ -629,7 +629,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 ? Container(
                     padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
                     margin: const EdgeInsets.only(bottom: 12.0),
-                    color: KColors.backgroundColorAlter,
+                    color: KColors.white,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -640,7 +640,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           style: TextStyle(
                               fontSize: 18.0,
                               fontWeight: FontWeight.w600,
-                              color: KColors.text200),
+                              color: KColors.black600),
                         ),
                         const SizedBox(
                           height: 8.0,
@@ -655,7 +655,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                       0, 0, 6, 0),
                                   child: Icon(
                                     Icons.person,
-                                    color: KColors.text300,
+                                    color: KColors.black500,
                                   ),
                                 ),
                                 Padding(
@@ -665,7 +665,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                                     selectedWaiterName ?? 'Not assigned',
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
-                                      color: KColors.text300,
+                                      color: KColors.black500,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -709,7 +709,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             Container(
               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
               margin: const EdgeInsets.only(bottom: 12.0),
-              color: KColors.backgroundColorAlter,
+              color: KColors.white,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -720,7 +720,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                     style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.w600,
-                        color: KColors.text200),
+                        color: KColors.black600),
                   ),
                   // Row(
                   //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -865,7 +865,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
                           'Final total',
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                            color: KColors.text200,
+                            color: KColors.black600,
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                           ),
@@ -893,7 +893,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: KColors.backgroundColorAlter,
+        color: KColors.white,
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: isProcessing

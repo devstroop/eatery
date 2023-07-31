@@ -30,7 +30,7 @@ class CreateCompanyBottomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      color: KColors.backgroundColorAlter,
+      color: KColors.white,
       child: PrimaryButton(
           color: themeColor, onPressed: _submit, child: Text(title)),
     );

@@ -1,7 +1,7 @@
 import 'package:eatery/references.dart';
 
-class TransactionDetailsPage extends StatefulWidget {
-  const TransactionDetailsPage(
+class ViewOrderPage extends StatefulWidget {
+  const ViewOrderPage(
       {Key? key,
       required this.account,
       required this.order,
@@ -12,10 +12,10 @@ class TransactionDetailsPage extends StatefulWidget {
   final OrderType? orderType;
 
   @override
-  State<TransactionDetailsPage> createState() => _TransactionDetailsPageState();
+  State<ViewOrderPage> createState() => _ViewOrderPageState();
 }
 
-class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
+class _ViewOrderPageState extends State<ViewOrderPage> {
   @override
   initState() {
     super.initState();
@@ -26,7 +26,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
     final pageColor = Color(widget.orderType!.color!);
     final appBar = AppBar(
       backgroundColor: pageColor,
-      title: const Text('Order detail'),
+      title: const Text('Order Details'),
       actions: [
         IconButton(
             onPressed: () {

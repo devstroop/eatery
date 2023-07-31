@@ -72,7 +72,7 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
           Text(
             widget.label!,
             style: TextStyle(
-              color: KColors.text200,
+              color: KColors.black600,
               fontSize: 12,
               fontWeight: FontWeight.w500,
             ),
@@ -108,18 +108,18 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
                         icon: obscureText ?? false
                             ? const Icon(Icons.remove_red_eye)
                             : const Icon(Icons.visibility_off),
-                        color: KColors.text400,
+                        color: KColors.white600,
                       )
                     : null,
             hintText: widget.hint,
             hintStyle: TextStyle(
-              color: KColors.text400,
+              color: KColors.white600,
               fontSize: 14,
               fontWeight: FontWeight.normal,
             ),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: KColors.text400,
+                color: KColors.white600,
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(8),
@@ -140,7 +140,7 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
             ),
             disabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: KColors.text400,
+                color: KColors.white600,
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(8),
@@ -162,7 +162,7 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
                 const EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
           ),
           style: TextStyle(
-            color: KColors.text200,
+            color: KColors.black600,
             fontSize: 14,
             fontWeight: FontWeight.normal,
           ),

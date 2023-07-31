@@ -54,7 +54,7 @@ class WaiterCard extends StatelessWidget {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              color: KColors.backgroundColorAlter,
+                              color: KColors.white,
                               borderRadius:
                               const BorderRadius.only(topLeft: Radius.circular(6), topRight: Radius.circular(6)),
                               image: File(image ?? '').existsSync()
@@ -71,7 +71,7 @@ class WaiterCard extends StatelessWidget {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              color: KColors.backgroundColorAlter,
+                              color: KColors.white,
                               borderRadius: const BorderRadius.only(
                                   bottomLeft: Radius.circular(6), bottomRight: Radius.circular(6)),
                             ),
@@ -83,7 +83,7 @@ class WaiterCard extends StatelessWidget {
                               name,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(
-                                  fontSize: 16.0, fontWeight: FontWeight.w600, color: KColors.text200),
+                                  fontSize: 16.0, fontWeight: FontWeight.w600, color: KColors.black600),
                             ),
                           )
                         ],

@@ -1,4 +1,7 @@
+import 'package:eatery/pages/dashboard/payment/payments.page.dart';
 import 'package:eatery/references.dart';
+
+import 'order/orders.page.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -286,8 +289,8 @@ class _DashboardPageState extends State<DashboardPage> {
                 MenuCard(
                   iconData: Icons.history,
                   iconSize: iconSize,
-                  title: 'Sales',
-                  subtitle: 'All sale records are here',
+                  title: 'Orders',
+                  subtitle: 'All orders are here',
                   titleSize: titleSize,
                   subtitleSize: subtitleSize,
                   color: const Color(0xFFF5A142),
@@ -297,7 +300,7 @@ class _DashboardPageState extends State<DashboardPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const TransactionsPage(),
+                        builder: (context) => const OrdersPage(),
                       ),
                     );
                   },
@@ -309,14 +312,14 @@ class _DashboardPageState extends State<DashboardPage> {
                   subtitle: 'All payment receipts are here',
                   titleSize: titleSize,
                   subtitleSize: subtitleSize,
-                  color: const Color(0xFF2F5EC2),
+                  color: KColors.alternate2,
                   width: menuSize,
                   height: menuSize,
                   onTap: () {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const TransactionsPage(),
+                        builder: (context) => const PaymentsPage(),
                       ),
                     );
                   },

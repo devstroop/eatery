@@ -50,15 +50,15 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Color themeColor = KColors.brandColor;
+  Color themeColor = KColors.secondary2;
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: KColors.backgroundColorAlter,
+      backgroundColor: KColors.white,
       appBar: AppBar(
-        backgroundColor: KColors.backgroundColorAlter,
+        backgroundColor: KColors.white,
         automaticallyImplyLeading: false,
         title: Image.asset(
           'assets/logo.png',
@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
           IconButton(
             icon: Icon(
               Icons.settings_backup_restore,
-              color: KColors.text200,
+              color: KColors.black600,
             ),
             onPressed: () {
               Navigator.push(
@@ -89,9 +89,9 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             if (company == null)
               LinearProgressIndicator(
-                backgroundColor: KColors.backgroundColorAlter,
+                backgroundColor: KColors.white,
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  KColors.brandColor,
+                  KColors.secondary2,
                 ),
               ),
             if (company != null)
@@ -180,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
                     TextButton(
                       child: Text(
                         'Forgot password?',
-                        style: TextStyle(color: KColors.text200),
+                        style: TextStyle(color: KColors.black600),
                       ),
                       onPressed: () => showModalBottomSheet(
                         context: context,
@@ -231,7 +231,7 @@ class _LoginPageState extends State<LoginPage> {
       resizeToAvoidBottomInset: true,
       // Enable auto resize to avoid the keyboard
       bottomNavigationBar: BottomAppBar(
-        color: KColors.backgroundColorAlter,
+        color: KColors.white,
         child: PrimaryButton(
           height: 50,
           color: themeColor,

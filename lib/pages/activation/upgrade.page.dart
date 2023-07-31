@@ -31,7 +31,7 @@ class _UpgradePageState extends State<UpgradePage> {
   @override
   Widget build(BuildContext context) {
     Color getThemeColor() {
-      return KColors.brandColor;
+      return KColors.secondary2;
     }
 
     final appBar = AppBar(
@@ -76,7 +76,7 @@ class _UpgradePageState extends State<UpgradePage> {
                                   : throw "Could not launch $url");
                         },
                         icon: Icon(Icons.link,
-                            color: KColors.brandColor))
+                            color: KColors.secondary2))
                   ],
                 ),
                 const SizedBox(
@@ -87,7 +87,7 @@ class _UpgradePageState extends State<UpgradePage> {
                     Icon(
                       Icons.call,
                       size: 24,
-                      color: KColors.brandColor,
+                      color: KColors.secondary2,
                     ),
                     const SizedBox(
                       width: 12,
@@ -107,7 +107,7 @@ class _UpgradePageState extends State<UpgradePage> {
                     Icon(
                       Icons.email,
                       size: 24,
-                      color: KColors.brandColor,
+                      color: KColors.secondary2,
                     ),
                     const SizedBox(
                       width: 12,
@@ -127,7 +127,7 @@ class _UpgradePageState extends State<UpgradePage> {
           );
         });
     return Scaffold(
-      backgroundColor: KColors.backgroundColorAlter,
+      backgroundColor: KColors.white,
       appBar: appBar,
       body: SingleChildScrollView(
         child: Padding(
@@ -156,7 +156,7 @@ class _UpgradePageState extends State<UpgradePage> {
                       Text(
                         'Device Id: $deviceSerial',
                         style: TextStyle(
-                          color: KColors.text200,
+                          color: KColors.black600,
                           fontSize: 14,
                           fontWeight: FontWeight.w500,
                         ),
@@ -183,7 +183,7 @@ class _UpgradePageState extends State<UpgradePage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: KColors.backgroundColorAlter,
+        color: KColors.white,
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -191,8 +191,8 @@ class _UpgradePageState extends State<UpgradePage> {
               fit: FlexFit.tight,
               flex: 1,
               child: SecondaryButton(
-                color: KColors.text300,
-                borderColor: KColors.text400,
+                color: KColors.black500,
+                borderColor: KColors.white600,
                 text: 'Contact Sales',
                 height: 50.0,
                 onTap: () => showModalBottomSheet(
