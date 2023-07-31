@@ -20,29 +20,8 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
 
         title: const Text('Dining Table Categories'),
       ),
-      body: ListView(
+      body: EateryDB.instance.diningTableCategoryBox!.values.isNotEmpty ? ListView(
         children: [
-          ListTile(
-            title: const Text('Default',
-                style: TextStyle(fontWeight: FontWeight.w600)),
-            subtitle: const Text('Uncategorized'),
-            leading: Material(
-              elevation: 2.0,
-              borderRadius: BorderRadius.circular(12.0),
-              child: Container(
-                width: 50.0,
-                height: 50.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12.0),
-                  image: const DecorationImage(
-                    image: AssetImage('assets/images/default.jpg'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ),
-            onTap: () {},
-          ),
           ...EateryDB.instance.diningTableCategoryBox!.values.map((each) {
             return ListTile(
               title: Text(each.name,
@@ -137,7 +116,33 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
             );
           })
         ],
-      ),
+      ): const Center(
+          child: Opacity(
+            opacity: 0.5,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  Icons.category,
+                  size: 64,
+                ),
+                SizedBox(height: 16),
+                Text(
+                  'No Table Categories Found',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Text(
+                  'Add a dining table category to get started',
+                  style: TextStyle(
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          )),
       floatingActionButton: FloatingActionButton.extended(
         label: const Text('Add Category'),
         backgroundColor: _pageColor,

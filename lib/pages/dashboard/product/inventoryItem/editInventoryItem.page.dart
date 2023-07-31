@@ -22,10 +22,12 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
   final TextEditingController _controllerSalePrice = TextEditingController();
   final TextEditingController _controllerDescription = TextEditingController();
 
-  final focus1 = FocusNode();
-  final focus2 = FocusNode();
-  final focus3 = FocusNode();
-  final focus4 = FocusNode();
+final List<FocusNode> _focusNodes = [
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+  ];
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -61,6 +63,18 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
         foregroundColor: Colors.white,
         
         title: const Text('Edit Inventory Item'),
+        actions: [
+          if (_focusNodes[0].hasFocus ||
+              _focusNodes[1].hasFocus ||
+              _focusNodes[2].hasFocus ||
+              _focusNodes[3].hasFocus)
+            IconButton(
+              icon: const Icon(Icons.done),
+              onPressed: () {
+                FocusScope.of(context).unfocus();
+              },
+            ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -86,10 +100,9 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
               LabeledCustomTextFromField(
                   label: 'Name',
                   hint: 'Enter product name',
-                  // Write a hint for category name field
-                  focusNode: focus1,
+                  focusNode: _focusNodes[0],
                   onFieldSubmitted: (v) {
-                    FocusScope.of(context).requestFocus(focus2);
+                    FocusScope.of(context).requestFocus(_focusNodes[1]);
                   },
                   foregroundColor: ColorStyle.text200,
                   themeColor: _pageColor,
@@ -105,9 +118,9 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
                         prefix: const Icon(Icons.currency_rupee, size: 14,),
                         hint: '0.00',
                         themeColor: _pageColor,
-                        focusNode: focus2,
+                        focusNode: _focusNodes[1],
                         onFieldSubmitted: (v) {
-                          FocusScope.of(context).requestFocus(focus3);
+                          FocusScope.of(context).requestFocus(_focusNodes[2]);
                         },
                         validator: (value) {
                           if (value!.trim().isEmpty) {
@@ -126,9 +139,9 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
                         prefix: const Icon(Icons.currency_rupee, size: 14,),
                         hint: '0.00',
                         themeColor: _pageColor,
-                        focusNode: focus3,
+                        focusNode: _focusNodes[2],
                         onFieldSubmitted: (v) {
-                          FocusScope.of(context).unfocus();
+                          FocusScope.of(context).requestFocus(_focusNodes[3]);
                         },
                         validator: (value) {
                           if (value!.trim().isEmpty) {
@@ -275,7 +288,7 @@ class _EditInventoryItemPageState extends State<EditInventoryItemPage> {
                   label: 'Description',
                   hint: 'Enter product description',
                   multiline: true,
-                  focusNode: focus4,
+                  focusNode: _focusNodes[3],
                   onFieldSubmitted: (v) {
                     FocusScope.of(context).unfocus();
                   },

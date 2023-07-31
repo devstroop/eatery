@@ -17,6 +17,11 @@ class _AddStaffPageState extends State<AddStaffPage> {
   StaffType? staffType;
   final _formKey = GlobalKey<FormState>();
 
+  final List<FocusNode> _focusNodes = [
+    FocusNode(),
+    FocusNode(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,6 +29,15 @@ class _AddStaffPageState extends State<AddStaffPage> {
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
         title: const Text('Add Staff'),
+        actions: [
+          if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
+            IconButton(
+              icon: const Icon(Icons.done),
+              onPressed: () {
+                FocusScope.of(context).unfocus();
+              },
+            ),
+        ],
       ),
       body: InkWell(
         onTap: () {
@@ -53,8 +67,13 @@ class _AddStaffPageState extends State<AddStaffPage> {
                   themeColor: _pageColor,
                   foregroundColor: ColorStyle.text200,
                   hint: 'Enter Staff Name',
-                  validator: (value) =>
-                      value == null || value.isEmpty ? 'Enter Staff Name' : null,
+                  validator: (value) => value == null || value.isEmpty
+                      ? 'Enter Staff Name'
+                      : null,
+                  focusNode: _focusNodes[0],
+                  onFieldSubmitted: (v) {
+                    _focusNodes[1].requestFocus();
+                  },
                 ),
                 SpacingStyle.defaultVerticalSpacing,
                 LabeledCustomTextFromField(
@@ -64,8 +83,13 @@ class _AddStaffPageState extends State<AddStaffPage> {
                   foregroundColor: ColorStyle.text200,
                   keyboardType: TextInputType.phone,
                   hint: 'Enter Phone Number',
-                  validator: (value) =>
-                      value == null || value.isEmpty ? 'Enter Phone Number' : null,
+                  validator: (value) => value == null || value.isEmpty
+                      ? 'Enter Phone Number'
+                      : null,
+                  focusNode: _focusNodes[1],
+                  onFieldSubmitted: (v) {
+                    FocusScope.of(context).unfocus();
+                  },
                 ),
                 SpacingStyle.defaultVerticalSpacing,
                 // Drop down for staff type
@@ -119,7 +143,7 @@ class _AddStaffPageState extends State<AddStaffPage> {
                   validator: (value) =>
                       value == null ? 'Please select staff type' : null,
                 ),
-      
+
                 SpacingStyle.defaultVerticalSpacing,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,

@@ -1,9 +1,12 @@
+import 'package:eatery/pages/dashboard/customer/view.customer.page.dart';
+import 'package:flutter/material.dart';
 import 'package:eatery/references.dart';
 
 class SearchCustomerDelegate extends SearchDelegate<Customer?> {
   final List<Customer> customers;
+  final Function(Customer customer) callback;
 
-  SearchCustomerDelegate(this.customers, Function(Customer customer) callback);
+  SearchCustomerDelegate(this.customers, this.callback);
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -16,18 +19,18 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
         icon: const Icon(Icons.clear),
       ),
       IconButton(
-          onPressed: () {
-            Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const AddCustomerPage()))
-                .then((customer) {
-              if (customer != null) {
-                close(context, customer as Customer);
-              }
-            });
-          },
-          icon: const Icon(Icons.add))
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddCustomerPage()),
+          ).then((customer) {
+            if (customer != null) {
+              close(context, customer as Customer);
+            }
+          });
+        },
+        icon: const Icon(Icons.add),
+      )
     ];
   }
 
@@ -43,209 +46,114 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
 
   @override
   Widget buildResults(BuildContext context) {
-    if (query.isNotEmpty) {
-      List<Customer> customers = this
-          .customers
-          .where((element) =>
-              element.name.toLowerCase().contains(query.toLowerCase()) ||
-              (element.phone ?? '').toLowerCase().contains(query))
-          .toList();
-      return Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Text(
-              'Search Results',
-              style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14,
-                  color: ColorStyle.text300,
-                  fontStyle: FontStyle.normal),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: customers.length,
-              itemBuilder: (context, index) {
-                Customer customer = customers[index];
-                return ListTile(
-                  onTap: () {
-                    close(context, customer);
-                  },
-                  title: Text(
-                    customer.name,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: ColorStyle.text200),
-                  ),
-                  subtitle: Text(
-                    customer.phone ?? '',
-                    style: TextStyle(color: ColorStyle.text300),
-                  ),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.more_vert),
-                    onPressed: () {
-                      // show menu, view, orders
-                      showMenu(
-                        context: context,
-                        position: const RelativeRect.fromLTRB(100, 100, 0, 0),
-                        items: [
-                          const PopupMenuItem(
-                            value: 'view',
-                            child: Text('View Customer'),
-                          ),
-                          const PopupMenuItem(
-                            value: 'orders',
-                            child: Text('Orders'),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      );
-    } else {
-      return const SizedBox();
-    }
+    return _buildSearchResults(context, query);
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    if (query.isNotEmpty) {
-      List<Customer> customers = this
-          .customers
-          .where((element) =>
-              element.name.toLowerCase().contains(query.toLowerCase()) ||
-              (element.phone ?? '').toLowerCase().contains(query))
-          .toList();
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Text(
-              'Search Results',
-              style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14,
-                  color: ColorStyle.text300,
-                  fontStyle: FontStyle.normal),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: customers.length,
-              itemBuilder: (context, index) {
-                Customer customer = customers[index];
-                return ListTile(
-                  onTap: () {
-                    close(context, customer);
-                  },
-                  title: Text(
-                    customer.name,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: ColorStyle.text200),
-                  ),
-                  subtitle: Text(
-                    customer.phone ?? '',
-                    style: TextStyle(color: ColorStyle.text300),
-                  ),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.more_vert),
-                    onPressed: () {
-                      // show menu, view, orders
-                      showMenu(
-                        context: context,
-                        position: const RelativeRect.fromLTRB(100, 100, 0, 0),
-                        items: [
-                          const PopupMenuItem(
-                            value: 'view',
-                            child: Text('View Customer'),
-                          ),
-                          const PopupMenuItem(
-                            value: 'orders',
-                            child: Text('Orders'),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
-          ),
-        ],
-      );
+    if (query.isEmpty) {
+      // Show recent customers
+      return _buildRecentCustomers(context);
     } else {
-      // Return last 5 customers
-      List<Customer> customers = this.customers.reversed.toList();
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(top: 8.0),
-            child: Text(
-              'Recent Customers',
-              style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 14,
-                  color: ColorStyle.text300,
-                  fontStyle: FontStyle.normal),
+      // Show search results
+      return _buildSearchResults(context, query);
+    }
+  }
+
+  Widget _buildRecentCustomers(BuildContext context) {
+    List<Customer> recentCustomers = customers.reversed.toList();
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Text(
+            'Recent Customers',
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 14,
+              color: ColorStyle.text300,
+              fontStyle: FontStyle.normal,
             ),
           ),
-          Expanded(
-            child: ListView.builder(
-              itemCount: customers.length,
-              itemBuilder: (context, index) {
-                Customer customer = customers[index];
-                return ListTile(
-                  onTap: () {
-                    close(context, customer);
-                  },
-                  title: Text(
-                    customer.name,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                        color: ColorStyle.text200),
-                  ),
-                  subtitle: Text(
-                    customer.phone ?? '',
-                    style: TextStyle(color: ColorStyle.text300),
-                  ),
-                  trailing: IconButton(
-                    icon: const Icon(Icons.more_vert),
-                    onPressed: () {
-                      // show menu, view, orders
-                      showMenu(
-                        context: context,
-                        position: const RelativeRect.fromLTRB(100, 100, 0, 0),
-                        items: [
-                          const PopupMenuItem(
-                            value: 'view',
-                            child: Text('View Customer'),
-                          ),
-                          const PopupMenuItem(
-                            value: 'orders',
-                            child: Text('Orders'),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: recentCustomers.length,
+            itemBuilder: (context, index) {
+              Customer customer = recentCustomers[index];
+              return _buildCustomerListItem(context, customer);
+            },
           ),
-        ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildSearchResults(BuildContext context, String query) {
+    List<Customer> searchResults = customers
+        .where((element) =>
+            element.name.toLowerCase().contains(query.toLowerCase()) ||
+            (element.phone ?? '').toLowerCase().contains(query.toLowerCase()))
+        .toList();
+    if (searchResults.isEmpty) {
+      return Center(
+        child: CircularProgressIndicator(),
       );
     }
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(top: 8.0),
+          child: Text(
+            'Search Results',
+            style: TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 14,
+              color: ColorStyle.text300,
+              fontStyle: FontStyle.normal,
+            ),
+          ),
+        ),
+        Expanded(
+          child: ListView.builder(
+            itemCount: searchResults.length,
+            itemBuilder: (context, index) {
+              Customer customer = searchResults[index];
+              return _buildCustomerListItem(context, customer);
+            },
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCustomerListItem(BuildContext context, Customer customer) {
+    return ListTile(
+      onTap: () {
+        callback(customer);
+        close(context, customer);
+      },
+      title: Text(
+        customer.name,
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+          color: ColorStyle.text200,
+        ),
+      ),
+      subtitle: Text(
+        customer.phone ?? '',
+        style: TextStyle(color: ColorStyle.text300),
+      ),
+      trailing: Text(
+        customer.name.toString(),
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 18,
+          color: ColorStyle.text200,
+        ),
+      ),
+    );
   }
 }

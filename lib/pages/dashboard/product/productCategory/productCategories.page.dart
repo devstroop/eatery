@@ -22,27 +22,6 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
           ),
       body: categories.isNotEmpty ? ListView(
         children: [
-          ListTile(
-            title: const Text('Default',
-                style: TextStyle(fontWeight: FontWeight.w600)),
-            subtitle: const Text('Uncategorized'),
-            leading: Material(
-              elevation: 2.0,
-              borderRadius: BorderRadius.circular(12.0),
-              child: Container(
-                width: 50.0,
-                height: 50.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12.0),
-                  image: const DecorationImage(
-                    image: AssetImage('assets/images/default.jpg'),
-                    fit: BoxFit.cover,
-                  ),
-                ),
-              ),
-            ),
-            onTap: () {},
-          ),
           ...categories.map((category) {
             return ListTile(
               title: Text(category.name,

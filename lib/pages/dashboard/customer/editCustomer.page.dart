@@ -8,7 +8,8 @@ import '../../../widgets/buttons/primary.button.dart';
 Color _pageColor = ColorStyle.primary;
 
 class EditCustomerPage extends StatefulWidget {
-  const EditCustomerPage({Key? key, required this.customerId}) : super(key: key);
+  const EditCustomerPage({Key? key, required this.customerId})
+      : super(key: key);
   final int customerId;
 
   @override
@@ -27,6 +28,13 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
   final _formKey = GlobalKey<FormState>();
   Customer? customer;
 
+  final List<FocusNode> _focusNodes = [
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+    FocusNode(),
+  ];
+
   @override
   initState() {
     super.initState();
@@ -39,6 +47,7 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
         _controllerCustomerLandmark.text = customer?.landmark ?? '';
         isActive = customer?.isActive ?? false;
       });
+      _focusNodes[0].requestFocus();
     });
   }
 
@@ -49,37 +58,16 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
       foregroundColor: Colors.white,
       title: const Text('Edit Customer'),
       actions: [
-        IconButton(
-          icon: const Icon(Icons.delete),
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Text('Delete Customer'),
-                  content: const Text(
-                      'Are you sure you want to delete this customer?'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        EateryDB.instance.customerBox!.delete(widget.customerId);
-                        Navigator.pop(context);
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Delete'),
-                    ),
-                  ],
-                );
-              },
-            );
-          },
-        ),
+        if (_focusNodes[0].hasFocus ||
+            _focusNodes[1].hasFocus ||
+            _focusNodes[2].hasFocus ||
+            _focusNodes[3].hasFocus)
+          IconButton(
+            icon: const Icon(Icons.done),
+            onPressed: () {
+              FocusScope.of(context).unfocus();
+            },
+          ),
       ],
     );
     return Scaffold(
@@ -100,6 +88,10 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
                   themeColor: _pageColor,
                   foregroundColor: ColorStyle.text200,
                   hint: 'Enter customer name',
+                  focusNode: _focusNodes[0],
+                  onFieldSubmitted: (v) {
+                    _focusNodes[1].requestFocus();
+                  },
                 ),
                 const SizedBox(
                   height: 6.0,
@@ -111,6 +103,10 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
                   foregroundColor: ColorStyle.text200,
                   keyboardType: TextInputType.phone,
                   hint: 'Enter phone number',
+                  focusNode: _focusNodes[1],
+                  onFieldSubmitted: (v) {
+                    _focusNodes[2].requestFocus();
+                  },
                 ),
                 SpacingStyle.defaultVerticalSpacing,
                 LabeledCustomTextFromField(
@@ -121,6 +117,10 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
                   keyboardType: TextInputType.streetAddress,
                   hint: 'Enter full address',
                   multiline: true,
+                  focusNode: _focusNodes[2],
+                  onFieldSubmitted: (v) {
+                    _focusNodes[3].requestFocus();
+                  },
                 ),
                 SpacingStyle.defaultVerticalSpacing,
                 LabeledCustomTextFromField(
@@ -130,6 +130,11 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
                   foregroundColor: ColorStyle.text200,
                   keyboardType: TextInputType.text,
                   hint: 'Enter landmark',
+                  multiline: true,
+                  focusNode: _focusNodes[3],
+                  onFieldSubmitted: (v) {
+                    _focusNodes[4].requestFocus();
+                  },
                 ),
                 SpacingStyle.defaultVerticalSpacing,
                 Row(

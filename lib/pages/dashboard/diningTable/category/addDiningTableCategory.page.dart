@@ -16,13 +16,26 @@ class _AddDiningTableCategoryPageState
   final TextEditingController _controllerCategoryDescription =
       TextEditingController();
   LibraryImage? image;
+  final List<FocusNode> _focusNodes = [
+    FocusNode(),
+    FocusNode(),
+  ];
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
-        backgroundColor: _pageColor,
-        foregroundColor: Colors.white,
-        title: const Text('Add Dining Table Category'),
-        );
+      backgroundColor: _pageColor,
+      foregroundColor: Colors.white,
+      title: const Text('Add Dining Table Category'),
+      actions: [
+        if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
+          IconButton(
+            icon: const Icon(Icons.done),
+            onPressed: () {
+              FocusScope.of(context).unfocus();
+            },
+          ),
+      ],
+    );
     return Scaffold(
       appBar: appBar,
       body: Padding(
@@ -51,6 +64,10 @@ class _AddDiningTableCategoryPageState
               obscureText: false,
               themeColor: _pageColor,
               foregroundColor: ColorStyle.text200,
+              focusNode: _focusNodes[0],
+              onFieldSubmitted: (v) {
+                _focusNodes[1].requestFocus();
+              },
             ),
             const SizedBox(
               height: 6.0,
@@ -64,6 +81,10 @@ class _AddDiningTableCategoryPageState
               themeColor: _pageColor,
               foregroundColor: ColorStyle.text200,
               multiline: true,
+              focusNode: _focusNodes[1],
+              onFieldSubmitted: (v) {
+                FocusScope.of(context).unfocus();
+              },
             ),
             const SizedBox(
               height: 6.0,

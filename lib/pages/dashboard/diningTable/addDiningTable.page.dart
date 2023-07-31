@@ -17,6 +17,11 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
       TextEditingController();
   LibraryImage? image;
 
+  List<FocusNode> _focusNodes = [
+    FocusNode(),
+    FocusNode(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,6 +30,18 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
         foregroundColor: Colors.white,
         
         title: const Text('Add Dining Table'),
+        actions: [
+          if (_focusNodes[0].hasFocus ||
+            _focusNodes[1].hasFocus ||
+            _focusNodes[2].hasFocus ||
+            _focusNodes[3].hasFocus)
+          IconButton(
+            icon: const Icon(Icons.done),
+            onPressed: () {
+              FocusScope.of(context).unfocus();
+            },
+          ),
+        ],
       ),
       body: InkWell(
         onTap: () {
@@ -55,6 +72,10 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                 obscureText: false,
                 themeColor: _pageColor,
                 foregroundColor: ColorStyle.text200,
+                focusNode: _focusNodes[0],
+                onFieldSubmitted: (v) {
+                  _focusNodes[1].requestFocus();
+                },
               ),
               const SizedBox(
                 height: 12.0,
@@ -67,6 +88,10 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                 themeColor: _pageColor,
                 foregroundColor: ColorStyle.text200,
                 multiline: true,
+                focusNode: _focusNodes[1],
+                onFieldSubmitted: (v) {
+                  FocusScope.of(context).unfocus();
+                },
               ),
               const SizedBox(
                 height: 12.0,

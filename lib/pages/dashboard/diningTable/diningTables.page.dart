@@ -121,12 +121,12 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(
-                      Icons.person,
+                      Icons.table_restaurant,
                       size: 64,
                     ),
                     SizedBox(height: 16),
                     Text(
-                      'No dining tables found',
+                      'No Tables Found',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,

@@ -20,6 +20,11 @@ class _EditDiningTableCategoryPageState
       TextEditingController();
   LibraryImage? image;
 
+  List<FocusNode> _focusNodes = [
+    FocusNode(),
+    FocusNode(),
+  ];
+
   @override
   initState() {
     super.initState();
@@ -39,57 +44,13 @@ class _EditDiningTableCategoryPageState
       
       title: const Text('Edit Table Category'),
       actions: [
-        IconButton(
-          icon: const Icon(
-            Icons.delete,
+        if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
+          IconButton(
+            icon: const Icon(Icons.done),
+            onPressed: () {
+              FocusScope.of(context).unfocus();
+            },
           ),
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                // category exists in dining table then show message and return
-                if (EateryDB.instance.diningTableBox!.values
-                    .any((element) => element.categoryId == widget.category.id)) {
-                  return AlertDialog(
-                    title: const Text('Delete Category'),
-                    content: const Text(
-                        'This category is currently in use. Please remove it from dining tables before deleting.'),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('Ok'),
-                      ),
-                    ],
-                  );
-                }
-                return AlertDialog(
-                  title: const Text('Delete Category'),
-                  content: const Text(
-                      'Are you sure you want to delete this category?'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        widget.category.delete().whenComplete(() {
-                          Navigator.pop(context);
-                          setState(() {});
-                        });
-                      },
-                      child: const Text('Delete'),
-                    ),
-                  ],
-                );
-              },
-            );
-          },
-        ),
       ],
     );
     return Scaffold(
@@ -119,6 +80,10 @@ class _EditDiningTableCategoryPageState
               obscureText: false,
               themeColor: _pageColor,
               foregroundColor: ColorStyle.text200,
+              focusNode: _focusNodes[0],
+              onFieldSubmitted: (v) {
+                _focusNodes[1].requestFocus();
+              },
             ),
             const SizedBox(
               height: 6.0,
@@ -132,6 +97,10 @@ class _EditDiningTableCategoryPageState
               themeColor: _pageColor,
               foregroundColor: ColorStyle.text200,
               multiline: true,
+              focusNode: _focusNodes[1],
+              onFieldSubmitted: (v) {
+                _focusNodes[1].unfocus();
+              },
             ),
             const SizedBox(
               height: 6.0,

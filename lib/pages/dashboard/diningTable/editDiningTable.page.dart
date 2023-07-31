@@ -3,7 +3,8 @@ import 'package:eatery/references.dart';
 Color _pageColor = ColorStyle.tertiary;
 
 class EditDiningTablePage extends StatefulWidget {
-  const EditDiningTablePage({Key? key, required this.diningTable}) : super(key: key);
+  const EditDiningTablePage({Key? key, required this.diningTable})
+      : super(key: key);
   final DiningTable diningTable;
   @override
   State<EditDiningTablePage> createState() => _EditDiningTablePageState();
@@ -15,17 +16,30 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
   final TextEditingController _controllerCategoryDescription =
       TextEditingController();
   LibraryImage? image;
+  final List<FocusNode> _focusNodes = [
+    FocusNode(),
+    FocusNode(),
+  ];
 
   @override
   initState() {
     super.initState();
-    Future.delayed(Duration.zero, (){
+    Future.delayed(Duration.zero, () {
       setState(() {
-        diningTableCategory = EateryDB.instance.diningTableCategoryBox!.values.where((elem) => elem.id == widget.diningTable.categoryId).isNotEmpty ? EateryDB.instance.diningTableCategoryBox!.values.where((elem) => elem.id == widget.diningTable.categoryId).first : null;
+        diningTableCategory = EateryDB.instance.diningTableCategoryBox!.values
+                .where((elem) => elem.id == widget.diningTable.categoryId)
+                .isNotEmpty
+            ? EateryDB.instance.diningTableCategoryBox!.values
+                .where((elem) => elem.id == widget.diningTable.categoryId)
+                .first
+            : null;
         _controllerCategoryName.text = widget.diningTable.name;
-        _controllerCategoryDescription.text = widget.diningTable.description ?? '';
-        image = widget.diningTable.image != null ? LibraryImage(widget.diningTable.image) : null;
-      }); 
+        _controllerCategoryDescription.text =
+            widget.diningTable.description ?? '';
+        image = widget.diningTable.image != null
+            ? LibraryImage(widget.diningTable.image)
+            : null;
+      });
     });
   }
 
@@ -35,40 +49,15 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
       appBar: AppBar(
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
-        
         title: const Text('Edit Dining Table'),
         actions: [
-          IconButton(
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (BuildContext context) {
-                  return DialogBox(
-                    title: 'Delete',
-                    message: 'Are you sure?',
-                    actions: [
-                      TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Cancel')),
-                      TextButton(
-                          onPressed: () async {
-                            Navigator.pop(context);
-                            widget.diningTable.delete()
-                                .whenComplete(() {
-                              showSnackBar(context, 'Deleted successfully');
-                              Navigator.pop(context);
-                            });
-                          },
-                          child: const Text('OK'))
-                    ],
-                  );
-                },
-              );
-            },
-            icon: const Icon(Icons.delete),
-          )
+          if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
+            IconButton(
+              icon: const Icon(Icons.done),
+              onPressed: () {
+                FocusScope.of(context).unfocus();
+              },
+            ),
         ],
       ),
       body: InkWell(
@@ -100,6 +89,10 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                 obscureText: false,
                 themeColor: _pageColor,
                 foregroundColor: ColorStyle.text200,
+                focusNode: _focusNodes[0],
+                onFieldSubmitted: (v) {
+                  _focusNodes[1].requestFocus();
+                },
               ),
               const SizedBox(
                 height: 12.0,
@@ -112,6 +105,10 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                 themeColor: _pageColor,
                 foregroundColor: ColorStyle.text200,
                 multiline: true,
+                focusNode: _focusNodes[1],
+                onFieldSubmitted: (v) {
+                  FocusScope.of(context).unfocus();
+                },
               ),
               const SizedBox(
                 height: 12.0,
@@ -141,7 +138,8 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                             },
                           );
                         }),
-                    ...EateryDB.instance.diningTableCategoryBox!.values.map((e) {
+                    ...EateryDB.instance.diningTableCategoryBox!.values
+                        .map((e) {
                       return PosCategoryWidget(
                         active: diningTableCategory?.id == e.id,
                         label: e.name,
@@ -174,7 +172,8 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
             }
             widget.diningTable.name = _controllerCategoryName.text;
             widget.diningTable.categoryId = diningTableCategory!.id;
-            widget.diningTable.description = _controllerCategoryDescription.text;
+            widget.diningTable.description =
+                _controllerCategoryDescription.text;
             widget.diningTable.image = image?.filename;
             EateryDB.instance.diningTableBox!
                 .put(widget.diningTable.id, widget.diningTable)

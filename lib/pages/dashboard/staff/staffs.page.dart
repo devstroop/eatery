@@ -14,7 +14,10 @@ class _StaffsPageState extends State<StaffsPage> {
   void initState() {
     super.initState();
   }
-
+  final List<FocusNode> _focusNodes = [
+    FocusNode(),
+    FocusNode(),
+  ];
   @override
   Widget build(BuildContext context) {
     List<Staff> staffs = EateryDB.instance.staffBox!.values.toList();
@@ -23,7 +26,15 @@ class _StaffsPageState extends State<StaffsPage> {
         backgroundColor: _pageColor,
         title: const Text('Staffs'),
         foregroundColor: Colors.white,
-        
+        actions: [
+          if(_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
+            IconButton(
+              icon: const Icon(Icons.done),
+              onPressed: () {
+                FocusScope.of(context).unfocus();
+              },
+            ),
+        ],
       ),
       body: staffs.isNotEmpty
           ? ListView(

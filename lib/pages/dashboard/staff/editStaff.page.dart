@@ -18,6 +18,11 @@ class _EditStaffPageState extends State<EditStaffPage> {
 StaffType? staffType;
   final _formKey = GlobalKey<FormState>();
 
+  final List<FocusNode> _focusNodes = [
+    FocusNode(),
+    FocusNode(),
+  ];
+
   @override
   initState() {
     super.initState();
@@ -41,40 +46,14 @@ StaffType? staffType;
       
       title: const Text('Edit Staff'),
       actions: [
-        IconButton(
-          icon: const Icon(Icons.delete),
-          onPressed: () {
-            showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: const Text('Delete Staff'),
-                  content: const Text(
-                      'Are you sure you want to delete this Staff?'),
-                  actions: [
-                    TextButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      child: const Text('Cancel'),
-                    ),
-                    TextButton(
-                      onPressed: () {
-                        widget.staff.delete()
-                            .whenComplete(() {
-                          Navigator.pop(context);
-                          Navigator.pop(context);
-                          setState(() {});
-                        });
-                      },
-                      child: const Text('Delete'),
-                    ),
-                  ],
-                );
-              },
-            );
-          },
-        ),
+        if (_focusNodes[0].hasFocus ||
+            _focusNodes[1].hasFocus)
+          IconButton(
+            icon: const Icon(Icons.done),
+            onPressed: () {
+              FocusScope.of(context).unfocus();
+            },
+          ),
       ],
     );
     return Scaffold(
@@ -109,6 +88,10 @@ StaffType? staffType;
                   hint: 'Enter Staff Name',
                   validator: (value) =>
                       value == null || value.isEmpty ? 'Please enter staff name' : null,
+                  focusNode: _focusNodes[0],
+                  onFieldSubmitted: (v) {
+                    _focusNodes[1].requestFocus();
+                  },
                 ),
                 SpacingStyle.defaultVerticalSpacing,
                 LabeledCustomTextFromField(
@@ -120,6 +103,10 @@ StaffType? staffType;
                   hint: 'Enter Phone Number',
                   validator: (value) =>
                       value == null || value.isEmpty ? 'Please enter phone number' : null,
+                  focusNode: _focusNodes[1],
+                  onFieldSubmitted: (v) {
+                    FocusScope.of(context).unfocus();
+                  },
                 ),
                 SpacingStyle.defaultVerticalSpacing,
                 // Drop down for staff type

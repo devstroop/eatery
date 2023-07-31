@@ -45,6 +45,17 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
         title: const Text('Add Customer'),
+        actions: [
+          // When textbox is on focus, show done button
+          if(_focusNodes[0].hasFocus || _focusNodes[1].hasFocus || _focusNodes[2].hasFocus || _focusNodes[3].hasFocus || _focusNodes[4].hasFocus)
+            IconButton(onPressed: (){
+              _focusNodes[0].unfocus();
+              _focusNodes[1].unfocus();
+              _focusNodes[2].unfocus();
+              _focusNodes[3].unfocus();
+              _focusNodes[4].unfocus();
+            }, icon: const Icon(Icons.done)),
+        ],
       ),
       body: InkWell(
         onTap: () => FocusScope.of(context).unfocus(),

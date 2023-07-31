@@ -123,8 +123,6 @@ export './pages/dashboard/diningTable/addDiningTable.page.dart';
 export './pages/dashboard/diningTable/editDiningTable.page.dart';
 export './pages/dashboard/diningTable/diningTables.page.dart';
 // Internal references
-export './pages/dashboard/stock/stocks.page.dart';
-// Internal references
 export './pages/dashboard/customer/addCustomer.page.dart';
 export './pages/dashboard/customer/editCustomer.page.dart';
 export './pages/dashboard/customer/customers.page.dart';

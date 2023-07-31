@@ -1,3 +1,4 @@
+import 'package:eatery/pages/dashboard/customer/view.customer.page.dart';
 import 'package:eatery/references.dart';
 
 Color _pageColor = ColorStyle.primary;
@@ -28,6 +29,9 @@ class _CustomersPageState extends State<CustomersPage> {
               children: [
                 ...EateryDB.instance.customerBox!.values.map((customer) {
                   return ListTile(
+                    onTap: (){
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => ViewCustomer(customer: customer)));
+                    },
                     title: Text(
                       customer.name,
                       style: const TextStyle(fontWeight: FontWeight.w600),
