@@ -227,10 +227,6 @@ class _CheckoutPageState extends State<CheckoutPage> {
                 PrimaryButton(
                   color: Color(widget.orderType.color!),
                   onPressed: () {
-                    if (_controllerCustomerName.text.trim() == '') {
-                      showSnackBar(context, '* Customer name invalid');
-                      return;
-                    }
                     customerName = _controllerCustomerName.text;
                     customerPhone = _controllerCustomerPhone.text != ''
                         ? _controllerCustomerPhone.text
@@ -267,67 +263,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
       setState(() {
         isProcessing = true;
       });
-      try {
-        // TODO: Implement license validation
-        // Map<String, dynamic> order = {
-        //   'orderType': widget.orderType.name,
-        //   'orderTypeText': widget.orderType.name,
-        //   'customerName': customerName,
-        //   'customerPhone': customerPhone,
-        //   'customerAddress': customerAddress,
-        //   'timestamp': DateTime.now().microsecondsSinceEpoch,
-        //   'tableName': widget.diningTableName,
-        //   'table': widget.diningTable,
-        //   'cart': widget.cart,
-        //   'waiter': selectedWaiterName,
-        //   'taxableTotal': taxableTotal,
-        //   'taxTotal': taxTotal,
-        //   'roundOff': roundOff,
-        //   'finalTotal': finalTotalAfterRoundOff,
-        //   'open': OrderType.dine == widget.orderType ? true : false
-        // };
 
-        // String? id;
-        // if (widget.openOrderId != null) {
-        //   order['id'] = widget.openOrderId;
-        //   await Order.update(order);
-        // } else {
-        //   id = await Order.add(order);
-        //   order['id'] = id;
-        // }
-
-        // if (OrderType.dine == widget.orderType) {
-        //   Map<String, dynamic>? diningTable =
-        //       await DiningTable.get(widget.diningTable!);
-        //   diningTable!['orderId'] = id;
-        //   diningTable['due'] = finalTotalAfterRoundOff;
-        //   await DiningTable.update(diningTable);
-        // }
-
-        // if (widget.account['autoPrintOnSale']) {
-        //   PrintInvoice.printReceipt(order: order, account: widget.account)
-        //       .then((message) {
-        //     showSnackBar(context, message);
-        //   }).onError((error, stackTrace) {
-        //     showSnackBar(context, '$error ${stackTrace.toString()}');
-        //   });
-        // }
-
-        // Cart.cart = {};
-        // await Future.delayed(Duration.zero, () {
-        //   Navigator.push(
-        //     context,
-        //     MaterialPageRoute(
-        //         builder: (context) =>
-        //             OrderConfirmation(order: order, account: widget.account)),
-        //   ).then((_) {
-        //     Navigator.pop(context, 'clear');
-        //   });
-        // });
-      } catch (_) {
-        showSnackBar(context, 'Failed');
-        return;
-      }
 
       setState(() {
         isProcessing = false;

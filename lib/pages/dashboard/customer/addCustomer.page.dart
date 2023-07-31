@@ -147,6 +147,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                   children: [
                     Checkbox(
                         value: isActive,
+                        activeColor: _pageColor,
                         onChanged: (value) {
                           setState(() {
                             isActive = value ?? false;
@@ -173,10 +174,6 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {
-            if (_controllerCustomerName.text.isEmpty) {
-              showSnackBar(context, 'Customer Name is required');
-              return;
-            }
             final isValid = _formKey.currentState!.validate();
             if (!isValid) {
               return;
@@ -194,11 +191,11 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
               EateryDB.instance.customerBox!
                   .add(customer)
                   .whenComplete(() {
-                showSnackBar(context, 'Customer added successfully');
-                Navigator.pop(context, customer);
+                showMessageDialog(context, 'Customer added successfully', MessageType.success).then((value) => Navigator.pop(this.context, customer));
+
               });
             } catch (_) {
-              showSnackBar(context, 'Failed to add customer');
+              showMessageDialog(context, _.toString(), MessageType.error);
             }
           },
           child: const Text('Save'),

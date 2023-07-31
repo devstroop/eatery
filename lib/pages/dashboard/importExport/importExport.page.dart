@@ -76,7 +76,7 @@ class _ImportExportPageState extends State<ImportExportPage> {
           EateryDB.instance.orderBox!.put(order.id, order);
         }
 
-        showSnackBar(this.context, 'Imported successfully');
+        showMessageDialog(this.context, 'Imported successfully', MessageType.success);
 
       } else {
         // User canceled the picker
@@ -174,9 +174,8 @@ class _ImportExportPageState extends State<ImportExportPage> {
     List<int> bytes = excel.encode()!;
     File(filePath)
         .writeAsBytes(bytes)
-        .then((value) => showSnackBar(this.context, 'Exported successfully as `$filename`'))
-        .onError((error, stackTrace) =>
-            showSnackBar(this.context, 'Failed to export'));
+        .then((value) => showMessageDialog(this.context, 'Exported successfully', MessageType.success))
+        .onError((error, stackTrace) => showMessageDialog(this.context, 'Export failed', MessageType.error));
   }
 
   @override

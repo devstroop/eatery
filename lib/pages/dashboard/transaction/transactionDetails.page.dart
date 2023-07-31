@@ -628,8 +628,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                 await PrintInvoice.printReceipt(
                     order: widget.order, account: widget.account);
               } catch (_) {
-                showSnackBar(context, 'Failed to print');
-                return;
+                showMessageDialog(context, 'Unable to print receipt', MessageType.error);
               }
             },
             child: const Text('Print copy'),

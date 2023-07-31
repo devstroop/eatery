@@ -317,12 +317,10 @@ final List<FocusNode> _focusNodes = [
                 isActive: true,
               );
               await EateryDB.instance.productBox!.add(product).whenComplete(() {
-                showSnackBar(context, 'Successfully created');
-                Navigator.pop(context);
+                showMessageDialog(context, 'Product added successfully', MessageType.success);
               });
             }catch(_){
-              showSnackBar(context, 'Failed to create');
-              return Future.error(false);
+              showMessageDialog(context, 'Something went wrong', MessageType.error);
             }
           },
           child: const Text('Save'),

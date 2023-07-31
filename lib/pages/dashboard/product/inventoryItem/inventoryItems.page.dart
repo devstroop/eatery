@@ -141,8 +141,10 @@ class _InventoryItemsPageState extends State<InventoryItemsPage> {
                                         'Are you sure?',
                                         'Do you want to delete this item?', () {
                                       each.delete();
-                                      showSnackBar(context,
-                                          'Item deleted successfully.');
+                                      showMessageDialog(context, 'Item has been deleted',
+                                          MessageType.success, () {
+                                        Navigator.pop(context);
+                                      });
                                       setState(() {});
                                     }, () {
                                       // Do nothing
@@ -213,7 +215,7 @@ class _InventoryItemsPageState extends State<InventoryItemsPage> {
                               width: 4,
                             ),
                             Text(
-                              '${GlobalVariables.currency?.symbol ?? ''}${each.mrpPrice}',
+                              '${Common.currency?.symbol ?? ''}${each.mrpPrice}',
                               style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
@@ -233,7 +235,7 @@ class _InventoryItemsPageState extends State<InventoryItemsPage> {
                               width: 4,
                             ),
                             Text(
-                              '${GlobalVariables.currency?.symbol ?? ''}${each.salePrice}',
+                              '${Common.currency?.symbol ?? ''}${each.salePrice}',
                               style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
@@ -284,8 +286,10 @@ class _InventoryItemsPageState extends State<InventoryItemsPage> {
                                           'Do you want to delete this item?',
                                           () {
                                         each.delete();
-                                        showSnackBar(context,
-                                            'Item deleted successfully.');
+                                        showMessageDialog(context,
+                                            'Item has been deleted', MessageType.success, () {
+                                          Navigator.pop(context);
+                                        });
                                         setState(() {});
                                       }, () {
                                         // Do nothing

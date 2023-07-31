@@ -1,5 +1,3 @@
-import 'package:eatery/pages/dashboard/customer/view.customer.page.dart';
-import 'package:flutter/material.dart';
 import 'package:eatery/references.dart';
 
 class SearchCustomerDelegate extends SearchDelegate<Customer?> {

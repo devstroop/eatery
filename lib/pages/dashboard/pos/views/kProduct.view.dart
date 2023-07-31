@@ -67,7 +67,7 @@ class KProductView extends StatelessWidget {
                   width: 6,
                 ),
                 Text(
-                  '${GlobalVariables.currency?.symbol ?? ''}${product.mrpPrice}',
+                  '${Common.currency?.symbol ?? ''}${product.mrpPrice}',
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 18,
@@ -99,7 +99,7 @@ class KProductView extends StatelessWidget {
                   width: 6,
                 ),
                 Text(
-                  '${GlobalVariables.currency?.symbol ?? ''}${product.salePrice}',
+                  '${Common.currency?.symbol ?? ''}${product.salePrice}',
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 18,

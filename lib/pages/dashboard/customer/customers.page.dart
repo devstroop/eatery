@@ -48,7 +48,7 @@ class _CustomersPageState extends State<CustomersPage> {
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
-                                        EditCustomerPage(customerId: customer.id!)),
+                                        EditCustomerPage(customer: customer)),
                               ).then((_) => setState(() {}));
                             }
                           },

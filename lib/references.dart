@@ -54,6 +54,9 @@ export './widgets/card/diningTableSelection.card.dart';
 export './widgets/badges/foodType.badge.dart';
 export './widgets/textFields/search.textField.dart';
 export './widgets/switches/toggle.switch.dart';
+export './widgets/dialogs/showConfirmationDialog.dart';
+export './widgets/dialogs/showMessageDialog.dart';
+
 // Internal references
 export './components/bottom_view_grip.dart';
 export './components/secondary_button.dart';
@@ -77,8 +80,7 @@ export './components/bottomsheets/upload_image_bottomsheet.dart';
 export './components/bottomsheets/help_bottom_sheet.dart';
 export './components/custom_dialog_box.dart';
 // Internal references
-export './constants/global_variables.dart';
-export './constants/utils/utils.dart';
+export './constants/common.dart';
 export './constants/utils/file_utils.dart';
 export './constants/utils/email_validator.dart';
 export './constants/validators/phone_validator.dart';
@@ -122,6 +124,7 @@ export './pages/dashboard/diningTable/category/diningTableCategories.page.dart';
 export './pages/dashboard/diningTable/addDiningTable.page.dart';
 export './pages/dashboard/diningTable/editDiningTable.page.dart';
 export './pages/dashboard/diningTable/diningTables.page.dart';
+export './pages/dashboard/diningTable/search_diningTable.delegate.dart';
 // Internal references
 export './pages/dashboard/customer/addCustomer.page.dart';
 export './pages/dashboard/customer/editCustomer.page.dart';
@@ -144,7 +147,6 @@ export './pages/dashboard/pos/checkout.page.dart';
 export './pages/dashboard/pos/orderConfirmation.page.dart';
 // Internal references
 export './pages/dashboard/pos/views/cart.view.dart';
-export './pages/dashboard/pos/views/dininigTableSelection.view.dart';
 export './pages/dashboard/pos/views/kProduct.view.dart';
 export './pages/dashboard/pos/views/waiterSelection.view.dart';
 // Internal references

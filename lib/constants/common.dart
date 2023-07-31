@@ -2,14 +2,13 @@ import 'package:path/path.dart' as path;
 
 import 'package:eatery/references.dart';
 
-class GlobalVariables {
+class Common {
+  static Company? company;
+  static KCurrency? currency;
   static OrderType? activeOrderType;
   static Customer? activeCustomer;
   static DiningTable? activeDiningTable;
-
   static List<Product> cart = [];
-  static Company? company;
-  static KCurrency? currency;
 
   // Relative paths
   static String? dataDirectory =

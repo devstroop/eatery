@@ -27,7 +27,7 @@ class _CartViewState extends State<CartView> {
       Expanded(
         child: ListView(
           children: [
-            ...GlobalVariables.cart.toSet()
+            ...Common.cart.toSet()
                 .map((product) => ListTile(
                       title: Text(product.name),
                       subtitle:
@@ -60,11 +60,11 @@ class _CartViewState extends State<CartView> {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              GlobalVariables.cart.contains(product)
+                              Common.cart.contains(product)
                                   ? InkWell(
                                       onTap: () {
                                         setState(() {
-                                          GlobalVariables.cart.remove(product);
+                                          Common.cart.remove(product);
                                         });
                                       },
                                       child: Icon(
@@ -74,13 +74,13 @@ class _CartViewState extends State<CartView> {
                                       ),
                                     )
                                   : Container(),
-                              GlobalVariables.cart.contains(product)
+                              Common.cart.contains(product)
                                   ? Padding(
                                       padding:
                                           const EdgeInsetsDirectional.fromSTEB(
                                               4, 0, 4, 0),
                                       child: Text(
-                                        GlobalVariables.cart
+                                        Common.cart
                                             .where(
                                                 (element) => element.id == product.id)
                                             .length
@@ -95,7 +95,7 @@ class _CartViewState extends State<CartView> {
                               InkWell(
                                 onTap: () {
                                   setState(() {
-                                    GlobalVariables.cart.add(product);
+                                    Common.cart.add(product);
                                   });
                                 },
                                 child: Icon(

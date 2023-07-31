@@ -216,12 +216,9 @@ class _Body6State extends State<Body6> {
   void copyDeviceIdToClipboard() {
     // Implement copy to clipboard 'deviceSerial'
     String? deviceSerial = this.deviceSerial;
-    if (deviceSerial == null) {
-      showSnackBar(this.context, 'Device Id can\'t be copied in clipboard');
-      return;
-    }
+    deviceSerial ??= 'Undefined';
     Clipboard.setData(ClipboardData(text: deviceSerial)).whenComplete(() {
-      showSnackBar(this.context, 'Copied to clipboard');
+      showMessageDialog(this.context, 'Device ID copied to clipboard', MessageType.success);
     });
   }
 }

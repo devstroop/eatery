@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/widgets/dialogs/showMessageDialog.dart';
 
 Color _pageColor = ColorStyle.tertiary;
 
@@ -21,6 +22,10 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
     FocusNode(),
   ];
 
+  bool isActive = true;
+
+  final _formKey = GlobalKey<FormState>();
+
   @override
   initState() {
     super.initState();
@@ -39,6 +44,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
         image = widget.diningTable.image != null
             ? LibraryImage(widget.diningTable.image)
             : null;
+        isActive = widget.diningTable.isActive;
       });
     });
   }
@@ -66,94 +72,129 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
         },
         child: Padding(
           padding: const EdgeInsets.all(12.0),
-          child: ListView(
-            children: [
-              UploadButton(
-                onChanged: (value) {
-                  setState(() {
-                    image = value;
-                  });
-                },
-                title: '+ Upload Icon',
-                label: 'Dining Table Icon',
-                image: image?.image,
-                primaryColor: _pageColor,
-              ),
-              const SizedBox(
-                height: 6.0,
-              ),
-              LabeledCustomTextFromField(
-                label: 'Dining Table Name',
-                controller: _controllerCategoryName,
-                hint: 'eg. Table 1 ',
-                obscureText: false,
-                themeColor: _pageColor,
-                foregroundColor: ColorStyle.text200,
-                focusNode: _focusNodes[0],
-                onFieldSubmitted: (v) {
-                  _focusNodes[1].requestFocus();
-                },
-              ),
-              const SizedBox(
-                height: 12.0,
-              ),
-              LabeledCustomTextFromField(
-                label: 'Description',
-                controller: _controllerCategoryDescription,
-                hint: 'eg. Table description',
-                obscureText: false,
-                themeColor: _pageColor,
-                foregroundColor: ColorStyle.text200,
-                multiline: true,
-                focusNode: _focusNodes[1],
-                onFieldSubmitted: (v) {
-                  FocusScope.of(context).unfocus();
-                },
-              ),
-              const SizedBox(
-                height: 12.0,
-              ),
-              Text(
-                'Category',
-                style: TextStyle(
-                  color: ColorStyle.text200,
-                  fontSize: 12,
-                  fontWeight: FontWeight.w500,
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              children: [
+                UploadButton(
+                  onChanged: (value) {
+                    setState(() {
+                      image = value;
+                    });
+                  },
+                  title: '+ Upload Icon',
+                  label: 'Dining Table Icon',
+                  image: image?.image,
+                  primaryColor: _pageColor,
                 ),
-              ),
-              Container(
-                width: double.maxFinite,
-                height: 60,
-                margin: const EdgeInsets.symmetric(vertical: 8.0),
-                child: ListView(
-                  scrollDirection: Axis.horizontal,
+                const SizedBox(
+                  height: 6.0,
+                ),
+                LabeledCustomTextFromField(
+                  label: 'Dining Table Name',
+                  controller: _controllerCategoryName,
+                  hint: 'eg. Table 1 ',
+                  obscureText: false,
+                  themeColor: _pageColor,
+                  foregroundColor: ColorStyle.text200,
+                  focusNode: _focusNodes[0],
+                  onFieldSubmitted: (v) {
+                    _focusNodes[1].requestFocus();
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter dining table name';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(
+                  height: 12.0,
+                ),
+                LabeledCustomTextFromField(
+                  label: 'Description',
+                  controller: _controllerCategoryDescription,
+                  hint: 'eg. Table description',
+                  obscureText: false,
+                  themeColor: _pageColor,
+                  foregroundColor: ColorStyle.text200,
+                  multiline: true,
+                  focusNode: _focusNodes[1],
+                  onFieldSubmitted: (v) {
+                    FocusScope.of(context).unfocus();
+                  },
+                ),
+                const SizedBox(
+                  height: 12.0,
+                ),
+                Text(
+                  'Category',
+                  style: TextStyle(
+                    color: ColorStyle.text200,
+                    fontSize: 12,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Container(
+                  width: double.maxFinite,
+                  height: 60,
+                  margin: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      PosCategoryWidget(
+                          active: diningTableCategory == null,
+                          label: 'None',
+                          onTap: () {
+                            setState(
+                              () {
+                                diningTableCategory = null;
+                              },
+                            );
+                          }),
+                      ...EateryDB.instance.diningTableCategoryBox!.values
+                          .map((e) {
+                        return PosCategoryWidget(
+                          active: diningTableCategory?.id == e.id,
+                          label: e.name,
+                          onTap: () {
+                            setState(() {
+                              diningTableCategory = e;
+                            });
+                          },
+                        );
+                      }),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 12.0,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    PosCategoryWidget(
-                        active: diningTableCategory == null,
-                        label: 'None',
-                        onTap: () {
-                          setState(
-                            () {
-                              diningTableCategory = null;
-                            },
-                          );
-                        }),
-                    ...EateryDB.instance.diningTableCategoryBox!.values
-                        .map((e) {
-                      return PosCategoryWidget(
-                        active: diningTableCategory?.id == e.id,
-                        label: e.name,
-                        onTap: () {
+                    Checkbox(
+                        value: isActive,
+                        activeColor: _pageColor,
+                        onChanged: (value) {
                           setState(() {
-                            diningTableCategory = e;
+                            isActive = value ?? false;
                           });
-                        },
-                      );
-                    }),
+                        }),
+                    const SizedBox(
+                      width: 6.0,
+                    ),
+                    Text(
+                      'Active',
+                      style: TextStyle(
+                        color: ColorStyle.text200,
+                        fontSize: 16.0,
+                      ),
+                    ),
                   ],
-                ),
-              ),
-            ],
+                )
+              ],
+            ),
           ),
         ),
       ),
@@ -162,26 +203,24 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {
-            if (_controllerCategoryName.text.trim() == '') {
-              showSnackBar(context, '* Dining table name required');
+            if (!_formKey.currentState!.validate()) {
               return;
             }
-            if (diningTableCategory == null) {
-              showSnackBar(context, '* Select category');
-              return;
-            }
-            widget.diningTable.name = _controllerCategoryName.text;
-            widget.diningTable.categoryId = diningTableCategory!.id;
-            widget.diningTable.description =
-                _controllerCategoryDescription.text;
-            widget.diningTable.image = image?.filename;
-            EateryDB.instance.diningTableBox!
-                .put(widget.diningTable.id, widget.diningTable)
-                .whenComplete(() {
-              showSnackBar(context, 'Successfully updated');
-              Navigator.of(context).pop();
+
+            DiningTable diningTable = EateryDB.instance.diningTableBox!.values.where((element) => element.id == widget.diningTable.id).first;
+
+            diningTable.name = _controllerCategoryName.text;
+            diningTable.description = _controllerCategoryDescription.text;
+            diningTable.image = image?.filename;
+            diningTable.categoryId = diningTableCategory?.id;
+            diningTable.isActive = isActive;
+
+            await EateryDB.instance.diningTableBox!
+                .put(diningTable.key, diningTable)
+                .then((value) {
+                  showMessageDialog(context, 'Successfully updated', MessageType.success).then((value) => Navigator.of(this.context).pop());
             }).onError((error, stackTrace) {
-              showSnackBar(context, 'Something went wrong');
+              showMessageDialog(context, 'Failed to update', MessageType.error);
             });
           },
           child: const Text('Update'),

@@ -229,10 +229,9 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
 
                   // Update the company in the Hive database
                   company!.save().then((value) {
-                    // Update the company in the database
-                    // Display a success message and navigate back
-                    showSnackBar(context, 'Company details successfully updated');
-                    Navigator.pop(context);
+                    showMessageDialog(context, 'Company details successfully updated', MessageType.success, (){
+                      Navigator.pop(context);
+                    });
                   });
 
                 },

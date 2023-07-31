@@ -1,8 +1,7 @@
 import 'package:eatery/references.dart';
 
 class DashboardPage extends StatefulWidget {
-  const DashboardPage({Key? key, required this.company}) : super(key: key);
-  final Company company;
+  const DashboardPage({Key? key}) : super(key: key);
 
   @override
   _DashboardPageState createState() => _DashboardPageState();
@@ -14,13 +13,6 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
-      setState(() {
-        GlobalVariables.company = widget.company;
-        GlobalVariables.currency = EateryDB.instance.currencyBox!
-            .get(GlobalVariables.company?.currencyCode);
-      });
-    });
   }
 
   @override
@@ -62,7 +54,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
     menuSize = (screenWidth - (spacing * (crossAxisItemCount + 1))) /
         crossAxisItemCount;
-    if (GlobalVariables.company == null) {
+    if (Common.company == null) {
       return const Center(
         child: CircularProgressIndicator(),
       );
@@ -77,9 +69,9 @@ class _DashboardPageState extends State<DashboardPage> {
           padding: EdgeInsets.symmetric(horizontal: spacing, vertical: 60),
           children: [
             DashboardHeader(
-              companyName: GlobalVariables.company!.name,
-              image: GlobalVariables.company?.logo != null
-                  ? LibraryImage(GlobalVariables.company?.logo).image
+              companyName: Common.company!.name,
+              image: Common.company?.logo != null
+                  ? LibraryImage(Common.company?.logo).image
                   : null,
               suffix: [
                 IconButton(
@@ -120,54 +112,11 @@ class _DashboardPageState extends State<DashboardPage> {
               ],
             ),
             UpgradeNotification(
-              company: GlobalVariables.company,
+              company: Common.company,
             ),
-            SizedBox(
+            const SizedBox(
               height: 16,
             ),
-            // Container(
-            //   height: 96,
-            //   width: double.infinity,
-            //   padding: const EdgeInsets.symmetric(horizontal: 16),
-            //   margin: const EdgeInsets.symmetric(vertical: 8),
-            //   decoration: BoxDecoration(
-            //     color: const Color(0xFFDFDFDF),
-            //     borderRadius: BorderRadius.circular(12),
-            //     border: Border.all(
-            //       color: const Color(0xFFCFCFCF),
-            //     ),
-            //     boxShadow: [
-            //       BoxShadow(
-            //         color: Colors.black.withOpacity(0.25),
-            //         blurRadius: 8,
-            //         offset: const Offset(0, 2),
-            //       ),
-            //     ],
-            //   ),
-            //   child: Row(
-            //     mainAxisSize: MainAxisSize.max,
-            //     children: [
-            //       Flexible(
-            //           flex: 1,
-            //           child: Expanded(
-            //             child: Stack(
-            //               children: [
-            //                 Positioned(child: Text('Total Sales')),
-            //               ],
-            //             ),
-            //           )),
-            //       Flexible(
-            //           flex: 1,
-            //           child: Expanded(
-            //             child: Stack(
-            //               children: [
-            //                 Positioned(child: Text('Total Sales')),
-            //               ],
-            //             ),
-            //           )),
-            //     ],
-            //   ),
-            // ),
             Wrap(
               spacing: spacing,
               runSpacing: spacing,
@@ -327,7 +276,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 MenuCard(
                   iconData: Icons.history,
                   iconSize: iconSize,
-                  title: 'Transactions',
+                  title: 'Sales',
                   subtitle: 'All sale records are here',
                   titleSize: titleSize,
                   subtitleSize: subtitleSize,

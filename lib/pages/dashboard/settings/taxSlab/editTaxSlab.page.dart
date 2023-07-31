@@ -42,10 +42,11 @@ class _EditTaxSlabSettingsPageState extends State<EditTaxSlabSettingsPage> {
       widget.taxSlab.rate = double.parse(controllerTaxRate.text);
       widget.taxSlab.type = selectedTaxType;
       widget.taxSlab.save();
-      showSnackBar(this.context, 'Successfully updated!');
-      Navigator.of(this.context).pop();
+      showMessageDialog(this.context, 'Tax slab updated successfully!',
+          MessageType.success, () => Navigator.pop(this.context));
     } catch (_) {
-      showSnackBar(this.context, 'Failed to created!');
+      showMessageDialog(
+          this.context, 'Something went wrong!', MessageType.error);
     }
   }
 

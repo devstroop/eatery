@@ -27,10 +27,6 @@ class CircularCategoryPOSWidget extends StatelessWidget {
                 width: imageBlockSize,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(imageBlockSize/2),
-                  border: Border.all(
-                      width: selected ? 2: 1,
-                      color: (selected ? themeColor ?? ColorStyle.primary : ColorStyle.text400).withOpacity(0.5)
-                  ),
                   color: Colors.white,
                   image: DecorationImage(
                       image: image,

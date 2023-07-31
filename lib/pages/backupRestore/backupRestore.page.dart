@@ -32,21 +32,21 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
     // GlobalVariables.imagesDirectory
 
     // copy data directory and images directory to temp directory and zip it to a file
-    String tempBackupDirectory = join(GlobalVariables.tempDirectory!,
+    String tempBackupDirectory = join(Common.tempDirectory!,
         '${DateTime.now().millisecondsSinceEpoch}');
     Directory(tempBackupDirectory).createSync(recursive: true);
-    Directory(GlobalVariables.dataDirectory!).listSync().forEach((element) {
+    Directory(Common.dataDirectory!).listSync().forEach((element) {
       if (element is File) {
         element.copySync(join(tempBackupDirectory, 'data', element.path.split('/').last));
       }
     });
-    Directory(GlobalVariables.imagesDirectory!).listSync().forEach((element) {
+    Directory(Common.imagesDirectory!).listSync().forEach((element) {
       if (element is File) {
         element.copySync(join(tempBackupDirectory, 'images', element.path.split('/').last));
       }
     });
     // zip
-    String zipFilePath = join(GlobalVariables.tempDirectory!,
+    String zipFilePath = join(Common.tempDirectory!,
         '${DateTime.now().millisecondsSinceEpoch}.zip');
     var encoder = ZipFileEncoder();
     encoder.create(zipFilePath);
@@ -54,7 +54,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
     encoder.close();
 
     // move zip file to backup directory
-    File(zipFilePath).copySync(join(GlobalVariables.backupDirectory!,
+    File(zipFilePath).copySync(join(Common.backupDirectory!,
         '${DateTime.now().millisecondsSinceEpoch}.zip'));
 
     // delete temp directory

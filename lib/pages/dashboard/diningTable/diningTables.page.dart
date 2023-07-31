@@ -52,19 +52,20 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
       ),
       body: diningTables.isNotEmpty
           ? ListView(
+        padding: const EdgeInsets.symmetric(vertical: 8),
               children: [
-                ...diningTables.map((e) {
+                ...diningTables.map((diningTable) {
                   DiningTableCategory? category = EateryDB.instance
                           .diningTableCategoryBox!.values
-                          .where((element) => element.id == e.categoryId)
+                          .where((element) => element.id == diningTable.categoryId)
                           .isNotEmpty
                       ? EateryDB.instance.diningTableCategoryBox!.values
-                          .where((element) => element.id == e.categoryId)
+                          .where((element) => element.id == diningTable.categoryId)
                           .first
                       : null;
-                  Order? order = e.orderId != null
+                  Order? order = diningTable.orderId != null
                       ? EateryDB.instance.orderBox!.values
-                          .singleWhere((elem) => elem.id == e.orderId)
+                          .singleWhere((elem) => elem.id == diningTable.orderId)
                       : null;
                   // bool isAvailable = order == null || order.isPaid;
                   return ListTile(
@@ -72,42 +73,55 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          e.name,
+                          diningTable.name,
                           style: const TextStyle(fontWeight: FontWeight.w600),
                         ),
                         const SizedBox(width: 6),
                         if (category != null)
                           CaptionLabel(label: category.name),
                         const SizedBox(width: 3),
-                        if (e.isActive)
+                        if (diningTable.isActive)
+                          CaptionLabel(
+                            label: 'Active',
+                            color: ColorStyle.success,
+                          )
+                        else
                           CaptionLabel(
                             label: 'Inactive',
-                            color: ColorStyle.text300,
-                          )
+                            color: ColorStyle.error,
+                          ),
                       ],
                     ),
-                    leading: LeadingImageWidget(
-                      image: LibraryImage(e.image ?? '').image,
-                      elevation: 0.0,
+                    leading: Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        color: ColorStyle.primary,
+                        borderRadius: BorderRadius.circular(8),
+                        image: DecorationImage(
+                          image: LibraryImage(diningTable.image).image,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
                     ),
                     trailing: order != null
                         ? Text(
-                            '${GlobalVariables.currency?.symbol ?? ''}${order.finalTotal}',
+                            '${Common.currency?.symbol ?? ''}${order.finalTotal}',
                             style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
                                 color: ColorStyle.error),
                           )
                         : null,
-                    subtitle: e.description != null && e.description?.trim() != ''
-                        ? Text(e.description!)
+                    subtitle: diningTable.description != null && diningTable.description?.trim() != ''
+                        ? Text(diningTable.description!)
                         : null,
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
                             builder: (context) =>
-                                EditDiningTablePage(diningTable: e)),
+                                EditDiningTablePage(diningTable: diningTable)),
                       ).then((_) => setState(() {}));
                     },
                   );

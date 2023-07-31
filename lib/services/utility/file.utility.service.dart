@@ -1,6 +1,6 @@
 // import 'dart:io';
 //
-// import 'package:eatery/constants/global_variables.dart';
+// import 'package:eatery/constants/common.dart';
 // import 'package:flutter/material.dart';
 //
 // class FileUtilityService {

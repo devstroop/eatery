@@ -69,7 +69,7 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                   Column(
                     children: [
                       Text(
-                        '${GlobalVariables.currency?.symbol ?? ''}${widget.product.salePrice}',
+                        '${Common.currency?.symbol ?? ''}${widget.product.salePrice}',
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
                             fontSize: 20.0,
@@ -95,7 +95,7 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            GlobalVariables.cart
+                            Common.cart
                                     .where((element) =>
                                         element.id == widget.product.id)
                                     .isNotEmpty
@@ -107,7 +107,7 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                                     ),
                                   )
                                 : const SizedBox.shrink(),
-                            GlobalVariables.cart
+                            Common.cart
                                     .where((element) =>
                                         element.id == widget.product.id)
                                     .isNotEmpty
@@ -116,7 +116,7 @@ class _DetailedProductViewState extends State<DetailedProductView> {
                                         const EdgeInsetsDirectional.fromSTEB(
                                             4, 0, 4, 0),
                                     child: Text(
-                                      GlobalVariables.cart
+                                      Common.cart
                                           .where((element) =>
                                               element.id == widget.product.id)
                                           .length

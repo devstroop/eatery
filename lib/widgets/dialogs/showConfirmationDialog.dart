@@ -1,4 +1,4 @@
-import 'package:eatery/references.dart';
+import 'package:flutter/material.dart';
 
 Future<bool?> showConfirmationDialog(BuildContext context, String title,
     String message, Function onConfirm, Function onCancel) {

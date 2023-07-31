@@ -30,11 +30,12 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
           rate: double.parse(controllerTaxRate.text),
           type: selectedTaxType);
       await EateryDB.instance.taxSlabBox!.add(taxSlab).whenComplete(() {
-        showSnackBar(this.context, 'Successfully created!');
-        Navigator.of(this.context).pop();
+        showMessageDialog(this.context, 'Tax slab created successfully!',
+            MessageType.success, () => Navigator.pop(this.context));
       });
     } catch (_) {
-      showSnackBar(this.context, 'Failed to created!');
+      showMessageDialog(
+          this.context, 'Something went wrong!', MessageType.error);
     }
   }
 

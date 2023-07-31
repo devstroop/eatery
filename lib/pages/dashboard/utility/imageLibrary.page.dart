@@ -61,7 +61,7 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
           // widget.action(image);
           fetchLibrary();
         } catch (e) {
-          showSnackBar(this.context, e.toString());
+          showMessageDialog(this.context, e.toString(), MessageType.error);
         }
       }
     });
@@ -76,7 +76,7 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
           // widget.action(image);
           fetchLibrary();
         } catch (e) {
-          showSnackBar(this.context, e.toString());
+          showMessageDialog(this.context, e.toString(), MessageType.error);
         }
       }
     });
@@ -91,7 +91,7 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
           // widget.action(image);
           fetchLibrary();
         } catch (e) {
-          showSnackBar(this.context, e.toString());
+          showMessageDialog(this.context, e.toString(), MessageType.error);
         }
       }
     });
@@ -201,9 +201,8 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
                         'Do you want to remove this image from library.',
                         () {
                       each.delete();
-                      showSnackBar(
-                          context, 'Image removed from library.');
-                      fetchLibrary();
+                      showMessageDialog(context, 'Image removed from library.',
+                          MessageType.success, () => fetchLibrary());
                     }, () {
                       // Do nothing
                     });

@@ -325,11 +325,10 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
               widget.product.categoryId = selectedCategory?.id;
               widget.product.description = _controllerDescription.text;
               await widget.product.save().whenComplete(() {
-                showSnackBar(context, 'Successfully updated');
-                Navigator.pop(context);
+                showMessageDialog(context, 'Product updated successfully', MessageType.success);
               });
             } catch (_) {
-              showSnackBar(context, 'Failed to update');
+              showMessageDialog(context, 'Failed to update product', MessageType.error);
             }
           },
           child: const Text('Save'),

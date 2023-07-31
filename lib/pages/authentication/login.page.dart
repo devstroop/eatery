@@ -29,17 +29,24 @@ class _LoginPageState extends State<LoginPage> {
     }
     _formKey.currentState!.save();
     if (_controllerPassword.text == company!.password) {
+      setState(() {
+        Common.company = company;
+        Common.currency = EateryDB.instance.currencyBox!.values
+            .where((element) => element.code == Common.company?.currencyCode)
+            .firstOrNull;
+        Common.activeOrderType = null;
+        Common.activeDiningTable = null;
+        Common.activeCustomer = null;
+      });
       Navigator.pushAndRemoveUntil(
         this.context,
         MaterialPageRoute(
-          builder: (context) => DashboardPage(
-            company: company!,
-          ),
+          builder: (context) => const DashboardPage(),
         ),
         (Route<dynamic> route) => false,
       );
     } else {
-      showSnackBar(this.context, "Invalid credentials");
+      showMessageDialog(this.context, 'Invalid secure pin', MessageType.error);
     }
   }
 
@@ -106,9 +113,7 @@ class _LoginPageState extends State<LoginPage> {
                             borderRadius: BorderRadius.circular(24),
                             image: DecorationImage(
                               fit: BoxFit.cover,
-                              image:
-                                  LibraryImage(
-                                      company?.logo ?? '').image,
+                              image: LibraryImage(company?.logo ?? '').image,
                             ),
                           ),
                         ),
@@ -223,8 +228,8 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
       ),
-      resizeToAvoidBottomInset:
-          true, // Enable auto resize to avoid the keyboard
+      resizeToAvoidBottomInset: true,
+      // Enable auto resize to avoid the keyboard
       bottomNavigationBar: BottomAppBar(
         color: ColorStyle.backgroundColorAlter,
         child: PrimaryButton(

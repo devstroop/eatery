@@ -1,16 +1,10 @@
-import 'package:eatery_db/eatery_db.dart';
-import 'package:eatery/services/utility/show_snack_bar.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import '../../../components/labeled_custom_text_from_field.dart';
-import '../../../constants/style/spacing_style.dart';
-import '../../../widgets/buttons/primary.button.dart';
+import 'package:eatery/references.dart';
 
 Color _pageColor = ColorStyle.primary;
 
 class EditCustomerPage extends StatefulWidget {
-  const EditCustomerPage({Key? key, required this.customerId})
-      : super(key: key);
-  final int customerId;
+  const EditCustomerPage({Key? key, required this.customer}) : super(key: key);
+  final Customer customer;
 
   @override
   State<EditCustomerPage> createState() => _EditCustomerPageState();
@@ -26,7 +20,6 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
   final TextEditingController _controllerCustomerLandmark =
       TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  Customer? customer;
 
   final List<FocusNode> _focusNodes = [
     FocusNode(),
@@ -39,14 +32,14 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
   initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      customer = EateryDB.instance.customerBox!.get(widget.customerId);
       setState(() {
-        _controllerCustomerName.text = customer?.name ?? '';
-        _controllerCustomerPhone.text = customer?.phone ?? '';
-        _controllerCustomerAddress.text = customer?.address ?? '';
-        _controllerCustomerLandmark.text = customer?.landmark ?? '';
-        isActive = customer?.isActive ?? false;
+        _controllerCustomerName.text = widget.customer.name;
+        _controllerCustomerPhone.text = widget.customer.phone;
+        _controllerCustomerAddress.text = widget.customer.address ?? '';
+        _controllerCustomerLandmark.text = widget.customer.landmark ?? '';
+        isActive = widget.customer.isActive;
       });
+
       _focusNodes[0].requestFocus();
     });
   }
@@ -169,35 +162,37 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {
-            if (_controllerCustomerName.text.isEmpty) {
-              showSnackBar(context, 'Customer Name is required');
-              return;
-            }
-            final isValid = _formKey.currentState!.validate();
-            if (!isValid) {
+            if (!_formKey.currentState!.validate()) {
               return;
             }
             _formKey.currentState!.save();
 
-            customer?.name = _controllerCustomerName.text;
-            customer?.phone = _controllerCustomerPhone.text;
-            customer?.address = _controllerCustomerAddress.text;
-            customer?.landmark = _controllerCustomerLandmark.text;
-            customer?.isActive = isActive;
+            EateryDB.instance.customerBox!.values
+                .where((element) => element.id == widget.customer.id)
+                .first
+              ..name = _controllerCustomerName.text
+              ..phone = _controllerCustomerPhone.text
+              ..address = _controllerCustomerAddress.text
+              ..landmark = _controllerCustomerLandmark.text
+              ..isActive = isActive
+              ..save()
+              .then((value) => showMessageDialog(
+                  context,
+                  'Customer updated successfully',
+                  MessageType.success,
+                  () {
+                    Navigator.pop(context);
+                  }
+              )).onError((error, stackTrace) => showMessageDialog(
+                  context,
+                  'Error updating customer',
+                  MessageType.error,
+                  () {
+                    Navigator.pop(context);
+                  }
+              ));
 
-            try {
-              EateryDB.instance.customerBox!
-                  .put(
-                widget.customerId,
-                customer!,
-              )
-                  .whenComplete(() {
-                showSnackBar(context, 'Customer updated successfully');
-                Navigator.pop(context);
-              });
-            } catch (_) {
-              showSnackBar(context, 'Failed to add customer');
-            }
+
           },
           child: const Text('Save'),
         ),

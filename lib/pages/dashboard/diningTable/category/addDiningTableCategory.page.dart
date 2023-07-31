@@ -20,6 +20,8 @@ class _AddDiningTableCategoryPageState
     FocusNode(),
     FocusNode(),
   ];
+
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     final appBar = AppBar(
@@ -40,56 +42,59 @@ class _AddDiningTableCategoryPageState
       appBar: appBar,
       body: Padding(
         padding: const EdgeInsets.all(12.0),
-        child: ListView(
-          children: [
-            UploadButton(
-              onChanged: (value) {
-                setState(() {
-                  image = value;
-                });
-              },
-              title: '+ Upload Icon',
-              label: 'Table Category Icon',
-              image: image?.image,
-              primaryColor: _pageColor,
-            ),
-            const SizedBox(
-              height: 6.0,
-            ),
-            LabeledCustomTextFromField(
-              keyboardType: TextInputType.text,
-              controller: _controllerCategoryName,
-              label: 'Category Name',
-              hint: 'eg. Terrace',
-              obscureText: false,
-              themeColor: _pageColor,
-              foregroundColor: ColorStyle.text200,
-              focusNode: _focusNodes[0],
-              onFieldSubmitted: (v) {
-                _focusNodes[1].requestFocus();
-              },
-            ),
-            const SizedBox(
-              height: 6.0,
-            ),
-            LabeledCustomTextFromField(
-              keyboardType: TextInputType.text,
-              controller: _controllerCategoryDescription,
-              label: 'Description',
-              hint: 'eg. Terrace',
-              obscureText: false,
-              themeColor: _pageColor,
-              foregroundColor: ColorStyle.text200,
-              multiline: true,
-              focusNode: _focusNodes[1],
-              onFieldSubmitted: (v) {
-                FocusScope.of(context).unfocus();
-              },
-            ),
-            const SizedBox(
-              height: 6.0,
-            ),
-          ],
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            children: [
+              UploadButton(
+                onChanged: (value) {
+                  setState(() {
+                    image = value;
+                  });
+                },
+                title: '+ Upload Icon',
+                label: 'Table Category Icon',
+                image: image?.image,
+                primaryColor: _pageColor,
+              ),
+              const SizedBox(
+                height: 6.0,
+              ),
+              LabeledCustomTextFromField(
+                keyboardType: TextInputType.text,
+                controller: _controllerCategoryName,
+                label: 'Category Name',
+                hint: 'eg. Terrace',
+                obscureText: false,
+                themeColor: _pageColor,
+                foregroundColor: ColorStyle.text200,
+                focusNode: _focusNodes[0],
+                onFieldSubmitted: (v) {
+                  _focusNodes[1].requestFocus();
+                },
+              ),
+              const SizedBox(
+                height: 6.0,
+              ),
+              LabeledCustomTextFromField(
+                keyboardType: TextInputType.text,
+                controller: _controllerCategoryDescription,
+                label: 'Description',
+                hint: 'eg. Terrace',
+                obscureText: false,
+                themeColor: _pageColor,
+                foregroundColor: ColorStyle.text200,
+                multiline: true,
+                focusNode: _focusNodes[1],
+                onFieldSubmitted: (v) {
+                  FocusScope.of(context).unfocus();
+                },
+              ),
+              const SizedBox(
+                height: 6.0,
+              ),
+            ],
+          ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
@@ -97,20 +102,21 @@ class _AddDiningTableCategoryPageState
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {
-            if (_controllerCategoryName.text.trim() == '') {
-              showSnackBar(context, '* Category name required');
+            if (!_formKey.currentState!.validate()) {
               return;
             }
+            DiningTableCategory diningTableCategory = DiningTableCategory(
+              name: _controllerCategoryName.text,
+              description: _controllerCategoryDescription.text,
+              image: image?.filename,
+              isActive: true,
+            );
             EateryDB.instance.diningTableCategoryBox!
                 .add(
-              DiningTableCategory(
-                  name: _controllerCategoryName.text.trim(),
-                  description: _controllerCategoryDescription.text.trim(),
-                  image: image?.filename,
-                  isActive: true),
+              diningTableCategory,
             )
                 .then((value) {
-              Navigator.pop(context);
+              showMessageDialog(context, 'Dining table category added successfully', MessageType.success).then((value) => Navigator.pop(this.context, diningTableCategory));
             });
           },
           child: const Text('Save'),

@@ -237,7 +237,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                             (route) => false));
                 debugPrint('Company Added: $result');
               } catch (e) {
-                showSnackBar(this.context, e.toString());
+                showMessageDialog(this.context, e.toString(), MessageType.error);
               }
             })
       ];

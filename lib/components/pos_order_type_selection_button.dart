@@ -18,9 +18,9 @@ class PosOrderTypeSelectionButton extends StatelessWidget {
           Text(
             text,
             textAlign: TextAlign.start,
-            style: TextStyle(
-              color: ColorStyle.text200,
-              fontSize: 16,
+            style: const TextStyle(
+              color: Color(0xFF2F2F2F),
+              fontSize: 18,
               fontWeight: FontWeight.w600,
             ),
           ),
@@ -28,7 +28,7 @@ class PosOrderTypeSelectionButton extends StatelessWidget {
           Icon(
             Icons.arrow_drop_up,
             color: themeColor,
-            size: 16,
+            size: 24,
           ),
         ],
       ),

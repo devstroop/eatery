@@ -101,10 +101,6 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {
-            if (_controllerCategoryName.text.trim() == '') {
-              showSnackBar(context, '* Category name required');
-              return;
-            }
             try {
               EateryDB.instance.productCategoryBox!
                   .add(ProductCategory(
@@ -112,12 +108,12 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
                       description: _controllerCategoryDescription.text,
                       image: pickedLibraryImage?.filename))
                   .then((response) {
-                showSnackBar(context, 'Created successfully');
+                    showMessageDialog(context, 'Category created successfully', MessageType.success);
               }).whenComplete(() {
                 Navigator.pop(context);
               });
             } catch (_) {
-              showSnackBar(context, 'Failed to create');
+              showMessageDialog(context, 'Failed to create category', MessageType.error);
             }
           },
           child: const Text('Save'),

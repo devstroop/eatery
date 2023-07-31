@@ -66,11 +66,12 @@ class _KitchenPageState extends State<KitchenPage> {
                                 'Are you sure?',
                                 'Do you want to delete this dish?', () {
                               product.delete();
-                              showSnackBar(context,
-                                  'Item deleted successfully.');
-                              setState(() {});
+                              showMessageDialog(context,
+                                  'Dish has been deleted successfully', MessageType.success, () {
+                                    setState(() {});
+                                  });
                             }, () {
-                              // Do nothing
+                                  setState(() {});
                             });
                           },
                           onEdit: () {
@@ -178,9 +179,11 @@ class _KitchenPageState extends State<KitchenPage> {
                                     'Are you sure?',
                                     'Do you want to delete this dish?', () {
                                   each.delete();
-                                  showSnackBar(context,
-                                      'Item deleted successfully.');
-                                  setState(() {});
+                                  showMessageDialog(context,
+                                      'Dish has been deleted successfully', MessageType.success, () {
+                                    setState(() {});
+                                      }
+                                  );
                                 }, () {
                                   // Do nothing
                                 });
@@ -250,7 +253,7 @@ class _KitchenPageState extends State<KitchenPage> {
                               width: 4,
                             ),
                             Text(
-                              '${GlobalVariables.currency?.symbol ?? ''}${each.mrpPrice}',
+                              '${Common.currency?.symbol ?? ''}${each.mrpPrice}',
                               style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
@@ -270,7 +273,7 @@ class _KitchenPageState extends State<KitchenPage> {
                               width: 4,
                             ),
                             Text(
-                              '${GlobalVariables.currency?.symbol ?? ''}${each.salePrice}',
+                              '${Common.currency?.symbol ?? ''}${each.salePrice}',
                               style: const TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w600,
@@ -321,9 +324,10 @@ class _KitchenPageState extends State<KitchenPage> {
                                           'Do you want to delete this item?',
                                               () {
                                             each.delete();
-                                            showSnackBar(context,
-                                                'Item deleted successfully.');
-                                            setState(() {});
+                                            showMessageDialog(context,
+                                                'Item has been deleted successfully', MessageType.success, () {
+                                              setState(() {});
+                                                });
                                           }, () {
                                         // Do nothing
                                       });

@@ -198,11 +198,18 @@ class _AddStaffPageState extends State<AddStaffPage> {
                     type: staffType!),
               )
                   .whenComplete(() {
-                showSnackBar(context, 'Staff added successfully');
-                Navigator.pop(context);
+                    showMessageDialog(
+                      context,
+                      'Staff has been added successfully',
+                      MessageType.success
+                    );
               });
             } catch (_) {
-              showSnackBar(context, 'Failed to add Staff');
+              showMessageDialog(
+                context,
+                'Something went wrong',
+                MessageType.error
+              );
             }
           },
           child: const Text('Save'),

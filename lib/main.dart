@@ -41,12 +41,12 @@ Future setupDataAndInitDB() async {
     throw Exception('Unsupported platform');
   }
 
-  GlobalVariables.baseDirectory = basePath;
-  debugPrint(GlobalVariables.baseDirectory);
-  debugPrint(GlobalVariables.dataDirectory);
-  debugPrint(GlobalVariables.backupDirectory);
-  debugPrint(GlobalVariables.imagesDirectory);
-  await EateryDB.instance.init(GlobalVariables.dataDirectory);
+  Common.baseDirectory = basePath;
+  debugPrint(Common.baseDirectory);
+  debugPrint(Common.dataDirectory);
+  debugPrint(Common.backupDirectory);
+  debugPrint(Common.imagesDirectory);
+  await EateryDB.instance.init(Common.dataDirectory);
 }
 
 class MyApp extends StatelessWidget {

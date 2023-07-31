@@ -17,7 +17,7 @@ class _ShowCurrencyRegionPageState extends State<ShowCurrencyRegionPage> {
     super.initState();
     Future.delayed(Duration.zero, () {
       setState(() {
-        String? currencyCode = GlobalVariables.company?.currencyCode;
+        String? currencyCode = Common.company?.currencyCode;
         KCurrency? curr = currencyCode != null
             ? EateryDB.instance.currencyBox!.values
                 .singleWhere((element) => element.code == currencyCode)

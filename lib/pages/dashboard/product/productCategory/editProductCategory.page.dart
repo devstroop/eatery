@@ -120,20 +120,15 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {
-            if (_controllerCategoryName.text.trim() == '') {
-              showSnackBar(context, '* Category name required');
-              return;
-            }
 
             try {
               widget.category.name = _controllerCategoryName.text.trim();
               widget.category.description = _controllerDescription.text.trim();
               widget.category.image = pickedLibraryImage?.filename;
               widget.category.save();
-              showSnackBar(context, 'Successfully updated');
-              Navigator.of(context).pop();
+              showMessageDialog(context, 'Updated successfully', MessageType.success);
             } catch (_) {
-              showSnackBar(context, 'Failed to update');
+              showMessageDialog(context, 'Failed to update', MessageType.error);
             }
           },
           child: const Text('Update'),

@@ -139,7 +139,7 @@ class ProductCard extends StatelessWidget {
                                   if (product.salePrice != null &&
                                       product.salePrice != product.mrpPrice)
                                     Text(
-                                      '${GlobalVariables.currency?.symbol ?? ''}${product.mrpPrice}',
+                                      '${Common.currency?.symbol ?? ''}${product.mrpPrice}',
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                           fontSize: 10.0,
@@ -150,7 +150,7 @@ class ProductCard extends StatelessWidget {
                                     ),
                                   if (product.salePrice != null)
                                     Text(
-                                      '${GlobalVariables.currency?.symbol ?? ''}${product.salePrice}',
+                                      '${Common.currency?.symbol ?? ''}${product.salePrice}',
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                           fontSize: 12.0,
@@ -159,7 +159,7 @@ class ProductCard extends StatelessWidget {
                                     ),
                                   if (product.salePrice == null)
                                     Text(
-                                      '${GlobalVariables.currency?.symbol ?? ''}${product.mrpPrice}',
+                                      '${Common.currency?.symbol ?? ''}${product.mrpPrice}',
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                           fontSize: 12.0,
@@ -183,7 +183,7 @@ class ProductCard extends StatelessWidget {
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            GlobalVariables.cart
+                                            Common.cart
                                                     .contains(product)
                                                 ? InkWell(
                                                     onTap: onRemove,
@@ -194,7 +194,7 @@ class ProductCard extends StatelessWidget {
                                                     ),
                                                   )
                                                 : Container(),
-                                            GlobalVariables.cart
+                                            Common.cart
                                                     .contains(product)
                                                 ? Padding(
                                                     padding:
@@ -202,7 +202,7 @@ class ProductCard extends StatelessWidget {
                                                                 .fromSTEB(
                                                             4, 0, 4, 0),
                                                     child: Text(
-                                                      GlobalVariables.cart
+                                                      Common.cart
                                                           .where((element) =>
                                                               element.id ==
                                                               product.id)

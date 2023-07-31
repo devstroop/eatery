@@ -454,9 +454,9 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                     PrintInvoice.printReceipt(
                             order: widget.order, account: widget.account)
                         .then((String message) {
-                      showSnackBar(context, message);
+                          showMessageDialog(context, message, MessageType.info);
                     }).onError((error, stackTrace) {
-                      showSnackBar(context, 'Print error');
+                      showMessageDialog(context, error.toString(), MessageType.error);
                     });
                   },
                   child: Icon(

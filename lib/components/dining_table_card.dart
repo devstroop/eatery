@@ -74,7 +74,7 @@ class DiningTableCard extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                '${GlobalVariables.currency?.symbol ?? ''}${order?.finalTotal} due',
+                                '${Common.currency?.symbol ?? ''}${order?.finalTotal} due',
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                     fontSize: 12.0,

@@ -4,7 +4,7 @@ import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
 import 'package:http/http.dart' as http;
 
-import '../../constants/global_variables.dart';
+import '../../constants/common.dart';
 
 class LibraryImage {
   final String? filename;
@@ -26,7 +26,7 @@ class LibraryImage {
   }
 
   String get absolutePath =>
-      '${GlobalVariables.baseDirectory}$_subDirectory/$filename';
+      '${Common.baseDirectory}$_subDirectory/$filename';
 
   String? get basename => exists() ? path.basename(filename!) : null;
 
@@ -82,10 +82,10 @@ class LibraryImageProvider {
     if (sourceFile.existsSync()) {
       try {
         final destinationFile = sourceFile.copySync(
-            '${GlobalVariables.baseDirectory}/images/${path.basename(imagePath)}');
+            '${Common.baseDirectory}/images/${path.basename(imagePath)}');
         return LibraryImage(destinationFile.path
             .replaceAll('\\', '/')
-            .replaceFirst(GlobalVariables.baseDirectory!, ''));
+            .replaceFirst(Common.baseDirectory!, ''));
       } catch (e) {
         rethrow;
       }
@@ -99,12 +99,12 @@ class LibraryImageProvider {
       if (response.statusCode == 200) {
         final bytes = response.bodyBytes;
         final fileName = path.basename(url);
-        final filePath = '${GlobalVariables.baseDirectory}/images/$fileName';
+        final filePath = '${Common.baseDirectory}/images/$fileName';
         final file = File(filePath);
         await file.writeAsBytes(bytes);
         return LibraryImage(file.path
             .replaceAll('\\', '/')
-            .replaceFirst(GlobalVariables.baseDirectory!, ''));
+            .replaceFirst(Common.baseDirectory!, ''));
       } else {
         throw Exception(
             'Failed to download image. Status code: ${response.statusCode}');
@@ -115,17 +115,17 @@ class LibraryImageProvider {
   }
 
   static List<LibraryImage> getAll({Function(LibraryImage)? listen}) {
-    final directory = Directory('${GlobalVariables.baseDirectory}/images');
+    final directory = Directory('${Common.baseDirectory}/images');
     if (directory.existsSync()) {
       return directory.listSync().map((e) {
         if (listen != null) {
           listen(LibraryImage(e.path
               .replaceAll('\\', '/')
-              .replaceFirst('${GlobalVariables.baseDirectory}/images/', '')));
+              .replaceFirst('${Common.baseDirectory}/images/', '')));
         }
         return LibraryImage(e.path
             .replaceAll('\\', '/')
-            .replaceFirst('${GlobalVariables.baseDirectory}/images/', ''));
+            .replaceFirst('${Common.baseDirectory}/images/', ''));
       }).toList();
     }
     return [];
@@ -133,21 +133,21 @@ class LibraryImageProvider {
 
   static Future<List<LibraryImage>> getAllAsync(
       {Function(LibraryImage)? listen}) async {
-    debugPrint(GlobalVariables.baseDirectory);
-    final directory = Directory('${GlobalVariables.baseDirectory}/images');
+    debugPrint(Common.baseDirectory);
+    final directory = Directory('${Common.baseDirectory}/images');
     bool exists = await directory.exists();
     if (exists) {
       return directory.list().map((e) {
         if (listen != null) {
           LibraryImage libraryImage = LibraryImage(e.path
               .replaceAll('\\', '/')
-              .replaceFirst('${GlobalVariables.baseDirectory}/images/', ''));
+              .replaceFirst('${Common.baseDirectory}/images/', ''));
           listen(libraryImage);
         }
 
         return LibraryImage(e.path
             .replaceAll('\\', '/')
-            .replaceFirst('${GlobalVariables.baseDirectory}/images/', ''));
+            .replaceFirst('${Common.baseDirectory}/images/', ''));
       }).toList();
     }
     return [];
