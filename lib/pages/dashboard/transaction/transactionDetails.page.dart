@@ -62,7 +62,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
       ],
     );
     return Scaffold(
-      backgroundColor: ColorStyle.backgroundColorAlter,
+      backgroundColor: KColors.backgroundColorAlter,
       appBar: appBar,
       body: SingleChildScrollView(
         child: Column(
@@ -73,7 +73,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
             Container(
               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
               margin: const EdgeInsets.only(bottom: 12.0),
-              color: ColorStyle.backgroundColorAlter,
+              color: KColors.backgroundColorAlter,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -84,7 +84,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                     style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.w600,
-                        color: ColorStyle.text200),
+                        color: KColors.text200),
                   ),
                   const SizedBox(
                     height: 8.0,
@@ -110,7 +110,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                               widget.orderType!.name!,
                               textAlign: TextAlign.start,
                               style: TextStyle(
-                                color: ColorStyle.text200,
+                                color: KColors.text200,
                                 fontSize: 16,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -126,7 +126,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
             Container(
               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
               margin: const EdgeInsets.only(bottom: 12.0),
-              color: ColorStyle.backgroundColorAlter,
+              color: KColors.backgroundColorAlter,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -140,7 +140,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                         style: TextStyle(
                             fontSize: 18.0,
                             fontWeight: FontWeight.w600,
-                            color: ColorStyle.text200),
+                            color: KColors.text200),
                       ),
                     ],
                   ),
@@ -154,7 +154,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                             const EdgeInsetsDirectional.fromSTEB(0, 0, 6, 0),
                         child: Icon(
                           Icons.person,
-                          color: ColorStyle.text300,
+                          color: KColors.text300,
                         ),
                       ),
                       Padding(
@@ -167,7 +167,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                 'Customer Name',
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                  color: ColorStyle.text300,
+                                  color: KColors.text300,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w400,
                                 ),
@@ -176,7 +176,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                 widget.order['customerName'],
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                  color: ColorStyle.text200,
+                                  color: KColors.text200,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -198,7 +198,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                   0, 0, 6, 0),
                               child: Icon(
                                 Icons.call,
-                                color: ColorStyle.text300,
+                                color: KColors.text300,
                               ),
                             ),
                             Padding(
@@ -211,7 +211,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                       'Phone Number',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        color: ColorStyle.text300,
+                                        color: KColors.text300,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -220,7 +220,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                       '${widget.order['customerPhone']!}',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        color: ColorStyle.text200,
+                                        color: KColors.text200,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
                                       ),
@@ -243,7 +243,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                   0, 0, 6, 0),
                               child: Icon(
                                 Icons.pin_drop,
-                                color: ColorStyle.text300,
+                                color: KColors.text300,
                               ),
                             ),
                             Padding(
@@ -256,7 +256,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                       'Address',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        color: ColorStyle.text300,
+                                        color: KColors.text300,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -265,7 +265,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                       widget.order['customerAddress']!,
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                          color: ColorStyle.text200,
+                                          color: KColors.text200,
                                           fontSize: 16,
                                           fontWeight: FontWeight.w600,
                                           overflow: TextOverflow.clip),
@@ -288,7 +288,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                   0, 0, 6, 0),
                               child: Icon(
                                 Icons.chair_sharp,
-                                color: ColorStyle.text300,
+                                color: KColors.text300,
                               ),
                             ),
                             Padding(
@@ -301,7 +301,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                       'Table No.',
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        color: ColorStyle.text300,
+                                        color: KColors.text300,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w400,
                                       ),
@@ -310,7 +310,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                       widget.order['tableName']!,
                                       textAlign: TextAlign.start,
                                       style: TextStyle(
-                                        color: ColorStyle.text200,
+                                        color: KColors.text200,
                                         fontSize: 16,
                                         fontWeight: FontWeight.w600,
                                       ),
@@ -326,7 +326,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
             Container(
               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
               margin: const EdgeInsets.only(bottom: 12.0),
-              color: ColorStyle.backgroundColorAlter,
+              color: KColors.backgroundColorAlter,
               child: Column(
                 children: [
                   Row(
@@ -337,7 +337,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                         style: TextStyle(
                             fontSize: 18.0,
                             fontWeight: FontWeight.w600,
-                            color: ColorStyle.text200),
+                            color: KColors.text200),
                       ),
                     ],
                   ),
@@ -367,7 +367,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                 ? Container(
                     padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
                     margin: const EdgeInsets.only(bottom: 12.0),
-                    color: ColorStyle.backgroundColorAlter,
+                    color: KColors.backgroundColorAlter,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -378,7 +378,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                           style: TextStyle(
                               fontSize: 18.0,
                               fontWeight: FontWeight.w600,
-                              color: ColorStyle.text200),
+                              color: KColors.text200),
                         ),
                         const SizedBox(
                           height: 8.0,
@@ -393,7 +393,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                       0, 0, 6, 0),
                                   child: Icon(
                                     Icons.person,
-                                    color: ColorStyle.text300,
+                                    color: KColors.text300,
                                   ),
                                 ),
                                 Padding(
@@ -403,7 +403,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                     widget.order['waiter'] ?? 'Not assigned',
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
-                                      color: ColorStyle.text300,
+                                      color: KColors.text300,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500,
                                     ),
@@ -420,7 +420,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
             Container(
               padding: const EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
               margin: const EdgeInsets.only(bottom: 12.0),
-              color: ColorStyle.backgroundColorAlter,
+              color: KColors.backgroundColorAlter,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -431,7 +431,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                     style: TextStyle(
                         fontSize: 18.0,
                         fontWeight: FontWeight.w600,
-                        color: ColorStyle.text200),
+                        color: KColors.text200),
                   ),
                   const SizedBox(
                     height: 8.0,
@@ -446,7 +446,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                           'Taxable',
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                            color: ColorStyle.text300,
+                            color: KColors.text300,
                             fontSize: 16,
                             fontWeight: FontWeight.w400,
                           ),
@@ -459,7 +459,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                           '${widget.account['currencySymbol']}${widget.order['taxableTotal']}',
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                            color: ColorStyle.text200,
+                            color: KColors.text200,
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                           ),
@@ -485,7 +485,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                     widget.account['taxName'],
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
-                                      color: ColorStyle.text300,
+                                      color: KColors.text300,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400,
                                     ),
@@ -496,7 +496,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                         : "",
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
-                                        color: ColorStyle.text200,
+                                        color: KColors.text200,
                                         fontSize: 12,
                                         fontWeight: FontWeight.w400,
                                         overflow: TextOverflow.clip),
@@ -511,7 +511,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                 '${widget.account['currencySymbol']}${widget.order['taxTotal']}',
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                  color: ColorStyle.text200,
+                                  color: KColors.text200,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
                                 ),
@@ -538,7 +538,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                     'Round off',
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
-                                      color: ColorStyle.text300,
+                                      color: KColors.text300,
                                       fontSize: 16,
                                       fontWeight: FontWeight.w400,
                                     ),
@@ -551,7 +551,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                     '(+/-)',
                                     textAlign: TextAlign.start,
                                     style: TextStyle(
-                                      color: ColorStyle.text200,
+                                      color: KColors.text200,
                                       fontSize: 12,
                                       fontWeight: FontWeight.w400,
                                     ),
@@ -568,7 +568,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                                     : '${widget.account['currencySymbol']}${widget.order['roundOff']}',
                                 textAlign: TextAlign.start,
                                 style: TextStyle(
-                                  color: ColorStyle.text200,
+                                  color: KColors.text200,
                                   fontSize: 16,
                                   fontWeight: FontWeight.w600,
                                 ),
@@ -590,7 +590,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                           'Final total',
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                            color: ColorStyle.text200,
+                            color: KColors.text200,
                             fontSize: 18,
                             fontWeight: FontWeight.w600,
                           ),
@@ -603,7 +603,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
                           '${widget.account['currencySymbol']}${(widget.order['finalTotal'])}',
                           textAlign: TextAlign.start,
                           style: TextStyle(
-                            color: ColorStyle.text200,
+                            color: KColors.text200,
                             fontSize: 24,
                             fontWeight: FontWeight.w600,
                           ),
@@ -618,7 +618,7 @@ class _TransactionDetailsPageState extends State<TransactionDetailsPage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: ColorStyle.backgroundColorAlter,
+        color: KColors.backgroundColorAlter,
         child: Padding(
           padding: const EdgeInsets.all(12.0),
           child: PrimaryButton(

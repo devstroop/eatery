@@ -126,7 +126,7 @@ class _UploadImageBottomSheetState extends State<UploadImageBottomSheet> {
                       child: IconButton(
                         icon: const Icon(Icons.upload),
                         iconSize: 72.0,
-                        color: ColorStyle.information,
+                        color: KColors.cyan,
                         onPressed: pickFromUrl,
                       )),
                 Padding(
@@ -134,7 +134,7 @@ class _UploadImageBottomSheetState extends State<UploadImageBottomSheet> {
                     child: IconButton(
                       icon: const Icon(Icons.photo_library),
                       iconSize: urlImage != null ? 36.0 : 60,
-                      color: ColorStyle.text300,
+                      color: KColors.text300,
                       onPressed: pickFromGallery,
                     )),
                 Padding(
@@ -142,7 +142,7 @@ class _UploadImageBottomSheetState extends State<UploadImageBottomSheet> {
                     child: IconButton(
                       icon: const Icon(Icons.camera),
                       iconSize: urlImage != null ? 36.0 : 60,
-                      color: ColorStyle.text300,
+                      color: KColors.text300,
                       onPressed: pickFromCamera,
                     )),
               ],

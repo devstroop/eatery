@@ -19,7 +19,7 @@ class LeadingImageWidget extends StatelessWidget {
         decoration: BoxDecoration(
           border: border ?? Border.all(
               width: 0.5,
-              color: (backgroundCo0lor ?? ColorStyle.text400).withOpacity(0.5)
+              color: (backgroundCo0lor ?? KColors.text400).withOpacity(0.5)
           ),
           borderRadius: borderRadius ?? BorderRadius.circular(size/2),
           color: backgroundCo0lor ?? Colors.white,

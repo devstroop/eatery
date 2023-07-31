@@ -70,7 +70,7 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 14,
-              color: ColorStyle.text300,
+              color: KColors.text300,
               fontStyle: FontStyle.normal,
             ),
           ),
@@ -108,7 +108,7 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 14,
-              color: ColorStyle.text300,
+              color: KColors.text300,
               fontStyle: FontStyle.normal,
             ),
           ),
@@ -137,19 +137,19 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 18,
-          color: ColorStyle.text200,
+          color: KColors.text200,
         ),
       ),
       subtitle: Text(
         customer.phone ?? '',
-        style: TextStyle(color: ColorStyle.text300),
+        style: TextStyle(color: KColors.text300),
       ),
       trailing: Text(
         customer.name.toString(),
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 18,
-          color: ColorStyle.text200,
+          color: KColors.text200,
         ),
       ),
     );

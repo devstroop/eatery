@@ -23,23 +23,23 @@ class SearchTextField extends StatelessWidget {
       controller: controller,
       decoration: InputDecoration(
         prefixIcon:
-            Icon(Icons.search, color: ColorStyle.text400),
+            Icon(Icons.search, color: KColors.text400),
         hintText: hintText,
         hintStyle: TextStyle(
-          color: ColorStyle.text400,
+          color: KColors.text400,
           fontSize: 16,
           fontWeight: FontWeight.normal,
         ),
         enabledBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: ColorStyle.text400,
+            color: KColors.text400,
             width: 1,
           ),
           borderRadius: BorderRadius.circular(12),
         ),
         focusedBorder: OutlineInputBorder(
           borderSide: BorderSide(
-            color: (themeColor ?? ColorStyle.primary).withOpacity(0.5),
+            color: (themeColor ?? KColors.primary).withOpacity(0.5),
             width: 2,
           ),
           borderRadius: BorderRadius.circular(12),
@@ -49,7 +49,7 @@ class SearchTextField extends StatelessWidget {
         contentPadding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
       ),
       style: TextStyle(
-        color: ColorStyle.text200,
+        color: KColors.text200,
         fontSize: 16,
         fontWeight: FontWeight.normal,
       ),

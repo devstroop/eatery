@@ -1,6 +1,6 @@
 import 'package:eatery/references.dart';
 
-Color _pageColor = ColorStyle.tertiary;
+Color _pageColor = KColors.tertiary;
 
 class AddDiningTablePage extends StatefulWidget {
   const AddDiningTablePage({Key? key}) : super(key: key);
@@ -72,7 +72,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                   hint: 'eg. Table 1 ',
                   obscureText: false,
                   themeColor: _pageColor,
-                  foregroundColor: ColorStyle.text200,
+                  foregroundColor: KColors.text200,
                   focusNode: _focusNodes[0],
                   onFieldSubmitted: (v) {
                     _focusNodes[1].requestFocus();
@@ -87,7 +87,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                   hint: 'eg. Table description',
                   obscureText: false,
                   themeColor: _pageColor,
-                  foregroundColor: ColorStyle.text200,
+                  foregroundColor: KColors.text200,
                   multiline: true,
                   focusNode: _focusNodes[1],
                   onFieldSubmitted: (v) {
@@ -100,7 +100,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                 Text(
                   'Category',
                   style: TextStyle(
-                    color: ColorStyle.text200,
+                    color: KColors.text200,
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),

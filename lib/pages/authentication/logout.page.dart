@@ -7,7 +7,7 @@ class LogoutPage extends StatefulWidget {
 }
 
 class _LogoutPageState extends State<LogoutPage> {
-  Color themeColor = ColorStyle.brandColor;
+  Color themeColor = KColors.brandColor;
   @override
   void initState() {
     super.initState();
@@ -40,7 +40,7 @@ class _LogoutPageState extends State<LogoutPage> {
             Text(
               'Logging out...',
               style: TextStyle(
-                  color: ColorStyle.brandColor,
+                  color: KColors.brandColor,
                   fontSize: 20,
                   fontWeight: FontWeight.bold),
             ),

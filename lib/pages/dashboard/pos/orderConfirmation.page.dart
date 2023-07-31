@@ -40,7 +40,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
   previewWidget(BuildContext context) => RepaintBoundary(
         key: genKey,
         child: Container(
-          color: ColorStyle.backgroundColorAlter,
+          color: KColors.backgroundColorAlter,
           margin: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0),
           //height: MediaQuery.of(context).size.height,
           width: MediaQuery.of(context).size.width,
@@ -399,7 +399,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorStyle.backgroundColorAlter,
+      backgroundColor: KColors.backgroundColorAlter,
       body: SingleChildScrollView(
         child: Column(
           children: [
@@ -432,14 +432,14 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: ColorStyle.backgroundColorAlter,
+        color: KColors.backgroundColorAlter,
         child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
                 PrimaryButton(
-                  color: ColorStyle.tertiary,
+                  color: KColors.tertiary,
                   onPressed: () {
                     Navigator.pop(context);
                   },
@@ -449,7 +449,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                   width: 6,
                 ),
                 PrimaryButton(
-                  color: ColorStyle.primary,
+                  color: KColors.primary,
                   onPressed: () async {
                     PrintInvoice.printReceipt(
                             order: widget.order, account: widget.account)
@@ -461,14 +461,14 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                   },
                   child: Icon(
                     Icons.print,
-                    color: ColorStyle.backgroundColorAlter,
+                    color: KColors.backgroundColorAlter,
                   ),
                 ),
                 const SizedBox(
                   width: 6,
                 ),
                 PrimaryButton(
-                  color: ColorStyle.success,
+                  color: KColors.green,
                   onPressed: () async {
                     final temp = await AppFileSystem.getShareDir();
                     final path = '$temp/${getRandomString(8)}.png';
@@ -479,7 +479,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
                   },
                   child: Icon(
                     Icons.share,
-                    color: ColorStyle.backgroundColorAlter,
+                    color: KColors.backgroundColorAlter,
                   ),
                 ),
               ],

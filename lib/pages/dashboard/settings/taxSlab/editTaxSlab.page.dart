@@ -1,6 +1,6 @@
 import 'package:eatery/references.dart';
 
-final _pageColor = ColorStyle.primary;
+final _pageColor = KColors.primary;
 
 class EditTaxSlabSettingsPage extends StatefulWidget {
   const EditTaxSlabSettingsPage({Key? key, required this.taxSlab})
@@ -81,7 +81,7 @@ class _EditTaxSlabSettingsPageState extends State<EditTaxSlabSettingsPage> {
                     }
                     return null;
                   },
-                  foregroundColor: ColorStyle.text200,
+                  foregroundColor: KColors.text200,
                 ),
                 SpacingStyle.defaultVerticalSpacing,
                 LabeledCustomTextFromField(
@@ -92,7 +92,7 @@ class _EditTaxSlabSettingsPageState extends State<EditTaxSlabSettingsPage> {
                   focusNode: focus2,
                   suffix: Icon(
                     Icons.percent,
-                    color: ColorStyle.text400,
+                    color: KColors.text400,
                   ),
                   keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
@@ -103,13 +103,13 @@ class _EditTaxSlabSettingsPageState extends State<EditTaxSlabSettingsPage> {
                   onFieldSubmitted: (v) {
                     FocusScope.of(context).unfocus();
                   },
-                  foregroundColor: ColorStyle.text200,
+                  foregroundColor: KColors.text200,
                 ),
                 SpacingStyle.defaultVerticalSpacing,
                 Text(
                   'Select Tax Type',
                   style: TextStyle(
-                    color: ColorStyle.text200,
+                    color: KColors.text200,
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
@@ -121,7 +121,7 @@ class _EditTaxSlabSettingsPageState extends State<EditTaxSlabSettingsPage> {
                   highlightColor: _pageColor,
                   backgroundColor: const Color(0xFFE5E5E5),
                   foregroundColor: Colors.white,
-                  inactiveForegroundColor: ColorStyle.text200,
+                  inactiveForegroundColor: KColors.text200,
                   children: [
                     ...TaxType.values.map((e) => e.name!)
                   ],

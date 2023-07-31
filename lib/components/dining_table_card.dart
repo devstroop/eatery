@@ -36,13 +36,12 @@ class DiningTableCard extends StatelessWidget {
             padding: const EdgeInsets.all(8.0),
             decoration: BoxDecoration(
                 color: diningTable.isActive
-                    ? ColorStyle.success.withOpacity(0.15)
-                    : ColorStyle.error.withOpacity(0.15),
+                    ? KColors.green.withOpacity(0.15)
+                    : KColors.red.withOpacity(0.15),
                 borderRadius: const BorderRadius.all(Radius.circular(6)),
                 border: Border.all(
                   color: diningTable.isActive
-                      ? ColorStyle.success
-                      : ColorStyle.error,
+                      ? KColors.green                     : KColors.red,
                 )),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -63,7 +62,7 @@ class DiningTableCard extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 14.0,
                               fontWeight: FontWeight.w600,
-                              color: ColorStyle.text200),
+                              color: KColors.text200),
                         ),
                       ],
                     ),
@@ -79,7 +78,7 @@ class DiningTableCard extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 12.0,
                                     fontWeight: FontWeight.w600,
-                                    color: ColorStyle.error),
+                                    color: KColors.red),
                               ),
                             ],
                           )
@@ -89,8 +88,7 @@ class DiningTableCard extends StatelessWidget {
                 if (diningTable.isActive)
                   Icon(
                     Icons.check,
-                    color: ColorStyle.success,
-                  )
+                    color: KColors.green              )
               ],
             ),
           ),

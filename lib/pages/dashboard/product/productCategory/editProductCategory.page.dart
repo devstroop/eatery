@@ -1,6 +1,6 @@
 import 'package:eatery/references.dart';
 
-Color _pageColor = ColorStyle.tertiary;
+Color _pageColor = KColors.tertiary;
 
 class EditProductCategoryPage extends StatefulWidget {
   const EditProductCategoryPage({Key? key, required this.category})
@@ -69,7 +69,7 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
               UploadButton(
                 label: 'Product Category Image',
                 primaryColor: _pageColor,
-                secondaryColor: ColorStyle.text200,
+                secondaryColor: KColors.text200,
                 image: pickedLibraryImage?.image,
                 onChanged: (libraryImage) {
                   setState(() {
@@ -86,7 +86,7 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
                 hint: 'eg. Starters',
                 obscureText: false,
                 themeColor: _pageColor,
-                foregroundColor: ColorStyle.text200,
+                foregroundColor: KColors.text200,
                 focusNode: _focusNodes[0],
                 onFieldSubmitted: (v) {
                   _focusNodes[1].requestFocus();
@@ -101,7 +101,7 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
                 hint: 'eg. Starters are the best',
                 obscureText: false,
                 themeColor: _pageColor,
-                foregroundColor: ColorStyle.text200,
+                foregroundColor: KColors.text200,
                 multiline: true,
                 focusNode: _focusNodes[1],
                 onFieldSubmitted: (v) {
@@ -116,7 +116,7 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: ColorStyle.backgroundColorAlter,
+        color: KColors.backgroundColorAlter,
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {

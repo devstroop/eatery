@@ -26,7 +26,7 @@ class CustomButton extends StatelessWidget {
           ),
         child: Center(
           child: Text(text, textAlign: TextAlign.left, style: TextStyle(
-              color: ColorStyle.primary,
+              color: KColors.primary,
               fontSize: 13,
           ),),
         ),

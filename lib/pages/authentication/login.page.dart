@@ -50,15 +50,15 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  Color themeColor = ColorStyle.brandColor;
+  Color themeColor = KColors.brandColor;
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: ColorStyle.backgroundColorAlter,
+      backgroundColor: KColors.backgroundColorAlter,
       appBar: AppBar(
-        backgroundColor: ColorStyle.backgroundColorAlter,
+        backgroundColor: KColors.backgroundColorAlter,
         automaticallyImplyLeading: false,
         title: Image.asset(
           'assets/logo.png',
@@ -68,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
           IconButton(
             icon: Icon(
               Icons.settings_backup_restore,
-              color: ColorStyle.text200,
+              color: KColors.text200,
             ),
             onPressed: () {
               Navigator.push(
@@ -89,9 +89,9 @@ class _LoginPageState extends State<LoginPage> {
           children: [
             if (company == null)
               LinearProgressIndicator(
-                backgroundColor: ColorStyle.backgroundColorAlter,
+                backgroundColor: KColors.backgroundColorAlter,
                 valueColor: AlwaysStoppedAnimation<Color>(
-                  ColorStyle.brandColor,
+                  KColors.brandColor,
                 ),
               ),
             if (company != null)
@@ -180,7 +180,7 @@ class _LoginPageState extends State<LoginPage> {
                     TextButton(
                       child: Text(
                         'Forgot password?',
-                        style: TextStyle(color: ColorStyle.text200),
+                        style: TextStyle(color: KColors.text200),
                       ),
                       onPressed: () => showModalBottomSheet(
                         context: context,
@@ -231,7 +231,7 @@ class _LoginPageState extends State<LoginPage> {
       resizeToAvoidBottomInset: true,
       // Enable auto resize to avoid the keyboard
       bottomNavigationBar: BottomAppBar(
-        color: ColorStyle.backgroundColorAlter,
+        color: KColors.backgroundColorAlter,
         child: PrimaryButton(
           height: 50,
           color: themeColor,

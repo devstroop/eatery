@@ -1,6 +1,6 @@
 import 'package:eatery/references.dart';
 
-Color _pageColor = ColorStyle.secondary;
+Color _pageColor = KColors.secondary;
 
 class EditKitchenDishPage extends StatefulWidget {
   const EditKitchenDishPage(
@@ -88,7 +88,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
               UploadButton(
                 label: 'Product Image',
                 primaryColor: _pageColor,
-                secondaryColor: ColorStyle.text200,
+                secondaryColor: KColors.text200,
                 image: image?.image,
                 onChanged: (image) {
                   setState(() {
@@ -106,7 +106,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
                   onFieldSubmitted: (v) {
                     _focusNodes[1].requestFocus();
                   },
-                  foregroundColor: ColorStyle.text200,
+                  foregroundColor: KColors.text200,
                   themeColor: _pageColor,
                   controller: _controllerName),
               const SizedBox(
@@ -131,7 +131,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
                           return null;
                         },
                         keyboardType: TextInputType.number,
-                        foregroundColor: ColorStyle.text200,
+                        foregroundColor: KColors.text200,
                         controller: _controllerMRP),
                   ),
                   const SizedBox(width: 12.0,),
@@ -152,7 +152,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
                           return null;
                         },
                         keyboardType: TextInputType.number,
-                        foregroundColor: ColorStyle.text200,
+                        foregroundColor: KColors.text200,
                         controller: _controllerSalePrice),
                   ),
                 ],
@@ -163,7 +163,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
               Text(
                 'Select Food Type',
                 style: TextStyle(
-                  color: ColorStyle.text400,
+                  color: KColors.text400,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -174,7 +174,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
                 highlightColor: selectedFoodType?.color ?? _pageColor,
                 backgroundColor: const Color(0xFFE5E5E5),
                 foregroundColor: Colors.white,
-                inactiveForegroundColor: ColorStyle.text200,
+                inactiveForegroundColor: KColors.text200,
 
                 children: [
                   'None',
@@ -201,7 +201,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
               Text(
                 'Select Tax Slab',
                 style: TextStyle(
-                  color: ColorStyle.text400,
+                  color: KColors.text400,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -211,7 +211,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
               ToggleSwitch(
                 highlightColor: _pageColor,
                 backgroundColor: const Color(0xFFE5E5E5),
-                foregroundColor: selectedTaxSlab == null ? Colors.white : ColorStyle.text200,
+                foregroundColor: selectedTaxSlab == null ? Colors.white : KColors.text200,
                 children: [
                   'None',
                   for (var each in EateryDB.instance.taxSlabBox!.values)
@@ -246,7 +246,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
               Text(
                 'Select Category',
                 style: TextStyle(
-                  color: ColorStyle.text400,
+                  color: KColors.text400,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -295,7 +295,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
                   onFieldSubmitted: (v) {
                     FocusScope.of(context).unfocus();
                   },
-                  foregroundColor: ColorStyle.text200,
+                  foregroundColor: KColors.text200,
                   themeColor: _pageColor,
                   controller: _controllerDescription),
 
@@ -305,7 +305,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: ColorStyle.backgroundColorAlter,
+        color: KColors.backgroundColorAlter,
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {

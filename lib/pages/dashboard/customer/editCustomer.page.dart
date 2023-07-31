@@ -1,6 +1,6 @@
 import 'package:eatery/references.dart';
 
-Color _pageColor = ColorStyle.primary;
+Color _pageColor = KColors.primary;
 
 class EditCustomerPage extends StatefulWidget {
   const EditCustomerPage({Key? key, required this.customer}) : super(key: key);
@@ -79,7 +79,7 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
                   controller: _controllerCustomerName,
                   label: 'Customer Name',
                   themeColor: _pageColor,
-                  foregroundColor: ColorStyle.text200,
+                  foregroundColor: KColors.text200,
                   hint: 'Enter customer name',
                   focusNode: _focusNodes[0],
                   onFieldSubmitted: (v) {
@@ -93,7 +93,7 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
                   controller: _controllerCustomerPhone,
                   label: 'Phone Number',
                   themeColor: _pageColor,
-                  foregroundColor: ColorStyle.text200,
+                  foregroundColor: KColors.text200,
                   keyboardType: TextInputType.phone,
                   hint: 'Enter phone number',
                   focusNode: _focusNodes[1],
@@ -106,7 +106,7 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
                   controller: _controllerCustomerAddress,
                   label: 'Address',
                   themeColor: _pageColor,
-                  foregroundColor: ColorStyle.text200,
+                  foregroundColor: KColors.text200,
                   keyboardType: TextInputType.streetAddress,
                   hint: 'Enter full address',
                   multiline: true,
@@ -120,7 +120,7 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
                   controller: _controllerCustomerLandmark,
                   label: 'Landmark (Optional)',
                   themeColor: _pageColor,
-                  foregroundColor: ColorStyle.text200,
+                  foregroundColor: KColors.text200,
                   keyboardType: TextInputType.text,
                   hint: 'Enter landmark',
                   multiline: true,
@@ -146,7 +146,7 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
                     Text(
                       'Active',
                       style: TextStyle(
-                        color: ColorStyle.text200,
+                        color: KColors.text200,
                         fontSize: 16.0,
                       ),
                     ),
@@ -158,7 +158,7 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: ColorStyle.backgroundColorAlter,
+        color: KColors.backgroundColorAlter,
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {

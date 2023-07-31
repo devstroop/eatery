@@ -1,6 +1,6 @@
 import 'package:eatery/references.dart';
 
-Color _pageColor = ColorStyle.primary;
+Color _pageColor = KColors.primary;
 
 class AddCustomerPage extends StatefulWidget {
   const AddCustomerPage({Key? key, this.addressRequired = false}) : super(key: key);
@@ -69,7 +69,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                   controller: _controllerCustomerPhone,
                   label: 'Phone Number (*required)',
                   themeColor: _pageColor,
-                  foregroundColor: ColorStyle.text200,
+                  foregroundColor: KColors.text200,
                   keyboardType: TextInputType.phone,
                   hint: 'Enter phone number',
                   focusNode: _focusNodes[0],
@@ -92,7 +92,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                   controller: _controllerCustomerName,
                   label: 'Customer Name',
                   themeColor: _pageColor,
-                  foregroundColor: ColorStyle.text200,
+                  foregroundColor: KColors.text200,
                   hint: 'Enter customer name',
                   textInputAction: TextInputAction.next,
                   focusNode: _focusNodes[1],
@@ -111,7 +111,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                   controller: _controllerCustomerAddress,
                   label: 'Address',
                   themeColor: _pageColor,
-                  foregroundColor: ColorStyle.text200,
+                  foregroundColor: KColors.text200,
                   keyboardType: TextInputType.streetAddress,
                   hint: 'Enter full address',
                   multiline: true,
@@ -133,7 +133,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                   controller: _controllerCustomerLandmark,
                   label: 'Landmark (Optional)',
                   themeColor: _pageColor,
-                  foregroundColor: ColorStyle.text200,
+                  foregroundColor: KColors.text200,
                   keyboardType: TextInputType.text,
                   hint: 'Enter landmark',
                   focusNode: _focusNodes[4],
@@ -159,7 +159,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                     Text(
                       'Active',
                       style: TextStyle(
-                        color: ColorStyle.text200,
+                        color: KColors.text200,
                         fontSize: 16.0,
                       ),
                     ),

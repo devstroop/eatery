@@ -17,7 +17,7 @@ class _HelpPageState extends State<HelpPage> {
   }
 
   Color getThemeColor() {
-    return ColorStyle.tertiary;
+    return KColors.tertiary;
   }
 
   @override

@@ -1,6 +1,6 @@
 import 'package:eatery/references.dart';
 
-final _pageColor = ColorStyle.primary;
+final _pageColor = KColors.primary;
 
 class ShowCompanyPage extends StatefulWidget {
   const ShowCompanyPage({Key? key}) : super(key: key);
@@ -142,7 +142,7 @@ class _ShowCompanyPageState extends State<ShowCompanyPage> {
         ],
       ),
       bottomNavigationBar: BottomAppBar(
-        color: ColorStyle.backgroundColorAlter,
+        color: KColors.backgroundColorAlter,
         child: PrimaryButton(
           color: _pageColor,
           child: const Text('Edit'),

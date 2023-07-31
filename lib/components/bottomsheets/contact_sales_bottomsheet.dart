@@ -52,7 +52,7 @@ class ContactSalesBottomSheet extends StatelessWidget {
                 Icon(
                   Icons.call,
                   size: 24,
-                  color: ColorStyle.brandColor,
+                  color: KColors.brandColor,
                 ),
                 const SizedBox(
                   width: 12,
@@ -71,7 +71,7 @@ class ContactSalesBottomSheet extends StatelessWidget {
                 Icon(
                   Icons.email,
                   size: 24,
-                  color: ColorStyle.brandColor,
+                  color: KColors.brandColor,
                 ),
                 const SizedBox(
                   width: 12,

@@ -16,7 +16,7 @@ class KProductView extends StatelessWidget {
       AppBar(
         title: Text(product.name),
         backgroundColor: Colors.transparent,
-        foregroundColor: ColorStyle.text200,
+        foregroundColor: KColors.text200,
       ),
       Divider(
         height: 0.5,
@@ -26,7 +26,7 @@ class KProductView extends StatelessWidget {
         height: 200,
         margin: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
-            color: ColorStyle.text400.withOpacity(0.36),
+            color: KColors.text400.withOpacity(0.36),
             borderRadius: BorderRadius.circular(12.0),
             image: DecorationImage(
               image: LibraryImage(product.image).image,
@@ -61,7 +61,7 @@ class KProductView extends StatelessWidget {
                   style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 18,
-                      color: ColorStyle.text200),
+                      color: KColors.text200),
                 ),
                 const SizedBox(
                   width: 6,
@@ -71,7 +71,7 @@ class KProductView extends StatelessWidget {
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 18,
-                      color: ColorStyle.text200),
+                      color: KColors.text200),
                 ),
               ],
             ),
@@ -82,7 +82,7 @@ class KProductView extends StatelessWidget {
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 18,
-                    color: ColorStyle.text200),
+                    color: KColors.text200),
               ),
             ),
             Row(
@@ -93,7 +93,7 @@ class KProductView extends StatelessWidget {
                   style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 18,
-                      color: ColorStyle.text200),
+                      color: KColors.text200),
                 ),
                 const SizedBox(
                   width: 6,
@@ -103,7 +103,7 @@ class KProductView extends StatelessWidget {
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 18,
-                      color: ColorStyle.success),
+                      color: KColors.green),
                 ),
               ],
             ),
@@ -123,11 +123,11 @@ class KProductView extends StatelessWidget {
               style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
-                  color: ColorStyle.text200),
+                  color: KColors.text200),
             ),
             Text(
               product.description ?? '',
-              style: TextStyle(color: ColorStyle.text300, fontSize: 12),
+              style: TextStyle(color: KColors.text300, fontSize: 12),
             ),
           ],
         ),
@@ -150,10 +150,10 @@ class KProductView extends StatelessWidget {
                   child: Container(
                     height: 60,
                     decoration: BoxDecoration(
-                      color: ColorStyle.warning.withOpacity(0.25),
+                      color: KColors.yellow.withOpacity(0.25),
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: ColorStyle.warning,
+                        color: KColors.yellow,
                         width: 1,
                       ),
                     ),
@@ -161,7 +161,7 @@ class KProductView extends StatelessWidget {
                       child: Text(
                         'Edit',
                         style: TextStyle(
-                          color: ColorStyle.warning,
+                          color: KColors.yellow,
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -179,10 +179,10 @@ class KProductView extends StatelessWidget {
                   child: Container(
                     height: 60,
                     decoration: BoxDecoration(
-                      color: ColorStyle.error.withOpacity(0.25),
+                      color: KColors.red.withOpacity(0.25),
                       borderRadius: BorderRadius.circular(8),
                       border: Border.all(
-                        color: ColorStyle.error,
+                        color: KColors.red,
                         width: 1,
                       ),
                     ),
@@ -190,7 +190,7 @@ class KProductView extends StatelessWidget {
                       child: Text(
                         'Delete',
                         style: TextStyle(
-                          color: ColorStyle.error,
+                          color: KColors.red,
                           fontSize: 16,
                           fontWeight: FontWeight.w600,
                         ),
@@ -214,10 +214,10 @@ class KProductView extends StatelessWidget {
             child: Container(
               height: 60,
               decoration: BoxDecoration(
-                color: ColorStyle.success.withOpacity(0.25),
+                color: KColors.green.withOpacity(0.25),
                 borderRadius: BorderRadius.circular(8),
                 border: Border.all(
-                  color: ColorStyle.success,
+                  color: KColors.green,
                   width: 1,
                 ),
               ),
@@ -225,7 +225,7 @@ class KProductView extends StatelessWidget {
                 child: Text(
                   'Add to Cart',
                   style: TextStyle(
-                    color: ColorStyle.success,
+                    color: KColors.green,
                     fontSize: 16,
                     fontWeight: FontWeight.w600,
                   ),

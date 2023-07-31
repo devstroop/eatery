@@ -48,7 +48,7 @@ class PosWaiterCard extends StatelessWidget {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              color: ColorStyle.backgroundColorAlter,
+                              color: KColors.backgroundColorAlter,
                               borderRadius:
                               const BorderRadius.only(topLeft: Radius.circular(6), bottomLeft: Radius.circular(6)),
                               image: File(image ?? '').existsSync()
@@ -65,7 +65,7 @@ class PosWaiterCard extends StatelessWidget {
                         children: [
                           Container(
                             decoration: BoxDecoration(
-                              color: active ?? false ? ColorStyle.text200 : ColorStyle.backgroundColorAlter,
+                              color: active ?? false ? KColors.text200 : KColors.backgroundColorAlter,
                               borderRadius: const BorderRadius.only(
                                   topRight: Radius.circular(6), bottomRight: Radius.circular(6)),
                             ),
@@ -77,7 +77,7 @@ class PosWaiterCard extends StatelessWidget {
                               name,
                               overflow: TextOverflow.ellipsis,
                               style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600,
-                                  color: active ?? false ? ColorStyle.backgroundColorAlter : ColorStyle.text200
+                                  color: active ?? false ? KColors.backgroundColorAlter : KColors.text200
                               ),
                             ),
                           )

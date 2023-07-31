@@ -41,7 +41,7 @@ class CartProductCard extends StatelessWidget {
                   height: 50,
                   width: 50,
                   decoration: BoxDecoration(
-                    color: ColorStyle.backgroundColorAlter,
+                    color: KColors.backgroundColorAlter,
                     borderRadius: const BorderRadius.all(Radius.circular(6)),
                     image: File(image ?? '').existsSync()
                         ? DecorationImage(
@@ -65,7 +65,7 @@ class CartProductCard extends StatelessWidget {
                       style: TextStyle(
                           fontSize: 16.0,
                           fontWeight: FontWeight.w600,
-                          color: ColorStyle.text200),
+                          color: KColors.text200),
                     ),
                     Row(
                       children: [
@@ -75,7 +75,7 @@ class CartProductCard extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 14.0,
                               fontWeight: FontWeight.w400,
-                              color: ColorStyle.text400),
+                              color: KColors.text400),
                         ),
                       ],
                     ),
@@ -93,7 +93,7 @@ class CartProductCard extends StatelessWidget {
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(4),
                           border: Border.all(
-                            color: ColorStyle.primary /*themeColor!*/,
+                            color: KColors.primary /*themeColor!*/,
                             width: 2,
                           ),
                         ),
@@ -108,7 +108,7 @@ class CartProductCard extends StatelessWidget {
                                       onTap: onRemove,
                                       child: Icon(
                                         Icons.remove,
-                                        color: ColorStyle.primary,
+                                        color: KColors.primary,
                                       ),
                                     )
                                   : Container(),
@@ -130,7 +130,7 @@ class CartProductCard extends StatelessWidget {
                                 onTap: onAdd,
                                 child: Icon(
                                   Icons.add,
-                                  color: ColorStyle.primary,
+                                  color: KColors.primary,
                                 ),
                               ),
                             ],
@@ -143,7 +143,7 @@ class CartProductCard extends StatelessWidget {
                         onTap: onDeleteAll,
                         child: Icon(
                           Icons.delete_outline,
-                          color: ColorStyle.error,
+                          color: KColors.red,
                         ),
                       )
                     : Container()

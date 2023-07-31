@@ -1,6 +1,6 @@
 import 'package:eatery/references.dart';
 
-Color _pageColor = ColorStyle.secondary;
+Color _pageColor = KColors.secondary;
 class AddKitchenDish extends StatefulWidget {
   const AddKitchenDish({Key? key}) : super(key: key);
 
@@ -77,7 +77,7 @@ final List<FocusNode> _focusNodes = [
                 UploadButton(
                   label: 'Product Image',
                   primaryColor: _pageColor,
-                  secondaryColor: ColorStyle.text200,
+                  secondaryColor: KColors.text200,
                   image: image?.image,
                   onChanged: (image) {
                     setState(() {
@@ -95,7 +95,7 @@ final List<FocusNode> _focusNodes = [
                     onFieldSubmitted: (v) {
                       FocusScope.of(context).requestFocus(_focusNodes[1]);
                     },
-                    foregroundColor: ColorStyle.text200,
+                    foregroundColor: KColors.text200,
                     themeColor: _pageColor,
                     controller: _controllerName),
                 const SizedBox(
@@ -120,7 +120,7 @@ final List<FocusNode> _focusNodes = [
                             return null;
                           },
                           keyboardType: TextInputType.number,
-                          foregroundColor: ColorStyle.text200,
+                          foregroundColor: KColors.text200,
                           controller: _controllerMRP),
                     ),
                     const SizedBox(width: 12.0,),
@@ -141,7 +141,7 @@ final List<FocusNode> _focusNodes = [
                             return null;
                           },
                           keyboardType: TextInputType.number,
-                          foregroundColor: ColorStyle.text200,
+                          foregroundColor: KColors.text200,
                           controller: _controllerSalePrice),
                     ),
                   ],
@@ -152,7 +152,7 @@ final List<FocusNode> _focusNodes = [
                 Text(
                   'Select Food Type',
                   style: TextStyle(
-                    color: ColorStyle.text400,
+                    color: KColors.text400,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -163,7 +163,7 @@ final List<FocusNode> _focusNodes = [
                   highlightColor: selectedFoodType?.color ?? _pageColor,
                   backgroundColor: const Color(0xFFE5E5E5),
                   foregroundColor: Colors.white,
-                  inactiveForegroundColor: ColorStyle.text200,
+                  inactiveForegroundColor: KColors.text200,
 
                   children: [
                     'None',
@@ -190,7 +190,7 @@ final List<FocusNode> _focusNodes = [
                 Text(
                   'Select Tax Slab',
                   style: TextStyle(
-                    color: ColorStyle.text400,
+                    color: KColors.text400,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -201,7 +201,7 @@ final List<FocusNode> _focusNodes = [
                   highlightColor: _pageColor,
                   backgroundColor: const Color(0xFFE5E5E5),
                   foregroundColor: Colors.white,
-                  inactiveForegroundColor: ColorStyle.text200,
+                  inactiveForegroundColor: KColors.text200,
                   children: [
                     'None',
                     ...slabs.map((e) => e.name)
@@ -233,7 +233,7 @@ final List<FocusNode> _focusNodes = [
                 Text(
                   'Select Category',
                   style: TextStyle(
-                    color: ColorStyle.text400,
+                    color: KColors.text400,
                     fontWeight: FontWeight.w400,
                   ),
                 ),
@@ -282,7 +282,7 @@ final List<FocusNode> _focusNodes = [
                     onFieldSubmitted: (v) {
                       FocusScope.of(context).unfocus();
                     },
-                    foregroundColor: ColorStyle.text200,
+                    foregroundColor: KColors.text200,
                     themeColor: _pageColor,
                     controller: _controllerDescription),
 
@@ -293,7 +293,7 @@ final List<FocusNode> _focusNodes = [
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: ColorStyle.backgroundColorAlter,
+        color: KColors.backgroundColorAlter,
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {

@@ -13,7 +13,7 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   Color getThemeColor() {
-    return ColorStyle.primary;
+    return KColors.primary;
   }
 
   SizedBox options() {

@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:eatery/references.dart';
 
-final _pageColor = ColorStyle.primary;
+final _pageColor = KColors.primary;
 
 class EditCompanyPage extends StatefulWidget {
   const EditCompanyPage({Key? key}) : super(key: key);
@@ -71,7 +71,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                   UploadButton(
                     label: 'Restaurant Logo',
                     primaryColor: _pageColor,
-                    secondaryColor: ColorStyle.text200,
+                    secondaryColor: KColors.text200,
                     image: selectedLogo?.image,
                     onChanged: (image){
                       setState(() {
@@ -83,7 +83,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                   SpacingStyle.defaultVerticalSpacing,
                   LabeledCustomTextFromField(
                       themeColor: _pageColor,
-                      foregroundColor: ColorStyle.text200,
+                      foregroundColor: KColors.text200,
                       keyboardType: TextInputType.name,
                       controller: _controllerCompanyName,
                       focusNode: focus1,
@@ -102,7 +102,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                   SpacingStyle.defaultVerticalSpacing,
                   LabeledCustomTextFromField(
                       themeColor: _pageColor,
-                      foregroundColor: ColorStyle.text200,
+                      foregroundColor: KColors.text200,
                       keyboardType: TextInputType.emailAddress,
                       controller: _controllerEmail,
                       label: 'Email address',
@@ -124,7 +124,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                   SpacingStyle.defaultVerticalSpacing,
                   LabeledCustomTextFromField(
                       themeColor: _pageColor,
-                      foregroundColor: ColorStyle.text200,
+                      foregroundColor: KColors.text200,
                       keyboardType: TextInputType.phone,
                       controller: _controllerPhone,
                       label: 'Phone no',
@@ -146,7 +146,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                   SpacingStyle.defaultVerticalSpacing,
                   LabeledCustomTextFromField(
                     themeColor: _pageColor,
-                    foregroundColor: ColorStyle.text200,
+                    foregroundColor: KColors.text200,
                     controller: _controllerAddress,
                     label: 'Address',
                     hint: 'Enter address...',
@@ -166,7 +166,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                   SpacingStyle.defaultVerticalSpacing,
                   LabeledCustomTextFromField(
                     themeColor: _pageColor,
-                    foregroundColor: ColorStyle.text200,
+                    foregroundColor: KColors.text200,
                     keyboardType: TextInputType.text,
                     controller: _controllerSalesTaxNo,
                     label:
@@ -189,7 +189,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                   SpacingStyle.defaultVerticalSpacing,
                   LabeledCustomTextFromField(
                     themeColor: _pageColor,
-                    foregroundColor: ColorStyle.text200,
+                    foregroundColor: KColors.text200,
                     keyboardType: TextInputType.text,
                     controller: _controllerFoodLicNo,
                     label:
@@ -215,7 +215,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
               ),
             ),
             bottomNavigationBar: BottomAppBar(
-              color: ColorStyle.backgroundColorAlter,
+              color: KColors.backgroundColorAlter,
               child: PrimaryButton(
                 color: _pageColor,
                 child: const Text('Save'),

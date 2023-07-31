@@ -1,6 +1,6 @@
 import 'package:eatery/references.dart';
 
-Color _pageColor = ColorStyle.tertiary;
+Color _pageColor = KColors.tertiary;
 
 class ProductCategoriesPage extends StatefulWidget {
   const ProductCategoriesPage({Key? key}) : super(key: key);
@@ -14,7 +14,7 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
   Widget build(BuildContext context) {
     List<ProductCategory> categories = EateryDB.instance.productCategoryBox!.values.toList();
     return Scaffold(
-      backgroundColor: ColorStyle.backgroundColor,
+      backgroundColor: KColors.backgroundColor,
       appBar: AppBar(
           backgroundColor: _pageColor,
           foregroundColor: Colors.white,

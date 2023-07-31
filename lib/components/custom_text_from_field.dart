@@ -72,7 +72,7 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
           Text(
             widget.label!,
             style: TextStyle(
-              color: ColorStyle.text200,
+              color: KColors.text200,
               fontSize: 12,
               fontWeight: FontWeight.w500,
             ),
@@ -108,46 +108,46 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
                         icon: obscureText ?? false
                             ? const Icon(Icons.remove_red_eye)
                             : const Icon(Icons.visibility_off),
-                        color: ColorStyle.text400,
+                        color: KColors.text400,
                       )
                     : null,
             hintText: widget.hint,
             hintStyle: TextStyle(
-              color: ColorStyle.text400,
+              color: KColors.text400,
               fontSize: 14,
               fontWeight: FontWeight.normal,
             ),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: ColorStyle.text400,
+                color: KColors.text400,
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(8),
             ),
             errorBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: ColorStyle.error,
+                color: KColors.red,
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(8),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: ColorStyle.error,
+                color: KColors.red,
                 width: 2,
               ),
               borderRadius: BorderRadius.circular(8),
             ),
             disabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: ColorStyle.text400,
+                color: KColors.text400,
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(8),
             ),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: widget.themeColor ?? ColorStyle.primary,
+                color: widget.themeColor ?? KColors.primary,
                 width: 2,
               ),
               borderRadius: BorderRadius.circular(8),
@@ -162,7 +162,7 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
                 const EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
           ),
           style: TextStyle(
-            color: ColorStyle.text200,
+            color: KColors.text200,
             fontSize: 14,
             fontWeight: FontWeight.normal,
           ),

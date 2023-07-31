@@ -10,14 +10,14 @@ class WaiterSelectionView extends StatelessWidget {
       AppBar(
           title: const Text('Select Waiter'),
           backgroundColor: Colors.transparent,
-          foregroundColor: ColorStyle.text200,
+          foregroundColor: KColors.text200,
           
       ),
 
       Container(
         margin: const EdgeInsets.symmetric(horizontal: 12.0),
         height: 0.5,
-        color: ColorStyle.text400,
+        color: KColors.text400,
       ),
     ]);
   }

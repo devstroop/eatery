@@ -8,7 +8,7 @@ class ShowCurrencyRegionPage extends StatefulWidget {
 }
 
 class _ShowCurrencyRegionPageState extends State<ShowCurrencyRegionPage> {
-  final themeColor = ColorStyle.primary;
+  final themeColor = KColors.primary;
   Currency? selectedCurrency;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -34,7 +34,7 @@ class _ShowCurrencyRegionPageState extends State<ShowCurrencyRegionPage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: themeColor,
-        foregroundColor: ColorStyle.textColorLight,
+        foregroundColor: KColors.text90,
         title: const Text('Region and Currency'),
       ),
       body: Padding(

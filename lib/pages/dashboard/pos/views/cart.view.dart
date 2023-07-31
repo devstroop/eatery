@@ -18,7 +18,7 @@ class _CartViewState extends State<CartView> {
       AppBar(
         title: const Text('Cart'),
         backgroundColor: Colors.transparent,
-        foregroundColor: ColorStyle.text200,
+        foregroundColor: KColors.text200,
       ),
       Divider(
         height: 0.5,
@@ -36,7 +36,7 @@ class _CartViewState extends State<CartView> {
                         height: 48,
                         width: 48,
                         decoration: BoxDecoration(
-                          color: ColorStyle.text400.withOpacity(0.36),
+                          color: KColors.text400.withOpacity(0.36),
                           borderRadius: BorderRadius.circular(12.0),
                           image: DecorationImage(
                             image: LibraryImage(product.image).image,

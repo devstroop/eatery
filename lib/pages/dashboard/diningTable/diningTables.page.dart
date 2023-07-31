@@ -1,6 +1,6 @@
 import 'package:eatery/references.dart';
 
-Color _pageColor = ColorStyle.tertiary;
+Color _pageColor = KColors.tertiary;
 
 class DiningTablesPage extends StatefulWidget {
   const DiningTablesPage({Key? key}) : super(key: key);
@@ -83,12 +83,12 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                         if (diningTable.isActive)
                           CaptionLabel(
                             label: 'Active',
-                            color: ColorStyle.success,
+                            color: KColors.green,
                           )
                         else
                           CaptionLabel(
                             label: 'Inactive',
-                            color: ColorStyle.error,
+                            color: KColors.red,
                           ),
                       ],
                     ),
@@ -96,7 +96,7 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                       width: 48,
                       height: 48,
                       decoration: BoxDecoration(
-                        color: ColorStyle.primary,
+                        color: KColors.primary,
                         borderRadius: BorderRadius.circular(8),
                         image: DecorationImage(
                           image: LibraryImage(diningTable.image).image,
@@ -110,7 +110,7 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                             style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.w500,
-                                color: ColorStyle.error),
+                                color: KColors.red),
                           )
                         : null,
                     subtitle: diningTable.description != null && diningTable.description?.trim() != ''

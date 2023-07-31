@@ -13,7 +13,7 @@ class MenuTile extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        color: ColorStyle.backgroundColorAlter,
+        color: KColors.backgroundColorAlter,
         margin: const EdgeInsets.only(bottom: 8.0),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -35,13 +35,13 @@ class MenuTile extends StatelessWidget {
                         Text(
                           title,
                           style:
-                          TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
+                          TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600, color: KColors.text200),
                         ),
                         subtitle != null ?
                         Text(
                           subtitle!,
                           style:
-                          TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400, color: ColorStyle.text400),
+                          TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400, color: KColors.text400),
                         ) : Container()
                       ],
                     )
@@ -52,7 +52,7 @@ class MenuTile extends StatelessWidget {
                 child: Icon(
                   postfixIcon,
                   size: 16,
-                  color: ColorStyle.text400,
+                  color: KColors.text400,
                   //style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
                 )),
           ],

@@ -65,7 +65,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
   @override
   Widget build(BuildContext context) {
     Color pageColor = Color(
-        Common.activeOrderType?.color ?? ColorStyle.primary.value);
+        Common.activeOrderType?.color ?? KColors.primary.value);
     List<Product> products =
         EateryDB.instance.productBox!.values.where((element) {
       // TODO: implement build
@@ -415,7 +415,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                         ? Icons.delivery_dining
                         : Icons.takeout_dining,
                 color: Color(Common.activeOrderType?.color ??
-                    ColorStyle.text200.value),
+                    KColors.text200.value),
               ),
               themeColor: pageColor,
               text:
@@ -440,7 +440,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
-          backgroundColor: ColorStyle.error,
+          backgroundColor: KColors.red,
           textColor: Colors.white,
           fontSize: 12.0);
       return;
@@ -457,7 +457,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
         ),
         builder: (context) => CartView(
               themeColor: Color(Common.activeOrderType?.color ??
-                  ColorStyle.text200.value),
+                  KColors.text200.value),
               orderType: Common.activeOrderType!,
               setParentState: () {
                 setState(() {});
@@ -486,7 +486,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                   toastLength: Toast.LENGTH_SHORT,
                   gravity: ToastGravity.CENTER,
                   timeInSecForIosWeb: 1,
-                  backgroundColor: ColorStyle.success,
+                  backgroundColor: KColors.green,
                   textColor: Colors.white,
                   fontSize: 12.0);
               Navigator.of(context).pop();
@@ -530,7 +530,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                   style: TextStyle(
                       fontSize: 18.0,
                       fontWeight: FontWeight.w600,
-                      color: ColorStyle.text200),
+                      color: KColors.text200),
                 ),
               ),
               for (var orderType in OrderType.values)

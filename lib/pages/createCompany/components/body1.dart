@@ -47,7 +47,7 @@ class Body1 extends StatelessWidget {
           UploadButton(
             label: 'Restaurant Logo',
             primaryColor: pageColor,
-            secondaryColor: ColorStyle.text200,
+            secondaryColor: KColors.text200,
             image: selectedLibraryImage?.image,
             onChanged: onChanged,
           ),
@@ -115,7 +115,7 @@ class Body1 extends StatelessWidget {
           SpacingStyle.defaultVerticalSpacing,
           LabeledCustomTextFromField(
             themeColor: pageColor,
-            foregroundColor: ColorStyle.text200,
+            foregroundColor: KColors.text200,
             controller: addressController,
             label: 'Address',
             hint: 'Enter address...',

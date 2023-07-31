@@ -1,6 +1,6 @@
 import 'package:eatery/references.dart';
 
-Color _pageColor = ColorStyle.tertiary;
+Color _pageColor = KColors.tertiary;
 
 class EditDiningTableCategoryPage extends StatefulWidget {
   const EditDiningTableCategoryPage({Key? key, required this.category})
@@ -81,7 +81,7 @@ class _EditDiningTableCategoryPageState
                 hint: 'eg. Terrace',
                 obscureText: false,
                 themeColor: _pageColor,
-                foregroundColor: ColorStyle.text200,
+                foregroundColor: KColors.text200,
                 focusNode: _focusNodes[0],
                 onFieldSubmitted: (v) {
                   _focusNodes[1].requestFocus();
@@ -103,7 +103,7 @@ class _EditDiningTableCategoryPageState
                 hint: 'eg. Terrace',
                 obscureText: false,
                 themeColor: _pageColor,
-                foregroundColor: ColorStyle.text200,
+                foregroundColor: KColors.text200,
                 multiline: true,
                 focusNode: _focusNodes[1],
                 onFieldSubmitted: (v) {
@@ -118,7 +118,7 @@ class _EditDiningTableCategoryPageState
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: ColorStyle.backgroundColorAlter,
+        color: KColors.backgroundColorAlter,
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {

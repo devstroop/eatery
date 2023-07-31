@@ -80,7 +80,7 @@ class _Body6State extends State<Body6> {
             highlights: const ['100 invoices a month', '10 products'],
             footer: 'Enjoy with limited access',
             selected: widget.subscriptionType == SubscriptionType.free,
-            highlightColor: ColorStyle.warning,
+            highlightColor: KColors.yellow,
             onTap: () {
               widget.callback(SubscriptionType.free, null, null, null);
 
@@ -96,7 +96,7 @@ class _Body6State extends State<Body6> {
             highlights: const ['Everything Unlimited'],
             footer: 'Get unlocked to all premium features',
             selected: widget.subscriptionType == SubscriptionType.premium,
-            highlightColor: ColorStyle.success,
+            highlightColor: KColors.green,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -159,7 +159,7 @@ class _Body6State extends State<Body6> {
                       }
                     },
                     icon: const Icon(Icons.paste),
-                    color: ColorStyle.text400,
+                    color: KColors.text400,
                   ),
                   validator: (value) {
                     if (widget.subscriptionType == SubscriptionType.premium) {

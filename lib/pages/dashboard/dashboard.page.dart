@@ -129,7 +129,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   subtitle: 'Tap here to start your sale',
                   titleSize: titleSize,
                   subtitleSize: subtitleSize,
-                  color: ColorStyle.primary,
+                  color: KColors.primary,
                   width: menuSize,
                   height: menuSize,
                   onTap: () {
@@ -155,7 +155,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         // subtitle: 'Manage product categories',
                         titleSize: titleSize * 0.7,
                         subtitleSize: subtitleSize * 0.7,
-                        color: ColorStyle.tertiary,
+                        color: KColors.tertiary,
                         width: menuSize,
                         height: (menuSize - 8) / 2,
                         onTap: () {
@@ -175,7 +175,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         // subtitle: 'Manage kitchen dishes',
                         titleSize: titleSize * 0.7,
                         subtitleSize: subtitleSize * 0.7,
-                        color: ColorStyle.secondary,
+                        color: KColors.secondary,
                         width: (menuSize - 8) / 2,
                         height: (menuSize - 8) / 2,
                         onTap: () {
@@ -194,7 +194,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         // subtitle: 'Manage product categories',
                         titleSize: titleSize * 0.7,
                         subtitleSize: subtitleSize * 0.7,
-                        color: ColorStyle.alternate,
+                        color: KColors.alternate,
                         width: (menuSize - 8) / 2,
                         height: (menuSize - 8) / 2,
                         onTap: () {
@@ -211,7 +211,7 @@ class _DashboardPageState extends State<DashboardPage> {
                 ),
                 SizedBox(
                   width: menuSize,
-                  height: menuSize,
+                  height: (menuSize - 8) / 2,
                   child: Wrap(
                     spacing: 8,
                     runSpacing: 8,
@@ -252,6 +252,16 @@ class _DashboardPageState extends State<DashboardPage> {
                           );
                         },
                       ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: menuSize,
+                  height: (menuSize - 8) / 2,
+                  child: Wrap(
+                    spacing: 8,
+                    runSpacing: 8,
+                    children: [
                       MenuCard(
                         iconSize: iconSize / 1.75,
                         titleSize: titleSize * 0.7,
@@ -260,7 +270,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         height: (menuSize - 8) / 2,
                         iconData: Icons.table_restaurant,
                         title: 'Dining Tables',
-                        color: const Color(0xFFEF9050),
+                        color: const Color(0xFFEF6850),
                         onTap: () {
                           Navigator.push(
                             context,
@@ -280,7 +290,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   subtitle: 'All sale records are here',
                   titleSize: titleSize,
                   subtitleSize: subtitleSize,
-                  color: const Color(0xFFF5B942),
+                  color: const Color(0xFFF5A142),
                   width: menuSize,
                   height: menuSize,
                   onTap: () {
@@ -293,65 +303,79 @@ class _DashboardPageState extends State<DashboardPage> {
                   },
                 ),
                 MenuCard(
-                  iconData: Icons.photo_library,
-                  iconSize: iconSize / 1.75,
-                  title: 'Library',
-                  subtitle: 'Images and resources are here',
-                  titleSize: titleSize * 0.7,
-                  subtitleSize: subtitleSize * 0.7,
-                  width: menuSize,
-                  height: (menuSize - 8) / 2,
-                  color: const Color(0xFF2FC289),
-                  onTap: () => _showLibrary(context),
-                ),
-                SizedBox(
+                  iconData: Icons.payment,
+                  iconSize: iconSize,
+                  title: 'Payments',
+                  subtitle: 'All payment receipts are here',
+                  titleSize: titleSize,
+                  subtitleSize: subtitleSize,
+                  color: const Color(0xFF2F5EC2),
                   width: menuSize,
                   height: menuSize,
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      MenuCard(
-                        iconData: Icons.import_export,
-                        iconSize: iconSize / 1.75,
-                        title: 'Import Export',
-                        titleSize: titleSize * 0.7,
-                        subtitleSize: subtitleSize * 0.7,
-                        width: (menuSize - 8) / 2,
-                        height: (menuSize - 8) / 2,
-                        color: const Color(0xFFEF9050),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const ImportExportPage(),
-                            ),
-                          );
-                        },
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const TransactionsPage(),
                       ),
-
-                      MenuCard(
-                        iconData: Icons.settings,
-                        iconSize: iconSize / 1.75,
-                        title: 'Settings',
-                        titleSize: titleSize * 0.7,
-                        subtitleSize: subtitleSize * 0.7,
-                        width: (menuSize - 8) / 2,
-                        height: (menuSize - 8) / 2,
-                        color: const Color(0xFF222222),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SettingPage(),
-                            ),
-                          ).then((_) async {
-                            setState(() {});
-                          });
-                        },
-                      ), // Settings
-                    ],
-                  ),
+                    );
+                  },
+                ),
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    MenuCard(
+                      iconData: Icons.photo_library,
+                      iconSize: iconSize / 1.75,
+                      title: 'Library',
+                      subtitle: 'Images and resources are here',
+                      titleSize: titleSize * 0.7,
+                      subtitleSize: subtitleSize * 0.7,
+                      width: menuSize,
+                      height: (menuSize - 8) / 2,
+                      color: const Color(0xFF2FC289),
+                      onTap: () => _showLibrary(context),
+                    ),
+                    MenuCard(
+                      iconData: Icons.import_export,
+                      iconSize: iconSize / 1.75,
+                      title: 'Import Export',
+                      titleSize: titleSize * 0.7,
+                      subtitleSize: subtitleSize * 0.7,
+                      width: (menuSize - 8) / 2,
+                      height: (menuSize - 8) / 2,
+                      color: const Color(0xFFEF9050),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const ImportExportPage(),
+                          ),
+                        );
+                      },
+                    ),
+                    MenuCard(
+                      iconData: Icons.settings,
+                      iconSize: iconSize / 1.75,
+                      title: 'Settings',
+                      titleSize: titleSize * 0.7,
+                      subtitleSize: subtitleSize * 0.7,
+                      width: (menuSize - 8) / 2,
+                      height: (menuSize - 8) / 2,
+                      color: const Color(0xFF222222),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const SettingPage(),
+                          ),
+                        ).then((_) async {
+                          setState(() {});
+                        });
+                      },
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -362,32 +386,34 @@ class _DashboardPageState extends State<DashboardPage> {
   }
 
   void _showLibrary(BuildContext context) {
+    Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ImageLibraryPage(context, (value) {
+                  // Display in full screen view
 
-    Navigator.push(context, MaterialPageRoute(builder: (context) => ImageLibraryPage(context, (value) {
-      // Display in full screen view
-
-      showDialog(
-          context: context,
-          builder: (context) {
-            final image =
-            Image(image: (value ?? LibraryImage('')).image);
-            return Dialog(
-              // Add close button to dialog (top right)
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12),
-                  image: DecorationImage(
-                    image: image.image,
-                    fit: BoxFit.contain,
-                  ),
-                ),
-                width: MediaQuery.of(context).size.width * 0.80,
-                // Set height with aspect ratio to image size and screen width
-                // height: MediaQuery.of(context).size.width * 0.80 * (image.height ?? 1) / (image.width ?? 1),
-                // height: MediaQuery.of(context).size.height * 0.80,
-              ),
-            );
-          });
-    })));
+                  showDialog(
+                      context: context,
+                      builder: (context) {
+                        final image =
+                            Image(image: (value ?? LibraryImage('')).image);
+                        return Dialog(
+                          // Add close button to dialog (top right)
+                          child: Container(
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12),
+                              image: DecorationImage(
+                                image: image.image,
+                                fit: BoxFit.contain,
+                              ),
+                            ),
+                            width: MediaQuery.of(context).size.width * 0.80,
+                            // Set height with aspect ratio to image size and screen width
+                            // height: MediaQuery.of(context).size.width * 0.80 * (image.height ?? 1) / (image.width ?? 1),
+                            // height: MediaQuery.of(context).size.height * 0.80,
+                          ),
+                        );
+                      });
+                })));
   }
 }

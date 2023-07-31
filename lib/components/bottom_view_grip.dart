@@ -16,7 +16,7 @@ class BottomViewGrip extends StatelessWidget {
             bottomLeft: Radius.circular(2),
             bottomRight: Radius.circular(2),
           ),
-          color: ColorStyle.text400,
+          color: KColors.text400,
         ));
   }
 }

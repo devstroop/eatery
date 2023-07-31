@@ -3,7 +3,7 @@ import 'package:eatery/references.dart';
 class LoadingScreen extends StatelessWidget {
   LoadingScreen({Key? key}) : super(key: key);
 
-  final Color themeColor = ColorStyle.brandColor;
+  final Color themeColor = KColors.brandColor;
 
   @override
   Widget build(BuildContext context) {

@@ -14,7 +14,7 @@ class DiningTableSelectionCard extends StatelessWidget {
     bool active = diningTable.isActive;
     bool available = active && order != null ? order!.id == diningTable.orderId : true;
     Color color = active && available
-        ? ColorStyle.success : active && !available ? ColorStyle.error : ColorStyle.text300;
+        ? KColors.green : active && !available ? KColors.red : KColors.text300;
     return Material(
       borderRadius: BorderRadius.circular(12.0),
       child: InkWell(

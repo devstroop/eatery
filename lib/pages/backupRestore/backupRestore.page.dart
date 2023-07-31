@@ -1,7 +1,7 @@
 import 'package:eatery/references.dart';
 import 'package:archive/archive_io.dart';
 
-Color _pageColor = ColorStyle.tertiary;
+Color _pageColor = KColors.tertiary;
 
 class BackupRestorePage extends StatefulWidget {
   const BackupRestorePage({Key? key, this.company}) : super(key: key);

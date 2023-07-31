@@ -184,7 +184,7 @@ class _ImportExportPageState extends State<ImportExportPage> {
   }
 
   Color getThemeColor() {
-    return ColorStyle.tertiary;
+    return KColors.tertiary;
   }
 
   SizedBox options() {

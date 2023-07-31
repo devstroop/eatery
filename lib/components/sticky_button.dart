@@ -28,7 +28,7 @@ class StickyButton extends StatelessWidget {
           Container(
             margin: const EdgeInsets.fromLTRB(9, 0, 9, 0),
             decoration: BoxDecoration(
-              color: ColorStyle.backgroundColorAlter,
+              color: KColors.backgroundColorAlter,
               boxShadow: const [
                 BoxShadow(
                   color: Color(0x2F000000),
@@ -60,7 +60,7 @@ class StickyButton extends StatelessWidget {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: ColorStyle.backgroundColorAlter,
+                            color: KColors.backgroundColorAlter,
                             borderRadius: BorderRadius.only(
                               topLeft: topLeftRound != null
                                   ? Radius.circular(topLeftRound!)
@@ -84,7 +84,7 @@ class StickyButton extends StatelessWidget {
                       children: [
                         Container(
                           decoration: BoxDecoration(
-                            color: ColorStyle.backgroundColorAlter,
+                            color: KColors.backgroundColorAlter,
                             borderRadius: BorderRadius.only(
                                 topRight: topRightRound != null
                                     ? Radius.circular(topRightRound!)
@@ -103,7 +103,7 @@ class StickyButton extends StatelessWidget {
                             style: TextStyle(
                                 fontSize: 16.0,
                                 fontWeight: FontWeight.w600,
-                                color: ColorStyle.text200),
+                                color: KColors.text200),
                           ),
                         )
                       ],

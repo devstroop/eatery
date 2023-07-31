@@ -1,6 +1,6 @@
 import 'package:eatery/references.dart';
 
-Color _pageColor = ColorStyle.tertiary;
+Color _pageColor = KColors.tertiary;
 
 class DiningTableCategoriesPage extends StatefulWidget {
   const DiningTableCategoriesPage({Key? key}) : super(key: key);

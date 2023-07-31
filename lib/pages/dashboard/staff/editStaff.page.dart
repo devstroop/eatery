@@ -71,7 +71,7 @@ StaffType? staffType;
                 UploadButton(
                   label: 'Staff Photo',
                   primaryColor: _pageColor,
-                  secondaryColor: ColorStyle.text200,
+                  secondaryColor: KColors.text200,
                   image: image?.image,
                   onChanged: (image) {
                     setState(() {
@@ -84,7 +84,7 @@ StaffType? staffType;
                   controller: _controllerStaffName,
                   label: 'Staff Name',
                   themeColor: _pageColor,
-                  foregroundColor: ColorStyle.text200,
+                  foregroundColor: KColors.text200,
                   hint: 'Enter Staff Name',
                   validator: (value) =>
                       value == null || value.isEmpty ? 'Please enter staff name' : null,
@@ -98,7 +98,7 @@ StaffType? staffType;
                   controller: _controllerStaffPhone,
                   label: 'Phone Number',
                   themeColor: _pageColor,
-                  foregroundColor: ColorStyle.text200,
+                  foregroundColor: KColors.text200,
                   keyboardType: TextInputType.phone,
                   hint: 'Enter Phone Number',
                   validator: (value) =>
@@ -114,12 +114,12 @@ StaffType? staffType;
                   decoration: InputDecoration(
                     labelText: 'Staff Type',
                     labelStyle: TextStyle(
-                      color: ColorStyle.text200,
+                      color: KColors.text200,
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                       borderSide: BorderSide(
-                        color: ColorStyle.text200,
+                        color: KColors.text200,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -133,14 +133,14 @@ StaffType? staffType;
                       borderRadius: BorderRadius.circular(8.0),
                       borderSide: BorderSide(
                         width: 2,
-                        color: ColorStyle.error,
+                        color: KColors.red,
                       ),
                     ),
                     focusedErrorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                       borderSide: BorderSide(
                         width: 2,
-                        color: ColorStyle.error,
+                        color: KColors.red,
                       ),
                     ),
                   ),
@@ -182,7 +182,7 @@ StaffType? staffType;
                     Text(
                       'Active',
                       style: TextStyle(
-                        color: ColorStyle.text200,
+                        color: KColors.text200,
                         fontSize: 16.0,
                       ),
                     ),
@@ -194,7 +194,7 @@ StaffType? staffType;
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: ColorStyle.backgroundColorAlter,
+        color: KColors.backgroundColorAlter,
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {

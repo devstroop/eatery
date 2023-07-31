@@ -1,7 +1,7 @@
 import 'package:eatery/pages/dashboard/customer/view.customer.page.dart';
 import 'package:eatery/references.dart';
 
-Color _pageColor = ColorStyle.primary;
+Color _pageColor = KColors.primary;
 
 class CustomersPage extends StatefulWidget {
   const CustomersPage({Key? key}) : super(key: key);

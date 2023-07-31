@@ -22,7 +22,7 @@ class _CreateCompanyResultPageState extends State<CreateCompanyResultPage> {
         ),
         centerTitle: true,
       ),
-      backgroundColor: ColorStyle.backgroundColorAlter,
+      backgroundColor: KColors.backgroundColorAlter,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SizedBox(
@@ -43,7 +43,7 @@ class _CreateCompanyResultPageState extends State<CreateCompanyResultPage> {
                     style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
-                        color: ColorStyle.brandColor),
+                        color: KColors.brandColor),
                   ),
                   const Text(
                     'You\'ve successfully created a company.',
@@ -60,9 +60,9 @@ class _CreateCompanyResultPageState extends State<CreateCompanyResultPage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: ColorStyle.backgroundColorAlter,
+        color: KColors.backgroundColorAlter,
         child: PrimaryButton(
-          color: ColorStyle.brandColor,
+          color: KColors.brandColor,
           onPressed: () {
             Navigator.pushAndRemoveUntil(
               context,

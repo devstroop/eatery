@@ -1,6 +1,6 @@
 import 'package:eatery/references.dart';
 
-Color _pageColor = ColorStyle.primary;
+Color _pageColor = KColors.primary;
 
 class TaxSlabsSettingsPage extends StatefulWidget {
   const TaxSlabsSettingsPage({Key? key}) : super(key: key);
@@ -59,7 +59,7 @@ class _TaxSlabsSettingsPageState extends State<TaxSlabsSettingsPage> {
                           style: TextStyle(
                               fontWeight: FontWeight.w500,
                               fontSize: 18,
-                              color: ColorStyle.text200),
+                              color: KColors.text200),
                         ),
                         title: Text(
                           e.name,

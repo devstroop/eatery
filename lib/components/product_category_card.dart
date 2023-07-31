@@ -15,7 +15,7 @@ class ProductCategoryCard extends StatelessWidget {
       height: 60,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-            backgroundColor: ColorStyle.backgroundColorAlter),
+            backgroundColor: KColors.backgroundColorAlter),
         onPressed: onTap,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -30,7 +30,7 @@ class ProductCategoryCard extends StatelessWidget {
             ),
             Text(
               name,
-              style: TextStyle(color: ColorStyle.text200),
+              style: TextStyle(color: KColors.text200),
             )
           ],
         ),

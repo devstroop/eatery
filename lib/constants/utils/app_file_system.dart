@@ -81,19 +81,19 @@ class AppFileSystem {
                   IconButton(
                     icon: const Icon(Icons.upload),
                     iconSize: 48.0,
-                    color: ColorStyle.text300,
+                    color: KColors.text300,
                     onPressed: () {},
                   ),
                   IconButton(
                     icon: const Icon(Icons.camera_alt),
                     iconSize: 48.0,
-                    color: ColorStyle.text300,
+                    color: KColors.text300,
                     onPressed: () {},
                   ),
                   IconButton(
                     icon: const Icon(Icons.link),
                     iconSize: 48.0,
-                    color: ColorStyle.text300,
+                    color: KColors.text300,
                     onPressed: () {},
                   ),
                 ],
@@ -106,7 +106,7 @@ class AppFileSystem {
                   IconButton(
                     icon: const Icon(Icons.hub),
                     iconSize: 48.0,
-                    color: ColorStyle.text300,
+                    color: KColors.text300,
                     onPressed: () {},
                   ),
                 ],
@@ -123,8 +123,8 @@ class AppFileSystem {
                       Flexible(
                         flex: 1,
                         child: SecondaryButton(
-                          color: ColorStyle.text300,
-                          borderColor: ColorStyle.text400,
+                          color: KColors.text300,
+                          borderColor: KColors.text400,
                           text: 'Camera',
                           height: 50.0,
                           onTap: () async {
@@ -157,7 +157,7 @@ class AppFileSystem {
                         width: 8.0,
                       ),
                       PrimaryButton(
-                        color: ColorStyle.brandColor,
+                        color: KColors.brandColor,
                         onPressed: () async {
                           final ImagePicker picker = ImagePicker();
                           final XFile? photo = await picker.pickImage(

@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:eatery/references.dart';
 
-final Color _pageColor = ColorStyle.brandColor;
+final Color _pageColor = KColors.brandColor;
 
 class TransactionsPage extends StatefulWidget {
   const TransactionsPage({Key? key}) : super(key: key);

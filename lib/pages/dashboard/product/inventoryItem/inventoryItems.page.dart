@@ -1,6 +1,6 @@
 import 'package:eatery/references.dart';
 
-Color _pageColor = ColorStyle.alternate;
+Color _pageColor = KColors.alternate;
 
 class InventoryItemsPage extends StatefulWidget {
   const InventoryItemsPage({Key? key}) : super(key: key);

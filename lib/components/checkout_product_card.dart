@@ -46,7 +46,7 @@ class CheckoutProductCard extends StatelessWidget {
                       height: 50,
                       width: 50,
                       decoration: BoxDecoration(
-                        color: ColorStyle.backgroundColorAlter,
+                        color: KColors.backgroundColorAlter,
                         borderRadius:
                             const BorderRadius.all(Radius.circular(6)),
                         image: File(image ?? '').existsSync()
@@ -74,7 +74,7 @@ class CheckoutProductCard extends StatelessWidget {
                           style: TextStyle(
                               fontSize: 16.0,
                               fontWeight: FontWeight.w500,
-                              color: ColorStyle.text200),
+                              color: KColors.text200),
                         ),
                       ),
                       description != null
@@ -85,7 +85,7 @@ class CheckoutProductCard extends StatelessWidget {
                                 style: TextStyle(
                                     fontSize: 14.0,
                                     fontWeight: FontWeight.w400,
-                                    color: ColorStyle.text400),
+                                    color: KColors.text400),
                               ),
                             )
                           : Container(),
@@ -103,7 +103,7 @@ class CheckoutProductCard extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 14.0,
                       fontWeight: FontWeight.w500,
-                      color: ColorStyle.text200),
+                      color: KColors.text200),
                 ),
               ],
             ),
@@ -118,7 +118,7 @@ class CheckoutProductCard extends StatelessWidget {
                   style: TextStyle(
                       fontSize: 14.0,
                       fontWeight: FontWeight.w500,
-                      color: ColorStyle.text200),
+                      color: KColors.text200),
                 ),
               ],
             ),
