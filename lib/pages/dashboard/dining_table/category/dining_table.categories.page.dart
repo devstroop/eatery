@@ -54,7 +54,7 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
                         builder: (context) {
                           // category exists in dining table then show message and return
                           if (EateryDB.instance.diningTableBox!.values
-                              .any((element) => element.categoryId == each.id)) {
+                              .any((element) => element.category == each.id)) {
                             return AlertDialog(
                               title: const Text('Delete Category'),
                               content: const Text(
@@ -98,19 +98,20 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
                 ],
               ),
               subtitle: Text(each.description ?? ''),
-              leading: Material(
-                elevation: 2.0,
-                borderRadius: BorderRadius.circular(12.0),
-                child: Container(
-                    width: 50.0,
-                    height: 50.0,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(12.0),
-                      image: DecorationImage(
-                        image: LibraryImage(each.image).image,
-                        fit: BoxFit.cover,
-                      ),
-                    )),
+              leading: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(
+                  color: _pageColor,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  each.name[0],
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                  ),
+                )
               ),
               onTap: () {},
             );

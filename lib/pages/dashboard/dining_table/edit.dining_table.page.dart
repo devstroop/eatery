@@ -1,5 +1,4 @@
 import 'package:eatery/references.dart';
-import 'package:eatery/widgets/dialogs/showMessageDialog.dart';
 
 Color _pageColor = KColors.tertiary;
 
@@ -16,7 +15,6 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
   final TextEditingController _controllerCategoryName = TextEditingController();
   final TextEditingController _controllerCategoryDescription =
       TextEditingController();
-  LibraryImage? image;
   final List<FocusNode> _focusNodes = [
     FocusNode(),
     FocusNode(),
@@ -32,18 +30,15 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
     Future.delayed(Duration.zero, () {
       setState(() {
         diningTableCategory = EateryDB.instance.diningTableCategoryBox!.values
-                .where((elem) => elem.id == widget.diningTable.categoryId)
+                .where((elem) => elem.id == widget.diningTable.category)
                 .isNotEmpty
             ? EateryDB.instance.diningTableCategoryBox!.values
-                .where((elem) => elem.id == widget.diningTable.categoryId)
+                .where((elem) => elem.id == widget.diningTable.category)
                 .first
             : null;
         _controllerCategoryName.text = widget.diningTable.name;
         _controllerCategoryDescription.text =
             widget.diningTable.description ?? '';
-        image = widget.diningTable.image != null
-            ? LibraryImage(widget.diningTable.image)
-            : null;
         isActive = widget.diningTable.isActive;
       });
     });
@@ -76,20 +71,6 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
             key: _formKey,
             child: ListView(
               children: [
-                UploadButton(
-                  onChanged: (value) {
-                    setState(() {
-                      image = value;
-                    });
-                  },
-                  title: '+ Upload Icon',
-                  label: 'Dining Table Icon',
-                  image: image?.image,
-                  primaryColor: _pageColor,
-                ),
-                const SizedBox(
-                  height: 6.0,
-                ),
                 LabeledCustomTextFromField(
                   label: 'Dining Table Name',
                   controller: _controllerCategoryName,
@@ -211,8 +192,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
 
             diningTable.name = _controllerCategoryName.text;
             diningTable.description = _controllerCategoryDescription.text;
-            diningTable.image = image?.filename;
-            diningTable.categoryId = diningTableCategory?.id;
+            diningTable.category = diningTableCategory;
             diningTable.isActive = isActive;
 
             await EateryDB.instance.diningTableBox!

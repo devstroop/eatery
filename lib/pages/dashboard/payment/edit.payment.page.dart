@@ -28,7 +28,7 @@ class _EditPaymentPageState extends State<EditPaymentPage> {
       setState(() {
         order = widget.payment.order;
         _controllerAmount.text = widget.payment.amount.toString();
-        paymentMode = widget.payment.paymentMode;
+        paymentMode = widget.payment.mode;
       });
     });
   }

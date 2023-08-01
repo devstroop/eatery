@@ -123,9 +123,12 @@ class _ShowCurrencyRegionPageState extends State<ShowCurrencyRegionPage> {
                 await EateryDB.instance.currencyBox!.add(currency);
                 currency = EateryDB.instance.currencyBox!.values.first;
               }
-              Company company = EateryDB.instance.companyBox!.values.first;
-              company.currencyCode = currency?.code;
-              company.save().then((value) {
+              EateryDB.instance.companyBox!.values.first
+                  ..currencyCode = currency?.code
+                ..save().then((value) {
+                  setState(() {
+                    Common.currency = currency;
+                  });
                 showDialog(
                   context: context,
                   builder: (context) => AlertDialog(

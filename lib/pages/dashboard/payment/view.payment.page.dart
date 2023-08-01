@@ -66,7 +66,7 @@ class _ViewPaymentPageState extends State<ViewPaymentPage> {
             ),
             ListTile(
               title: const Text('Payment Mode'),
-              subtitle: Text(widget.payment.paymentMode.name),
+              subtitle: Text(widget.payment.mode.name ?? 'NA'),
             ),
             ListTile(
               title: const Text('Payment Date'),

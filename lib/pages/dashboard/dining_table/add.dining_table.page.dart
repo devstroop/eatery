@@ -15,7 +15,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
   final TextEditingController _controllerCategoryName = TextEditingController();
   final TextEditingController _controllerCategoryDescription =
       TextEditingController();
-  LibraryImage? image;
+  final TextEditingController _controllerCapacity = TextEditingController();
 
   final List<FocusNode> _focusNodes = [
     FocusNode(),
@@ -23,23 +23,22 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
   ];
 
   final _formKey = GlobalKey<FormState>();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
-        
         title: const Text('Add Dining Table'),
         actions: [
-          if (_focusNodes[0].hasFocus ||
-            _focusNodes[1].hasFocus )
-          IconButton(
-            icon: const Icon(Icons.done),
-            onPressed: () {
-              FocusScope.of(context).unfocus();
-            },
-          ),
+          if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
+            IconButton(
+              icon: const Icon(Icons.done),
+              onPressed: () {
+                FocusScope.of(context).unfocus();
+              },
+            ),
         ],
       ),
       body: InkWell(
@@ -52,28 +51,37 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
             key: _formKey,
             child: ListView(
               children: [
-                UploadButton(
-                  onChanged: (value) {
-                    setState(() {
-                      image = value;
-                    });
-                  },
-                  title: '+ Upload Icon',
-                  label: 'Dining Table Icon',
-                  image: image?.image,
-                  primaryColor: _pageColor,
-                ),
-                const SizedBox(
-                  height: 6.0,
-                ),
                 LabeledCustomTextFromField(
                   label: 'Dining Table Name',
                   controller: _controllerCategoryName,
-                  hint: 'eg. Table 1 ',
+                  hint:
+                      'eg. Table ${EateryDB.instance.diningTableBox!.length + 1}',
                   obscureText: false,
                   themeColor: _pageColor,
                   foregroundColor: KColors.black600,
                   focusNode: _focusNodes[0],
+                  suffix: _controllerCategoryName.text.isNotEmpty
+                      ? IconButton(
+                          icon: const Icon(Icons.clear),
+                          onPressed: () {
+                            setState(() {
+                              _controllerCategoryName.clear();
+                            });
+                          },
+                        )
+                      : IconButton(
+                          icon: Icon(
+                            Icons.auto_awesome,
+                            size: 18.0,
+                            color: KColors.black600,
+                          ),
+                          onPressed: () {
+                            setState(() {
+                              _controllerCategoryName.text =
+                                  'Table ${EateryDB.instance.diningTableBox!.length + 1}';
+                            });
+                          },
+                        ),
                   onFieldSubmitted: (v) {
                     _focusNodes[1].requestFocus();
                   },
@@ -84,12 +92,27 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                 LabeledCustomTextFromField(
                   label: 'Description',
                   controller: _controllerCategoryDescription,
-                  hint: 'eg. Table description',
+                  hint: 'eg. Regular/ VIP/ Family/ etc.',
                   obscureText: false,
                   themeColor: _pageColor,
                   foregroundColor: KColors.black600,
                   multiline: true,
                   focusNode: _focusNodes[1],
+                  onFieldSubmitted: (v) {
+                    FocusScope.of(context).unfocus();
+                  },
+                ),
+                const SizedBox(
+                  height: 12.0,
+                ),
+                LabeledCustomTextFromField(
+                  label: 'Capacity',
+                  controller: _controllerCapacity,
+                  hint: 'eg. 4/ 6/ 8/ 10/ etc.',
+                  obscureText: false,
+                  themeColor: _pageColor,
+                  foregroundColor: KColors.black600,
+                  keyboardType: TextInputType.number,
                   onFieldSubmitted: (v) {
                     FocusScope.of(context).unfocus();
                   },
@@ -122,7 +145,8 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                               },
                             );
                           }),
-                      ...EateryDB.instance.diningTableCategoryBox!.values.map((e) {
+                      ...EateryDB.instance.diningTableCategoryBox!.values
+                          .map((e) {
                         return PosCategoryWidget(
                           active: diningTableCategory?.id == e.id,
                           label: e.name,
@@ -133,6 +157,50 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                           },
                         );
                       }),
+                      Container(
+                        padding: const EdgeInsets.only(bottom: 6, right: 12),
+                        child: InkWell(
+                          onTap: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => Container(
+                                  margin: const EdgeInsets.symmetric(
+                                      horizontal: 24.0, vertical: 24.0),
+                                  child: const AddDiningTableCategoryPage()),
+                            ).then((value) {
+                              setState(() {});
+                            });
+                          },
+                          child: Material(
+                            color: Colors.transparent,
+                            elevation: 2,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Container(
+                              width: 54,
+                              decoration: BoxDecoration(
+                                color: KColors.green,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: KColors.green.withOpacity(0.2),
+                                  ),
+                                ],
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: KColors.green,
+                                  width: 1,
+                                ),
+                              ),
+                              alignment: Alignment.center,
+                              child: Icon(
+                                Icons.add,
+                                color: KColors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
                     ],
                   ),
                 ),
@@ -150,19 +218,15 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
             }
             _formKey.currentState!.save();
             DiningTable diningTable = DiningTable(
-              image: image?.filename,
               name: _controllerCategoryName.text,
               description: _controllerCategoryDescription.text,
-              categoryId: diningTableCategory?.id,
+              category: diningTableCategory,
+              capacity: 0,
               isActive: true,
             );
             EateryDB.instance.diningTableBox!.add(diningTable).then((value) {
-              showMessageDialog(
-                context,
-                'Dining Table created successfully',
-                MessageType.success,
-                  () => Navigator.pop(context)
-              );
+              showMessageDialog(context, 'Dining Table created successfully',
+                  MessageType.success, () => Navigator.pop(context));
             }).onError((error, stackTrace) {
               showMessageDialog(
                 context,

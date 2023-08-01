@@ -42,11 +42,7 @@ Future setupDataAndInitDB() async {
   }
 
   Common.baseDirectory = basePath;
-  debugPrint(Common.baseDirectory);
-  debugPrint(Common.dataDirectory);
-  debugPrint(Common.backupDirectory);
-  debugPrint(Common.imagesDirectory);
-  await EateryDB.instance.init(Common.dataDirectory);
+  await EateryDB.instance.init(Common.dataDirectory).onError((error, stackTrace) => throw Exception('Error initializing DB: $error'));
 }
 
 class MyApp extends StatelessWidget {

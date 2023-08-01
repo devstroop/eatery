@@ -5,6 +5,7 @@ Color _pageColor = KColors.tertiary;
 class AddPaymentPage extends StatefulWidget {
   const AddPaymentPage({Key? key, this.order}) : super(key: key);
   final Order? order;
+
   @override
   State<AddPaymentPage> createState() => _AddPaymentPageState();
 }
@@ -12,23 +13,27 @@ class AddPaymentPage extends StatefulWidget {
 class _AddPaymentPageState extends State<AddPaymentPage> {
   Order? order;
   final TextEditingController _controllerAmount = TextEditingController();
+  final TextEditingController _controllerReference = TextEditingController();
+
   LibraryImage? image;
-  PaymentMode? paymentMode;
+  PaymentMode paymentMode = PaymentMode.cash;
   final List<FocusNode> _focusNodes = [
     FocusNode(),
     FocusNode(),
   ];
   final _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
       setState(() {
-        _controllerAmount.text = widget.order!.finalTotal.toString();
-        paymentMode = PaymentMode.cash;
+        order = widget.order;
+        _controllerAmount.text = (order?.finalTotal ?? '').toString();
       });
     });
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,41 +62,97 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
             child: ListView(
               children: [
                 // Order selection dropdown
-                DropdownButtonFormField<Order>(
-                  decoration: const InputDecoration(
-                    labelText: 'Order',
-                    hintText: 'Select Order',
-                    border: OutlineInputBorder(),
-                  ),
-                  value: order,
-                  onChanged: (Order? newValue) {
-                    setState(() {
-                      order = newValue;
-                    });
-                  },
-                  items: <DropdownMenuItem<Order>>[
-                    for (Order order in EateryDB.instance.orderBox!.values)
-                      DropdownMenuItem<Order>(
-                        value: order,
-                        child: Text(order.id.toString()),
+                ListTile(
+                    title: Text(
+                      '${order?.id ?? 'Select Order'}',
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
                       ),
-                  ],
-                  validator: (value) {
-                    if (value == null) {
-                      return 'Please select order';
+                    ),
+                    subtitle: widget.order != null
+                        ? Text(
+                            widget.order!.type.name!,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold,
+                            ),
+                          )
+                        : null,
+                    trailing: Text(
+                      (widget.order?.finalTotal ?? '').toString(),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    onTap: () async {
+                      showSearch(
+                          context: context,
+                          delegate: SearchOrderDelegate(
+                            EateryDB.instance.orderBox!.values.toList(),
+                            (order) {
+                              setState(() {
+                                this.order = order;
+                                _controllerAmount.text =
+                                    order.finalTotal.toString();
+                              });
+                            },
+                          ));
+                    }),
+                // Payment mode
+                ListTile(
+                  title: const Text('Payment Mode'),
+                  subtitle: Text(paymentMode.name),
+                  trailing: const Icon(Icons.arrow_drop_down),
+                  onTap: () async {
+                    final mode = await showModalBottomSheet<PaymentMode>(
+                      context: context,
+                      builder: (context) => ListView(
+                        shrinkWrap: true,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(16),
+                            child: const Text(
+                              'Select Payment Mode',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 20,
+                              ),
+                            ),
+                          ),
+                          ...PaymentMode.values
+                              .map((e) => ListTile(
+                            leading: Visibility(
+                              visible: paymentMode == e,
+                              child: const Icon(Icons.check_circle, color: Colors.green),
+                            ),
+                            title: Text(e.name),
+                            onTap: () {
+                              Navigator.pop(context, e);
+                            },
+                          ))
+                              .toList(),
+                        ],
+                      ),
+                    );
+                    if (mode != null) {
+                      setState(() {
+                        paymentMode = mode;
+                      });
                     }
-                    return null;
                   },
                 ),
                 const SizedBox(height: 20),
                 TextFormField(
                   controller: _controllerAmount,
                   focusNode: _focusNodes[1],
-                  keyboardType: TextInputType.number,
-                  decoration: const InputDecoration(
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
+                    signed: false,
+                  ),
+                  decoration: InputDecoration(
                     labelText: 'Amount',
                     hintText: 'Enter Payment Amount',
-                    border: OutlineInputBorder(),
+                    prefix: Text('${Common.currency?.symbol ?? ''}  '),
+                    border: const OutlineInputBorder(),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -100,35 +161,66 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                     return null;
                   },
                 ),
+                // Upload screenshot image
                 const SizedBox(height: 20),
-                DropdownButtonFormField<PaymentMode>(
+                // Reference number
+                TextFormField(
+                  controller: _controllerReference,
+                  focusNode: _focusNodes[0],
                   decoration: const InputDecoration(
-                    labelText: 'Payment Mode',
-                    hintText: 'Select Payment Mode',
+                    labelText: 'Reference Number',
+                    hintText: 'Enter Reference Number',
+                    prefix: Text('#  '),
                     border: OutlineInputBorder(),
                   ),
-                  value: paymentMode,
-                  onChanged: (PaymentMode? newValue) {
-                    setState(() {
-                      paymentMode = newValue;
-                    });
-                  },
-                  items: PaymentMode.values.map((PaymentMode paymentMode) {
-                    return DropdownMenuItem<PaymentMode>(
-                      value: paymentMode,
-                      child: Text(paymentMode.toString().split('.').last),
-                    );
-                  }).toList(),
                   validator: (value) {
-                    if (value == null) {
-                      return 'Please select payment mode';
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter reference number';
                     }
                     return null;
+                  },
+                ),
+                const SizedBox(height: 20),
+                UploadButton(
+                  label: 'Attach Payment Screenshot',
+                  primaryColor: _pageColor,
+                  secondaryColor: KColors.black600,
+                  image: image?.image,
+                  onChanged: (value) {
+                    setState(() {
+                      image = value;
+                    });
                   },
                 ),
               ],
             ),
           ),
+        ),
+      ),
+      bottomNavigationBar: BottomAppBar(
+        child: PrimaryButton(
+          color: _pageColor,
+          child: const Text('Save Payment'),
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              final payment = Payment(
+                amount: double.parse(_controllerAmount.text),
+                reference: _controllerReference.text,
+                mode: paymentMode,
+                attachment: image?.filename,
+                order: order!,
+              );
+              EateryDB.instance.paymentBox!
+                  .add(payment)
+                  .then((value) => showMessageDialog(
+                      context,
+                      'Payment saved successfully',
+                      MessageType.success,
+                      () => Navigator.pop(this.context)))
+                  .onError((error, stackTrace) => showMessageDialog(
+                      context, 'Error saving payment', MessageType.error));
+            }
+          },
         ),
       ),
     );

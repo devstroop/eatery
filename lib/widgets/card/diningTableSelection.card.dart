@@ -12,7 +12,7 @@ class DiningTableSelectionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     bool active = diningTable.isActive;
-    bool available = active && order != null ? order!.id == diningTable.orderId : true;
+    bool available = active && order != null ? order!.id == diningTable.order : true;
     Color color = active && available
         ? KColors.green : active && !available ? KColors.red : KColors.black500;
     return Material(

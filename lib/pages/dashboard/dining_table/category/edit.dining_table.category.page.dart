@@ -17,7 +17,6 @@ class _EditDiningTableCategoryPageState
   final TextEditingController _controllerCategoryName = TextEditingController();
   final TextEditingController _controllerCategoryDescription =
       TextEditingController();
-  LibraryImage? image;
 
   final List<FocusNode> _focusNodes = [
     FocusNode(),
@@ -33,7 +32,6 @@ class _EditDiningTableCategoryPageState
       _controllerCategoryName.text = widget.category.name;
       _controllerCategoryDescription.text = widget.category.description ?? '';
 
-      image = LibraryImage(widget.category.image);
     });
   }
 
@@ -55,65 +53,57 @@ class _EditDiningTableCategoryPageState
     );
     return Scaffold(
       appBar: appBar,
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              UploadButton(
-                onChanged: (value) {
-                  setState(() {
-                    image = value;
-                  });
-                },
-                title: '+ Upload Icon',
-                label: 'Table Category Icon',
-                image: image?.image,
-              ),
-              const SizedBox(
-                height: 6.0,
-              ),
-              LabeledCustomTextFromField(
-                keyboardType: TextInputType.text,
-                controller: _controllerCategoryName,
-                label: 'Category Name',
-                hint: 'eg. Terrace',
-                obscureText: false,
-                themeColor: _pageColor,
-                foregroundColor: KColors.black600,
-                focusNode: _focusNodes[0],
-                onFieldSubmitted: (v) {
-                  _focusNodes[1].requestFocus();
-                },
-                validator: (value) {
-                  if (value == null || value.isEmpty) {
-                    return 'Please enter category name';
-                  }
-                  return null;
-                },
-              ),
-              const SizedBox(
-                height: 6.0,
-              ),
-              LabeledCustomTextFromField(
-                keyboardType: TextInputType.text,
-                controller: _controllerCategoryDescription,
-                label: 'Description',
-                hint: 'eg. Terrace',
-                obscureText: false,
-                themeColor: _pageColor,
-                foregroundColor: KColors.black600,
-                multiline: true,
-                focusNode: _focusNodes[1],
-                onFieldSubmitted: (v) {
-                  _focusNodes[1].unfocus();
-                },
-              ),
-              const SizedBox(
-                height: 6.0,
-              ),
-            ],
+      body: InkWell(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              children: [
+                LabeledCustomTextFromField(
+                  keyboardType: TextInputType.text,
+                  controller: _controllerCategoryName,
+                  label: 'Category Name',
+                  hint: 'eg. Terrace',
+                  obscureText: false,
+                  themeColor: _pageColor,
+                  foregroundColor: KColors.black600,
+                  focusNode: _focusNodes[0],
+                  onFieldSubmitted: (v) {
+                    _focusNodes[1].requestFocus();
+                  },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter category name';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(
+                  height: 6.0,
+                ),
+                LabeledCustomTextFromField(
+                  keyboardType: TextInputType.text,
+                  controller: _controllerCategoryDescription,
+                  label: 'Description',
+                  hint: 'eg. Terrace',
+                  obscureText: false,
+                  themeColor: _pageColor,
+                  foregroundColor: KColors.black600,
+                  multiline: true,
+                  focusNode: _focusNodes[1],
+                  onFieldSubmitted: (v) {
+                    _focusNodes[1].unfocus();
+                  },
+                ),
+                const SizedBox(
+                  height: 6.0,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -131,7 +121,6 @@ class _EditDiningTableCategoryPageState
                 .first
               ..name = _controllerCategoryName.text
               ..description = _controllerCategoryDescription.text
-              ..image = image?.filename
               ..save()
                   .then((value) => showMessageDialog(context,
                   'Updated successfully', MessageType.success)

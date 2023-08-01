@@ -15,7 +15,6 @@ class _AddDiningTableCategoryPageState
   final TextEditingController _controllerCategoryName = TextEditingController();
   final TextEditingController _controllerCategoryDescription =
       TextEditingController();
-  LibraryImage? image;
   final List<FocusNode> _focusNodes = [
     FocusNode(),
     FocusNode(),
@@ -40,60 +39,51 @@ class _AddDiningTableCategoryPageState
     );
     return Scaffold(
       appBar: appBar,
-      body: Padding(
-        padding: const EdgeInsets.all(12.0),
-        child: Form(
-          key: _formKey,
-          child: ListView(
-            children: [
-              UploadButton(
-                onChanged: (value) {
-                  setState(() {
-                    image = value;
-                  });
-                },
-                title: '+ Upload Icon',
-                label: 'Table Category Icon',
-                image: image?.image,
-                primaryColor: _pageColor,
-              ),
-              const SizedBox(
-                height: 6.0,
-              ),
-              LabeledCustomTextFromField(
-                keyboardType: TextInputType.text,
-                controller: _controllerCategoryName,
-                label: 'Category Name',
-                hint: 'eg. Terrace',
-                obscureText: false,
-                themeColor: _pageColor,
-                foregroundColor: KColors.black600,
-                focusNode: _focusNodes[0],
-                onFieldSubmitted: (v) {
-                  _focusNodes[1].requestFocus();
-                },
-              ),
-              const SizedBox(
-                height: 6.0,
-              ),
-              LabeledCustomTextFromField(
-                keyboardType: TextInputType.text,
-                controller: _controllerCategoryDescription,
-                label: 'Description',
-                hint: 'eg. Terrace',
-                obscureText: false,
-                themeColor: _pageColor,
-                foregroundColor: KColors.black600,
-                multiline: true,
-                focusNode: _focusNodes[1],
-                onFieldSubmitted: (v) {
-                  FocusScope.of(context).unfocus();
-                },
-              ),
-              const SizedBox(
-                height: 6.0,
-              ),
-            ],
+      body: InkWell(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              children: [
+                LabeledCustomTextFromField(
+                  keyboardType: TextInputType.text,
+                  controller: _controllerCategoryName,
+                  label: 'Category Name',
+                  hint: 'eg. Terrace',
+                  obscureText: false,
+                  themeColor: _pageColor,
+                  foregroundColor: KColors.black600,
+                  focusNode: _focusNodes[0],
+                  onFieldSubmitted: (v) {
+                    _focusNodes[1].requestFocus();
+                  },
+                ),
+                const SizedBox(
+                  height: 6.0,
+                ),
+                LabeledCustomTextFromField(
+                  keyboardType: TextInputType.text,
+                  controller: _controllerCategoryDescription,
+                  label: 'Description',
+                  hint: 'eg. Terrace',
+                  obscureText: false,
+                  themeColor: _pageColor,
+                  foregroundColor: KColors.black600,
+                  multiline: true,
+                  focusNode: _focusNodes[1],
+                  onFieldSubmitted: (v) {
+                    FocusScope.of(context).unfocus();
+                  },
+                ),
+                const SizedBox(
+                  height: 6.0,
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -108,7 +98,6 @@ class _AddDiningTableCategoryPageState
             DiningTableCategory diningTableCategory = DiningTableCategory(
               name: _controllerCategoryName.text,
               description: _controllerCategoryDescription.text,
-              image: image?.filename,
               isActive: true,
             );
             EateryDB.instance.diningTableCategoryBox!
