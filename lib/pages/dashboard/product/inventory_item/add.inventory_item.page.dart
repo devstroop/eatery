@@ -81,7 +81,7 @@ final List<FocusNode> _focusNodes = [
               const SizedBox(
                 height: 6.0,
               ),
-              LabeledCustomTextFromField(
+              LabeledCustomTextFormField(
                   label: 'Name',
                   hint: 'Enter product name',
                   foregroundColor: KColors.black600,
@@ -97,7 +97,7 @@ final List<FocusNode> _focusNodes = [
               Row(
                 children: [
                   Container(
-                    child: LabeledCustomTextFromField(
+                    child: LabeledCustomTextFormField(
                         label: 'MRP',
                         prefix: const Icon(Icons.currency_rupee, size: 14,),
                         hint: '0.00',
@@ -119,7 +119,7 @@ final List<FocusNode> _focusNodes = [
                   ),
                   const SizedBox(width: 12.0,),
                   Flexible(
-                    child: LabeledCustomTextFromField(
+                    child: LabeledCustomTextFormField(
                         label: 'Sale Price',
                         prefix: const Icon(Icons.currency_rupee, size: 14,),
                         hint: '0.00',
@@ -272,7 +272,7 @@ final List<FocusNode> _focusNodes = [
               const SizedBox(
                 height: 6.0,
               ),
-              LabeledCustomTextFromField(
+              LabeledCustomTextFormField(
                   label: 'Description',
                   hint: 'Enter product description',
                   multiline: true,

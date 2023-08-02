@@ -63,7 +63,7 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
               const SizedBox(
                 height: 6.0,
               ),
-              LabeledCustomTextFromField(
+              LabeledCustomTextFormField(
                   label: 'Category Name',
                   hint:
                       'Enter product category name', // Write a hint for category name field
@@ -77,7 +77,7 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
               const SizedBox(
                 height: 6.0,
               ),
-              LabeledCustomTextFromField(
+              LabeledCustomTextFormField(
                 label: 'Description',
                 foregroundColor: KColors.black600,
                 themeColor: _pageColor,

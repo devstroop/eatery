@@ -63,7 +63,11 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                       return Padding(
                         padding: const EdgeInsets.symmetric(horizontal: 5),
                         child: ChoiceChip(
-                           labelStyle: TextStyle(fontSize: 14, color: selectedCategory?.id == category.id ? KColors.white : KColors.white500),
+                          labelStyle: TextStyle(
+                              fontSize: 14,
+                              color: selectedCategory?.id == category.id
+                                  ? KColors.white
+                                  : KColors.white500),
                           labelPadding: const EdgeInsets.symmetric(
                               horizontal: 8, vertical: 4),
                           side: BorderSide(
@@ -119,11 +123,10 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                                 if (category != null)
                                   CaptionLabel(label: category.name),
                                 const SizedBox(width: 3),
-                                if (!diningTable.isActive)
-                                  CaptionLabel(
-                                    label: 'Inactive',
-                                    color: KColors.red,
-                                  ),
+                                CaptionLabel(
+                                  label: diningTable.status.name,
+                                  color: KColors.red,
+                                ),
                               ],
                             ),
                             leading: Container(

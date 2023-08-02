@@ -80,7 +80,7 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
               const SizedBox(
                 height: 6.0,
               ),
-              LabeledCustomTextFromField(
+              LabeledCustomTextFormField(
                 label: 'Category Name',
                 controller: _controllerCategoryName,
                 hint: 'eg. Starters',
@@ -95,7 +95,7 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
               const SizedBox(
                 height: 6.0,
               ),
-              LabeledCustomTextFromField(
+              LabeledCustomTextFormField(
                 label: 'Description',
                 controller: _controllerDescription,
                 hint: 'eg. Starters are the best',

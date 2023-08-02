@@ -49,7 +49,7 @@ class _AddDiningTableCategoryPageState
             key: _formKey,
             child: ListView(
               children: [
-                LabeledCustomTextFromField(
+                LabeledCustomTextFormField(
                   keyboardType: TextInputType.text,
                   controller: _controllerCategoryName,
                   label: 'Category Name',
@@ -65,7 +65,7 @@ class _AddDiningTableCategoryPageState
                 const SizedBox(
                   height: 6.0,
                 ),
-                LabeledCustomTextFromField(
+                LabeledCustomTextFormField(
                   keyboardType: TextInputType.text,
                   controller: _controllerCategoryDescription,
                   label: 'Description',

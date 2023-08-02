@@ -1,7 +1,7 @@
 import 'package:eatery/references.dart';
 
-class LabeledCustomTextFromField extends StatelessWidget {
-  const LabeledCustomTextFromField(
+class LabeledCustomTextFormField extends StatelessWidget {
+  const LabeledCustomTextFormField(
       {super.key,
       required this.label,
       required this.foregroundColor,

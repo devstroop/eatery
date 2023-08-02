@@ -61,7 +61,7 @@ class _AddStaffPageState extends State<AddStaffPage> {
                   },
                 ),
                 SpacingStyle.defaultVerticalSpacing,
-                LabeledCustomTextFromField(
+                LabeledCustomTextFormField(
                   controller: _controllerStaffName,
                   label: 'Staff Name',
                   themeColor: _pageColor,
@@ -85,7 +85,7 @@ class _AddStaffPageState extends State<AddStaffPage> {
                   },
                 ),
                 SpacingStyle.defaultVerticalSpacing,
-                LabeledCustomTextFromField(
+                LabeledCustomTextFormField(
                   controller: _controllerStaffPhone,
                   label: 'Phone Number',
                   themeColor: _pageColor,

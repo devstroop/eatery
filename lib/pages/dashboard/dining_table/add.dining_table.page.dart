@@ -51,7 +51,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
             key: _formKey,
             child: ListView(
               children: [
-                LabeledCustomTextFromField(
+                LabeledCustomTextFormField(
                   label: 'Dining Table Name',
                   controller: _controllerCategoryName,
                   hint:
@@ -89,7 +89,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                 const SizedBox(
                   height: 12.0,
                 ),
-                LabeledCustomTextFromField(
+                LabeledCustomTextFormField(
                   label: 'Description',
                   controller: _controllerCategoryDescription,
                   hint: 'eg. Regular/ VIP/ Family/ etc.',
@@ -105,7 +105,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                 const SizedBox(
                   height: 12.0,
                 ),
-                LabeledCustomTextFromField(
+                LabeledCustomTextFormField(
                   label: 'Capacity',
                   controller: _controllerCapacity,
                   hint: 'eg. 4/ 6/ 8/ 10/ etc.',
@@ -222,7 +222,6 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
               description: _controllerCategoryDescription.text,
               category: diningTableCategory,
               capacity: 0,
-              isActive: true,
             );
             EateryDB.instance.diningTableBox!.add(diningTable).then((value) {
               showMessageDialog(context, 'Dining Table created successfully',

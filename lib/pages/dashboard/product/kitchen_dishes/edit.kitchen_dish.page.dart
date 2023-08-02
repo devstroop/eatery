@@ -99,7 +99,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
               const SizedBox(
                 height: 6.0,
               ),
-              LabeledCustomTextFromField(
+              LabeledCustomTextFormField(
                   label: 'Name',
                   hint: 'Enter product name',
                   focusNode: _focusNodes[0],
@@ -115,7 +115,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
               Row(
                 children: [
                   Flexible(
-                    child: LabeledCustomTextFromField(
+                    child: LabeledCustomTextFormField(
                         label: 'MRP (Max. retail price)',
                         prefix: const Icon(Icons.currency_rupee, size: 14,),
                         hint: '0.00',
@@ -136,7 +136,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
                   ),
                   const SizedBox(width: 12.0,),
                   Flexible(
-                    child: LabeledCustomTextFromField(
+                    child: LabeledCustomTextFormField(
                         label: 'Sale Price',
                         prefix: const Icon(Icons.currency_rupee, size: 14,),
                         hint: '0.00',
@@ -287,7 +287,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
               const SizedBox(
                 height: 6.0,
               ),
-              LabeledCustomTextFromField(
+              LabeledCustomTextFormField(
                   label: 'Description',
                   hint: 'Enter product description',
                   multiline: true,

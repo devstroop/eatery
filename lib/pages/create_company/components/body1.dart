@@ -113,7 +113,7 @@ class Body1 extends StatelessWidget {
                 return null;
               }),
           SpacingStyle.defaultVerticalSpacing,
-          LabeledCustomTextFromField(
+          LabeledCustomTextFormField(
             themeColor: pageColor,
             foregroundColor: KColors.black600,
             controller: addressController,

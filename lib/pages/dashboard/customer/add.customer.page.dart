@@ -63,7 +63,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
             key: _formKey,
             child: ListView(
               children: [
-                LabeledCustomTextFromField(
+                LabeledCustomTextFormField(
                   controller: _controllerCustomerPhone,
                   label: 'Phone Number (*required)',
                   themeColor: _pageColor,
@@ -86,7 +86,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                   },
                 ),
                 SpacingStyle.defaultVerticalSpacing,
-                LabeledCustomTextFromField(
+                LabeledCustomTextFormField(
                   controller: _controllerCustomerName,
                   label: 'Customer Name',
                   themeColor: _pageColor,
@@ -105,7 +105,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                   },
                 ),
                 SpacingStyle.defaultVerticalSpacing,
-                LabeledCustomTextFromField(
+                LabeledCustomTextFormField(
                   controller: _controllerCustomerAddress,
                   label: 'Address',
                   themeColor: _pageColor,
@@ -127,7 +127,7 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                   },
                 ),
                 SpacingStyle.defaultVerticalSpacing,
-                LabeledCustomTextFromField(
+                LabeledCustomTextFormField(
                   controller: _controllerCustomerLandmark,
                   label: 'Landmark (Optional)',
                   themeColor: _pageColor,

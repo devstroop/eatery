@@ -80,7 +80,7 @@ StaffType? staffType;
                   },
                 ),
                 SpacingStyle.defaultVerticalSpacing,
-                LabeledCustomTextFromField(
+                LabeledCustomTextFormField(
                   controller: _controllerStaffName,
                   label: 'Staff Name',
                   themeColor: _pageColor,
@@ -94,7 +94,7 @@ StaffType? staffType;
                   },
                 ),
                 SpacingStyle.defaultVerticalSpacing,
-                LabeledCustomTextFromField(
+                LabeledCustomTextFormField(
                   controller: _controllerStaffPhone,
                   label: 'Phone Number',
                   themeColor: _pageColor,

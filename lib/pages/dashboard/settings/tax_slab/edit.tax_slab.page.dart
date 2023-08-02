@@ -66,7 +66,7 @@ class _EditTaxSlabSettingsPageState extends State<EditTaxSlabSettingsPage> {
             key: _formKey,
             child: ListView(
               children: [
-                LabeledCustomTextFromField(
+                LabeledCustomTextFormField(
                   controller: controllerSlabName,
                   label: 'Tax Slab Name',
                   themeColor: _pageColor,
@@ -84,7 +84,7 @@ class _EditTaxSlabSettingsPageState extends State<EditTaxSlabSettingsPage> {
                   foregroundColor: KColors.black600,
                 ),
                 SpacingStyle.defaultVerticalSpacing,
-                LabeledCustomTextFromField(
+                LabeledCustomTextFormField(
                   controller: controllerTaxRate,
                   label: 'Tax Slab Rate',
                   hint: 'Enter tax slab rate',

@@ -20,7 +20,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
     FocusNode(),
   ];
 
-  bool isActive = true;
+  DiningTableStatus status = DiningTableStatus.available;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -30,16 +30,16 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
     Future.delayed(Duration.zero, () {
       setState(() {
         diningTableCategory = EateryDB.instance.diningTableCategoryBox!.values
-                .where((elem) => elem.id == widget.diningTable.category)
+                .where((elem) => elem.id == widget.diningTable.category?.id)
                 .isNotEmpty
             ? EateryDB.instance.diningTableCategoryBox!.values
-                .where((elem) => elem.id == widget.diningTable.category)
+                .where((elem) => elem.id == widget.diningTable.category?.id)
                 .first
             : null;
         _controllerCategoryName.text = widget.diningTable.name;
         _controllerCategoryDescription.text =
             widget.diningTable.description ?? '';
-        isActive = widget.diningTable.isActive;
+        status = widget.diningTable.status;
       });
     });
   }
@@ -71,7 +71,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
             key: _formKey,
             child: ListView(
               children: [
-                LabeledCustomTextFromField(
+                LabeledCustomTextFormField(
                   label: 'Dining Table Name',
                   controller: _controllerCategoryName,
                   hint: 'eg. Table 1 ',
@@ -92,7 +92,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                 const SizedBox(
                   height: 12.0,
                 ),
-                LabeledCustomTextFromField(
+                LabeledCustomTextFormField(
                   label: 'Description',
                   controller: _controllerCategoryDescription,
                   hint: 'eg. Table description',
@@ -151,29 +151,14 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                 const SizedBox(
                   height: 12.0,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Checkbox(
-                        value: isActive,
-                        activeColor: _pageColor,
-                        onChanged: (value) {
-                          setState(() {
-                            isActive = value ?? false;
-                          });
-                        }),
-                    const SizedBox(
-                      width: 6.0,
-                    ),
-                    Text(
-                      'Active',
-                      style: TextStyle(
-                        color: KColors.black600,
-                        fontSize: 16.0,
-                      ),
-                    ),
-                  ],
-                )
+                DiningTableStatusWidget(
+                  status: DiningTableStatus.available,
+                  onTap: () {
+                    setState(() {
+                      status = DiningTableStatus.available;
+                    });
+                  },
+                ),
               ],
             ),
           ),
@@ -193,7 +178,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
             diningTable.name = _controllerCategoryName.text;
             diningTable.description = _controllerCategoryDescription.text;
             diningTable.category = diningTableCategory;
-            diningTable.isActive = isActive;
+            diningTable.status = status;
 
             await EateryDB.instance.diningTableBox!
                 .put(diningTable.key, diningTable)
@@ -208,4 +193,43 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
       ),
     );
   }
+}
+
+class DiningTableStatusWidget extends StatelessWidget {
+  const DiningTableStatusWidget({
+    Key? key,
+    required this.status,
+    required this.onTap,
+  }) : super(key: key);
+
+  final DiningTableStatus status;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        height: 60,
+        width: double.maxFinite,
+        decoration: BoxDecoration(
+          color: status == DiningTableStatus.available
+              ? KColors.green
+              : KColors.red,
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        child: Center(
+          child: Text(
+            status.name,
+            style: TextStyle(
+              color: KColors.white,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
 }

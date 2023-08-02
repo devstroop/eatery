@@ -81,7 +81,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                   ),
                   SpacingStyle.defaultVerticalSpacing,
                   SpacingStyle.defaultVerticalSpacing,
-                  LabeledCustomTextFromField(
+                  LabeledCustomTextFormField(
                       themeColor: _pageColor,
                       foregroundColor: KColors.black600,
                       keyboardType: TextInputType.name,
@@ -100,7 +100,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                         return null;
                       }),
                   SpacingStyle.defaultVerticalSpacing,
-                  LabeledCustomTextFromField(
+                  LabeledCustomTextFormField(
                       themeColor: _pageColor,
                       foregroundColor: KColors.black600,
                       keyboardType: TextInputType.emailAddress,
@@ -122,7 +122,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                         return null;
                       }),
                   SpacingStyle.defaultVerticalSpacing,
-                  LabeledCustomTextFromField(
+                  LabeledCustomTextFormField(
                       themeColor: _pageColor,
                       foregroundColor: KColors.black600,
                       keyboardType: TextInputType.phone,
@@ -144,7 +144,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                         return null;
                       }),
                   SpacingStyle.defaultVerticalSpacing,
-                  LabeledCustomTextFromField(
+                  LabeledCustomTextFormField(
                     themeColor: _pageColor,
                     foregroundColor: KColors.black600,
                     controller: _controllerAddress,
@@ -164,7 +164,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                     },
                   ),
                   SpacingStyle.defaultVerticalSpacing,
-                  LabeledCustomTextFromField(
+                  LabeledCustomTextFormField(
                     themeColor: _pageColor,
                     foregroundColor: KColors.black600,
                     keyboardType: TextInputType.text,
@@ -187,7 +187,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                     },
                   ),
                   SpacingStyle.defaultVerticalSpacing,
-                  LabeledCustomTextFromField(
+                  LabeledCustomTextFormField(
                     themeColor: _pageColor,
                     foregroundColor: KColors.black600,
                     keyboardType: TextInputType.text,
@@ -239,6 +239,6 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
               ),
             ),
           )
-        : LoadingScreen();
+        : Center(child: CircularProgressIndicator());
   }
 }
