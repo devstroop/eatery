@@ -67,9 +67,18 @@ class _AddStaffPageState extends State<AddStaffPage> {
                   themeColor: _pageColor,
                   foregroundColor: KColors.black600,
                   hint: 'Enter Staff Name',
-                  validator: (value) => value == null || value.isEmpty
-                      ? 'Enter Staff Name'
-                      : null,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Enter Staff Name';
+                    }
+                    if(value.length < 3) {
+                      return 'Staff Name must be at least 3 characters';
+                    }
+                    if(EateryDB.instance.staffBox!.values.where((element) => element.name == value).isNotEmpty) {
+                      return 'Staff Name already exists';
+                    }
+                    return null;
+                  },
                   focusNode: _focusNodes[0],
                   onFieldSubmitted: (v) {
                     _focusNodes[1].requestFocus();
@@ -83,14 +92,24 @@ class _AddStaffPageState extends State<AddStaffPage> {
                   foregroundColor: KColors.black600,
                   keyboardType: TextInputType.phone,
                   hint: 'Enter Phone Number',
-                  validator: (value) => value == null || value.isEmpty
-                      ? 'Enter Phone Number'
-                      : null,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Enter Phone Number';
+                    }
+                    if(value.length < 10) {
+                      return 'Phone Number must be 10 digits';
+                    }
+                    if(EateryDB.instance.staffBox!.values.where((element) => element.phone == value).isNotEmpty) {
+                      return 'Phone Number already exists';
+                    }
+                    return null;
+                  },
                   focusNode: _focusNodes[1],
                   onFieldSubmitted: (v) {
                     FocusScope.of(context).unfocus();
                   },
                 ),
+                SpacingStyle.defaultVerticalSpacing,
                 SpacingStyle.defaultVerticalSpacing,
                 // Drop down for staff type
                 DropdownButtonFormField(
@@ -186,31 +205,23 @@ class _AddStaffPageState extends State<AddStaffPage> {
               return;
             }
             _formKey.currentState!.save();
-
-            try {
-              EateryDB.instance.staffBox!
-                  .add(
-                Staff(
-                    name: _controllerStaffName.text,
-                    phone: _controllerStaffPhone.text,
-                    photo: image?.filename,
-                    isActive: isActive,
-                    type: staffType!),
-              )
-                  .whenComplete(() {
-                    showMessageDialog(
-                      context,
-                      'Staff has been added successfully',
-                      MessageType.success
-                    );
-              });
-            } catch (_) {
-              showMessageDialog(
+            final staff = Staff(
+                name: _controllerStaffName.text,
+                phone: _controllerStaffPhone.text,
+                photo: image?.filename,
+                isActive: isActive,
+                type: staffType!);
+            EateryDB.instance.staffBox!
+                .add(staff).then((value) => showMessageDialog(
+                context,
+                'Staff has been added successfully',
+                MessageType.success,
+                () => Navigator.pop(context)
+            )).onError((error, stackTrace) => showMessageDialog(
                 context,
                 'Something went wrong',
                 MessageType.error
-              );
-            }
+            ));
           },
           child: const Text('Save'),
         ),

@@ -1,5 +1,4 @@
 import 'package:eatery/references.dart';
-import 'package:get/get.dart';
 
 class SearchOrderDelegate extends SearchDelegate<Order?>{
   final List<Order> orders;
@@ -31,6 +30,23 @@ class SearchOrderDelegate extends SearchDelegate<Order?>{
   }
 
   @override
+  ThemeData appBarTheme(BuildContext context) {
+    return Theme.of(context).copyWith(
+      inputDecorationTheme: const InputDecorationTheme(
+        hintStyle: TextStyle(
+          color: Colors.white,
+        ),
+      ),
+      textTheme: const TextTheme(
+        headline6: TextStyle(
+          color: Colors.white,
+          fontSize: 18,
+        ),
+      ),
+    );
+  }
+
+  @override
   Widget buildResults(BuildContext context) {
     return _buildSearchResults(context, query);
   }
@@ -49,24 +65,27 @@ class SearchOrderDelegate extends SearchDelegate<Order?>{
   Widget _buildRecentOrders(BuildContext context) {
     return ListView(
       children: [
-        ListTile(
-          title: const Text('Order 1'),
-          onTap: () {
-            close(context, orders[0]);
-          },
+        Container(
+          padding: const EdgeInsets.all(16),
+          alignment: Alignment.center,
+          child: Text(
+            'Recent orders',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.normal,
+              fontStyle: FontStyle.italic,
+              color: Colors.grey[600],
+            ),
+          ),
         ),
-        ListTile(
-          title: const Text('Order 2'),
-          onTap: () {
-            close(context, orders[1]);
-          },
-        ),
-        ListTile(
-          title: const Text('Order 3'),
-          onTap: () {
-            close(context, orders[2]);
-          },
-        ),
+        for (final order in orders)
+          ListTile(
+            title: Text('${order.id} - ${Common.currency?.symbol ?? ''}${order.finalTotal}'),
+            onTap: () {
+              callback(order);
+              close(context, order);
+            },
+          ),
       ],
     );
   }
@@ -74,16 +93,30 @@ class SearchOrderDelegate extends SearchDelegate<Order?>{
   Widget _buildSearchResults(BuildContext context, String query) {
     final List<Order> searchResults = orders.where((order) => order.id.toString().contains(query.trim())).toList();
 
-    return ListView.builder(
-      itemCount: searchResults.length,
-      itemBuilder: (context, index) {
-        return ListTile(
-          title: Text('${searchResults[index].id} - ${Common.currency?.symbol ?? ''}${searchResults[index].finalTotal}'),
-          onTap: () {
-            close(context, searchResults[index]);
-          },
-        );
-      },
+    return ListView(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16),
+          alignment: Alignment.center,
+          child: Text(
+            'Search results',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.normal,
+              fontStyle: FontStyle.italic,
+              color: Colors.grey[600],
+            ),
+          ),
+        ),
+        for (final order in searchResults)
+          ListTile(
+            title: Text('${order.id} - ${Common.currency?.symbol ?? ''}${order.finalTotal}'),
+            onTap: () {
+              callback(order);
+              close(context, order);
+            },
+          ),
+      ],
     );
   }
 

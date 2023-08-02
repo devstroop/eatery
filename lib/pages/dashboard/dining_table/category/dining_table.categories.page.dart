@@ -105,11 +105,14 @@ class _DiningTableCategoriesPageState extends State<DiningTableCategoriesPage> {
                   color: _pageColor,
                   borderRadius: BorderRadius.circular(8),
                 ),
-                child: Text(
-                  each.name[0],
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.bold,
+                child: Center(
+                  child: Text(
+                    each.name[0],
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                    ),
                   ),
                 )
               ),

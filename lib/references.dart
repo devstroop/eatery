@@ -146,14 +146,13 @@ export './pages/dashboard/help/help.page.dart';
 export './pages/dashboard/import_export/import_export.page.dart';
 // Order
 export './pages/dashboard/order/orders.page.dart';
-export './pages/dashboard/order/view.page.page.dart';
+export './pages/dashboard/order/view.order.page.dart';
 export './pages/dashboard/order/search.order.delegate.dart';
 
 // Point of Sale
 export './pages/dashboard/pos/pos.page.dart';
 export './pages/dashboard/pos/checkout.page.dart';
 export './pages/dashboard/pos/orderConfirmation.page.dart';
-export './pages/dashboard/pos/views/cart.view.dart';
 export './pages/dashboard/pos/views/kProduct.view.dart';
 export './pages/dashboard/pos/views/waiterSelection.view.dart';
 // Authentication

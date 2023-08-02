@@ -16,20 +16,20 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?>{
         },
         icon: const Icon(Icons.clear),
       ),
-      // IconButton(
-      //   onPressed: () {
-      //     Navigator.push(
-      //       context,
-      //       MaterialPageRoute(builder: (context) => const AddDiningTablePage()),
-      //     ).then((diningTable) {
-      //       if (diningTable != null) {
-      //         callback(diningTable);
-      //         close(context, diningTable);
-      //       }
-      //     });
-      //   },
-      //   icon: const Icon(Icons.add),
-      // )
+      IconButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddDiningTablePage()),
+          ).then((diningTable) {
+            if (diningTable != null) {
+              callback(diningTable);
+              close(context, diningTable);
+            }
+          });
+        },
+        icon: const Icon(Icons.add),
+      )
     ];
   }
 
@@ -66,11 +66,10 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?>{
           padding: const EdgeInsets.all(16),
           alignment: Alignment.center,
           child: Text(
-            'Recent Dining Tables',
+            'Recent dining tables',
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.normal,
-              fontStyle: FontStyle.italic,
               color: Colors.grey[600],
             ),
           ),
@@ -111,18 +110,50 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?>{
     List<DiningTable> diningTables = this.diningTables
         .where((element) => element.name.toLowerCase().contains(query))
         .toList();
-    return ListView.builder(
-      itemCount: diningTables.length,
-      itemBuilder: (context, index) {
-        DiningTable diningTable = diningTables[index];
-        return ListTile(
+    return ListView(
+      children: [
+        Container(
+          padding: const EdgeInsets.all(16),
+          alignment: Alignment.center,
+          child: Text(
+            'Search results',
+            style: TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.normal,
+              color: Colors.grey[600],
+            ),
+          ),
+        ),
+        ...diningTables.map((e) => ListTile(
           onTap: () {
-            callback(diningTable);
-            close(context, diningTable);
+            callback(e);
+            close(context, e);
           },
-          title: Text(diningTable.name),
-        );
-      },
+          leading: Container(
+            height: 40,
+            width: 40,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(8),
+            ),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  e.name.split(' ').last.toUpperCase()[0],
+                  style: TextStyle(
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[600],
+                  ),
+                ),
+              ],
+            ),
+
+          ),
+          title: Text(e.name),
+        )).toList()
+      ],
     );
   }
 }

@@ -2,6 +2,7 @@ import 'package:eatery/pages/dashboard/payment/payments.page.dart';
 import 'package:eatery/references.dart';
 
 import 'order/orders.page.dart';
+import 'pos/cart.page.dart';
 
 class DashboardPage extends StatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
@@ -77,6 +78,43 @@ class _DashboardPageState extends State<DashboardPage> {
                   ? LibraryImage(Common.company?.logo).image
                   : null,
               suffix: [
+                // Cart with badge
+                Stack(
+                  children: [
+                    IconButton(
+                      icon: const Icon(
+                        Icons.shopping_cart_outlined,
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const CartPage(),
+                          ),
+                        );
+                      },
+                    ),
+                    Positioned(
+                      top: 0,
+                      right: 0,
+                      child: Container(
+                        padding: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: KColors.primary,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          Common.cart.length.toString(),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
                 IconButton(
                   icon: const Icon(
                     Icons.power_settings_new,
@@ -111,7 +149,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           );
                         });
                   },
-                )
+                ),
               ],
             ),
             UpgradeNotification(

@@ -7,6 +7,7 @@ final Color _pageColor = KColors.secondary2;
 
 class OrdersPage extends StatefulWidget {
   const OrdersPage({Key? key}) : super(key: key);
+
   @override
   State<OrdersPage> createState() => _OrdersPageState();
 }
@@ -17,13 +18,10 @@ class _OrdersPageState extends State<OrdersPage> {
   DateTime? filterFrom;
   DateTime? filterTill;
 
-
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, (){
-      
-    });
+    Future.delayed(Duration.zero, () {});
   }
 
   Future<Uint8List> _capturePng() async {
@@ -50,67 +48,73 @@ class _OrdersPageState extends State<OrdersPage> {
       appBar: AppBar(
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
-        title: const Text('Transactions'),
+        title: const Text('Orders'),
         actions: [
           IconButton(
-              onPressed: () async {
-              },
-              icon: const Icon(Icons.barcode_reader)),
+            icon: const Icon(Icons.search),
+            onPressed: () async {
+              await showSearch(
+                context: context,
+                delegate: SearchOrderDelegate(orders, (order) {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(
+                      builder: (context) => ViewOrderPage(order: order),
+                    ),
+                  );
+                }),
+              );
+            },
+          ),
           IconButton(
-              onPressed: () async {
-              },
-              icon: const Icon(Icons.filter_list_alt)),
+            icon: const Icon(Icons.barcode_reader),
+            onPressed: () async {},
+          ),
           IconButton(
-              onPressed: () async {
-
-              },
-              icon: const Icon(Icons.more_vert)),
+            icon: const Icon(Icons.more_vert),
+            onPressed: () async {},
+          ),
         ],
       ),
       body: orders.isNotEmpty
-        ? ListView(
-        children: [
-          ...orders.map((order) => ListTile(
-            leading: Icon(
-              order.type == OrderType.dine
-                  ? Icons.restaurant
-                  : order.type == OrderType.delivery
-                      ? Icons.delivery_dining
-                      : Icons.takeout_dining,
-            )/*Text(
-              DateFormat('dd MMM, yyyy').format(e.createdAt),
-              style: const TextStyle(fontWeight: FontWeight.w600),
-            ),*/
-          ))
-        ],
-      )
-          : const Center(
-          child: Opacity(
-            opacity: 0.5,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
+          ? ListView(
               children: [
-                Icon(
-                  Icons.receipt_long,
-                  size: 64,
-                ),
-                SizedBox(height: 16),
-                Text(
-                  'No Transactions Found',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                Text(
-                  'Create a new sale to get started',
-                  style: TextStyle(
-                    fontSize: 16,
-                  ),
-                ),
+                ...orders.map((order) => ListTile(
+                        leading: Icon(
+                      order.type == OrderType.dine
+                          ? Icons.restaurant
+                          : order.type == OrderType.delivery
+                              ? Icons.delivery_dining
+                              : Icons.takeout_dining,
+                    )))
               ],
-            ),
-          )),
+            )
+          : const Center(
+              child: Opacity(
+              opacity: 0.5,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.receipt_long,
+                    size: 64,
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'No orders received yet',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    'Create a new sale to get started',
+                    style: TextStyle(
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            )),
     );
   }
 }

@@ -53,24 +53,36 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
           children: [
             if (EateryDB.instance.diningTableCategoryBox!.values.isNotEmpty)
               Container(
-                padding: const EdgeInsets.all(8),
-                child: DropdownButton<DiningTableCategory>(
-                  isExpanded: true,
-                  hint: const Text('Select Category'),
-                  value: selectedCategory,
-                  onChanged: (DiningTableCategory? newValue) {
-                    setState(() {
-                      selectedCategory = newValue;
-                    });
-                  },
-                  items: EateryDB.instance.diningTableCategoryBox!.values
-                      .map<DropdownMenuItem<DiningTableCategory>>(
-                          (DiningTableCategory value) {
-                    return DropdownMenuItem<DiningTableCategory>(
-                      value: value,
-                      child: Text(value.name),
-                    );
-                  }).toList(),
+                height: 60,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  children: [
+                    const SizedBox(width: 10),
+                    ...EateryDB.instance.diningTableCategoryBox!.values
+                        .map((category) {
+                      return Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                        child: ChoiceChip(
+                           labelStyle: TextStyle(fontSize: 14, color: selectedCategory?.id == category.id ? KColors.white : KColors.white500),
+                          labelPadding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          side: BorderSide(
+                              color: selectedCategory?.id == category.id
+                                  ? KColors.white
+                                  : KColors.white500,
+                              width: 1),
+                          label: Text(category.name),
+                          selected: selectedCategory?.id == category.id,
+                          selectedColor: _pageColor,
+                          onSelected: (value) {
+                            setState(() {
+                              selectedCategory = value ? category : null;
+                            });
+                          },
+                        ),
+                      );
+                    }).toList(),
+                  ],
                 ),
               ),
             Expanded(

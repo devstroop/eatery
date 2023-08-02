@@ -27,7 +27,7 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
             }
           });
         },
-        icon: const Icon(Icons.add),
+        icon: const Icon(Icons.person_add),
       )
     ];
   }
@@ -68,10 +68,9 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
           child: Text(
             'Recent Customers',
             style: TextStyle(
-              fontWeight: FontWeight.w400,
               fontSize: 14,
-              color: KColors.black500,
-              fontStyle: FontStyle.normal,
+              fontWeight: FontWeight.normal,
+              color: Colors.grey[600],
             ),
           ),
         ),
@@ -95,21 +94,20 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
             (element.phone ?? '').toLowerCase().contains(query.toLowerCase()))
         .toList();
     if (searchResults.isEmpty) {
-      return Center(
+      return const Center(
         child: CircularProgressIndicator(),
       );
     }
     return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 8.0),
+          padding: const EdgeInsets.all(16),
           child: Text(
-            'Search Results',
+            'Search results',
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 14,
               color: KColors.black500,
-              fontStyle: FontStyle.normal,
             ),
           ),
         ),
@@ -132,6 +130,25 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
         callback(customer);
         close(context, customer);
       },
+      leading: Container(
+        height: 40,
+        width: 40,
+        decoration: BoxDecoration(
+          color: Colors.grey[300],
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: Center(
+          child: Text(
+            customer.name[0],
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[600],
+            ),
+          ),
+        ),
+
+      ),
       title: Text(
         customer.name,
         style: TextStyle(
@@ -145,10 +162,10 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
         style: TextStyle(color: KColors.black500),
       ),
       trailing: Text(
-        customer.name.toString(),
+        (customer.lastOrderAt ?? DateTime.now()).toIso8601String(),
         style: TextStyle(
           fontWeight: FontWeight.bold,
-          fontSize: 18,
+          fontSize: 12,
           color: KColors.black600,
         ),
       ),
