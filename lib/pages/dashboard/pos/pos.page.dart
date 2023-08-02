@@ -178,15 +178,13 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                             color: Colors.white),
                       ),
                       const SizedBox(width: 8),
-                      Flexible(
-                        child: Text(
-                          '${Common.currency?.symbol ?? ''}${Common.activeCustomer?.outstandingAmount ?? '~'}',
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
-                        ),
+                      Text(
+                        '${Common.currency?.symbol ?? ''}${Common.activeCustomer?.outstandingAmount ?? '~'}',
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
                       ),
                     ],
                   ),
@@ -211,32 +209,28 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                       }
                     });
                   },
-                  child: Flexible(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Text(
-                          'Dining Table',
-                          textAlign: TextAlign.end,
-                          style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.white),
-                        ),
-                        const SizedBox(width: 8),
-                        Flexible(
-                          child: Text(
-                            Common.activeDiningTable?.name ?? '~',
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white),
-                          ),
-                        ),
-                      ],
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        'Dining Table',
+                        textAlign: TextAlign.end,
+                        style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.white),
+                      ),
+                      const SizedBox(width: 8),
+                      Text(
+                        Common.activeDiningTable?.name ?? '~',
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white),
+                      ),
+                    ],
                   ),
                 ),
               ],
