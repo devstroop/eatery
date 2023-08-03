@@ -1,6 +1,5 @@
 import 'package:eatery/references.dart';
 
-Color _pageColor = KColors.tertiary;
 
 class ViewDiningTablePage extends StatefulWidget {
   const ViewDiningTablePage({Key? key, required this.diningTable})
@@ -19,21 +18,33 @@ class _ViewDiningTablePageState extends State<ViewDiningTablePage> {
 
   @override
   Widget build(BuildContext context) {
+    Color pageColor = widget.diningTable.status.color;
     final appBar = AppBar(
-      backgroundColor: _pageColor,
+      backgroundColor: pageColor,
       foregroundColor: Colors.white,
       title: const Text('Dining Table Details'),
       actions: [
         IconButton(
-          icon: const Icon(Icons.edit),
+          icon: const Icon(Icons.more_vert),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) =>
-                    EditDiningTablePage(diningTable: widget.diningTable),
+            showMenu(context: context, position: const RelativeRect.fromLTRB(100, 100, 0, 100), items: [
+              const PopupMenuItem(
+                value: 'edit',
+                child: Text('Edit'),
               ),
-            );
+              const PopupMenuItem(
+                value: 'unlink',
+                child: Text('Unlink from Order'),
+              ),
+            ]).then((value) {
+              if (value == 'edit') {
+                Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditDiningTablePage(diningTable: widget.diningTable)));
+              } else if (value == 'unlink') {
+                widget.diningTable.order = null;
+                Navigator.of(context).pop();
+              }
+            });
+
           },
         )
       ],
@@ -58,20 +69,21 @@ class _ViewDiningTablePageState extends State<ViewDiningTablePage> {
                     ),
                   ),
                   Container(
-                    margin: const EdgeInsets.only(left: 8),
-                    padding: const EdgeInsets.all(8),
+                    margin: const EdgeInsets.only(left: 12),
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                     decoration: BoxDecoration(
-                      color: _pageColor.withOpacity(0.1),
+                      color: widget.diningTable.status.color,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
-                      widget.diningTable.category?.name ?? 'None',
+                      widget.diningTable.status.name,
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
+                        color: Colors.white,
                       ),
                     ),
-                  )
+                  ),
                 ],
               ),
             ),
@@ -143,23 +155,40 @@ class _ViewDiningTablePageState extends State<ViewDiningTablePage> {
             const SizedBox(
               height: 16,
             ),
-            const Text(
-              'Description',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Text(
-              widget.diningTable.description ?? 'None',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.normal,
-                color: KColors.white500,
-              ),
+            if(widget.diningTable.description != null)
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 8),
+                  child: Text(
+                    'Description',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                const SizedBox(
+                  height: 8,
+                ),
+                Container(
+                  width: double.infinity,
+                  padding: const EdgeInsets.all(8),
+                  decoration: BoxDecoration(
+                    color: KColors.white900,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Text(
+                    widget.diningTable.description!,
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.normal,
+                      color: KColors.white500,
+                    ),
+                  ),
+                ),
+              ],
             ),
             // If table is occupied show the customer details and order details
             if (widget.diningTable.order != null) ...[
@@ -286,10 +315,10 @@ class _ViewDiningTablePageState extends State<ViewDiningTablePage> {
                         color: KColors.primary.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: Column(
+                      child: const Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const Text(
+                            Text(
                               'Order Status',
                               style: TextStyle(
                                 fontSize: 10,
@@ -298,7 +327,7 @@ class _ViewDiningTablePageState extends State<ViewDiningTablePage> {
                             ),
                             Text(
                               'None',
-                              style: const TextStyle(
+                              style: TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
                               ),

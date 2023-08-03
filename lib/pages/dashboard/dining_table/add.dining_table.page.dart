@@ -227,6 +227,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
               showMessageDialog(context, 'Dining Table created successfully',
                   MessageType.success, () => Navigator.pop(context));
             }).onError((error, stackTrace) {
+              debugPrint(error.toString());
               showMessageDialog(
                 context,
                 'Failed to create Dining Table',

@@ -164,7 +164,16 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                   ),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    if(Common.activeDiningTable?.order == null){
+                      showMessageDialog(this.context, 'No active order for this table', MessageType.warning);
+                      return;
+                    }
+                    Navigator.push(
+                        this.context,
+                        MaterialPageRoute(
+                            builder: (context) => ViewOrderPage(order: Common.activeDiningTable!.order!)));
+                  },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -191,23 +200,13 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                 ),
                 InkWell(
                   onTap: () {
-                    showSearch(
-                        context: this.context,
-                        delegate: SearchDiningTableDelegate(
-                            EateryDB.instance.diningTableBox!.values
-                                .toList(), (table) {
-                          setState(() {
-                            Common.activeDiningTable = table;
-                          });
-                        })).then((value) {
-                      setState(() {
-                        Common.activeDiningTable = null;
-                      });
-                      if (value == null) {
-                        Navigator.pop(this.context);
-                        return;
-                      }
-                    });
+                    // View Dining Table
+                    Navigator.push(
+                        this.context,
+                        MaterialPageRoute(
+                            builder: (context) => ViewDiningTablePage(
+                                  diningTable: Common.activeDiningTable!,
+                                )));
                   },
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

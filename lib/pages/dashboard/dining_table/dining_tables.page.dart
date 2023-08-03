@@ -27,7 +27,7 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
     List<DiningTable> diningTables = EateryDB.instance.diningTableBox!.values
         .where((element) =>
             selectedCategory == null ||
-            element.category == selectedCategory?.id)
+            element.category?.id == selectedCategory?.id)
         .toList();
     return Scaffold(
         appBar: AppBar(
@@ -52,7 +52,7 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
         body: Column(
           children: [
             if (EateryDB.instance.diningTableCategoryBox!.values.isNotEmpty)
-              Container(
+              SizedBox(
                 height: 60,
                 child: ListView(
                   scrollDirection: Axis.horizontal,
@@ -98,18 +98,17 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                           DiningTableCategory? category = EateryDB
                                   .instance.diningTableCategoryBox!.values
                                   .where((element) =>
-                                      element.id == diningTable.category)
+                                      element.id == diningTable.category?.id)
                                   .isNotEmpty
                               ? EateryDB.instance.diningTableCategoryBox!.values
                                   .where((element) =>
-                                      element.id == diningTable.category)
+                                      element.id == diningTable.category?.id)
                                   .first
                               : null;
                           Order? order = diningTable.order != null
                               ? EateryDB.instance.orderBox!.values.singleWhere(
-                                  (elem) => elem.id == diningTable.order)
+                                  (elem) => elem.id == diningTable.order?.id)
                               : null;
-                          // bool isAvailable = order == null || order.isPaid;
                           return ListTile(
                             title: Row(
                               mainAxisAlignment: MainAxisAlignment.start,
@@ -123,10 +122,10 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                                 if (category != null)
                                   CaptionLabel(label: category.name),
                                 const SizedBox(width: 3),
-                                CaptionLabel(
-                                  label: diningTable.status.name,
-                                  color: KColors.red,
-                                ),
+                                // CaptionLabel(
+                                //   label: diningTable.status.name,
+                                //   color: KColors.red,
+                                // ),
                               ],
                             ),
                             leading: Container(
@@ -149,22 +148,14 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                             trailing: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                order != null
-                                    ? Text(
-                                        'Busy\n${Common.currency?.symbol ?? ''}${order.finalTotal}',
-                                        textAlign: TextAlign.end,
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: KColors.red),
-                                      )
-                                    : Text(
-                                        'Available',
-                                        style: TextStyle(
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.bold,
-                                            color: KColors.green),
-                                      ),
+                                Text(
+                                  diningTable.status.name,
+                                  textAlign: TextAlign.end,
+                                  style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: diningTable.status.color),
+                                ),
                                 IconButton(
                                   icon: const Icon(Icons.more_vert),
                                   onPressed: () {
@@ -236,10 +227,29 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                                 )
                               ],
                             ),
-                            subtitle: diningTable.description != null &&
-                                    diningTable.description?.trim() != ''
-                                ? Text(diningTable.description!)
-                                : null,
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                if (diningTable.description != null &&
+                                    diningTable.description?.trim() != '')
+                                  Text(diningTable.description!),
+
+                                if (order != null)
+                                  TextButton(onPressed: (){
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => ViewOrderPage(
+                                              order: order)),
+                                    ).then((_) => setState(() {}));
+                                  }, child: Text(
+                                    'Order: ${order.id}',
+                                    style: const TextStyle(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.bold),
+                                  )),
+                              ],
+                            ),
                             onTap: () {
                               Navigator.push(
                                 context,

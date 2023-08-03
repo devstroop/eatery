@@ -81,8 +81,7 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                     close(context, e);
                   },
                   leading: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     decoration: BoxDecoration(
                       color: Colors.grey[300],
                       borderRadius: BorderRadius.circular(8),
@@ -91,7 +90,7 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          e.name.split(' ').last.toUpperCase(),
+                          e.name.split(' ').last[0].toUpperCase(),
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,
@@ -101,12 +100,13 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                       ],
                     ),
                   ),
-                  title: Text(e.name),
+                  title: Text(e.name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
                   subtitle: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if (e.description?.trim() != '') Text(e.description!),
+                      if (e.description?.trim() != '') Text(e.description!.trim()),
                       Text(
                         '${e.capacity} seats',
                         style: TextStyle(
