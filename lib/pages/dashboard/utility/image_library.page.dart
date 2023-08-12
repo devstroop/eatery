@@ -168,18 +168,24 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
       body: _images.isEmpty
           ? Opacity(
               opacity: 0.25,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  SizedBox(
-                    width: MediaQuery.of(context).size.width / 3,
-                    child: Image.asset('assets/images/empty-folder.png'),
-                  ),
-                  const Text(
-                    'Empty Library',
-                    style: TextStyle(fontSize: 24),
-                  ),
-                ],
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      width: MediaQuery.of(context).size.width / 3,
+                      child: Image.asset('assets/images/empty-folder.png'),
+                    ),
+                    const Text(
+                      'LIBRARY IS EMPTY',
+                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                    ),
+                    const Text(
+                      'NO IMAGES FOUND IN LIBRARY',
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ],
+                ),
               ),
             )
           : GridView.count(
