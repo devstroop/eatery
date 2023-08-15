@@ -379,9 +379,9 @@ class _DashboardPageState extends State<DashboardPage> {
                       onTap: () => _showLibrary(context),
                     ),
                     MenuCard(
-                      iconData: Icons.import_export,
+                      iconData: FontAwesomeIcons.database,
                       iconSize: iconSize / 1.75,
-                      title: 'Import Export',
+                      title: 'Data Mgmt.',
                       titleSize: titleSize * 0.7,
                       subtitleSize: subtitleSize * 0.7,
                       width: (menuSize - 8) / 2,
@@ -391,7 +391,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const ImportExportPage(),
+                            builder: (context) => const DataManagementPage(),
                           ),
                         );
                       },

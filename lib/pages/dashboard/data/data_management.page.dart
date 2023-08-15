@@ -1,17 +1,17 @@
-import 'package:excel/excel.dart';
+import 'package:excel/excel.dart' as excel;
 import 'package:eatery/references.dart';
+import 'package:http/http.dart' as http;
 
 final _pageColor = KColors.tertiary;
 
-class ImportExportPage extends StatefulWidget {
-  const ImportExportPage({Key? key}) : super(key: key);
+class DataManagementPage extends StatefulWidget {
+  const DataManagementPage({Key? key}) : super(key: key);
 
   @override
-  State<ImportExportPage> createState() => _ImportExportPageState();
+  State<DataManagementPage> createState() => _DataManagementPageState();
 }
 
-class _ImportExportPageState extends State<ImportExportPage> {
-
+class _DataManagementPageState extends State<DataManagementPage> {
   @override
   void initState() {
     super.initState();
@@ -19,41 +19,145 @@ class _ImportExportPageState extends State<ImportExportPage> {
 
   @override
   Widget build(BuildContext context) {
-    final appBar = AppBar(
-      backgroundColor: _pageColor,
-      foregroundColor: Colors.white,
-      title: const Text('Import / Export'),
-    );
 
     return Scaffold(
-      appBar: appBar,
+      appBar: AppBar(
+        backgroundColor: _pageColor,
+        foregroundColor: Colors.white,
+        title: const Text('Data Management'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.more_vert),
+            onPressed: (){
+              showMenu(context: context, position: const RelativeRect.fromLTRB(100, 100, 0, 0), items: [
+                const PopupMenuItem(
+                  value: 'demo',
+                  child: Text('Download Demo Data'),
+                ),
+              ]).then((value) {
+                if(value == 'demo') {
+                  _downloadDemoData(context);
+                }
+              });
+            },
+          ),
+        ],
+      ),
       body: ListView(scrollDirection: Axis.vertical, children: [
+        Container(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+          child: Row(
+            children: [
+              Icon(FontAwesomeIcons.googleDrive, color: _pageColor,),
+              const SizedBox(width: 8,),
+              Text('Google Drive Backup / Restore', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey[700]),),
+              const SizedBox(width: 8,),
+              Flexible(child: Divider(color: Colors.grey[300]),),
+            ],
+          ),
+        ),
+        Container(
+          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          padding: const EdgeInsets.all(16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(8),
+            border: Border.all(color: Colors.grey[400]!),
+          ),
+          child: Row(
+            children: [
+              Icon(Icons.history, color: Colors.grey[700],),
+              const SizedBox(width: 8,),
+              Text('Last Backup: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey[700]),),
+              Text('Never', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey[700]),),
+            ],
+          ),
+        ),
+        ListTile(
+            leading: Icon(
+              FontAwesomeIcons.upload,
+              color: Colors.grey[700],
+            ),
+            title: Text(
+              'Backup ↑',
+              style: TextStyle(
+                  fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey[700]),
+            ),
+            subtitle: Text(
+              'Backup data to Google Drive',
+              style: TextStyle(color: Colors.grey[700]),
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ImportPage(),
+                  fullscreenDialog: true,
+                ))),
         ListTile(
           leading: Icon(
-            Icons.file_download_outlined,
-            color: _pageColor,
+            FontAwesomeIcons.download,
+            color: Colors.grey[700],
           ),
           title: Text(
-            'Import',
+            'Restore ↓',
             style: TextStyle(
-                fontSize: 16, fontWeight: FontWeight.bold, color: _pageColor),
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey[700]),
           ),
           subtitle: Text(
-            'Import data from json/excel file',
+            'Restore data from Google Drive',
             style: TextStyle(color: Colors.grey[700]),
           ),
           trailing: const Icon(Icons.chevron_right),
-          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ImportPage(), fullscreenDialog: true,))
+          onTap: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+                builder: (context) => const ExportPage(),
+                fullscreenDialog: true),
+          ),
+        ),
+        Container(
+          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+          child: Row(
+            children: [
+              Icon(FontAwesomeIcons.fileExcel, color: _pageColor,),
+              const SizedBox(width: 8,),
+              Text('Import / Export', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey[700]),),
+              const SizedBox(width: 8,),
+              Flexible(child: Divider(color: Colors.grey[300]),),
+            ],
+          ),
         ),
         ListTile(
+            leading: Icon(
+              FontAwesomeIcons.fileImport,
+              color: Colors.grey[700],
+            ),
+            title: Text(
+              'Import',
+              style: TextStyle(
+                  fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey[700],),
+            ),
+            subtitle: Text(
+              'Import data from json/excel file',
+              style: TextStyle(color: Colors.grey[700]),
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const ImportPage(),
+                  fullscreenDialog: true,
+                ))),
+        ListTile(
           leading: Icon(
-            Icons.file_upload_outlined,
-            color: _pageColor,
+            FontAwesomeIcons.fileExport,
+            color: Colors.grey[700],
           ),
           title: Text(
             'Export',
             style: TextStyle(
-                fontSize: 16, fontWeight: FontWeight.bold, color: _pageColor),
+                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey[700]),
           ),
           subtitle: Text(
             'Export data to json/excel file',
@@ -61,16 +165,15 @@ class _ImportExportPageState extends State<ImportExportPage> {
           ),
           trailing: const Icon(Icons.chevron_right),
           onTap: () => Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const ExportPage(),
-                  fullscreenDialog: true),
+            context,
+            MaterialPageRoute(
+                builder: (context) => const ExportPage(),
+                fullscreenDialog: true),
           ),
         ),
       ]),
     );
   }
-
 
 /*
 
@@ -243,4 +346,68 @@ class _ImportExportPageState extends State<ImportExportPage> {
         .onError((error, stackTrace) => showMessageDialog(this.context, 'Export failed', MessageType.error));
   }
   */
+
+
+  Future<void> _downloadDemoData(BuildContext context) async {
+    ProgressDialog progressDialog = ProgressDialog(context: context);
+    progressDialog.show();
+
+    const productsUrl =
+        'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main/products.json';
+    const productCategoriesUrl =
+        'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main/product_categories.json';
+    const ordersUrl =
+        'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main/orders.json';
+    //
+    progressDialog.update(msg: 'Downloading Products');
+    final productsList = await getList(productsUrl);
+    progressDialog.update(msg: 'Saving Products');
+    Iterable<Product> products = (productsList ?? []).map((element) =>Product.fromMap(element as Map<String, dynamic>));
+    await EateryDB.instance.productBox!.clear();
+    await EateryDB.instance.productBox!.addAll(products);
+    //
+    progressDialog.update(msg: 'Downloading Categories');
+    final productCategoriesList = await getList(productCategoriesUrl);
+    progressDialog.update(msg: 'Saving Categories');
+    Iterable<ProductCategory> categories = (productCategoriesList ?? []).map((element) => ProductCategory.fromMap(element as Map<String, dynamic>));
+    await EateryDB.instance.productCategoryBox!.clear();
+    await EateryDB.instance.productCategoryBox!.addAll(categories);
+    //
+    progressDialog.update(msg: 'Downloading Orders');
+    final ordersList = await getList(ordersUrl);
+    progressDialog.update(msg: 'Saving Orders');
+    Iterable<Order> orders = (ordersList ?? []).map((element) => Order.fromMap(element as Map<String, dynamic>));
+    await EateryDB.instance.orderBox!.clear();
+    await EateryDB.instance.orderBox!.addAll(orders);
+    //
+    progressDialog.update(msg: 'Done');
+    progressDialog.close(delay: 99);
+    Future.delayed(const Duration(milliseconds: 100), () {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Success'),
+          content: const Text('Demo data downloaded successfully'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
+  Future<List<dynamic>?> getList(String customersUrl) async {
+    try {
+      http.Response response = await http.get(Uri.parse(customersUrl));
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      }
+    } catch (e) {
+      print(e);
+    }
+    return null;
+  }
 }

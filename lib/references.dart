@@ -37,6 +37,7 @@ export 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 export 'package:permission_handler/permission_handler.dart';
 export 'package:external_path/external_path.dart';
 export 'package:fluttertoast/fluttertoast.dart';
+export 'package:font_awesome_flutter/font_awesome_flutter.dart';
 // Google packages
 export 'package:googleapis_auth/auth_io.dart';
 // Internal references
@@ -136,7 +137,9 @@ export './pages/dashboard/staff/edit.staff.page.dart';
 // Help
 export './pages/dashboard/help/help.page.dart';
 // Import Export
-export './pages/dashboard/import_export/import_export.page.dart';
+export './pages/dashboard/data/data_management.page.dart';
+export './pages/dashboard/data/import.page.dart';
+export './pages/dashboard/data/export.page.dart';
 // Order
 export './pages/dashboard/order/orders.page.dart';
 export './pages/dashboard/order/view.order.page.dart';
