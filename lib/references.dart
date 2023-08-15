@@ -38,6 +38,7 @@ export 'package:permission_handler/permission_handler.dart';
 export 'package:external_path/external_path.dart';
 export 'package:fluttertoast/fluttertoast.dart';
 export 'package:font_awesome_flutter/font_awesome_flutter.dart';
+export 'package:fast_cached_network_image/fast_cached_network_image.dart';
 // Google packages
 export 'package:googleapis_auth/auth_io.dart';
 // Internal references

@@ -228,7 +228,7 @@ class _ViewDiningTablePageState extends State<ViewDiningTablePage> {
                               ),
                             ),
                             Text(
-                              widget.diningTable.order?.customer.name ?? 'None',
+                              widget.diningTable.order?.customer?.name ?? 'None',
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -254,7 +254,7 @@ class _ViewDiningTablePageState extends State<ViewDiningTablePage> {
                               ),
                             ),
                             Text(
-                              widget.diningTable.order?.customer.phone ?? 'None',
+                              widget.diningTable.order?.customer?.phone ?? 'None',
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,

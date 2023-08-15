@@ -22,6 +22,8 @@ class Common {
       : null;
   static String? tempDirectory =
       _baseDirectory != null ? path.join(_baseDirectory!, 'temp') : null;
+  static String? cacheDirectory =
+      _baseDirectory != null ? path.join(_baseDirectory!, 'cache') : null;
 
   // Absolute paths
   static String? _baseDirectory;
@@ -36,6 +38,7 @@ class Common {
       _createDirectoryIfNotExists(path.join(value, backupDirectory));
       _createDirectoryIfNotExists(path.join(value, importExportDirectory));
       _createDirectoryIfNotExists(path.join(value, tempDirectory));
+      _createDirectoryIfNotExists(path.join(value, cacheDirectory));
     }
   }
 

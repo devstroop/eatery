@@ -19,7 +19,6 @@ class _DataManagementPageState extends State<DataManagementPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       appBar: AppBar(
         backgroundColor: _pageColor,
@@ -28,14 +27,17 @@ class _DataManagementPageState extends State<DataManagementPage> {
         actions: [
           IconButton(
             icon: const Icon(Icons.more_vert),
-            onPressed: (){
-              showMenu(context: context, position: const RelativeRect.fromLTRB(100, 100, 0, 0), items: [
-                const PopupMenuItem(
-                  value: 'demo',
-                  child: Text('Download Demo Data'),
-                ),
-              ]).then((value) {
-                if(value == 'demo') {
+            onPressed: () {
+              showMenu(
+                  context: context,
+                  position: const RelativeRect.fromLTRB(100, 100, 0, 0),
+                  items: [
+                    const PopupMenuItem(
+                      value: 'demo',
+                      child: Text('Download Demo Data'),
+                    ),
+                  ]).then((value) {
+                if (value == 'demo') {
                   _downloadDemoData(context);
                 }
               });
@@ -48,11 +50,26 @@ class _DataManagementPageState extends State<DataManagementPage> {
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
           child: Row(
             children: [
-              Icon(FontAwesomeIcons.googleDrive, color: _pageColor,),
-              const SizedBox(width: 8,),
-              Text('Google Drive Backup / Restore', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey[700]),),
-              const SizedBox(width: 8,),
-              Flexible(child: Divider(color: Colors.grey[300]),),
+              Icon(
+                FontAwesomeIcons.googleDrive,
+                color: _pageColor,
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Text(
+                'Google Drive Backup / Restore',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700]),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Flexible(
+                child: Divider(color: Colors.grey[300]),
+              ),
             ],
           ),
         ),
@@ -66,10 +83,27 @@ class _DataManagementPageState extends State<DataManagementPage> {
           ),
           child: Row(
             children: [
-              Icon(Icons.history, color: Colors.grey[700],),
-              const SizedBox(width: 8,),
-              Text('Last Backup: ', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey[700]),),
-              Text('Never', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey[700]),),
+              Icon(
+                Icons.history,
+                color: Colors.grey[700],
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Text(
+                'Last Backup: ',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700]),
+              ),
+              Text(
+                'Never',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.grey[700]),
+              ),
             ],
           ),
         ),
@@ -81,7 +115,9 @@ class _DataManagementPageState extends State<DataManagementPage> {
             title: Text(
               'Backup ↑',
               style: TextStyle(
-                  fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey[700]),
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.grey[700]),
             ),
             subtitle: Text(
               'Backup data to Google Drive',
@@ -102,7 +138,9 @@ class _DataManagementPageState extends State<DataManagementPage> {
           title: Text(
             'Restore ↓',
             style: TextStyle(
-                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey[700]),
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey[700]),
           ),
           subtitle: Text(
             'Restore data from Google Drive',
@@ -120,11 +158,26 @@ class _DataManagementPageState extends State<DataManagementPage> {
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
           child: Row(
             children: [
-              Icon(FontAwesomeIcons.fileExcel, color: _pageColor,),
-              const SizedBox(width: 8,),
-              Text('Import / Export', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.grey[700]),),
-              const SizedBox(width: 8,),
-              Flexible(child: Divider(color: Colors.grey[300]),),
+              Icon(
+                FontAwesomeIcons.fileExcel,
+                color: _pageColor,
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Text(
+                'Import / Export',
+                style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey[700]),
+              ),
+              const SizedBox(
+                width: 8,
+              ),
+              Flexible(
+                child: Divider(color: Colors.grey[300]),
+              ),
             ],
           ),
         ),
@@ -136,7 +189,10 @@ class _DataManagementPageState extends State<DataManagementPage> {
             title: Text(
               'Import',
               style: TextStyle(
-                  fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey[700],),
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey[700],
+              ),
             ),
             subtitle: Text(
               'Import data from json/excel file',
@@ -157,7 +213,9 @@ class _DataManagementPageState extends State<DataManagementPage> {
           title: Text(
             'Export',
             style: TextStyle(
-                fontSize: 16, fontWeight: FontWeight.bold, color: Colors.grey[700]),
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: Colors.grey[700]),
           ),
           subtitle: Text(
             'Export data to json/excel file',
@@ -347,39 +405,107 @@ class _DataManagementPageState extends State<DataManagementPage> {
   }
   */
 
-
   Future<void> _downloadDemoData(BuildContext context) async {
     ProgressDialog progressDialog = ProgressDialog(context: context);
     progressDialog.show();
 
-    const productsUrl =
-        'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main/products.json';
-    const productCategoriesUrl =
-        'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main/product_categories.json';
+    // Customers
+    const customersUrl =
+        'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main/customers.json';
+    progressDialog.update(msg: 'Downloading Customers');
+    final customersList = await getList(customersUrl);
+    progressDialog.update(msg: 'Saving Products');
+    Iterable<Customer> customers = (customersList ?? [])
+        .map((element) => Customer.fromMap(element as Map<String, dynamic>));
+    await EateryDB.instance.customerBox!.clear();
+    await EateryDB.instance.customerBox!.addAll(customers);
+    // Dining Table Categories
+    progressDialog.update(msg: 'Downloading Dining Table Categories');
+    const diningTableCategoriesUrl =
+        'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main/customers.json';
+    final diningTableCategoriesList = await getList(diningTableCategoriesUrl);
+    progressDialog.update(msg: 'Saving Dining Table Categories');
+    Iterable<DiningTableCategory> diningTableCategories =
+        (diningTableCategoriesList ?? []).map((element) =>
+            DiningTableCategory.fromMap(element as Map<String, dynamic>));
+    await EateryDB.instance.diningTableCategoryBox!.clear();
+    await EateryDB.instance.diningTableCategoryBox!
+        .addAll(diningTableCategories);
+    // Dining Tables
+    progressDialog.update(msg: 'Downloading Dining Tables');
+    const diningTablesUrl =
+        'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main/dining_tables.json';
+    final diningTablesList = await getList(diningTablesUrl);
+    progressDialog.update(msg: 'Saving Dining Tables');
+    Iterable<DiningTable> diningTables = (diningTablesList ?? [])
+        .map((element) => DiningTable.fromMap(element as Map<String, dynamic>));
+    await EateryDB.instance.diningTableBox!.clear();
+    await EateryDB.instance.diningTableBox!.addAll(diningTables);
+
+    // Orders
+    progressDialog.update(msg: 'Downloading Orders');
     const ordersUrl =
         'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main/orders.json';
-    //
-    progressDialog.update(msg: 'Downloading Products');
-    final productsList = await getList(productsUrl);
-    progressDialog.update(msg: 'Saving Products');
-    Iterable<Product> products = (productsList ?? []).map((element) =>Product.fromMap(element as Map<String, dynamic>));
-    await EateryDB.instance.productBox!.clear();
-    await EateryDB.instance.productBox!.addAll(products);
-    //
-    progressDialog.update(msg: 'Downloading Categories');
-    final productCategoriesList = await getList(productCategoriesUrl);
-    progressDialog.update(msg: 'Saving Categories');
-    Iterable<ProductCategory> categories = (productCategoriesList ?? []).map((element) => ProductCategory.fromMap(element as Map<String, dynamic>));
-    await EateryDB.instance.productCategoryBox!.clear();
-    await EateryDB.instance.productCategoryBox!.addAll(categories);
-    //
-    progressDialog.update(msg: 'Downloading Orders');
     final ordersList = await getList(ordersUrl);
     progressDialog.update(msg: 'Saving Orders');
-    Iterable<Order> orders = (ordersList ?? []).map((element) => Order.fromMap(element as Map<String, dynamic>));
+    Iterable<Order> orders = (ordersList ?? [])
+        .map((element) => Order.fromMap(element as Map<String, dynamic>));
     await EateryDB.instance.orderBox!.clear();
     await EateryDB.instance.orderBox!.addAll(orders);
+    // Payments
+    progressDialog.update(msg: 'Downloading Payments');
+    const paymentsUrl =
+        'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main/payments.json';
+    final paymentsList = await getList(paymentsUrl);
+    progressDialog.update(msg: 'Saving Payments');
+    Iterable<Payment> payments = (paymentsList ?? [])
+        .map((element) => Payment.fromMap(element as Map<String, dynamic>));
+    await EateryDB.instance.paymentBox!.clear();
+    await EateryDB.instance.paymentBox!.addAll(payments);
+    // Product Categories
+    progressDialog.update(msg: 'Downloading Product Categories');
+    const productCategoriesUrl =
+        'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main/product_categories.json';
+    final productCategoriesList = await getList(productCategoriesUrl);
+    progressDialog.update(msg: 'Saving Categories');
+    Iterable<ProductCategory> categories = (productCategoriesList ?? []).map(
+        (element) => ProductCategory.fromMap(element as Map<String, dynamic>));
+    await EateryDB.instance.productCategoryBox!.clear();
+    await EateryDB.instance.productCategoryBox!.addAll(categories);
+    // Products
+    progressDialog.update(msg: 'Downloading Products');
+    const productsUrl =
+        'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main/products.json';
+    final productsList = await getList(productsUrl);
+    progressDialog.update(msg: 'Saving Products');
+    Iterable<Product> products = (productsList ?? [])
+        .map((element) => Product.fromMap(element as Map<String, dynamic>));
+    await EateryDB.instance.productBox!.clear();
+    await EateryDB.instance.productBox!.addAll(products);
+
+    // Staffs
+    progressDialog.update(msg: 'Downloading Staffs');
+    const staffsUrl =
+        'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main/staffs.json';
+    final staffsList = await getList(staffsUrl);
+    progressDialog.update(msg: 'Saving Staffs');
+    Iterable<Staff> staffs = (staffsList ?? [])
+        .map((element) => Staff.fromMap(element as Map<String, dynamic>));
+    await EateryDB.instance.staffBox!.clear();
+    await EateryDB.instance.staffBox!.addAll(staffs);
+    // Tax Slabs
+    progressDialog.update(msg: 'Downloading Tax Slabs');
+    const taxSlabsUrl =
+        'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main/tax_slabs.json';
+    final taxSlabsList = await getList(taxSlabsUrl);
+    progressDialog.update(msg: 'Saving Tax Slabs');
+    Iterable<TaxSlab> taxSlabs = (taxSlabsList ?? [])
+        .map((element) => TaxSlab.fromMap(element as Map<String, dynamic>));
+    await EateryDB.instance.taxSlabBox!.clear();
+    await EateryDB.instance.taxSlabBox!.addAll(taxSlabs);
+
     //
+
     progressDialog.update(msg: 'Done');
     progressDialog.close(delay: 99);
     Future.delayed(const Duration(milliseconds: 100), () {

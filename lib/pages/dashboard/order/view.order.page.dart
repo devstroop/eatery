@@ -66,7 +66,7 @@ class _ViewOrderPageState extends State<ViewOrderPage> {
               height: 10,
             ),
             Text(
-              'Customer: ${widget.order.customer.name}',
+              'Customer: ${widget.order.customer?.name ?? 'NA'}',
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,

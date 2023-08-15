@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   # hive database
+  fast_cached_network_image: ^1.2.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
   mime: ^1.0.0
@@ -26,7 +27,7 @@ dependencies:
   move_to_background: ^1.0.2
   flutter_svg: ^1.1.6
   font_awesome_flutter: ^10.1.0
-#  battery_info: ^1.1.1
+  #  attery_info: ^1.1.1
   platform_device_id: #^1.0.1
     git:
       url: "https://github.com/devstroop/platform_device_id.git"

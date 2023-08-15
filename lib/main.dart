@@ -43,6 +43,7 @@ Future setupDataAndInitDB() async {
 
   Common.baseDirectory = basePath;
   await EateryDB.instance.init(Common.dataDirectory).onError((error, stackTrace) => throw Exception('Error initializing DB: $error'));
+  await FastCachedImageConfig.init(subDir: '${Common.cacheDirectory}/', clearCacheAfter: const Duration(days: 15));
 }
 
 class MyApp extends StatelessWidget {
