@@ -1,6 +1,8 @@
 import 'package:excel/excel.dart';
 import 'package:eatery/references.dart';
 
+final _pageColor = KColors.tertiary;
+
 class ImportExportPage extends StatefulWidget {
   const ImportExportPage({Key? key}) : super(key: key);
 
@@ -9,6 +11,69 @@ class ImportExportPage extends StatefulWidget {
 }
 
 class _ImportExportPageState extends State<ImportExportPage> {
+
+  @override
+  void initState() {
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final appBar = AppBar(
+      backgroundColor: _pageColor,
+      foregroundColor: Colors.white,
+      title: const Text('Import / Export'),
+    );
+
+    return Scaffold(
+      appBar: appBar,
+      body: ListView(scrollDirection: Axis.vertical, children: [
+        ListTile(
+          leading: Icon(
+            Icons.file_download_outlined,
+            color: _pageColor,
+          ),
+          title: Text(
+            'Import',
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: _pageColor),
+          ),
+          subtitle: Text(
+            'Import data from json/excel file',
+            style: TextStyle(color: Colors.grey[700]),
+          ),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) => const ImportPage(), fullscreenDialog: true,))
+        ),
+        ListTile(
+          leading: Icon(
+            Icons.file_upload_outlined,
+            color: _pageColor,
+          ),
+          title: Text(
+            'Export',
+            style: TextStyle(
+                fontSize: 16, fontWeight: FontWeight.bold, color: _pageColor),
+          ),
+          subtitle: Text(
+            'Export data to json/excel file',
+            style: TextStyle(color: Colors.grey[700]),
+          ),
+          trailing: const Icon(Icons.chevron_right),
+          onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => const ExportPage(),
+                  fullscreenDialog: true),
+          ),
+        ),
+      ]),
+    );
+  }
+
+
+/*
+
   Future<void> doImportProducts() async {
     await FilePicker.platform.pickFiles(
         type: FileType.custom,
@@ -135,7 +200,7 @@ class _ImportExportPageState extends State<ImportExportPage> {
       ordersSheet.insertRowIterables(element.toMap().values.toList(), index);
       index++;
     }
-    
+
     // Populate Products Sheet
     index = 0;
     for (var element in EateryDB.instance.productBox!.values) {
@@ -177,64 +242,5 @@ class _ImportExportPageState extends State<ImportExportPage> {
         .then((value) => showMessageDialog(this.context, 'Exported successfully', MessageType.success))
         .onError((error, stackTrace) => showMessageDialog(this.context, 'Export failed', MessageType.error));
   }
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  Color getThemeColor() {
-    return KColors.tertiary;
-  }
-
-  SizedBox options() {
-    return SizedBox(
-      width: double.maxFinite,
-      height: double.maxFinite,
-      child:
-          ListView(scrollDirection: Axis.vertical, shrinkWrap: true, children: [
-        InkWell(
-          onTap: () {},
-          child: MenuTile(
-            prefixIcon: Icons.get_app,
-            title: 'Import Products',
-            subtitle: 'Import invoices and vouchers',
-            postfixIcon: Icons.chevron_right,
-            color: getThemeColor(),
-            onTap: doImportProducts,
-          ),
-        ),
-        InkWell(
-          onTap: () {},
-          child: MenuTile(
-            prefixIcon: Icons.upload,
-            title: 'Export Products',
-            subtitle: 'Export invoices and vouchers',
-            postfixIcon: Icons.chevron_right,
-            color: getThemeColor(),
-            onTap: doExportProducts,
-          ),
-        ),
-      ]),
-    );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final appBar = AppBar(
-      backgroundColor: getThemeColor(),
-      foregroundColor: Colors.white,
-      title: const Text('Import / Export'),
-    );
-
-    return Scaffold(
-      appBar: appBar,
-      body: Stack(
-        children: [
-          Positioned(
-              top: 12.0, left: 0.0, right: 0.0, bottom: 72, child: options()),
-        ],
-      ),
-    );
-  }
+  */
 }
