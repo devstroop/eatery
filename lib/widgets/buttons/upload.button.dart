@@ -23,19 +23,26 @@ class UploadButton extends StatefulWidget {
 
 class _UploadButtonState extends State<UploadButton> {
   LibraryImage? libraryImage;
+
   @override
   void initState() {
     super.initState();
   }
 
-  void onUploadPressed(BuildContext context) => Navigator.push(context, MaterialPageRoute(builder: (context) => ImageLibraryPage(context, (LibraryImage? libraryImage) {
-    this.libraryImage = libraryImage;
-    if (widget.onChanged != null) {
-      widget.onChanged!(libraryImage);
-      Navigator.pop(context);
-    }
-    setState(() {});
-  })));
+  void onUploadPressed(BuildContext context) => Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) =>
+                ImageLibraryPage(context, (LibraryImage? libraryImage) {
+                  this.libraryImage = libraryImage;
+                  if (widget.onChanged != null) {
+                    widget.onChanged!(libraryImage);
+                    Navigator.pop(context);
+                  }
+                  setState(() {});
+                }),
+            fullscreenDialog: true),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +62,8 @@ class _UploadButtonState extends State<UploadButton> {
             Row(
               children: [
                 SizedBox(
-                  height: 72,
-                  width: 72,
+                  height: 84,
+                  width: 84,
                   child: Stack(
                     children: [
                       if (widget.image == null)
@@ -95,11 +102,11 @@ class _UploadButtonState extends State<UploadButton> {
                                 height: 20,
                                 width: 20,
                                 decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(8),
-                                  color: const Color(0xFFB63A3A),
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: Colors.redAccent,
                                 ),
                                 child: const Icon(
-                                  Icons.remove,
+                                  Icons.close,
                                   size: 16,
                                   color: Colors.white,
                                 ),
@@ -149,7 +156,7 @@ class _UploadButtonState extends State<UploadButton> {
                     width: 72,
                     height: 72,
                     child: Icon(
-                      Icons.attach_file,
+                      widget.image != null ? Icons.refresh : Icons.add,
                       size: 24,
                       color: widget.primaryColor,
                     ),

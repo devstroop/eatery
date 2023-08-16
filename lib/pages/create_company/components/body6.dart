@@ -69,145 +69,31 @@ class _Body6State extends State<Body6> {
         scrollDirection: Axis.vertical,
         children: [
           const PageTitle(
-            title: "Choose your plan",
-            subtitle: "Get access to whole product in one go",
+            title: "Choose your subscription",
+            subtitle: "Select the subscription type that suits you best",
           ),
           SpacingStyle.defaultVerticalSpacing,
           SpacingStyle.defaultVerticalSpacing,
-          SelectableCard(
-            header: 'EVALUATION',
-            title: 'Try It Free',
-            highlights: const ['100 invoices a month', '10 products'],
-            footer: 'Enjoy with limited access',
-            selected: widget.subscriptionType == SubscriptionType.free,
-            highlightColor: KColors.yellow,
-            onTap: () {
-              widget.callback(SubscriptionType.free, null, null, null);
-
-              if (widget.callbackFormKey != null) {
-                widget.callbackFormKey!(widget.formKey);
-              }
-            },
-          ),
-          SpacingStyle.defaultVerticalSpacing,
-          SelectableCard(
-            header: 'PREMIUM',
-            title: 'Activate License',
-            highlights: const ['Everything Unlimited'],
-            footer: 'Get unlocked to all premium features',
-            selected: widget.subscriptionType == SubscriptionType.premium,
-            highlightColor: KColors.green,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+          ...SubscriptionType.values.map((e) {
+            return Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                SpacingStyle.defaultVerticalSpacing,
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        const Text('Device ID'),
-                        IconButton(
-                          onPressed: fetchDeviceInfo,
-                          iconSize: 14,
-                          icon: const Icon(
-                            Icons.refresh,
-                          ),
-                        ),
-                        IconButton(
-                          onPressed: copyDeviceIdToClipboard,
-                          iconSize: 14,
-                          icon: const Icon(
-                            Icons.copy,
-                          ),
-                        ),
-                      ],
-                    ),
-                    InkWell(
-                      onTap: copyDeviceIdToClipboard,
-                      child: Text(
-                        deviceSerial ?? 'Undefined',
-                        style: const TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 14),
-                      ),
-                    ),
-                    const Divider()
-                  ],
-                ),
-                SpacingStyle.defaultVerticalSpacing,
-                if (validTill != null)
-                  Text('Validity: ${DateFormat.yMMMd().format(validTill!)}'),
-                if (validTill != null) SpacingStyle.defaultVerticalSpacing,
-                CustomTextFromField(
-                  themeColor: widget.themeColor,
-                  controller: _controllerPurchaseCode,
-                  label: 'Purchase code',
-                  hint: 'Enter purchase code...',
-                  textInputAction: TextInputAction.done,
-                  autoFocus: true,
-                  suffix: IconButton(
-                    onPressed: () async {
-                      String val = await FlutterClipboard.paste();
-                      setState(() {
-                        _controllerPurchaseCode.text = val;
-                      });
-
-                      if (widget.callbackFormKey != null) {
-                        widget.callbackFormKey!(widget.formKey);
-                      }
-                    },
-                    icon: const Icon(Icons.paste),
-                    color: KColors.white600,
-                  ),
-                  validator: (value) {
-                    if (widget.subscriptionType == SubscriptionType.premium) {
-                      if (value!.isEmpty) {
-                        return 'Purchase code cannot be blank';
-                      }
-                      if (value.contains(' ')) {
-                        return 'Purchase code is not valid';
-                      }
-                      if (validFrom == null || validTill == null) {
-                        return 'Purchase code is not valid';
-                      }
-                    }
-                    return null;
-                  },
-                  onChanged: (value) {
-                    // VALIDATE_LICENSE_HERE
-                    License(purchaseCode: value)
-                        .validate((validFrom, validTill) {
-                      setState(() {
-                        this.validFrom = validFrom;
-                        this.validTill = validTill;
-                      });
-                      widget.callback(SubscriptionType.premium,
-                          _controllerPurchaseCode.text, validFrom, validTill);
-
-                      if (widget.callbackFormKey != null) {
-                        widget.callbackFormKey!(widget.formKey);
-                      }
-                    });
-                  },
-                  onFieldSubmitted: (v) {
-                    if (widget.callbackFormKey != null) {
-                      widget.callbackFormKey!(widget.formKey);
-                    }
-                    FocusScope.of(context).unfocus();
+                SelectableCard(
+                  header: e.label,
+                  title: e.name,
+                  highlights: e.highlights,
+                  footer: e.description,
+                  selected: e.id == widget.subscriptionType?.id,
+                  highlightColor: e.color,
+                  onTap: () {
+                    // Callback
+                    widget.callback(e, _controllerPurchaseCode.text, validFrom, validTill);
                   },
                 ),
+                SpacingStyle.defaultVerticalSpacing,
               ],
-            ),
-            onTap: () {
-              widget.callback(SubscriptionType.premium, null, null, null);
-
-              if (widget.callbackFormKey != null) {
-                widget.callbackFormKey!(widget.formKey);
-              }
-            },
-          ),
+            );
+          }),
         ],
       ),
     );

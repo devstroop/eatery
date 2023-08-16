@@ -10,54 +10,12 @@ class MenuTile extends StatelessWidget {
   final Function()? onTap;
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    return ListTile(
       onTap: onTap,
-      child: Container(
-        color: KColors.white,
-        margin: const EdgeInsets.only(bottom: 8.0),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-                padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
-                child: Row(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 12.0),
-                      child: Icon(
-                        prefixIcon,
-                        color: color,
-                      ),
-                    ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          title,
-                          style:
-                          TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600, color: KColors.black600),
-                        ),
-                        subtitle != null ?
-                        Text(
-                          subtitle!,
-                          style:
-                          TextStyle(fontSize: 14.0, fontWeight: FontWeight.w400, color: KColors.white600),
-                        ) : Container()
-                      ],
-                    )
-                  ],
-                )),
-            Padding(
-                padding: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0),
-                child: Icon(
-                  postfixIcon,
-                  size: 16,
-                  color: KColors.white600,
-                  //style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w600, color: ColorStyle.text200),
-                )),
-          ],
-        ),
-      ),
+      leading: Icon(prefixIcon, color: color ?? KColors.black500),
+      title: Text(title, style: TextStyle(fontWeight: FontWeight.w500, color: color ?? KColors.black500)),
+      subtitle: subtitle != null ? Text(subtitle!, style: TextStyle(color: Colors.grey[700])) : null,
+      trailing: Icon(postfixIcon, color: Colors.grey[400]),
     );
   }
 }

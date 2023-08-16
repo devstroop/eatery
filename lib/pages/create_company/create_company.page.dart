@@ -11,7 +11,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
   int viewIndex = 0;
   LibraryImage? libraryImageLogo; // used
   Edition edition = Edition.gst;
-  SubscriptionType subscriptionType = SubscriptionType.free;
+  SubscriptionType subscriptionType = SubscriptionType.individual;
   String? deviceSerial;
   final TextEditingController _controllerRestaurantName =
       TextEditingController(); // used
@@ -182,7 +182,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
           title: 'Next',
         ),
         CreateCompanyBottomAppBar(
-            title: 'Finish',
+            title: 'Continue',
             formKey: formKeys[5],
             index: 6,
             themeColor: themeColor,

@@ -31,7 +31,7 @@ class SelectableCard extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
-            color: selected ? KColors.secondary2 : KColors.white600,
+            color: selected ? (highlightColor ?? KColors.secondary2) : KColors.white600,
             width: selected ? 2 : 1,
           ),
         ),
@@ -62,7 +62,7 @@ class SelectableCard extends StatelessWidget {
                                     width: 24,
                                     height: 24,
                                     decoration: BoxDecoration(
-                                      color: KColors.secondary2,
+                                      color: (highlightColor ?? KColors.secondary2),
                                       borderRadius: const BorderRadius.all(
                                           Radius.elliptical(24, 24)),
                                     ))),
@@ -107,11 +107,12 @@ class SelectableCard extends StatelessWidget {
                 height: 8.0,
               ),
               if (highlights != null)
-                Row(
+                Wrap(
+                  spacing: 6.0,
+                  runSpacing: 6.0,
                   children: [
                     for (var highlight in highlights!)
                       Container(
-                        margin: const EdgeInsets.only(right: 6.0),
                         padding: const EdgeInsets.all(6.0),
                         decoration: BoxDecoration(
                           color: (highlightColor ?? KColors.secondary2)

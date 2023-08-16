@@ -1,5 +1,5 @@
 import 'package:eatery/references.dart';
-
+final _pageColor = KColors.secondary2;
 class UpgradePage extends StatefulWidget {
   const UpgradePage({Key? key, required this.company}) : super(key: key);
   final Company? company;
@@ -9,7 +9,7 @@ class UpgradePage extends StatefulWidget {
 }
 
 class _UpgradePageState extends State<UpgradePage> {
-  int selectedIndex = 1;
+  SubscriptionType? selectedSubscriptionType;
   var controllerPurchaseCode = TextEditingController();
   late String? deviceSerial = 'Fetching';
 
@@ -27,19 +27,17 @@ class _UpgradePageState extends State<UpgradePage> {
       this.deviceSerial = deviceSerial;
     });
   }
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-    Color getThemeColor() {
-      return KColors.secondary2;
-    }
 
     final appBar = AppBar(
       foregroundColor: Colors.white,
-      backgroundColor: getThemeColor(),
-      title: const Text('Upgrade'),
+      backgroundColor: _pageColor,
+      title: const Text('Subscription'),
     );
-    Widget buildContactSalesBottomSheet() =>
+    /*Widget buildContactSalesBottomSheet() =>
         StatefulBuilder(builder: (context, state) {
           return Padding(
             padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
@@ -125,120 +123,55 @@ class _UpgradePageState extends State<UpgradePage> {
               ],
             ),
           );
-        });
+        });*/
     return Scaffold(
       backgroundColor: KColors.white,
       appBar: appBar,
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              const SizedBox(
-                height: 12.0,
-              ),
-              InkWell(
-                child: SelectableCard(
-                  header: 'PREMIUM',
-                  title: 'UPGRADE TO PREMIUM',
-                  highlights: const ['Everything Unlimited'],
-                  footer: 'Get unlocked to all premium features',
-                  selected: selectedIndex == 1,
-                  highlightColor: KColors.yellow,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'Device Id: $deviceSerial',
-                        style: TextStyle(
-                          color: KColors.black600,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 3.0,
-                      ),
-                      CustomTextFromField(
-                        controller: controllerPurchaseCode,
-                        hint: 'Purchase Code',
-                        obscureText: false,
-                      ),
-                    ],
+      body: Form(
+        key: formKey,
+        child: ListView(
+          padding: const EdgeInsets.all(16.0),
+          scrollDirection: Axis.vertical,
+          children: [
+            const PageTitle(
+              title: "Choose your subscription",
+              subtitle: "Select the subscription type that suits you best",
+            ),
+            SpacingStyle.defaultVerticalSpacing,
+            SpacingStyle.defaultVerticalSpacing,
+            ...SubscriptionType.values.map((e) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SelectableCard(
+                    header: e.label,
+                    title: e.name,
+                    highlights: e.highlights,
+                    footer: e.description,
+                    selected: e.id == selectedSubscriptionType?.id,
+                    highlightColor: e.color,
+                    onTap: () {
+                      setState(() {
+                        selectedSubscriptionType = e;
+                      });
+                    },
                   ),
-                ),
-                onTap: () {
-                  setState(() {
-                    selectedIndex = 1;
-                  });
-                },
-              ),
-            ],
-          ),
+                  SpacingStyle.defaultVerticalSpacing,
+                ],
+              );
+            }),
+          ],
         ),
       ),
       bottomNavigationBar: BottomAppBar(
         color: KColors.white,
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Flexible(
-              fit: FlexFit.tight,
-              flex: 1,
-              child: SecondaryButton(
-                color: KColors.black500,
-                borderColor: KColors.white600,
-                text: 'Contact Sales',
-                height: 50.0,
-                onTap: () => showModalBottomSheet(
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(24),
-                        topRight: Radius.circular(24),
-                        bottomLeft: Radius.circular(0),
-                        bottomRight: Radius.circular(0),
-                      ),
-                    ),
-                    context: context,
-                    builder: (context) => buildContactSalesBottomSheet()),
-              ),
-            ),
-            const SizedBox(
-              width: 8.0,
-            ),
-            Flexible(
-              flex: 1,
-              fit: FlexFit.tight,
-              child: PrimaryButton(
-                height: 50.0,
-                color: getThemeColor(),
-                onPressed: () async {
-                  if (selectedIndex == 1 && controllerPurchaseCode.text != '') {
-                    /*LicenseData licData = License.validate(controllerPurchaseCode.text);
-                    if (licData.status) {
-                      */ /*Map<String, dynamic> account = widget.account;
-                      account['purchaseCode'] = licData.purchaseCode;
-                      var status = await Account.update(account);
-                      if (status) {
-                        showSnackBar(context, "Activated successfully");
-                        Navigator.pop(context);
-                      } else {
-                        showSnackBar(context, "Activation failed");
-                      }*/ /*
-                    } else {
-                      showSnackBar(context, licData.message);
-                    }*/
-                  }
-                },
-                child: const Text('Activate'),
-              ),
-            ),
-          ],
+        child: PrimaryButton(
+          height: 50.0,
+          color: _pageColor,
+          onPressed: () async {
+
+          },
+          child: const Text('Continue'),
         ),
       ),
     );

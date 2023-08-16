@@ -96,26 +96,24 @@ final List<FocusNode> _focusNodes = [
               ),
               Row(
                 children: [
-                  Container(
-                    child: LabeledCustomTextFormField(
-                        label: 'MRP',
-                        prefix: const Icon(Icons.currency_rupee, size: 14,),
-                        hint: '0.00',
-                        themeColor: _pageColor,
-                        validator: (value) {
-                          if (value!.trim().isEmpty) {
-                            return 'Price cannot be blank';
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.number,
-                        foregroundColor: KColors.black600,
-                        controller: _controllerMRP,
-                        focusNode: _focusNodes[1],
-                        onFieldSubmitted: (v) {
-                          FocusScope.of(context).requestFocus(_focusNodes[2]);
-                        },
-                    ),
+                  LabeledCustomTextFormField(
+                      label: 'MRP',
+                      prefix: const Icon(Icons.currency_rupee, size: 14,),
+                      hint: '0.00',
+                      themeColor: _pageColor,
+                      validator: (value) {
+                        if (value!.trim().isEmpty) {
+                          return 'Price cannot be blank';
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.number,
+                      foregroundColor: KColors.black600,
+                      controller: _controllerMRP,
+                      focusNode: _focusNodes[1],
+                      onFieldSubmitted: (v) {
+                        FocusScope.of(context).requestFocus(_focusNodes[2]);
+                      },
                   ),
                   const SizedBox(width: 12.0,),
                   Flexible(

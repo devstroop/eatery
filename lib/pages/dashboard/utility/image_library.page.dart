@@ -189,6 +189,7 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
               ),
             )
           : GridView.count(
+        padding: const EdgeInsets.all(12.0),
             scrollDirection: Axis.vertical,
             controller: scrollController,
             crossAxisCount: crossAxisCount,

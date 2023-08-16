@@ -26,7 +26,7 @@ class _SettingPageState extends State<SettingPage> {
           prefixIcon: Icons.business,
           title: 'Company',
           subtitle: 'Manage Company Profile',
-          postfixIcon: Icons.arrow_right,
+          postfixIcon: Icons.chevron_right,
           color: getThemeColor(),
           onTap: () {
             Navigator.push(
@@ -39,7 +39,7 @@ class _SettingPageState extends State<SettingPage> {
           prefixIcon: Icons.attach_money,
           title: 'Currency and Region',
           subtitle: 'Manage Currency and Region Settings',
-          postfixIcon: Icons.arrow_right,
+          postfixIcon: Icons.chevron_right,
           color: getThemeColor(),
           onTap: () => Navigator.push(
             this.context,
@@ -51,7 +51,7 @@ class _SettingPageState extends State<SettingPage> {
           prefixIcon: Icons.percent,
           title: 'Tax',
           subtitle: 'Manage Tax Slabs',
-          postfixIcon: Icons.arrow_right,
+          postfixIcon: Icons.chevron_right,
           color: getThemeColor(),
           onTap: () => Navigator.push(
             this.context,
@@ -64,7 +64,7 @@ class _SettingPageState extends State<SettingPage> {
           prefixIcon: Icons.print,
           title: 'Printer',
           subtitle: 'Manage Printing Devices',
-          postfixIcon: Icons.arrow_right,
+          postfixIcon: Icons.chevron_right,
           color: getThemeColor(),
           /*onTap: () => Navigator.push(
             context,
