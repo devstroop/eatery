@@ -33,7 +33,7 @@ class _CustomersPageState extends State<CustomersPage> {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => ViewCustomer(customer: customer)));
                     },
                     title: Text(
-                      customer.name,
+                      customer.name ?? 'NA',
                       style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
                     subtitle: Text(customer.phone),

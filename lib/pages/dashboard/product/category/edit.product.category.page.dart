@@ -126,7 +126,8 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
               widget.category.description = _controllerDescription.text.trim();
               widget.category.image = pickedLibraryImage?.filename;
               widget.category.save();
-              showMessageDialog(context, 'Updated successfully', MessageType.success);
+              showMessageDialog(context, 'Updated successfully', MessageType.success).then((value) => Navigator.pop(context));
+
             } catch (_) {
               showMessageDialog(context, 'Failed to update', MessageType.error);
             }

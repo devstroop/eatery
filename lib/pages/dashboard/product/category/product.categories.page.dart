@@ -1,5 +1,4 @@
 import 'package:eatery/references.dart';
-import 'package:fast_cached_network_image/fast_cached_network_image.dart';
 
 Color _pageColor = KColors.tertiary;
 
@@ -76,13 +75,16 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
                             leading: const Icon(Icons.edit),
                             title: const Text('Edit'),
                             onTap: () {
+                              Navigator.pop(context);
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
                                         EditProductCategoryPage(
                                             category: category)),
-                              ).then((_) => setState(() {}));
+                              ).then((_) {
+                                setState(() {});
+                              });
                             },
                           ),
                         ),
@@ -90,26 +92,7 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
                           child: ListTile(
                             leading: const Icon(Icons.delete),
                             title: const Text('Delete'),
-                            onTap: () {
-                              showMenu(
-                                  context: context,
-                                  position: const RelativeRect.fromLTRB(
-                                      100, 100, 0, 100),
-                                  items: [
-                                    PopupMenuItem(
-                                      child: ListTile(
-                                        leading: const Icon(Icons.delete),
-                                        title: const Text('Delete'),
-                                        onTap: () {
-                                          EateryDB.instance.productCategoryBox!
-                                              .delete(category.id);
-                                          setState(() {});
-                                          Navigator.pop(context);
-                                        },
-                                      ),
-                                    ),
-                                  ]);
-                            },
+                            onTap: () => _onCategoryDelete(context, category),
                           ),
                         ),
                       ]);
@@ -145,6 +128,37 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
           ).then((_) => setState(() {}));
         },
       ),
+    );
+  }
+
+  _onCategoryDelete(BuildContext context, ProductCategory category) {
+    Navigator.pop(context);
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Delete Category'),
+          content: const Text('Are you sure you want to delete this category?'),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.pop(context);
+              },
+              child: const Text('Cancel'),
+            ),
+            TextButton(
+              onPressed: () {
+                category.delete();
+                setState(() {});
+                Navigator.pop(context);
+                showMessageDialog(context, 'Category deleted successfully',
+                    MessageType.success);
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

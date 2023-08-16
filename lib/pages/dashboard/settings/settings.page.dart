@@ -71,24 +71,6 @@ class _SettingPageState extends State<SettingPage> {
             MaterialPageRoute(builder: (context) => PrinterSettingsPage(account: widget.account)),
           ),*/
         ),
-        MenuTile(
-          prefixIcon: Icons.comment,
-          title: 'Help',
-          subtitle: 'Get support',
-          postfixIcon: Icons.arrow_right,
-          color: getThemeColor(),
-          onTap: () => showModalBottomSheet(
-              shape: const RoundedRectangleBorder(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(24),
-                  topRight: Radius.circular(24),
-                  bottomLeft: Radius.circular(0),
-                  bottomRight: Radius.circular(0),
-                ),
-              ),
-              context: this.context,
-              builder: (context) => const HelpBottomSheet()),
-        ),
       ]),
     );
   }

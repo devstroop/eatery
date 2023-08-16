@@ -406,114 +406,320 @@ class _DataManagementPageState extends State<DataManagementPage> {
   */
 
   Future<void> _downloadDemoData(BuildContext context) async {
-    ProgressDialog progressDialog = ProgressDialog(context: context);
-    progressDialog.show();
+    ProgressDialog pd = ProgressDialog(context: context);
+    pd.show();
+    List<String> logs = [];
+
+    String baseUrl =
+        'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main';
 
     // Customers
-    const customersUrl =
-        'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main/customers.json';
-    progressDialog.update(msg: 'Downloading Customers');
-    final customersList = await getList(customersUrl);
-    progressDialog.update(msg: 'Saving Products');
-    Iterable<Customer> customers = (customersList ?? [])
-        .map((element) => Customer.fromMap(element as Map<String, dynamic>));
-    await EateryDB.instance.customerBox!.clear();
-    await EateryDB.instance.customerBox!.addAll(customers);
+    try {
+      pd.update(msg: '⏳ Downloading Customers');
+      Iterable<Map<String, dynamic>> list =
+          await getList('$baseUrl/customers.json');
+      pd.update(msg: '⌛️ Saving Customers');
+      logs.add('🛢️ Customers');
+      Iterable<Customer> custs = list.map((element) {
+        try {
+          final msg = '\t👤 ${element['name']} downloaded';
+          logs.add(msg);
+          pd.update(msg: msg);
+          return Customer.fromMap(element);
+        } catch (e) {
+          final msg = '\t❌ Error downloading 👤 ${element['name']}: $e';
+          logs.add(msg);
+          pd.update(msg: msg);
+          return Customer(phone: element['phone']);
+        }
+      });
+      await EateryDB.instance.customerBox!.clear();
+      await EateryDB.instance.customerBox!.addAll(custs);
+      final msg = '✅ ${custs.length} Customers downloaded successfully';
+      logs.add(msg);
+      pd.update(msg: msg);
+    } catch (e) {
+      final msg = '❌ Error downloading Customers: $e';
+      logs.add(msg);
+      pd.update(msg: msg);
+    }
+
     // Dining Table Categories
-    progressDialog.update(msg: 'Downloading Dining Table Categories');
-    const diningTableCategoriesUrl =
-        'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main/customers.json';
-    final diningTableCategoriesList = await getList(diningTableCategoriesUrl);
-    progressDialog.update(msg: 'Saving Dining Table Categories');
-    Iterable<DiningTableCategory> diningTableCategories =
-        (diningTableCategoriesList ?? []).map((element) =>
-            DiningTableCategory.fromMap(element as Map<String, dynamic>));
-    await EateryDB.instance.diningTableCategoryBox!.clear();
-    await EateryDB.instance.diningTableCategoryBox!
-        .addAll(diningTableCategories);
+    try {
+      pd.update(msg: '⏳ Downloading Dining Table Categories');
+      Iterable<Map<String, dynamic>> list =
+          await getList('$baseUrl/dining_table_categories.json');
+      pd.update(msg: '⌛️ Saving Dining Table Categories');
+      logs.add('🛢️ Dining Table Categories');
+      Iterable<DiningTableCategory> dtCats = list.map((element) {
+        try {
+          final msg = '\t📖 ${element['name']} downloaded successfully';
+          logs.add(msg);
+          pd.update(msg: msg);
+          return DiningTableCategory.fromMap(element);
+        } catch (e) {
+          final msg = '\t❌ Error downloading ${element['name']}: $e';
+          logs.add(msg);
+          pd.update(msg: msg);
+          return DiningTableCategory(name: element['name']);
+        }
+      });
+      await EateryDB.instance.diningTableCategoryBox!.clear();
+      await EateryDB.instance.diningTableCategoryBox!.addAll(dtCats);
+      final msg =
+          '✅ ${dtCats.length} Dining Table Categories downloaded successfully';
+      logs.add(msg);
+      pd.update(msg: msg);
+    } catch (e) {
+      final msg = '❌ Error downloading Dining Table Categories: $e';
+      logs.add(msg);
+      pd.update(msg: msg);
+    }
+
     // Dining Tables
-    progressDialog.update(msg: 'Downloading Dining Tables');
-    const diningTablesUrl =
-        'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main/dining_tables.json';
-    final diningTablesList = await getList(diningTablesUrl);
-    progressDialog.update(msg: 'Saving Dining Tables');
-    Iterable<DiningTable> diningTables = (diningTablesList ?? [])
-        .map((element) => DiningTable.fromMap(element as Map<String, dynamic>));
-    await EateryDB.instance.diningTableBox!.clear();
-    await EateryDB.instance.diningTableBox!.addAll(diningTables);
+    try {
+      pd.update(msg: '⏳ Downloading Dining Tables');
+      Iterable<Map<String, dynamic>> list =
+          await getList('$baseUrl/dining_tables.json');
+      pd.update(msg: '⌛️ Saving Dining Tables');
+      logs.add('🛢️ Dining Tables');
+      Iterable<DiningTable> diningTables = list.map((element) {
+        try {
+          final msg = '\t🍽️ ${element['name']} downloaded successfully';
+          logs.add(msg);
+          pd.update(msg: msg);
+          return DiningTable.fromMap(element);
+        } catch (e) {
+          final msg = '\t❌ Error downloading ${element['name']}: $e';
+          logs.add(msg);
+          pd.update(msg: msg);
+          return DiningTable(name: element['name']);
+        }
+      });
+      await EateryDB.instance.diningTableBox!.clear();
+      await EateryDB.instance.diningTableBox!.addAll(diningTables);
+      final msg =
+          '✅ ${diningTables.length} Dining Tables downloaded successfully';
+      logs.add(msg);
+      pd.update(msg: msg);
+    } catch (e) {
+      final msg = '❌ Error downloading Dining Tables: $e';
+      logs.add(msg);
+      pd.update(msg: msg);
+    }
 
     // Orders
-    progressDialog.update(msg: 'Downloading Orders');
-    const ordersUrl =
-        'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main/orders.json';
-    final ordersList = await getList(ordersUrl);
-    progressDialog.update(msg: 'Saving Orders');
-    Iterable<Order> orders = (ordersList ?? [])
-        .map((element) => Order.fromMap(element as Map<String, dynamic>));
-    await EateryDB.instance.orderBox!.clear();
-    await EateryDB.instance.orderBox!.addAll(orders);
+    try {
+      pd.update(msg: '⏳ Downloading Orders');
+      Iterable<Map<String, dynamic>> ordersList =
+          await getList('$baseUrl/orders.json');
+      pd.update(msg: '⌛️ Saving Orders');
+      logs.add('🛢️ Orders');
+      Iterable<Order> orders = ordersList.map((element) {
+        try {
+          final msg = '\t📦 ${element['id']} downloaded successfully';
+          logs.add(msg);
+          pd.update(msg: msg);
+          return Order.fromMap(element);
+        } catch (e) {
+          final msg = '\t❌ Error downloading ${element['id']}: $e';
+          logs.add(msg);
+          pd.update(msg: msg);
+          rethrow;
+        }
+      });
+      await EateryDB.instance.orderBox!.clear();
+      await EateryDB.instance.orderBox!.addAll(orders);
+      final msg = '✅ ${orders.length} Orders downloaded successfully';
+      logs.add(msg);
+      pd.update(msg: msg);
+    } catch (e) {
+      final msg = '❌ Error downloading Orders: $e';
+      logs.add(msg);
+      pd.update(msg: msg);
+    }
+
     // Payments
-    progressDialog.update(msg: 'Downloading Payments');
-    const paymentsUrl =
-        'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main/payments.json';
-    final paymentsList = await getList(paymentsUrl);
-    progressDialog.update(msg: 'Saving Payments');
-    Iterable<Payment> payments = (paymentsList ?? [])
-        .map((element) => Payment.fromMap(element as Map<String, dynamic>));
-    await EateryDB.instance.paymentBox!.clear();
-    await EateryDB.instance.paymentBox!.addAll(payments);
+    try {
+      pd.update(msg: '⏳ Downloading Payments');
+      Iterable<Map<String, dynamic>> paymentsList =
+          await getList('$baseUrl/payments.json');
+      pd.update(msg: '⌛️ Saving Payments');
+      logs.add('🛢️ Payments');
+      Iterable<Payment> payments = paymentsList.map((element) {
+        try {
+          final msg = '\t💰 ${element['id']} downloaded successfully';
+          logs.add(msg);
+          pd.update(msg: msg);
+          return Payment.fromMap(element);
+        } catch (e) {
+          final msg = '\t❌ Error downloading ${element['id']}: $e';
+          logs.add(msg);
+          pd.update(msg: msg);
+          rethrow;
+        }
+      });
+      await EateryDB.instance.paymentBox!.clear();
+      await EateryDB.instance.paymentBox!.addAll(payments);
+      final msg = '✅ ${payments.length} Payments downloaded successfully';
+      logs.add(msg);
+      pd.update(msg: msg);
+    } catch (e) {
+      final msg = '❌ Error downloading Payments: $e';
+      logs.add(msg);
+      pd.update(msg: msg);
+    }
+
     // Product Categories
-    progressDialog.update(msg: 'Downloading Product Categories');
-    const productCategoriesUrl =
-        'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main/product_categories.json';
-    final productCategoriesList = await getList(productCategoriesUrl);
-    progressDialog.update(msg: 'Saving Categories');
-    Iterable<ProductCategory> categories = (productCategoriesList ?? []).map(
-        (element) => ProductCategory.fromMap(element as Map<String, dynamic>));
-    await EateryDB.instance.productCategoryBox!.clear();
-    await EateryDB.instance.productCategoryBox!.addAll(categories);
+    try {
+      pd.update(msg: '⏳ Downloading Product Categories');
+      Iterable<Map<String, dynamic>> productCategoriesList =
+          await getList('$baseUrl/product_categories.json');
+      pd.update(msg: '⌛️ Saving Categories');
+      logs.add('🛢️ Product Categories');
+      Iterable<ProductCategory> categories =
+          productCategoriesList.map((element) {
+        try {
+          final msg = '\t📖 ${element['name']} downloaded successfully';
+          logs.add(msg);
+          pd.update(msg: msg);
+          return ProductCategory.fromMap(element);
+        } catch (e) {
+          final msg = '\t❌ Error downloading ${element['name']}: $e';
+          logs.add(msg);
+          pd.update(msg: msg);
+          return ProductCategory(name: element['name']);
+        }
+      });
+      await EateryDB.instance.productCategoryBox!.clear();
+      await EateryDB.instance.productCategoryBox!.addAll(categories);
+      final msg =
+          '✅ ${categories.length} Product Categories downloaded successfully';
+      logs.add(msg);
+      pd.update(msg: msg);
+    } catch (e) {
+      final msg = '❌ Error downloading Product Categories: $e';
+      logs.add(msg);
+      pd.update(msg: msg);
+    }
+
     // Products
-    progressDialog.update(msg: 'Downloading Products');
-    const productsUrl =
-        'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main/products.json';
-    final productsList = await getList(productsUrl);
-    progressDialog.update(msg: 'Saving Products');
-    Iterable<Product> products = (productsList ?? [])
-        .map((element) => Product.fromMap(element as Map<String, dynamic>));
-    await EateryDB.instance.productBox!.clear();
-    await EateryDB.instance.productBox!.addAll(products);
+    try {
+      pd.update(msg: '⏳ Downloading Products');
+      Iterable<Map<String, dynamic>> productsList =
+          await getList('$baseUrl/products.json');
+      pd.update(msg: '⌛️ Saving Products');
+      logs.add('🛢️ Products');
+      Iterable<Product> products = productsList.map((element) {
+        try {
+          final msg = '\t⌗ ${element['name']} downloaded successfully';
+          logs.add(msg);
+          pd.update(msg: msg);
+          return Product.fromMap(element);
+        } catch (e) {
+          final msg = '\t❌ Error downloading ${element['name']}: $e';
+          logs.add(msg);
+          pd.update(msg: msg);
+          return Product(
+              name: element['name'],
+              mrpPrice: 0.0,
+              salePrice: 0.0,
+              type: ProductType.inventoryItem,
+              isActive: false);
+        }
+      });
+      await EateryDB.instance.productBox!.clear();
+      await EateryDB.instance.productBox!.addAll(products);
+      final msg = '✅ ${products.length} Products downloaded successfully';
+      logs.add(msg);
+      pd.update(msg: msg);
+    } catch (e) {
+      final msg = '❌ Error downloading Products: $e';
+      logs.add(msg);
+      pd.update(msg: msg);
+    }
 
     // Staffs
-    progressDialog.update(msg: 'Downloading Staffs');
-    const staffsUrl =
-        'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main/staffs.json';
-    final staffsList = await getList(staffsUrl);
-    progressDialog.update(msg: 'Saving Staffs');
-    Iterable<Staff> staffs = (staffsList ?? [])
-        .map((element) => Staff.fromMap(element as Map<String, dynamic>));
-    await EateryDB.instance.staffBox!.clear();
-    await EateryDB.instance.staffBox!.addAll(staffs);
+    try {
+      pd.update(msg: '⏳ Downloading Staffs');
+      Iterable<Map<String, dynamic>> staffsList =
+          await getList('$baseUrl/staffs.json');
+      pd.update(msg: '⌛️ Saving Staffs');
+      logs.add('🛢️ Staffs');
+      Iterable<Staff> staffs = staffsList.map((element) {
+        try {
+          final msg = '\t👨🏻‍🔧 ${element['name']} downloaded successfully';
+          logs.add(msg);
+          pd.update(msg: msg);
+          return Staff.fromMap(element);
+        } catch (e) {
+          final msg = '\t❌ Error downloading ${element['name']}: $e';
+          logs.add(msg);
+          pd.update(msg: msg);
+          return Staff(
+              name: element['name'], type: StaffType.other, isActive: false);
+        }
+      });
+      await EateryDB.instance.staffBox!.clear();
+      await EateryDB.instance.staffBox!.addAll(staffs);
+      final msg = '✅ ${staffs.length} Staffs downloaded successfully';
+      logs.add(msg);
+      pd.update(msg: msg);
+    } catch (e) {
+      final msg = '❌ Error downloading Staffs: $e';
+      logs.add(msg);
+      pd.update(msg: msg);
+    }
+
     // Tax Slabs
-    progressDialog.update(msg: 'Downloading Tax Slabs');
-    const taxSlabsUrl =
-        'https://raw.githubusercontent.com/devstroop/eatery_sample_data/main/tax_slabs.json';
-    final taxSlabsList = await getList(taxSlabsUrl);
-    progressDialog.update(msg: 'Saving Tax Slabs');
-    Iterable<TaxSlab> taxSlabs = (taxSlabsList ?? [])
-        .map((element) => TaxSlab.fromMap(element as Map<String, dynamic>));
-    await EateryDB.instance.taxSlabBox!.clear();
-    await EateryDB.instance.taxSlabBox!.addAll(taxSlabs);
+    try {
+      pd.update(msg: '⏳ Downloading Tax Slabs');
+      Iterable<Map<String, dynamic>> taxSlabsList =
+          await getList('$baseUrl/tax_slabs.json');
+      pd.update(msg: '⌛️ Saving Tax Slabs');
+      logs.add('🛢️ Tax Slabs');
+      Iterable<TaxSlab> taxSlabs = taxSlabsList.map((element) {
+        try {
+          final msg = '\t％ ${element['name']} downloaded successfully';
+          logs.add(msg);
+          pd.update(msg: msg);
+          return TaxSlab.fromMap(element);
+        } catch (e) {
+          final msg = '\t❌ Error downloading ${element['name']}: $e';
+          logs.add(msg);
+          pd.update(msg: msg);
+          return TaxSlab(
+              name: element['name'], rate: 0.0, type: TaxType.exclusive);
+        }
+      });
+      await EateryDB.instance.taxSlabBox!.clear();
+      await EateryDB.instance.taxSlabBox!.addAll(taxSlabs);
+      final msg = '✅ ${taxSlabs.length} Tax Slabs downloaded successfully';
+      logs.add(msg);
+      pd.update(msg: msg);
+    } catch (e) {
+      final msg = '❌ Error downloading Tax Slabs: $e';
+      logs.add(msg);
+      pd.update(msg: msg);
+    }
 
     //
 
-    progressDialog.update(msg: 'Done');
-    progressDialog.close(delay: 99);
+    pd.update(msg: 'Done');
+    pd.close(delay: 99);
     Future.delayed(const Duration(milliseconds: 100), () {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Success'),
-          content: const Text('Demo data downloaded successfully'),
+          title: const Text('Log'),
+          content: SingleChildScrollView(
+            scrollDirection: Axis.vertical,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [...logs.map((e) => Text('$e\n '))],
+            ),
+          ),
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
@@ -525,15 +731,16 @@ class _DataManagementPageState extends State<DataManagementPage> {
     });
   }
 
-  Future<List<dynamic>?> getList(String customersUrl) async {
+  Future<Iterable<Map<String, dynamic>>> getList(String customersUrl) async {
     try {
       http.Response response = await http.get(Uri.parse(customersUrl));
       if (response.statusCode == 200) {
-        return jsonDecode(response.body);
+        return (jsonDecode(response.body) as List<dynamic>)
+            .map<Map<String, dynamic>>((e) => e);
       }
     } catch (e) {
       print(e);
     }
-    return null;
+    return [];
   }
 }

@@ -26,8 +26,7 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
       backgroundColor: _pageColor,
       title: const Text('Add Product Category'),
       actions: [
-        if (_focusNodes[0].hasFocus ||
-            _focusNodes[1].hasFocus)
+        if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
           IconButton(
             icon: const Icon(Icons.done),
             onPressed: () {
@@ -65,8 +64,8 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
               ),
               LabeledCustomTextFormField(
                   label: 'Category Name',
-                  hint:
-                      'Enter product category name', // Write a hint for category name field
+                  hint: 'Enter product category name',
+                  // Write a hint for category name field
                   foregroundColor: KColors.black600,
                   themeColor: _pageColor,
                   controller: _controllerCategoryName,
@@ -101,20 +100,17 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {
-            try {
-              EateryDB.instance.productCategoryBox!
-                  .add(ProductCategory(
-                      name: _controllerCategoryName.text,
-                      description: _controllerCategoryDescription.text,
-                      image: pickedLibraryImage?.filename))
-                  .then((response) {
-                    showMessageDialog(context, 'Category created successfully', MessageType.success);
-              }).whenComplete(() {
-                Navigator.pop(context);
-              });
-            } catch (_) {
-              showMessageDialog(context, 'Failed to create category', MessageType.error);
-            }
+            EateryDB.instance.productCategoryBox!
+                .add(ProductCategory(
+                    name: _controllerCategoryName.text,
+                    description: _controllerCategoryDescription.text,
+                    image: pickedLibraryImage?.filename))
+                .then((response) {
+              showMessageDialog(context, 'Category created successfully',
+                  MessageType.success).then((value) => Navigator.pop(context));
+            }).onError((error, stackTrace) {
+              showMessageDialog(context, error.toString(), MessageType.error);
+            });
           },
           child: const Text('Save'),
         ),

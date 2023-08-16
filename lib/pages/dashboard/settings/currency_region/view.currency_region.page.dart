@@ -56,7 +56,7 @@ class _ShowCurrencyRegionPageState extends State<ShowCurrencyRegionPage> {
                   showFlag: true,
                   showCurrencyName: true,
                   showCurrencyCode: true,
-                  currencyFilter: const ['INR', 'AED'],
+                  // currencyFilter: const ['INR', 'AED'],
                   theme: CurrencyPickerThemeData(
                       bottomSheetHeight:
                           MediaQuery.of(context).size.height * 4 / 5),

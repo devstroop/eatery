@@ -128,7 +128,7 @@ class _ViewCustomerState extends State<ViewCustomer> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text('Name'),
-                    Text(widget.customer.name,
+                    Text(widget.customer.name ?? '',
                         style:
                         const TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
                   ],

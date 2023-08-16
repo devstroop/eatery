@@ -90,7 +90,7 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
   Widget _buildSearchResults(BuildContext context, String query) {
     List<Customer> searchResults = customers
         .where((element) =>
-            element.name.toLowerCase().contains(query.toLowerCase()) ||
+    (element.name ?? '').toLowerCase().contains(query.toLowerCase()) ||
             (element.phone ?? '').toLowerCase().contains(query.toLowerCase()))
         .toList();
     if (searchResults.isEmpty) {
@@ -139,7 +139,7 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
         ),
         child: Center(
           child: Text(
-            customer.name[0],
+            (customer.name ?? 'NA')[0],
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -150,7 +150,7 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
 
       ),
       title: Text(
-        customer.name,
+        customer.name ?? 'NA',
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 18,

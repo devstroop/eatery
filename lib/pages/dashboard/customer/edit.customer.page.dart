@@ -33,7 +33,7 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
     super.initState();
     Future.delayed(Duration.zero, () {
       setState(() {
-        _controllerCustomerName.text = widget.customer.name;
+        _controllerCustomerName.text = widget.customer.name ?? '';
         _controllerCustomerPhone.text = widget.customer.phone;
         _controllerCustomerAddress.text = widget.customer.address ?? '';
         _controllerCustomerLandmark.text = widget.customer.landmark ?? '';
