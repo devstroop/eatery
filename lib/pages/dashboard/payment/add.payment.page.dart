@@ -37,6 +37,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
@@ -185,7 +186,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                   label: 'Attach Payment Screenshot',
                   primaryColor: _pageColor,
                   secondaryColor: KColors.black600,
-                  image: image?.image,
+                  libraryImage: image,
                   onChanged: (value) {
                     setState(() {
                       image = value;

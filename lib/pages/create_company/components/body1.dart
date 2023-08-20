@@ -48,7 +48,7 @@ class Body1 extends StatelessWidget {
             label: 'Restaurant Logo',
             primaryColor: pageColor,
             secondaryColor: KColors.black600,
-            image: selectedLibraryImage?.image,
+            libraryImage: selectedLibraryImage,
             onChanged: onChanged,
           ),
           SpacingStyle.defaultVerticalSpacing,

@@ -13,6 +13,7 @@ class _CartPageState extends State<CartPage> {
     Color themeColor =
         Color(Common.activeOrderType?.color ?? KColors.primary.value);
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: themeColor,
         foregroundColor: Colors.white,

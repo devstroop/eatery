@@ -125,7 +125,7 @@ class _UpgradePageState extends State<UpgradePage> {
           );
         });*/
     return Scaffold(
-      backgroundColor: KColors.white,
+      backgroundColor: Colors.grey[200],
       appBar: appBar,
       body: Form(
         key: formKey,

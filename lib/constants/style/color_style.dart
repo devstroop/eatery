@@ -4,6 +4,7 @@ class KColors{
   static Color primary = const Color(0xFF30A8CF);
   static Color tertiary = const Color(0xFFD98049);
   static Color tertiary2 = const Color(0xFFF5A142);
+  static Color tertiary3 = const Color(0xFFEF6850);
   static Color secondary = const Color(0xFF4AC3A1);
   static Color secondary2 = const Color(0xFF74B952);
   static Color alternate = const Color(0xFF705EE0);

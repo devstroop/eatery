@@ -50,6 +50,7 @@ class _ViewDiningTablePageState extends State<ViewDiningTablePage> {
       ],
     );
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: appBar,
       body: Padding(
         padding: const EdgeInsets.all(16.0),

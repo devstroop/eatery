@@ -105,6 +105,7 @@ class _BackupRestorePageState extends State<BackupRestorePage> {
     );
 
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: appBar,
       body: ListView(children: [
         ListTile(

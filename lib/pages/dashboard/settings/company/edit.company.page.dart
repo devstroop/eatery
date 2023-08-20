@@ -72,7 +72,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                     label: 'Restaurant Logo',
                     primaryColor: _pageColor,
                     secondaryColor: KColors.black600,
-                    image: selectedLogo?.image,
+                    libraryImage: selectedLogo,
                     onChanged: (image){
                       setState(() {
                         selectedLogo = image;

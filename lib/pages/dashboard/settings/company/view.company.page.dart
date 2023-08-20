@@ -35,6 +35,7 @@ class _ShowCompanyPageState extends State<ShowCompanyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,

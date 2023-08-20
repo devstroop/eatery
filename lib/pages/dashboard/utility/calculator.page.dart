@@ -14,6 +14,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         title: const Text('Calculator'),
         backgroundColor: Color.fromARGB(0, 47, 24, 130),

@@ -54,6 +54,7 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
          ],
     );
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: appBar,
       body: InkWell(
         onTap: () {
@@ -70,7 +71,7 @@ class _EditProductCategoryPageState extends State<EditProductCategoryPage> {
                 label: 'Product Category Image',
                 primaryColor: _pageColor,
                 secondaryColor: KColors.black600,
-                image: pickedLibraryImage?.image,
+                libraryImage: pickedLibraryImage,
                 onChanged: (libraryImage) {
                   setState(() {
                     pickedLibraryImage = libraryImage;

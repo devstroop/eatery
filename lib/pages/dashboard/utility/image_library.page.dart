@@ -58,7 +58,7 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
         try {
           LibraryImage image =
               LibraryImageProvider.importFromPath(value.files.first.path!);
-          // widget.action(image);
+          widget.action(image);
           fetchLibrary();
         } catch (e) {
           showMessageDialog(this.context, e.toString(), MessageType.error);
@@ -73,7 +73,7 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
       if (value != null) {
         try {
           LibraryImage image = LibraryImageProvider.importFromPath(value.path);
-          // widget.action(image);
+          widget.action(image);
           fetchLibrary();
         } catch (e) {
           showMessageDialog(this.context, e.toString(), MessageType.error);
@@ -88,7 +88,7 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
       if (value != null) {
         try {
           LibraryImage image = LibraryImageProvider.importFromPath(value.path);
-          // widget.action(image);
+          widget.action(image);
           fetchLibrary();
         } catch (e) {
           showMessageDialog(this.context, e.toString(), MessageType.error);
@@ -104,6 +104,7 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
     double screenWidth = MediaQuery.of(context).size.width;
     int crossAxisCount = screenWidth ~/ 100;
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -142,6 +143,20 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
                         }
                       },
                     ),*/
+          IconButton(
+            icon: const Icon(Icons.add_link_outlined),
+            onPressed: (){
+              onLinkAttachPressed(context, callback: (link) async {
+                try{
+                  var libraryImage = await LibraryImageProvider.importFromURL(link);
+                  widget.action(libraryImage);
+                  fetchLibrary();
+                } catch(e) {
+                  showMessageDialog(context, e.toString(), MessageType.error);
+                }
+              });
+            },
+          ),
           if (Platform.isAndroid)
             IconButton(
               icon: const Icon(Icons.camera),
@@ -220,5 +235,51 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
             ],
           ),
     );
+  }
+  onLinkAttachPressed(BuildContext context, {String? link, Function(String)? callback}) {
+    // Show dialog to enter link and fetch data from link in dialog
+    TextEditingController controllerLink = TextEditingController();
+    controllerLink.text = link ?? '';
+    FocusNode focusNodeLink = FocusNode();
+    focusNodeLink.requestFocus();
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Network Image'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                focusNode: focusNodeLink,
+                controller: controllerLink,
+                decoration: const InputDecoration(
+                  labelText: 'URL',
+                  hintText: 'Enter URL',
+                ),
+              ),
+              const SizedBox(
+                height: 16,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Cancel')),
+                  TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        if(callback != null) {
+                          callback(controllerLink.text);
+                        }
+                      },
+                      child: const Text('Attach')),
+                ],
+              )
+            ],
+          ),
+        ));
   }
 }

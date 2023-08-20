@@ -32,6 +32,7 @@ class _ShowCurrencyRegionPageState extends State<ShowCurrencyRegionPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: themeColor,
         foregroundColor: KColors.white900,

@@ -399,7 +399,7 @@ class _OrderConfirmationState extends State<OrderConfirmation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: KColors.white,
+      backgroundColor: Colors.grey[200],
       body: SingleChildScrollView(
         child: Column(
           children: [

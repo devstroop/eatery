@@ -13,7 +13,7 @@ class _SettingPageState extends State<SettingPage> {
   }
 
   Color getThemeColor() {
-    return KColors.primary;
+    return KColors.black;
   }
 
   SizedBox options() {
@@ -83,6 +83,7 @@ class _SettingPageState extends State<SettingPage> {
       foregroundColor: Colors.white,
     );
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: appBar,
       body: Stack(
         children: [

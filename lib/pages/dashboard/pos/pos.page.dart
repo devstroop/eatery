@@ -91,6 +91,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
       spacing = 24;
     }
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         title: const Text('Point of Sale'),
         backgroundColor: pageColor,

@@ -56,9 +56,9 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: KColors.white,
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        backgroundColor: KColors.white,
+        backgroundColor: Colors.grey[200],
         automaticallyImplyLeading: false,
         title: Image.asset(
           'assets/logo.png',

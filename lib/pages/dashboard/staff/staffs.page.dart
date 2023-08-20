@@ -22,6 +22,7 @@ class _StaffsPageState extends State<StaffsPage> {
   Widget build(BuildContext context) {
     List<Staff> staffs = EateryDB.instance.staffBox!.values.toList();
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: _pageColor,
         title: const Text('Staffs'),

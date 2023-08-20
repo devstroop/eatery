@@ -15,7 +15,7 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
     List<ProductCategory> categories =
         EateryDB.instance.productCategoryBox!.values.toList();
     return Scaffold(
-      backgroundColor: KColors.white800,
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
@@ -104,11 +104,11 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12.0),
                 ),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12.0),
-                  child: (category.image ?? '').startsWith('http')
-                      ? FastCachedImage(url: category.image!)
-                      : Image(image: LibraryImage(category.image ?? '').image),
+                child: Image(
+                  image: LibraryImage(category.image,).image,
+                  fit: BoxFit.contain,
+                  height: 48,
+                  width: 48,
                 ),
               ),
               onTap: () {},

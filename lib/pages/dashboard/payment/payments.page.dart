@@ -3,7 +3,7 @@ import 'package:eatery/references.dart';
 
 import 'search.payment.delegate.dart';
 
-Color _pageColor = KColors.tertiary;
+Color _pageColor = KColors.alternate2;
 
 class PaymentsPage extends StatefulWidget {
   const PaymentsPage({super.key});
@@ -21,6 +21,7 @@ class _PaymentsPageState extends State<PaymentsPage> {
         [];
     payments.sort((a, b) => b.date.compareTo(a.date));
     return Scaffold(
+        backgroundColor: Colors.grey[200],
         appBar: AppBar(
           backgroundColor: _pageColor,
           title: const Text('Payments'),

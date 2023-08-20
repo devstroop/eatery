@@ -33,7 +33,8 @@ StaffType? staffType;
         staffType = widget.staff.type;
         isActive = widget.staff.isActive;
         image = LibraryImage(widget.staff.photo ?? '');
-        
+
+        debugPrint('image: ${image?.filename}');
       });
     });
   }
@@ -57,6 +58,7 @@ StaffType? staffType;
       ],
     );
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: appBar,
       body: InkWell(
         onTap: () {
@@ -72,8 +74,9 @@ StaffType? staffType;
                   label: 'Staff Photo',
                   primaryColor: _pageColor,
                   secondaryColor: KColors.black600,
-                  image: image?.image,
+                  libraryImage: image,
                   onChanged: (image) {
+                    debugPrint(image?.filename ?? '');
                     setState(() {
                       this.image = image;
                     });

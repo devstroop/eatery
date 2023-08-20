@@ -152,6 +152,40 @@ class _KitchenPageState extends State<KitchenPage> {
             child: ListView(
               scrollDirection: Axis.vertical,
               children: [
+                if(EateryDB.instance.productBox!.values
+                    .where(
+                        (element) => element.type == ProductType.kitchenDish).isEmpty)
+                  Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.no_food_outlined,
+                          size: 128,
+                          color: Colors.grey[500],
+                        ),
+                        const SizedBox(
+                          height: 16,
+                        ),
+                        Text(
+                          'Oops!',
+                          style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.grey[500]
+                          ),
+                        ),
+                        Text(
+                          'No dishes found in kitchen',
+                          style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.grey[500]
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ...EateryDB.instance.productBox!.values
                     .where(
                         (element) => element.type == ProductType.kitchenDish)

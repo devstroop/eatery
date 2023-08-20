@@ -24,7 +24,9 @@ class _AddStaffPageState extends State<AddStaffPage> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('image: ${image?.absolutePath}');
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
@@ -53,9 +55,11 @@ class _AddStaffPageState extends State<AddStaffPage> {
                   label: 'Staff Photo',
                   primaryColor: _pageColor,
                   secondaryColor: KColors.black600,
-                  image: image?.image,
+                  libraryImage: image,
                   onChanged: (image) {
                     setState(() {
+
+                      debugPrint('image: ${image?.absolutePath}');
                       this.image = image;
                     });
                   },

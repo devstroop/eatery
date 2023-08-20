@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:eatery/references.dart';
 import 'package:flutter/material.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
@@ -7,7 +8,7 @@ import 'package:http/http.dart' as http;
 import '../../constants/common.dart';
 
 class LibraryImage {
-  final String? filename;
+  late String? filename;
 
   LibraryImage(this.filename);
 
@@ -25,8 +26,7 @@ class LibraryImage {
     return filename != null && await file.exists();
   }
 
-  String get absolutePath =>
-      '${Common.baseDirectory}$_subDirectory/$filename';
+  String get absolutePath => '${Common.baseDirectory}$_subDirectory/$filename';
 
   String? get basename => exists() ? path.basename(filename!) : null;
 
@@ -70,10 +70,19 @@ class LibraryImage {
     await file.delete();
   }
 
-  ImageProvider get image => (file.existsSync()
-          ? Image.file(file)
-          : Image.asset('assets/images/default.jpg'))
-      .image;
+  ImageProvider get image {
+    if((filename?.startsWith('http://') ?? false) || (filename?.startsWith('https://') ?? false)) {
+      try{
+        return FastCachedImageProvider(filename!);
+      } catch(e) {
+        return Image.asset('assets/images/default.jpg').image;
+      }
+    }
+    return (file.existsSync()
+            ? Image.file(file)
+            : Image.asset('assets/images/default.jpg'))
+        .image;
+  }
 }
 
 class LibraryImageProvider {
@@ -81,11 +90,11 @@ class LibraryImageProvider {
     final sourceFile = File(imagePath);
     if (sourceFile.existsSync()) {
       try {
-        final destinationFile = sourceFile.copySync(
-            '${Common.baseDirectory}/images/${path.basename(imagePath)}');
+        final destinationFile = sourceFile
+            .copySync('${Common.imagesDirectory}/${path.basename(imagePath)}');
         return LibraryImage(destinationFile.path
             .replaceAll('\\', '/')
-            .replaceFirst(Common.baseDirectory!, ''));
+            .replaceFirst(Common.imagesDirectory!, ''));
       } catch (e) {
         rethrow;
       }
@@ -97,14 +106,21 @@ class LibraryImageProvider {
     try {
       final response = await http.get(Uri.parse(url));
       if (response.statusCode == 200) {
-        final bytes = response.bodyBytes;
-        final fileName = path.basename(url);
-        final filePath = '${Common.baseDirectory}/images/$fileName';
-        final file = File(filePath);
-        await file.writeAsBytes(bytes);
-        return LibraryImage(file.path
-            .replaceAll('\\', '/')
-            .replaceFirst(Common.baseDirectory!, ''));
+        if (response.headers['content-type']!.contains('image')) {
+          final bytes = response.bodyBytes;
+          final fileName = path.basename(url);
+          final filePath = '${Common.imagesDirectory}/$fileName';
+          var file = File(filePath);
+          return await file
+              .writeAsBytes(bytes)
+              .then((value) => LibraryImage(file.path
+                  .replaceAll('\\', '/')
+                  .replaceFirst('${Common.imagesDirectory!}/', '')))
+              .onError((error, stackTrace) =>
+                  throw Exception('Failed to write image to file: $error'));
+        } else {
+          throw Exception('Response is not image');
+        }
       } else {
         throw Exception(
             'Failed to download image. Status code: ${response.statusCode}');

@@ -3,14 +3,14 @@ import 'package:eatery/references.dart';
 class UploadButton extends StatefulWidget {
   const UploadButton(
       {Key? key,
-      this.image,
+      this.libraryImage,
       this.onChanged,
       this.primaryColor = const Color(0xFF30A8CF),
       this.secondaryColor = const Color(0xFF2F2F2F),
       this.title,
       this.label})
       : super(key: key);
-  final ImageProvider? image;
+  final LibraryImage? libraryImage;
   final Function(LibraryImage? libraryImage)? onChanged;
   final Color primaryColor;
   final Color secondaryColor;
@@ -47,13 +47,13 @@ class _UploadButtonState extends State<UploadButton> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      elevation: 2,
+      elevation: 1,
       borderRadius: BorderRadius.circular(12),
       child: Container(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(12)),
-            color: const Color(0xFFF0F0F0),
+            color: const Color(0xFFFFFFFF),
             border: Border.all(color: const Color(0xFFF0F0F0), width: 1)),
         child: Row(
           mainAxisSize: MainAxisSize.max,
@@ -62,31 +62,38 @@ class _UploadButtonState extends State<UploadButton> {
             Row(
               children: [
                 SizedBox(
-                  height: 84,
-                  width: 84,
+                  height: 72,
+                  width: 72,
                   child: Stack(
                     children: [
-                      if (widget.image == null)
+                      if (widget.libraryImage == null)
                         Center(
                             child: Icon(
                           Icons.photo_library,
                           size: 54,
                           color: widget.primaryColor.withOpacity(0.50),
                         )),
-                      if (widget.image != null)
+                      if (widget.libraryImage != null)
                         Container(
                           margin: const EdgeInsets.all(6),
                           decoration: BoxDecoration(
                             color: const Color(0xFFF7F7F8),
                             borderRadius: BorderRadius.circular(4),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.1),
+                                blurRadius: 4,
+                                offset: const Offset(0, 2),
+                              )
+                            ],
                             image: DecorationImage(
                               fit: BoxFit.cover,
-                              image: widget.image ??
+                              image: widget.libraryImage?.image ??
                                   const AssetImage('assets/images.default.jpg'),
                             ),
                           ),
                         ),
-                      if (widget.image != null)
+                      if (widget.libraryImage != null)
                         Positioned(
                             top: 0,
                             right: 0,
@@ -104,6 +111,13 @@ class _UploadButtonState extends State<UploadButton> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
                                   color: Colors.redAccent,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      blurRadius: 4,
+                                      offset: const Offset(0, 2),
+                                    )
+                                  ],
                                 ),
                                 child: const Icon(
                                   Icons.close,
@@ -145,28 +159,95 @@ class _UploadButtonState extends State<UploadButton> {
                 ),
               ],
             ),
-            Material(
-              elevation: 2,
-              borderRadius: BorderRadius.circular(12),
-              child: InkWell(
-                onTap: () => onUploadPressed(context),
-                child: ClipRRect(
-                  borderRadius: const BorderRadius.all(Radius.circular(9)),
-                  child: SizedBox(
-                    width: 72,
-                    height: 72,
-                    child: Icon(
-                      widget.image != null ? Icons.refresh : Icons.add,
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                  IconButton(
+                    onPressed: () {
+                      onLinkAttachPressed(context, callback: (link) async {
+                        if (widget.onChanged != null) {
+                          try{
+
+                            var libraryImage = LibraryImage(link);
+                            widget.onChanged!(libraryImage);
+                          } catch(e) {
+                            showMessageDialog(context, e.toString(), MessageType.error);
+                          }
+                        }
+                      });
+                    },
+
+                    icon: Icon(
+                      Icons.add_link_outlined,
                       size: 24,
                       color: widget.primaryColor,
                     ),
                   ),
+
+                const SizedBox(
+                  width: 8,
                 ),
-              ),
+                IconButton(
+                  onPressed: () => onUploadPressed(context),
+                  icon: Icon(
+                    Icons.add_photo_alternate_outlined,
+                    size: 24,
+                    color: widget.primaryColor,
+                  ),
+                )
+              ],
             ),
+
           ],
         ),
       ),
     );
+  }
+
+  onLinkAttachPressed(BuildContext context, {String? link, Function(String)? callback}) {
+    // Show dialog to enter link and fetch data from link in dialog
+    TextEditingController controllerLink = TextEditingController();
+    controllerLink.text = link ?? '';
+    FocusNode focusNodeLink = FocusNode();
+    focusNodeLink.requestFocus();
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: const Text('Network Image'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    focusNode: focusNodeLink,
+                    controller: controllerLink,
+                    decoration: const InputDecoration(
+                      labelText: 'URL',
+                      hintText: 'Enter URL',
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Cancel')),
+                      TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                            if(callback != null) {
+                              callback(controllerLink.text);
+                            }
+                          },
+                          child: const Text('Attach')),
+                    ],
+                  )
+                ],
+              ),
+            ));
   }
 }

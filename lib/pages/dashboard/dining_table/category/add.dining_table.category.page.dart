@@ -38,6 +38,7 @@ class _AddDiningTableCategoryPageState
       ],
     );
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: appBar,
       body: InkWell(
         onTap: () {

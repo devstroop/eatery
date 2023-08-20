@@ -12,7 +12,9 @@ class _CreateCompanyResultPageState extends State<CreateCompanyResultPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
+        backgroundColor: Colors.grey[200],
         title: Padding(
           padding: const EdgeInsets.only(top: 16.0),
           child: Image.asset(
@@ -22,7 +24,6 @@ class _CreateCompanyResultPageState extends State<CreateCompanyResultPage> {
         ),
         centerTitle: true,
       ),
-      backgroundColor: KColors.white,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SizedBox(
@@ -30,49 +31,69 @@ class _CreateCompanyResultPageState extends State<CreateCompanyResultPage> {
           height: MediaQuery.of(context).size.height,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
-              Lottie.asset(
-                  'assets/lottie/hurray.json'),
+              Spacer(),
+              Container(
+                margin: const EdgeInsets.only(top: 16.0),
+                child: Lottie.asset(
+                    'assets/lottie/animation_llie4lzc.json'),
+              ),
               Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Text(
-                    'Hurray!',
+                    'Congrats!',
                     style: TextStyle(
-                        fontSize: 32,
+                        fontSize: 24,
                         fontWeight: FontWeight.bold,
                         color: KColors.secondary2),
                   ),
-                  const Text(
-                    'You\'ve successfully created a company.',
+                  Text(
+                    'Your company has been created successfully.\nLogin to get started!',
                     style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w400,
+                      fontSize: 16,
+                      fontWeight: FontWeight.normal,
+                      color: KColors.black500,
                     ),
                     textAlign: TextAlign.center,
                   ),
                 ],
               ),
+              Container(
+                margin: const EdgeInsets.only(top: 16.0),
+                child: PrimaryButton(
+                  color: KColors.secondary2,
+                  onPressed: () {
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(builder: (context) => const LoginPage()),
+                      (Route<dynamic> route) => false,
+                    );
+                  },
+                  child: const Text('Continue to Login'),
+                ),
+              ),
+              Spacer(),
             ],
           ),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: KColors.white,
-        child: PrimaryButton(
-          color: KColors.secondary2,
-          onPressed: () {
-            Navigator.pushAndRemoveUntil(
-              context,
-              MaterialPageRoute(builder: (context) => const LoginPage()),
-              (Route<dynamic> route) => false,
-            );
-          },
-          child: const Text('Continue to Login'),
-        ),
-      ),
+      // bottomNavigationBar: BottomAppBar(
+      //   color: KColors.white,
+      //   child: PrimaryButton(
+      //     color: KColors.secondary2,
+      //     onPressed: () {
+      //       Navigator.pushAndRemoveUntil(
+      //         context,
+      //         MaterialPageRoute(builder: (context) => const LoginPage()),
+      //         (Route<dynamic> route) => false,
+      //       );
+      //     },
+      //     child: const Text('Continue to Login'),
+      //   ),
+      // ),
     );
   }
 }

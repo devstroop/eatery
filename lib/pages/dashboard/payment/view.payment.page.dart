@@ -14,6 +14,7 @@ class _ViewPaymentPageState extends State<ViewPaymentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         title: const Text('Payment Details'),
         actions: [

@@ -47,10 +47,14 @@ class _Body5State extends State<Body5> {
           InkWell(
             onTap: () => showCurrencyPicker(
               context: context,
-              showSearchField: false,
+              showSearchField: true,
               showFlag: true,
               showCurrencyName: true,
               showCurrencyCode: true,
+              favorite: const ['INR'],
+              physics: const BouncingScrollPhysics(),
+              searchHint: 'Search by country name or currency code',
+              useRootNavigator: true,
               // currencyFilter: const ['INR', 'AED'],
               theme: CurrencyPickerThemeData(
                   bottomSheetHeight: MediaQuery.of(context).size.height * 4/5

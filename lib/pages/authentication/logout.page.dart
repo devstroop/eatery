@@ -23,6 +23,7 @@ class _LogoutPageState extends State<LogoutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        backgroundColor: Colors.grey[200],
         body: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,

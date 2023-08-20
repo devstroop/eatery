@@ -245,9 +245,9 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: KColors.white,
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        backgroundColor: KColors.white,
+        backgroundColor: Colors.grey[200],
         title: Image.asset(
           'assets/logo.png',
           height: 36,

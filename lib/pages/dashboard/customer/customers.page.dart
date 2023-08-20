@@ -19,6 +19,7 @@ class _CustomersPageState extends State<CustomersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: _pageColor,
         title: const Text('Customers'),
@@ -32,58 +33,146 @@ class _CustomersPageState extends State<CustomersPage> {
                     onTap: (){
                       Navigator.push(context, MaterialPageRoute(builder: (context) => ViewCustomer(customer: customer)));
                     },
+                      leading: Container(
+                        width: 48,
+                        height: 48,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: _pageColor,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          customer.name![0],
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 24,
+                          ),
+                        ),
+                      ),
                     title: Text(
                       customer.name ?? 'NA',
                       style: const TextStyle(fontWeight: FontWeight.w600),
                     ),
-                    subtitle: Text(customer.phone),
-                    trailing: Row(
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        IconButton(
-                          icon: Icon(Icons.edit, color: _pageColor),
-                          onPressed: () {
-                            if (customer.id != null) {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        EditCustomerPage(customer: customer)),
-                              ).then((_) => setState(() {}));
-                            }
-                          },
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.delete, color: _pageColor),
-                          onPressed: () {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return AlertDialog(
-                                  title: const Text('Delete Customer'),
-                                  content: const Text(
-                                      'Are you sure you want to delete this customer?'),
-                                  actions: [
-                                    TextButton(
-                                      onPressed: () {
-                                        Navigator.pop(context);
-                                      },
-                                      child: const Text('Cancel'),
-                                    ),
-                                    TextButton(
-                                      onPressed: () {
-                                        // (customer).delete();
-                                        setState(() {});
-                                      },
-                                      child: const Text('Delete'),
-                                    ),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                        ),
+                        if(customer.address != null)
+                          Text(customer.address!),
+                        Text(customer.phone),
                       ],
+                    ),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.more_vert),
+                      onPressed: () async {
+                        await showModalBottomSheet(
+                          context: context,
+                          builder: (context) => Container(
+                            margin: const EdgeInsets.only(bottom: 24),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                // Row(
+                                //   mainAxisSize: MainAxisSize.min,
+                                //   children: [
+                                //     IconButton(
+                                //       icon: Icon(Icons.edit, color: _pageColor),
+                                //       onPressed: () {
+                                //         if (customer.id != null) {
+                                //           Navigator.push(
+                                //             context,
+                                //             MaterialPageRoute(
+                                //                 builder: (context) =>
+                                //                     EditCustomerPage(customer: customer)),
+                                //           ).then((_) => setState(() {}));
+                                //         }
+                                //       },
+                                //     ),
+                                //     IconButton(
+                                //       icon: Icon(Icons.delete, color: _pageColor),
+                                //       onPressed: () {
+                                //         showDialog(
+                                //           context: context,
+                                //           builder: (context) {
+                                //             return AlertDialog(
+                                //               title: const Text('Delete Customer'),
+                                //               content: const Text(
+                                //                   'Are you sure you want to delete this customer?'),
+                                //               actions: [
+                                //                 TextButton(
+                                //                   onPressed: () {
+                                //                     Navigator.pop(context);
+                                //                   },
+                                //                   child: const Text('Cancel'),
+                                //                 ),
+                                //                 TextButton(
+                                //                   onPressed: () {
+                                //                     // (customer).delete();
+                                //                     setState(() {});
+                                //                   },
+                                //                   child: const Text('Delete'),
+                                //                 ),
+                                //               ],
+                                //             );
+                                //           },
+                                //         );
+                                //       },
+                                //     ),
+                                //   ],
+                                // ),
+                                ListTile(
+                                  leading: const Icon(Icons.edit),
+                                  title: const Text('Edit'),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    if (customer.id != null) {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                EditCustomerPage(customer: customer)),
+                                      ).then((_) => setState(() {}));
+                                    }
+                                  },
+                                ),
+                                ListTile(
+                                  leading: const Icon(Icons.delete),
+                                  title: const Text('Delete'),
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: const Text('Delete Customer'),
+                                          content: const Text(
+                                              'Are you sure you want to delete this customer?'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              child: const Text('Cancel'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                // (customer).delete();
+                                                setState(() {});
+                                              },
+                                              child: const Text('Delete'),
+                                            ),
+                                          ],
+                                        );
+                                      },
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     ));
                 }),
               ],

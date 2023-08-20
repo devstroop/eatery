@@ -36,6 +36,7 @@ class _TaxSlabsSettingsPageState extends State<TaxSlabsSettingsPage> {
   Widget build(BuildContext context) {
     List<TaxSlab> taxSlabs = EateryDB.instance.taxSlabBox!.values.toList();
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,

@@ -45,10 +45,10 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
             ? widget.product.salePrice.toString()
             : '';
         selectedFoodType = widget.product.foodType;
-        selectedTaxSlab = widget.product.taxSlabId != null ? EateryDB.instance.taxSlabBox!.values
-            .singleWhere((element) => element.id == widget.product.taxSlabId) : null;
-        selectedCategory = widget.product.categoryId != null ?EateryDB.instance.productCategoryBox!.values
-            .singleWhere((element) => element.id == widget.product.categoryId) : null;
+        selectedTaxSlab = EateryDB.instance.taxSlabBox!.values
+            .where((element) => element.id == widget.product.taxSlabId).firstOrNull;
+        selectedCategory = EateryDB.instance.productCategoryBox!.values
+            .where((element) => element.id == widget.product.categoryId).firstOrNull;
         _controllerDescription.text = widget.product.description ?? '';
       });
     });
@@ -59,6 +59,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
@@ -89,7 +90,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
                 label: 'Product Image',
                 primaryColor: _pageColor,
                 secondaryColor: KColors.black600,
-                image: image?.image,
+                libraryImage: image,
                 onChanged: (image) {
                   setState(() {
                     this.image = image;

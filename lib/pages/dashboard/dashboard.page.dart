@@ -311,7 +311,7 @@ class _DashboardPageState extends State<DashboardPage> {
                         height: (menuSize - 8) / 2,
                         iconData: Icons.table_restaurant,
                         title: 'Dining Tables',
-                        color: const Color(0xFFEF6850),
+                        color: KColors.tertiary3,
                         onTap: () {
                           Navigator.push(
                             context,
@@ -331,7 +331,7 @@ class _DashboardPageState extends State<DashboardPage> {
                   subtitle: 'All orders are here',
                   titleSize: titleSize,
                   subtitleSize: subtitleSize,
-                  color: const Color(0xFFF5A142),
+                  color: KColors.tertiary2,
                   width: menuSize,
                   height: menuSize,
                   onTap: () {

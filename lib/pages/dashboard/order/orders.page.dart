@@ -3,7 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:eatery/references.dart';
 
-final Color _pageColor = KColors.secondary2;
+final Color _pageColor = KColors.tertiary2;
 
 class OrdersPage extends StatefulWidget {
   const OrdersPage({Key? key}) : super(key: key);
@@ -45,6 +45,7 @@ class _OrdersPageState extends State<OrdersPage> {
   Widget build(BuildContext context) {
     List<Order> orders = EateryDB.instance.orderBox!.values.toList();
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,

@@ -1,6 +1,6 @@
 import 'package:eatery/references.dart';
 
-Color _pageColor = KColors.tertiary;
+Color _pageColor = KColors.tertiary3;
 
 class DiningTablesPage extends StatefulWidget {
   const DiningTablesPage({Key? key}) : super(key: key);
@@ -30,6 +30,7 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
             element.category?.id == selectedCategory?.id)
         .toList();
     return Scaffold(
+        backgroundColor: Colors.grey[200],
         appBar: AppBar(
           backgroundColor: _pageColor,
           title: const Text('Dining Tables'),
@@ -92,7 +93,7 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
             Expanded(
               child: diningTables.isNotEmpty
                   ? ListView(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      padding: const EdgeInsets.only(bottom: 8),
                       children: [
                         ...diningTables.map((diningTable) {
                           DiningTableCategory? category = EateryDB

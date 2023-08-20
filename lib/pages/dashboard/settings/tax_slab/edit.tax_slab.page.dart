@@ -53,6 +53,7 @@ class _EditTaxSlabSettingsPageState extends State<EditTaxSlabSettingsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,

@@ -42,6 +42,7 @@ final List<FocusNode> _focusNodes = [
   Widget build(BuildContext context) {
     List<TaxSlab> slabs = EateryDB.instance.taxSlabBox!.values.toList();
     return Scaffold(
+      backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
@@ -71,7 +72,7 @@ final List<FocusNode> _focusNodes = [
                 label: 'Product Image',
                 primaryColor: _pageColor,
                 secondaryColor: KColors.black600,
-                image: image?.image,
+                libraryImage: image,
                 onChanged: (image) {
                   setState(() {
                     this.image = image;
