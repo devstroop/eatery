@@ -1,5 +1,8 @@
+import 'package:eatery/pages/authentication/reset-pin.dart';
 import 'package:get/get.dart';
 import 'package:eatery/references.dart';
+
+import '../main.screen.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -67,16 +70,115 @@ class _LoginPageState extends State<LoginPage> {
         actions: [
           IconButton(
             icon: Icon(
-              Icons.settings_backup_restore,
+              Icons.more_vert,
               color: KColors.black600,
             ),
             onPressed: () {
-              Navigator.push(
+              showMenu(
+                context: context,
+                position: const RelativeRect.fromLTRB(100, 100, 0, 0),
+                items: [
+                  PopupMenuItem(
+                    value: 'reset',
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.lock_reset,
+                          color: KColors.black600,
+                        ),
+                        const SizedBox(width: 8,),
+                        Text(
+                          'Reset PIN',
+                          style: TextStyle(
+                            color: KColors.black600,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: 'delete',
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.delete,
+                          color: KColors.red,
+                        ),
+                        const SizedBox(width: 8,),
+                        Text(
+                          'Delete Company',
+                          style: TextStyle(
+                            color: KColors.red,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ).then((value) {
+                if (value == 'reset') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ResetPinScreen(),
+                    ),
+                  );
+                } else if (value == 'delete') {
+
+                  // ask for confirmation
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: Text('Delete ${company?.name}'),
+                      content: Text('Are you sure you want to delete ${company?.name} and its data?'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('Cancel'),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            EateryDB.instance.flush();
+                            Navigator.pop(context);
+                            Navigator.pushAndRemoveUntil(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const MainScreen(),
+                              ),
+                              (Route<dynamic> route) => false,
+                            );
+                          },
+                          child: const Text('Delete'),
+                        ),
+                      ],
+                    ),
+                  );
+                }
+
+                /*if (value == 'settings') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const SettingsPage(),
+                    ),
+                  );
+                } else if (value == 'backup_restore') {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const BackupRestorePage(),
+                    ),
+                  );
+                }*/
+              });
+              /*Navigator.push(
                 context,
                 MaterialPageRoute(
                   builder: (context) => const BackupRestorePage(),
                 ),
-              );
+              );*/
             },
           )
         ],
@@ -176,7 +278,7 @@ class _LoginPageState extends State<LoginPage> {
                         ],
                       ),
                     ),
-                    SpacingStyle.defaultVerticalSpacing,
+                    /*SpacingStyle.defaultVerticalSpacing,
                     TextButton(
                       child: Text(
                         'Forgot password?',
@@ -221,7 +323,7 @@ class _LoginPageState extends State<LoginPage> {
                                     },
                                   ),
                       ),
-                    )
+                    )*/
                   ],
                 ),
               ), // Placeholder to add space for the bottom app bar

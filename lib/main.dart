@@ -1,3 +1,4 @@
+import 'package:eatery/pages/main.screen.dart';
 import 'package:eatery/references.dart';
 import 'package:googleapis/chat/v1.dart';
 
@@ -62,7 +63,7 @@ class MyApp extends StatelessWidget {
         home: Scaffold(
           body: EateryDB.instance.companyBox!.isNotEmpty
               ? const LoginPage()
-              : const CreateCompanyPage(),
+              : const MainScreen(),
         ));
   }
 }
