@@ -24,96 +24,67 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ),
         ),
-        /*body: Center(
-        child: Container(
-          width: MediaQuery.of(context).size.width * 0.8,
-          decoration: BoxDecoration(
-            color: Colors.white70,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.grey.withOpacity(0.35),
-                spreadRadius: 0,
-                blurRadius: 10,
-                offset: const Offset(0, 3), // changes position of shadow
-              ),
-            ],
-            border: Border.all(
-              color: themeColor,
-              width: 2,
-              // color: Colors.grey[300]!,
-            ),
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              for(var each in EateryDB.instance.companyBox?.values.toList() ?? [])
-                ListTile(
-                  leading: CircleAvatar(
-                    radius: 24,
-                    backgroundImage: Common.company?.logo != null
-                        ? LibraryImage(Common.company?.logo).image
-                        : null,
-                  ),
-                  title: Text(each.name),
-                  subtitle: Text(each.address),
-                  onTap: () {
-                  },
-                ),
-            ],
-          ),
-        ),
-      )*/
-
         backgroundColor: Colors.white,
         body: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Lottie.asset('assets/lottie/1699652006712.json'),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'All-in-one',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w400,
+            const Stack(
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'All-in-one',
+                            style: TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                          Text(
+                            'restaurant POS System',
+                            style: TextStyle(
+                              fontSize: 32,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  Text(
-                    'restaurant POS System',
-                    style: TextStyle(
-                      fontSize: 32,
-                      fontWeight: FontWeight.w600,
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16.0),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Manage your restaurant with ease',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w300,
+                            ),
+                          ),
+                          SizedBox(
+                            width: 4,
+                          ),
+                          Text(
+                            'with Eatery',
+                            style: TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Manage your restaurant with ease',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  Text(
-                    'with Eatery',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                ],
-              ),
+                  ],
+                ),
+              ],
             ),
           ],
         ),
@@ -126,7 +97,7 @@ class _MainScreenState extends State<MainScreen> {
                   height: 50,
                   width: double.infinity,
                   color: KColors.tertiary3,
-                  onPressed: () {},
+                  onPressed: () => _restoreExisting(context),
                   child: const Text('Restore existing'),
                 ),
               ),
@@ -139,12 +110,22 @@ class _MainScreenState extends State<MainScreen> {
                   width: double.infinity,
                   height: 50,
                   color: themeColor,
-                  onPressed: () {},
+                  onPressed: () => _createNew(context),
                   child: const Text('Create new'),
                 ),
               ),
             ],
           ),
         ));
+  }
+
+  _restoreExisting(BuildContext context) {
+  }
+
+  _createNew(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => const CreateCompanyPage()),
+    );
   }
 }

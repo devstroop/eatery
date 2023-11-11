@@ -20,7 +20,7 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     Future.delayed(Duration.zero, () {
       setState(() {
-        company = EateryDB.instance.companyBox!.values.single;
+        company = EateryDB.instance.companyBox!.values.firstOrNull;
       });
     });
   }
