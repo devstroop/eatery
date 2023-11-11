@@ -57,8 +57,7 @@ class _MainScreenState extends State<MainScreen> {
                     ),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 16.0),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                      child: Wrap(
                         children: [
                           Text(
                             'Manage your restaurant with ease',
@@ -96,7 +95,7 @@ class _MainScreenState extends State<MainScreen> {
                   width: double.infinity,
                   color: KColors.tertiary3,
                   onPressed: () => _restoreExisting(context),
-                  child: const Text('Restore Company'),
+                  child: const Text('Restore Existing'),
                 ),
               ),
               const SizedBox(
@@ -109,7 +108,7 @@ class _MainScreenState extends State<MainScreen> {
                   height: 50,
                   color: themeColor,
                   onPressed: () => _createNew(context),
-                  child: const Text('New Company'),
+                  child: const Text('Create Company'),
                 ),
               ),
             ],

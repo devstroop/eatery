@@ -69,10 +69,38 @@ class LibraryImage {
   Future<void> deleteAsync() async {
     await file.delete();
   }
+  ImageProvider<Object> get image {
+    // if ((filename?.startsWith('http://') ?? false) || (filename?.startsWith('https://') ?? false)) {
+    //   try {
+    //     // Attempt to create FastCachedImageProvider
+    //     FastCachedImageProvider provider = FastCachedImageProvider(filename!);
+    //     return provider;
+    //   } catch (e) {
+    //     // Log the error or handle it in any way you prefer
+    //     print('Error loading image from URL: $e');
+    //   }
+    //
+    //   // Return the default image if there's an error
+    //   return Image.asset('assets/images/default.jpg').image;
+    // }
 
-  ImageProvider get image {
+    // If it's not a URL, check if the file exists and return the appropriate image
+    return (file.existsSync()
+        ? Image.file(file)
+        : Image.asset('assets/images/default.jpg'))
+        .image;
+  }
+
+  /*ImageProvider get image {
     if((filename?.startsWith('http://') ?? false) || (filename?.startsWith('https://') ?? false)) {
       try{
+
+        http.get(Uri.parse(filename!)).then((value) {
+          if(value.statusCode != 200) {
+            throw Exception('Invalid URL');
+          }
+        }).whenComplete(() => null);
+
         return FastCachedImageProvider(filename!);
       } catch(e) {
         return Image.asset('assets/images/default.jpg').image;
@@ -82,7 +110,7 @@ class LibraryImage {
             ? Image.file(file)
             : Image.asset('assets/images/default.jpg'))
         .image;
-  }
+  }*/
 }
 
 class LibraryImageProvider {
@@ -108,7 +136,16 @@ class LibraryImageProvider {
       if (response.statusCode == 200) {
         if (response.headers['content-type']!.contains('image')) {
           final bytes = response.bodyBytes;
-          final fileName = path.basename(url);
+          var fileName = path.basename(url);
+          if(fileName.isEmpty) {
+            throw Exception('Invalid URL');
+          }
+          if(!fileName.endsWith('.jpg') && !fileName.endsWith('.jpeg') && !fileName.endsWith('.png')) {
+            // find extension from bytes
+            var extension = lookupMimeType(fileName);
+            extension = extension?.split('/').last ?? 'jpg';
+            fileName = '${DateTime.now().millisecondsSinceEpoch}.$extension';
+          }
           final filePath = '${Common.imagesDirectory}/$fileName';
           var file = File(filePath);
           return await file

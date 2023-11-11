@@ -89,7 +89,11 @@ class _InventoryItemsPageState extends State<InventoryItemsPage> {
                                   Padding(
                                     padding: const EdgeInsets.only(right: 6.0),
                                     child: Image(
-                                      image: LibraryImage(e.image!).image,
+                                      errorBuilder: (context, error, stackTrace) {
+                                        print(error);
+                                        return const Icon(Icons.error_outline);
+                                      },
+                                      image: LibraryImage(e.image ?? '').image,
                                       height: 28,
                                       width: 28,
                                     ),

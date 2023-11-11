@@ -108,11 +108,11 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        centerTitle: false,
         title: const Text(
-          'Image Library',
+          'Library',
           style: TextStyle(color: Colors.black),
         ),
-        centerTitle: true,
         actions: [
           /*FutureBuilder<ClipboardData?>(
                       future: Clipboard.getData('text/plain'),
@@ -144,12 +144,14 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
                       },
                     ),*/
           IconButton(
-            icon: const Icon(Icons.add_link_outlined),
+            icon: const Icon(Icons.download),
+            iconSize: 18,
+            color: const Color(0xFF888888),
             onPressed: (){
               onLinkAttachPressed(context, callback: (link) async {
                 try{
                   var libraryImage = await LibraryImageProvider.importFromURL(link);
-                  widget.action(libraryImage);
+                  //widget.action(libraryImage);
                   fetchLibrary();
                 } catch(e) {
                   showMessageDialog(context, e.toString(), MessageType.error);
@@ -159,7 +161,7 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
           ),
           if (Platform.isAndroid)
             IconButton(
-              icon: const Icon(Icons.camera),
+              icon: const Icon(Icons.camera_alt),
               iconSize: 18,
               color: const Color(0xFF888888),
               onPressed: pickFromCamera,
@@ -245,7 +247,7 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Network Image'),
+          title: const Text('Download image'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -275,7 +277,7 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
                           callback(controllerLink.text);
                         }
                       },
-                      child: const Text('Attach')),
+                      child: const Text('Download')),
                 ],
               )
             ],

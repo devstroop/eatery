@@ -110,9 +110,9 @@ final List<FocusNode> _focusNodes = [
                           prefix: const Icon(Icons.currency_rupee, size: 14,),
                           hint: '0.00',
                           themeColor: _pageColor,
-                          focusNode: _focusNodes[2],
+                          focusNode: _focusNodes[1],
                           onFieldSubmitted: (v) {
-                            FocusScope.of(context).requestFocus(_focusNodes[3]);
+                            FocusScope.of(context).requestFocus(_focusNodes[2]);
                           },
                           validator: (value) {
                             if (value!.trim().isEmpty) {
@@ -131,7 +131,7 @@ final List<FocusNode> _focusNodes = [
                           prefix: const Icon(Icons.currency_rupee, size: 14,),
                           hint: '0.00',
                           themeColor: _pageColor,
-                          focusNode: _focusNodes[3],
+                          focusNode: _focusNodes[2],
                           onFieldSubmitted: (v) {
                             FocusScope.of(context).unfocus();
                           },
@@ -279,7 +279,7 @@ final List<FocusNode> _focusNodes = [
                     label: 'Description',
                     hint: 'Enter product description',
                     multiline: true,
-                    focusNode: _focusNodes[4],
+                    focusNode: _focusNodes[3],
                     onFieldSubmitted: (v) {
                       FocusScope.of(context).unfocus();
                     },

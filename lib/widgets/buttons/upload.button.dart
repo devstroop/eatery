@@ -162,31 +162,6 @@ class _UploadButtonState extends State<UploadButton> {
             Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                  IconButton(
-                    onPressed: () {
-                      onLinkAttachPressed(context, callback: (link) async {
-                        if (widget.onChanged != null) {
-                          try{
-
-                            var libraryImage = LibraryImage(link);
-                            widget.onChanged!(libraryImage);
-                          } catch(e) {
-                            showMessageDialog(context, e.toString(), MessageType.error);
-                          }
-                        }
-                      });
-                    },
-
-                    icon: Icon(
-                      Icons.add_link_outlined,
-                      size: 24,
-                      color: widget.primaryColor,
-                    ),
-                  ),
-
-                const SizedBox(
-                  width: 8,
-                ),
                 IconButton(
                   onPressed: () => onUploadPressed(context),
                   icon: Icon(
@@ -204,7 +179,7 @@ class _UploadButtonState extends State<UploadButton> {
     );
   }
 
-  onLinkAttachPressed(BuildContext context, {String? link, Function(String)? callback}) {
+  /*onLinkAttachPressed(BuildContext context, {String? link, Function(String)? callback}) {
     // Show dialog to enter link and fetch data from link in dialog
     TextEditingController controllerLink = TextEditingController();
     controllerLink.text = link ?? '';
@@ -213,7 +188,7 @@ class _UploadButtonState extends State<UploadButton> {
     showDialog(
         context: context,
         builder: (context) => AlertDialog(
-              title: const Text('Network Image'),
+          title: const Text('Download image'),
               content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
@@ -249,5 +224,5 @@ class _UploadButtonState extends State<UploadButton> {
                 ],
               ),
             ));
-  }
+  }*/
 }

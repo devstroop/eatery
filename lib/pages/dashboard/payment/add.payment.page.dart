@@ -183,7 +183,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                 ),
                 const SizedBox(height: 20),
                 UploadButton(
-                  label: 'Attach Payment Screenshot',
+                  label: 'Payment Screenshot',
                   primaryColor: _pageColor,
                   secondaryColor: KColors.black600,
                   libraryImage: image,

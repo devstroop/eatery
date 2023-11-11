@@ -389,7 +389,7 @@ class _KitchenPageState extends State<KitchenPage> {
         onPressed: () async {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => const AddInventoryItem()),
+            MaterialPageRoute(builder: (context) => const AddKitchenDish()),
           ).then((_) => setState(() {}));
         },
       ),
