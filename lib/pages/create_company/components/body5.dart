@@ -36,82 +36,87 @@ class _Body5State extends State<Body5> {
   Widget build(BuildContext context) {
     return Form(
       key: widget.formKey,
-      child: ListView(
-        scrollDirection: Axis.vertical,
-        children: [
-          const PageTitle(
-            title: "Region and Currency",
-            subtitle: "Select the default currency as per region",
-          ),
-          SpacingStyle.defaultVerticalSpacing,
-          InkWell(
-            onTap: () => showCurrencyPicker(
-              context: context,
-              showSearchField: true,
-              showFlag: true,
-              showCurrencyName: true,
-              showCurrencyCode: true,
-              favorite: const ['INR'],
-              physics: const BouncingScrollPhysics(),
-              searchHint: 'Search by country name or currency code',
-              useRootNavigator: true,
-              // currencyFilter: const ['INR', 'AED'],
-              theme: CurrencyPickerThemeData(
-                  bottomSheetHeight: MediaQuery.of(context).size.height * 4/5
-              ),
-              onSelect: (Currency currency) {
-                setState(() {
-                  selectedCurrency = currency;
-                });
-                if (widget.callbackFormKey != null) {
-                  widget.callbackFormKey!(widget.formKey);
-                }
-                widget.callback(currency);
-              },
+      child: InkWell(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: ListView(
+          scrollDirection: Axis.vertical,
+          children: [
+            const PageTitle(
+              title: "Region and Currency",
+              subtitle: "Select the default currency as per region",
             ),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(6),
-                border: Border.all(
-                  color: KColors.secondary2,
-                  width: 2,
+            SpacingStyle.defaultVerticalSpacing,
+            InkWell(
+              onTap: () => showCurrencyPicker(
+                context: context,
+                showSearchField: true,
+                showFlag: true,
+                showCurrencyName: true,
+                showCurrencyCode: true,
+                favorite: const ['INR'],
+                physics: const BouncingScrollPhysics(),
+                searchHint: 'Search by country name or currency code',
+                useRootNavigator: true,
+                // currencyFilter: const ['INR', 'AED'],
+                theme: CurrencyPickerThemeData(
+                    bottomSheetHeight: MediaQuery.of(context).size.height * 4/5
                 ),
+                onSelect: (Currency currency) {
+                  setState(() {
+                    selectedCurrency = currency;
+                  });
+                  if (widget.callbackFormKey != null) {
+                    widget.callbackFormKey!(widget.formKey);
+                  }
+                  widget.callback(currency);
+                },
               ),
-              child: ListTile(
-                leading: selectedCurrency != null
-                    ? Column(
-                        mainAxisSize: MainAxisSize.max,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            CurrencyUtils.currencyToEmoji(selectedCurrency!),
-                            style: const TextStyle(
-                              fontSize: 32,
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(
+                    color: KColors.secondary2,
+                    width: 2,
+                  ),
+                ),
+                child: ListTile(
+                  leading: selectedCurrency != null
+                      ? Column(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              CurrencyUtils.currencyToEmoji(selectedCurrency!),
+                              style: const TextStyle(
+                                fontSize: 32,
+                              ),
                             ),
+                          ],
+                        )
+                      : null,
+                  trailing: selectedCurrency != null
+                      ? Text(
+                          selectedCurrency!.symbol,
+                          style: const TextStyle(
+                            fontSize: 18,
                           ),
-                        ],
-                      )
-                    : null,
-                trailing: selectedCurrency != null
-                    ? Text(
-                        selectedCurrency!.symbol,
-                        style: const TextStyle(
-                          fontSize: 18,
-                        ),
-                      )
-                    : null,
-                title: Text(
-                  selectedCurrency != null
-                      ? selectedCurrency!.code
-                      : 'Not Selected',
+                        )
+                      : null,
+                  title: Text(
+                    selectedCurrency != null
+                        ? selectedCurrency!.code
+                        : 'Not Selected',
+                  ),
+                  subtitle: selectedCurrency != null
+                      ? Text(selectedCurrency!.name)
+                      : null,
                 ),
-                subtitle: selectedCurrency != null
-                    ? Text(selectedCurrency!.name)
-                    : null,
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

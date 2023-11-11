@@ -65,36 +65,41 @@ class _Body6State extends State<Body6> {
   Widget build(BuildContext context) {
     return Form(
       key: widget.formKey,
-      child: ListView(
-        scrollDirection: Axis.vertical,
-        children: [
-          const PageTitle(
-            title: "Choose your subscription",
-            subtitle: "Select the subscription type that suits you best",
-          ),
-          SpacingStyle.defaultVerticalSpacing,
-          SpacingStyle.defaultVerticalSpacing,
-          ...SubscriptionType.values.map((e) {
-            return Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SelectableCard(
-                  header: e.label,
-                  title: e.name,
-                  highlights: e.highlights,
-                  footer: e.description,
-                  selected: e.id == widget.subscriptionType?.id,
-                  highlightColor: e.color,
-                  onTap: () {
-                    // Callback
-                    widget.callback(e, _controllerPurchaseCode.text, validFrom, validTill);
-                  },
-                ),
-                SpacingStyle.defaultVerticalSpacing,
-              ],
-            );
-          }),
-        ],
+      child: InkWell(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: ListView(
+          scrollDirection: Axis.vertical,
+          children: [
+            const PageTitle(
+              title: "Choose your subscription",
+              subtitle: "Select the subscription type that suits you best",
+            ),
+            SpacingStyle.defaultVerticalSpacing,
+            SpacingStyle.defaultVerticalSpacing,
+            ...SubscriptionType.values.map((e) {
+              return Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SelectableCard(
+                    header: e.label,
+                    title: e.name,
+                    highlights: e.highlights,
+                    footer: e.description,
+                    selected: e.id == widget.subscriptionType?.id,
+                    highlightColor: e.color,
+                    onTap: () {
+                      // Callback
+                      widget.callback(e, _controllerPurchaseCode.text, validFrom, validTill);
+                    },
+                  ),
+                  SpacingStyle.defaultVerticalSpacing,
+                ],
+              );
+            }),
+          ],
+        ),
       ),
     );
   }

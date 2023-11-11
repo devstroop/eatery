@@ -25,9 +25,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ),
         backgroundColor: Colors.white,
-        body: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
+        body: ListView(
           children: [
             Lottie.asset('assets/lottie/1699652006712.json'),
             const Stack(
@@ -98,7 +96,7 @@ class _MainScreenState extends State<MainScreen> {
                   width: double.infinity,
                   color: KColors.tertiary3,
                   onPressed: () => _restoreExisting(context),
-                  child: const Text('Restore existing'),
+                  child: const Text('Restore Company'),
                 ),
               ),
               const SizedBox(
@@ -111,7 +109,7 @@ class _MainScreenState extends State<MainScreen> {
                   height: 50,
                   color: themeColor,
                   onPressed: () => _createNew(context),
-                  child: const Text('Create new'),
+                  child: const Text('New Company'),
                 ),
               ),
             ],

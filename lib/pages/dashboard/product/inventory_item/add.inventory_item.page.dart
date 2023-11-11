@@ -83,21 +83,25 @@ final List<FocusNode> _focusNodes = [
                 height: 6.0,
               ),
               LabeledCustomTextFormField(
-                  label: 'Name',
-                  hint: 'Enter product name',
-                  foregroundColor: KColors.black600,
-                  themeColor: _pageColor,
-                  controller: _controllerName,
-                  focusNode: _focusNodes[0],
-                  onFieldSubmitted: (v) {
-                    FocusScope.of(context).requestFocus(_focusNodes[1]);
-                  },),
+                label: 'Name',
+                hint: 'Enter product name',
+                foregroundColor: KColors.black600,
+                themeColor: _pageColor,
+                controller: _controllerName,
+                focusNode: _focusNodes[0],
+                onFieldSubmitted: (v) {
+                  FocusScope.of(context).requestFocus(_focusNodes[1]);
+                },),
               const SizedBox(
                 height: 6.0,
               ),
-              Row(
-                children: [
-                  LabeledCustomTextFormField(
+              SizedBox(
+                height: 48.0,
+                width: double.maxFinite,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    LabeledCustomTextFormField(
                       label: 'MRP',
                       prefix: const Icon(Icons.currency_rupee, size: 14,),
                       hint: '0.00',
@@ -115,29 +119,30 @@ final List<FocusNode> _focusNodes = [
                       onFieldSubmitted: (v) {
                         FocusScope.of(context).requestFocus(_focusNodes[2]);
                       },
-                  ),
-                  const SizedBox(width: 12.0,),
-                  Flexible(
-                    child: LabeledCustomTextFormField(
-                        label: 'Sale Price',
-                        prefix: const Icon(Icons.currency_rupee, size: 14,),
-                        hint: '0.00',
-                        themeColor: _pageColor,
-                        focusNode: _focusNodes[2],
-                        onFieldSubmitted: (v) {
-                          FocusScope.of(context).unfocus();
-                        },
-                        validator: (value) {
-                          if (value!.trim().isEmpty) {
-                            return 'Price cannot be blank';
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.number,
-                        foregroundColor: KColors.black600,
-                        controller: _controllerSalePrice),
-                  ),
-                ],
+                    ),
+                    const SizedBox(width: 12.0,),
+                    Flexible(
+                      child: LabeledCustomTextFormField(
+                          label: 'Sale Price',
+                          prefix: const Icon(Icons.currency_rupee, size: 14,),
+                          hint: '0.00',
+                          themeColor: _pageColor,
+                          focusNode: _focusNodes[2],
+                          onFieldSubmitted: (v) {
+                            FocusScope.of(context).unfocus();
+                          },
+                          validator: (value) {
+                            if (value!.trim().isEmpty) {
+                              return 'Price cannot be blank';
+                            }
+                            return null;
+                          },
+                          keyboardType: TextInputType.number,
+                          foregroundColor: KColors.black600,
+                          controller: _controllerSalePrice),
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(
                 height: 6.0,
@@ -180,7 +185,6 @@ final List<FocusNode> _focusNodes = [
               const SizedBox(
                 height: 6.0,
               ),
-
 
               Text(
                 'Select Tax Slab',

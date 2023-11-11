@@ -140,7 +140,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         TextButton(
                           onPressed: () {
-                            EateryDB.instance.flush();
+                            EateryDB.instance.deleteAll();
                             Navigator.pop(context);
                             Navigator.pushAndRemoveUntil(
                               context,
