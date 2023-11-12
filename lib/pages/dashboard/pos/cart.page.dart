@@ -1,5 +1,5 @@
+import 'package:eatery/functions/order.function.dart';
 import 'package:eatery/references.dart';
-import 'package:get/get.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -47,6 +47,20 @@ class _CartPageState extends State<CartPage> {
               children: [
                 for (var product in Common.cart.toSet())
                   ListTile(
+                    leading: Container(
+                      height: 48,
+                      width: 48,
+                      decoration: BoxDecoration(
+                        color: KColors.white600.withOpacity(0.36),
+                        borderRadius: BorderRadius.circular(12.0),
+                        image: DecorationImage(
+                          image: LibraryImage(product.image).image,
+                          fit: product.type == ProductType.inventoryItem
+                              ? BoxFit.contain
+                              : BoxFit.cover,
+                        ),
+                      ),
+                    ),
                     title: Row(
                       children: [
                         Expanded(
@@ -128,11 +142,16 @@ class _CartPageState extends State<CartPage> {
                         Row(
                           children: [
                             Text(
-                              '${Common.currency?.symbol ?? ''}${(product.salePrice ?? product.mrpPrice)}',
+                              '${Common.currency?.symbol ?? ''}${OrderFunction.calculateProductPriceWithoutTax(product)}',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
+                            const Text('(Excl. Tax)',
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 8,
+                            ),),
                             const Spacer(),
                             Row(
                               children: [
@@ -145,7 +164,7 @@ class _CartPageState extends State<CartPage> {
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
-                                  '${Common.currency?.symbol ?? ''}${((product.salePrice ?? product.mrpPrice) * Common.cart.where((element) => element.id == product.id).length).toPrecision(2)}',
+                                  '${Common.currency?.symbol ?? ''}${OrderFunction.calculateProductSubtotalInCartWithoutTax(Common.cart, product)}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
@@ -157,35 +176,144 @@ class _CartPageState extends State<CartPage> {
                         ),
                       ],
                     ),
-                    leading: Container(
-                      height: 48,
-                      width: 48,
-                      decoration: BoxDecoration(
-                        color: KColors.white600.withOpacity(0.36),
-                        borderRadius: BorderRadius.circular(12.0),
-                        image: DecorationImage(
-                          image: LibraryImage(product.image).image,
-                          fit: product.type == ProductType.inventoryItem
-                              ? BoxFit.contain
-                              : BoxFit.cover,
+                  ),
+                // Price breakthrough
+                Container(
+                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      )
+                    ],
+                    border: Border.all(
+                      color: Colors.grey.withOpacity(0.2),
+                      width: 1,
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            16, 8, 16, 8),
+                        child: Row(
+                          children: [
+                            const Expanded(
+                              child: Text(
+                                'Subtotal',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              '${Common.currency?.symbol ?? ''}${OrderFunction.calculateCartTotalWithoutTax(Common.cart)}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
-                    ),
-                    // trailing: Row(
-                    //   mainAxisSize: MainAxisSize.min,
-                    //   children: [
-                    //     IconButton(
-                    //       color: themeColor,
-                    //       icon: const Icon(Icons.clear),
-                    //       onPressed: () {
-                    //         setState(() {
-                    //           Common.cart.remove(product);
-                    //         });
-                    //       },
-                    //     ),
-                    //   ],
-                    // ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            16, 8, 16, 8),
+                        child: Row(
+                          children: [
+                            const Expanded(
+                              child: Text(
+                                'Tax (Incl./Excl.)',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              '${Common.currency?.symbol ?? ''}${OrderFunction.calculateTaxAmount(Common.cart)}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            16, 8, 16, 8),
+                        child: Row(
+                          children: [
+                            const Expanded(
+                              child: Text(
+                                'Total',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              '${Common.currency?.symbol ?? ''}${OrderFunction.calculateFinalTotal(Common.cart)}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            16, 8, 16, 8),
+                        child: Row(
+                          children: [
+                            const Expanded(
+                              child: Text(
+                                'Round off (+/-)',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              '${Common.currency?.symbol ?? ''}${OrderFunction.calculateRoundOff(Common.cart)}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      // GrandTotal
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            16, 8, 16, 8),
+                        child: Row(
+                          children: [
+                            const Expanded(
+                              child: Text(
+                                'Grand Total',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              '${Common.currency?.symbol ?? ''}${OrderFunction.calculatePayable(Common.cart)}',
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
+                )
               ],
             )
           : const Center(
@@ -216,22 +344,22 @@ class _CartPageState extends State<CartPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
-                          'Total',
+                          'Payable Amount',
                           style: TextStyle(
                             fontWeight: FontWeight.normal,
                             fontSize: 12,
                           ),
                         ),
                         Text(
-                          '${Common.currency?.symbol ?? ''}${calculateTotal(Common.cart)}',
+                          '${Common.currency?.symbol ?? ''}${OrderFunction.calculatePayable(Common.cart)}',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
                           ),
                         ),
-                        Text(
-                          'Taxes and additional charges ${Common.currency?.symbol ?? ''}${calculateTaxesAndAdditionalCharges(Common.cart)}',
-                          style: const TextStyle(
+                        const Text(
+                          'Includes taxes and additional charges',
+                          style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 8,
                           ),
@@ -242,16 +370,7 @@ class _CartPageState extends State<CartPage> {
                   PrimaryButton(
                     color: themeColor,
                     onPressed: () {
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //         builder: (context) => CheckoutPage(
-                      //               order: Order(
-                      //                 customer: Common.activeCustomer!,
-                      //                 products: Common.cart,
-                      //                 type: Common.activeOrderType!,
-                      //               ),
-                      //             )));
+
                     },
                     child: const Padding(
                       padding:
@@ -267,51 +386,40 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-  double calculateTotal(List<Product> cart) {
-    // If tax slab is inclusive, then the tax is already included in the price
-    // If tax slab is exclusive, then the tax is not included in the price, therefore, we need to add it
-
-    double total = 0;
-
-    for (var product in cart) {
-      if (product.taxSlabId == null) {
-        total += (product.salePrice ?? product.mrpPrice);
-        continue;
-      } else {
-        var taxSlab = EateryDB.instance.taxSlabBox!.get(product.taxSlabId!);
-        if (taxSlab == null) {
-          total += (product.salePrice ?? product.mrpPrice);
-          continue;
-        }
-        var rate = taxSlab.rate / 100;
-        var type = taxSlab.type;
-        if (type == TaxType.inclusive) {
-          total += (product.salePrice ?? product.mrpPrice);
-        } else if (type == TaxType.exclusive) {
-          total += (product.salePrice ?? product.mrpPrice) * (1 + rate);
-        }
+ placeOrder(BuildContext context, List<Product> cart, String customerName,
+      String customerPhone, String customerAddress) {
+    var type = Common.activeOrderType;
+    if (type == null) {
+      showMessageDialog(context, 'Please select order type', MessageType.warning);
+      return null;
+    }
+    if (type == OrderType.delivery) {
+      if (customerName.isEmpty ||
+          customerPhone.isEmpty ||
+          customerAddress.isEmpty) {
+        showMessageDialog(context, 'Please fill all the details', MessageType.warning);
+        return null;
       }
     }
-    return total.toPrecision(2);
+
+    final order = Order(
+      customer: Common.activeCustomer,
+      timestamp: DateTime.now(),
+      products: cart,
+      type: type,
+      subtotal: OrderFunction.calculateSubtotal(cart),
+      taxTotal: OrderFunction.calculateTaxAmount(cart),
+      finalTotal: OrderFunction.calculateFinalTotal(cart),
+      roundOff: OrderFunction.calculateRoundOff(cart),
+      grandTotal: OrderFunction.calculatePayable(cart),
+    );
+
+    EateryDB.instance.orderBox!.put(order.id, order).then((value) {
+      Common.cart.clear();
+      showMessageDialog(context, 'Order placed successfully', MessageType.success).whenComplete(() => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => OrderConfirmationPage(order: order)), (route) => false));
+    }).onError((error, stackTrace) {
+      showMessageDialog(context, 'Failed to place order', MessageType.error);
+    });
   }
 
-  double calculateTaxesAndAdditionalCharges(List<Product> cart) {
-    double taxTotal = 0;
-    double additionalChargesTotal = 0;
-    // TODO: Implement additional charges, if any
-    for (var product in cart) {
-      if (product.taxSlabId == null) continue;
-      var taxSlab = EateryDB.instance.taxSlabBox!.get(product.taxSlabId!);
-      if (taxSlab == null) continue;
-      var rate = taxSlab.rate / 100;
-      var type = taxSlab.type;
-      if (type == TaxType.inclusive) {
-        taxTotal += (product.salePrice ?? product.mrpPrice) -
-            ((product.salePrice ?? product.mrpPrice) / (1 + rate));
-      } else if (type == TaxType.exclusive) {
-        taxTotal += (product.salePrice ?? product.mrpPrice) * rate;
-      }
-    }
-    return (taxTotal + additionalChargesTotal).toPrecision(2);
-  }
 }

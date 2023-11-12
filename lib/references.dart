@@ -148,7 +148,7 @@ export './pages/dashboard/order/search.order.delegate.dart';
 
 // Point of Sale
 export './pages/dashboard/pos/pos.page.dart';
-export './pages/dashboard/pos/orderConfirmation.page.dart';
+export './pages/dashboard/pos/order_confirmation.page.dart';
 export './pages/dashboard/pos/views/kProduct.view.dart';
 export './pages/dashboard/pos/views/waiterSelection.view.dart';
 // Authentication
@@ -178,6 +178,5 @@ export './pages/dashboard/settings/tax_slab/tax_slabs.page.dart';
 export './pages/dashboard/settings/currency_region/view.currency_region.page.dart';
 // Backup Restore
 export './pages/backup_restore/backup_restore.page.dart';
-// Dialogs
-export './widgets/dialogs/showConfirmationDialog.dart';
+
 
