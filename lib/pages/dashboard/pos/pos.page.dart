@@ -19,9 +19,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      if (Common.activeOrderType == null ||
-          Common.activeCustomer == null ||
-          Common.activeDiningTable == null) {
+      if (Common.activeOrderType == null) {
         _showOrderTypeSelection().then((value) {
           if (value != null) {
             setState(() => Common.activeOrderType = value);
@@ -111,128 +109,156 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
               children: [
                 InkWell(
                   onTap: () {
-                    Navigator.push(
-                        this.context,
-                        MaterialPageRoute(
-                            builder: (context) => ViewCustomer(
-                                  customer: Common.activeCustomer!,
-                                )));
+                    if (Common.activeCustomer == null) {
+                      showSearch(
+                          context: this.context,
+                          delegate: SearchCustomerDelegate(
+                              EateryDB.instance.customerBox!.values.toList(),
+                              (customer) {
+                            setState(() {
+                              Common.activeCustomer = customer;
+                            });
+                          })).then((value) => setState(() {}));
+                    } else {
+                      Navigator.push(
+                          this.context,
+                          MaterialPageRoute(
+                              builder: (context) => ViewCustomer(
+                                    customer: Common.activeCustomer!,
+                                  ))).then((value) => setState(() {}));
+                    }
                   },
                   child: Row(
                     children: [
-                        CircleAvatar(
-                          radius: 18,
-                          backgroundColor: Colors.white,
-                          child: Icon(
-                            Icons.person,
-                            color: Colors.grey[400],
-                            size: 24,
-                          ),
+                      CircleAvatar(
+                        radius: 18,
+                        backgroundColor: Colors.white,
+                        child: Icon(
+                          Icons.person,
+                          color: Colors.grey[400],
+                          size: 24,
                         ),
+                      ),
                       const SizedBox(width: 8),
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            if(Common.activeCustomer?.phone != null)
-                              Text(
-                                Common.activeCustomer?.phone ?? '',
-                                style: const TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.normal,
-                                    color: Colors.white),
-                              ),
-                            if(Common.activeCustomer?.name != null)
-                              Text(
-                                Common.activeCustomer?.name ?? 'NA',
-                                style: const TextStyle(
-                                    fontSize: 20,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              ),
-
-                            if(Common.activeCustomer == null)
-                              const Text(
-                                'Select\nCustomer',
-                                style: TextStyle(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.white),
-                              ),
-                          ],
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (Common.activeCustomer?.phone != null)
+                            Text(
+                              Common.activeCustomer?.phone ?? '',
+                              style: const TextStyle(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.normal,
+                                  color: Colors.white),
+                            ),
+                          if (Common.activeCustomer?.name != null)
+                            Text(
+                              Common.activeCustomer?.name ?? 'NA',
+                              style: const TextStyle(
+                                  fontSize: 20,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                          if (Common.activeCustomer == null)
+                            const Text(
+                              'Select\nCustomer',
+                              style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white),
+                            ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                if (Common.activeOrderType == OrderType.dine)
+                  InkWell(
+                    onTap: () {
+                      if (Common.activeDiningTable?.order == null) {
+                        showMessageDialog(
+                            this.context,
+                            'No active order for this table',
+                            MessageType.warning);
+                        return;
+                      }
+                      Navigator.push(
+                          this.context,
+                          MaterialPageRoute(
+                              builder: (context) => ViewOrderPage(
+                                  order: Common.activeDiningTable!.order!)));
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Outstanding',
+                          textAlign: TextAlign.end,
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.white),
                         ),
-                    ],
+                        const SizedBox(width: 8),
+                        Text(
+                          '${Common.currency?.symbol ?? ''}${Common.activeCustomer?.outstandingAmount ?? '~'}',
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                InkWell(
-                  onTap: () {
-                    if(Common.activeDiningTable?.order == null){
-                      showMessageDialog(this.context, 'No active order for this table', MessageType.warning);
-                      return;
-                    }
-                    Navigator.push(
-                        this.context,
-                        MaterialPageRoute(
-                            builder: (context) => ViewOrderPage(order: Common.activeDiningTable!.order!)));
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'Outstanding',
-                        textAlign: TextAlign.end,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.white),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        '${Common.currency?.symbol ?? ''}${Common.activeCustomer?.outstandingAmount ?? '~'}',
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                    ],
+                if (Common.activeOrderType == OrderType.dine)
+                  InkWell(
+                    onTap: () {
+                      if (Common.activeDiningTable == null) {
+                        showSearch(
+                            context: this.context,
+                            delegate: SearchDiningTableDelegate(
+                                EateryDB.instance.diningTableBox!.values
+                                    .toList(), (table) {
+                              setState(() {
+                                Common.activeDiningTable = table;
+                              });
+                            })).then((value) => setState(() {}));
+                      } else {
+                        Navigator.push(
+                            this.context,
+                            MaterialPageRoute(
+                                builder: (context) => ViewDiningTablePage(
+                                      diningTable: Common.activeDiningTable!,
+                                    ))).then((value) => setState(() {}));
+                      }
+                    },
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Text(
+                          'Dining Table',
+                          textAlign: TextAlign.end,
+                          style: TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.normal,
+                              color: Colors.white),
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          Common.activeDiningTable?.name ?? '~',
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-                InkWell(
-                  onTap: () {
-                    // View Dining Table
-                    Navigator.push(
-                        this.context,
-                        MaterialPageRoute(
-                            builder: (context) => ViewDiningTablePage(
-                                  diningTable: Common.activeDiningTable!,
-                                )));
-                  },
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Text(
-                        'Dining Table',
-                        textAlign: TextAlign.end,
-                        style: TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.normal,
-                            color: Colors.white),
-                      ),
-                      const SizedBox(width: 8),
-                      Text(
-                        Common.activeDiningTable?.name ?? '~',
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
               ],
             ),
           ),
@@ -422,7 +448,14 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             PosOrderTypeSelectionButton(
-              onTap: _showOrderTypeSelection,
+              onTap: () {
+                _showOrderTypeSelection().then((value) {
+                  // TODO: When only new order, else postpone
+                  if (value != null) {
+                    setState(() => Common.activeOrderType = value);
+                  }
+                });
+              },
               icon: Icon(
                 Common.activeOrderType == OrderType.dine
                     ? Icons.dinner_dining
@@ -437,7 +470,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
             ),
             // Cart Information with total price
             PosCartInformation(
-              onTap: (){
+              onTap: () {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -453,7 +486,9 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
       ),
     );
   }
+
   void _showProductDetails(Product product) => showModalBottomSheet(
+      showDragHandle: true,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(24),
@@ -545,7 +580,8 @@ class PosCartInformation extends StatelessWidget {
       {Key? key,
       required this.onTap,
       required this.themeColor,
-      required this.cart}) : super(key: key);
+      required this.cart})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {

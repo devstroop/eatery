@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:intl/intl.dart';
 
 class SearchCustomerDelegate extends SearchDelegate<Customer?> {
   final List<Customer> customers;
@@ -23,8 +24,10 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
             MaterialPageRoute(builder: (context) => const AddCustomerPage()),
           ).then((customer) {
             if (customer != null) {
-              close(context, customer as Customer);
+              customers.add(customer);
+              showSuggestions(context);
             }
+
           });
         },
         icon: const Icon(Icons.person_add),
@@ -162,7 +165,7 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
         style: TextStyle(color: KColors.black500),
       ),
       trailing: Text(
-        (customer.lastOrderAt ?? DateTime.now()).toIso8601String(),
+        timeAgo(customer.lastOrderAt),
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 12,
@@ -170,5 +173,21 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
         ),
       ),
     );
+  }
+  String timeAgo(DateTime? lastOrderTime) {
+    if (lastOrderTime == null) {
+      return 'Never ordered';
+    }
+
+    Duration difference = DateTime.now().difference(lastOrderTime);
+    if (difference.inDays > 0) {
+      return DateFormat.yMMMd().format(lastOrderTime); // Display date if more than a day
+    } else if (difference.inHours > 0) {
+      return '${difference.inHours}h ago';
+    } else if (difference.inMinutes > 0) {
+      return '${difference.inMinutes}m ago';
+    } else {
+      return 'Just now';
+    }
   }
 }

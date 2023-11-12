@@ -91,7 +91,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           MaterialPageRoute(
                             builder: (context) => const CartPage(),
                           ),
-                        );
+                        ).then((value) => setState(() {}));
                       },
                     ),
                     Positioned(
@@ -179,7 +179,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       MaterialPageRoute(
                         builder: (context) => const PointOfSalePage(),
                       ),
-                    );
+                    ).then((value) => setState(() {}));
                   },
                 ),
                 SizedBox(
@@ -206,7 +206,7 @@ class _DashboardPageState extends State<DashboardPage> {
                               builder: (context) =>
                                   const ProductCategoriesPage(),
                             ),
-                          );
+                          ).then((value) => setState(() {}));
                         },
                       ),
                       MenuCard(
@@ -225,7 +225,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             MaterialPageRoute(
                               builder: (context) => const KitchenPage(),
                             ),
-                          );
+                          ).then((value) => setState(() {}));
                         },
                       ),
                       MenuCard(
@@ -244,7 +244,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             MaterialPageRoute(
                               builder: (context) => const InventoryItemsPage(),
                             ),
-                          );
+                          ).then((value) => setState(() {}));
                         },
                       ),
                     ],
@@ -272,7 +272,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             MaterialPageRoute(
                               builder: (context) => const CustomersPage(),
                             ),
-                          );
+                          ).then((value) => setState(() {}));
                         },
                       ),
                       MenuCard(
@@ -290,7 +290,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             MaterialPageRoute(
                               builder: (context) => const StaffsPage(),
                             ),
-                          );
+                          ).then((value) => setState(() {}));
                         },
                       ),
                     ],
@@ -318,7 +318,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             MaterialPageRoute(
                               builder: (context) => const DiningTablesPage(),
                             ),
-                          );
+                          ).then((value) => setState(() {}));
                         },
                       ),
                     ],
@@ -340,7 +340,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       MaterialPageRoute(
                         builder: (context) => const OrdersPage(),
                       ),
-                    );
+                    ).then((value) => setState(() {}));
                   },
                 ),
                 MenuCard(
@@ -359,7 +359,7 @@ class _DashboardPageState extends State<DashboardPage> {
                       MaterialPageRoute(
                         builder: (context) => const PaymentsPage(),
                       ),
-                    );
+                    ).then((value) => setState(() {}));
                   },
                 ),
                 Wrap(
@@ -393,7 +393,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           MaterialPageRoute(
                             builder: (context) => const DataManagementPage(),
                           ),
-                        );
+                        ).then((value) => setState(() {}));
                       },
                     ),
                     MenuCard(
@@ -411,9 +411,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           MaterialPageRoute(
                             builder: (context) => const SettingPage(),
                           ),
-                        ).then((_) async {
-                          setState(() {});
-                        });
+                        ).then((value) => setState(() {}));
                       },
                     ),
                   ],
@@ -454,7 +452,7 @@ class _DashboardPageState extends State<DashboardPage> {
                             // height: MediaQuery.of(context).size.height * 0.80,
                           ),
                         );
-                      });
+                      }).then((value) => setState(() {}));
                 })));
   }
 }

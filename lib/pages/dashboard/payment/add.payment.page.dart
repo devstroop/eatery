@@ -203,6 +203,9 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
           color: _pageColor,
           child: const Text('Save Payment'),
           onPressed: () {
+
+            if(order == null) return showMessageDialog(context, 'Please select an order', MessageType.error);
+
             if (_formKey.currentState!.validate()) {
               final payment = Payment(
                 amount: double.parse(_controllerAmount.text),

@@ -148,7 +148,6 @@ export './pages/dashboard/order/search.order.delegate.dart';
 
 // Point of Sale
 export './pages/dashboard/pos/pos.page.dart';
-export './pages/dashboard/pos/checkout.page.dart';
 export './pages/dashboard/pos/orderConfirmation.page.dart';
 export './pages/dashboard/pos/views/kProduct.view.dart';
 export './pages/dashboard/pos/views/waiterSelection.view.dart';

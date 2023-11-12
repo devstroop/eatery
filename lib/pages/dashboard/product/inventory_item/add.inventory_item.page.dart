@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:eatery/references.dart';
 
 Color _pageColor = KColors.alternate;
@@ -11,10 +10,10 @@ class AddInventoryItem extends StatefulWidget {
 }
 
 class _AddInventoryItemState extends State<AddInventoryItem> {
-  late LibraryImage? image;
-  late ProductCategory? selectedCategory;
-  late FoodType? selectedFoodType;
-  late TaxSlab? selectedTaxSlab;
+  LibraryImage? image;
+  ProductCategory? selectedCategory;
+  FoodType? selectedFoodType;
+  TaxSlab? selectedTaxSlab;
 
   late final TextEditingController _controllerName = TextEditingController();
   late final TextEditingController _controllerMRP = TextEditingController();
@@ -123,6 +122,18 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
       themeColor: _pageColor,
       controller: _controllerName,
       focusNode: _focusNodes[0],
+      validator: (value) {
+        if (value?.trim().isEmpty ?? true) {
+          return 'Name cannot be blank';
+        } else if (value!.length < 3) {
+          return 'Name must be at least 3 characters long';
+        } else if (value.trim().length > 50) {
+          return 'Name cannot be more than 50 characters long';
+        } else if (EateryDB.instance.productBox!.values.where((element) => element.name.toLowerCase().trim() == value.toLowerCase().trim()).isNotEmpty){
+          return 'Product with this name already exists';
+        }
+        return null;
+      },
       onFieldSubmitted: (v) {
         FocusScope.of(this.context).requestFocus(_focusNodes[1]);
       },
@@ -200,7 +211,7 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
         '${selectedTaxSlab?.rate}% (${selectedTaxSlab?.type.name})',
         style: TextStyle(
           color: _pageColor,
-          fontSize: 16.0,
+          fontSize: 14.0,
           fontWeight: FontWeight.w500,
         ),
       ),
@@ -351,347 +362,12 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
       isActive: true,
     );
 
-    await EateryDB.instance.productBox!.add(product).whenComplete(() {
-      showMessageDialog(this.context, 'Product created successfully', MessageType.success);
+    await EateryDB.instance.productBox!.add(product).then((value) {
+      showMessageDialog(this.context, 'Product created successfully', MessageType.success).whenComplete(() => Navigator.of(this.context).pop());
+
     }).onError((error, stackTrace) {
       showMessageDialog(this.context, 'Error creating product', MessageType.error);
-      return -1;
     });
   }
 }
 
-
-
-// import 'package:eatery/references.dart';
-//
-// Color _pageColor = KColors.alternate;
-//
-// class AddInventoryItem extends StatefulWidget {
-//   const AddInventoryItem({Key? key}) : super(key: key);
-//
-//   @override
-//   State<AddInventoryItem> createState() => _AddInventoryItemState();
-// }
-//
-// class _AddInventoryItemState extends State<AddInventoryItem> {
-//   LibraryImage? image;
-//   ProductCategory? selectedCategory;
-//   FoodType? selectedFoodType;
-//   TaxSlab? selectedTaxSlab;
-//
-//   final TextEditingController _controllerName = TextEditingController();
-//   final TextEditingController _controllerMRP = TextEditingController();
-//   final TextEditingController _controllerSalePrice = TextEditingController();
-//   final TextEditingController _controllerDescription = TextEditingController();
-//
-// final List<FocusNode> _focusNodes = [
-//     FocusNode(),
-//     FocusNode(),
-//     FocusNode(),
-//     FocusNode(),
-//   ];
-//   final _formKey = GlobalKey<FormState>();
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     Future.delayed(Duration.zero, () {
-//       // TODO: If company has default tax slab then set it as selected
-//     });
-//   }
-//
-//   final ScrollController _scrollController = ScrollController();
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     List<TaxSlab> slabs = EateryDB.instance.taxSlabBox!.values.toList();
-//     return Scaffold(
-//       backgroundColor: Colors.grey[200],
-//       appBar: AppBar(
-//         backgroundColor: _pageColor,
-//         foregroundColor: Colors.white,
-//
-//         title: const Text('Add Inventory Item'),
-//         actions: [
-//           if (_focusNodes[0].hasFocus ||
-//               _focusNodes[1].hasFocus ||
-//               _focusNodes[2].hasFocus ||
-//               _focusNodes[3].hasFocus)
-//             IconButton(
-//               icon: const Icon(Icons.done),
-//               onPressed: () {
-//                 FocusScope.of(context).unfocus();
-//               },
-//             ),
-//         ],
-//       ),
-//       body: Padding(
-//         padding: const EdgeInsets.all(12.0),
-//         child: Form(
-//           key: _formKey,
-//           child: ListView(
-//             controller: _scrollController,
-//             children: [
-//               UploadButton(
-//                 label: 'Product Image',
-//                 primaryColor: _pageColor,
-//                 secondaryColor: KColors.black600,
-//                 libraryImage: image,
-//                 onChanged: (image) {
-//                   setState(() {
-//                     this.image = image;
-//                   });
-//                 },
-//               ),
-//               const SizedBox(
-//                 height: 6.0,
-//               ),
-//               LabeledCustomTextFormField(
-//                 label: 'Name',
-//                 hint: 'Enter product name',
-//                 foregroundColor: KColors.black600,
-//                 themeColor: _pageColor,
-//                 controller: _controllerName,
-//                 focusNode: _focusNodes[0],
-//                 onFieldSubmitted: (v) {
-//                   FocusScope.of(context).requestFocus(_focusNodes[1]);
-//                 },),
-//               const SizedBox(
-//                 height: 6.0,
-//               ),
-//
-//
-//               const SizedBox(
-//                 height: 6.0,
-//               ),
-//               Row(
-//                 mainAxisSize: MainAxisSize.min,
-//                 children: [
-//                   Flexible(
-//                     child: LabeledCustomTextFormField(
-//                       label: 'MRP (Max. retail price)',
-//                       prefix: const Icon(Icons.currency_rupee, size: 14,),
-//                       hint: '0.00',
-//                       themeColor: _pageColor,
-//                       validator: (value) {
-//                         if (value!.trim().isEmpty) {
-//                           return 'Price cannot be blank';
-//                         }
-//                         return null;
-//                       },
-//                       keyboardType: TextInputType.number,
-//                       foregroundColor: KColors.black600,
-//                       controller: _controllerMRP,
-//                       focusNode: _focusNodes[1],
-//                       onFieldSubmitted: (v) {
-//                         FocusScope.of(context).requestFocus(_focusNodes[2]);
-//                       },
-//                     ),
-//                   ),
-//                   const SizedBox(width: 12.0,),
-//                   Flexible(
-//                     child: LabeledCustomTextFormField(
-//                         label: 'Sale Price',
-//                         prefix: const Icon(Icons.currency_rupee, size: 14,),
-//                         hint: '0.00',
-//                         themeColor: _pageColor,
-//                         focusNode: _focusNodes[2],
-//                         onFieldSubmitted: (v) {
-//                           FocusScope.of(context).unfocus();
-//                         },
-//                         validator: (value) {
-//                           if (value!.trim().isEmpty) {
-//                             return 'Price cannot be blank';
-//                           }
-//                           return null;
-//                         },
-//                         keyboardType: TextInputType.number,
-//                         foregroundColor: KColors.black600,
-//                         controller: _controllerSalePrice),
-//                   ),
-//                 ],
-//               ),
-//               const SizedBox(
-//                 height: 6.0,
-//               ),
-//
-//               Text(
-//                 'Select Food Type',
-//                 style: TextStyle(
-//                   color: KColors.black600,
-//                   fontSize: 12,
-//                   fontWeight: FontWeight.w500,
-//                 ),
-//               ),
-//               const SizedBox(
-//                 height: 3.0,
-//               ),
-//               ToggleSwitch(
-//                 highlightColor: selectedFoodType?.color ?? _pageColor,
-//                 backgroundColor: const Color(0xFFE5E5E5),
-//                 foregroundColor: Colors.white,
-//                 inactiveForegroundColor: KColors.black600,
-//
-//                 children: [
-//                   'None',
-//                   ...FoodType.values.map((e) => e.name),
-//                 ],
-//                 selectedIndex: selectedFoodType!= null ? selectedFoodType!.index + 1 : 0,
-//                 onChange: (int? index) {
-//                   if (index == 0) {
-//                     setState(() {
-//                       selectedFoodType = null;
-//                     });
-//                   } else {
-//                     setState(() {
-//                       selectedFoodType = FoodType.values[index! - 1];
-//                     });
-//                   }
-//                 },
-//               ),
-//               const SizedBox(
-//                 height: 6.0,
-//               ),
-//
-//               Text(
-//                 'Select Tax Slab',
-//                 style: TextStyle(
-//                   color: KColors.black600,
-//                   fontSize: 12,
-//                   fontWeight: FontWeight.w500,
-//                 ),
-//               ),
-//               const SizedBox(
-//                 height: 3.0,
-//               ),
-//               ToggleSwitch(
-//                 highlightColor: _pageColor,
-//                 backgroundColor: const Color(0xFFE5E5E5),
-//                 foregroundColor: Colors.white,
-//                 inactiveForegroundColor: KColors.black600,
-//                 children: [
-//                   'None',
-//                   ...slabs.map((e) => e.name)
-//                 ],
-//                 selectedIndex: (selectedTaxSlab == null) ? 0 : slabs.indexOf(selectedTaxSlab!) + 1,
-//                 onChange: (int? index) {
-//                   if (index == 0 || index == null) {
-//                     selectedTaxSlab = null;
-//                   } else {
-//                     selectedTaxSlab = slabs[index - 1];
-//                   }
-//                   setState(() {});
-//                 },
-//               ),
-//               if (selectedTaxSlab != null)
-//                 Padding(
-//                   padding: const EdgeInsets.all(12.0),
-//                   child: Text(
-//                     '${selectedTaxSlab?.rate}% (${selectedTaxSlab?.type.name})',
-//                     style: TextStyle(
-//                         color: _pageColor,
-//                         fontSize: 16.0,
-//                         fontWeight: FontWeight.w500),
-//                   ),
-//                 ),
-//               const SizedBox(
-//                 height: 6.0,
-//               ),
-//               Text(
-//                 'Select Category',
-//                 style: TextStyle(
-//                   color: KColors.black600,
-//                   fontSize: 12,
-//                   fontWeight: FontWeight.w500,
-//                 ),
-//               ),
-//               const SizedBox(
-//                 height: 3.0,
-//               ),
-//               SizedBox(
-//                 width: double.maxFinite,
-//                 height: 97,
-//                 child: ListView(
-//                   scrollDirection: Axis.horizontal,
-//                   children: [
-//                     CircularCategoryPOSWidget(
-//                       themeColor: _pageColor,
-//                       margin: const EdgeInsets.symmetric(horizontal: 8.0),
-//                       image: const AssetImage('assets/images/default.jpg'), label: 'None', selected: selectedCategory == null, onTap: (){
-//                       setState(() {
-//                         selectedCategory = null;
-//                       });
-//                     },),
-//                     ...EateryDB.instance.productCategoryBox!.values.map((e) {
-//                       return CircularCategoryPOSWidget(
-//                         themeColor: _pageColor,
-//                         margin: const EdgeInsets.symmetric(horizontal: 8.0),
-//                         image: LibraryImage(e.image).image,
-//                         label: e.name,
-//                         selected: selectedCategory == e,
-//                         onTap: () {
-//                           setState(() {
-//                             selectedCategory = e;
-//                           });
-//                         },
-//                       );
-//                     }),
-//                   ],
-//                 ),
-//               ),
-//               const SizedBox(
-//                 height: 6.0,
-//               ),
-//               LabeledCustomTextFormField(
-//                   label: 'Description',
-//                   hint: 'Enter product description',
-//                   multiline: true,
-//                   focusNode: _focusNodes[3],
-//                   onFieldSubmitted: (v) {
-//                     FocusScope.of(context).unfocus();
-//                   },
-//                   foregroundColor: KColors.black600,
-//                   themeColor: _pageColor,
-//                   controller: _controllerDescription),
-//             ],
-//           ),
-//         ),
-//       ),
-//       bottomNavigationBar: BottomAppBar(
-//         color: KColors.white,
-//         child: PrimaryButton(
-//           color: _pageColor,
-//           onPressed: () async {
-//             final isValid = _formKey.currentState!.validate();
-//             if (!isValid) {
-//               return;
-//             }
-//             _formKey.currentState!.save();
-//
-//             try {
-//               Product product = Product(
-//                   name: _controllerName.text,
-//                   categoryId: selectedCategory?.id,
-//                   description: _controllerDescription.text,
-//                   image: image?.filename,
-//                   mrpPrice: _controllerMRP.text.toDouble() ?? 0.0,
-//                   salePrice: _controllerSalePrice.text.toDouble(),
-//                   taxSlabId: selectedTaxSlab?.id,
-//                   foodType: selectedFoodType,
-//                   type: ProductType.inventoryItem,
-//                   isActive: true);
-//               await EateryDB.instance.productBox!
-//                   .add(product)
-//                   .whenComplete(() {
-//                     showMessageDialog(context, 'Product created successfully', MessageType.success);
-//               });
-//             } catch (_) {
-//               showMessageDialog(context, 'Something went wrong', MessageType.error);
-//             }
-//           },
-//           child: const Text('Save'),
-//         ),
-//       ),
-//     );
-//   }
-// }

@@ -13,7 +13,7 @@ class PosOrderTypeSelectionButton extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          icon, // TODO: Implement icon color override
+          icon,
           const SizedBox(width: 6.0),
           Text(
             text,

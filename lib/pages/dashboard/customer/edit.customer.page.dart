@@ -101,6 +101,20 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
                   onFieldSubmitted: (v) {
                     _focusNodes[2].requestFocus();
                   },
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Phone number is required';
+                    } else if (value.length < 10) {
+                      return 'Phone number must be 10 digits';
+                    } else if (EateryDB.instance.customerBox!
+                        .values
+                        .any((element) =>
+                        element.id != widget.customer.id &&
+                    element.phone.trim() == value.trim())) {
+                      return 'Phone number already exists';
+                    }
+                    return null;
+                  },
                 ),
                 SpacingStyle.defaultVerticalSpacing,
                 LabeledCustomTextFormField(

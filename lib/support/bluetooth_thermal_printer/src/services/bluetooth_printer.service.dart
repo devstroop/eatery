@@ -98,7 +98,7 @@ class BluetoothPrinterService {
 
             completer.complete(PrintResult.success);
           }
-          // TODO sending disconnect signal should be event-based
+
           _runDelayed(3).then((dynamic v) async {
             await _bluetoothManager.disconnect();
             _isPrinting = false;

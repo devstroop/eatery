@@ -68,6 +68,8 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
                   validator: (value) {
                     if (value!.trim().isEmpty) {
                       return 'Tax slab name cannot be blank';
+                    } else if (value.trim().length > 8) {
+                      return 'Tax slab name cannot be more than 8 characters';
                     }
                     return null;
                   },

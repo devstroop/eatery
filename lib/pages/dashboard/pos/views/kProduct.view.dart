@@ -12,19 +12,11 @@ class KProductView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      AppBar(
-        title: Text(product.name),
-        backgroundColor: Colors.transparent,
-        foregroundColor: KColors.black600,
-      ),
-      Divider(
-        height: 0.5,
-        color: Colors.grey[300],
-      ),
+    return ListView(
+        children: [
       Container(
-        height: 200,
-        margin: const EdgeInsets.all(12.0),
+        height: 180,
+        margin: const EdgeInsets.symmetric(horizontal: 12.0),
         decoration: BoxDecoration(
             color: KColors.white600.withOpacity(0.36),
             borderRadius: BorderRadius.circular(12.0),
@@ -47,6 +39,9 @@ class KProductView extends StatelessWidget {
           ],
         ),
       ),
+          const SizedBox(
+            height: 12,
+          ),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12.0),
         child: Row(
@@ -119,7 +114,7 @@ class KProductView extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Description',
+              product.name,
               style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
@@ -132,7 +127,9 @@ class KProductView extends StatelessWidget {
           ],
         ),
       ),
-      const Spacer(),
+      const SizedBox(
+        height: 12,
+      ),
       if (onEdit != null || onDelete != null)
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),

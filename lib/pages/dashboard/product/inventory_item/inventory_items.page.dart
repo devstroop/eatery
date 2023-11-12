@@ -154,7 +154,7 @@ class _InventoryItemsPageState extends State<InventoryItemsPage> {
                   ),
                 ...EateryDB.instance.productBox!.values
                     .where(
-                        (element) => element.type == ProductType.inventoryItem)
+                        (element) => element.type == ProductType.inventoryItem && (selectedCategory != null ? element.categoryId == selectedCategory?.id : true))
                     .map((each) {
                   return ListTile(
                     leading: InkWell(

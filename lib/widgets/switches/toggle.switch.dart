@@ -1,4 +1,3 @@
-// TODO Implement this library.
 import 'package:eatery/references.dart';
 
 class ToggleSwitch extends StatelessWidget {

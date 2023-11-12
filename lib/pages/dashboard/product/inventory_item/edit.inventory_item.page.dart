@@ -102,6 +102,22 @@ final List<FocusNode> _focusNodes = [
                   label: 'Name',
                   hint: 'Enter product name',
                   focusNode: _focusNodes[0],
+                  validator: (value) {
+                    if (value!.trim().isEmpty) {
+                      return 'Name cannot be blank';
+                    } else if (value.trim().length < 3) {
+                      return 'Name must be at least 3 characters long';
+                    } else if (value.trim().length > 50) {
+                      return 'Name cannot be more than 50 characters long';
+                    } else if (EateryDB.instance.productBox!.values
+                        .any((element) =>
+                            element.id != widget.product.id &&
+                            element.name.toLowerCase() ==
+                            value!.trim().toLowerCase())) {
+                      return 'Product with this name already exists';
+                    }
+                    return null;
+                  },
                   onFieldSubmitted: (v) {
                     FocusScope.of(context).requestFocus(_focusNodes[1]);
                   },
@@ -234,7 +250,7 @@ final List<FocusNode> _focusNodes = [
                     '${selectedTaxSlab?.rate}% (${selectedTaxSlab?.type.name})',
                     style: TextStyle(
                         color: _pageColor,
-                        fontSize: 16.0,
+                        fontSize: 14.0,
                         fontWeight: FontWeight.w500),
                   ),
                 ),
@@ -311,21 +327,19 @@ final List<FocusNode> _focusNodes = [
             }
             _formKey.currentState!.save();
 
-            try {
-              widget.product.image = image?.filename;
-              widget.product.name = _controllerName.text;
-              widget.product.mrpPrice = _controllerMRP.text.toDouble() ?? 0;
-              widget.product.salePrice = _controllerSalePrice.text.toDouble();
-              widget.product.foodType = selectedFoodType;
-              widget.product.taxSlabId = selectedTaxSlab?.id;
-              widget.product.categoryId = selectedCategory?.id;
-              widget.product.description = _controllerDescription.text;
-              await widget.product.save().whenComplete(() {
-                showMessageDialog(context, 'Product updated successfully', MessageType.success);
-              });
-            } catch (_) {
-              showMessageDialog(context, 'Failed to update product', MessageType.error);
-            }
+            widget.product.image = image?.filename;
+            widget.product.name = _controllerName.text;
+            widget.product.mrpPrice = _controllerMRP.text.toDouble() ?? 0;
+            widget.product.salePrice = _controllerSalePrice.text.toDouble();
+            widget.product.foodType = selectedFoodType;
+            widget.product.taxSlabId = selectedTaxSlab?.id;
+            widget.product.categoryId = selectedCategory?.id;
+            widget.product.description = _controllerDescription.text;
+            await widget.product.save().then((value) {
+              showMessageDialog(this.context, 'Product updated successfully', MessageType.success).whenComplete(() => Navigator.pop(this.context));
+            }).onError((error, stackTrace) {
+              showMessageDialog(this.context, 'Failed to update product', MessageType.error);
+            });
           },
           child: const Text('Save'),
         ),

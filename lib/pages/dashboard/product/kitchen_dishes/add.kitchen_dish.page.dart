@@ -96,6 +96,18 @@ final List<FocusNode> _focusNodes = [
                     onFieldSubmitted: (v) {
                       FocusScope.of(context).requestFocus(_focusNodes[1]);
                     },
+                    validator: (value) {
+                      if (value!.trim().isEmpty) {
+                        return 'Name cannot be blank';
+                      } else if (value!.length < 3) {
+                        return 'Name must be at least 3 characters long';
+                      } else if (value.trim().length > 50) {
+                        return 'Name cannot be more than 50 characters long';
+                      } else if (EateryDB.instance.productBox!.values.where((element) => element.name.toLowerCase().trim() == value.toLowerCase().trim()).isNotEmpty){
+                        return 'Product with this name already exists';
+                      }
+                      return null;
+                    },
                     foregroundColor: KColors.black600,
                     themeColor: _pageColor,
                     controller: _controllerName),
@@ -224,7 +236,7 @@ final List<FocusNode> _focusNodes = [
                       '${selectedTaxSlab?.rate}% (${selectedTaxSlab?.type.name})',
                       style: TextStyle(
                           color: _pageColor,
-                          fontSize: 16.0,
+                          fontSize: 14.0,
                           fontWeight: FontWeight.w500),
                     ),
                   ),
@@ -304,25 +316,24 @@ final List<FocusNode> _focusNodes = [
             }
             _formKey.currentState!.save();
 
-            try{
-              Product product = Product(
-                name: _controllerName.text,
-                categoryId: selectedCategory?.id,
-                description: _controllerDescription.text,
-                image: image?.filename,
-                mrpPrice: _controllerMRP.text.toDouble() ?? 0.0,
-                salePrice: _controllerSalePrice.text.toDouble(),
-                taxSlabId: selectedTaxSlab?.id,
-                foodType: selectedFoodType,
-                type: ProductType.kitchenDish,
-                isActive: true,
-              );
-              await EateryDB.instance.productBox!.add(product).whenComplete(() {
-                showMessageDialog(context, 'Product added successfully', MessageType.success);
-              });
-            }catch(_){
-              showMessageDialog(context, 'Something went wrong', MessageType.error);
-            }
+
+            Product product = Product(
+              name: _controllerName.text,
+              categoryId: selectedCategory?.id,
+              description: _controllerDescription.text,
+              image: image?.filename,
+              mrpPrice: _controllerMRP.text.toDouble() ?? 0.0,
+              salePrice: _controllerSalePrice.text.toDouble(),
+              taxSlabId: selectedTaxSlab?.id,
+              foodType: selectedFoodType,
+              type: ProductType.kitchenDish,
+              isActive: true,
+            );
+            await EateryDB.instance.productBox!.add(product).then((value) {
+              showMessageDialog(this.context, 'Product added successfully', MessageType.success).whenComplete(() => Navigator.pop(this.context));
+            }).onError((error, stackTrace) {
+              showMessageDialog(this.context, 'Failed to add product', MessageType.error);
+            });
           },
           child: const Text('Save'),
         ),

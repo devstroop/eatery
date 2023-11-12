@@ -58,7 +58,7 @@ class _CustomersPageState extends State<CustomersPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if(customer.address != null)
+                        if(customer.address != null && customer.address!.isNotEmpty)
                           Text(customer.address!),
                         Text(customer.phone),
                       ],
@@ -73,54 +73,6 @@ class _CustomersPageState extends State<CustomersPage> {
                             child: Column(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                // Row(
-                                //   mainAxisSize: MainAxisSize.min,
-                                //   children: [
-                                //     IconButton(
-                                //       icon: Icon(Icons.edit, color: _pageColor),
-                                //       onPressed: () {
-                                //         if (customer.id != null) {
-                                //           Navigator.push(
-                                //             context,
-                                //             MaterialPageRoute(
-                                //                 builder: (context) =>
-                                //                     EditCustomerPage(customer: customer)),
-                                //           ).then((_) => setState(() {}));
-                                //         }
-                                //       },
-                                //     ),
-                                //     IconButton(
-                                //       icon: Icon(Icons.delete, color: _pageColor),
-                                //       onPressed: () {
-                                //         showDialog(
-                                //           context: context,
-                                //           builder: (context) {
-                                //             return AlertDialog(
-                                //               title: const Text('Delete Customer'),
-                                //               content: const Text(
-                                //                   'Are you sure you want to delete this customer?'),
-                                //               actions: [
-                                //                 TextButton(
-                                //                   onPressed: () {
-                                //                     Navigator.pop(context);
-                                //                   },
-                                //                   child: const Text('Cancel'),
-                                //                 ),
-                                //                 TextButton(
-                                //                   onPressed: () {
-                                //                     // (customer).delete();
-                                //                     setState(() {});
-                                //                   },
-                                //                   child: const Text('Delete'),
-                                //                 ),
-                                //               ],
-                                //             );
-                                //           },
-                                //         );
-                                //       },
-                                //     ),
-                                //   ],
-                                // ),
                                 ListTile(
                                   leading: const Icon(Icons.edit),
                                   title: const Text('Edit'),
@@ -157,8 +109,12 @@ class _CustomersPageState extends State<CustomersPage> {
                                             ),
                                             TextButton(
                                               onPressed: () {
-                                                // (customer).delete();
-                                                setState(() {});
+                                                customer.delete().then((value) {
+                                                  showMessageDialog(context, 'Customer deleted successfully', MessageType.success);
+                                                  Navigator.pop(context);
+                                                }).onError((error, stackTrace) {
+                                                  showMessageDialog(context, error.toString(), MessageType.error);
+                                                }).whenComplete(() => setState(() {}));
                                               },
                                               child: const Text('Delete'),
                                             ),

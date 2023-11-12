@@ -188,7 +188,7 @@ class _KitchenPageState extends State<KitchenPage> {
                   ),
                 ...EateryDB.instance.productBox!.values
                     .where(
-                        (element) => element.type == ProductType.kitchenDish)
+                        (element) => element.type == ProductType.kitchenDish && (selectedCategory != null ? element.categoryId == selectedCategory?.id : true))
                     .map((each) {
                   return ListTile(
                     leading: InkWell(

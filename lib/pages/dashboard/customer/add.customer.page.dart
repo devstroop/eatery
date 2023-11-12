@@ -79,9 +79,12 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Phone number is required';
-                    }
-                    if (value.length < 10) {
+                    } else if (value.length < 10) {
                       return 'Phone number must be 10 digits';
+                    } else if (EateryDB.instance.customerBox!
+                        .values
+                        .any((element) => element.phone == value)) {
+                      return 'Phone number already exists';
                     }
                     return null;
                   },
@@ -179,23 +182,20 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
             }
             _formKey.currentState!.save();
 
-            try {
-              Customer customer = Customer(
-                name: _controllerCustomerName.text,
-                phone: _controllerCustomerPhone.text,
-                address: _controllerCustomerAddress.text,
-                landmark: _controllerCustomerLandmark.text,
-                isActive: isActive,
-              );
-              EateryDB.instance.customerBox!
-                  .add(customer)
-                  .whenComplete(() {
-                showMessageDialog(context, 'Customer added successfully', MessageType.success).then((value) => Navigator.pop(this.context, customer));
-
-              });
-            } catch (_) {
-              showMessageDialog(context, _.toString(), MessageType.error);
-            }
+            Customer customer = Customer(
+              name: _controllerCustomerName.text,
+              phone: _controllerCustomerPhone.text,
+              address: _controllerCustomerAddress.text,
+              landmark: _controllerCustomerLandmark.text,
+              isActive: isActive,
+            );
+            await EateryDB.instance.customerBox!
+                .add(customer)
+                .then((value) {
+              showMessageDialog(context, 'Customer added successfully', MessageType.success).then((value) => Navigator.pop(this.context, customer));
+            }).onError((error, stackTrace) {
+              showMessageDialog(context, error.toString(), MessageType.error);
+            });
           },
           child: const Text('Save'),
         ),
