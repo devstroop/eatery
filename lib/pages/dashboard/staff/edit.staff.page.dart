@@ -104,8 +104,7 @@ StaffType? staffType;
                   foregroundColor: KColors.black600,
                   keyboardType: TextInputType.phone,
                   hint: 'Enter Phone Number',
-                  validator: (value) =>
-                      value == null || value.isEmpty ? 'Please enter phone number' : null,
+                  validator: (value) => value == null || value.isEmpty ? 'Please enter phone number' : null,
                   focusNode: _focusNodes[1],
                   onFieldSubmitted: (v) {
                     FocusScope.of(context).unfocus();

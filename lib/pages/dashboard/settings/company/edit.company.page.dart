@@ -179,8 +179,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                       FocusScope.of(context).requestFocus(focus6);
                     },
                     validator: (value) {
-                      if (value!.trim().isNotEmpty &&
-                          !value.trim().isValidGSTIN()) {
+                      if (value!.trim().isNotEmpty && value.trim().length < 10) {
                         return '${Edition.values.singleWhere((element) => element.id == company?.edition.id).name} license number is not valid';
                       }
                       return null;
@@ -203,11 +202,10 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                     },
                     validator: (value) {
                       if (value!.trim().isNotEmpty &&
-                          (value.trim().length < 10 ||
-                              !value.trim().isNumericOnly)) {
+                          (value.trim().length < 10/* ||
+                              !value.trim().isNumericOnly*/)) {
                         return '${Edition.values.singleWhere((element) => element.id == company?.edition.id) == Edition.gst ? 'FSSAI' : 'Food'} license number is not valid';
                       }
-                      // if (edition == Edition.gst && !value!.trim().isValidGSTIN()) return '${edition.name} license number is not valid';
                       return null;
                     },
                   ),

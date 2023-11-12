@@ -99,11 +99,7 @@ class _AddStaffPageState extends State<AddStaffPage> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Enter Phone Number';
-                    }
-                    if(value.length < 10) {
-                      return 'Phone Number must be 10 digits';
-                    }
-                    if(EateryDB.instance.staffBox!.values.where((element) => element.phone == value).isNotEmpty) {
+                    } else if(EateryDB.instance.staffBox!.values.where((element) => element.phone == value).isNotEmpty) {
                       return 'Phone Number already exists';
                     }
                     return null;

@@ -223,14 +223,14 @@ class _CartPageState extends State<CartPage> {
                           ),
                         ),
                         Text(
-                          '${Common.currency?.symbol ?? ''}${calculateTotal(Common.cart).toPrecision(2)}',
+                          '${Common.currency?.symbol ?? ''}${calculateTotal(Common.cart)}',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
                           ),
                         ),
                         Text(
-                          'Taxes and additional charges ${Common.currency?.symbol ?? ''}${calculateTaxesAndAdditionalCharges(Common.cart).toPrecision(2)}',
+                          'Taxes and additional charges ${Common.currency?.symbol ?? ''}${calculateTaxesAndAdditionalCharges(Common.cart)}',
                           style: const TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 8,
@@ -292,10 +292,10 @@ class _CartPageState extends State<CartPage> {
         }
       }
     }
-    return total;
+    return total.toPrecision(2);
   }
 
-  calculateTaxesAndAdditionalCharges(List<Product> cart) {
+  double calculateTaxesAndAdditionalCharges(List<Product> cart) {
     double taxTotal = 0;
     double additionalChargesTotal = 0;
     // TODO: Implement additional charges, if any
@@ -312,6 +312,6 @@ class _CartPageState extends State<CartPage> {
         taxTotal += (product.salePrice ?? product.mrpPrice) * rate;
       }
     }
-    return taxTotal + additionalChargesTotal;
+    return (taxTotal + additionalChargesTotal).toPrecision(2);
   }
 }

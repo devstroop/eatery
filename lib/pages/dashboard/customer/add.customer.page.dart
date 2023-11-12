@@ -79,8 +79,6 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Phone number is required';
-                    } else if (value.length < 10) {
-                      return 'Phone number must be 10 digits';
                     } else if (EateryDB.instance.customerBox!
                         .values
                         .any((element) => element.phone == value)) {

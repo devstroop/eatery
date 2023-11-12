@@ -57,7 +57,7 @@ class Body4 extends StatelessWidget {
                 FocusScope.of(context).requestFocus(focus2);
               },
               validator: (value) {
-                if (value!.trim().isNotEmpty && !value.trim().isValidGSTIN()) {
+                if (value!.trim().isNotEmpty /*&& !value.trim().isValidGSTIN()*/ && value.trim().length < 10) {
                   return '${edition.name} license number is not valid';
                 }
                 return null;
@@ -80,7 +80,7 @@ class Body4 extends StatelessWidget {
               },
               validator: (value) {
                 if (value!.trim().isNotEmpty &&
-                    (value.trim().length < 10 || !value.trim().isNumericOnly)) {
+                    (value.trim().length < 10/* || !value.trim().isNumericOnly*/)) {
                   return '${edition == Edition.gst ? 'FSSAI' : 'Food'} license number is not valid';
                 }
                 // if (edition == Edition.gst && !value!.trim().isValidGSTIN()) return '${edition.name} license number is not valid';
