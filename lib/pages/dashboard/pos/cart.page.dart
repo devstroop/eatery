@@ -1,5 +1,7 @@
 import 'package:eatery/functions/order.function.dart';
+import 'package:eatery/pages/dashboard/utility/print.page.dart';
 import 'package:eatery/references.dart';
+import 'package:get/get.dart';
 
 class CartPage extends StatefulWidget {
   const CartPage({super.key});
@@ -147,13 +149,20 @@ class _CartPageState extends State<CartPage> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const Text(
-                              '(Excl. Tax)',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 8,
-                              ),
-                            ),
+                            const SizedBox(width: 2,),
+                            Builder(builder: (context){
+                              var taxSlab = EateryDB.instance.taxSlabBox?.values.where((element) => element.id == product.taxSlabId).firstOrNull;
+                              if(taxSlab != null){
+                                return Text(
+                                  '+ TAX: ${taxSlab.rate}%',
+                                  style: const TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 7,
+                                  ),
+                                );
+                              }
+                              return const SizedBox.shrink();
+                            }),
                             const Spacer(),
                             Row(
                               children: [
@@ -181,8 +190,7 @@ class _CartPageState extends State<CartPage> {
                   ),
                 // Price breakthrough
                 Container(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -204,8 +212,8 @@ class _CartPageState extends State<CartPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            16, 8, 16, 8),
                         child: Row(
                           children: [
                             const Expanded(
@@ -226,8 +234,8 @@ class _CartPageState extends State<CartPage> {
                         ),
                       ),
                       Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            16, 8, 16, 8),
                         child: Row(
                           children: [
                             const Expanded(
@@ -248,8 +256,8 @@ class _CartPageState extends State<CartPage> {
                         ),
                       ),
                       Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            16, 8, 16, 8),
                         child: Row(
                           children: [
                             const Expanded(
@@ -261,7 +269,7 @@ class _CartPageState extends State<CartPage> {
                               ),
                             ),
                             Text(
-                              '${Common.currency?.symbol ?? ''}${OrderFunction.calculateFinalTotal(Common.cart)}',
+                              '${Common.currency?.symbol ?? ''}${OrderFunction.calculateTotalWithTax(Common.cart)}',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -270,8 +278,8 @@ class _CartPageState extends State<CartPage> {
                         ),
                       ),
                       Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            16, 8, 16, 8),
                         child: Row(
                           children: [
                             const Expanded(
@@ -293,8 +301,8 @@ class _CartPageState extends State<CartPage> {
                       ),
                       // GrandTotal
                       Padding(
-                        padding:
-                            const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            16, 8, 16, 8),
                         child: Row(
                           children: [
                             const Expanded(
@@ -306,9 +314,34 @@ class _CartPageState extends State<CartPage> {
                               ),
                             ),
                             Text(
-                              '${Common.currency?.symbol ?? ''}${OrderFunction.calculatePayable(Common.cart)}',
+                              '${Common.currency?.symbol ?? ''}${OrderFunction.calculatePayable(Common.cart, 0)}',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      if((Common.activeCustomer?.getOutstandingAmount ?? 0) > 0)
+                      Padding(
+                        padding: const EdgeInsetsDirectional.fromSTEB(
+                            16, 8, 16, 8),
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Text(
+                                'Previous due',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w500,
+                                  color: KColors.red,
+                                ),
+                              ),
+                            ),
+                            Text(
+                              '${Common.currency?.symbol ?? ''}${Common.activeCustomer?.getOutstandingAmount ?? 0}',
+                              style: TextStyle(
+                                fontWeight: FontWeight.bold,
+                                color: KColors.red,
                               ),
                             ),
                           ],
@@ -354,17 +387,17 @@ class _CartPageState extends State<CartPage> {
                           ),
                         ),
                         Text(
-                          '${Common.currency?.symbol ?? ''}${OrderFunction.calculatePayable(Common.cart)}',
+                          '${Common.currency?.symbol ?? ''}${OrderFunction.calculatePayable(Common.cart, Common.activeCustomer?.getOutstandingAmount)}',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
                           ),
                         ),
                         const Text(
-                          'Includes taxes and additional charges',
+                          'includes all taxes and other charges',
                           style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 8,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 7,
                           ),
                         ),
                       ],
@@ -372,8 +405,8 @@ class _CartPageState extends State<CartPage> {
                   ),
                   PrimaryButton(
                     color: themeColor,
-                    onPressed: () =>
-                        placeOrder(context, Common.cart, Common.activeCustomer),
+                    onPressed: () => placeOrder(
+                        context, Common.cart, Common.activeCustomer),
                     child: const Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -388,7 +421,7 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-  placeOrder(BuildContext context, List<Product> cart, Customer? customer) {
+  placeOrder(BuildContext context, List<Product> cart, Customer? customer) async {
     if (customer == null) {
       showMessageDialog(
           context, 'Please select a customer', MessageType.warning);
@@ -400,52 +433,56 @@ class _CartPageState extends State<CartPage> {
           context, 'Please select order type', MessageType.warning);
       return;
     }
+    var diningTable = Common.activeDiningTable;
+    if(type == OrderType.dine && diningTable == null){
+      showMessageDialog(
+          context, 'Please select a table', MessageType.warning);
+      return;
+    }
 
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Are you sure?'),
-        content: const Text('Do you want to place this order?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('No'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pop(context);
+    Order order;
+    if(Common.activeOrder != null){
+      order = Common.activeOrder!;
+      order.products += cart;
+      order.subtotal = OrderFunction.calculateSubtotal(order.products);
+      order.taxTotal = OrderFunction.calculateTaxAmount(order.products);
+      order.total = OrderFunction.calculateTotalWithTax(order.products);
+      order.roundOff = OrderFunction.calculateRoundOff(order.products);
+      order.grandTotal = OrderFunction.calculatePayable(order.products, 0);
+      order.payable = OrderFunction.calculatePayable(order.products, Common.activeCustomer?.getOutstandingAmount);
+    }
+    else{
+      order = Order(
+        customer: Common.activeCustomer,
+        timestamp: DateTime.now(),
+        products: cart,
+        type: type,
+        subtotal: OrderFunction.calculateSubtotal(cart),
+        taxTotal: OrderFunction.calculateTaxAmount(cart),
+        total: OrderFunction.calculateTotalWithTax(cart),
+        roundOff: OrderFunction.calculateRoundOff(cart),
+        grandTotal: OrderFunction.calculatePayable(cart, 0),
+        payable: OrderFunction.calculatePayable(cart, Common.activeCustomer?.getOutstandingAmount),
+      );
+    }
 
-              final order = Order(
-                customer: customer,
-                timestamp: DateTime.now(),
-                products: cart,
-                type: type,
-                subtotal: OrderFunction.calculateSubtotal(cart),
-                taxTotal: OrderFunction.calculateTaxAmount(cart),
-                finalTotal: OrderFunction.calculateFinalTotal(cart),
-                roundOff: OrderFunction.calculateRoundOff(cart),
-                grandTotal: OrderFunction.calculatePayable(cart),
-              );
+    if(type == OrderType.dine && Common.activeOrder == null){
+      Common.activeDiningTable!.status = DiningTableStatus.occupied;
+      Common.activeDiningTable!.order = order;
+      await Common.activeDiningTable!.save();
+    }
 
-              EateryDB.instance.orderBox!.put(order.id, order).then((value) {
-                Common.cart.clear();
-                showMessageDialog(context, 'Order placed successfully',
-                        MessageType.success)
-                    .whenComplete(() => Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) =>
-                                OrderConfirmationPage(order: order)),
-                        (route) => false));
-              }).onError((error, stackTrace) {
-                showMessageDialog(
-                    context, 'Failed to place order', MessageType.error);
-              });
-            },
-            child: const Text('Yes'),
-          ),
-        ],
-      ),
-    );
+
+    EateryDB.instance.orderBox!.put(order.id, order).then((value) {
+      Common.cart.clear();
+      Common.activeOrder = null;
+      Common.activeDiningTable = null;
+      Common.activeCustomer = null;
+
+      showMessageDialog(context, 'Order placed successfully', MessageType.success).whenComplete(() => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => PrintPage(order: order)), (route) => false));
+    }).onError((error, stackTrace) {
+      showMessageDialog(context, 'Failed to place order', MessageType.error);
+    });
   }
+
 }

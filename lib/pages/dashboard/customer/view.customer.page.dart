@@ -119,7 +119,7 @@ class _ViewCustomerState extends State<ViewCustomer> {
                   children: [
                     const Text('Outstanding\nAmount'),
                     Text(
-                        '${Common.currency?.symbol ?? ''}${widget.customer.outstandingAmount}',
+                        '${Common.currency?.symbol ?? ''}${widget.customer.getOutstandingAmount.toStringAsFixed(2)}',
                         style:
                         const TextStyle(fontSize: 36, fontWeight: FontWeight.bold)),
                   ],
@@ -229,7 +229,7 @@ class _ViewCustomerState extends State<ViewCustomer> {
                         title: Text('${e.id ?? 'NA'}'),
                         subtitle: Text(e.timestamp.toIso8601String()),
                         trailing: Text(
-                            '${Common.currency?.symbol ?? ''}${e.finalTotal}'),
+                            '${Common.currency?.symbol ?? ''}${e.grandTotal}'),
                       )),
                       if (EateryDB.instance.orderBox!.values.isEmpty)
                         ListTile(
@@ -245,4 +245,18 @@ class _ViewCustomerState extends State<ViewCustomer> {
       ),
     );
   }
+/*
+  double getCustomerOutstandingAmount(Customer? customer){
+    if (customer == null) {
+      return 0;
+    }
+    double outstandingAmount = 0;
+    for (var order in EateryDB.instance.orderBox!.values.where((element) => element.customer?.id == customer.id)) {
+      var payments = EateryDB.instance.paymentBox!.values.where((element) => element.order.id == order.id);
+      if(payments.isNotEmpty){
+        outstandingAmount += order.grandTotal - payments.map((e) => e.amount).reduce((value, element) => value + element);
+      }
+    }
+    return outstandingAmount;
+  }*/
 }

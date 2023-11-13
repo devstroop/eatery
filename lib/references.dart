@@ -178,5 +178,6 @@ export './pages/dashboard/settings/tax_slab/tax_slabs.page.dart';
 export './pages/dashboard/settings/currency_region/view.currency_region.page.dart';
 // Backup Restore
 export './pages/backup_restore/backup_restore.page.dart';
-
+//
+export 'package:eatery/extensions/customer.extension.dart';
 

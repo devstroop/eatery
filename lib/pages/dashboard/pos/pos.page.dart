@@ -15,51 +15,83 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
   final ScrollController _scrollControllerCategories = ScrollController();
   final ScrollController _scrollControllerProducts = ScrollController();
 
+  Future<OrderType?> initOrderType() async {
+    OrderType? orderType;
+    if(Common.activeOrderType == null){
+      orderType = await _showOrderTypeSelection();
+    }
+    return orderType ?? Common.activeOrderType!;
+  }
+  Future<DiningTable?> initDiningTableIfDine() async {
+    DiningTable? diningTable;
+    if(Common.activeOrderType == OrderType.dine && Common.activeDiningTable == null){
+      await showSearch(
+          context: this.context,
+          delegate: SearchDiningTableDelegate(EateryDB.instance.diningTableBox!.values.toList(), (table) async {
+
+            diningTable = table;
+          }));
+    }
+    return diningTable;
+  }
+
+  Future<Customer?> initCustomerIfNull() async {
+    Customer? customer;
+    if(Common.activeCustomer == null){
+      await showSearch(
+          context: this.context,
+          delegate: SearchCustomerDelegate(
+              EateryDB.instance.customerBox!.values.toList(), (customer) {
+            setState(() {
+              Common.activeCustomer = customer;
+            });
+          })).then((value) {
+            customer = value;
+      });
+    }
+    return customer ?? Common.activeCustomer;
+  }
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
-      if (Common.activeOrderType == null) {
-        _showOrderTypeSelection().then((value) {
-          if (value != null) {
-            setState(() => Common.activeOrderType = value);
-          } else {
+    Future.delayed(Duration.zero, (){
+      initOrderType().then((orderType) {
+        if(orderType == null){
+          Navigator.pop(this.context);
+          return;
+        }
+        setState(() {
+          Common.activeOrderType = orderType;
+        });
+        initDiningTableIfDine().then((diningTable) {
+          if(Common.activeOrderType == OrderType.dine && diningTable == null){
             Navigator.pop(this.context);
             return;
           }
-          if (Common.activeCustomer == null) {
-            showSearch(
-                context: this.context,
-                delegate: SearchCustomerDelegate(
-                    EateryDB.instance.customerBox!.values.toList(), (customer) {
-                  setState(() {
-                    Common.activeCustomer = customer;
-                  });
-                })).then((value) {
-              if (value == null) {
-                Navigator.pop(this.context);
-                return;
-              }
+          setState(() {
+            Common.activeDiningTable = diningTable;
+            if(diningTable?.status == DiningTableStatus.reserved){
+              Common.activeCustomer = diningTable?.customer;
+            } else if (diningTable?.status == DiningTableStatus.occupied){
+              Common.activeOrder = EateryDB.instance.orderBox!.values.firstWhere((element) => element.id == diningTable?.order?.id);
+              Common.activeCustomer = EateryDB.instance.customerBox!.values.firstWhere((element) => element.id == Common.activeOrder?.customer?.id);
+            }
+          });
+          initCustomerIfNull().then((customer) {
+            // if(customer == null){
+            //   Navigator.pop(this.context);
+            //   return;
+            // }
+            setState(() {
+              Common.activeCustomer = customer;
             });
-          }
-          if (Common.activeOrderType == OrderType.dine) {
-            showSearch(
-                context: this.context,
-                delegate: SearchDiningTableDelegate(
-                    EateryDB.instance.diningTableBox!.values.toList(), (table) {
-                  setState(() {
-                    Common.activeDiningTable = table;
-                  });
-                })).then((value) {
-              if (value == null) {
-                Navigator.pop(this.context);
-                return;
-              }
-            });
-          }
+          });
         });
-      }
+      });
     });
+
+
   }
 
   @override
@@ -131,12 +163,12 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                   child: Row(
                     children: [
                       CircleAvatar(
-                        radius: 18,
+                        radius: 16,
                         backgroundColor: Colors.white,
                         child: Icon(
                           Icons.person,
                           color: Colors.grey[400],
-                          size: 24,
+                          size: 20,
                         ),
                       ),
                       const SizedBox(width: 8),
@@ -156,7 +188,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                             Text(
                               Common.activeCustomer?.name ?? 'NA',
                               style: const TextStyle(
-                                  fontSize: 20,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                   color: Colors.white),
                             ),
@@ -197,16 +229,16 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                           'Outstanding',
                           textAlign: TextAlign.end,
                           style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 10,
                               fontWeight: FontWeight.normal,
                               color: Colors.white),
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          '${Common.currency?.symbol ?? ''}${Common.activeCustomer?.outstandingAmount ?? '~'}',
+                          '${Common.currency?.symbol ?? ''}${Common.activeCustomer?.getOutstandingAmount.toStringAsFixed(2) ?? '0.00'}',
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                              fontSize: 20,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
                         ),
@@ -243,7 +275,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                           'Dining Table',
                           textAlign: TextAlign.end,
                           style: TextStyle(
-                              fontSize: 12,
+                              fontSize: 10,
                               fontWeight: FontWeight.normal,
                               color: Colors.white),
                         ),
@@ -252,7 +284,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                           Common.activeDiningTable?.name ?? '~',
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                              fontSize: 20,
+                              fontSize: 16,
                               fontWeight: FontWeight.bold,
                               color: Colors.white),
                         ),
@@ -569,6 +601,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
               ),
             ],
           ));
+
 }
 
 class PosCartInformation extends StatelessWidget {
@@ -639,4 +672,6 @@ class PosCartInformation extends StatelessWidget {
       ),
     );
   }
+
+
 }

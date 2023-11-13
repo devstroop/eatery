@@ -3,6 +3,7 @@ import 'package:path/path.dart' as path;
 import 'package:eatery/references.dart';
 
 class Common {
+  static Order? activeOrder;
   static Company? company;
   static KCurrency? currency;
   static OrderType? activeOrderType;

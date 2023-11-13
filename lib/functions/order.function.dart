@@ -35,29 +35,9 @@ class OrderFunction {
         .toPrecision(2);
   }
 
-  static double calculateFinalTotal(List<Product> cart) {
-    double totalPrice = 0;
-
-    for (var product in cart) {
-      if (product.taxSlabId == null) {
-        totalPrice += (product.salePrice ?? product.mrpPrice);
-      } else {
-        final taxSlab = EateryDB.instance.taxSlabBox!.values
-            .where((element) => element.id == product.taxSlabId)
-            .firstOrNull;
-
-        if (taxSlab != null) {
-          totalPrice += (taxSlab.type == TaxType.exclusive)
-              ? (product.salePrice ?? product.mrpPrice) *
-                  (1 + taxSlab.rate / 100)
-              : calculateProductPriceWithoutTax(product);
-        } else {
-          totalPrice += (product.salePrice ?? product.mrpPrice);
-        }
-      }
-    }
-
-    return totalPrice.toPrecision(2);
+  static double calculateTotalWithTax(List<Product> cart) {
+    return (calculateCartTotalWithoutTax(cart) +
+        calculateTaxAmount(cart)).toPrecision(2);
   }
 
   static double calculateSubtotal(List<Product> cart) {
@@ -92,14 +72,14 @@ class OrderFunction {
   }
 
   static double calculateRoundOff(List<Product> cart) {
-    final value = calculateFinalTotal(cart);
+    final value = calculateTotalWithTax(cart);
     final decimal = value - value.toInt();
     return decimal.toPrecision(2);
   }
 
-  static double calculatePayable(List<Product> cart) {
-    var finalTotal = calculateFinalTotal(cart);
-    return (finalTotal - calculateRoundOff(cart)).toPrecision(2);
+  static double calculatePayable(List<Product> cart, double? previousDue) {
+    var finalTotal = calculateTotalWithTax(cart);
+    return (finalTotal - calculateRoundOff(cart) + (previousDue ?? 0)).toPrecision(2);
   }
 
 

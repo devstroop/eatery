@@ -56,7 +56,7 @@ class _ViewOrderPageState extends State<ViewOrderPage> {
             const SizedBox(
               height: 10,
             ),
-            Text(
+            const Text(
               'Table: ',
               style: TextStyle(
                 fontSize: 18,
@@ -68,7 +68,7 @@ class _ViewOrderPageState extends State<ViewOrderPage> {
             ),
             Text(
               'Customer: ${widget.order.customer?.name ?? 'NA'}',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -76,7 +76,7 @@ class _ViewOrderPageState extends State<ViewOrderPage> {
             const SizedBox(
               height: 10,
             ),
-            Text(
+            const Text(
               'Order Status: NA}',
               style: TextStyle(
                 fontSize: 18,
@@ -88,8 +88,8 @@ class _ViewOrderPageState extends State<ViewOrderPage> {
             ),
 
             Text(
-              'Payment Status: ${widget.order.finalTotal > (widget.order.payment?.amount ?? 0)  ? 'Paid' : 'Not Paid'}',
-              style: TextStyle(
+              'Payment Status: ${widget.order.grandTotal > (widget.order.payment?.amount ?? 0)  ? 'Paid' : 'Not Paid'}',
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -99,7 +99,7 @@ class _ViewOrderPageState extends State<ViewOrderPage> {
             ),
             Text(
               'Order Type: ${widget.order.type.name}',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -109,7 +109,7 @@ class _ViewOrderPageState extends State<ViewOrderPage> {
             ),
             Text(
               'Order Date: ${widget.order.timestamp}',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -119,7 +119,7 @@ class _ViewOrderPageState extends State<ViewOrderPage> {
             ),
             Text(
               'Order Time: ${widget.order.timestamp}',
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -128,8 +128,8 @@ class _ViewOrderPageState extends State<ViewOrderPage> {
               height: 10,
             ),
             Text(
-              'Total Amount: ${widget.order.finalTotal}',
-              style: TextStyle(
+              'Total Amount: ${widget.order.grandTotal}',
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -137,7 +137,7 @@ class _ViewOrderPageState extends State<ViewOrderPage> {
             const SizedBox(
               height: 20,
             ),
-            Text(
+            const Text(
               'Order Items',
               style: TextStyle(
                 fontSize: 18,

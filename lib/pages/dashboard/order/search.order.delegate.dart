@@ -80,7 +80,7 @@ class SearchOrderDelegate extends SearchDelegate<Order?>{
         ),
         for (final order in orders)
           ListTile(
-            title: Text('${order.id} - ${Common.currency?.symbol ?? ''}${order.finalTotal}'),
+            title: Text('${order.id} - ${Common.currency?.symbol ?? ''}${order.grandTotal}'),
             onTap: () {
               callback(order);
               close(context, order);
@@ -110,7 +110,7 @@ class SearchOrderDelegate extends SearchDelegate<Order?>{
         ),
         for (final order in searchResults)
           ListTile(
-            title: Text('${order.id} - ${Common.currency?.symbol ?? ''}${order.finalTotal}'),
+            title: Text('${order.id} - ${Common.currency?.symbol ?? ''}${order.grandTotal}'),
             onTap: () {
               callback(order);
               close(context, order);

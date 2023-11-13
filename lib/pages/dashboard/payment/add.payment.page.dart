@@ -29,7 +29,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
     Future.delayed(Duration.zero, () {
       setState(() {
         order = widget.order;
-        _controllerAmount.text = (order?.finalTotal ?? '').toString();
+        _controllerAmount.text = (order?.grandTotal ?? '').toString();
       });
     });
   }
@@ -79,7 +79,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                           )
                         : null,
                     trailing: Text(
-                      (widget.order?.finalTotal ?? '').toString(),
+                      (widget.order?.grandTotal ?? '').toString(),
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                       ),
@@ -93,7 +93,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                               setState(() {
                                 this.order = order;
                                 _controllerAmount.text =
-                                    order.finalTotal.toString();
+                                    order.grandTotal.toString();
                               });
                             },
                           ));

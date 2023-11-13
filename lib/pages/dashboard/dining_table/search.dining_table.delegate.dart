@@ -117,25 +117,30 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                       ),
                     ],
                   ),
-                  trailing: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: e.order?.id != null &&
-                                (e.order?.finalTotal ?? 0) <=
-                                    (e.order?.payment?.amount ?? 0)
-                            ? Colors.red
-                            : Colors.green,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        e.status.name,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                      )),
+                  trailing: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 3),
+                          decoration: BoxDecoration(
+                            color: e.status == DiningTableStatus.available
+                                ? Colors.green : e.status == DiningTableStatus.occupied ? Colors.red
+                                : Colors.blueAccent,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            e.status.name,
+                            style: const TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          )),
+                      if(e.order != null) Text('Order #${e.order!.id}', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: KColors.black800)),
+                      if(e.order != null) Text('Due ${Common.currency?.symbol ?? ''}${e.order!.grandTotal}', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.red)),
+                    ],
+                  ),
                 ))
             .toList()
       ],
