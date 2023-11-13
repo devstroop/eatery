@@ -147,11 +147,13 @@ class _CartPageState extends State<CartPage> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            const Text('(Excl. Tax)',
-                            style: TextStyle(
-                              fontWeight: FontWeight.w400,
-                              fontSize: 8,
-                            ),),
+                            const Text(
+                              '(Excl. Tax)',
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 8,
+                              ),
+                            ),
                             const Spacer(),
                             Row(
                               children: [
@@ -179,7 +181,8 @@ class _CartPageState extends State<CartPage> {
                   ),
                 // Price breakthrough
                 Container(
-                  margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  margin:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   decoration: BoxDecoration(
                     color: Colors.white,
@@ -201,8 +204,8 @@ class _CartPageState extends State<CartPage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                            16, 8, 16, 8),
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
                         child: Row(
                           children: [
                             const Expanded(
@@ -223,8 +226,8 @@ class _CartPageState extends State<CartPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                            16, 8, 16, 8),
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
                         child: Row(
                           children: [
                             const Expanded(
@@ -245,8 +248,8 @@ class _CartPageState extends State<CartPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                            16, 8, 16, 8),
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
                         child: Row(
                           children: [
                             const Expanded(
@@ -267,8 +270,8 @@ class _CartPageState extends State<CartPage> {
                         ),
                       ),
                       Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                            16, 8, 16, 8),
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
                         child: Row(
                           children: [
                             const Expanded(
@@ -290,8 +293,8 @@ class _CartPageState extends State<CartPage> {
                       ),
                       // GrandTotal
                       Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(
-                            16, 8, 16, 8),
+                        padding:
+                            const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 8),
                         child: Row(
                           children: [
                             const Expanded(
@@ -369,9 +372,8 @@ class _CartPageState extends State<CartPage> {
                   ),
                   PrimaryButton(
                     color: themeColor,
-                    onPressed: () {
-
-                    },
+                    onPressed: () =>
+                        placeOrder(context, Common.cart, Common.activeCustomer),
                     child: const Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -386,40 +388,64 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
- placeOrder(BuildContext context, List<Product> cart, String customerName,
-      String customerPhone, String customerAddress) {
+  placeOrder(BuildContext context, List<Product> cart, Customer? customer) {
+    if (customer == null) {
+      showMessageDialog(
+          context, 'Please select a customer', MessageType.warning);
+      return;
+    }
     var type = Common.activeOrderType;
     if (type == null) {
-      showMessageDialog(context, 'Please select order type', MessageType.warning);
-      return null;
-    }
-    if (type == OrderType.delivery) {
-      if (customerName.isEmpty ||
-          customerPhone.isEmpty ||
-          customerAddress.isEmpty) {
-        showMessageDialog(context, 'Please fill all the details', MessageType.warning);
-        return null;
-      }
+      showMessageDialog(
+          context, 'Please select order type', MessageType.warning);
+      return;
     }
 
-    final order = Order(
-      customer: Common.activeCustomer,
-      timestamp: DateTime.now(),
-      products: cart,
-      type: type,
-      subtotal: OrderFunction.calculateSubtotal(cart),
-      taxTotal: OrderFunction.calculateTaxAmount(cart),
-      finalTotal: OrderFunction.calculateFinalTotal(cart),
-      roundOff: OrderFunction.calculateRoundOff(cart),
-      grandTotal: OrderFunction.calculatePayable(cart),
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Are you sure?'),
+        content: const Text('Do you want to place this order?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('No'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+
+              final order = Order(
+                customer: customer,
+                timestamp: DateTime.now(),
+                products: cart,
+                type: type,
+                subtotal: OrderFunction.calculateSubtotal(cart),
+                taxTotal: OrderFunction.calculateTaxAmount(cart),
+                finalTotal: OrderFunction.calculateFinalTotal(cart),
+                roundOff: OrderFunction.calculateRoundOff(cart),
+                grandTotal: OrderFunction.calculatePayable(cart),
+              );
+
+              EateryDB.instance.orderBox!.put(order.id, order).then((value) {
+                Common.cart.clear();
+                showMessageDialog(context, 'Order placed successfully',
+                        MessageType.success)
+                    .whenComplete(() => Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                OrderConfirmationPage(order: order)),
+                        (route) => false));
+              }).onError((error, stackTrace) {
+                showMessageDialog(
+                    context, 'Failed to place order', MessageType.error);
+              });
+            },
+            child: const Text('Yes'),
+          ),
+        ],
+      ),
     );
-
-    EateryDB.instance.orderBox!.put(order.id, order).then((value) {
-      Common.cart.clear();
-      showMessageDialog(context, 'Order placed successfully', MessageType.success).whenComplete(() => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => OrderConfirmationPage(order: order)), (route) => false));
-    }).onError((error, stackTrace) {
-      showMessageDialog(context, 'Failed to place order', MessageType.error);
-    });
   }
-
 }

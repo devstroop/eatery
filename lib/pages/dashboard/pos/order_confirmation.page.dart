@@ -1,9 +1,10 @@
 import 'package:intl/intl.dart';
 import 'package:eatery/references.dart';
 
+import '../../../functions/order.function.dart';
+
 class OrderConfirmationPage extends StatefulWidget {
-  const OrderConfirmationPage(
-      {Key? key, required this.order})
+  const OrderConfirmationPage({Key? key, required this.order})
       : super(key: key);
   final Order order;
 
@@ -97,22 +98,43 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
               const SizedBox(
                 height: 12.0,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Products',
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w400),
-                  )
-                ],
+              Divider(
+                color: KColors.white900,
               ),
               const SizedBox(
                 height: 12.0,
               ),
-
-
-
+              ListView.builder(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: widget.order.products.length,
+                itemBuilder: (context, index) {
+                  final product = widget.order.products[index];
+                  return Column(
+                    children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            product.name,
+                            style: TextStyle(
+                              color: KColors.black,
+                                fontSize: 16, fontWeight: FontWeight.w400),
+                          ),
+                          Text(
+                            '${widget.order.products.where((element) => element.id == product.id).length} x ${OrderFunction.calculateProductPriceWithoutTax(product)}',
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w400),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(
+                        height: 12.0,
+                      ),
+                    ],
+                  );
+                },
+              ),
             ],
           ),
         ),
@@ -155,57 +177,70 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
       ),
       bottomNavigationBar: BottomAppBar(
         color: KColors.white,
-        child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                PrimaryButton(
-                  color: KColors.tertiary,
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Text('< Back'),
+        child: Row(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            Expanded(
+              flex: 1,
+              child: PrimaryButton(
+                color: KColors.tertiary,
+                onPressed: () {
+                  Navigator.pushAndRemoveUntil(
+                    this.context,
+                    MaterialPageRoute(
+                      builder: (context) => const DashboardPage(),
+                    ),
+                    (Route<dynamic> route) => false,
+                  );
+                },
+                child: const Text('< Back'),
+              ),
+            ),
+            const SizedBox(
+              width: 6,
+            ),
+            Expanded(
+              flex: 1,
+              child: PrimaryButton(
+                color: KColors.primary,
+                onPressed: () async {
+                  // PrintInvoice.printReceipt(
+                  //         order: widget.order, account: widget.account)
+                  //     .then((String message) {
+                  //       showMessageDialog(context, message, MessageType.info);
+                  // }).onError((error, stackTrace) {
+                  //   showMessageDialog(context, error.toString(), MessageType.error);
+                  // });
+                },
+                child: Icon(
+                  Icons.print,
+                  color: KColors.white,
                 ),
-                const SizedBox(
-                  width: 6,
+              ),
+            ),
+            const SizedBox(
+              width: 6,
+            ),
+            Expanded(
+              flex: 1,
+              child: PrimaryButton(
+                color: KColors.green,
+                onPressed: () async {
+                  // final temp = await AppFileSystem.getShareDir();
+                  // final path = '$temp/${getRandomString(8)}.png';
+                  // await File(path).writeAsBytes(await _capturePng());
+                  // await shareFile(path, 'Invoice #${widget.order['id']}',
+                  //     'Autogenerated by RestaurantPOS');
+                  // //await File(path).delete();
+                },
+                child: Icon(
+                  Icons.share,
+                  color: KColors.white,
                 ),
-                PrimaryButton(
-                  color: KColors.primary,
-                  onPressed: () async {
-                    // PrintInvoice.printReceipt(
-                    //         order: widget.order, account: widget.account)
-                    //     .then((String message) {
-                    //       showMessageDialog(context, message, MessageType.info);
-                    // }).onError((error, stackTrace) {
-                    //   showMessageDialog(context, error.toString(), MessageType.error);
-                    // });
-                  },
-                  child: Icon(
-                    Icons.print,
-                    color: KColors.white,
-                  ),
-                ),
-                const SizedBox(
-                  width: 6,
-                ),
-                PrimaryButton(
-                  color: KColors.green,
-                  onPressed: () async {
-                    // final temp = await AppFileSystem.getShareDir();
-                    // final path = '$temp/${getRandomString(8)}.png';
-                    // await File(path).writeAsBytes(await _capturePng());
-                    // await shareFile(path, 'Invoice #${widget.order['id']}',
-                    //     'Autogenerated by RestaurantPOS');
-                    // //await File(path).delete();
-                  },
-                  child: Icon(
-                    Icons.share,
-                    color: KColors.white,
-                  ),
-                ),
-              ],
-            )),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
