@@ -22,7 +22,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
     if (Common.activeOrderType == null) {
       orderType = await _showOrderTypeSelection();
     }
-    return orderType ?? Common.activeOrderType!;
+    return orderType ?? Common.activeOrderType;
   }
 
   Future<DiningTable?> initDiningTableIfDine() async {
