@@ -73,13 +73,13 @@ class OrderFunction {
 
   static double calculateRoundOff(List<Product> cart) {
     final value = calculateTotalWithTax(cart);
-    final decimal = value - value.toInt();
+    final decimal = value.round() - value;
     return decimal.toPrecision(2);
   }
 
   static double calculatePayable(List<Product> cart) {
     var finalTotal = calculateTotalWithTax(cart);
-    return (finalTotal - calculateRoundOff(cart)).toPrecision(2);
+    return (finalTotal + calculateRoundOff(cart)).toPrecision(2);
   }
 
 

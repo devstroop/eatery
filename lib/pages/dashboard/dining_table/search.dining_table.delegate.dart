@@ -17,7 +17,7 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
         },
         icon: const Icon(Icons.clear),
       ),
-      IconButton(
+      /*IconButton(
         onPressed: () {
           Navigator.push(
             context,
@@ -30,7 +30,7 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
           });
         },
         icon: const Icon(Icons.add),
-      )
+      )*/
     ];
   }
 

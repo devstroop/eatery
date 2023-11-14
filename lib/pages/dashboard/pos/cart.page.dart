@@ -291,7 +291,7 @@ class _CartPageState extends State<CartPage> {
                               ),
                             ),
                             Text(
-                              '${Common.currency?.symbol ?? ''}${OrderFunction.calculateRoundOff(Common.cart)}',
+                              '${OrderFunction.calculateRoundOff(Common.cart) > 0 ? '+' : '-'} ${Common.currency?.symbol ?? ''}${OrderFunction.calculateRoundOff(Common.cart).abs()}',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -310,6 +310,7 @@ class _CartPageState extends State<CartPage> {
                                 'Grand Total',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
+                                  fontSize: 18
                                 ),
                               ),
                             ),
@@ -317,6 +318,7 @@ class _CartPageState extends State<CartPage> {
                               '${Common.currency?.symbol ?? ''}${OrderFunction.calculatePayable(Common.cart)}',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
+                                  fontSize: 18
                               ),
                             ),
                           ],
@@ -330,7 +332,7 @@ class _CartPageState extends State<CartPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                'Outstanding',
+                                'Previous',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   color: KColors.red,
