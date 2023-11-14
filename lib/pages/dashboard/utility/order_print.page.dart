@@ -171,6 +171,9 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
   }
 
   invoicePreview(BuildContext context) {
+    List<OrderProduct> products = EateryDB.instance.orderProductBox!.values
+        .where((element) => element.orderId == widget.order.id)
+        .toList();
     return RepaintBoundary(
       key: invKey,
       child: Container(
@@ -216,7 +219,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                       fontSize: 14, fontWeight: FontWeight.w400),
                 ),
                 Text(
-                  'Date: ${DateFormat('dd/MM/yyyy').format(widget.order.timestamp)}',
+                  'Date: ${DateFormat('dd/MM/yyyy').format(widget.order.createdAt)}',
                   style: const TextStyle(
                       fontSize: 14, fontWeight: FontWeight.w400),
                 )
@@ -233,12 +236,12 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      widget.order.customer?.name ?? '',
+                      EateryDB.instance.customerBox!.values.where((element) => element.phone == widget.order.customerPhone).firstOrNull?.name ?? '',
                       style: const TextStyle(
                           fontSize: 12, fontWeight: FontWeight.w500),
                     ),
                     Text(
-                      widget.order.customer?.phone ?? '',
+                      EateryDB.instance.customerBox!.values.where((element) => element.phone == widget.order.customerPhone).firstOrNull?.phone ?? '',
                       style: const TextStyle(
                           fontSize: 12, fontWeight: FontWeight.w500),
                     ),
@@ -252,7 +255,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                           TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                     ),
                     Text(
-                      widget.order.customer?.address ?? '',
+                      EateryDB.instance.customerBox!.values.where((element) => element.phone == widget.order.customerPhone).firstOrNull?.address ?? '',
                       style: const TextStyle(
                           fontSize: 12, fontWeight: FontWeight.w500),
                     ),
@@ -266,24 +269,17 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
             ),
             ListView.builder(
               shrinkWrap: true,
-              itemCount:
-                  widget.order.products.map((obj) => obj.id).toSet().length,
+              itemCount: products.length,
               itemBuilder: (context, index) {
-                var productId = widget.order.products
-                    .map((obj) => obj.id)
-                    .toSet()
-                    .toList()[index];
+                var product = products[index];
 
-                // Use firstWhere instead of singleWhere
-                var product = widget.order.products
-                    .firstWhere((element) => element.id == productId);
 
                 return Row(
                   children: [
                     Expanded(
                       flex: 4,
                       child: Text(
-                        product.name,
+                        product.productName,
                         style: const TextStyle(
                             fontSize: 12, fontWeight: FontWeight.w400),
                       ),
@@ -291,7 +287,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                     Expanded(
                       flex: 1,
                       child: Text(
-                        'x ${widget.order.products.where((element) => element.id == product.id).length}',
+                        'x ${product.quantity}',
                         style: const TextStyle(
                             fontSize: 12, fontWeight: FontWeight.w400),
                       ),
@@ -301,7 +297,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                       child: Align(
                         alignment: Alignment.centerRight,
                         child: Text(
-                          '${OrderFunction.calculateProductPriceWithoutTax(product).toPrecision(2)}/-',
+                          '${product.price.toPrecision(2)}/-',
                           style: const TextStyle(
                               fontSize: 12, fontWeight: FontWeight.w400),
                         ),
@@ -312,7 +308,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                       child: Align(
                         alignment: Alignment.centerRight,
                         child: Text(
-                          '${Common.currency?.symbol ?? ''}${OrderFunction.calculateProductSubtotalInCartWithoutTax(widget.order.products, product).toPrecision(2)}',
+                          '${Common.currency?.symbol ?? ''}${product.subTotal.toPrecision(2)}',
                           style: const TextStyle(
                               fontSize: 12, fontWeight: FontWeight.w400),
                         ),
@@ -334,7 +330,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                 ),
                 Text(
-                  '${Common.currency?.symbol ?? ''}${OrderFunction.calculateCartTotalWithoutTax(widget.order.products).toPrecision(2)}',
+                  '${Common.currency?.symbol ?? ''}${widget.order.subTotal.toPrecision(2)}',
                   style: const TextStyle(
                       fontSize: 12, fontWeight: FontWeight.w400),
                 )
@@ -348,7 +344,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                 ),
                 Text(
-                  '${Common.currency?.symbol ?? ''}${(OrderFunction.calculateTotalWithTax(widget.order.products) - OrderFunction.calculateCartTotalWithoutTax(widget.order.products)).toPrecision(2)}',
+                  '${Common.currency?.symbol ?? ''}${(widget.order.taxTotal ?? 0).toPrecision(2)}',
                   style: const TextStyle(
                       fontSize: 12, fontWeight: FontWeight.w400),
                 )
@@ -362,7 +358,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                 ),
                 Text(
-                  '${Common.currency?.symbol ?? ''}${OrderFunction.calculateTotalWithTax(widget.order.products).toPrecision(2)}',
+                  '${Common.currency?.symbol ?? ''}${widget.order.finalTotal.toPrecision(2)}',
                   style: const TextStyle(
                       fontSize: 12, fontWeight: FontWeight.w400),
                 )
@@ -380,7 +376,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                 ),
                 Text(
-                  '${widget.order.roundOff > 0 ? '+' : '-'} ${Common.currency?.symbol ?? ''}${widget.order.roundOff.toPrecision(2).abs() ?? '0.00'}',
+                  '${widget.order.roundOff > 0 ? '+' : '-'} ${Common.currency?.symbol ?? ''}${widget.order.roundOff.toPrecision(2).abs()}',
                   style: const TextStyle(
                       fontSize: 12, fontWeight: FontWeight.w400),
                 )
@@ -444,7 +440,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                       fontSize: 14, fontWeight: FontWeight.w400),
                 ),
                 Text(
-                  'Date: ${DateFormat('dd/MM/yyyy').format(widget.order.timestamp)}',
+                  'Date: ${DateFormat('dd/MM/yyyy').format(widget.order.createdAt)}',
                   style: const TextStyle(
                       fontSize: 14, fontWeight: FontWeight.w400),
                 )
@@ -461,12 +457,12 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      widget.order.customer?.name ?? '',
+                      EateryDB.instance.customerBox!.values.where((element) => element.phone == widget.order.customerPhone).firstOrNull?.name ?? '',
                       style: const TextStyle(
                           fontSize: 12, fontWeight: FontWeight.w500),
                     ),
                     Text(
-                      widget.order.customer?.phone ?? '',
+                      EateryDB.instance.customerBox!.values.where((element) => element.phone == widget.order.customerPhone).firstOrNull?.phone ?? '',
                       style: const TextStyle(
                           fontSize: 12, fontWeight: FontWeight.w500),
                     ),
@@ -480,7 +476,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                           TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                     ),
                     Text(
-                      widget.order.customer?.address ?? '',
+                      EateryDB.instance.customerBox!.values.where((element) => element.phone == widget.order.customerPhone).firstOrNull?.address ?? '',
                       style: const TextStyle(
                           fontSize: 12, fontWeight: FontWeight.w500),
                     ),

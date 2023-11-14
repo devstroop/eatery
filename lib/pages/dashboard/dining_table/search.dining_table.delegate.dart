@@ -138,8 +138,8 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                               color: Colors.white,
                             ),
                           )),
-                      if(e.order != null) Text('Order #${e.order!.id}', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: KColors.black800)),
-                      if(e.order != null) Text('Due ${Common.currency?.symbol ?? ''}${e.order!.grandTotal.toPrecision(2)}', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.red)),
+                      if(e.orderId != null) Text('Order #${e.orderId}', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: KColors.black800)),
+                      if(e.orderId != null) Text('Due ${Common.currency?.symbol ?? ''}${EateryDB.instance.orderBox!.values.where((element) => element.id == e.orderId).firstOrNull?.grandTotal.toPrecision(2)}', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.red)),
                     ],
                   ),
                 ))

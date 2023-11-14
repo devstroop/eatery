@@ -26,7 +26,7 @@ class _EditPaymentPageState extends State<EditPaymentPage> {
     super.initState();
     Future.delayed(Duration.zero, () {
       setState(() {
-        order = widget.payment.order;
+        order = EateryDB.instance.orderBox!.values.where((element) => element.id == widget.payment.orderId).firstOrNull;
         _controllerAmount.text = widget.payment.amount.toString();
         paymentMode = widget.payment.mode;
       });

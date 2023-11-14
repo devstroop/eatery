@@ -67,7 +67,7 @@ class _ViewOrderPageState extends State<ViewOrderPage> {
               height: 10,
             ),
             Text(
-              'Customer: ${widget.order.customer?.name ?? 'NA'}',
+              'Customer: ${EateryDB.instance.customerBox!.values.where((element) => element.phone == widget.order.customerPhone).firstOrNull?.name ?? 'NA'}',
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -88,7 +88,7 @@ class _ViewOrderPageState extends State<ViewOrderPage> {
             ),
 
             Text(
-              'Payment Status: ${widget.order.grandTotal > (widget.order.payment?.amount ?? 0)  ? 'Paid' : 'Not Paid'}',
+              'Payment Status: ${widget.order.grandTotal > (widget.order.paidTotal ?? 0)  ? 'Paid' : 'Not Paid'}',
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -108,7 +108,7 @@ class _ViewOrderPageState extends State<ViewOrderPage> {
               height: 10,
             ),
             Text(
-              'Order Date: ${widget.order.timestamp}',
+              'Order Date: ${widget.order.createdAt}',
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -118,7 +118,7 @@ class _ViewOrderPageState extends State<ViewOrderPage> {
               height: 10,
             ),
             Text(
-              'Order Time: ${widget.order.timestamp}',
+              'Order Time: ${widget.order.createdAt}',
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,

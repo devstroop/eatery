@@ -227,7 +227,7 @@ class _ViewCustomerState extends State<ViewCustomer> {
                     children: [
                       ...EateryDB.instance.orderBox!.values.map((e) => ListTile(
                         title: Text('${e.id ?? 'NA'}'),
-                        subtitle: Text(e.timestamp.toIso8601String()),
+                        subtitle: Text(e.createdAt.toIso8601String()),
                         trailing: Text(
                             '${Common.currency?.symbol ?? ''}${e.grandTotal}'),
                       )),

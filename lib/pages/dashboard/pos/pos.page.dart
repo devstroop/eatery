@@ -76,14 +76,15 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
           setState(() {
             Common.activeDiningTable = diningTable;
             if (diningTable?.status == DiningTableStatus.reserved) {
-              Common.activeCustomer = diningTable?.customer;
+              Common.activeCustomer = EateryDB.instance.customerBox!.values
+                  .firstWhere(
+                      (element) => element.phone == diningTable?.customerPhone);
             } else if (diningTable?.status == DiningTableStatus.occupied) {
               Common.activeOrder = EateryDB.instance.orderBox!.values
-                  .firstWhere(
-                      (element) => element.id == diningTable?.order?.id);
+                  .firstWhere((element) => element.id == diningTable?.orderId);
               Common.activeCustomer = EateryDB.instance.customerBox!.values
                   .firstWhere((element) =>
-                      element.id == Common.activeOrder?.customer?.id);
+                      element.phone == Common.activeOrder?.customerPhone);
             }
           });
           initCustomerIfNull().then((customer) {
@@ -132,7 +133,184 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
         title: const Text('Point of Sale'),
         backgroundColor: pageColor,
         foregroundColor: Colors.white,
-        // Add bottom: container with short height, displays customer name, phone number and previous balance
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              showSearch(
+                  context: context,
+                  delegate: SearchProductDelegate(
+                      EateryDB.instance.productBox!.values.toList(),
+                      (product) => Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) =>
+                                  KProductView(product: product)))));
+            },
+          ),
+          IconButton(icon: const Icon(Icons.qr_code_scanner), onPressed: () {}),
+          IconButton(
+            icon: const Icon(Icons.more_vert),
+            onPressed: () {
+              // Show the menu
+              showMenu(
+                context: context,
+                color: const Color(0xEFEFEFEF),
+                position: const RelativeRect.fromLTRB(100, 100, 0, 100),
+                items: [
+                  // Close this order
+                  if (Common.activeOrderType == OrderType.dine &&
+                      Common.activeOrder != null)
+                    PopupMenuItem(
+                      child: ListTile(
+                        leading: const Icon(Icons.close),
+                        title: const Text('Close Order'),
+                        onTap: () {
+                          Navigator.pop(context);
+                          // Ask before close
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('Close Order?'),
+                                content: const Text(
+                                    'Are you sure you want to close this order?'),
+                                actions: [
+                                  TextButton(
+                                    child: const Text('Cancel'),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: const Text('Close'),
+                                    onPressed: () async {
+                                      Navigator.pop(context);
+                                      if (Common.cart.isNotEmpty) {
+                                        showMessageDialog(
+                                            context,
+                                            'Please clear cart before closing order',
+                                            MessageType.warning);
+                                        return;
+                                      }
+
+                                      /*// Confirm Payment
+                                      // Popup: AddPaymentPage(order: Common.activeOrder!,)
+// Popup: AddPaymentPage(order: Common.activeOrder!,)
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) =>
+                                              AddPaymentPage(
+                                                order: Common
+                                                    .activeOrder!,
+                                              ),
+                                        ),
+                                      ).whenComplete(() async {
+                                        var payments = EateryDB.instance.paymentBox!.values.where((element) => element.orderId == Common.activeOrder!.id).map((e) => e.amount);
+
+                                        var totalPaid = payments.fold(0.0, (previousValue, element) => previousValue + element);
+                                        var totalToPay = Common.activeOrder!.grandTotal;
+                                        if(totalPaid < totalToPay){
+                                          showMessageDialog(
+                                              context,
+                                              'Please pay the remaining amount before closing order',
+                                              MessageType.warning);
+                                          return;
+                                        }
+
+                                        order.paidTotal = totalPaid;
+                                        await order.save();
+
+
+                                      });
+*/
+                                      var order = Common.activeOrder!;
+                                      var diningTable = EateryDB
+                                          .instance.diningTableBox?.values
+                                          .firstWhere((element) =>
+                                              element.id ==
+                                              Common.activeDiningTable?.id);
+                                      diningTable?.status =
+                                          DiningTableStatus.available;
+                                      diningTable?.orderId = null;
+                                      diningTable?.save();
+
+                                      var printKOT = false;
+                                      var printInvoice = true;
+                                      setState(() {
+                                        Common.activeOrder = null;
+                                        Common.activeCustomer = null;
+                                        Common.activeDiningTable = null;
+                                        Common.activeOrderType = null;
+                                      });
+
+                                      Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  OrderPrintPage(
+                                                    order: order,
+                                                    currentCart: const [],
+                                                    printKOT: printKOT,
+                                                    printInvoice: printInvoice,
+                                                  )),
+                                          (route) => false);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
+                  PopupMenuItem(
+                    child: ListTile(
+                      leading: const Icon(Icons.cancel),
+                      title: const Text('Discard'),
+                      onTap: () {
+                        Navigator.pop(context);
+                        // Ask before discard
+                        showDialog(
+                          context: context,
+                          builder: (context) {
+                            return AlertDialog(
+                              title: const Text('Discard Order?'),
+                              content: const Text(
+                                  'Are you sure you want to discard this order?'),
+                              actions: [
+                                TextButton(
+                                  child: const Text('Cancel'),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                TextButton(
+                                  child: const Text('Discard'),
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                    setState(() {
+                                      Common.activeOrderType = null;
+                                      Common.activeCustomer = null;
+                                      Common.activeDiningTable = null;
+                                      Common.cart.clear();
+                                    });
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            );
+                          },
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              );
+            },
+          )
+        ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(48),
           child: Container(
@@ -200,7 +378,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                             ),
                           if (Common.activeCustomer == null)
                             const Text(
-                              'Select\nCustomer',
+                              'Select Customer',
                               style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
@@ -214,7 +392,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                 if (Common.activeOrderType == OrderType.dine)
                   InkWell(
                     onTap: () {
-                      if (Common.activeDiningTable?.order == null) {
+                      if (Common.activeDiningTable?.orderId == null) {
                         showMessageDialog(
                             this.context,
                             'No active order for this table',
@@ -222,10 +400,15 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                         return;
                       }
                       Navigator.push(
-                          this.context,
-                          MaterialPageRoute(
-                              builder: (context) => ViewOrderPage(
-                                  order: Common.activeDiningTable!.order!)));
+                              this.context,
+                              MaterialPageRoute(
+                                  builder: (context) => ViewOrderPage(
+                                      order: EateryDB.instance.orderBox!.values
+                                          .where((element) =>
+                                              element.id ==
+                                              Common.activeDiningTable!.orderId)
+                                          .first)))
+                          .then((value) => setState(() {}));
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -301,154 +484,6 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
             ),
           ),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              showSearch(
-                  context: context,
-                  delegate: SearchProductDelegate(
-                      EateryDB.instance.productBox!.values.toList(),
-                      (product) => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  KProductView(product: product)))));
-            },
-          ),
-          IconButton(icon: const Icon(Icons.qr_code_scanner), onPressed: () {}),
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {
-              // Show the menu
-              showMenu(
-                context: context,
-                color: const Color(0xEFEFEFEF),
-                position: const RelativeRect.fromLTRB(100, 100, 0, 100),
-                items: [
-                  // Close this order
-                  if (Common.activeOrderType == OrderType.dine &&
-                      Common.activeOrder != null)
-                    PopupMenuItem(
-                      child: ListTile(
-                        leading: const Icon(Icons.close),
-                        title: const Text('Close Order'),
-                        onTap: () {
-                          Navigator.pop(context);
-                          // Ask before close
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                title: const Text('Close Order?'),
-                                content: const Text(
-                                    'Are you sure you want to close this order?'),
-                                actions: [
-                                  TextButton(
-                                    child: const Text('Cancel'),
-                                    onPressed: () {
-                                      Navigator.pop(context);
-                                    },
-                                  ),
-                                  TextButton(
-                                    child: const Text('Close'),
-                                    onPressed: () async {
-                                      Navigator.pop(context);
-                                      if (Common.cart.isNotEmpty) {
-                                        showMessageDialog(
-                                            context,
-                                            'Please clear cart before closing order',
-                                            MessageType.warning);
-                                        return;
-                                      }
-
-                                      var diningTable = EateryDB
-                                          .instance.diningTableBox?.values
-                                          .firstWhere((element) =>
-                                              element.id ==
-                                              Common.activeDiningTable?.id);
-                                      diningTable?.status =
-                                          DiningTableStatus.available;
-                                      diningTable?.order = null;
-                                      diningTable?.save();
-
-                                      var printKOT = false;
-                                      var printInvoice = true;
-                                      var order = Common.activeOrder!;
-                                      setState(() {
-                                        Common.activeOrder = null;
-                                        Common.activeCustomer = null;
-                                        Common.activeDiningTable = null;
-                                        Common.activeOrderType = null;
-                                      });
-
-
-                                      Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  OrderPrintPage(
-                                                    order: order,
-                                                    currentCart: [],
-                                                    printKOT: printKOT,
-                                                    printInvoice: printInvoice,
-                                                  )),
-                                          (route) => false);
-                                    },
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                      ),
-                    ),
-                  PopupMenuItem(
-                    child: ListTile(
-                      leading: const Icon(Icons.cancel),
-                      title: const Text('Discard'),
-                      onTap: () {
-                        Navigator.pop(context);
-                        // Ask before discard
-                        showDialog(
-                          context: context,
-                          builder: (context) {
-                            return AlertDialog(
-                              title: const Text('Discard Order?'),
-                              content: const Text(
-                                  'Are you sure you want to discard this order?'),
-                              actions: [
-                                TextButton(
-                                  child: const Text('Cancel'),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                                TextButton(
-                                  child: const Text('Discard'),
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                    setState(() {
-                                      Common.activeOrderType = null;
-                                      Common.activeCustomer = null;
-                                      Common.activeDiningTable = null;
-                                      Common.cart.clear();
-                                    });
-                                    Navigator.pop(context);
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              );
-            },
-          )
-        ],
       ),
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

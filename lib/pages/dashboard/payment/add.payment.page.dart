@@ -121,15 +121,16 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                           ),
                           ...PaymentMode.values
                               .map((e) => ListTile(
-                            leading: Visibility(
-                              visible: paymentMode == e,
-                              child: const Icon(Icons.check_circle, color: Colors.green),
-                            ),
-                            title: Text(e.name),
-                            onTap: () {
-                              Navigator.pop(context, e);
-                            },
-                          ))
+                                    leading: Visibility(
+                                      visible: paymentMode == e,
+                                      child: const Icon(Icons.check_circle,
+                                          color: Colors.green),
+                                    ),
+                                    title: Text(e.name),
+                                    onTap: () {
+                                      Navigator.pop(context, e);
+                                    },
+                                  ))
                               .toList(),
                         ],
                       ),
@@ -203,8 +204,9 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
           color: _pageColor,
           child: const Text('Save Payment'),
           onPressed: () {
-
-            if(order == null) return showMessageDialog(context, 'Please select an order', MessageType.error);
+            if (order == null)
+              return showMessageDialog(
+                  context, 'Please select an order', MessageType.error);
 
             if (_formKey.currentState!.validate()) {
               final payment = Payment(
@@ -212,15 +214,30 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                 reference: _controllerReference.text,
                 mode: paymentMode,
                 attachment: image?.filename,
-                order: order!,
+                orderId: order?.id,
               );
               EateryDB.instance.paymentBox!
                   .add(payment)
                   .then((value) => showMessageDialog(
-                      context,
-                      'Payment saved successfully',
-                      MessageType.success,
-                      () => Navigator.pop(this.context)))
+                          context,
+                          'Payment saved successfully',
+                          MessageType.success, () async {
+
+                        var diningTable = EateryDB
+                            .instance.diningTableBox?.values
+                            .where((element) =>
+                        element.orderId == order?.id).firstOrNull;
+                        if(diningTable != null){
+                          diningTable.status = DiningTableStatus.available;
+                          diningTable.orderId = null;
+                          diningTable.customerPhone = null;
+                          await diningTable.save();
+                        }
+
+                        order?.paidTotal = (order?.paidTotal ?? 0) +
+                            double.parse(_controllerAmount.text);
+                        order?.save().then((value) => Navigator.pop(context));
+                      }))
                   .onError((error, stackTrace) => showMessageDialog(
                       context, 'Error saving payment', MessageType.error));
             }

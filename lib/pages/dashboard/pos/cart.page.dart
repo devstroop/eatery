@@ -291,7 +291,7 @@ class _CartPageState extends State<CartPage> {
                               ),
                             ),
                             Text(
-                              '${OrderFunction.calculateRoundOff(Common.cart) > 0 ? '+' : '-'} ${Common.currency?.symbol ?? ''}${OrderFunction.calculateRoundOff(Common.cart).abs()}',
+                              '${OrderFunction.calculateRoundOff(OrderFunction.calculateTotalWithTax(Common.cart)) > 0 ? '+' : '-'} ${Common.currency?.symbol ?? ''}${OrderFunction.calculateRoundOff(OrderFunction.calculateTotalWithTax(Common.cart)).abs()}',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -445,31 +445,74 @@ class _CartPageState extends State<CartPage> {
     Order order;
     if(Common.activeOrder != null){
       order = Common.activeOrder!;
-      order.products += cart;
-      order.subtotal = OrderFunction.calculateSubtotal(order.products);
-      order.taxTotal = OrderFunction.calculateTaxAmount(order.products);
-      order.total = OrderFunction.calculateTotalWithTax(order.products);
-      order.roundOff = OrderFunction.calculateRoundOff(order.products);
-      order.grandTotal = OrderFunction.calculatePayable(order.products);
-
+      for(var product in cart){
+        var existing = EateryDB.instance.orderProductBox!.values.where((element) => element.id == product.id).firstOrNull;
+        if(existing != null){
+          existing.quantity += 1;
+          existing.price = OrderFunction.calculateProductPriceWithoutTax(product).toPrecision(2);
+          existing.subTotal = (OrderFunction.calculateProductPriceWithoutTax(product) * existing.quantity).toPrecision(2);
+          existing.taxRate = OrderFunction.getProductTaxRate(product)?.toPrecision(2);
+          existing.taxAmount = OrderFunction.calculateProductTaxAmount(product)?.toPrecision(2);
+          existing.total = (existing.subTotal + (existing.taxAmount ?? 0)).toPrecision(2);
+          await existing.save();
+        }
+        else{
+          var orderProduct = OrderProduct(
+            orderId: order.id,
+            productId: product.id,
+            productName: product.name,
+            quantity: 1,
+            price: OrderFunction.calculateProductPriceWithoutTax(product).toPrecision(2),
+            subTotal: OrderFunction.calculateProductPriceWithoutTax(product).toPrecision(2),
+            taxRate: OrderFunction.getProductTaxRate(product)?.toPrecision(2),
+            taxAmount: OrderFunction.calculateProductTaxAmount(product)?.toPrecision(2),
+            total: (OrderFunction.calculateProductPriceWithoutTax(product) + (OrderFunction.calculateProductTaxAmount(product) ?? 0)).toPrecision(2),
+          );
+          await EateryDB.instance.orderProductBox?.put(orderProduct.id, orderProduct);
+        }
+      }
+      order.totalQuantity = EateryDB.instance.orderProductBox!.values.where((element) => element.orderId == order.id).toList().fold(0, (previousValue, element) => previousValue + element.quantity);
+      order.subTotal = EateryDB.instance.orderProductBox!.values.where((element) => element.orderId == order.id).toList().fold(0, (previousValue, element) => previousValue + element.subTotal);
+      order.taxTotal = EateryDB.instance.orderProductBox!.values.where((element) => element.orderId == order.id).toList().fold(0, (previousValue, element) => previousValue + (element.taxAmount ?? 0));
+      order.finalTotal = EateryDB.instance.orderProductBox!.values.where((element) => element.orderId == order.id).toList().fold(0, (previousValue, element) => previousValue + element.total);
+      order.roundOff = OrderFunction.calculateRoundOff(order.finalTotal);
+      order.grandTotal = (order.finalTotal + order.roundOff).toPrecision(2);
+      order.updatedAt = DateTime.now();
+      await order.save();
     }
     else{
       order = Order(
-        customer: Common.activeCustomer,
-        timestamp: DateTime.now(),
-        products: cart,
+        customerPhone: Common.activeCustomer?.phone,
         type: type,
-        subtotal: OrderFunction.calculateSubtotal(cart),
-        taxTotal: OrderFunction.calculateTaxAmount(cart),
-        total: OrderFunction.calculateTotalWithTax(cart),
-        roundOff: OrderFunction.calculateRoundOff(cart),
-        grandTotal: OrderFunction.calculatePayable(cart),
+        subTotal: OrderFunction.calculateSubtotal(cart).toPrecision(2),
+        taxTotal: OrderFunction.calculateTaxAmount(cart).toPrecision(2),
+        finalTotal: OrderFunction.calculateTotalWithTax(cart).toPrecision(2),
+        roundOff: OrderFunction.calculateRoundOff(OrderFunction.calculateTotalWithTax(cart)).toPrecision(2),
+        grandTotal: OrderFunction.calculatePayable(cart).toPrecision(2),
+        totalQuantity: cart.length,
+        discountTotal: 0,
       );
+      await EateryDB.instance.orderBox?.put(order.id, order);
+      for(var product in cart){
+        var orderProduct = OrderProduct(
+          orderId: order.id,
+          productId: product.id,
+          productName: product.name,
+          quantity: 1,
+          price: OrderFunction.calculateProductPriceWithoutTax(product).toPrecision(2),
+          subTotal: OrderFunction.calculateProductPriceWithoutTax(product).toPrecision(2),
+          taxRate: OrderFunction.getProductTaxRate(product)?.toPrecision(2),
+          taxAmount: OrderFunction.calculateProductTaxAmount(product)?.toPrecision(2),
+          total: (OrderFunction.calculateProductPriceWithoutTax(product) + (OrderFunction.calculateProductTaxAmount(product) ?? 0)).toPrecision(2),
+        );
+        await EateryDB.instance.orderProductBox?.put(orderProduct.id, orderProduct);
+      }
     }
+
     if(type == OrderType.dine && diningTable != null){
       var diningTable = EateryDB.instance.diningTableBox?.values.firstWhere((element) => element.id == Common.activeDiningTable?.id);
       diningTable?.status = DiningTableStatus.occupied;
-      diningTable?.order = order;
+      diningTable?.orderId = order.id;
       await diningTable?.save();
     }
 

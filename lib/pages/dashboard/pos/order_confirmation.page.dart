@@ -48,14 +48,14 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
             children: [
-              const SizedBox(
+              /*const SizedBox(
                 height: 12.0,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    widget.order.customer?.name ?? 'Unnamed',
+                    EateryDB.instance.customerBox!.values.where((element) => element.id == widget.order.customerId).firstOrNull?.name ?? 'Unnamed',
                     style: const TextStyle(
                         fontSize: 24, fontWeight: FontWeight.bold),
                   )
@@ -65,7 +65,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    widget.order.customer?.phone ?? 'No Phone',
+                    EateryDB.instance.customerBox!.values.where((element) => element.id == widget.order.customerId).firstOrNull?.phone ?? 'No Phone',
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w400),
                   )
@@ -134,7 +134,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                     ],
                   );
                 },
-              ),
+              ),*/
             ],
           ),
         ),

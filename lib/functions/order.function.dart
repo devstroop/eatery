@@ -71,15 +71,35 @@ class OrderFunction {
     return taxAmount.toPrecision(2);
   }
 
-  static double calculateRoundOff(List<Product> cart) {
-    final value = calculateTotalWithTax(cart);
+  static double calculateRoundOff(double value) {
     final decimal = value.round() - value;
     return decimal.toPrecision(2);
   }
 
   static double calculatePayable(List<Product> cart) {
     var finalTotal = calculateTotalWithTax(cart);
-    return (finalTotal + calculateRoundOff(cart)).toPrecision(2);
+    return (finalTotal + calculateRoundOff(finalTotal)).toPrecision(2);
+  }
+
+  static double? getProductTaxRate(Product product) {
+    return EateryDB.instance.taxSlabBox!.values.where((element) => element.id == product.taxSlabId).firstOrNull?.rate;
+  }
+
+  static double? calculateProductTaxAmount(Product product) {
+    final taxSlab = EateryDB.instance.taxSlabBox!.values
+        .where((element) => element.id == product.taxSlabId)
+        .firstOrNull;
+
+    if (taxSlab != null) {
+      if (taxSlab.type == TaxType.exclusive) {
+        return (product.salePrice ?? product.mrpPrice) * (taxSlab.rate / 100);
+      } else if (taxSlab.type == TaxType.inclusive) {
+        return (product.salePrice ?? product.mrpPrice) -
+            calculateProductPriceWithoutTax(product);
+      }
+    }
+
+    return null;
   }
 
 

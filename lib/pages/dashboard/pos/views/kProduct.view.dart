@@ -55,7 +55,7 @@ class KProductView extends StatelessWidget {
                   'MRP',
                   style: TextStyle(
                       fontWeight: FontWeight.w400,
-                      fontSize: 18,
+                      fontSize: 16,
                       color: KColors.black600),
                 ),
                 const SizedBox(
@@ -65,7 +65,7 @@ class KProductView extends StatelessWidget {
                   '${Common.currency?.symbol ?? ''}${product.mrpPrice}',
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      fontSize: 18,
+                      fontSize: 16,
                       color: KColors.black600),
                 ),
               ],
@@ -76,7 +76,7 @@ class KProductView extends StatelessWidget {
                 ' | ',
                 style: TextStyle(
                     fontWeight: FontWeight.w400,
-                    fontSize: 18,
+                    fontSize: 16,
                     color: KColors.black600),
               ),
             ),
@@ -87,7 +87,7 @@ class KProductView extends StatelessWidget {
                   'Sale Price',
                   style: TextStyle(
                       fontWeight: FontWeight.w400,
-                      fontSize: 18,
+                      fontSize: 16,
                       color: KColors.black600),
                 ),
                 const SizedBox(
@@ -97,7 +97,7 @@ class KProductView extends StatelessWidget {
                   '${Common.currency?.symbol ?? ''}${product.salePrice}',
                   style: TextStyle(
                       fontWeight: FontWeight.w600,
-                      fontSize: 18,
+                      fontSize: 16,
                       color: KColors.green),
                 ),
               ],
@@ -130,7 +130,6 @@ class KProductView extends StatelessWidget {
       const SizedBox(
         height: 12,
       ),
-      if (onEdit != null || onDelete != null)
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
           height: 0.5,
@@ -145,7 +144,7 @@ class KProductView extends StatelessWidget {
                 child: InkWell(
                   onTap: onEdit,
                   child: Container(
-                    height: 60,
+                    height: 40,
                     decoration: BoxDecoration(
                       color: KColors.yellow.withOpacity(0.25),
                       borderRadius: BorderRadius.circular(8),
@@ -174,7 +173,7 @@ class KProductView extends StatelessWidget {
                 child: InkWell(
                   onTap: onDelete,
                   child: Container(
-                    height: 60,
+                    height: 40,
                     decoration: BoxDecoration(
                       color: KColors.red.withOpacity(0.25),
                       borderRadius: BorderRadius.circular(8),
@@ -209,7 +208,7 @@ class KProductView extends StatelessWidget {
           child: InkWell(
             onTap: onAddToCart,
             child: Container(
-              height: 60,
+              height: 40,
               decoration: BoxDecoration(
                 color: KColors.green.withOpacity(0.25),
                 borderRadius: BorderRadius.circular(8),

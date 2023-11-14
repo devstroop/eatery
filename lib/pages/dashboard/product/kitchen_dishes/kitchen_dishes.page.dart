@@ -190,189 +190,189 @@ class _KitchenPageState extends State<KitchenPage> {
                     .where(
                         (element) => element.type == ProductType.kitchenDish && (selectedCategory != null ? element.categoryId == selectedCategory?.id : true))
                     .map((each) {
-                  return ListTile(
-                    leading: InkWell(
-                      onTap: () {
-                        // Show detailed bottom sheet
-                        showModalBottomSheet(
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(24),
-                                topRight: Radius.circular(24),
-                                bottomLeft: Radius.circular(0),
-                                bottomRight: Radius.circular(0),
-                              ),
-                            ),
-                            context: this.context,
-                            builder: (context) => KProductView(
-                              product: each,
-                              onDelete: () {
-                                Navigator.pop(context);
-                                showConfirmationDialog(
-                                    context,
-                                    'Are you sure?',
-                                    'Do you want to delete this dish?', () {
-                                  each.delete();
-                                  showMessageDialog(context,
-                                      'Dish has been deleted successfully', MessageType.success, () {
+                  return InkWell(onTap: () {
+                    // Show detailed bottom sheet
+                    showModalBottomSheet(
+                        shape: const RoundedRectangleBorder(
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(24),
+                            topRight: Radius.circular(24),
+                            bottomLeft: Radius.circular(0),
+                            bottomRight: Radius.circular(0),
+                          ),
+                        ),
+                        context: this.context,
+                        showDragHandle: true,
+                        builder: (context) => KProductView(
+                          product: each,
+                          onDelete: () {
+                            Navigator.pop(context);
+                            showConfirmationDialog(
+                                context,
+                                'Are you sure?',
+                                'Do you want to delete this dish?', () {
+                              each.delete();
+                              showMessageDialog(context,
+                                  'Dish has been deleted successfully', MessageType.success, () {
                                     setState(() {});
-                                      }
-                                  );
-                                }, () {
-                                  // Do nothing
-                                });
-                              },
-                              onEdit: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          EditKitchenDishPage(
-                                              product: each)),
-                                ).then((_) => setState(() {}));
-                              },
-                            ));
-                      },
-                      child: Image(
+                                  }
+                              );
+                            }, () {
+                              // Do nothing
+                            });
+                          },
+                          onEdit: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      EditKitchenDishPage(
+                                          product: each)),
+                            ).then((_) => setState(() {}));
+                          },
+                        ));
+                  },
+                    child: ListTile(
+                      leading: Image(
                         image: LibraryImage(each.image).image,
                         fit: BoxFit.contain,
                         height: 48,
                         width: 48,
                       ),
-                    ),
-                    title: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          each.name,
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w500),
-                        ),
-                        const SizedBox(
-                          width: 8,
-                        ),
-                        if (each.foodType != null)
-                          FoodTypeBadge(
-                            size: 16,
-                            foodType: each.foodType,
-                            backgroundColor: Colors.white,
-                          ),
-                      ],
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        if (each.description != null)
+                      title: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
                           Text(
-                            each.description!,
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w400,
-                              color: Colors.grey[700],
-                            ),
+                            each.name,
+                            style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w500),
                           ),
-                        Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
+                          const SizedBox(
+                            width: 8,
+                          ),
+                          if (each.foodType != null)
+                            FoodTypeBadge(
+                              size: 16,
+                              foodType: each.foodType,
+                              backgroundColor: Colors.white,
+                            ),
+                        ],
+                      ),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          if (each.description != null)
                             Text(
-                              'MRP',
+                              each.description!,
                               style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.grey[700]),
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
+                                color: Colors.grey[700],
+                              ),
                             ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Text(
-                              '${Common.currency?.symbol ?? ''}${each.mrpPrice}',
-                              style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: Color(0xFF2F2F2F)),
-                            ),
-                            const SizedBox(
-                              width: 8,
-                            ),
-                            Text(
-                              'Sale Price',
-                              style: TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.grey[700]),
-                            ),
-                            const SizedBox(
-                              width: 4,
-                            ),
-                            Text(
-                              '${Common.currency?.symbol ?? ''}${each.salePrice}',
-                              style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.green),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    trailing: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        IconButton(
-                          icon: const Icon(Icons.more_vert),
-                          onPressed: () {
-                            // Show the menu
-                            showMenu(
-                              context: context,
-                              color: const Color(0xEFEFEFEF),
-                              position:
-                              const RelativeRect.fromLTRB(100, 100, 0, 100),
-                              items: [
-                                PopupMenuItem(
-                                  child: ListTile(
-                                    leading: const Icon(Icons.edit),
-                                    title: const Text('Edit'),
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) =>
-                                                EditKitchenDishPage(
-                                                    product: each)),
-                                      ).then((_) => setState(() {}));
-                                    },
-                                  ),
-                                ),
-                                PopupMenuItem(
-                                  child: ListTile(
-                                    leading: const Icon(Icons.delete),
-                                    title: const Text('Delete'),
-                                    onTap: () {
-                                      Navigator.pop(context);
-                                      showConfirmationDialog(
+                          Row(
+                            mainAxisSize: MainAxisSize.min,
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'MRP',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.grey[700]),
+                              ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Text(
+                                '${Common.currency?.symbol ?? ''}${each.mrpPrice}',
+                                style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF2F2F2F)),
+                              ),
+                              const SizedBox(
+                                width: 8,
+                              ),
+                              Text(
+                                'Sale Price',
+                                style: TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.grey[700]),
+                              ),
+                              const SizedBox(
+                                width: 4,
+                              ),
+                              Text(
+                                '${Common.currency?.symbol ?? ''}${each.salePrice}',
+                                style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.green),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: const Icon(Icons.more_vert),
+                            onPressed: () {
+                              // Show the menu
+                              showMenu(
+                                context: context,
+                                color: const Color(0xEFEFEFEF),
+                                position:
+                                const RelativeRect.fromLTRB(100, 100, 0, 100),
+                                items: [
+                                  PopupMenuItem(
+                                    child: ListTile(
+                                      leading: const Icon(Icons.edit),
+                                      title: const Text('Edit'),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                        Navigator.push(
                                           context,
-                                          'Are you sure?',
-                                          'Do you want to delete this item?',
-                                              () {
-                                            each.delete();
-                                            showMessageDialog(context,
-                                                'Item has been deleted successfully', MessageType.success, () {
-                                              setState(() {});
-                                                });
-                                          }, () {
-                                        // Do nothing
-                                      });
-                                    },
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  EditKitchenDishPage(
+                                                      product: each)),
+                                        ).then((_) => setState(() {}));
+                                      },
+                                    ),
                                   ),
-                                ),
-                              ],
-                            );
-                          },
-                        )
-                      ],
+                                  PopupMenuItem(
+                                    child: ListTile(
+                                      leading: const Icon(Icons.delete),
+                                      title: const Text('Delete'),
+                                      onTap: () {
+                                        Navigator.pop(context);
+                                        showConfirmationDialog(
+                                            context,
+                                            'Are you sure?',
+                                            'Do you want to delete this item?',
+                                                () {
+                                              each.delete();
+                                              showMessageDialog(context,
+                                                  'Item has been deleted successfully', MessageType.success, () {
+                                                setState(() {});
+                                                  });
+                                            }, () {
+                                          // Do nothing
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          )
+                        ],
+                      ),
                     ),
                   );
                 })

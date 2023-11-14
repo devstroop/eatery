@@ -40,7 +40,7 @@ class _ViewDiningTablePageState extends State<ViewDiningTablePage> {
               if (value == 'edit') {
                 Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditDiningTablePage(diningTable: widget.diningTable)));
               } else if (value == 'unlink') {
-                widget.diningTable.order = null;
+                widget.diningTable.orderId = null;
                 Navigator.of(context).pop();
               }
             });
@@ -192,7 +192,7 @@ class _ViewDiningTablePageState extends State<ViewDiningTablePage> {
               ],
             ),
             // If table is occupied show the customer details and order details
-            if (widget.diningTable.order != null) ...[
+            if (widget.diningTable.orderId != null) ...[
               const SizedBox(
                 height: 16,
               ),
@@ -229,7 +229,7 @@ class _ViewDiningTablePageState extends State<ViewDiningTablePage> {
                               ),
                             ),
                             Text(
-                              widget.diningTable.order?.customer?.name ?? 'None',
+                              EateryDB.instance.customerBox!.values.where((element) => element.phone == widget.diningTable.customerPhone).firstOrNull?.name ?? 'None',
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -255,7 +255,7 @@ class _ViewDiningTablePageState extends State<ViewDiningTablePage> {
                               ),
                             ),
                             Text(
-                              widget.diningTable.order?.customer?.phone ?? 'None',
+                              EateryDB.instance.customerBox!.values.where((element) => element.phone == widget.diningTable.customerPhone).firstOrNull?.phone ?? 'None',
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,
@@ -301,7 +301,7 @@ class _ViewDiningTablePageState extends State<ViewDiningTablePage> {
                               ),
                             ),
                             Text(
-                              '#${widget.diningTable.order?.id ?? 'None'}',
+                              '#${widget.diningTable.orderId ?? 'None'}',
                               style: const TextStyle(
                                 fontSize: 18,
                                 fontWeight: FontWeight.bold,

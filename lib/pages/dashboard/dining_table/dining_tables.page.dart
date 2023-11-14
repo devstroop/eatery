@@ -106,9 +106,9 @@ class _DiningTablesPageState extends State<DiningTablesPage> {
                                       element.id == diningTable.category?.id)
                                   .first
                               : null;
-                          Order? order = diningTable.order != null
+                          Order? order = diningTable.orderId != null
                               ? EateryDB.instance.orderBox!.values.singleWhere(
-                                  (elem) => elem.id == diningTable.order?.id)
+                                  (elem) => elem.id == diningTable.orderId)
                               : null;
                           return ListTile(
                             title: Row(
