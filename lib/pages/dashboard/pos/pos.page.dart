@@ -1,5 +1,7 @@
 import 'package:eatery/pages/dashboard/customer/view.customer.page.dart';
 import 'package:eatery/references.dart';
+import 'package:get/get.dart';
+import '../utility/order_print.page.dart';
 import 'cart.page.dart';
 
 class PointOfSalePage extends StatefulWidget {
@@ -17,27 +19,29 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
 
   Future<OrderType?> initOrderType() async {
     OrderType? orderType;
-    if(Common.activeOrderType == null){
+    if (Common.activeOrderType == null) {
       orderType = await _showOrderTypeSelection();
     }
     return orderType ?? Common.activeOrderType!;
   }
+
   Future<DiningTable?> initDiningTableIfDine() async {
     DiningTable? diningTable;
-    if(Common.activeOrderType == OrderType.dine && Common.activeDiningTable == null){
+    if (Common.activeOrderType == OrderType.dine &&
+        Common.activeDiningTable == null) {
       await showSearch(
           context: this.context,
-          delegate: SearchDiningTableDelegate(EateryDB.instance.diningTableBox!.values.toList(), (table) async {
-
+          delegate: SearchDiningTableDelegate(
+              EateryDB.instance.diningTableBox!.values.toList(), (table) async {
             diningTable = table;
           }));
     }
-    return diningTable;
+    return diningTable ?? Common.activeDiningTable;
   }
 
   Future<Customer?> initCustomerIfNull() async {
     Customer? customer;
-    if(Common.activeCustomer == null){
+    if (Common.activeCustomer == null) {
       await showSearch(
           context: this.context,
           delegate: SearchCustomerDelegate(
@@ -46,7 +50,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
               Common.activeCustomer = customer;
             });
           })).then((value) {
-            customer = value;
+        customer = value;
       });
     }
     return customer ?? Common.activeCustomer;
@@ -55,9 +59,9 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, (){
+    Future.delayed(Duration.zero, () {
       initOrderType().then((orderType) {
-        if(orderType == null){
+        if (orderType == null) {
           Navigator.pop(this.context);
           return;
         }
@@ -65,17 +69,21 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
           Common.activeOrderType = orderType;
         });
         initDiningTableIfDine().then((diningTable) {
-          if(Common.activeOrderType == OrderType.dine && diningTable == null){
+          if (Common.activeOrderType == OrderType.dine && diningTable == null) {
             Navigator.pop(this.context);
             return;
           }
           setState(() {
             Common.activeDiningTable = diningTable;
-            if(diningTable?.status == DiningTableStatus.reserved){
+            if (diningTable?.status == DiningTableStatus.reserved) {
               Common.activeCustomer = diningTable?.customer;
-            } else if (diningTable?.status == DiningTableStatus.occupied){
-              Common.activeOrder = EateryDB.instance.orderBox!.values.firstWhere((element) => element.id == diningTable?.order?.id);
-              Common.activeCustomer = EateryDB.instance.customerBox!.values.firstWhere((element) => element.id == Common.activeOrder?.customer?.id);
+            } else if (diningTable?.status == DiningTableStatus.occupied) {
+              Common.activeOrder = EateryDB.instance.orderBox!.values
+                  .firstWhere(
+                      (element) => element.id == diningTable?.order?.id);
+              Common.activeCustomer = EateryDB.instance.customerBox!.values
+                  .firstWhere((element) =>
+                      element.id == Common.activeOrder?.customer?.id);
             }
           });
           initCustomerIfNull().then((customer) {
@@ -90,8 +98,6 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
         });
       });
     });
-
-
   }
 
   @override
@@ -235,7 +241,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          '${Common.currency?.symbol ?? ''}${Common.activeCustomer?.getOutstandingAmount.toStringAsFixed(2) ?? '0.00'}',
+                          '${Common.currency?.symbol ?? ''}${Common.activeOrder?.grandTotal.toPrecision(2) ?? '0.00'}',
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
                               fontSize: 16,
@@ -320,6 +326,83 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                 color: const Color(0xEFEFEFEF),
                 position: const RelativeRect.fromLTRB(100, 100, 0, 100),
                 items: [
+                  // Close this order
+                  if (Common.activeOrderType == OrderType.dine &&
+                      Common.activeOrder != null)
+                    PopupMenuItem(
+                      child: ListTile(
+                        leading: const Icon(Icons.close),
+                        title: const Text('Close Order'),
+                        onTap: () {
+                          Navigator.pop(context);
+                          // Ask before close
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                title: const Text('Close Order?'),
+                                content: const Text(
+                                    'Are you sure you want to close this order?'),
+                                actions: [
+                                  TextButton(
+                                    child: const Text('Cancel'),
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                  ),
+                                  TextButton(
+                                    child: const Text('Close'),
+                                    onPressed: () async {
+                                      Navigator.pop(context);
+                                      if (Common.cart.isNotEmpty) {
+                                        showMessageDialog(
+                                            context,
+                                            'Please clear cart before closing order',
+                                            MessageType.warning);
+                                        return;
+                                      }
+
+                                      var diningTable = EateryDB
+                                          .instance.diningTableBox?.values
+                                          .firstWhere((element) =>
+                                              element.id ==
+                                              Common.activeDiningTable?.id);
+                                      diningTable?.status =
+                                          DiningTableStatus.available;
+                                      diningTable?.order = null;
+                                      diningTable?.save();
+
+                                      var printKOT = false;
+                                      var printInvoice = true;
+                                      var order = Common.activeOrder!;
+                                      setState(() {
+                                        Common.activeOrder = null;
+                                        Common.activeCustomer = null;
+                                        Common.activeDiningTable = null;
+                                        Common.activeOrderType = null;
+                                      });
+
+
+                                      Navigator.pushAndRemoveUntil(
+                                          context,
+                                          MaterialPageRoute(
+                                              builder: (context) =>
+                                                  OrderPrintPage(
+                                                    order: order,
+                                                    currentCart: [],
+                                                    printKOT: printKOT,
+                                                    printInvoice: printInvoice,
+                                                  )),
+                                          (route) => false);
+                                    },
+                                  ),
+                                ],
+                              );
+                            },
+                          );
+                        },
+                      ),
+                    ),
                   PopupMenuItem(
                     child: ListTile(
                       leading: const Icon(Icons.cancel),
@@ -601,7 +684,6 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
               ),
             ],
           ));
-
 }
 
 class PosCartInformation extends StatelessWidget {
@@ -672,6 +754,4 @@ class PosCartInformation extends StatelessWidget {
       ),
     );
   }
-
-
 }

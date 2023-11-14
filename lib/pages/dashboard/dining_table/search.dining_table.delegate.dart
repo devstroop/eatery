@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:get/get.dart';
 
 class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
   final List<DiningTable> diningTables;
@@ -138,7 +139,7 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                             ),
                           )),
                       if(e.order != null) Text('Order #${e.order!.id}', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: KColors.black800)),
-                      if(e.order != null) Text('Due ${Common.currency?.symbol ?? ''}${e.order!.grandTotal}', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.red)),
+                      if(e.order != null) Text('Due ${Common.currency?.symbol ?? ''}${e.order!.grandTotal.toPrecision(2)}', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.red)),
                     ],
                   ),
                 ))

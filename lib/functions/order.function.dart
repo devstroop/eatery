@@ -77,9 +77,9 @@ class OrderFunction {
     return decimal.toPrecision(2);
   }
 
-  static double calculatePayable(List<Product> cart, double? previousDue) {
+  static double calculatePayable(List<Product> cart) {
     var finalTotal = calculateTotalWithTax(cart);
-    return (finalTotal - calculateRoundOff(cart) + (previousDue ?? 0)).toPrecision(2);
+    return (finalTotal - calculateRoundOff(cart)).toPrecision(2);
   }
 
 

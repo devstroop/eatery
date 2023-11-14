@@ -1,5 +1,5 @@
 import 'package:eatery/functions/order.function.dart';
-import 'package:eatery/pages/dashboard/utility/print.page.dart';
+import 'package:eatery/pages/dashboard/utility/order_print.page.dart';
 import 'package:eatery/references.dart';
 import 'package:get/get.dart';
 
@@ -314,7 +314,7 @@ class _CartPageState extends State<CartPage> {
                               ),
                             ),
                             Text(
-                              '${Common.currency?.symbol ?? ''}${OrderFunction.calculatePayable(Common.cart, 0)}',
+                              '${Common.currency?.symbol ?? ''}${OrderFunction.calculatePayable(Common.cart)}',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -330,7 +330,7 @@ class _CartPageState extends State<CartPage> {
                           children: [
                             Expanded(
                               child: Text(
-                                'Previous due',
+                                'Outstanding',
                                 style: TextStyle(
                                   fontWeight: FontWeight.w500,
                                   color: KColors.red,
@@ -338,7 +338,7 @@ class _CartPageState extends State<CartPage> {
                               ),
                             ),
                             Text(
-                              '${Common.currency?.symbol ?? ''}${Common.activeCustomer?.getOutstandingAmount ?? 0}',
+                              '${Common.currency?.symbol ?? ''}${Common.activeOrder?.grandTotal ?? 0}',
                               style: TextStyle(
                                 fontWeight: FontWeight.bold,
                                 color: KColors.red,
@@ -387,7 +387,7 @@ class _CartPageState extends State<CartPage> {
                           ),
                         ),
                         Text(
-                          '${Common.currency?.symbol ?? ''}${OrderFunction.calculatePayable(Common.cart, Common.activeCustomer?.getOutstandingAmount)}',
+                          '${Common.currency?.symbol ?? ''}${OrderFunction.calculatePayable(Common.cart) + (Common.activeOrder?.grandTotal ?? 0)}',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
@@ -448,8 +448,8 @@ class _CartPageState extends State<CartPage> {
       order.taxTotal = OrderFunction.calculateTaxAmount(order.products);
       order.total = OrderFunction.calculateTotalWithTax(order.products);
       order.roundOff = OrderFunction.calculateRoundOff(order.products);
-      order.grandTotal = OrderFunction.calculatePayable(order.products, 0);
-      order.payable = OrderFunction.calculatePayable(order.products, Common.activeCustomer?.getOutstandingAmount);
+      order.grandTotal = OrderFunction.calculatePayable(order.products);
+
     }
     else{
       order = Order(
@@ -461,25 +461,30 @@ class _CartPageState extends State<CartPage> {
         taxTotal: OrderFunction.calculateTaxAmount(cart),
         total: OrderFunction.calculateTotalWithTax(cart),
         roundOff: OrderFunction.calculateRoundOff(cart),
-        grandTotal: OrderFunction.calculatePayable(cart, 0),
-        payable: OrderFunction.calculatePayable(cart, Common.activeCustomer?.getOutstandingAmount),
+        grandTotal: OrderFunction.calculatePayable(cart),
       );
     }
-
-    if(type == OrderType.dine && Common.activeOrder == null){
-      Common.activeDiningTable!.status = DiningTableStatus.occupied;
-      Common.activeDiningTable!.order = order;
-      await Common.activeDiningTable!.save();
+    if(type == OrderType.dine && diningTable != null){
+      var diningTable = EateryDB.instance.diningTableBox?.values.firstWhere((element) => element.id == Common.activeDiningTable?.id);
+      diningTable?.status = DiningTableStatus.occupied;
+      diningTable?.order = order;
+      await diningTable?.save();
     }
 
 
-    EateryDB.instance.orderBox!.put(order.id, order).then((value) {
+
+    EateryDB.instance.orderBox!.put(order.id, order).whenComplete(() {
+      var printKOT = Common.activeOrderType == OrderType.dine;
+      var printInvoice = Common.activeOrderType == OrderType.takeout || Common.activeOrderType == OrderType.delivery;
+      List<Product> currentCart = List.from(Common.cart);
+
       Common.cart.clear();
       Common.activeOrder = null;
       Common.activeDiningTable = null;
       Common.activeCustomer = null;
+      Common.activeOrderType = null;
 
-      showMessageDialog(context, 'Order placed successfully', MessageType.success).whenComplete(() => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => PrintPage(order: order)), (route) => false));
+      showMessageDialog(context, 'Order placed successfully', MessageType.success).whenComplete(() => Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => OrderPrintPage(order: order, currentCart: currentCart, printKOT: printKOT, printInvoice: printInvoice,)), (route) => false));
     }).onError((error, stackTrace) {
       showMessageDialog(context, 'Failed to place order', MessageType.error);
     });
