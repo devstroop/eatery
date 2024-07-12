@@ -38,7 +38,7 @@ class SearchOrderDelegate extends SearchDelegate<Order?>{
         ),
       ),
       textTheme: const TextTheme(
-        headline6: TextStyle(
+        headlineMedium: TextStyle(
           color: Colors.white,
           fontSize: 18,
         ),

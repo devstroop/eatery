@@ -1,3 +1,4 @@
+import 'package:archive/archive.dart';
 import 'package:eatery/references.dart';
 
 class AppFileSystem {
@@ -213,8 +214,21 @@ class AppFileSystem {
     final dataDir = Directory(dataDirPath);
     try {
       final zipFile = File(zipFilePath);
-      ZipFile.createFromDirectory(
-          sourceDir: dataDir, zipFile: zipFile, recurseSubDirs: true);
+      // ZipFile.createFromDirectory(
+      //     sourceDir: dataDir, zipFile: zipFile, recurseSubDirs: true);
+
+      // Instead of flutter_archive, use archive package
+      final encoder = ZipEncoder();
+      final archive = Archive();
+      for (final file in dataDir.listSync(recursive: true)) {
+        if (file is File) {
+          final filename = file.path
+              .split(dataDir.path)
+              .last
+              .replaceAll(RegExp(r'^[/\\]'), '');
+          archive.addFile(ArchiveFile(file.path, file.lengthSync(), file.readAsBytesSync()));
+        }
+      }
     } catch (e) {
       rethrow;
     }
@@ -225,8 +239,23 @@ class AppFileSystem {
     final zipFile = File(zipFilePath);
     final destinationDir = Directory(dataDirPath);
     try {
-      ZipFile.extractToDirectory(
-          zipFile: zipFile, destinationDir: destinationDir);
+      // ZipFile.extractToDirectory(
+      //     zipFile: zipFile, destinationDir: destinationDir);
+      // Instead of flutter_archive, use archive package
+
+      final archive = ZipDecoder().decodeBytes(zipFile.readAsBytesSync());
+      for (final file in archive) {
+        final filename = file.name;
+        if (file.isFile) {
+          final data = file.content as List<int>;
+          final f = File('${destinationDir.path}/$filename');
+          f.createSync(recursive: true);
+          f.writeAsBytesSync(data);
+        } else {
+          final dir = Directory('${destinationDir.path}/$filename');
+          dir.createSync(recursive: true);
+        }
+      }
     } catch (e) {
       rethrow;
     }

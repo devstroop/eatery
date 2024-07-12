@@ -22,7 +22,6 @@ export 'package:path_provider/path_provider.dart';
 export 'package:flutter_native_splash/flutter_native_splash.dart';
 export 'package:file_picker/file_picker.dart';
 export 'package:image_picker/image_picker.dart';
-export 'package:flutter_archive/flutter_archive.dart';
 export 'package:platform_device_id/platform_device_id.dart';
 export 'package:url_launcher/url_launcher.dart';
 export 'package:sn_progress_dialog/sn_progress_dialog.dart';
