@@ -222,7 +222,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
               name: _controllerCategoryName.text,
               description: _controllerCategoryDescription.text,
               category: diningTableCategory,
-              capacity: 0,
+              capacity: int.parse(_controllerCapacity.text),
             );
             EateryDB.instance.diningTableBox!.add(diningTable).then((value) {
               showMessageDialog(context, 'Dining Table created successfully',

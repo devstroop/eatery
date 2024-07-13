@@ -15,6 +15,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
   final TextEditingController _controllerCategoryName = TextEditingController();
   final TextEditingController _controllerCategoryDescription =
       TextEditingController();
+  final TextEditingController _controllerCapacity = TextEditingController();
   final List<FocusNode> _focusNodes = [
     FocusNode(),
     FocusNode(),
@@ -109,6 +110,21 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                 const SizedBox(
                   height: 12.0,
                 ),
+                LabeledCustomTextFormField(
+                  label: 'Capacity',
+                  controller: _controllerCapacity,
+                  hint: 'eg. 4/ 6/ 8/ 10/ etc.',
+                  obscureText: false,
+                  themeColor: _pageColor,
+                  foregroundColor: KColors.black600,
+                  keyboardType: TextInputType.number,
+                  onFieldSubmitted: (v) {
+                    FocusScope.of(context).unfocus();
+                  },
+                ),
+                const SizedBox(
+                  height: 12.0,
+                ),
                 Text(
                   'Category',
                   style: TextStyle(
@@ -180,6 +196,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
             diningTable.description = _controllerCategoryDescription.text;
             diningTable.category = diningTableCategory;
             diningTable.status = status;
+            diningTable.capacity = int.parse(_controllerCapacity.text);
 
             await EateryDB.instance.diningTableBox!
                 .put(diningTable.key, diningTable)

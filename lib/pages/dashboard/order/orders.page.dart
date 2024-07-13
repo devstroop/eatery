@@ -1,4 +1,5 @@
 import 'dart:ui' as ui;
+import 'package:eatery_db/eatery_db.dart';
 import 'package:intl/intl.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:eatery/references.dart';
@@ -80,13 +81,63 @@ class _OrdersPageState extends State<OrdersPage> {
           ? ListView(
               children: [
                 ...orders.map((order) => ListTile(
+                  // leading: Icon(
+                  //   order.type == OrderType.dine
+                  //       ? Icons.restaurant
+                  //       : order.type == OrderType.delivery
+                  //       ? Icons.delivery_dining
+                  //       : Icons.takeout_dining,
+                  // ),
+                  title: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('${Common.currency?.symbol}${order.finalTotal.toStringAsFixed(2)}', style: const TextStyle(fontSize: 24,fontWeight: FontWeight.w600)),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Color(order.type.color!),
+                          ),
+                          borderRadius: BorderRadius.circular(4),
+                        ),
+                        child: Text(order.type.description!, style: TextStyle(color: Color(order.type.color!), fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ],
+                  ),
+                  subtitle: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Date: ${DateFormat.yMMMd().format(order.createdAt)}'),
+                      Text('Customer Phone: ${order.customerPhone ?? 'N/A'}'),
+                      Text('Total Quantity: ${order.totalQuantity}'),
+                      Text('Sub Total: ${Common.currency?.symbol}${order.subTotal.toStringAsFixed(2)}'),
+                      Text('Discount: ${Common.currency?.symbol}${order.discountTotal.toStringAsFixed(2)}'),
+                      Text('Tax: ${Common.currency?.symbol}${order.taxTotal.toStringAsFixed(2)}'),
+                      Text('Round Off: ${Common.currency?.symbol}${order.roundOff.toStringAsFixed(2)}'),
+                      Text('Grand Total: ${Common.currency?.symbol}${order.grandTotal.toStringAsFixed(2)}'),
+                      if (order.paidTotal != null)
+                        Text('Paid Total: ${Common.currency?.symbol}${order.paidTotal!.toStringAsFixed(2)}'),
+                    ],
+                  ),
+                  onTap: () {
+                    // Handle tile tap
+                  },
+                )
+                  /*ListTile(
                         leading: Icon(
                       order.type == OrderType.dine
                           ? Icons.restaurant
                           : order.type == OrderType.delivery
                               ? Icons.delivery_dining
                               : Icons.takeout_dining,
-                    )))
+                    ),
+                  title: Text(order.finalTotal.toString()),
+                  subtitle: Text(DateFormat.yMMMd().format(order.createdAt)),
+                )*/)
               ],
             )
           : const Center(

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:eatery/references.dart';
 import 'package:intl/intl.dart';
 
@@ -17,7 +19,7 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
         },
         icon: const Icon(Icons.clear),
       ),
-      IconButton(
+      TextButton(
         onPressed: () {
           Navigator.push(
             context,
@@ -27,10 +29,16 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
               customers.add(customer);
               showSuggestions(context);
             }
-
           });
         },
-        icon: const Icon(Icons.person_add),
+        child: const Row(
+          children: [
+            Icon(Icons.person_add),
+            SizedBox(width: 6),
+            Text('New', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),)
+          ],
+        ),
+
       )
     ];
   }

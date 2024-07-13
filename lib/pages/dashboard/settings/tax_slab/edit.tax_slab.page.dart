@@ -58,6 +58,37 @@ class _EditTaxSlabSettingsPageState extends State<EditTaxSlabSettingsPage> {
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
         title: const Text('Edit Tax Slab'),
+        actions: [
+          // Delete button
+          IconButton(
+            icon: const Icon(Icons.delete),
+            onPressed: () {
+              // Confirm before delete
+              showDialog(context: context, builder: (context) {
+                return AlertDialog(
+                  title: const Text('Delete Tax Slab'),
+                  content: const Text('Are you sure you want to delete this tax slab?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        widget.taxSlab.delete();
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Delete'),
+                    ),
+                  ],
+                );
+              });
+            },
+          ),
+        ],
       ),
       body: InkWell(
         onTap: () => FocusScope.of(context).unfocus(),

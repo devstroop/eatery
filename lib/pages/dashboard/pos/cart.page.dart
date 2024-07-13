@@ -442,6 +442,54 @@ class _CartPageState extends State<CartPage> {
       return;
     }
 
+    // Confirm?
+    var confirm = await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Confirm Order'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text('Are you sure you want to place this order?'),
+            const SizedBox(height: 16),
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(KColors.white800),
+                      foregroundColor: MaterialStateProperty.all(KColors.black600),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context, false);
+                    },
+                    child: const Text('Cancel'),
+                  ),
+                ),
+                const SizedBox(width: 16),
+                Expanded(
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(KColors.secondary2),
+                      foregroundColor: MaterialStateProperty.all(KColors.white),
+                    ),
+                    onPressed: () {
+                      Navigator.pop(context, true);
+                    },
+                    child: const Text('Confirm'),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+
+    if(confirm == null || !confirm){
+      return;
+    }
+
     Order order;
     if(Common.activeOrder != null){
       order = Common.activeOrder!;

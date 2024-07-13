@@ -18,10 +18,26 @@ class CircularCategoryPOSWidget extends StatelessWidget {
         child: Column(
           children: [
             const SizedBox(height: 6),
-            Material(
-              elevation: selected ? 6 : 0,
-              shadowColor: selected ?  themeColor : null,
-              borderRadius: BorderRadius.circular(imageBlockSize/2),
+            Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  if(selected)
+                  const BoxShadow(
+                    color: Color(0x2F000000),
+                    blurRadius: 6,
+                    offset: Offset(0, 4),
+                    spreadRadius: 1,
+                  ),
+                  if(!selected)
+                  const BoxShadow(
+                    color: Color(0x00000000),
+                    blurRadius: 0,
+                    offset: Offset(0, 0),
+                    spreadRadius: 0,
+                  )
+                ],
+                borderRadius: BorderRadius.circular(imageBlockSize/2),
+              ),
               child: Container(
                 height: imageBlockSize,
                 width: imageBlockSize,

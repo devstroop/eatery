@@ -48,7 +48,7 @@ class _StaffsPageState extends State<StaffsPage> {
                       ),
                       subtitle: e.phone != null ? Text(e.phone!) : null,
                       leading: LeadingImageWidget(
-                        image: LibraryImage(e.photo ?? '').image,
+                        image: LibraryImage(e.photo ?? '', defaultImage: 'assets/images/man.png').image,
                         size: 48,
                       ),
                       trailing: Row(

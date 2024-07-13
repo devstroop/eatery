@@ -69,7 +69,7 @@ class ProductCard extends StatelessWidget {
                                   topLeft: Radius.circular(6),
                                   topRight: Radius.circular(6)),
                               image: DecorationImage(
-                                image: LibraryImage(product.image ?? '').image,
+                                image: LibraryImage(product.image ?? '', defaultImage: 'assets/images/no-picture.png').image,
                                 fit: product.type == ProductType.inventoryItem
                                     ? BoxFit.contain
                                     : BoxFit.cover,

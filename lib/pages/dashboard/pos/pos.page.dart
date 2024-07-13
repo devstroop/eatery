@@ -509,7 +509,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                 ...EateryDB.instance.productCategoryBox!.values.map((each) {
                   return CircularCategoryPOSWidget(
                     margin: const EdgeInsets.only(bottom: 6),
-                    image: LibraryImage(each.image).image,
+                    image: LibraryImage(each.image, defaultImage: 'assets/images/category.png').image,
                     themeColor: pageColor,
                     selected: selectedProductCategory?.id == each.id,
                     onTap: () {
@@ -619,18 +619,19 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
               text: Common.activeOrderType?.name ?? 'Select order type',
             ),
             // Cart Information with total price
-            PosCartInformation(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CartPage(),
-                  ),
-                );
-              },
-              themeColor: pageColor,
-              cart: Common.cart,
-            ),
+            if (Common.activeCustomer != null)
+              PosCartInformation(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CartPage(),
+                    ),
+                  );
+                },
+                themeColor: pageColor,
+                cart: Common.cart,
+              ),
           ],
         ),
       ),
