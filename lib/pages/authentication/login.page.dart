@@ -40,7 +40,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       return;
     }
     _formKey.currentState!.save();
-    if (_controllerPassword.text == company!.password) {
+    if (company!.password == null || _controllerPassword.text == company!.password) {
       ref.read(companyProvider.notifier).setCompany(company);
       GoRouter.of(context as BuildContext).goNamed('dashboard');
     } else {

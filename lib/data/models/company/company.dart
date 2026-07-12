@@ -17,7 +17,7 @@ class Company extends HiveObject {
   @HiveField(5)
   String address;
   @HiveField(6)
-  String password;
+  String? password;
   @HiveField(7)
   Taxation taxation;
   @HiveField(8)
@@ -35,7 +35,7 @@ class Company extends HiveObject {
     required this.email,
     required this.phone,
     required this.address,
-    required this.password,
+    this.password,
     required this.taxation,
     this.currencyCode,
     this.foodLicenseNo,

@@ -59,7 +59,9 @@ import 'package:go_router/go_router.dart';
 
 GoRouter createAppRouter(EateryDatabase db) {
   return GoRouter(
-    initialLocation: db.hasCompany ? '/login' : '/',
+    initialLocation: db.hasCompany
+        ? (db.companyBox.values.first.password != null ? '/login' : '/dashboard')
+        : '/',
     routes: [
       GoRoute(
         name: 'login',
