@@ -44,7 +44,7 @@ class MenuCard extends StatelessWidget {
               blurRadius: 4,
               color: Color(0x37000000),
               offset: Offset(0, 1),
-            )
+            ),
           ],
           borderRadius: BorderRadius.circular(12),
         ),
@@ -52,34 +52,28 @@ class MenuCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              iconData,
-              color: Colors.white,
-              size: iconSize,
-            ),
-            const SizedBox(
-              height: 8,
-            ),
-            Flexible(
-              child: Text(
-                title,
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: titleSize,
-                  fontWeight: FontWeight.w700,
-                ),
+            Icon(iconData, color: Colors.white, size: iconSize),
+            const SizedBox(height: 8),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: titleSize,
+                fontWeight: FontWeight.w700,
               ),
             ),
             if (subtitle != null)
-              Flexible(
-                child: Text(
-                  subtitle!,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: const Color(0xB3FFFFFF),
-                    fontSize: subtitleSize,
-                  ),
+              Text(
+                subtitle!,
+                textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: TextStyle(
+                  color: const Color(0xB3FFFFFF),
+                  fontSize: subtitleSize,
                 ),
               ),
           ],

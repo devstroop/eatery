@@ -63,13 +63,13 @@ class _ViewOrderPageState extends ConsumerState<ViewOrderPage> {
             ),
             const SizedBox(height: 10),
             const Text(
-              'Order Status: NA}',
+              'Order Status: NA',
               style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
 
             Text(
-              'Payment Status: ${widget.order.grandTotal > (widget.order.paidTotal ?? 0) ? 'Paid' : 'Not Paid'}',
+              'Payment Status: ${widget.order.grandTotal > (widget.order.paidTotal ?? 0) ? 'Not Paid' : 'Paid'}',
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),

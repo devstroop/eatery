@@ -1,3 +1,4 @@
+import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/pages/dashboard/payment/payments.page.dart';
 import 'package:eatery/references.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,45 +29,31 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
     final company = ref.read(companyProvider);
     final cart = ref.read(cartProvider).cart;
 
-    double crossAxisItemCount;
-    double menuSize;
-    double spacing;
-    double iconSize;
-    double titleSize;
-    double subtitleSize;
+    final double crossAxisItemCount = screenWidth >= 1200
+        ? 5
+        : screenWidth >= 800
+        ? 4
+        : screenWidth >= 600
+        ? 3
+        : 2;
+    final spacing = Responsive.spacing(context);
+    final iconSize =
+        (screenWidth >= 1200
+                ? 48
+                : screenWidth >= 800
+                ? 44
+                : screenWidth >= 600
+                ? 40
+                : 36)
+            .toDouble();
+    final titleSize = Responsive.titleSize(context);
+    final subtitleSize = Responsive.bodySize(context);
 
-    if (screenWidth >= 1200) {
-      crossAxisItemCount = 5;
-      spacing = 24;
-      iconSize = 48;
-      titleSize = 20;
-      subtitleSize = 16;
-    } else if (screenWidth >= 800) {
-      crossAxisItemCount = 4;
-      spacing = 20;
-      iconSize = 44;
-      titleSize = 18;
-      subtitleSize = 14;
-    } else if (screenWidth >= 600) {
-      crossAxisItemCount = 3;
-      spacing = 16;
-      iconSize = 40;
-      titleSize = 16;
-      subtitleSize = 12;
-    } else {
-      crossAxisItemCount = 2;
-      spacing = 12;
-      iconSize = 36;
-      titleSize = 14;
-      subtitleSize = 10;
-    }
-
-    menuSize = (screenWidth - (spacing * (crossAxisItemCount + 1))) /
+    final menuSize =
+        (screenWidth - (spacing * (crossAxisItemCount + 1))) /
         crossAxisItemCount;
     if (company == null) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
     return WillPopScope(
       onWillPop: () {
@@ -87,9 +74,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                 Stack(
                   children: [
                     IconButton(
-                      icon: const Icon(
-                        Icons.shopping_cart_outlined,
-                      ),
+                      icon: const Icon(Icons.shopping_cart_outlined),
                       onPressed: () {
                         Navigator.push(
                           context,
@@ -121,48 +106,44 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                   ],
                 ),
                 IconButton(
-                  icon: const Icon(
-                    Icons.power_settings_new,
-                  ),
+                  icon: const Icon(Icons.power_settings_new),
                   onPressed: () {
                     showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Logout'),
-                            content:
-                                const Text('Are you sure you want to logout?'),
-                            actions: [
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('No'),
-                              ),
-                              TextButton(
-                                onPressed: () async {
-                                  Navigator.pushReplacement(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => const LogoutPage(),
-                                    ),
-                                  );
-                                },
-                                child: const Text('Yes'),
-                              ),
-                            ],
-                          );
-                        });
+                      context: context,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          title: const Text('Logout'),
+                          content: const Text(
+                            'Are you sure you want to logout?',
+                          ),
+                          actions: [
+                            TextButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('No'),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                Navigator.pushReplacement(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const LogoutPage(),
+                                  ),
+                                );
+                              },
+                              child: const Text('Yes'),
+                            ),
+                          ],
+                        );
+                      },
+                    );
                   },
                 ),
               ],
             ),
-            UpgradeNotification(
-              company: company,
-            ),
-            const SizedBox(
-              height: 16,
-            ),
+            UpgradeNotification(company: company),
+            const SizedBox(height: 16),
             Wrap(
               spacing: spacing,
               runSpacing: spacing,
@@ -431,33 +412,35 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
 
   void _showLibrary(BuildContext context) {
     Navigator.push(
-        context,
-        MaterialPageRoute(
-            builder: (context) => ImageLibraryPage(context, (value) {
-                  // Display in full screen view
+      context,
+      MaterialPageRoute(
+        builder: (context) => ImageLibraryPage(context, (value) {
+          // Display in full screen view
 
-                  showDialog(
-                      context: context,
-                      builder: (context) {
-                        final image =
-                            Image(image: (value ?? LibraryImage('')).image);
-                        return Dialog(
-                          // Add close button to dialog (top right)
-                          child: Container(
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(12),
-                              image: DecorationImage(
-                                image: image.image,
-                                fit: BoxFit.contain,
-                              ),
-                            ),
-                            width: MediaQuery.of(context).size.width * 0.80,
-                            // Set height with aspect ratio to image size and screen width
-                            // height: MediaQuery.of(context).size.width * 0.80 * (image.height ?? 1) / (image.width ?? 1),
-                            // height: MediaQuery.of(context).size.height * 0.80,
-                          ),
-                        );
-                      }).then((value) => setState(() {}));
-                })));
+          showDialog(
+            context: context,
+            builder: (context) {
+              final image = Image(image: (value ?? LibraryImage('')).image);
+              return Dialog(
+                // Add close button to dialog (top right)
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(12),
+                    image: DecorationImage(
+                      image: image.image,
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                  width: MediaQuery.of(context).size.width * 0.80,
+                  // Set height with aspect ratio to image size and screen width
+                  // height: MediaQuery.of(context).size.width * 0.80 * (image.height ?? 1) / (image.width ?? 1),
+                  // height: MediaQuery.of(context).size.height * 0.80,
+                ),
+              );
+            },
+          ).then((value) => setState(() {}));
+        }),
+      ),
+    );
   }
 }

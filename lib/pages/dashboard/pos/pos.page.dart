@@ -1,3 +1,4 @@
+import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/core/extensions/double_ext.dart';
 import 'package:eatery/pages/dashboard/customer/view.customer.page.dart';
 import 'package:eatery/presentation/providers/product_provider.dart';
@@ -96,19 +97,14 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                     .read(customerRepositoryProvider)
                     .getCustomerByPhone(diningTable.customerPhone ?? '');
                 if (reservedCustomer != null) {
-                  ref
-                      .read(cartProvider.notifier)
-                      .setCustomer(reservedCustomer);
+                  ref.read(cartProvider.notifier).setCustomer(reservedCustomer);
                 }
               } else if (diningTable.status == DiningTableStatus.occupied) {
-                final existingOrder =
-                    ref.read(orderRepositoryProvider).getOrderById(
-                          diningTable.orderId!,
-                        );
+                final existingOrder = ref
+                    .read(orderRepositoryProvider)
+                    .getOrderById(diningTable.orderId!);
                 if (existingOrder != null) {
-                  ref
-                      .read(cartProvider.notifier)
-                      .setActiveOrder(existingOrder);
+                  ref.read(cartProvider.notifier).setActiveOrder(existingOrder);
                   final occupiedCustomer = ref
                       .read(customerRepositoryProvider)
                       .getCustomerByPhone(existingOrder.customerPhone ?? '');
@@ -144,9 +140,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
     Color pageColor = Color(
       session.activeOrderType?.color ?? KColors.primary.value,
     );
-    List<Product> products = productsRepo.getAllProducts().where((
-      element,
-    ) {
+    List<Product> products = productsRepo.getAllProducts().where((element) {
       if (selectedProductCategory == null) {
         return true;
       }
@@ -155,18 +149,8 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
       }
       return false;
     }).toList();
-    double crossAxisCount;
-    double spacing;
-    if (MediaQuery.of(context).size.width < 600) {
-      crossAxisCount = 2;
-      spacing = 12;
-    } else if (MediaQuery.of(context).size.width < 900) {
-      crossAxisCount = 3;
-      spacing = 16;
-    } else {
-      crossAxisCount = 4;
-      spacing = 24;
-    }
+    final crossAxisCount = Responsive.gridColumns(context);
+    final spacing = Responsive.spacing(context);
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
@@ -270,12 +254,13 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                                       });
 */
                                       var order = session.activeOrder!;
-                                      var diningTableRepo =
-                                          ref.read(diningTableRepositoryProvider);
+                                      var diningTableRepo = ref.read(
+                                        diningTableRepositoryProvider,
+                                      );
                                       var diningTable = diningTableRepo
                                           .getTableById(
-                                        session.activeDiningTable?.id ?? 0,
-                                      );
+                                            session.activeDiningTable?.id ?? 0,
+                                          );
                                       if (diningTable != null) {
                                         diningTable.status =
                                             DiningTableStatus.available;
@@ -285,7 +270,9 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
 
                                       var printKOT = false;
                                       var printInvoice = true;
-                                      ref.read(cartProvider.notifier).clearCart();
+                                      ref
+                                          .read(cartProvider.notifier)
+                                          .clearCart();
 
                                       Navigator.pushAndRemoveUntil(
                                         context,
@@ -335,7 +322,9 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                                   onPressed: () {
                                     Navigator.pop(context);
                                     setState(() {
-                                      ref.read(cartProvider.notifier).clearCart();
+                                      ref
+                                          .read(cartProvider.notifier)
+                                          .clearCart();
                                     });
                                     Navigator.pop(context);
                                   },
@@ -368,10 +357,14 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                       showSearch(
                         context: this.context,
                         delegate: SearchCustomerDelegate(
-                          ref.read(customerRepositoryProvider).getAllCustomers(),
+                          ref
+                              .read(customerRepositoryProvider)
+                              .getAllCustomers(),
                           (customer) {
                             setState(() {
-                              ref.read(cartProvider.notifier).setCustomer(customer);
+                              ref
+                                  .read(cartProvider.notifier)
+                                  .setCustomer(customer);
                             });
                           },
                         ),
@@ -447,16 +440,13 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                       }
                       final tableOrder = ref
                           .read(orderRepositoryProvider)
-                          .getOrderById(
-                            session.activeDiningTable!.orderId!,
-                          );
+                          .getOrderById(session.activeDiningTable!.orderId!);
                       if (tableOrder != null) {
                         Navigator.push(
                           this.context,
                           MaterialPageRoute(
-                            builder: (context) => ViewOrderPage(
-                              order: tableOrder,
-                            ),
+                            builder: (context) =>
+                                ViewOrderPage(order: tableOrder),
                           ),
                         ).then((value) => setState(() {}));
                       }
@@ -504,13 +494,15 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                                     .setDiningTable(table);
                               });
                             },
-                            currencySymbol: ref
+                            currencySymbol:
+                                ref
                                     .read(companyProvider.notifier)
                                     .currency
                                     ?.symbol ??
                                 '',
-                            orders:
-                                ref.read(orderRepositoryProvider).getAllOrders(),
+                            orders: ref
+                                .read(orderRepositoryProvider)
+                                .getAllOrders(),
                           ),
                         ).then((value) => setState(() {}));
                       } else {
@@ -617,19 +609,24 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                             width: width,
                             height: height,
                             themeColor: pageColor,
-                            currencySymbol: ref
+                            currencySymbol:
+                                ref
                                     .read(companyProvider.notifier)
                                     .currency
                                     ?.symbol ??
                                 '',
                             onAdd: () {
                               setState(() {
-                                ref.read(cartProvider.notifier).addToCart(product);
+                                ref
+                                    .read(cartProvider.notifier)
+                                    .addToCart(product);
                               });
                             },
                             onRemove: () {
                               setState(() {
-                                ref.read(cartProvider.notifier).removeFromCart(product);
+                                ref
+                                    .read(cartProvider.notifier)
+                                    .removeFromCart(product);
                               });
                             },
                             onTap: () => _showProductDetails(product),
@@ -681,7 +678,9 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                 _showOrderTypeSelection().then((value) {
                   // TODO: When only new order, else postpone
                   if (value != null) {
-                    setState(() => ref.read(cartProvider.notifier).setOrderType(value));
+                    setState(
+                      () => ref.read(cartProvider.notifier).setOrderType(value),
+                    );
                   }
                 });
               },
