@@ -1,3 +1,4 @@
+import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/pages/authentication/reset-pin.dart';
 import 'package:eatery/core/extensions/string_ext.dart';
 import 'package:eatery/references.dart';
@@ -161,155 +162,30 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           ),
         ],
       ),
-      body: InkWell(
-        onTap: () {
-          FocusScope.of(context).unfocus();
+      body: LayoutBuilder(
+        builder: (context, constraints) {
+          final isDesktop = Responsive.isDesktop(context);
+          return InkWell(
+            onTap: () => FocusScope.of(context).unfocus(),
+            child: isDesktop
+                ? Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 480),
+                      child: ListView(
+                        shrinkWrap: true,
+                        padding: const EdgeInsets.all(12),
+                        children: _buildBody(),
+                      ),
+                    ),
+                  )
+                : ListView(
+                    padding: const EdgeInsets.all(12),
+                    children: _buildBody(),
+                  ),
+          );
         },
-        child: ListView(
-          children: [
-            if (company == null)
-              LinearProgressIndicator(
-                backgroundColor: KColors.white,
-                valueColor: AlwaysStoppedAnimation<Color>(KColors.secondary2),
-              ),
-            if (company != null)
-              Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    SpacingStyle.defaultVerticalSpacing,
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          height: 120,
-                          width: 120,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(24),
-                            image: DecorationImage(
-                              fit: BoxFit.cover,
-                              image: LibraryImage(company?.logo ?? '').image,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 8.0),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text(
-                              company!.name,
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            Text(
-                              company!.address,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.normal,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                    SpacingStyle.defaultVerticalSpacing,
-                    Form(
-                      key: _formKey,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.max,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          CustomTextFromField(
-                            themeColor: themeColor,
-                            keyboardType: const TextInputType.numberWithOptions(
-                              decimal: false,
-                              signed: false,
-                            ),
-                            controller: _controllerPassword,
-                            obscureText: true,
-                            isPassword: true,
-                            label: 'Secure PIN',
-                            hint: 'Enter secure pin...',
-                            textInputAction: TextInputAction.done,
-                            onFieldSubmitted: (v) {
-                              FocusScope.of(context).unfocus();
-                              _submit();
-                            },
-                            validator: (value) {
-                              if (value!.trim().isEmpty) {
-                                return 'Pin cannot be blank';
-                              }
-                              if (!value.trim().isNumericOnly) {
-                                return 'Invalid character';
-                              }
-                              return null;
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    /*SpacingStyle.defaultVerticalSpacing,
-                    TextButton(
-                      child: Text(
-                        'Forgot password?',
-                        style: TextStyle(color: KColors.black600),
-                      ),
-                      onPressed: () => showModalBottomSheet(
-                        context: context,
-                        isScrollControlled: true,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(24),
-                            topRight: Radius.circular(24),
-                            bottomLeft: Radius.circular(0),
-                            bottomRight: Radius.circular(0),
-                          ),
-                        ),
-                        builder: (context) => ref
-                                        .read(appDatabaseProvider)
-                                        .subscriptionBox
-                                        .values
-                                        .singleWhere(
-                                          (element) =>
-                                              element.id ==
-                                              company!.subscriptionId!,
-                                        )
-                                        .purchaseCode !=
-                                    null
-                                ? ForgotPasswordBottomSheet(
-                                    context,
-                                    themeColor: themeColor,
-                                    callback: (Company? company) {
-                                      setState(() {
-                                        this.company = company;
-                                      });
-                                    },
-                                  )
-                                : UpgradeToAccessBottomSheet(
-                                    context,
-                                    themeColor: themeColor,
-                                    callback: (Company? company) {
-                                      setState(() {
-                                        this.company = company;
-                                      });
-                                    },
-                                  ),
-                      ),
-                    )*/
-                  ],
-                ),
-              ), // Placeholder to add space for the bottom app bar
-          ],
-        ),
       ),
       resizeToAvoidBottomInset: true,
-      // Enable auto resize to avoid the keyboard
       bottomNavigationBar: BottomAppBar(
         color: KColors.white,
         child: PrimaryButton(
@@ -320,5 +196,95 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         ),
       ),
     );
+  }
+
+  List<Widget> _buildBody() {
+    return [
+      if (company == null)
+        const LinearProgressIndicator(
+          backgroundColor: Colors.white,
+          valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF74B952)),
+        ),
+      if (company != null)
+        Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              const SizedBox(height: 12),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    height: 120,
+                    width: 120,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(24),
+                      image: DecorationImage(
+                        fit: BoxFit.cover,
+                        image: LibraryImage(company?.logo ?? '').image,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        company!.name,
+                        style: const TextStyle(
+                          fontSize: 24,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      Text(
+                        company!.address,
+                        style: const TextStyle(fontWeight: FontWeight.normal),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomTextFromField(
+                      themeColor: themeColor,
+                      keyboardType: const TextInputType.numberWithOptions(
+                        decimal: false,
+                        signed: false,
+                      ),
+                      controller: _controllerPassword,
+                      obscureText: true,
+                      isPassword: true,
+                      label: 'Secure PIN',
+                      hint: 'Enter secure pin...',
+                      textInputAction: TextInputAction.done,
+                      onFieldSubmitted: (v) {
+                        FocusScope.of(this.context).unfocus();
+                        _submit();
+                      },
+                      validator: (value) {
+                        if (value!.trim().isEmpty) return 'Pin cannot be blank';
+                        if (!value.trim().isNumericOnly)
+                          return 'Invalid character';
+                        return null;
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+    ];
   }
 }

@@ -1,8 +1,8 @@
 import 'dart:ui' as ui;
+import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:intl/intl.dart';
-import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:eatery/references.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -86,92 +86,39 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
         ],
       ),
       body: orders.isNotEmpty
-          ? ListView(
-              children: [
-                ...orders.map(
-                  (order) => ListTile(
-                    // leading: Icon(
-                    //   order.type == OrderType.dine
-                    //       ? Icons.restaurant
-                    //       : order.type == OrderType.delivery
-                    //       ? Icons.delivery_dining
-                    //       : Icons.takeout_dining,
-                    // ),
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          '${currencySymbol}${order.finalTotal.toStringAsFixed(2)}',
-                          style: const TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 8,
-                            vertical: 4,
-                          ),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Color(order.type.color!)),
-                            borderRadius: BorderRadius.circular(4),
-                          ),
-                          child: Text(
-                            order.type.description!,
-                            style: TextStyle(
-                              color: Color(order.type.color!),
-                              fontWeight: FontWeight.w500,
+          ? LayoutBuilder(
+              builder: (context, constraints) {
+                final isDesktop = Responsive.isDesktop(context);
+                if (isDesktop) {
+                  return Center(
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(maxWidth: 900),
+                      child: ListView(
+                        padding: const EdgeInsets.all(16),
+                        children: [
+                          ...orders.map(
+                            (order) => _OrderCard(
+                              order: order,
+                              currencySymbol: currencySymbol,
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          'Date: ${DateFormat.yMMMd().format(order.createdAt)}',
-                        ),
-                        Text('Customer Phone: ${order.customerPhone ?? 'N/A'}'),
-                        Text('Total Quantity: ${order.totalQuantity}'),
-                        Text(
-                          'Sub Total: ${currencySymbol}${order.subTotal.toStringAsFixed(2)}',
-                        ),
-                        Text(
-                          'Discount: ${currencySymbol}${order.discountTotal.toStringAsFixed(2)}',
-                        ),
-                        Text(
-                          'Tax: ${currencySymbol}${order.taxTotal.toStringAsFixed(2)}',
-                        ),
-                        Text(
-                          'Round Off: ${currencySymbol}${order.roundOff.toStringAsFixed(2)}',
-                        ),
-                        Text(
-                          'Grand Total: ${currencySymbol}${order.grandTotal.toStringAsFixed(2)}',
-                        ),
-                        if (order.paidTotal != null)
-                          Text(
-                            'Paid Total: ${currencySymbol}${order.paidTotal!.toStringAsFixed(2)}',
-                          ),
-                      ],
+                  );
+                }
+                return ListView(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  children: [
+                    ...orders.map(
+                      (order) => _OrderCard(
+                        order: order,
+                        currencySymbol: currencySymbol,
+                      ),
                     ),
-                    onTap: () {
-                      // Handle tile tap
-                    },
-                  ),
-                  /*ListTile(
-                        leading: Icon(
-                      order.type == OrderType.dine
-                          ? Icons.restaurant
-                          : order.type == OrderType.delivery
-                              ? Icons.delivery_dining
-                              : Icons.takeout_dining,
-                    ),
-                  title: Text(order.finalTotal.toString()),
-                  subtitle: Text(DateFormat.yMMMd().format(order.createdAt)),
-                )*/
-                ),
-              ],
+                  ],
+                );
+              },
             )
           : const Center(
               child: Opacity(
@@ -196,6 +143,72 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
                 ),
               ),
             ),
+    );
+  }
+}
+
+/// Desktop-friendly order card.
+class _OrderCard extends StatelessWidget {
+  final dynamic order;
+  final String currencySymbol;
+
+  const _OrderCard({required this.order, required this.currencySymbol});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      child: ListTile(
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              '${currencySymbol}${order.finalTotal.toStringAsFixed(2)}',
+              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+            ),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+              decoration: BoxDecoration(
+                border: Border.all(color: Color(order.type.color!)),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                order.type.description!,
+                style: TextStyle(
+                  color: Color(order.type.color!),
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+          ],
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Date: ${DateFormat.yMMMd().format(order.createdAt)}'),
+            Text('Customer Phone: ${order.customerPhone ?? 'N/A'}'),
+            Text('Total Quantity: ${order.totalQuantity}'),
+            Text(
+              'Sub Total: ${currencySymbol}${order.subTotal.toStringAsFixed(2)}',
+            ),
+            Text(
+              'Discount: ${currencySymbol}${order.discountTotal.toStringAsFixed(2)}',
+            ),
+            Text('Tax: ${currencySymbol}${order.taxTotal.toStringAsFixed(2)}'),
+            Text(
+              'Round Off: ${currencySymbol}${order.roundOff.toStringAsFixed(2)}',
+            ),
+            Text(
+              'Grand Total: ${currencySymbol}${order.grandTotal.toStringAsFixed(2)}',
+            ),
+            if (order.paidTotal != null)
+              Text(
+                'Paid Total: ${currencySymbol}${order.paidTotal!.toStringAsFixed(2)}',
+              ),
+          ],
+        ),
+        onTap: () {},
+      ),
     );
   }
 }

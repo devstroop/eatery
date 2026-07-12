@@ -1,3 +1,4 @@
+import 'package:eatery/widgets/responsive/responsive_list_view.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:eatery/references.dart';
@@ -49,21 +50,31 @@ class _PaymentsPageState extends ConsumerState<PaymentsPage> {
         ],
       ),
       body: payments.isNotEmpty
-          ? ListView(
-              padding: const EdgeInsets.symmetric(vertical: 8),
-              children: [
-                ...payments.map((payment) {
-                  return ListTile(
+          ? ResponsiveListView(
+              itemCount: payments.length,
+              childAspectRatio: 4.0,
+              separator: (_, __) => const SizedBox.shrink(),
+              itemBuilder: (context, index) {
+                final payment = payments[index];
+                return Card(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 4,
+                    vertical: 2,
+                  ),
+                  child: ListTile(
                     title: Text('${payment.id ?? 'NA'}'),
                     subtitle: Text(payment.date.toString()),
                     trailing: Text(
                       '$currencySymbol${payment.amount}',
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
+                      ),
                     ),
                     onTap: () {},
-                  );
-                }),
-              ],
+                  ),
+                );
+              },
             )
           : const Center(
               child: Column(

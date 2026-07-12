@@ -1,3 +1,5 @@
+import 'package:eatery/core/utils/responsive.dart';
+import 'package:eatery/widgets/responsive/responsive_list_view.dart';
 import 'package:eatery/pages/dashboard/customer/view.customer.page.dart';
 import 'package:eatery/references.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,143 +30,18 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
         foregroundColor: Colors.white,
       ),
       body: ref.read(customerRepositoryProvider).getAllCustomers().isNotEmpty
-          ? ListView(
-              children: [
-                ...ref.read(customerRepositoryProvider).getAllCustomers().map((
-                  customer,
-                ) {
-                  return ListTile(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ViewCustomer(customer: customer),
-                        ),
-                      );
-                    },
-                    leading: Container(
-                      width: 48,
-                      height: 48,
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: _pageColor,
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Text(
-                        customer.name![0],
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 24,
-                        ),
-                      ),
-                    ),
-                    title: Text(
-                      customer.name ?? 'NA',
-                      style: const TextStyle(fontWeight: FontWeight.w600),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (customer.address != null &&
-                            customer.address!.isNotEmpty)
-                          Text(customer.address!),
-                        Text(customer.phone),
-                      ],
-                    ),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.more_vert),
-                      onPressed: () async {
-                        await showModalBottomSheet(
-                          context: context,
-                          builder: (context) => Container(
-                            margin: const EdgeInsets.only(bottom: 24),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                ListTile(
-                                  leading: const Icon(Icons.edit),
-                                  title: const Text('Edit'),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                    if (customer.id != null) {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              EditCustomerPage(
-                                                customer: customer,
-                                              ),
-                                        ),
-                                      ).then((_) => setState(() {}));
-                                    }
-                                  },
-                                ),
-                                ListTile(
-                                  leading: const Icon(Icons.delete),
-                                  title: const Text('Delete'),
-                                  onTap: () {
-                                    Navigator.pop(context);
-                                    showDialog(
-                                      context: context,
-                                      builder: (context) {
-                                        return AlertDialog(
-                                          title: const Text('Delete Customer'),
-                                          content: const Text(
-                                            'Are you sure you want to delete this customer?',
-                                          ),
-                                          actions: [
-                                            TextButton(
-                                              onPressed: () {
-                                                Navigator.pop(context);
-                                              },
-                                              child: const Text('Cancel'),
-                                            ),
-                                            TextButton(
-                                              onPressed: () {
-                                                customer
-                                                    .delete()
-                                                    .then((value) {
-                                                      showMessageDialog(
-                                                        context,
-                                                        'Customer deleted successfully',
-                                                        MessageType.success,
-                                                      );
-                                                      Navigator.pop(context);
-                                                    })
-                                                    .onError((
-                                                      error,
-                                                      stackTrace,
-                                                    ) {
-                                                      showMessageDialog(
-                                                        context,
-                                                        error.toString(),
-                                                        MessageType.error,
-                                                      );
-                                                    })
-                                                    .whenComplete(
-                                                      () => setState(() {}),
-                                                    );
-                                              },
-                                              child: const Text('Delete'),
-                                            ),
-                                          ],
-                                        );
-                                      },
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                  );
-                }),
-              ],
+          ? ResponsiveListView(
+              itemCount: ref
+                  .read(customerRepositoryProvider)
+                  .getAllCustomers()
+                  .length,
+              childAspectRatio: 3.5,
+              itemBuilder: (context, index) {
+                final customer = ref
+                    .read(customerRepositoryProvider)
+                    .getAllCustomers()[index];
+                return _CustomerCard(customer: customer, pageColor: _pageColor);
+              },
             )
           : const Center(
               child: Opacity(
@@ -200,6 +77,141 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
             MaterialPageRoute(builder: (context) => const AddCustomerPage()),
           ).then((_) => setState(() {}));
         },
+      ),
+    );
+  }
+}
+
+/// Desktop-friendly card wrapper for a customer list item.
+class _CustomerCard extends ConsumerStatefulWidget {
+  final dynamic customer;
+  final Color pageColor;
+
+  const _CustomerCard({required this.customer, required this.pageColor});
+
+  @override
+  ConsumerState<_CustomerCard> createState() => _CustomerCardState();
+}
+
+class _CustomerCardState extends ConsumerState<_CustomerCard> {
+  @override
+  Widget build(BuildContext context) {
+    final c = widget.customer;
+    final isDesktop = Responsive.isDesktop(context);
+    return Card(
+      margin: EdgeInsets.symmetric(horizontal: isDesktop ? 4 : 0, vertical: 2),
+      child: ListTile(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ViewCustomer(customer: c)),
+          );
+        },
+        leading: Container(
+          width: 48,
+          height: 48,
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+            color: widget.pageColor,
+            borderRadius: BorderRadius.circular(8),
+          ),
+          child: Text(
+            c.name![0],
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 24,
+            ),
+          ),
+        ),
+        title: Text(
+          c.name ?? 'NA',
+          style: const TextStyle(fontWeight: FontWeight.w600),
+        ),
+        subtitle: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (c.address != null && c.address!.isNotEmpty) Text(c.address!),
+            Text(c.phone),
+          ],
+        ),
+        trailing: IconButton(
+          icon: const Icon(Icons.more_vert),
+          onPressed: () async {
+            await showModalBottomSheet(
+              context: context,
+              builder: (ctx) => Container(
+                margin: const EdgeInsets.only(bottom: 24),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    ListTile(
+                      leading: const Icon(Icons.edit),
+                      title: const Text('Edit'),
+                      onTap: () {
+                        Navigator.pop(ctx);
+                        if (c.id != null) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) => EditCustomerPage(customer: c),
+                            ),
+                          ).then((_) => setState(() {}));
+                        }
+                      },
+                    ),
+                    ListTile(
+                      leading: const Icon(Icons.delete),
+                      title: const Text('Delete'),
+                      onTap: () {
+                        Navigator.pop(ctx);
+                        showDialog(
+                          context: context,
+                          builder: (ctx2) => AlertDialog(
+                            title: const Text('Delete Customer'),
+                            content: const Text(
+                              'Are you sure you want to delete this customer?',
+                            ),
+                            actions: [
+                              TextButton(
+                                onPressed: () => Navigator.pop(ctx2),
+                                child: const Text('Cancel'),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  c
+                                      .delete()
+                                      .then((_) {
+                                        showMessageDialog(
+                                          context,
+                                          'Customer deleted successfully',
+                                          MessageType.success,
+                                        );
+                                        Navigator.pop(ctx2);
+                                      })
+                                      .onError((error, _) {
+                                        showMessageDialog(
+                                          context,
+                                          error.toString(),
+                                          MessageType.error,
+                                        );
+                                      })
+                                      .whenComplete(() => setState(() {}));
+                                },
+                                child: const Text('Delete'),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
       ),
     );
   }
