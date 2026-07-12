@@ -1,3 +1,4 @@
+import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/core/extensions/double_ext.dart';
 import 'package:eatery/references.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -283,9 +284,16 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
           )
         ],
       ),
-      body: Padding(
-        padding: SpacingStyle.defaultPadding,
-        child: bodies()[viewIndex],
+      body: Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxWidth: Responsive.isDesktop(context) ? 720 : double.infinity,
+          ),
+          child: Padding(
+            padding: SpacingStyle.defaultPadding,
+            child: bodies()[viewIndex],
+          ),
+        ),
       ),
       bottomNavigationBar: bottomAppBars()[viewIndex],
     );

@@ -1,3 +1,4 @@
+import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/references.dart';
 
 class CreateCompanyBottomAppBar extends StatelessWidget {
@@ -29,10 +30,24 @@ class CreateCompanyBottomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDesktop = Responsive.isDesktop(context);
     return BottomAppBar(
       color: KColors.white,
-      child: PrimaryButton(
-          color: themeColor, onPressed: _submit, child: Text(title)),
+      child: isDesktop
+          ? Align(
+              alignment: Alignment.centerRight,
+              child: PrimaryButton(
+                width: 200,
+                color: themeColor,
+                onPressed: _submit,
+                child: Text(title),
+              ),
+            )
+          : PrimaryButton(
+              color: themeColor,
+              onPressed: _submit,
+              child: Text(title),
+            ),
     );
   }
 }
