@@ -1,5 +1,6 @@
 import 'package:eatery/dev/database_inspector.dart';
 import 'package:eatery/dev/seed_loader.dart';
+import 'package:eatery/pages/dashboard/settings/printer/printer.setting.page.dart';
 import 'package:eatery/references.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -69,10 +70,11 @@ class _SettingPageState extends ConsumerState<SettingPage> {
           subtitle: 'Manage Printing Devices',
           postfixIcon: Icons.chevron_right,
           color: getThemeColor(),
-          /*onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => PrinterSettingsPage(account: widget.account)),
-          ),*/
+          onTap: () => Navigator.push(
+            this.context,
+            MaterialPageRoute(
+                builder: (context) => const PrinterSettingsPage()),
+          ).then((_) => setState(() {})),
         ),
         // Developer section — visible only in debug mode
         if (const bool.fromEnvironment('dart.vm.product') == false) ...[

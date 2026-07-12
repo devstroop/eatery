@@ -1,290 +1,242 @@
-import 'package:eatery/references.dart';
-/*
-import 'dart:convert';
-//import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_dropdown/flutter_dropdown.dart';
-import 'package:flutter_switch/flutter_switch.dart';
-import 'package:intl/intl.dart';
-import 'package:eatery/components/bottom_view_grip.dart';
-import 'package:eatery/database/account.dart';
-import 'package:eatery/database/printer.dart';
-import 'package:eatery/services/utility/show_snack_bar.dart';
-import 'package:eatery/constants/style/color_style.dart';
-import 'package:eatery/services/printing/print_invoice.dart';
+import 'dart:io';
 
-class PrinterSettingsPage extends StatefulWidget {
-  const PrinterSettingsPage({Key? key, this.account}) : super(key: key);
-  final dynamic account;
+import 'package:eatery/data/models/eatery_db.dart';
+import 'package:eatery/presentation/providers/printer_provider.dart';
+import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+/// Printer configuration page.
+/// Mobile: discovers Bluetooth ESC/POS printers and saves them.
+/// Desktop: shows guidance for WiFi/Ethernet network printers.
+class PrinterSettingsPage extends ConsumerStatefulWidget {
+  const PrinterSettingsPage({Key? key}) : super(key: key);
+
   @override
-  State<PrinterSettingsPage> createState() => _PrinterSettingsPageState();
+  ConsumerState<PrinterSettingsPage> createState() =>
+      _PrinterSettingsPageState();
 }
 
-class _PrinterSettingsPageState extends State<PrinterSettingsPage> {
-  PrinterBluetoothManager printerManager = PrinterBluetoothManager();
-  List<PrinterBluetooth> _devices = [];
-  final List<PrinterBluetooth> _savedDevices = [];
+class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
+  List<_DiscoveredPrinter> _discovered = [];
+  bool _isScanning = false;
+  bool _autoPrint = false;
+  String _paperSize = '58mm';
 
-
-
-  Future<void> loadDevicesFromDatabase() async {
-    List<Map<String, dynamic>> _devices = await Printer.getAll();
-    for (Map<String, dynamic> _device in _devices) {
-      setState(() {
-        _savedDevices.add(PrinterBluetooth(BluetoothDevice.fromJson(_device)));
-      });
-    }
-  }
-  Widget buildPrinterConfigBottomSheet() => StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
-    bool autoPrintOnSale = widget.account['autoPrintOnSale'] ?? false;
-    List<String> printerSizes = ['58mm', '80mm'];
-    String selectedPrinterSize = widget.account['printerSize'];
-    return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 16),
-      child: ListView(
-        shrinkWrap: true,
-        children: [
-          const Center(
-            child: BottomViewGrip(),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Auto print on sale', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-              FlutterSwitch(
-                activeText: "on",
-                inactiveText: "off",
-                value: autoPrintOnSale,
-                valueFontSize: 14.0,
-                width: 72,
-                height: 36,
-                borderRadius: 36.0,
-                showOnOff: true,
-                activeTextFontWeight: FontWeight.w500,
-                inactiveTextFontWeight: FontWeight.w500,
-                toggleSize: 30.0,
-                // activeToggleColor: Color(0xFF6E40C9),
-                // inactiveToggleColor: Color(0xFF2F363D),
-                // activeColor: getThemeColor(),
-                // inactiveColor: Colors.white,
-                // activeTextColor: Colors.black,
-                // inactiveTextColor: Colors.white,
-
-                onToggle: (value) async {
-                  widget.account['autoPrintOnSale'] = !autoPrintOnSale;
-                  await Account.update(widget.account);
-                  setState(() {
-                    autoPrintOnSale = !autoPrintOnSale;
-                  });
-                },
-              )
-            ],
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text('Size', style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),),
-              DropDown(
-                //isExpanded: true,
-                initialValue: widget.account['printerSize'],
-                items: printerSizes,
-                hint: const Text("Select"),
-                icon: Icon(
-                  Icons.expand_more,
-                  color: ColorStyle.brandColor,
-                ),
-                onChanged: (value) async {
-                  widget.account['printerSize'] = selectedPrinterSize;
-                  await Account.update(widget.account);
-                  setState((){
-                    selectedPrinterSize = value.toString();
-                  });
-                },
-              ),
-            ],
-          ),
-
-          const SizedBox(
-            height: 20.0,
-          ),
-        ],
-      ),
-    );
-  });
+  final BluetoothManager _btManager = BluetoothManager.instance;
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, (){
-      
-    });
-    WidgetsBinding.instance.addPostFrameCallback((_) => loadDevicesFromDatabase());
-    //loadDevicesFromDatabase();
-
-    printerManager.scanResults.listen((devices) async {
-      // print('UI: Devices found ${devices.length}');
-      setState(() {
-        _devices = devices;
-      });
-    });
+    _loadConfig();
   }
 
-  void _startScanDevices() {
+  Future<void> _loadConfig() async {
+    final prefs = await SharedPreferences.getInstance();
+    if (!mounted) return;
     setState(() {
-      _devices = [];
+      _autoPrint = prefs.getBool('autoPrint') ?? false;
+      _paperSize = prefs.getString('paperSize') ?? '58mm';
     });
-    printerManager.startScan(const Duration(seconds: 4));
   }
 
-  void _stopScanDevices() {
-    printerManager.stopScan();
+  Future<void> _saveAutoPrint(bool value) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('autoPrint', value);
+    setState(() => _autoPrint = value);
   }
 
-  Color getThemeColor() {
-    return ColorStyle.tertiary;
+  Future<void> _savePaperSize(String size) async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('paperSize', size);
+    setState(() => _paperSize = size);
+  }
+
+  Future<void> _startScan() async {
+    if (!(Platform.isAndroid || Platform.isIOS)) {
+      if (this.context.mounted) {
+        showMessageDialog(
+          this.context,
+          'Bluetooth scanning is only available on mobile devices.\nFor desktop, connect via WiFi/Ethernet ESC/POS.',
+          MessageType.info,
+        );
+      }
+      return;
+    }
+
+    setState(() {
+      _discovered = [];
+      _isScanning = true;
+    });
+
+    try {
+      _btManager.startScan(timeout: const Duration(seconds: 8));
+      _btManager.scanResults.listen((devices) {
+        if (!mounted) return;
+        setState(() {
+          _discovered = devices
+              .where((d) => d.name != null && d.name!.isNotEmpty)
+              .map((d) => _DiscoveredPrinter(d.name!, d.address ?? ''))
+              .toList();
+        });
+      });
+      await Future.delayed(const Duration(seconds: 8));
+    } catch (e) {
+      if (this.context.mounted) {
+        showMessageDialog(this.context, 'Scan failed: $e', MessageType.error);
+      }
+    } finally {
+      if (mounted) setState(() => _isScanning = false);
+    }
+  }
+
+  Future<void> _addPrinter(String name, String address) async {
+    final printer = Printer(
+      name: name,
+      bluetoothAddress: address,
+      type: PrinterType.bluetooth,
+    );
+    await ref.read(printerRepositoryProvider).addPrinter(printer);
+    ref.invalidate(printerListProvider);
+    if (this.context.mounted) {
+      showMessageDialog(this.context, 'Printer added', MessageType.success);
+    }
+  }
+
+  Future<void> _removePrinter(Printer printer) async {
+    await ref.read(printerRepositoryProvider).deletePrinter(printer);
+    ref.invalidate(printerListProvider);
   }
 
   @override
   Widget build(BuildContext context) {
-    final appBar = AppBar(
-      backgroundColor: getThemeColor(),
-      title: const Text('Printer Settings'),
-    );
+    final savedPrinters = ref.watch(printerListProvider);
+
     return Scaffold(
-      appBar: appBar,
-      body: ListView(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        children: [
-          _savedDevices.isNotEmpty
-              ? ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: _savedDevices.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return InkWell(
-                      onTap: () => showModalBottomSheet(
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                              topLeft: Radius.circular(24),
-                              topRight: Radius.circular(24),
-                              bottomLeft: Radius.circular(0),
-                              bottomRight: Radius.circular(0),
-                            ),
-                          ),
-                          context: context,
-                          builder: (context) => buildPrinterConfigBottomSheet()),
-
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            height: 60,
-                            padding: const EdgeInsets.only(left: 10),
-                            alignment: Alignment.centerLeft,
-                            child: Row(
-                              children: <Widget>[
-                                const Icon(Icons.print),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(_savedDevices[index].name ?? ''),
-                                      Text(_savedDevices[index].address!),
-                                      Text(
-                                        'Tap to configure',
-                                        style: TextStyle(color: Colors.grey[700]),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Icon(
-                                  Icons.check_circle,
-                                  color: ColorStyle.success,
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Divider(),
-                        ],
-                      ),
-                    );
-                  })
-              : const SizedBox.shrink(),
-          _devices.isNotEmpty
-              ? ListView.builder(
-                  scrollDirection: Axis.vertical,
-                  shrinkWrap: true,
-                  itemCount: _devices.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return InkWell(
-                      onTap: () async {
-                        PrinterBluetooth printerBt = _devices[index];
-                        await Printer.clear();
-                        await Printer.add(
-                            {'name': printerBt.name, 'address': printerBt.address, 'type': printerBt.type});
-                        showSnackBar(context, "Successfully saved");
-                        Navigator.pop(context);
-                      },
-                      child: Column(
-                        children: <Widget>[
-                          Container(
-                            height: 60,
-                            padding: const EdgeInsets.only(left: 10),
-                            alignment: Alignment.centerLeft,
-                            child: Row(
-                              children: <Widget>[
-                                const Icon(Icons.print),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: <Widget>[
-                                      Text(_devices[index].name ?? ''),
-                                      Text(_devices[index].address!),
-                                      */
-/*Text(
-                                    'Long press to print a test receipt',
-                                    style: TextStyle(color: Colors.grey[700]),
-                                  ),*//*
-
-                                    ],
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Divider(),
-                        ],
-                      ),
-                    );
-                  })
-              : const SizedBox.shrink(),
-        ],
+      backgroundColor: Colors.grey[200],
+      appBar: AppBar(
+        backgroundColor: KColors.tertiary,
+        foregroundColor: Colors.white,
+        title: const Text('Printer Settings'),
       ),
-      floatingActionButton: StreamBuilder<bool>(
-        stream: printerManager.isScanningStream,
-        initialData: false,
-        builder: (c, snapshot) {
-          if (snapshot.data!) {
-            return FloatingActionButton(
-              child: const Icon(Icons.stop),
-              onPressed: _stopScanDevices,
-              backgroundColor: ColorStyle.warning,
-            );
-          } else {
-            return FloatingActionButton(
-              backgroundColor: ColorStyle.success,
-              child: const Icon(Icons.search),
-              onPressed: _startScanDevices,
-            );
-          }
-        },
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          const Text('Saved Printers',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          savedPrinters.when(
+            data: (printers) {
+              if (printers.isEmpty) {
+                return const Card(
+                  child: ListTile(
+                    leading: Icon(Icons.print_disabled),
+                    title: Text('No printers configured'),
+                    subtitle: Text('Scan for Bluetooth printers below'),
+                  ),
+                );
+              }
+              return Column(
+                children: printers
+                    .map((p) => Card(
+                          child: ListTile(
+                            leading: const Icon(Icons.print),
+                            title: Text(p.name),
+                            subtitle: Text(p.bluetoothAddress ?? ''),
+                            trailing: IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () => _removePrinter(p),
+                            ),
+                          ),
+                        ))
+                    .toList(),
+              );
+            },
+            loading: () =>
+                const Center(child: CircularProgressIndicator()),
+            error: (e, _) => Text('Error: $e'),
+          ),
+
+          const SizedBox(height: 24),
+          const Divider(),
+          const SizedBox(height: 16),
+
+          const Text('Bluetooth Discovery',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          ElevatedButton.icon(
+            onPressed: _isScanning ? null : _startScan,
+            icon: _isScanning
+                ? const SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2))
+                : const Icon(Icons.bluetooth_searching),
+            label: Text(_isScanning ? 'Scanning...' : 'Scan for Printers'),
+          ),
+          const SizedBox(height: 8),
+          if (_discovered.isNotEmpty)
+            ..._discovered.map((bp) => Card(
+                  child: ListTile(
+                    leading: const Icon(Icons.bluetooth),
+                    title: Text(bp.name),
+                    subtitle: Text(bp.address),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.add_circle, color: Colors.green),
+                      onPressed: () => _addPrinter(bp.name, bp.address),
+                    ),
+                  ),
+                )),
+          if (_discovered.isEmpty && !_isScanning)
+            const Padding(
+              padding: EdgeInsets.all(8),
+              child: Text(
+                  'Tap "Scan for Printers" to discover Bluetooth devices',
+                  style: TextStyle(color: Colors.grey)),
+            ),
+
+          const SizedBox(height: 24),
+          const Divider(),
+          const SizedBox(height: 16),
+
+          const Text('Print Settings',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          const SizedBox(height: 8),
+          Card(
+            child: SwitchListTile(
+              title: const Text('Auto-print on sale'),
+              subtitle: const Text(
+                  'Automatically print receipt after payment'),
+              value: _autoPrint,
+              onChanged: _saveAutoPrint,
+            ),
+          ),
+          Card(
+            child: ListTile(
+              title: const Text('Paper Size'),
+              subtitle: Text(_paperSize),
+              trailing: DropdownButton<String>(
+                value: _paperSize,
+                items: const [
+                  DropdownMenuItem(value: '58mm', child: Text('58mm')),
+                  DropdownMenuItem(value: '80mm', child: Text('80mm')),
+                ],
+                onChanged: (v) {
+                  if (v != null) _savePaperSize(v);
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
-*/
+
+class _DiscoveredPrinter {
+  final String name;
+  final String address;
+  const _DiscoveredPrinter(this.name, this.address);
+}
+
