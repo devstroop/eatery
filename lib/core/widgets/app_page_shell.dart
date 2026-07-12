@@ -26,6 +26,8 @@ class AppPageShell extends StatelessWidget {
   final Widget? bottomNavigationBar;
   final bool showBack;
   final bool resizeToAvoidBottomInset;
+  final bool fullWidth;
+  final Color? backgroundColor;
 
   const AppPageShell({
     super.key,
@@ -37,6 +39,8 @@ class AppPageShell extends StatelessWidget {
     this.bottomNavigationBar,
     this.showBack = true,
     this.resizeToAvoidBottomInset = true,
+    this.fullWidth = false,
+    this.backgroundColor,
   });
 
   @override
@@ -44,7 +48,7 @@ class AppPageShell extends StatelessWidget {
     final isDesktop = Responsive.isDesktop(context);
 
     return Scaffold(
-      backgroundColor: AppColors.grey200,
+      backgroundColor: backgroundColor ?? AppColors.grey200,
       appBar: AppBar(
         backgroundColor: color ?? AppColors.primary,
         foregroundColor: AppColors.white,
@@ -58,7 +62,7 @@ class AppPageShell extends StatelessWidget {
         actions: actions,
       ),
       resizeToAvoidBottomInset: resizeToAvoidBottomInset,
-      body: isDesktop
+      body: isDesktop && !fullWidth
           ? Center(
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 720),

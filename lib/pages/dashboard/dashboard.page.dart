@@ -1,5 +1,6 @@
 import 'package:eatery/core/theme/app_spacing.dart';
 import 'package:eatery/core/utils/responsive.dart';
+import 'package:eatery/core/widgets/widgets.dart';
 import 'package:eatery/pages/dashboard/payment/payments.page.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
@@ -10,6 +11,23 @@ import 'package:eatery/presentation/providers/cart_provider.dart';
 import 'order/orders.page.dart';
 import 'pos/cart.page.dart';
 
+// ── Dashboard navigation destinations ──────────────────────────
+// These drive both the menu grid AND any future AppAdaptiveShell.
+abstract final class DashboardRoutes {
+  static const pos = 'pos';
+  static const orders = 'orders';
+  static const payments = 'payments';
+  static const categories = 'categories';
+  static const kitchen = 'kitchen';
+  static const inventory = 'inventory';
+  static const customers = 'customers';
+  static const staffs = 'staffs';
+  static const tables = 'tables';
+  static const library = 'library';
+  static const data = 'data';
+  static const settings = 'settings';
+}
+
 /// Dashboard menu tiles grouped by category.
 final _menuItems = <_MenuItem>[
   // ── Sales ──
@@ -18,21 +36,21 @@ final _menuItems = <_MenuItem>[
     label: 'Point of Sale',
     subtitle: 'Start a new sale',
     color: Color(0xFF30A8CF),
-    route: 'pos',
+    route: DashboardRoutes.pos,
   ),
   _MenuItem(
     icon: Icons.history,
     label: 'Orders',
     subtitle: 'All orders here',
     color: Color(0xFFF5A142),
-    route: 'orders',
+    route: DashboardRoutes.orders,
   ),
   _MenuItem(
     icon: Icons.payment,
     label: 'Payments',
     subtitle: 'Payment receipts',
     color: Color(0xFF2F5EC2),
-    route: 'payments',
+    route: DashboardRoutes.payments,
   ),
   // ── Management ──
   _MenuItem(
@@ -40,42 +58,42 @@ final _menuItems = <_MenuItem>[
     label: 'Categories',
     subtitle: 'Product categories',
     color: Color(0xFFD98049),
-    route: 'categories',
+    route: DashboardRoutes.categories,
   ),
   _MenuItem(
     icon: Icons.restaurant,
     label: 'Kitchen',
     subtitle: 'Kitchen dishes',
     color: Color(0xFF4AC3A1),
-    route: 'kitchen',
+    route: DashboardRoutes.kitchen,
   ),
   _MenuItem(
     icon: Icons.inventory,
     label: 'Inventory',
     subtitle: 'Stock items',
     color: Color(0xFF705EE0),
-    route: 'inventory',
+    route: DashboardRoutes.inventory,
   ),
   _MenuItem(
     icon: Icons.people,
     label: 'Customers',
     subtitle: 'Manage customers',
     color: Color(0xFF2FC289),
-    route: 'customers',
+    route: DashboardRoutes.customers,
   ),
   _MenuItem(
     icon: Icons.group,
     label: 'Staffs',
     subtitle: 'Manage staff',
     color: Color(0xFFC2592F),
-    route: 'staffs',
+    route: DashboardRoutes.staffs,
   ),
   _MenuItem(
     icon: Icons.table_restaurant,
     label: 'Dining Tables',
     subtitle: 'Manage tables',
     color: Color(0xFFEF6850),
-    route: 'tables',
+    route: DashboardRoutes.tables,
   ),
   // ── Utilities ──
   _MenuItem(
@@ -83,21 +101,21 @@ final _menuItems = <_MenuItem>[
     label: 'Library',
     subtitle: 'Images & resources',
     color: Color(0xFF2FC289),
-    route: 'library',
+    route: DashboardRoutes.library,
   ),
   _MenuItem(
     icon: FontAwesomeIcons.database,
     label: 'Data Mgmt.',
     subtitle: 'Import / Export',
     color: Color(0xFFEF9050),
-    route: 'data',
+    route: DashboardRoutes.data,
   ),
   _MenuItem(
     icon: Icons.settings,
     label: 'Settings',
     subtitle: 'App settings',
     color: Color(0xFF222222),
-    route: 'settings',
+    route: DashboardRoutes.settings,
   ),
 ];
 
@@ -128,7 +146,6 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
         key: scaffoldKey,
         body: LayoutBuilder(
           builder: (context, constraints) {
-            // Card width: fill available space, cap at 220px on desktop
             final availableWidth = constraints.maxWidth - spacing * 2;
             final cardWidth =
                 (isDesktop
@@ -141,7 +158,6 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
             return ListView(
               padding: EdgeInsets.symmetric(horizontal: spacing, vertical: 32),
               children: [
-                // ── Header ──
                 _DashboardHeader(
                   companyName: company.name,
                   image: company.logo != null
@@ -252,27 +268,18 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
   }
 
   void _showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text('Logout'),
-        content: const Text('Are you sure you want to logout?'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('No'),
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (_) => const LogoutPage()),
-              );
-            },
-            child: const Text('Yes'),
-          ),
-        ],
-      ),
+    AppDialog.show(
+      context,
+      title: 'Logout',
+      content: 'Are you sure you want to logout?',
+      confirmLabel: 'Yes',
+      cancelLabel: 'No',
+      onConfirm: () {
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (_) => const LogoutPage()),
+        );
+      },
     );
   }
 
