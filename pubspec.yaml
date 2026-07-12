@@ -6,7 +6,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.4.3 <4.0.0'
+  sdk: '>=3.8.0 <4.0.0'
 
 dependencies:
   flutter:
@@ -21,43 +21,28 @@ dependencies:
   flutter_bluetooth_basic: ^0.1.7
   flutter_native_splash: ^2.4.1
   cupertino_icons: ^1.0.6
-  sqflite: ^2.3.3+1
   intl: ^0.19.0
   file_picker: ^8.0.6
-  move_to_background: ^1.0.2
   flutter_svg: ^2.0.10+1
   font_awesome_flutter: ^10.7.0
-  #  attery_info: ^1.1.1
-  platform_device_id: #^1.0.1
+  platform_device_id:
     git:
       url: "https://github.com/devstroop/platform_device_id.git"
       ref: 'main'
   archive: ^3.6.1
   encrypt: ^5.0.3
   path_provider: ^2.1.3
-  flutter_dropdown: ^1.0.1+hotfix.1
-  flutter_switch: ^0.3.2
   image_picker: ^1.1.2
   sn_progress_dialog: ^1.1.4
-  excel:
-    git:
-      url: "https://github.com/itsalfredakku/flutter_excel.git"
+  excel: ^4.0.3
   flutter_file_dialog: ^3.0.2
   qrscan: ^0.3.3
-  qr_flutter: ^4.0.0
   flutter_share: ^2.0.0
   number_to_words: ^1.0.0
   url_launcher: ^6.3.0
   googleapis: ^13.2.0
   googleapis_auth: ^1.6.0
-  json_store: ^2.0.2
   flutter_secure_storage: ^9.2.2
-  get: ^4.6.6
-  date_time_picker:
-    git:
-      url: "https://github.com/itsalfredakku/flutter_date_time_picker.git"
-      ref: 'master'
-  floor: ^1.5.0
   clipboard: ^0.1.3
   http: ^1.2.1
   shared_preferences: ^2.2.3
@@ -76,30 +61,17 @@ dependencies:
     # git:
       # url: 'https://github.com/devstroop/bluetooth_thermal_printer.git'
       # ref: 'master'
-  # database provider
-  eatery_db:
-    path: "../eatery_db"
-    # git:
-      # url: 'https://github.com/devstroop/eatery_db.git'
-      # ref: 'main'
-  eatery_components:
-    path: "../eatery_components"
-    # git:
-      # url: 'https://github.com/devstroop/eatery_components.git'
-      # ref: 'main'
-  # (archived) eatery_services:
-    # path: "../eatery_services"
-    # git:
-      # url: 'https://github.com/devstroop/eatery_services.git'
-      # ref: 'main'
+  flutter_riverpod: ^2.6.1
+  go_router: ^17.3.0
+  riverpod_annotation: ^2.6.1
+  riverpod_generator: ^2.4.0
+  build_runner: ^2.4.13
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_launcher_icons: any
   hive_generator: ^2.0.1
-  build_runner: ^2.4.11
-  floor_generator: ^1.5.0
   flutter_lints: ^4.0.0
 
 flutter_icons:

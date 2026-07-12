@@ -6,14 +6,14 @@ export 'package:flutter/material.dart';
 export 'package:flutter/services.dart';
 export 'package:flutter/rendering.dart';
 // External packages by devstroop
-export 'package:eatery_db/eatery_db.dart';
+export 'package:eatery/data/models/eatery_db.dart';
+export 'package:eatery/data/database/eatery_db_shim.dart';
 export 'package:devdart_windows_hdsn/devdart_windows_hdsn.dart';
 export 'package:devdart_windows_hdsn/drive.dart';
-// External refs by devstroop (*deprecated)
-export 'package:eatery_components/others/bottom_sheet.grip.dart';
-export 'package:eatery_components/titles/page.title.dart';
-export 'package:eatery_components/buttons/primary.button.dart';
-export 'package:eatery_components/bottomsheets/tax_slab.bottomsheet.dart';
+// External refs by devstroop (*deprecated — moved to local equivalents)
+export './components/bottom_view_grip.dart';
+export './widgets/titles/page_title.dart';
+export './widgets/buttons/primary.button.dart';
 // Integrated packages
 export './support/bluetooth_thermal_printer/bluetooth_thermal_printer.dart';
 // External packages
@@ -29,7 +29,6 @@ export 'package:currency_picker/currency_picker.dart';
 export 'package:clipboard/clipboard.dart';
 export 'package:lottie/lottie.dart';
 export 'package:number_to_words/number_to_words.dart';
-export 'package:date_time_picker/date_time_picker.dart';
 export 'package:flutter_svg/svg.dart';
 export 'package:flutter_secure_storage/flutter_secure_storage.dart';
 export 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
@@ -179,4 +178,3 @@ export './pages/dashboard/settings/currency_region/view.currency_region.page.dar
 export './pages/backup_restore/backup_restore.page.dart';
 //
 export 'package:eatery/extensions/customer.extension.dart';
-
