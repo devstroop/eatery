@@ -1,8 +1,10 @@
+import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/references.dart';
 import 'package:flutter/material.dart';
 
-Color themeColor = KColors.secondary2;
+Color themeColor = AppColors.secondary2;
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -26,7 +28,7 @@ class _MainScreenState extends State<MainScreen> {
           child: Image.asset('assets/logo.png', height: 48),
         ),
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: AppColors.white,
       body: isDesktop
           ? _buildDesktopLayout(screenWidth, screenHeight)
           : _buildMobileLayout(screenWidth, screenHeight),
@@ -67,27 +69,21 @@ class _MainScreenState extends State<MainScreen> {
                   children: [
                     Text(
                       'All-in-one',
-                      style: TextStyle(
-                        fontSize: 56,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.grey[800],
+                      style: AppTypography.headlineLarge.copyWith(
+                        color: AppColors.grey800,
                       ),
                     ),
                     Text(
                       'restaurant POS System',
-                      style: TextStyle(
-                        fontSize: 56,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.grey[900],
+                      style: AppTypography.displayMedium.copyWith(
+                        color: AppColors.grey900,
                       ),
                     ),
                     const SizedBox(height: 16),
                     Text(
                       'Manage your restaurant with ease with Eatery',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w400,
-                        color: Colors.black54,
+                      style: AppTypography.bodyLarge.copyWith(
+                        color: AppColors.grey500,
                       ),
                     ),
                     const SizedBox(height: 48),
@@ -97,7 +93,7 @@ class _MainScreenState extends State<MainScreen> {
                         PrimaryButton(
                           height: 52,
                           width: 200,
-                          color: KColors.tertiary3,
+                          color: AppColors.error,
                           onPressed: () => _restoreExisting(this.context),
                           child: const Text('Restore Existing'),
                         ),
@@ -139,21 +135,21 @@ class _MainScreenState extends State<MainScreen> {
           Text(
             'All-in-one',
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w400),
+            style: AppTypography.headlineMedium,
           ),
           Text(
             'restaurant POS System',
             textAlign: TextAlign.center,
-            style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w600),
+            style: AppTypography.headlineMedium.copyWith(
+              fontWeight: FontWeight.w700,
+            ),
           ),
           const SizedBox(height: 12),
           Text(
             'Manage your restaurant with ease with Eatery',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w400,
-              color: Colors.black54,
+            style: AppTypography.bodyMedium.copyWith(
+              color: AppColors.grey500,
             ),
           ),
         ],
@@ -164,7 +160,7 @@ class _MainScreenState extends State<MainScreen> {
   // ── Mobile: BottomAppBar with buttons ──────────────────────────
   Widget _buildBottomBar() {
     return BottomAppBar(
-      color: Colors.white,
+      color: AppColors.white,
       child: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -176,7 +172,7 @@ class _MainScreenState extends State<MainScreen> {
                   Expanded(
                     child: PrimaryButton(
                       height: 50,
-                      color: KColors.tertiary3,
+                      color: AppColors.error,
                       onPressed: () => _restoreExisting(this.context),
                       child: const Text('Restore Existing'),
                     ),

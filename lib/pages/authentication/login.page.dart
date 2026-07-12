@@ -1,3 +1,5 @@
+import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/pages/authentication/reset-pin.dart';
 import 'package:eatery/core/extensions/string_ext.dart';
@@ -47,20 +49,20 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     }
   }
 
-  Color themeColor = KColors.secondary2;
+  Color themeColor = AppColors.secondary2;
   final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
-        backgroundColor: Colors.grey[200],
+        backgroundColor: AppColors.grey200,
         automaticallyImplyLeading: false,
         title: Image.asset('assets/logo.png', height: 36),
         actions: [
           IconButton(
-            icon: Icon(Icons.more_vert, color: KColors.black600),
+            icon: Icon(Icons.more_vert, color: AppColors.grey700),
             onPressed: () {
               showMenu(
                 context: context,
@@ -70,11 +72,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     value: 'reset',
                     child: Row(
                       children: [
-                        Icon(Icons.lock_reset, color: KColors.black600),
+                        Icon(Icons.lock_reset, color: AppColors.grey700),
                         const SizedBox(width: 8),
                         Text(
                           'Reset PIN',
-                          style: TextStyle(color: KColors.black600),
+                          style: TextStyle(color: AppColors.grey700),
                         ),
                       ],
                     ),
@@ -83,11 +85,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     value: 'delete',
                     child: Row(
                       children: [
-                        Icon(Icons.delete, color: KColors.red),
+                        Icon(Icons.delete, color: AppColors.error),
                         const SizedBox(width: 8),
                         Text(
                           'Delete Company',
-                          style: TextStyle(color: KColors.red),
+                          style: TextStyle(color: AppColors.error),
                         ),
                       ],
                     ),
@@ -188,7 +190,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       ),
       resizeToAvoidBottomInset: true,
       bottomNavigationBar: BottomAppBar(
-        color: KColors.white,
+        color: AppColors.white,
         child: PrimaryButton(
           height: 50,
           color: themeColor,
@@ -203,7 +205,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     return [
       if (company == null)
         const LinearProgressIndicator(
-          backgroundColor: Colors.white,
+          backgroundColor: AppColors.white,
           valueColor: AlwaysStoppedAnimation<Color>(Color(0xFF74B952)),
         ),
       if (company != null)
@@ -237,14 +239,13 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     children: [
                       Text(
                         company!.name,
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.w500,
-                        ),
+                        style: AppTypography.headlineSmall,
                       ),
                       Text(
                         company!.address,
-                        style: const TextStyle(fontWeight: FontWeight.normal),
+                        style: AppTypography.bodyMedium.copyWith(
+                          color: AppColors.grey600,
+                        ),
                       ),
                     ],
                   ),
