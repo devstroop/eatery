@@ -2,10 +2,8 @@ import 'package:eatery/core/theme/app_spacing.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/core/utils/responsive.dart';
+import 'package:eatery/core/widgets/widgets.dart';
 import 'package:eatery/references.dart';
-import 'package:flutter/material.dart';
-
-Color themeColor = AppColors.secondary2;
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -91,20 +89,18 @@ class _MainScreenState extends State<MainScreen> {
                     // Buttons — inline, not bottom bar
                     Row(
                       children: [
-                        PrimaryButton(
+                        AppButton.destructive(
+                          label: 'Restore Existing',
                           height: 52,
                           width: 200,
-                          color: AppColors.error,
                           onPressed: () => _restoreExisting(this.context),
-                          child: const Text('Restore Existing'),
                         ),
                         const SizedBox(width: 16),
-                        PrimaryButton(
+                        AppButton.primary(
+                          label: 'Create Company',
                           height: 52,
                           width: 200,
-                          color: themeColor,
                           onPressed: () => _createNew(this.context),
-                          child: const Text('Create Company'),
                         ),
                       ],
                     ),
@@ -133,7 +129,7 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ),
           const SizedBox(height: 24),
-          Text(
+          const Text(
             'All-in-one',
             textAlign: TextAlign.center,
             style: AppTypography.headlineMedium,
@@ -169,20 +165,18 @@ class _MainScreenState extends State<MainScreen> {
               child: Row(
                 children: [
                   Expanded(
-                    child: PrimaryButton(
+                    child: AppButton.destructive(
+                      label: 'Restore Existing',
                       height: 50,
-                      color: AppColors.error,
                       onPressed: () => _restoreExisting(this.context),
-                      child: const Text('Restore Existing'),
                     ),
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: PrimaryButton(
+                    child: AppButton.primary(
+                      label: 'Create Company',
                       height: 50,
-                      color: themeColor,
                       onPressed: () => _createNew(this.context),
-                      child: const Text('Create Company'),
                     ),
                   ),
                 ],

@@ -281,12 +281,7 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
             ? IconButton(
                 icon: Icon(Icons.arrow_back, color: themeColor),
                 onPressed: () {
-                  if (viewIndex == 0) {
-                  } else {
-                    setState(() {
-                      viewIndex--;
-                    });
-                  }
+                  setState(() => viewIndex--);
                 },
               )
             : null,

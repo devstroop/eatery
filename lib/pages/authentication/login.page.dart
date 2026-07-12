@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/widgets.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/core/utils/responsive.dart';
@@ -104,37 +105,24 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     ),
                   );
                 } else if (value == 'delete') {
-                  // ask for confirmation
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text('Delete ${company?.name}'),
-                      content: Text(
+                  AppDialog.show(
+                    context,
+                    title: 'Delete ${company?.name}',
+                    content:
                         'Are you sure you want to delete ${company?.name} and its data?',
-                      ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Cancel'),
+                    confirmLabel: 'Delete',
+                    cancelLabel: 'Cancel',
+                    destructive: true,
+                    onConfirm: () {
+                      ref.read(appDatabaseProvider).deleteAll();
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const MainScreen(),
                         ),
-                        TextButton(
-                          onPressed: () {
-                            ref.read(appDatabaseProvider).deleteAll();
-                            Navigator.pop(context);
-                            Navigator.pushAndRemoveUntil(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => const MainScreen(),
-                              ),
-                              (Route<dynamic> route) => false,
-                            );
-                          },
-                          child: const Text('Delete'),
-                        ),
-                      ],
-                    ),
+                        (Route<dynamic> route) => false,
+                      );
+                    },
                   );
                 }
 
@@ -191,11 +179,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
       resizeToAvoidBottomInset: true,
       bottomNavigationBar: BottomAppBar(
         color: AppColors.white,
-        child: PrimaryButton(
-          height: 50,
-          color: themeColor,
+        child: AppButton.primary(
+          label: 'Login',
           onPressed: _submit,
-          child: const Text('Login'),
+          height: 50,
         ),
       ),
     );

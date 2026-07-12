@@ -1,4 +1,5 @@
 import 'package:eatery/core/utils/responsive.dart';
+import 'package:eatery/core/widgets/widgets.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 
@@ -20,13 +21,9 @@ class CreateCompanyBottomAppBar extends StatelessWidget {
 
   void _submit() {
     final isValid = formKey.currentState?.validate() ?? false;
-    if (!isValid) {
-      return;
-    }
+    if (!isValid) return;
     formKey.currentState!.save();
-    if (callback != null) {
-      callback!(index);
-    }
+    callback?.call(index);
   }
 
   @override
@@ -34,26 +31,22 @@ class CreateCompanyBottomAppBar extends StatelessWidget {
     return BottomAppBar(
       color: AppColors.white,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         child: Responsive.isDesktop(context)
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   SizedBox(
                     width: 200,
-                    child: PrimaryButton(
-                      color: themeColor,
+                    child: AppButton.primary(
+                      label: title,
                       onPressed: _submit,
-                      child: Text(title),
+                      height: 50,
                     ),
                   ),
                 ],
               )
-            : PrimaryButton(
-                color: themeColor,
-                onPressed: _submit,
-                child: Text(title),
-              ),
+            : AppButton.primary(label: title, onPressed: _submit, height: 50),
       ),
     );
   }
