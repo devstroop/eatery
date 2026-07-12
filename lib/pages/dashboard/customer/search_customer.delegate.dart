@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:intl/intl.dart';
 
 class SearchCustomerDelegate extends SearchDelegate<Customer?> {
@@ -118,7 +119,7 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 14,
-              color: KColors.black500,
+              color: AppColors.black500,
             ),
           ),
         ),
@@ -165,19 +166,19 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 18,
-          color: KColors.black600,
+          color: AppColors.black600,
         ),
       ),
       subtitle: Text(
         customer.phone ?? '',
-        style: TextStyle(color: KColors.black500),
+        style: TextStyle(color: AppColors.black500),
       ),
       trailing: Text(
         timeAgo(customer.lastOrderAt),
         style: TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 12,
-          color: KColors.black600,
+          color: AppColors.black600,
         ),
       ),
     );

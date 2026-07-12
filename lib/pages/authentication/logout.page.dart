@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class LogoutPage extends StatefulWidget {
   const LogoutPage({Key? key}) : super(key: key);
@@ -7,7 +8,7 @@ class LogoutPage extends StatefulWidget {
 }
 
 class _LogoutPageState extends State<LogoutPage> {
-  Color themeColor = KColors.secondary2;
+  Color themeColor = AppColors.secondary2;
   @override
   void initState() {
     super.initState();
@@ -41,7 +42,7 @@ class _LogoutPageState extends State<LogoutPage> {
             Text(
               'Logging out...',
               style: TextStyle(
-                  color: KColors.secondary2,
+                  color: AppColors.secondary2,
                   fontSize: 20,
                   fontWeight: FontWeight.bold),
             ),

@@ -1,5 +1,6 @@
 import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 
@@ -35,7 +36,7 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
   Currency? currency;
   TaxType _taxType = TaxType.inclusive;
 
-  Color themeColor = KColors.secondary2;
+  Color themeColor = AppColors.secondary2;
 
   List<Widget> bodies() => [
     Body1(
@@ -296,7 +297,7 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
               child: Text(
                 'Step ${viewIndex + 1}/${bodies().length}',
                 style: TextStyle(
-                  color: KColors.black600,
+                  color: AppColors.black600,
                   fontWeight: FontWeight.w500,
                 ),
               ),

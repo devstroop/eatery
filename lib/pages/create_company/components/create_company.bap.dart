@@ -33,10 +33,7 @@ class CreateCompanyBottomAppBar extends StatelessWidget {
     return BottomAppBar(
       color: Colors.white,
       child: Padding(
-        padding: EdgeInsets.symmetric(
-          horizontal: 16,
-          vertical: 8,
-        ),
+        padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         child: Responsive.isDesktop(context)
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.end,

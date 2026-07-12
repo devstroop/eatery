@@ -2,8 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
-Color _pageColor = KColors.alternate;
+Color _pageColor = AppColors.menuInventory;
 
 class InventoryItemsPage extends ConsumerStatefulWidget {
   const InventoryItemsPage({Key? key}) : super(key: key);

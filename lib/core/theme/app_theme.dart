@@ -16,7 +16,7 @@ class AppTheme {
   static ThemeData get light => ThemeData(
     useMaterial3: true,
     fontFamily: null, // falls back to system font
-    scaffoldBackgroundColor: AppColors.grey200,
+    scaffoldBackgroundColor: AppColors.background,
 
     // ── Color scheme ──────────────────────────────────────────────
     colorScheme: ColorScheme.fromSeed(
@@ -29,8 +29,8 @@ class AppTheme {
 
     // ── AppBar ────────────────────────────────────────────────────
     appBarTheme: const AppBarTheme(
-      backgroundColor: AppColors.white,
-      foregroundColor: AppColors.grey900,
+      backgroundColor: AppColors.background,
+      foregroundColor: AppColors.foreground,
       elevation: 0,
       centerTitle: true,
       titleTextStyle: TextStyle(
@@ -42,7 +42,7 @@ class AppTheme {
 
     // ── BottomAppBar ──────────────────────────────────────────────
     bottomAppBarTheme: const BottomAppBarThemeData(
-      color: AppColors.white,
+      color: AppColors.background,
       elevation: 0,
     ),
 
@@ -77,7 +77,7 @@ class AppTheme {
     // ── InputDecoration ───────────────────────────────────────────
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: AppColors.white,
+      fillColor: AppColors.muted,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),
@@ -106,13 +106,15 @@ class AppTheme {
 
     // ── Dialog ────────────────────────────────────────────────────
     dialogTheme: DialogThemeData(
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-      backgroundColor: AppColors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(AppSpacing.radiusXl),
+      ),
+      backgroundColor: AppColors.popover,
     ),
 
     // ── BottomSheet ──────────────────────────────────────────────
     bottomSheetTheme: const BottomSheetThemeData(
-      backgroundColor: AppColors.white,
+      backgroundColor: AppColors.popover,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
       ),
@@ -128,7 +130,7 @@ class AppTheme {
 
     // ── Divider ──────────────────────────────────────────────────
     dividerTheme: const DividerThemeData(
-      color: AppColors.grey200,
+      color: AppColors.border,
       thickness: 1,
       space: 1,
     ),

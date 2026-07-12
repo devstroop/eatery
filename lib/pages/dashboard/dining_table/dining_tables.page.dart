@@ -1,9 +1,10 @@
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-Color _pageColor = KColors.tertiary3;
+Color _pageColor = AppColors.error;
 
 class DiningTablesPage extends ConsumerStatefulWidget {
   const DiningTablesPage({Key? key}) : super(key: key);
@@ -80,8 +81,8 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                             labelStyle: TextStyle(
                               fontSize: 14,
                               color: selectedCategory?.id == category.id
-                                  ? KColors.white
-                                  : KColors.white500,
+                                  ? AppColors.white
+                                  : AppColors.white500,
                             ),
                             labelPadding: const EdgeInsets.symmetric(
                               horizontal: 8,
@@ -89,8 +90,8 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                             ),
                             side: BorderSide(
                               color: selectedCategory?.id == category.id
-                                  ? KColors.white
-                                  : KColors.white500,
+                                  ? AppColors.white
+                                  : AppColors.white500,
                               width: 1,
                             ),
                             label: Text(category.name),
@@ -155,7 +156,7 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                               const SizedBox(width: 3),
                               // CaptionLabel(
                               //   label: diningTable.status.name,
-                              //   color: KColors.red,
+                              //   color: AppColors.error,
                               // ),
                             ],
                           ),
@@ -163,7 +164,7 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                             width: 40,
                             height: 40,
                             decoration: BoxDecoration(
-                              color: KColors.white500,
+                              color: AppColors.white500,
                               borderRadius: BorderRadius.circular(8),
                             ),
                             child: Center(

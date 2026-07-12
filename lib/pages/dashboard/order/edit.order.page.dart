@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class EditOrderPage extends StatefulWidget {
   const EditOrderPage({super.key, required this.order});
@@ -14,7 +15,7 @@ class _EditOrderPageState extends State<EditOrderPage> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-          backgroundColor: KColors.tertiary,
+          backgroundColor: AppColors.menuCategories,
           foregroundColor: Colors.white,
           title: const Text('Edit Order'),
           actions: [

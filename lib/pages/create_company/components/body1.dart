@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 // ignore: must_be_immutable
 class Body1 extends StatelessWidget {
@@ -51,7 +52,7 @@ class Body1 extends StatelessWidget {
             UploadButton(
               label: 'Restaurant Logo',
               primaryColor: pageColor,
-              secondaryColor: KColors.black600,
+              secondaryColor: AppColors.black600,
               libraryImage: selectedLibraryImage,
               onChanged: onChanged,
             ),
@@ -119,7 +120,7 @@ class Body1 extends StatelessWidget {
             SpacingStyle.defaultVerticalSpacing,
             LabeledCustomTextFormField(
               themeColor: pageColor,
-              foregroundColor: KColors.black600,
+              foregroundColor: AppColors.black600,
               controller: addressController,
               label: 'Address',
               hint: 'Enter address...',

@@ -2,8 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
-Color _pageColor = KColors.alternate;
+Color _pageColor = AppColors.menuInventory;
 
 class EditInventoryItemPage extends ConsumerStatefulWidget {
   const EditInventoryItemPage({Key? key, required this.product})
@@ -93,7 +94,7 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
               UploadButton(
                 label: 'Product Image',
                 primaryColor: _pageColor,
-                secondaryColor: KColors.black600,
+                secondaryColor: AppColors.black600,
                 libraryImage: image,
                 onChanged: (image) {
                   setState(() {
@@ -126,7 +127,7 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
                 onFieldSubmitted: (v) {
                   FocusScope.of(context).requestFocus(_focusNodes[1]);
                 },
-                foregroundColor: KColors.black600,
+                foregroundColor: AppColors.black600,
                 themeColor: _pageColor,
                 controller: _controllerName,
               ),
@@ -150,7 +151,7 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
                         return null;
                       },
                       keyboardType: TextInputType.number,
-                      foregroundColor: KColors.black600,
+                      foregroundColor: AppColors.black600,
                       controller: _controllerMRP,
                     ),
                   ),
@@ -172,7 +173,7 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
                         return null;
                       },
                       keyboardType: TextInputType.number,
-                      foregroundColor: KColors.black600,
+                      foregroundColor: AppColors.black600,
                       controller: _controllerSalePrice,
                     ),
                   ),
@@ -183,7 +184,7 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
               Text(
                 'Select Food Type',
                 style: TextStyle(
-                  color: KColors.white600,
+                  color: AppColors.white600,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -192,7 +193,7 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
                 highlightColor: selectedFoodType?.color ?? _pageColor,
                 backgroundColor: const Color(0xFFE5E5E5),
                 foregroundColor: Colors.white,
-                inactiveForegroundColor: KColors.black600,
+                inactiveForegroundColor: AppColors.black600,
 
                 children: ['None', ...FoodType.values.map((e) => e.name)],
                 selectedIndex: selectedFoodType != null
@@ -215,7 +216,7 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
               Text(
                 'Select Tax Slab',
                 style: TextStyle(
-                  color: KColors.white600,
+                  color: AppColors.white600,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -226,7 +227,7 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
                 backgroundColor: const Color(0xFFE5E5E5),
                 foregroundColor: selectedTaxSlab == null
                     ? Colors.white
-                    : KColors.black600,
+                    : AppColors.black600,
                 children: ['None', ...slabs.map((e) => e.name)],
                 selectedIndex: (selectedTaxSlab == null)
                     ? 0
@@ -256,7 +257,7 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
               Text(
                 'Select Category',
                 style: TextStyle(
-                  color: KColors.white600,
+                  color: AppColors.white600,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -308,7 +309,7 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
                 onFieldSubmitted: (v) {
                   FocusScope.of(context).unfocus();
                 },
-                foregroundColor: KColors.black600,
+                foregroundColor: AppColors.black600,
                 themeColor: _pageColor,
                 controller: _controllerDescription,
               ),
@@ -317,7 +318,7 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: KColors.white,
+        color: AppColors.white,
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {

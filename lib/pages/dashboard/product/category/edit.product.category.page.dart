@@ -1,8 +1,9 @@
 import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-Color _pageColor = KColors.tertiary;
+Color _pageColor = AppColors.menuCategories;
 
 class EditProductCategoryPage extends ConsumerStatefulWidget {
   const EditProductCategoryPage({Key? key, required this.category})
@@ -65,7 +66,7 @@ class _EditProductCategoryPageState
               UploadButton(
                 label: 'Product Category Image',
                 primaryColor: _pageColor,
-                secondaryColor: KColors.black600,
+                secondaryColor: AppColors.black600,
                 libraryImage: pickedLibraryImage,
                 onChanged: (libraryImage) {
                   setState(() {
@@ -80,7 +81,7 @@ class _EditProductCategoryPageState
                 hint: 'eg. Starters',
                 obscureText: false,
                 themeColor: _pageColor,
-                foregroundColor: KColors.black600,
+                foregroundColor: AppColors.black600,
                 focusNode: _focusNodes[0],
                 onFieldSubmitted: (v) {
                   _focusNodes[1].requestFocus();
@@ -93,7 +94,7 @@ class _EditProductCategoryPageState
                 hint: 'eg. Starters are the best',
                 obscureText: false,
                 themeColor: _pageColor,
-                foregroundColor: KColors.black600,
+                foregroundColor: AppColors.black600,
                 multiline: true,
                 focusNode: _focusNodes[1],
                 onFieldSubmitted: (v) {
@@ -106,7 +107,7 @@ class _EditProductCategoryPageState
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: KColors.white,
+        color: AppColors.white,
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {

@@ -1,8 +1,9 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 
-Color _pageColor = KColors.primary;
+Color _pageColor = AppColors.primary;
 
 class AddCustomerPage extends ConsumerStatefulWidget {
   const AddCustomerPage({Key? key, this.addressRequired = false})
@@ -71,7 +72,7 @@ class _AddCustomerPageState extends ConsumerState<AddCustomerPage> {
                   controller: _controllerCustomerPhone,
                   label: 'Phone Number (*required)',
                   themeColor: _pageColor,
-                  foregroundColor: KColors.black600,
+                  foregroundColor: AppColors.black600,
                   keyboardType: TextInputType.phone,
                   hint: 'Enter phone number',
                   focusNode: _focusNodes[0],
@@ -96,7 +97,7 @@ class _AddCustomerPageState extends ConsumerState<AddCustomerPage> {
                   controller: _controllerCustomerName,
                   label: 'Customer Name',
                   themeColor: _pageColor,
-                  foregroundColor: KColors.black600,
+                  foregroundColor: AppColors.black600,
                   hint: 'Enter customer name',
                   textInputAction: TextInputAction.next,
                   focusNode: _focusNodes[1],
@@ -115,7 +116,7 @@ class _AddCustomerPageState extends ConsumerState<AddCustomerPage> {
                   controller: _controllerCustomerAddress,
                   label: 'Address',
                   themeColor: _pageColor,
-                  foregroundColor: KColors.black600,
+                  foregroundColor: AppColors.black600,
                   keyboardType: TextInputType.streetAddress,
                   hint: 'Enter full address',
                   multiline: true,
@@ -137,7 +138,7 @@ class _AddCustomerPageState extends ConsumerState<AddCustomerPage> {
                   controller: _controllerCustomerLandmark,
                   label: 'Landmark (Optional)',
                   themeColor: _pageColor,
-                  foregroundColor: KColors.black600,
+                  foregroundColor: AppColors.black600,
                   keyboardType: TextInputType.text,
                   hint: 'Enter landmark',
                   focusNode: _focusNodes[4],
@@ -161,7 +162,7 @@ class _AddCustomerPageState extends ConsumerState<AddCustomerPage> {
                     const SizedBox(width: 6.0),
                     Text(
                       'Active',
-                      style: TextStyle(color: KColors.black600, fontSize: 16.0),
+                      style: TextStyle(color: AppColors.black600, fontSize: 16.0),
                     ),
                   ],
                 ),

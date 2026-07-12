@@ -148,9 +148,7 @@ class _MainScreenState extends State<MainScreen> {
           Text(
             'Manage your restaurant with ease with Eatery',
             textAlign: TextAlign.center,
-            style: AppTypography.bodyMedium.copyWith(
-              color: AppColors.grey500,
-            ),
+            style: AppTypography.bodyMedium.copyWith(color: AppColors.grey500),
           ),
         ],
       ),

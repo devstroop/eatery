@@ -1,8 +1,9 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
 
-final _pageColor = KColors.primary;
+final _pageColor = AppColors.primary;
 
 class ShowCompanyPage extends ConsumerStatefulWidget {
   const ShowCompanyPage({Key? key}) : super(key: key);
@@ -18,21 +19,22 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
   }
 
   void _changeLogo() => showModalBottomSheet(
-      context: this.context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(24),
-          bottomLeft: Radius.circular(0),
-          bottomRight: Radius.circular(0),
-        ),
+    context: this.context,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(24),
+        topRight: Radius.circular(24),
+        bottomLeft: Radius.circular(0),
+        bottomRight: Radius.circular(0),
       ),
-      builder: (context) => UploadImageBottomSheet(context, (pickedImagePath) {
-            /*company!.logo = pickedImagePath;
+    ),
+    builder: (context) => UploadImageBottomSheet(context, (pickedImagePath) {
+      /*company!.logo = pickedImagePath;
         widget.database.companyDao.updateEntity(company!);
         showSnackBar(context, 'Successfully updated');
         setState(() {});*/
-          }));
+    }),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -50,21 +52,16 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
                 context: context,
                 position: const RelativeRect.fromLTRB(100, 100, 0, 100),
                 items: [
-                  const PopupMenuItem(
-                    value: 'edit',
-                    child: Text('Edit'),
-                  ),
-                  const PopupMenuItem(
-                    value: 'delete',
-                    child: Text('Delete'),
-                  ),
+                  const PopupMenuItem(value: 'edit', child: Text('Edit')),
+                  const PopupMenuItem(value: 'delete', child: Text('Delete')),
                 ],
               ).then((value) {
                 if (value == 'edit') {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => const EditCompanyPage()),
+                      builder: (context) => const EditCompanyPage(),
+                    ),
                   ).then((_) async {
                     setState(() {});
                   });
@@ -74,7 +71,8 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
                     builder: (context) => AlertDialog(
                       title: const Text('⚠️ Dangerous Action'),
                       content: const Text(
-                          'Are you sure you want to delete this company?'),
+                        'Are you sure you want to delete this company?',
+                      ),
                       actions: [
                         TextButton(
                           onPressed: () {
@@ -116,7 +114,7 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
                         borderRadius: BorderRadius.circular(24),
                         boxShadow: [
                           BoxShadow(
-                            color: KColors.black.withOpacity(0.2),
+                            color: AppColors.black.withOpacity(0.2),
                             blurRadius: 12,
                             offset: const Offset(0, 2),
                           ),
@@ -138,11 +136,11 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
                 padding: const EdgeInsets.all(16.0),
                 margin: const EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
-                  color: KColors.white,
+                  color: AppColors.white,
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
-                      color: KColors.black.withOpacity(0.2),
+                      color: AppColors.black.withOpacity(0.2),
                       blurRadius: 12,
                       offset: const Offset(0, 2),
                     ),
@@ -155,70 +153,93 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
                       leading: const Text(
                         'Company name',
                         style: TextStyle(
-                            fontWeight: FontWeight.w400, fontSize: 16),
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                        ),
                       ),
                       trailing: Text(
                         company!.name,
                         style: const TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 16),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                     ListTile(
                       leading: const Text(
                         'Address',
                         style: TextStyle(
-                            fontWeight: FontWeight.w400, fontSize: 16),
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                        ),
                       ),
                       trailing: Text(
                         company.address,
                         style: const TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 16),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                     ListTile(
                       leading: const Text(
                         'Email',
                         style: TextStyle(
-                            fontWeight: FontWeight.w400, fontSize: 16),
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                        ),
                       ),
                       trailing: Text(
                         company.email,
                         style: const TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 16),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                     ListTile(
                       leading: const Text(
                         'Phone',
                         style: TextStyle(
-                            fontWeight: FontWeight.w400, fontSize: 16),
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                        ),
                       ),
                       trailing: Text(
                         company.phone,
                         style: const TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 16),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                     ListTile(
                       leading: const Text(
                         'Taxation',
                         style: TextStyle(
-                            fontWeight: FontWeight.w400, fontSize: 16),
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                        ),
                       ),
                       trailing: Text(
                         Taxation.values
-                            .singleWhere((element) =>
-                                element.id == company.taxation.id)
+                            .singleWhere(
+                              (element) => element.id == company.taxation.id,
+                            )
                             .name,
                         style: const TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 16),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                     ListTile(
                       leading: Text(
                         '${Taxation.values.singleWhere((element) => element.id == company.taxation.id).name} License No',
                         style: const TextStyle(
-                            fontWeight: FontWeight.w400, fontSize: 16),
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                        ),
                       ),
                       trailing: Text(
                         (company.salesTaxNumber != null &&
@@ -226,14 +247,18 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
                             ? company.salesTaxNumber!
                             : 'Not Available',
                         style: const TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 16),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                     ListTile(
                       leading: Text(
                         '${Taxation.values.singleWhere((element) => element.id == company.taxation.id) == Taxation.gst ? 'FSSAI' : 'Food'} License No',
                         style: const TextStyle(
-                            fontWeight: FontWeight.w400, fontSize: 16),
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16,
+                        ),
                       ),
                       trailing: Text(
                         (company.foodLicenseNo != null &&
@@ -241,7 +266,9 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
                             ? company.foodLicenseNo!
                             : 'Not Available',
                         style: const TextStyle(
-                            fontWeight: FontWeight.w500, fontSize: 16),
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
                       ),
                     ),
                   ],
@@ -252,7 +279,7 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
         },
       ),
       // bottomNavigationBar: BottomAppBar(
-      //   color: KColors.white,
+      //   color: AppColors.white,
       //   child: PrimaryButton(
       //     color: _pageColor,
       //     child: const Text('Edit'),
@@ -311,9 +338,13 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
             onPressed: () {
               Navigator.pop(context);
 
-              if(securePinController.text != ref.read(companyProvider)?.password) {
+              if (securePinController.text !=
+                  ref.read(companyProvider)?.password) {
                 showMessageDialog(
-                    context, 'Invalid secure pin', MessageType.error);
+                  context,
+                  'Invalid secure pin',
+                  MessageType.error,
+                );
                 return;
               }
 
@@ -330,8 +361,5 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
         ],
       ),
     );
-
-
-
   }
 }

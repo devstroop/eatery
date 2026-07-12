@@ -1,6 +1,7 @@
 import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/pages/dashboard/payment/payments.page.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:eatery/presentation/providers/cart_provider.dart';
@@ -128,11 +129,12 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           builder: (context, constraints) {
             // Card width: fill available space, cap at 220px on desktop
             final availableWidth = constraints.maxWidth - spacing * 2;
-            final cardWidth = (isDesktop
-                ? (availableWidth - spacing * 3) / 4
-                : (availableWidth - spacing) / 2)
-                .clamp(140, 220)
-                .toDouble();
+            final cardWidth =
+                (isDesktop
+                        ? (availableWidth - spacing * 3) / 4
+                        : (availableWidth - spacing) / 2)
+                    .clamp(140, 220)
+                    .toDouble();
             final cardHeight = cardWidth * 1.1;
 
             return ListView(
@@ -156,11 +158,15 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                 Wrap(
                   spacing: spacing,
                   runSpacing: spacing,
-                  children: _menuItems.map((item) => _DashboardTile(
-                    item: item,
-                    width: cardWidth,
-                    height: cardHeight,
-                  )).toList(),
+                  children: _menuItems
+                      .map(
+                        (item) => _DashboardTile(
+                          item: item,
+                          width: cardWidth,
+                          height: cardHeight,
+                        ),
+                      )
+                      .toList(),
                 ),
               ],
             );
@@ -173,40 +179,73 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
   void _onTap(BuildContext context, String route) {
     switch (route) {
       case 'pos':
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const PointOfSalePage()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const PointOfSalePage()),
+        );
         break;
       case 'orders':
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const OrdersPage()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const OrdersPage()),
+        );
         break;
       case 'payments':
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const PaymentsPage()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const PaymentsPage()),
+        );
         break;
       case 'categories':
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const ProductCategoriesPage()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const ProductCategoriesPage()),
+        );
         break;
       case 'kitchen':
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const KitchenPage()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const KitchenPage()),
+        );
         break;
       case 'inventory':
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const InventoryItemsPage()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const InventoryItemsPage()),
+        );
         break;
       case 'customers':
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const CustomersPage()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const CustomersPage()),
+        );
         break;
       case 'staffs':
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const StaffsPage()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const StaffsPage()),
+        );
         break;
       case 'tables':
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const DiningTablesPage()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const DiningTablesPage()),
+        );
         break;
       case 'library':
         _showLibrary(context);
         break;
       case 'data':
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const DataManagementPage()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const DataManagementPage()),
+        );
         break;
       case 'settings':
-        Navigator.push(context, MaterialPageRoute(builder: (_) => const SettingPage()));
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const SettingPage()),
+        );
         break;
     }
   }
@@ -218,7 +257,10 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
         title: const Text('Logout'),
         content: const Text('Are you sure you want to logout?'),
         actions: [
-          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('No')),
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('No'),
+          ),
           TextButton(
             onPressed: () {
               Navigator.pushReplacement(
@@ -246,7 +288,10 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    image: DecorationImage(image: image.image, fit: BoxFit.contain),
+                    image: DecorationImage(
+                      image: image.image,
+                      fit: BoxFit.contain,
+                    ),
                   ),
                   width: MediaQuery.of(context).size.width * 0.8,
                 ),
@@ -311,15 +356,21 @@ class _DashboardHeader extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(companyName, style: TextStyle(
-                color: const Color(0xFF8B97A2),
-                fontSize: isDesktop ? 16 : 14,
-              )),
-              Text('Dashboard', style: TextStyle(
-                color: const Color(0xFF090F13),
-                fontSize: isDesktop ? 28 : 24,
-                fontWeight: FontWeight.bold,
-              )),
+              Text(
+                companyName,
+                style: TextStyle(
+                  color: const Color(0xFF8B97A2),
+                  fontSize: isDesktop ? 16 : 14,
+                ),
+              ),
+              Text(
+                'Dashboard',
+                style: TextStyle(
+                  color: const Color(0xFF090F13),
+                  fontSize: isDesktop ? 28 : 24,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
             ],
           ),
         ),
@@ -329,21 +380,36 @@ class _DashboardHeader extends StatelessWidget {
             padding: const EdgeInsets.only(right: 8),
             child: Stack(
               children: [
-                IconButton(icon: const Icon(Icons.shopping_cart_outlined), onPressed: onCartTap),
+                IconButton(
+                  icon: const Icon(Icons.shopping_cart_outlined),
+                  onPressed: onCartTap,
+                ),
                 Positioned(
-                  top: 0, right: 0,
+                  top: 0,
+                  right: 0,
                   child: Container(
                     padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(color: KColors.primary, shape: BoxShape.circle),
-                    child: Text(cartCount.toString(), style: const TextStyle(
-                      color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold,
-                    )),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Text(
+                      cartCount.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
                 ),
               ],
             ),
           ),
-        IconButton(icon: const Icon(Icons.power_settings_new), onPressed: onLogout),
+        IconButton(
+          icon: const Icon(Icons.power_settings_new),
+          onPressed: onLogout,
+        ),
       ],
     );
   }
@@ -378,7 +444,11 @@ class _DashboardTile extends StatelessWidget {
             color: item.color,
             borderRadius: BorderRadius.circular(12),
             boxShadow: const [
-              BoxShadow(blurRadius: 4, color: Color(0x37000000), offset: Offset(0, 1)),
+              BoxShadow(
+                blurRadius: 4,
+                color: Color(0x37000000),
+                offset: Offset(0, 1),
+              ),
             ],
           ),
           padding: const EdgeInsets.all(14),
@@ -388,16 +458,22 @@ class _DashboardTile extends StatelessWidget {
             children: [
               Icon(item.icon, color: Colors.white, size: 32),
               const Spacer(),
-              Text(item.label, style: TextStyle(
-                color: Colors.white,
-                fontSize: Responsive.bodySize(context),
-                fontWeight: FontWeight.w700,
-              )),
+              Text(
+                item.label,
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: Responsive.bodySize(context),
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
               const SizedBox(height: 2),
-              Text(item.subtitle, style: TextStyle(
-                color: Colors.white70,
-                fontSize: Responsive.bodySize(context) - 2,
-              )),
+              Text(
+                item.subtitle,
+                style: TextStyle(
+                  color: Colors.white70,
+                  fontSize: Responsive.bodySize(context) - 2,
+                ),
+              ),
             ],
           ),
         ),

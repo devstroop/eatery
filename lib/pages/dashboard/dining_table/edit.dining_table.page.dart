@@ -1,9 +1,10 @@
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-Color _pageColor = KColors.tertiary;
+Color _pageColor = AppColors.menuCategories;
 
 class EditDiningTablePage extends ConsumerStatefulWidget {
   const EditDiningTablePage({Key? key, required this.diningTable})
@@ -87,7 +88,7 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
                   hint: 'eg. Table 1 ',
                   obscureText: false,
                   themeColor: _pageColor,
-                  foregroundColor: KColors.black600,
+                  foregroundColor: AppColors.black600,
                   focusNode: _focusNodes[0],
                   onFieldSubmitted: (v) {
                     _focusNodes[1].requestFocus();
@@ -106,7 +107,7 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
                   hint: 'eg. Table description',
                   obscureText: false,
                   themeColor: _pageColor,
-                  foregroundColor: KColors.black600,
+                  foregroundColor: AppColors.black600,
                   multiline: true,
                   focusNode: _focusNodes[1],
                   onFieldSubmitted: (v) {
@@ -120,7 +121,7 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
                   hint: 'eg. 4/ 6/ 8/ 10/ etc.',
                   obscureText: false,
                   themeColor: _pageColor,
-                  foregroundColor: KColors.black600,
+                  foregroundColor: AppColors.black600,
                   keyboardType: TextInputType.number,
                   onFieldSubmitted: (v) {
                     FocusScope.of(context).unfocus();
@@ -130,7 +131,7 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
                 Text(
                   'Category',
                   style: TextStyle(
-                    color: KColors.black600,
+                    color: AppColors.black600,
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
@@ -184,7 +185,7 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: KColors.white,
+        color: AppColors.white,
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {
@@ -247,14 +248,14 @@ class DiningTableStatusWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: status == DiningTableStatus.available
               ? KColors.green
-              : KColors.red,
+              : AppColors.error,
           borderRadius: BorderRadius.circular(8.0),
         ),
         child: Center(
           child: Text(
             status.name,
             style: TextStyle(
-              color: KColors.white,
+              color: AppColors.white,
               fontSize: 16,
               fontWeight: FontWeight.w500,
             ),

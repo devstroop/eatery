@@ -1,10 +1,11 @@
 import 'package:eatery/core/extensions/string_ext.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
 
-final _pageColor = KColors.primary;
+final _pageColor = AppColors.primary;
 
 class EditCompanyPage extends ConsumerStatefulWidget {
   const EditCompanyPage({Key? key}) : super(key: key);
@@ -73,7 +74,7 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                   UploadButton(
                     label: 'Restaurant Logo',
                     primaryColor: _pageColor,
-                    secondaryColor: KColors.black600,
+                    secondaryColor: AppColors.black600,
                     libraryImage: selectedLogo,
                     onChanged: (image) {
                       setState(() {
@@ -85,7 +86,7 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                   SpacingStyle.defaultVerticalSpacing,
                   LabeledCustomTextFormField(
                     themeColor: _pageColor,
-                    foregroundColor: KColors.black600,
+                    foregroundColor: AppColors.black600,
                     keyboardType: TextInputType.name,
                     controller: _controllerCompanyName,
                     focusNode: focus1,
@@ -105,7 +106,7 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                   SpacingStyle.defaultVerticalSpacing,
                   LabeledCustomTextFormField(
                     themeColor: _pageColor,
-                    foregroundColor: KColors.black600,
+                    foregroundColor: AppColors.black600,
                     keyboardType: TextInputType.emailAddress,
                     controller: _controllerEmail,
                     label: 'Email address',
@@ -128,7 +129,7 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                   SpacingStyle.defaultVerticalSpacing,
                   LabeledCustomTextFormField(
                     themeColor: _pageColor,
-                    foregroundColor: KColors.black600,
+                    foregroundColor: AppColors.black600,
                     keyboardType: TextInputType.phone,
                     controller: _controllerPhone,
                     label: 'Phone no',
@@ -151,7 +152,7 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                   SpacingStyle.defaultVerticalSpacing,
                   LabeledCustomTextFormField(
                     themeColor: _pageColor,
-                    foregroundColor: KColors.black600,
+                    foregroundColor: AppColors.black600,
                     controller: _controllerAddress,
                     label: 'Address',
                     hint: 'Enter address...',
@@ -171,7 +172,7 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                   SpacingStyle.defaultVerticalSpacing,
                   LabeledCustomTextFormField(
                     themeColor: _pageColor,
-                    foregroundColor: KColors.black600,
+                    foregroundColor: AppColors.black600,
                     keyboardType: TextInputType.text,
                     controller: _controllerSalesTaxNo,
                     label:
@@ -194,7 +195,7 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                   SpacingStyle.defaultVerticalSpacing,
                   LabeledCustomTextFormField(
                     themeColor: _pageColor,
-                    foregroundColor: KColors.black600,
+                    foregroundColor: AppColors.black600,
                     keyboardType: TextInputType.text,
                     controller: _controllerFoodLicNo,
                     label:
@@ -220,7 +221,7 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
               ),
             ),
             bottomNavigationBar: BottomAppBar(
-              color: KColors.white,
+              color: AppColors.white,
               child: PrimaryButton(
                 color: _pageColor,
                 child: const Text('Save'),

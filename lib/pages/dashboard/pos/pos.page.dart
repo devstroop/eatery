@@ -1,3 +1,4 @@
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/core/extensions/double_ext.dart';
 import 'package:eatery/pages/dashboard/customer/view.customer.page.dart';
@@ -138,7 +139,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
     final session = ref.watch(cartProvider);
     final productsRepo = ref.read(productRepositoryProvider);
     Color pageColor = Color(
-      session.activeOrderType?.color ?? KColors.primary.value,
+      session.activeOrderType?.color ?? AppColors.primary.value,
     );
     List<Product> products = productsRepo.getAllProducts().where((element) {
       if (selectedProductCategory == null) {
@@ -691,7 +692,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                     ? Icons.delivery_dining
                     : Icons.takeout_dining,
                 color: Color(
-                  session.activeOrderType?.color ?? KColors.black600.value,
+                  session.activeOrderType?.color ?? AppColors.black600.value,
                 ),
               ),
               themeColor: pageColor,
@@ -767,7 +768,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
             style: TextStyle(
               fontSize: 18.0,
               fontWeight: FontWeight.w600,
-              color: KColors.black600,
+              color: AppColors.black600,
             ),
           ),
         ),

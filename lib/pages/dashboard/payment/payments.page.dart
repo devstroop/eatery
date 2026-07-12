@@ -2,9 +2,10 @@ import 'package:eatery/widgets/responsive/responsive_list_view.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-Color _pageColor = KColors.alternate2;
+Color _pageColor = AppColors.menuPayments;
 
 class PaymentsPage extends ConsumerStatefulWidget {
   const PaymentsPage({super.key});

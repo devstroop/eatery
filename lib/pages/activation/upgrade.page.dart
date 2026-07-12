@@ -1,6 +1,7 @@
 import 'package:eatery/core/utils/device_id.dart';
 import 'package:eatery/references.dart';
-final _pageColor = KColors.secondary2;
+import 'package:eatery/core/theme/app_colors.dart';
+final _pageColor = AppColors.secondary2;
 class UpgradePage extends StatefulWidget {
   const UpgradePage({Key? key, required this.company}) : super(key: key);
   final Company? company;
@@ -75,7 +76,7 @@ class _UpgradePageState extends State<UpgradePage> {
                                   : throw "Could not launch $url");
                         },
                         icon: Icon(Icons.link,
-                            color: KColors.secondary2))
+                            color: AppColors.secondary2))
                   ],
                 ),
                 const SizedBox(
@@ -86,7 +87,7 @@ class _UpgradePageState extends State<UpgradePage> {
                     Icon(
                       Icons.call,
                       size: 24,
-                      color: KColors.secondary2,
+                      color: AppColors.secondary2,
                     ),
                     const SizedBox(
                       width: 12,
@@ -106,7 +107,7 @@ class _UpgradePageState extends State<UpgradePage> {
                     Icon(
                       Icons.email,
                       size: 24,
-                      color: KColors.secondary2,
+                      color: AppColors.secondary2,
                     ),
                     const SizedBox(
                       width: 12,
@@ -165,7 +166,7 @@ class _UpgradePageState extends State<UpgradePage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: KColors.white,
+        color: AppColors.white,
         child: PrimaryButton(
           height: 50.0,
           color: _pageColor,

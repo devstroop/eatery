@@ -1,5 +1,6 @@
 import 'package:eatery/core/extensions/double_ext.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
   final List<DiningTable> diningTables;
@@ -167,7 +168,7 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                         style: TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
-                          color: KColors.black800,
+                          color: AppColors.black800,
                         ),
                       ),
                     if (e.orderId != null)

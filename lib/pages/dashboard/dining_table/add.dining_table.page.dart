@@ -1,9 +1,10 @@
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-Color _pageColor = KColors.tertiary;
+Color _pageColor = AppColors.menuCategories;
 
 class AddDiningTablePage extends ConsumerStatefulWidget {
   const AddDiningTablePage({Key? key}) : super(key: key);
@@ -59,7 +60,7 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
                       'eg. Table ${ref.read(diningTableRepositoryProvider).getAllTables().length + 1}',
                   obscureText: false,
                   themeColor: _pageColor,
-                  foregroundColor: KColors.black600,
+                  foregroundColor: AppColors.black600,
                   focusNode: _focusNodes[0],
                   suffix: _controllerCategoryName.text.isNotEmpty
                       ? IconButton(
@@ -74,7 +75,7 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
                           icon: Icon(
                             Icons.auto_awesome,
                             size: 18.0,
-                            color: KColors.black600,
+                            color: AppColors.black600,
                           ),
                           onPressed: () {
                             setState(() {
@@ -94,7 +95,7 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
                   hint: 'eg. Regular/ VIP/ Family/ etc.',
                   obscureText: false,
                   themeColor: _pageColor,
-                  foregroundColor: KColors.black600,
+                  foregroundColor: AppColors.black600,
                   multiline: true,
                   focusNode: _focusNodes[1],
                   onFieldSubmitted: (v) {
@@ -108,7 +109,7 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
                   hint: 'eg. 4/ 6/ 8/ 10/ etc.',
                   obscureText: false,
                   themeColor: _pageColor,
-                  foregroundColor: KColors.black600,
+                  foregroundColor: AppColors.black600,
                   keyboardType: TextInputType.number,
                   onFieldSubmitted: (v) {
                     FocusScope.of(context).unfocus();
@@ -118,7 +119,7 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
                 Text(
                   'Category',
                   style: TextStyle(
-                    color: KColors.black600,
+                    color: AppColors.black600,
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
@@ -193,7 +194,7 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
                                 ),
                               ),
                               alignment: Alignment.center,
-                              child: Icon(Icons.add, color: KColors.white),
+                              child: Icon(Icons.add, color: AppColors.white),
                             ),
                           ),
                         ),

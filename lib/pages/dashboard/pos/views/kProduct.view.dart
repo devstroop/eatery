@@ -1,5 +1,6 @@
 import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class KProductView extends ConsumerStatefulWidget {
@@ -30,7 +31,7 @@ class _KProductViewState extends ConsumerState<KProductView> {
           height: 180,
           margin: const EdgeInsets.symmetric(horizontal: 12.0),
           decoration: BoxDecoration(
-            color: KColors.white600.withOpacity(0.36),
+            color: AppColors.white600.withOpacity(0.36),
             borderRadius: BorderRadius.circular(12.0),
             image: DecorationImage(
               image: LibraryImage(widget.product.image).image,
@@ -67,7 +68,7 @@ class _KProductViewState extends ConsumerState<KProductView> {
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 16,
-                      color: KColors.black600,
+                      color: AppColors.black600,
                     ),
                   ),
                   const SizedBox(width: 6),
@@ -76,7 +77,7 @@ class _KProductViewState extends ConsumerState<KProductView> {
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 16,
-                      color: KColors.black600,
+                      color: AppColors.black600,
                     ),
                   ),
                 ],
@@ -88,7 +89,7 @@ class _KProductViewState extends ConsumerState<KProductView> {
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 16,
-                    color: KColors.black600,
+                    color: AppColors.black600,
                   ),
                 ),
               ),
@@ -100,7 +101,7 @@ class _KProductViewState extends ConsumerState<KProductView> {
                     style: TextStyle(
                       fontWeight: FontWeight.w400,
                       fontSize: 16,
-                      color: KColors.black600,
+                      color: AppColors.black600,
                     ),
                   ),
                   const SizedBox(width: 6),
@@ -128,12 +129,12 @@ class _KProductViewState extends ConsumerState<KProductView> {
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 16,
-                  color: KColors.black600,
+                  color: AppColors.black600,
                 ),
               ),
               Text(
                 widget.product.description ?? '',
-                style: TextStyle(color: KColors.black500, fontSize: 12),
+                style: TextStyle(color: AppColors.black500, fontSize: 12),
               ),
             ],
           ),
@@ -179,15 +180,15 @@ class _KProductViewState extends ConsumerState<KProductView> {
                     child: Container(
                       height: 40,
                       decoration: BoxDecoration(
-                        color: KColors.red.withOpacity(0.25),
+                        color: AppColors.error.withOpacity(0.25),
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: KColors.red, width: 1),
+                        border: Border.all(color: AppColors.error, width: 1),
                       ),
                       child: Center(
                         child: Text(
                           'Delete',
                           style: TextStyle(
-                            color: KColors.red,
+                            color: AppColors.error,
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),

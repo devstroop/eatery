@@ -53,6 +53,21 @@ abstract final class AppColors {
   static const Color grey900 = Color(0xFF151515);
   static const Color black = Color(0xFF000000);
 
+  // ── Shadcn-style semantic tokens ──────────────────────────────
+  static const Color background = white;
+  static const Color foreground = grey900;
+  static const Color card = white;
+  static const Color cardForeground = grey900;
+  static const Color popover = white;
+  static const Color popoverForeground = grey900;
+  static const Color muted = grey100;
+  static const Color mutedForeground = grey500;
+  static const Color border = grey200;
+  static const Color input = grey200;
+  static const Color ring = primary;
+  static const Color destructive = Color(0xFFEF6850);
+  static const Color destructiveForeground = white;
+
   // ── Legacy aliases (temporary — remove after full migration) ──
   static Color get white900 => grey100;
   static Color get white800 => grey300;

@@ -1,5 +1,6 @@
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ViewDiningTablePage extends ConsumerStatefulWidget {
@@ -107,7 +108,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                     padding: const EdgeInsets.all(8),
                     margin: const EdgeInsets.only(right: 8),
                     decoration: BoxDecoration(
-                      color: KColors.primary.withOpacity(0.1),
+                      color: AppColors.primary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Column(
@@ -134,7 +135,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                     padding: const EdgeInsets.all(8),
                     margin: const EdgeInsets.only(right: 8),
                     decoration: BoxDecoration(
-                      color: KColors.primary.withOpacity(0.1),
+                      color: AppColors.primary.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Column(
@@ -181,7 +182,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                     width: double.infinity,
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
-                      color: KColors.white900,
+                      color: AppColors.white900,
                       borderRadius: BorderRadius.circular(8),
                     ),
                     child: Text(
@@ -189,7 +190,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                       style: TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.normal,
-                        color: KColors.white500,
+                        color: AppColors.white500,
                       ),
                     ),
                   ),
@@ -212,7 +213,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                       padding: const EdgeInsets.all(8),
                       margin: const EdgeInsets.only(right: 8),
                       decoration: BoxDecoration(
-                        color: KColors.primary.withOpacity(0.1),
+                        color: AppColors.primary.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Column(
@@ -245,7 +246,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                       padding: const EdgeInsets.all(8),
                       margin: const EdgeInsets.only(right: 8),
                       decoration: BoxDecoration(
-                        color: KColors.primary.withOpacity(0.1),
+                        color: AppColors.primary.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Column(
@@ -291,7 +292,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                       padding: const EdgeInsets.all(8),
                       margin: const EdgeInsets.only(right: 8),
                       decoration: BoxDecoration(
-                        color: KColors.primary.withOpacity(0.1),
+                        color: AppColors.primary.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Column(
@@ -318,7 +319,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                       padding: const EdgeInsets.all(8),
                       margin: const EdgeInsets.only(right: 8),
                       decoration: BoxDecoration(
-                        color: KColors.primary.withOpacity(0.1),
+                        color: AppColors.primary.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Column(

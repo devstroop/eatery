@@ -1,8 +1,9 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 
-final _pageColor = KColors.primary;
+final _pageColor = AppColors.primary;
 
 class AddTaxSlabSettingsPage extends ConsumerStatefulWidget {
   const AddTaxSlabSettingsPage({Key? key}) : super(key: key);
@@ -76,7 +77,7 @@ class _AddTaxSlabSettingsPageState extends ConsumerState<AddTaxSlabSettingsPage>
                     }
                     return null;
                   },
-                  foregroundColor: KColors.black600,
+                  foregroundColor: AppColors.black600,
                 ),
                 SpacingStyle.defaultVerticalSpacing,
                 LabeledCustomTextFormField(
@@ -87,7 +88,7 @@ class _AddTaxSlabSettingsPageState extends ConsumerState<AddTaxSlabSettingsPage>
                   focusNode: focus2,
                   suffix: Icon(
                     Icons.percent,
-                    color: KColors.white600,
+                    color: AppColors.white600,
                   ),
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
@@ -98,13 +99,13 @@ class _AddTaxSlabSettingsPageState extends ConsumerState<AddTaxSlabSettingsPage>
                   onFieldSubmitted: (v) {
                     FocusScope.of(context).unfocus();
                   },
-                  foregroundColor: KColors.black600,
+                  foregroundColor: AppColors.black600,
                 ),
                 SpacingStyle.defaultVerticalSpacing,
                 Text(
                   'Select Tax Type',
                   style: TextStyle(
-                    color: KColors.black600,
+                    color: AppColors.black600,
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
@@ -116,7 +117,7 @@ class _AddTaxSlabSettingsPageState extends ConsumerState<AddTaxSlabSettingsPage>
                   highlightColor: _pageColor,
                   backgroundColor: const Color(0xFFE5E5E5),
                   foregroundColor: Colors.white,
-                  inactiveForegroundColor: KColors.black600,
+                  inactiveForegroundColor: AppColors.black600,
                   children: [
                     ...TaxType.values.map((e) => e.name!)
                   ],

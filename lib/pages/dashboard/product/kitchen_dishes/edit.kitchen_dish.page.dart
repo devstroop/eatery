@@ -2,8 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
-Color _pageColor = KColors.secondary;
+Color _pageColor = AppColors.secondary;
 
 class EditKitchenDishPage extends ConsumerStatefulWidget {
   const EditKitchenDishPage({Key? key, required this.product})
@@ -95,7 +96,7 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
               UploadButton(
                 label: 'Product Image',
                 primaryColor: _pageColor,
-                secondaryColor: KColors.black600,
+                secondaryColor: AppColors.black600,
                 libraryImage: image,
                 onChanged: (image) {
                   setState(() {
@@ -128,7 +129,7 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
                 onFieldSubmitted: (v) {
                   _focusNodes[1].requestFocus();
                 },
-                foregroundColor: KColors.black600,
+                foregroundColor: AppColors.black600,
                 themeColor: _pageColor,
                 controller: _controllerName,
               ),
@@ -152,7 +153,7 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
                         return null;
                       },
                       keyboardType: TextInputType.number,
-                      foregroundColor: KColors.black600,
+                      foregroundColor: AppColors.black600,
                       controller: _controllerMRP,
                     ),
                   ),
@@ -174,7 +175,7 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
                         return null;
                       },
                       keyboardType: TextInputType.number,
-                      foregroundColor: KColors.black600,
+                      foregroundColor: AppColors.black600,
                       controller: _controllerSalePrice,
                     ),
                   ),
@@ -184,7 +185,7 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
               Text(
                 'Select Food Type',
                 style: TextStyle(
-                  color: KColors.white600,
+                  color: AppColors.white600,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -193,7 +194,7 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
                 highlightColor: selectedFoodType?.color ?? _pageColor,
                 backgroundColor: const Color(0xFFE5E5E5),
                 foregroundColor: Colors.white,
-                inactiveForegroundColor: KColors.black600,
+                inactiveForegroundColor: AppColors.black600,
 
                 children: ['None', ...FoodType.values.map((e) => e.name)],
                 selectedIndex: selectedFoodType != null
@@ -216,7 +217,7 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
               Text(
                 'Select Tax Slab',
                 style: TextStyle(
-                  color: KColors.white600,
+                  color: AppColors.white600,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -226,7 +227,7 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
                 backgroundColor: const Color(0xFFE5E5E5),
                 foregroundColor: selectedTaxSlab == null
                     ? Colors.white
-                    : KColors.black600,
+                    : AppColors.black600,
                 children: [
                   'None',
                   for (var each in ref.read(taxRepositoryProvider).getAllTaxSlabs())
@@ -262,7 +263,7 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
               Text(
                 'Select Category',
                 style: TextStyle(
-                  color: KColors.white600,
+                  color: AppColors.white600,
                   fontWeight: FontWeight.w400,
                 ),
               ),
@@ -314,7 +315,7 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
                 onFieldSubmitted: (v) {
                   FocusScope.of(context).unfocus();
                 },
-                foregroundColor: KColors.black600,
+                foregroundColor: AppColors.black600,
                 themeColor: _pageColor,
                 controller: _controllerDescription,
               ),
@@ -323,7 +324,7 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: KColors.white,
+        color: AppColors.white,
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {

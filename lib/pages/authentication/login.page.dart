@@ -237,10 +237,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(
-                        company!.name,
-                        style: AppTypography.headlineSmall,
-                      ),
+                      Text(company!.name, style: AppTypography.headlineSmall),
                       Text(
                         company!.address,
                         style: AppTypography.bodyMedium.copyWith(

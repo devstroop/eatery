@@ -1,8 +1,9 @@
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-Color _pageColor = KColors.tertiary;
+Color _pageColor = AppColors.menuCategories;
 
 class EditPaymentPage extends ConsumerStatefulWidget {
   const EditPaymentPage({Key? key, required this.payment}) : super(key: key);

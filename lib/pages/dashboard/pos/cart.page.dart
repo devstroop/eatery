@@ -1,3 +1,4 @@
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:eatery/core/extensions/double_ext.dart';
 import 'package:eatery/functions/order.function.dart';
 import 'package:eatery/pages/dashboard/utility/order_print.page.dart';
@@ -18,7 +19,7 @@ class _CartPageState extends ConsumerState<CartPage> {
   @override
   Widget build(BuildContext context) {
     Color themeColor = Color(
-      ref.read(cartProvider).activeOrderType?.color ?? KColors.primary.value,
+      ref.read(cartProvider).activeOrderType?.color ?? AppColors.primary.value,
     );
     return Scaffold(
       backgroundColor: Colors.grey[200],
@@ -58,7 +59,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                       height: 48,
                       width: 48,
                       decoration: BoxDecoration(
-                        color: KColors.white600.withOpacity(0.36),
+                        color: AppColors.white600.withOpacity(0.36),
                         borderRadius: BorderRadius.circular(12.0),
                         image: DecorationImage(
                           image: LibraryImage(product.image).image,
@@ -381,7 +382,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                                   'Previous',
                                   style: TextStyle(
                                     fontWeight: FontWeight.w500,
-                                    color: KColors.red,
+                                    color: AppColors.error,
                                   ),
                                 ),
                               ),
@@ -389,7 +390,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                                 '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${ref.read(cartProvider).activeOrder?.grandTotal ?? 0}',
                                 style: TextStyle(
                                   fontWeight: FontWeight.bold,
-                                  color: KColors.red,
+                                  color: AppColors.error,
                                 ),
                               ),
                             ],
@@ -517,10 +518,10 @@ class _CartPageState extends ConsumerState<CartPage> {
                   child: ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                        KColors.white800,
+                        AppColors.white800,
                       ),
                       foregroundColor: MaterialStateProperty.all(
-                        KColors.black600,
+                        AppColors.black600,
                       ),
                     ),
                     onPressed: () {
@@ -534,9 +535,9 @@ class _CartPageState extends ConsumerState<CartPage> {
                   child: ElevatedButton(
                     style: ButtonStyle(
                       backgroundColor: MaterialStateProperty.all(
-                        KColors.secondary2,
+                        AppColors.secondary2,
                       ),
-                      foregroundColor: MaterialStateProperty.all(KColors.white),
+                      foregroundColor: MaterialStateProperty.all(AppColors.white),
                     ),
                     onPressed: () {
                       Navigator.pop(context, true);

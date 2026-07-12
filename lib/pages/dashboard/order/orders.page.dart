@@ -1,3 +1,4 @@
+import 'package:eatery/core/theme/app_colors.dart';
 import 'dart:ui' as ui;
 import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
@@ -6,7 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:eatery/references.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-final Color _pageColor = KColors.tertiary2;
+final Color _pageColor = AppColors.warning;
 
 class OrdersPage extends ConsumerStatefulWidget {
   const OrdersPage({Key? key}) : super(key: key);

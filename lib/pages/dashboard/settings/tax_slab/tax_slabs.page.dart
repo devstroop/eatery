@@ -1,8 +1,9 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 
-Color _pageColor = KColors.primary;
+Color _pageColor = AppColors.primary;
 
 class TaxSlabsSettingsPage extends ConsumerStatefulWidget {
   const TaxSlabsSettingsPage({Key? key}) : super(key: key);
@@ -65,7 +66,7 @@ class _TaxSlabsSettingsPageState extends ConsumerState<TaxSlabsSettingsPage> {
                       style: TextStyle(
                         fontWeight: FontWeight.w500,
                         fontSize: 18,
-                        color: KColors.black600,
+                        color: AppColors.black600,
                       ),
                     ),
                     title: Text(

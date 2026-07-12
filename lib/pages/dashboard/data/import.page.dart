@@ -1,7 +1,8 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:http/http.dart' as http;
 
-final _pageColor = KColors.tertiary;
+final _pageColor = AppColors.menuCategories;
 
 class ImportPage extends StatelessWidget {
   const ImportPage({super.key});
@@ -79,7 +80,7 @@ class ImportPage extends StatelessWidget {
                   title: Text(
                     'Import from Excel',
                     style: TextStyle(
-                        color: KColors.alternate2, fontWeight: FontWeight.bold),
+                        color: AppColors.menuPayments, fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
                     'Select the excel file to import',
@@ -87,7 +88,7 @@ class ImportPage extends StatelessWidget {
                   ),
                   trailing: Icon(
                     Icons.attachment,
-                    color: KColors.alternate2,
+                    color: AppColors.menuPayments,
                   ),
                 ),
               ],

@@ -1,9 +1,10 @@
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-Color _pageColor = KColors.tertiary;
+Color _pageColor = AppColors.menuCategories;
 
 class AddPaymentPage extends ConsumerStatefulWidget {
   const AddPaymentPage({Key? key, this.order}) : super(key: key);
@@ -190,7 +191,7 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
                 UploadButton(
                   label: 'Payment Screenshot',
                   primaryColor: _pageColor,
-                  secondaryColor: KColors.black600,
+                  secondaryColor: AppColors.black600,
                   libraryImage: image,
                   onChanged: (value) {
                     setState(() {

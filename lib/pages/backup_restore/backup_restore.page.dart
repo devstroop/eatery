@@ -3,11 +3,12 @@ import 'dart:io';
 import 'package:archive/archive_io.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
-Color _pageColor = KColors.tertiary;
+Color _pageColor = AppColors.menuCategories;
 
 class BackupRestorePage extends ConsumerStatefulWidget {
   const BackupRestorePage({Key? key, this.company}) : super(key: key);

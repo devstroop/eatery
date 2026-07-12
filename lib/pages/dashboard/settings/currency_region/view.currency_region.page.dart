@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
@@ -12,7 +13,7 @@ class ShowCurrencyRegionPage extends ConsumerStatefulWidget {
 }
 
 class _ShowCurrencyRegionPageState extends ConsumerState<ShowCurrencyRegionPage> {
-  final themeColor = KColors.primary;
+  final themeColor = AppColors.primary;
   Currency? selectedCurrency;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
@@ -39,7 +40,7 @@ class _ShowCurrencyRegionPageState extends ConsumerState<ShowCurrencyRegionPage>
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
         backgroundColor: themeColor,
-        foregroundColor: KColors.white900,
+        foregroundColor: AppColors.white900,
         title: const Text('Region and Currency'),
       ),
       body: Padding(

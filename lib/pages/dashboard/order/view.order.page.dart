@@ -1,5 +1,6 @@
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'edit.order.page.dart';
@@ -26,7 +27,7 @@ class _ViewOrderPageState extends ConsumerState<ViewOrderPage> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        backgroundColor: KColors.tertiary,
+        backgroundColor: AppColors.menuCategories,
         foregroundColor: Colors.white,
         title: const Text('View Order'),
         actions: [

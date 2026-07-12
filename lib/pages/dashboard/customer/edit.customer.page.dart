@@ -1,8 +1,9 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 
-Color _pageColor = KColors.primary;
+Color _pageColor = AppColors.primary;
 
 class EditCustomerPage extends ConsumerStatefulWidget {
   const EditCustomerPage({Key? key, required this.customer}) : super(key: key);
@@ -82,7 +83,7 @@ class _EditCustomerPageState extends ConsumerState<EditCustomerPage> {
                   controller: _controllerCustomerName,
                   label: 'Customer Name',
                   themeColor: _pageColor,
-                  foregroundColor: KColors.black600,
+                  foregroundColor: AppColors.black600,
                   hint: 'Enter customer name',
                   focusNode: _focusNodes[0],
                   onFieldSubmitted: (v) {
@@ -94,7 +95,7 @@ class _EditCustomerPageState extends ConsumerState<EditCustomerPage> {
                   controller: _controllerCustomerPhone,
                   label: 'Phone Number',
                   themeColor: _pageColor,
-                  foregroundColor: KColors.black600,
+                  foregroundColor: AppColors.black600,
                   keyboardType: TextInputType.phone,
                   hint: 'Enter phone number',
                   focusNode: _focusNodes[1],
@@ -121,7 +122,7 @@ class _EditCustomerPageState extends ConsumerState<EditCustomerPage> {
                   controller: _controllerCustomerAddress,
                   label: 'Address',
                   themeColor: _pageColor,
-                  foregroundColor: KColors.black600,
+                  foregroundColor: AppColors.black600,
                   keyboardType: TextInputType.streetAddress,
                   hint: 'Enter full address',
                   multiline: true,
@@ -135,7 +136,7 @@ class _EditCustomerPageState extends ConsumerState<EditCustomerPage> {
                   controller: _controllerCustomerLandmark,
                   label: 'Landmark (Optional)',
                   themeColor: _pageColor,
-                  foregroundColor: KColors.black600,
+                  foregroundColor: AppColors.black600,
                   keyboardType: TextInputType.text,
                   hint: 'Enter landmark',
                   multiline: true,
@@ -159,7 +160,7 @@ class _EditCustomerPageState extends ConsumerState<EditCustomerPage> {
                     const SizedBox(width: 6.0),
                     Text(
                       'Active',
-                      style: TextStyle(color: KColors.black600, fontSize: 16.0),
+                      style: TextStyle(color: AppColors.black600, fontSize: 16.0),
                     ),
                   ],
                 ),
@@ -169,7 +170,7 @@ class _EditCustomerPageState extends ConsumerState<EditCustomerPage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: KColors.white,
+        color: AppColors.white,
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {

@@ -1,5 +1,6 @@
 import 'package:eatery/references.dart';
-final _pageColor = KColors.tertiary;
+import 'package:eatery/core/theme/app_colors.dart';
+final _pageColor = AppColors.menuCategories;
 class ExportPage extends StatefulWidget {
   const ExportPage({super.key});
 

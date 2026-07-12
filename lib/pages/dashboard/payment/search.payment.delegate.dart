@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 import 'add.payment.page.dart';
 
@@ -121,7 +122,7 @@ class SearchPaymentDelegate extends SearchDelegate<Payment?>{
   ThemeData appBarTheme(BuildContext context) {
     return Theme.of(context).copyWith(
       appBarTheme: AppBarTheme(
-        backgroundColor: KColors.tertiary,
+        backgroundColor: AppColors.menuCategories,
         foregroundColor: Colors.white,
       ),
     );

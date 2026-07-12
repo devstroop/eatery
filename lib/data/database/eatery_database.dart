@@ -14,7 +14,8 @@ class EateryDatabase {
   bool isInitialized = false;
 
   /// True when [init] completed and a company exists.
-  bool get hasCompany => isInitialized && _companyBox != null && _companyBox!.values.isNotEmpty;
+  bool get hasCompany =>
+      isInitialized && _companyBox != null && _companyBox!.values.isNotEmpty;
 
   // Lazy-loaded boxes — accessed via getters so they work after init()
   Box<Company>? _companyBox;

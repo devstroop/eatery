@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class CreateCompanyResultPage extends StatefulWidget {
   const CreateCompanyResultPage({Key? key}) : super(key: key);
@@ -48,14 +49,14 @@ class _CreateCompanyResultPageState extends State<CreateCompanyResultPage> {
                     style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,
-                        color: KColors.secondary2),
+                        color: AppColors.secondary2),
                   ),
                   Text(
                     'Your company has been created successfully.\nLogin to get started!',
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.normal,
-                      color: KColors.black500,
+                      color: AppColors.black500,
                     ),
                     textAlign: TextAlign.center,
                   ),
@@ -64,7 +65,7 @@ class _CreateCompanyResultPageState extends State<CreateCompanyResultPage> {
               Container(
                 margin: const EdgeInsets.only(top: 16.0),
                 child: PrimaryButton(
-                  color: KColors.secondary2,
+                  color: AppColors.secondary2,
                   onPressed: () {
                     Navigator.pushAndRemoveUntil(
                       context,
@@ -81,9 +82,9 @@ class _CreateCompanyResultPageState extends State<CreateCompanyResultPage> {
         ),
       ),
       // bottomNavigationBar: BottomAppBar(
-      //   color: KColors.white,
+      //   color: AppColors.white,
       //   child: PrimaryButton(
-      //     color: KColors.secondary2,
+      //     color: AppColors.secondary2,
       //     onPressed: () {
       //       Navigator.pushAndRemoveUntil(
       //         context,

@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class Body5 extends StatefulWidget {
   final Color themeColor;
@@ -77,7 +78,7 @@ class _Body5State extends State<Body5> {
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6),
                   border: Border.all(
-                    color: KColors.secondary2,
+                    color: AppColors.secondary2,
                     width: 2,
                   ),
                 ),

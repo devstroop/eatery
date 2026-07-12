@@ -1,8 +1,9 @@
 import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-Color _pageColor = KColors.tertiary;
+Color _pageColor = AppColors.menuCategories;
 
 class EditDiningTableCategoryPage extends ConsumerStatefulWidget {
   const EditDiningTableCategoryPage({Key? key, required this.category})
@@ -69,7 +70,7 @@ class _EditDiningTableCategoryPageState
                   hint: 'eg. Terrace',
                   obscureText: false,
                   themeColor: _pageColor,
-                  foregroundColor: KColors.black600,
+                  foregroundColor: AppColors.black600,
                   focusNode: _focusNodes[0],
                   onFieldSubmitted: (v) {
                     _focusNodes[1].requestFocus();
@@ -89,7 +90,7 @@ class _EditDiningTableCategoryPageState
                   hint: 'eg. Terrace',
                   obscureText: false,
                   themeColor: _pageColor,
-                  foregroundColor: KColors.black600,
+                  foregroundColor: AppColors.black600,
                   multiline: true,
                   focusNode: _focusNodes[1],
                   onFieldSubmitted: (v) {
@@ -103,7 +104,7 @@ class _EditDiningTableCategoryPageState
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: KColors.white,
+        color: AppColors.white,
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {

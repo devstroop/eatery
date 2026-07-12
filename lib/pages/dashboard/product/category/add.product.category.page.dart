@@ -1,8 +1,9 @@
 import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-Color _pageColor = KColors.tertiary;
+Color _pageColor = AppColors.menuCategories;
 
 class AddProductCategoryPage extends ConsumerStatefulWidget {
   const AddProductCategoryPage({Key? key}) : super(key: key);
@@ -51,7 +52,7 @@ class _AddProductCategoryPageState
               UploadButton(
                 label: 'Product Category Image',
                 primaryColor: _pageColor,
-                secondaryColor: KColors.black600,
+                secondaryColor: AppColors.black600,
                 libraryImage: pickedLibraryImage,
                 onChanged: (pickedImagePath) {
                   setState(() {
@@ -64,7 +65,7 @@ class _AddProductCategoryPageState
                 label: 'Category Name',
                 hint: 'Enter product category name',
                 // Write a hint for category name field
-                foregroundColor: KColors.black600,
+                foregroundColor: AppColors.black600,
                 themeColor: _pageColor,
                 controller: _controllerCategoryName,
                 focusNode: _focusNodes[0],
@@ -75,7 +76,7 @@ class _AddProductCategoryPageState
               const SizedBox(height: 6.0),
               LabeledCustomTextFormField(
                 label: 'Description',
-                foregroundColor: KColors.black600,
+                foregroundColor: AppColors.black600,
                 themeColor: _pageColor,
                 controller: _controllerCategoryDescription,
                 multiline: true,
@@ -91,7 +92,7 @@ class _AddProductCategoryPageState
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: KColors.white,
+        color: AppColors.white,
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {

@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 
@@ -56,7 +57,7 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                 UploadButton(
                   label: 'Staff Photo',
                   primaryColor: _pageColor,
-                  secondaryColor: KColors.black600,
+                  secondaryColor: AppColors.black600,
                   libraryImage: image,
                   onChanged: (image) {
                     setState(() {
@@ -71,7 +72,7 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                   controller: _controllerStaffName,
                   label: 'Staff Name',
                   themeColor: _pageColor,
-                  foregroundColor: KColors.black600,
+                  foregroundColor: AppColors.black600,
                   hint: 'Enter Staff Name',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -95,7 +96,7 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                   controller: _controllerStaffPhone,
                   label: 'Phone Number',
                   themeColor: _pageColor,
-                  foregroundColor: KColors.black600,
+                  foregroundColor: AppColors.black600,
                   keyboardType: TextInputType.phone,
                   hint: 'Enter Phone Number',
                   validator: (value) {
@@ -118,12 +119,12 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                   decoration: InputDecoration(
                     labelText: 'Staff Type',
                     labelStyle: TextStyle(
-                      color: KColors.black600,
+                      color: AppColors.black600,
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                       borderSide: BorderSide(
-                        color: KColors.black600,
+                        color: AppColors.black600,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -137,14 +138,14 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                       borderRadius: BorderRadius.circular(8.0),
                       borderSide: BorderSide(
                         width: 2,
-                        color: KColors.red,
+                        color: AppColors.error,
                       ),
                     ),
                     focusedErrorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                       borderSide: BorderSide(
                         width: 2,
-                        color: KColors.red,
+                        color: AppColors.error,
                       ),
                     ),
                   ),
@@ -186,7 +187,7 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                     Text(
                       'Active',
                       style: TextStyle(
-                        color: KColors.black600,
+                        color: AppColors.black600,
                         fontSize: 16.0,
                       ),
                     ),
@@ -198,7 +199,7 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: KColors.white,
+        color: AppColors.white,
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {

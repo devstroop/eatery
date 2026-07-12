@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class HelpPage extends StatefulWidget {
   const HelpPage({Key? key, this.account}) : super(key: key);
@@ -17,7 +18,7 @@ class _HelpPageState extends State<HelpPage> {
   }
 
   Color getThemeColor() {
-    return KColors.tertiary;
+    return AppColors.menuCategories;
   }
 
   @override

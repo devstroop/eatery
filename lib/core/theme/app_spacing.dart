@@ -18,6 +18,13 @@ abstract final class AppSpacing {
   static const double xxl = 32;
   static const double xxxl = 48;
 
+  // ── Border radius (shadcn/ui-style) ──────────────────────────
+  static const double radiusSm = 4;
+  static const double radiusMd = 8;
+  static const double radiusLg = 12;
+  static const double radiusXl = 16;
+  static const double radiusFull = 9999;
+
   // ── Common SizedBox shortcuts ─────────────────────────────────
   static const SizedBox gapXs = SizedBox(height: xs);
   static const SizedBox gapSm = SizedBox(height: sm);

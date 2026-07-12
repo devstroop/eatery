@@ -2,10 +2,11 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 import '../search_product.delegate.dart';
 
-Color _pageColor = KColors.secondary;
+Color _pageColor = AppColors.secondary;
 
 class KitchenPage extends ConsumerStatefulWidget {
   const KitchenPage({Key? key}) : super(key: key);

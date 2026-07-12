@@ -3,9 +3,11 @@ import 'dart:io';
 import 'package:eatery/data/models/eatery_db.dart';
 import 'package:eatery/presentation/providers/printer_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 /// Printer configuration page.
 /// Mobile: discovers Bluetooth ESC/POS printers and saves them.
@@ -116,7 +118,7 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
-        backgroundColor: KColors.tertiary,
+        backgroundColor: AppColors.menuCategories,
         foregroundColor: Colors.white,
         title: const Text('Printer Settings'),
       ),

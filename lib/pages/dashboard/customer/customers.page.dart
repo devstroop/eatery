@@ -2,10 +2,11 @@ import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/widgets/responsive/responsive_list_view.dart';
 import 'package:eatery/pages/dashboard/customer/view.customer.page.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 
-Color _pageColor = KColors.primary;
+Color _pageColor = AppColors.primary;
 
 class CustomersPage extends ConsumerStatefulWidget {
   const CustomersPage({Key? key}) : super(key: key);

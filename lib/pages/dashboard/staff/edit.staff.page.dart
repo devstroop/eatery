@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 
@@ -75,7 +76,7 @@ StaffType? staffType;
                 UploadButton(
                   label: 'Staff Photo',
                   primaryColor: _pageColor,
-                  secondaryColor: KColors.black600,
+                  secondaryColor: AppColors.black600,
                   libraryImage: image,
                   onChanged: (image) {
                     debugPrint(image?.filename ?? '');
@@ -89,7 +90,7 @@ StaffType? staffType;
                   controller: _controllerStaffName,
                   label: 'Staff Name',
                   themeColor: _pageColor,
-                  foregroundColor: KColors.black600,
+                  foregroundColor: AppColors.black600,
                   hint: 'Enter Staff Name',
                   validator: (value) =>
                       value == null || value.isEmpty ? 'Please enter staff name' : null,
@@ -103,7 +104,7 @@ StaffType? staffType;
                   controller: _controllerStaffPhone,
                   label: 'Phone Number',
                   themeColor: _pageColor,
-                  foregroundColor: KColors.black600,
+                  foregroundColor: AppColors.black600,
                   keyboardType: TextInputType.phone,
                   hint: 'Enter Phone Number',
                   validator: (value) => value == null || value.isEmpty ? 'Please enter phone number' : null,
@@ -118,12 +119,12 @@ StaffType? staffType;
                   decoration: InputDecoration(
                     labelText: 'Staff Type',
                     labelStyle: TextStyle(
-                      color: KColors.black600,
+                      color: AppColors.black600,
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                       borderSide: BorderSide(
-                        color: KColors.black600,
+                        color: AppColors.black600,
                       ),
                     ),
                     focusedBorder: OutlineInputBorder(
@@ -137,14 +138,14 @@ StaffType? staffType;
                       borderRadius: BorderRadius.circular(8.0),
                       borderSide: BorderSide(
                         width: 2,
-                        color: KColors.red,
+                        color: AppColors.error,
                       ),
                     ),
                     focusedErrorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
                       borderSide: BorderSide(
                         width: 2,
-                        color: KColors.red,
+                        color: AppColors.error,
                       ),
                     ),
                   ),
@@ -186,7 +187,7 @@ StaffType? staffType;
                     Text(
                       'Active',
                       style: TextStyle(
-                        color: KColors.black600,
+                        color: AppColors.black600,
                         fontSize: 16.0,
                       ),
                     ),
@@ -198,7 +199,7 @@ StaffType? staffType;
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        color: KColors.white,
+        color: AppColors.white,
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {

@@ -2,6 +2,7 @@ import 'package:eatery/dev/database_inspector.dart';
 import 'package:eatery/dev/seed_loader.dart';
 import 'package:eatery/pages/dashboard/settings/printer/printer.setting.page.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class SettingPage extends ConsumerStatefulWidget {
@@ -17,7 +18,7 @@ class _SettingPageState extends ConsumerState<SettingPage> {
   }
 
   Color getThemeColor() {
-    return KColors.black;
+    return AppColors.black;
   }
 
   SizedBox options() {

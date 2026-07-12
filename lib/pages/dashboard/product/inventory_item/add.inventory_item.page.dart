@@ -2,8 +2,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
-Color _pageColor = KColors.alternate;
+Color _pageColor = AppColors.menuInventory;
 
 class AddInventoryItem extends ConsumerStatefulWidget {
   const AddInventoryItem({Key? key}) : super(key: key);
@@ -97,7 +98,7 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
 
   BottomAppBar buildBottomAppBar() {
     return BottomAppBar(
-      color: KColors.white,
+      color: AppColors.white,
       child: PrimaryButton(
         color: _pageColor,
         onPressed: () async {
@@ -112,7 +113,7 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
     return UploadButton(
       label: 'Product Image',
       primaryColor: _pageColor,
-      secondaryColor: KColors.black600,
+      secondaryColor: AppColors.black600,
       libraryImage: image,
       onChanged: (image) {
         setState(() {
@@ -126,7 +127,7 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
     return LabeledCustomTextFormField(
       label: 'Name',
       hint: 'Enter product name',
-      foregroundColor: KColors.black600,
+      foregroundColor: AppColors.black600,
       themeColor: _pageColor,
       controller: _controllerName,
       focusNode: _focusNodes[0],
@@ -162,7 +163,7 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
             themeColor: _pageColor,
             validator: (value) => validatePriceField(value),
             keyboardType: TextInputType.number,
-            foregroundColor: KColors.black600,
+            foregroundColor: AppColors.black600,
             controller: _controllerMRP,
             focusNode: _focusNodes[1],
             onFieldSubmitted: (v) {
@@ -183,7 +184,7 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
             },
             validator: (value) => validatePriceField(value),
             keyboardType: TextInputType.number,
-            foregroundColor: KColors.black600,
+            foregroundColor: AppColors.black600,
             controller: _controllerSalePrice,
           ),
         ),
@@ -273,7 +274,7 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
       onFieldSubmitted: (v) {
         FocusScope.of(this.context).unfocus();
       },
-      foregroundColor: KColors.black600,
+      foregroundColor: AppColors.black600,
       themeColor: _pageColor,
       controller: _controllerDescription,
     );
@@ -307,7 +308,7 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
         Text(
           label,
           style: TextStyle(
-            color: KColors.black600,
+            color: AppColors.black600,
             fontSize: 12,
             fontWeight: FontWeight.w500,
           ),
@@ -317,7 +318,7 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
           highlightColor: selectedFoodType?.color ?? _pageColor,
           backgroundColor: const Color(0xFFE5E5E5),
           foregroundColor: Colors.white,
-          inactiveForegroundColor: KColors.black600,
+          inactiveForegroundColor: AppColors.black600,
           children: items,
           selectedIndex: selectedIndex,
           onChange: onChange,

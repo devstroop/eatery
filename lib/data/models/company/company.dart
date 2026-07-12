@@ -29,33 +29,33 @@ class Company extends HiveObject {
   @HiveField(11)
   int? subscriptionId;
 
-  Company(
-      {this.logo,
-      required this.name,
-      required this.email,
-      required this.phone,
-      required this.address,
-      required this.password,
-      required this.taxation,
-      this.currencyCode,
-      this.foodLicenseNo,
-      this.salesTaxNumber,
-      this.subscriptionId})
-      : id = 1;
+  Company({
+    this.logo,
+    required this.name,
+    required this.email,
+    required this.phone,
+    required this.address,
+    required this.password,
+    required this.taxation,
+    this.currencyCode,
+    this.foodLicenseNo,
+    this.salesTaxNumber,
+    this.subscriptionId,
+  }) : id = 1;
 
   Company.fromMap(Map<String, dynamic> map)
-      : id = map['id'],
-        logo = map['logo'],
-        name = map['name'],
-        email = map['email'],
-        phone = map['phone'],
-        address = map['address'],
-        password = map['password'],
-        taxation = map['edition'] as Taxation,
-        currencyCode = map['currencyCode'],
-        foodLicenseNo = map['foodLicNo'],
-        salesTaxNumber = map['taxLicNo'],
-        subscriptionId = map['subscriptionId'];
+    : id = map['id'],
+      logo = map['logo'],
+      name = map['name'],
+      email = map['email'],
+      phone = map['phone'],
+      address = map['address'],
+      password = map['password'],
+      taxation = map['edition'] as Taxation,
+      currencyCode = map['currencyCode'],
+      foodLicenseNo = map['foodLicNo'],
+      salesTaxNumber = map['taxLicNo'],
+      subscriptionId = map['subscriptionId'];
 
   Map<String, Object?> toMap() {
     return {
@@ -70,30 +70,29 @@ class Company extends HiveObject {
       'currencyCode': currencyCode,
       'foodLicNo': foodLicenseNo,
       'taxLicNo': salesTaxNumber,
-      'subscriptionId': subscriptionId
+      'subscriptionId': subscriptionId,
     };
   }
-// Use this style
-// static DiningTableCategory fromIterable(Iterable<dynamic> row) {
-//     return DiningTableCategory.fromMap({ 
-//       'id': row.elementAt(0),
-//       'name': row.elementAt(1),
-//       'description': row.elementAt(2),
-//       'image': row.elementAt(3),
-//       'isActive': row.elementAt(4)
-//     });
-//   }
+  // Use this style
+  // static DiningTableCategory fromIterable(Iterable<dynamic> row) {
+  //     return DiningTableCategory.fromMap({
+  //       'id': row.elementAt(0),
+  //       'name': row.elementAt(1),
+  //       'description': row.elementAt(2),
+  //       'image': row.elementAt(3),
+  //       'isActive': row.elementAt(4)
+  //     });
+  //   }
 
-//   Iterable<dynamic> toIterable() {
-//     return [
-//       id,
-//       name,
-//       description,
-//       image,
-//       isActive
-//     ];
-//   }
-
+  //   Iterable<dynamic> toIterable() {
+  //     return [
+  //       id,
+  //       name,
+  //       description,
+  //       image,
+  //       isActive
+  //     ];
+  //   }
 
   static Company fromIterable(Iterable<dynamic> list) {
     return Company.fromMap({
@@ -104,12 +103,13 @@ class Company extends HiveObject {
       'phone': list.elementAt(4),
       'address': list.elementAt(5),
       'password': list.elementAt(6),
-      'edition': Taxation.values
-          .singleWhere((element) => element.id == list.elementAt(7)),
+      'edition': Taxation.values.singleWhere(
+        (element) => element.id == list.elementAt(7),
+      ),
       'currencyCode': list.elementAt(8),
       'foodLicNo': list.elementAt(9),
       'taxLicNo': list.elementAt(10),
-      'subscriptionId': list.elementAt(11)
+      'subscriptionId': list.elementAt(11),
     });
   }
 
@@ -127,7 +127,7 @@ class Company extends HiveObject {
       map['currencyCode'],
       map['foodLicNo'],
       map['taxLicNo'],
-      map['subscriptionId']
+      map['subscriptionId'],
     ];
   }
 }
