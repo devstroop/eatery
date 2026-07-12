@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
@@ -64,7 +65,7 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
           widget.action(image);
           fetchLibrary();
         } catch (e) {
-          showMessageDialog(this.context, e.toString(), MessageType.error);
+          AppDialog.showMessage(this.context, message: e.toString(), type: MessageType.error);
         }
       }
     });
@@ -79,7 +80,7 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
           widget.action(image);
           fetchLibrary();
         } catch (e) {
-          showMessageDialog(this.context, e.toString(), MessageType.error);
+          AppDialog.showMessage(this.context, message: e.toString(), type: MessageType.error);
         }
       }
     });
@@ -94,7 +95,7 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
           widget.action(image);
           fetchLibrary();
         } catch (e) {
-          showMessageDialog(this.context, e.toString(), MessageType.error);
+          AppDialog.showMessage(this.context, message: e.toString(), type: MessageType.error);
         }
       }
     });
@@ -150,7 +151,7 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
                   //widget.action(libraryImage);
                   fetchLibrary();
                 } catch(e) {
-                  showMessageDialog(context, e.toString(), MessageType.error);
+                  AppDialog.showMessage(context, message: e.toString(), type: MessageType.error);
                 }
               });
             },
@@ -216,15 +217,21 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
                     widget.action(each);
                   },
                   onLongPress: () {
-                    showConfirmationDialog(context, 'Are you sure?',
-                        'Do you want to remove this image from library.',
-                        () {
-                      each.delete();
-                      showMessageDialog(context, 'Image removed from library.',
-                          MessageType.success, () => fetchLibrary());
-                    }, () {
-                      // Do nothing
-                    });
+                    AppDialog.show(
+                      context,
+                      title: 'Are you sure?',
+                      content: 'Do you want to remove this image from library.',
+                      onConfirm: () {
+                        each.delete();
+                        AppDialog.showMessage(context,
+                            message: 'Image removed from library.',
+                            type: MessageType.success,
+                            onConfirm: () => fetchLibrary());
+                      },
+                      onCancel: () {
+                        // Do nothing
+                      },
+                    );
                   },
                   image: each.image,
                 ),

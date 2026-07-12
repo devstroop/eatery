@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:eatery/core/utils/device_id.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/widgets/app_dialog.dart';
 
 class Body6 extends StatefulWidget {
   final Color themeColor;
@@ -110,7 +111,7 @@ class _Body6State extends State<Body6> {
     String? deviceSerial = this.deviceSerial;
     deviceSerial ??= 'Undefined';
     Clipboard.setData(ClipboardData(text: deviceSerial)).whenComplete(() {
-      showMessageDialog(this.context, 'Device ID copied to clipboard', MessageType.success);
+      AppDialog.showMessage(this.context, message: 'Device ID copied to clipboard', type: MessageType.success);
     });
   }
 }

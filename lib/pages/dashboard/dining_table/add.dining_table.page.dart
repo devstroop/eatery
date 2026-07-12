@@ -4,6 +4,7 @@ import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/core/widgets/app_dialog.dart';
 
 Color _pageColor = AppColors.menuCategories;
 
@@ -221,19 +222,19 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
                 .read(diningTableRepositoryProvider)
                 .saveTable(diningTable)
                 .then((value) {
-                  showMessageDialog(
+                  AppDialog.showMessage(
                     context,
-                    'Dining Table created successfully',
-                    MessageType.success,
-                    () => Navigator.pop(context),
+                    message: 'Dining Table created successfully',
+                    type: MessageType.success,
+                    onConfirm: () => Navigator.pop(context),
                   );
                 })
                 .onError((error, stackTrace) {
                   debugPrint(error.toString());
-                  showMessageDialog(
+                  AppDialog.showMessage(
                     context,
-                    'Failed to create Dining Table',
-                    MessageType.error,
+                    message: 'Failed to create Dining Table',
+                    type: MessageType.error,
                   );
                 });
           },

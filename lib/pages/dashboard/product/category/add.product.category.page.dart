@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/references.dart';
@@ -101,17 +102,17 @@ class _AddProductCategoryPageState
                   ),
                 )
                 .then((response) {
-                  showMessageDialog(
+                  AppDialog.showMessage(
                     context,
-                    'Category created successfully',
-                    MessageType.success,
+                    message: 'Category created successfully',
+                    type: MessageType.success,
                   ).then((value) => Navigator.pop(context));
                 })
                 .onError((error, stackTrace) {
-                  showMessageDialog(
+                  AppDialog.showMessage(
                     context,
-                    error.toString(),
-                    MessageType.error,
+                    message: error.toString(),
+                    type: MessageType.error,
                   );
                 });
           },

@@ -4,6 +4,7 @@ import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery/core/widgets/app_dialog.dart';
 
 Color _pageColor = AppColors.menuInventory;
 
@@ -335,17 +336,17 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
             await repo
                 .saveProduct(widget.product)
                 .then((value) {
-                  showMessageDialog(
+                  AppDialog.showMessage(
                     this.context,
-                    'Product updated successfully',
-                    MessageType.success,
+                    message: 'Product updated successfully',
+                    type: MessageType.success,
                   ).whenComplete(() => Navigator.pop(this.context));
                 })
                 .onError((error, stackTrace) {
-                  showMessageDialog(
+                  AppDialog.showMessage(
                     this.context,
-                    'Failed to update product',
-                    MessageType.error,
+                    message: 'Failed to update product',
+                    type: MessageType.error,
                   );
                 });
           },

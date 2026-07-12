@@ -6,6 +6,7 @@ import 'package:eatery/data/repositories/product_repository.dart';
 import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'add.product.category.page.dart';
 import 'edit.product.category.page.dart';
@@ -161,10 +162,10 @@ class _ProductCategoriesPageState extends ConsumerState<ProductCategoriesPage> {
               onPressed: () async {
                 await repo.deleteCategory(category);
                 setState(() {});
-                showMessageDialog(
+                AppDialog.showMessage(
                   context,
-                  'Category deleted successfully',
-                  MessageType.success,
+                  message: 'Category deleted successfully',
+                  type: MessageType.success,
                 );
               },
               child: const Text('Delete'),

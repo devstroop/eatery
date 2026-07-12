@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/core/theme/app_spacing.dart';
 import 'dart:io';
@@ -60,10 +61,10 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
   Future<void> _startScan() async {
     if (!(Platform.isAndroid || Platform.isIOS)) {
       if (this.context.mounted) {
-        showMessageDialog(
+        AppDialog.showMessage(
           this.context,
-          'Bluetooth scanning is only available on mobile devices.\nFor desktop, connect via WiFi/Ethernet ESC/POS.',
-          MessageType.info,
+          message: 'Bluetooth scanning is only available on mobile devices.\nFor desktop, connect via WiFi/Ethernet ESC/POS.',
+          type: MessageType.info,
         );
       }
       return;
@@ -88,7 +89,7 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
       await Future.delayed(const Duration(seconds: 8));
     } catch (e) {
       if (this.context.mounted) {
-        showMessageDialog(this.context, 'Scan failed: $e', MessageType.error);
+        AppDialog.showMessage(this.context, message: 'Scan failed: $e', type: MessageType.error);
       }
     } finally {
       if (mounted) setState(() => _isScanning = false);
@@ -104,7 +105,7 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
     await ref.read(printerRepositoryProvider).addPrinter(printer);
     ref.invalidate(printerListProvider);
     if (this.context.mounted) {
-      showMessageDialog(this.context, 'Printer added', MessageType.success);
+      AppDialog.showMessage(this.context, message: 'Printer added', type: MessageType.success);
     }
   }
 

@@ -8,6 +8,7 @@ import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
+import 'package:eatery/core/widgets/app_dialog.dart';
 
 Color _pageColor = AppColors.menuCategories;
 
@@ -97,11 +98,11 @@ class _BackupRestorePageState extends ConsumerState<BackupRestorePage> {
       }
 
       if (context.mounted) {
-        showMessageDialog(context, 'Backup completed', MessageType.success);
+        AppDialog.showMessage(context, message: 'Backup completed', type: MessageType.success);
       }
     } catch (e) {
       if (context.mounted) {
-        showMessageDialog(context, 'Backup failed: $e', MessageType.error);
+        AppDialog.showMessage(context, message: 'Backup failed: $e', type: MessageType.error);
       }
     } finally {
       pd.close();
@@ -185,15 +186,15 @@ class _BackupRestorePageState extends ConsumerState<BackupRestorePage> {
       pd.close();
 
       if (context.mounted) {
-        showMessageDialog(
+        AppDialog.showMessage(
           context,
-          'Restore completed. Restart app to apply changes.',
-          MessageType.success,
+          message: 'Restore completed. Restart app to apply changes.',
+          type: MessageType.success,
         );
       }
     } catch (e) {
       if (context.mounted) {
-        showMessageDialog(context, 'Restore failed: $e', MessageType.error);
+        AppDialog.showMessage(context, message: 'Restore failed: $e', type: MessageType.error);
       }
     } finally {
       setState(() => inProgress = false);

@@ -3,6 +3,7 @@ import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:eatery/core/widgets/app_dialog.dart';
 
 Color _pageColor = const Color(0xFFC2592F);
 
@@ -211,15 +212,15 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                 isActive: isActive,
                 type: staffType!);
             ref.read(appDatabaseProvider).staffBox
-                .add(staff).then((value) => showMessageDialog(
+                .add(staff).then((value) => AppDialog.showMessage(
                 context,
-                'Staff has been added successfully',
-                MessageType.success,
-                () => Navigator.pop(context)
-            )).onError((error, stackTrace) => showMessageDialog(
+                message: 'Staff has been added successfully',
+                type: MessageType.success,
+                onConfirm: () => Navigator.pop(context)
+            )).onError((error, stackTrace) => AppDialog.showMessage(
                 context,
-                'Something went wrong',
-                MessageType.error
+                message: 'Something went wrong',
+                type: MessageType.error
             ));
           },
           label: 'Save',

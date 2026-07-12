@@ -2,6 +2,7 @@ import 'package:eatery/core/theme/app_spacing.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:eatery/core/extensions/double_ext.dart';
+import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:eatery/functions/order.function.dart';
 import 'package:eatery/pages/dashboard/utility/order_print.page.dart';
 import 'package:eatery/presentation/providers/cart_provider.dart';
@@ -472,25 +473,25 @@ class _CartPageState extends ConsumerState<CartPage> {
     Customer? customer,
   ) async {
     if (customer == null) {
-      showMessageDialog(
+      AppDialog.showMessage(
         context,
-        'Please select a customer',
-        MessageType.warning,
+        message: 'Please select a customer',
+        type: MessageType.warning,
       );
       return;
     }
     var type = ref.read(cartProvider).activeOrderType;
     if (type == null) {
-      showMessageDialog(
+      AppDialog.showMessage(
         context,
-        'Please select order type',
-        MessageType.warning,
+        message: 'Please select order type',
+        type: MessageType.warning,
       );
       return;
     }
     var diningTable = ref.read(cartProvider).activeDiningTable;
     if (type == OrderType.dine && diningTable == null) {
-      showMessageDialog(context, 'Please select a table', MessageType.warning);
+      AppDialog.showMessage(context, message: 'Please select a table', type: MessageType.warning);
       return;
     }
 
@@ -699,10 +700,10 @@ class _CartPageState extends ConsumerState<CartPage> {
 
       ref.read(cartProvider.notifier).clearCart();
 
-      await showMessageDialog(
+      await AppDialog.showMessage(
         context,
-        'Order placed successfully',
-        MessageType.success,
+        message: 'Order placed successfully',
+        type: MessageType.success,
       );
       if (context.mounted) {
         await Navigator.pushAndRemoveUntil(
@@ -719,7 +720,7 @@ class _CartPageState extends ConsumerState<CartPage> {
         );
       }
     } catch (e) {
-      showMessageDialog(context, 'Failed to place order', MessageType.error);
+      AppDialog.showMessage(context, message: 'Failed to place order', type: MessageType.error);
     }
   }
 }

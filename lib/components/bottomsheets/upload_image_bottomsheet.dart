@@ -2,6 +2,7 @@ import 'package:path/path.dart' as path;
 import 'package:http/http.dart' as http;
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery/core/widgets/app_dialog.dart';
 
 class UploadImageBottomSheet extends StatefulWidget {
   final BuildContext context;
@@ -61,7 +62,7 @@ class _UploadImageBottomSheetState extends State<UploadImageBottomSheet> {
       });
     } catch (e) {
       Navigator.pop(widget.context);
-      showMessageDialog(widget.context, e.toString(), MessageType.error);
+      AppDialog.showMessage(widget.context, message: e.toString(), type: MessageType.error);
     }
   }
 

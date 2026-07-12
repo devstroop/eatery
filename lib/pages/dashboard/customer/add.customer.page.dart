@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
@@ -188,17 +189,17 @@ class _AddCustomerPageState extends ConsumerState<AddCustomerPage> {
                 .read(customerRepositoryProvider)
                 .saveCustomer(customer)
                 .then((value) {
-                  showMessageDialog(
+                  AppDialog.showMessage(
                     context,
-                    'Customer added successfully',
-                    MessageType.success,
+                    message: 'Customer added successfully',
+                    type: MessageType.success,
                   ).then((value) => Navigator.pop(this.context, customer));
                 })
                 .onError((error, stackTrace) {
-                  showMessageDialog(
+                  AppDialog.showMessage(
                     context,
-                    error.toString(),
-                    MessageType.error,
+                    message: error.toString(),
+                    type: MessageType.error,
                   );
                 });
           },

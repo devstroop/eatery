@@ -4,6 +4,7 @@ import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery/core/widgets/app_dialog.dart';
 
 Color _pageColor = AppColors.secondary;
 
@@ -324,17 +325,17 @@ class _AddKitchenDishState extends ConsumerState<AddKitchenDish> {
                 .read(productRepositoryProvider)
                 .saveProduct(product)
                 .then((value) {
-                  showMessageDialog(
+                  AppDialog.showMessage(
                     this.context,
-                    'Product added successfully',
-                    MessageType.success,
+                    message: 'Product added successfully',
+                    type: MessageType.success,
                   ).whenComplete(() => Navigator.pop(this.context));
                 })
                 .onError((error, stackTrace) {
-                  showMessageDialog(
+                  AppDialog.showMessage(
                     this.context,
-                    'Failed to add product',
-                    MessageType.error,
+                    message: 'Failed to add product',
+                    type: MessageType.error,
                   );
                 });
           },

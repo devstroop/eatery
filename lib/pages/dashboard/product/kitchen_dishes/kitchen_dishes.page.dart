@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/core/theme/app_spacing.dart';
 import 'package:eatery/core/theme/app_typography.dart';
@@ -7,6 +8,7 @@ import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 
+import 'package:eatery/core/widgets/app_dialog.dart';
 import '../search_product.delegate.dart';
 
 Color _pageColor = AppColors.secondary;
@@ -64,22 +66,22 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                       product: product,
                       onDelete: () {
                         Navigator.pop(context);
-                        showConfirmationDialog(
+                        AppDialog.show(
                           context,
-                          'Are you sure?',
-                          'Do you want to delete this dish?',
-                          () {
+                          title: 'Are you sure?',
+                          content: 'Do you want to delete this dish?',
+                          onConfirm: () {
                             repo.deleteProduct(product);
-                            showMessageDialog(
+                            AppDialog.showMessage(
                               context,
-                              'Dish has been deleted successfully',
-                              MessageType.success,
-                              () {
+                              message: 'Dish has been deleted successfully',
+                              type: MessageType.success,
+                              onConfirm: () {
                                 setState(() {});
                               },
                             );
                           },
-                          () {
+                          onCancel: () {
                             setState(() {});
                           },
                         );
@@ -223,22 +225,22 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                               product: each,
                               onDelete: () {
                                 Navigator.pop(context);
-                                showConfirmationDialog(
+                                AppDialog.show(
                                   context,
-                                  'Are you sure?',
-                                  'Do you want to delete this dish?',
-                                  () {
+                                  title: 'Are you sure?',
+                                  content: 'Do you want to delete this dish?',
+                                  onConfirm: () {
                                     repo.deleteProduct(each);
-                                    showMessageDialog(
+                                    AppDialog.showMessage(
                                       context,
-                                      'Dish has been deleted successfully',
-                                      MessageType.success,
-                                      () {
+                                      message: 'Dish has been deleted successfully',
+                                      type: MessageType.success,
+                                      onConfirm: () {
                                         setState(() {});
                                       },
                                     );
                                   },
-                                  () {
+                                  onCancel: () {
                                     // Do nothing
                                   },
                                 );
@@ -378,22 +380,22 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                                           title: const Text('Delete'),
                                           onTap: () {
                                             Navigator.pop(context);
-                                            showConfirmationDialog(
+                                            AppDialog.show(
                                               context,
-                                              'Are you sure?',
-                                              'Do you want to delete this item?',
-                                              () {
+                                              title: 'Are you sure?',
+                                              content: 'Do you want to delete this item?',
+                                              onConfirm: () {
                                                 repo.deleteProduct(each);
-                                                showMessageDialog(
+                                                AppDialog.showMessage(
                                                   context,
-                                                  'Item has been deleted successfully',
-                                                  MessageType.success,
-                                                  () {
+                                                  message: 'Item has been deleted successfully',
+                                                  type: MessageType.success,
+                                                  onConfirm: () {
                                                     setState(() {});
                                                   },
                                                 );
                                               },
-                                              () {
+                                              onCancel: () {
                                                 // Do nothing
                                               },
                                             );

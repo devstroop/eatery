@@ -4,6 +4,7 @@ import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery/core/widgets/app_dialog.dart';
 
 Color _pageColor = AppColors.menuInventory;
 
@@ -389,17 +390,17 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
     await repo
         .saveProduct(product)
         .then((value) {
-          showMessageDialog(
+          AppDialog.showMessage(
             this.context,
-            'Product created successfully',
-            MessageType.success,
+            message: 'Product created successfully',
+            type: MessageType.success,
           ).whenComplete(() => Navigator.of(this.context).pop());
         })
         .onError((error, stackTrace) {
-          showMessageDialog(
+          AppDialog.showMessage(
             this.context,
-            'Error creating product',
-            MessageType.error,
+            message: 'Error creating product',
+            type: MessageType.error,
           );
         });
   }

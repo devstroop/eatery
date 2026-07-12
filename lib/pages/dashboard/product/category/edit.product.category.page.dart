@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/references.dart';
@@ -110,13 +111,13 @@ class _EditProductCategoryPageState
               widget.category.description = _controllerDescription.text.trim();
               widget.category.image = pickedLibraryImage?.filename;
               widget.category.save();
-              showMessageDialog(
+              AppDialog.showMessage(
                 context,
-                'Updated successfully',
-                MessageType.success,
+                message: 'Updated successfully',
+                type: MessageType.success,
               ).then((value) => Navigator.pop(context));
             } catch (_) {
-              showMessageDialog(context, 'Failed to update', MessageType.error);
+              AppDialog.showMessage(context, message: 'Failed to update', type: MessageType.error);
             }
           },
           label: 'Update',

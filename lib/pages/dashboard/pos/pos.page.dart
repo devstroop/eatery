@@ -3,6 +3,7 @@ import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/core/extensions/double_ext.dart';
+import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:eatery/pages/dashboard/customer/view.customer.page.dart';
 import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
@@ -218,10 +219,10 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                                     onPressed: () async {
                                       Navigator.pop(context);
                                       if (session.cart.isNotEmpty) {
-                                        showMessageDialog(
+                                        AppDialog.showMessage(
                                           context,
-                                          'Please clear cart before closing order',
-                                          MessageType.warning,
+                                          message: 'Please clear cart before closing order',
+                                          type: MessageType.warning,
                                         );
                                         return;
                                       }
@@ -243,10 +244,11 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                                         var totalPaid = payments.fold(0.0, (previousValue, element) => previousValue + element.amount);
                                         var totalToPay = order.grandTotal;
                                         if(totalPaid < totalToPay){
-                                          showMessageDialog(
-                                              context,
-                                              'Please pay the remaining amount before closing order',
-                                              MessageType.warning);
+                                          AppDialog.showMessage(
+                                            context,
+                                            message: 'Please pay the remaining amount before closing order',
+                                            type: MessageType.warning,
+                                          );
                                           return;
                                         }
 
@@ -434,10 +436,10 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                   InkWell(
                     onTap: () {
                       if (session.activeDiningTable?.orderId == null) {
-                        showMessageDialog(
+                        AppDialog.showMessage(
                           this.context,
-                          'No active order for this table',
-                          MessageType.warning,
+                          message: 'No active order for this table',
+                          type: MessageType.warning,
                         );
                         return;
                       }

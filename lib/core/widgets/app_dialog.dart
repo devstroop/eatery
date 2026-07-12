@@ -5,6 +5,7 @@ import '../theme/app_spacing.dart';
 import '../theme/app_shadows.dart';
 import 'app_button.dart';
 import '../../core/utils/responsive.dart';
+import '../../widgets/dialogs/showMessageDialog.dart';
 
 /// Responsive dialog/modal — on mobile shows a bottom sheet,
 /// on desktop shows a centered dialog.
@@ -21,6 +22,45 @@ class AppDialog {
   /// Shows a confirmation dialog.
   /// Pass [icon] and [iconColor] to show an icon next to the title
   /// (mirrors [showMessageDialog] functionality).
+
+  /// Convenience: shows a message dialog with icon based on [MessageType].
+  /// Replaces [showMessageDialog].
+  static Future<bool?> showMessage(
+    BuildContext context, {
+    required String message,
+    required MessageType type,
+    VoidCallback? onConfirm,
+  }) {
+    return show(
+      context,
+      icon: type.icon,
+      iconColor: type.color,
+      title: type.value,
+      content: message,
+      confirmLabel: 'OK',
+      onConfirm: onConfirm,
+    );
+  }
+
+  /// Convenience: shows a confirmation dialog.
+  /// Replaces [showConfirmationDialog].
+  static Future<bool?> showConfirmation(
+    BuildContext context, {
+    required String title,
+    required String content,
+    VoidCallback? onConfirm,
+    VoidCallback? onCancel,
+  }) {
+    return show(
+      context,
+      title: title,
+      content: content,
+      confirmLabel: 'Confirm',
+      cancelLabel: 'Cancel',
+      onConfirm: onConfirm,
+      onCancel: onCancel,
+    );
+  }
   static Future<bool?> show(
     BuildContext context, {
     required String title,

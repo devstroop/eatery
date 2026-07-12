@@ -3,6 +3,7 @@ import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/core/widgets/app_dialog.dart';
 
 Color _pageColor = AppColors.menuCategories;
 
@@ -97,10 +98,10 @@ class _AddDiningTableCategoryPageState
                 .diningTableCategoryBox
                 .add(diningTableCategory)
                 .then((value) {
-                  showMessageDialog(
+                  AppDialog.showMessage(
                     context,
-                    'Dining table category added successfully',
-                    MessageType.success,
+                    message: 'Dining table category added successfully',
+                    type: MessageType.success,
                   ).then(
                     (value) => Navigator.pop(this.context, diningTableCategory),
                   );

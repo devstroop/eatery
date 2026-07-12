@@ -9,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 
+import 'package:eatery/core/widgets/app_dialog.dart';
 import '../main.screen.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -46,7 +47,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
         (Route<dynamic> route) => false,
       );
     } else {
-      showMessageDialog(this.context, 'Invalid secure pin', MessageType.error);
+      AppDialog.showMessage(this.context, message: 'Invalid secure pin', type: MessageType.error);
     }
   }
 

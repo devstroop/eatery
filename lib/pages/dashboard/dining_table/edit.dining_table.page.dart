@@ -4,6 +4,7 @@ import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/core/widgets/app_dialog.dart';
 
 Color _pageColor = AppColors.menuCategories;
 
@@ -203,17 +204,17 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
                 .read(diningTableRepositoryProvider)
                 .saveTable(diningTable)
                 .then((value) {
-                  showMessageDialog(
+                  AppDialog.showMessage(
                     context,
-                    'Successfully updated',
-                    MessageType.success,
+                    message: 'Successfully updated',
+                    type: MessageType.success,
                   ).then((value) => Navigator.of(this.context).pop());
                 })
                 .onError((error, stackTrace) {
-                  showMessageDialog(
+                  AppDialog.showMessage(
                     context,
-                    'Failed to update',
-                    MessageType.error,
+                    message: 'Failed to update',
+                    type: MessageType.error,
                   );
                 });
           },

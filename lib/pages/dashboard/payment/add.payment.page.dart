@@ -4,6 +4,7 @@ import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Color _pageColor = AppColors.menuCategories;
@@ -207,8 +208,8 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
           label: 'Save Payment',
           onPressed: () {
             if (order == null)
-              showMessageDialog(
-                  context, 'Please select an order', MessageType.error);
+              AppDialog.showMessage(
+                  context, message: 'Please select an order', type: MessageType.error);
 
             if (_formKey.currentState!.validate()) {
               final payment = Payment(
@@ -219,10 +220,10 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
                 orderId: order?.id,
               );
               ref.read(paymentRepositoryProvider).savePayment(payment)
-                  .then((value) => showMessageDialog(
+                  .then((value) => AppDialog.showMessage(
                           context,
-                          'Payment saved successfully',
-                          MessageType.success, () async {
+                          message: 'Payment saved successfully',
+                          type: MessageType.success, onConfirm: () async {
 
                         var diningTable = ref.read(diningTableRepositoryProvider).getAllTables()
                             .where((element) =>
@@ -238,8 +239,8 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
                             double.parse(_controllerAmount.text);
                         ref.read(orderRepositoryProvider).saveOrder(order!).then((value) => Navigator.pop(context));
                       }))
-                  .onError((error, stackTrace) => showMessageDialog(
-                      context, 'Error saving payment', MessageType.error));
+                  .onError((error, stackTrace) => AppDialog.showMessage(
+                      context, message: 'Error saving payment', type: MessageType.error));
             }
           },
         ),

@@ -3,6 +3,7 @@ import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:eatery/core/widgets/app_dialog.dart';
 
 class CreateCompanyPage extends ConsumerStatefulWidget {
   const CreateCompanyPage({Key? key}) : super(key: key);
@@ -274,7 +275,7 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
                 );
             debugPrint('Company Added: $result');
           } catch (e) {
-            showMessageDialog(this.context, e.toString(), MessageType.error);
+            AppDialog.showMessage(this.context, message: e.toString(), type: MessageType.error);
           }
         },
       ),

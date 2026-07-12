@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
@@ -46,11 +47,11 @@ class _EditTaxSlabSettingsPageState extends ConsumerState<EditTaxSlabSettingsPag
       widget.taxSlab.rate = double.parse(controllerTaxRate.text);
       widget.taxSlab.type = selectedTaxType;
       widget.taxSlab.save();
-      showMessageDialog(this.context, 'Tax slab updated successfully!',
-          MessageType.success, () => Navigator.pop(this.context));
+      AppDialog.showMessage(this.context, message: 'Tax slab updated successfully!',
+          type: MessageType.success, onConfirm: () => Navigator.pop(this.context));
     } catch (_) {
-      showMessageDialog(
-          this.context, 'Something went wrong!', MessageType.error);
+      AppDialog.showMessage(
+          this.context, message: 'Something went wrong!', type: MessageType.error);
     }
   }
 

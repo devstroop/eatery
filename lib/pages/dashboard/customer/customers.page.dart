@@ -5,6 +5,7 @@ import 'package:eatery/widgets/responsive/responsive_list_view.dart';
 import 'package:eatery/pages/dashboard/customer/view.customer.page.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:eatery/core/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
@@ -180,21 +181,21 @@ class _CustomerCardState extends ConsumerState<_CustomerCard> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                  c
-                                      .delete()
-                                      .then((_) {
-                                        showMessageDialog(
-                                          context,
-                                          'Customer deleted successfully',
-                                          MessageType.success,
-                                        );
+                                      c
+                                        .delete()
+                                        .then((_) {
+                                          AppDialog.showMessage(
+                                            context,
+                                            message: 'Customer deleted successfully',
+                                            type: MessageType.success,
+                                          );
                                         Navigator.pop(ctx2);
                                       })
                                       .onError((error, _) {
-                                        showMessageDialog(
+                                        AppDialog.showMessage(
                                           context,
-                                          error.toString(),
-                                          MessageType.error,
+                                          message: error.toString(),
+                                          type: MessageType.error,
                                         );
                                       })
                                       .whenComplete(() => setState(() {}));

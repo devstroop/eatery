@@ -5,6 +5,7 @@ import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:eatery/core/widgets/widgets.dart';
 
 Color _pageColor = AppColors.menuInventory;
@@ -185,23 +186,23 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                                 product: each,
                                 onDelete: () {
                                   Navigator.pop(context);
-                                  showConfirmationDialog(
+                                  AppDialog.show(
                                     context,
-                                    'Are you sure?',
-                                    'Do you want to delete this item?',
-                                    () async {
+                                    title: 'Are you sure?',
+                                    content: 'Do you want to delete this item?',
+                                    onConfirm: () async {
                                       await repo.deleteProduct(each);
-                                      showMessageDialog(
+                                      AppDialog.showMessage(
                                         context,
-                                        'Item has been deleted',
-                                        MessageType.success,
-                                        () {
+                                        message: 'Item has been deleted',
+                                        type: MessageType.success,
+                                        onConfirm: () {
                                           Navigator.pop(context);
                                         },
                                       );
                                       setState(() {});
                                     },
-                                    () {
+                                    onCancel: () {
                                       // Do nothing
                                     },
                                   );
@@ -341,23 +342,23 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                                         title: const Text('Delete'),
                                         onTap: () {
                                           Navigator.pop(context);
-                                          showConfirmationDialog(
+                                          AppDialog.show(
                                             context,
-                                            'Are you sure?',
-                                            'Do you want to delete this item?',
-                                            () async {
+                                            title: 'Are you sure?',
+                                            content: 'Do you want to delete this item?',
+                                            onConfirm: () async {
                                               await repo.deleteProduct(each);
-                                              showMessageDialog(
+                                              AppDialog.showMessage(
                                                 context,
-                                                'Item has been deleted',
-                                                MessageType.success,
-                                                () {
+                                                message: 'Item has been deleted',
+                                                type: MessageType.success,
+                                                onConfirm: () {
                                                   Navigator.pop(context);
                                                 },
                                               );
                                               setState(() {});
                                             },
-                                            () {
+                                            onCancel: () {
                                               // Do nothing
                                             },
                                           );

@@ -3,6 +3,7 @@ import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:eatery/core/widgets/app_dialog.dart';
 
 Color _pageColor = const Color(0xFFC2592F);
 
@@ -212,10 +213,10 @@ StaffType? staffType;
               ref.read(appDatabaseProvider).staffBox.put(widget.staff.id,
                 widget.staff,
               ).whenComplete(() {
-                showMessageDialog(context, 'Staff added successfully', MessageType.success, () => Navigator.pop(context));
+                AppDialog.showMessage(context, message: 'Staff added successfully', type: MessageType.success, onConfirm: () => Navigator.pop(context));
               });
             } catch (_) {
-              showMessageDialog(context, 'Failed to add staff', MessageType.error);
+              AppDialog.showMessage(context, message: 'Failed to add staff', type: MessageType.error);
             }
           },
           label: 'Save',

@@ -3,6 +3,7 @@ import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/core/widgets/app_dialog.dart';
 
 Color _pageColor = AppColors.menuCategories;
 
@@ -117,17 +118,17 @@ class _EditDiningTableCategoryPageState
               ..description = _controllerCategoryDescription.text
               ..save()
                   .then(
-                    (value) => showMessageDialog(
+                    (value) => AppDialog.showMessage(
                       context,
-                      'Updated successfully',
-                      MessageType.success,
+                      message: 'Updated successfully',
+                      type: MessageType.success,
                     ).then((value) => Navigator.pop(this.context)),
                   )
                   .onError(
-                    (error, stackTrace) => showMessageDialog(
+                    (error, stackTrace) => AppDialog.showMessage(
                       context,
-                      'Can\'t update',
-                      MessageType.error,
+                      message: 'Can\'t update',
+                      type: MessageType.error,
                     ),
                   );
           },

@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
@@ -184,21 +185,21 @@ class _EditCustomerPageState extends ConsumerState<EditCustomerPage> {
                 .read(customerRepositoryProvider)
                 .saveCustomer(customer)
                 .then(
-                  (value) => showMessageDialog(
+                  (value) => AppDialog.showMessage(
                     context,
-                    'Customer updated successfully',
-                    MessageType.success,
-                    () {
+                    message: 'Customer updated successfully',
+                    type: MessageType.success,
+                    onConfirm: () {
                       Navigator.pop(context);
                     },
                   ),
                 )
                 .onError(
-                  (error, stackTrace) => showMessageDialog(
+                  (error, stackTrace) => AppDialog.showMessage(
                     context,
-                    'Error updating customer',
-                    MessageType.error,
-                    () {
+                    message: 'Error updating customer',
+                    type: MessageType.error,
+                    onConfirm: () {
                       Navigator.pop(context);
                     },
                   ),

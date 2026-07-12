@@ -4,6 +4,7 @@ import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
+import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
 
 class ViewCustomer extends ConsumerStatefulWidget {
@@ -64,19 +65,19 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                         .read(customerRepositoryProvider)
                         .saveCustomer(widget.customer)
                         .then(
-                          (value) => showMessageDialog(
+                          (value) => AppDialog.showMessage(
                             context,
-                            'Successfully activated',
-                            MessageType.success,
-                            () => setState(() {}),
+                            message: 'Successfully activated',
+                            type: MessageType.success,
+                            onConfirm: () => setState(() {}),
                           ),
                         )
                         .onError(
-                          (error, stackTrace) => showMessageDialog(
+                          (error, stackTrace) => AppDialog.showMessage(
                             context,
-                            error.toString(),
-                            MessageType.error,
-                            () => setState(() {}),
+                            message: error.toString(),
+                            type: MessageType.error,
+                            onConfirm: () => setState(() {}),
                           ),
                         );
                     setState(() {
@@ -89,19 +90,19 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                         .read(customerRepositoryProvider)
                         .saveCustomer(widget.customer)
                         .then(
-                          (value) => showMessageDialog(
+                          (value) => AppDialog.showMessage(
                             context,
-                            'Successfully suspended',
-                            MessageType.success,
-                            () => setState(() {}),
+                            message: 'Successfully suspended',
+                            type: MessageType.success,
+                            onConfirm: () => setState(() {}),
                           ),
                         )
                         .onError(
-                          (error, stackTrace) => showMessageDialog(
+                          (error, stackTrace) => AppDialog.showMessage(
                             context,
-                            error.toString(),
-                            MessageType.error,
-                            () => setState(() {}),
+                            message: error.toString(),
+                            type: MessageType.error,
+                            onConfirm: () => setState(() {}),
                           ),
                         );
                     setState(() {
