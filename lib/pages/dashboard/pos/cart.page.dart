@@ -3,6 +3,7 @@ import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:eatery/core/extensions/double_ext.dart';
 import 'package:eatery/core/widgets/app_dialog.dart';
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/functions/order.function.dart';
 import 'package:eatery/pages/dashboard/utility/order_print.page.dart';
 import 'package:eatery/presentation/providers/cart_provider.dart';
@@ -24,13 +25,10 @@ class _CartPageState extends ConsumerState<CartPage> {
     Color themeColor = Color(
       ref.read(cartProvider).activeOrderType?.color ?? AppColors.primary.value,
     );
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        backgroundColor: themeColor,
-        foregroundColor: AppColors.white,
-        title: const Text('Cart'),
-        actions: [
+    return AppPageShell(
+      title: 'Cart',
+      color: themeColor,
+      actions: [
           IconButton(
             icon: const Icon(Icons.more_vert),
             onPressed: () {
@@ -51,8 +49,7 @@ class _CartPageState extends ConsumerState<CartPage> {
             },
           ),
         ],
-      ),
-      body: ref.read(cartProvider).cart.isNotEmpty
+      child: ref.read(cartProvider).cart.isNotEmpty
           ? ListView(
               padding: const EdgeInsets.symmetric(vertical: 8),
               children: [
