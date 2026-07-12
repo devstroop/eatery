@@ -126,7 +126,8 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    if (e.description?.trim() != '')
+                    if (e.description != null &&
+                        e.description!.trim().isNotEmpty)
                       Text(e.description!.trim()),
                     Text(
                       '${e.capacity} seats',
