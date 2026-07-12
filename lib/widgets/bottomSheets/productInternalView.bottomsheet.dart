@@ -1,14 +1,14 @@
 import 'package:eatery/references.dart';
 
 class ProductInternalViewBottomsheet extends StatefulWidget {
-  const ProductInternalViewBottomsheet(
-      {Key? key,
-      required this.product,
-      this.color,
-      required this.onEdit,
-      required this.onDelete,
-      this.categoryName})
-      : super(key: key);
+  const ProductInternalViewBottomsheet({
+    Key? key,
+    required this.product,
+    this.color,
+    required this.onEdit,
+    required this.onDelete,
+    this.categoryName,
+  }) : super(key: key);
   final Product product;
   final Color? color;
   final VoidCallback onEdit;
@@ -35,36 +35,46 @@ class _ProductInternalViewBottomsheetState
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               PageTitle(
-                  title: widget.product.name,
-                  subtitle: widget.categoryName ?? 'Uncategorized'),
+                title: widget.product.name,
+                subtitle: widget.categoryName ?? 'Uncategorized',
+              ),
               Switch(
-                  activeColor: widget.color,
-                  value: widget.product.isActive,
-                  onChanged: (value) async {
-                    widget.product.isActive = value;
-                    await widget.product.save();
-                    setState(() {});
-                  })
+                activeColor: widget.color,
+                value: widget.product.isActive,
+                onChanged: (value) async {
+                  widget.product.isActive = value;
+                  await widget.product.save();
+                  setState(() {});
+                },
+              ),
             ],
           ),
           const SizedBox(height: 12.0),
           Expanded(
-              child: Center(
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: const BorderRadius.all(Radius.circular(16.0)),
-                image: widget.product.image != null &&
-                        File(widget.product.image ?? '').existsSync()
-                    ? DecorationImage(
-                        image: FileImage(File(widget.product.image!)),
-                        fit: BoxFit.cover)
-                    : const DecorationImage(
-                        image: AssetImage('assets/images/default.jpg'),
-                        fit: BoxFit.cover),
+            child: Center(
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: const BorderRadius.all(Radius.circular(16.0)),
+                  image:
+                      widget.product.image != null &&
+                          File(widget.product.image ?? '').existsSync()
+                      ? DecorationImage(
+                          image: ResizeImage.resizeIfNeeded(
+                            200,
+                            200,
+                            FileImage(File(widget.product.image!)),
+                          ),
+                          fit: BoxFit.cover,
+                        )
+                      : const DecorationImage(
+                          image: AssetImage('assets/images/default.jpg'),
+                          fit: BoxFit.cover,
+                        ),
+                ),
               ),
             ),
-          )),
+          ),
           const SizedBox(height: 8.0),
           if (widget.product.description != null)
             const Text(
@@ -92,16 +102,14 @@ class _ProductInternalViewBottomsheetState
                   child: const Text('Edit'),
                 ),
               ),
-              const SizedBox(
-                width: 8.0,
-              ),
+              const SizedBox(width: 8.0),
               PrimaryButton(
                 color: const Color(0xFFE53935),
                 onPressed: widget.onDelete,
                 child: const Icon(Icons.delete),
               ),
             ],
-          )
+          ),
         ],
       ),
     );
