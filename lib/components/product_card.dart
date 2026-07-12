@@ -9,9 +9,12 @@ class ProductCard extends StatelessWidget {
       this.onTap,
       required this.product,
       required this.width,
-      required this.height})
+      required this.height,
+      this.currencySymbol = '',
+      this.cartQuantity = 0})
       : super(key: key);
   final Product product;
+  final int cartQuantity;
 
   final Color themeColor;
   final Function()? onRemove;
@@ -19,6 +22,7 @@ class ProductCard extends StatelessWidget {
   final Function()? onTap;
   final double width;
   final double height;
+  final String currencySymbol;
 
   @override
   Widget build(BuildContext context) {
@@ -139,7 +143,7 @@ class ProductCard extends StatelessWidget {
                                   if (product.salePrice != null &&
                                       product.salePrice != product.mrpPrice)
                                     Text(
-                                      '${Common.currency?.symbol ?? ''}${product.mrpPrice}',
+                                      '$currencySymbol${product.mrpPrice}',
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                           fontSize: 10.0,
@@ -150,7 +154,7 @@ class ProductCard extends StatelessWidget {
                                     ),
                                   if (product.salePrice != null)
                                     Text(
-                                      '${Common.currency?.symbol ?? ''}${product.salePrice}',
+                                      '$currencySymbol${product.salePrice}',
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                           fontSize: 12.0,
@@ -159,7 +163,7 @@ class ProductCard extends StatelessWidget {
                                     ),
                                   if (product.salePrice == null)
                                     Text(
-                                      '${Common.currency?.symbol ?? ''}${product.mrpPrice}',
+                                      '$currencySymbol${product.mrpPrice}',
                                       overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                           fontSize: 12.0,
@@ -183,8 +187,7 @@ class ProductCard extends StatelessWidget {
                                         child: Row(
                                           mainAxisSize: MainAxisSize.min,
                                           children: [
-                                            Common.cart
-                                                    .contains(product)
+                                            cartQuantity > 0
                                                 ? InkWell(
                                                     onTap: onRemove,
                                                     child: Icon(
@@ -194,20 +197,14 @@ class ProductCard extends StatelessWidget {
                                                     ),
                                                   )
                                                 : Container(),
-                                            Common.cart
-                                                    .contains(product)
+                                            cartQuantity > 0
                                                 ? Padding(
                                                     padding:
                                                         const EdgeInsetsDirectional
                                                                 .fromSTEB(
                                                             4, 0, 4, 0),
                                                     child: Text(
-                                                      Common.cart
-                                                          .where((element) =>
-                                                              element.id ==
-                                                              product.id)
-                                                          .length
-                                                          .toString(),
+                                                      cartQuantity.toString(),
                                                       style: const TextStyle(
                                                         fontWeight:
                                                             FontWeight.w600,

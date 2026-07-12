@@ -1,17 +1,20 @@
 import 'package:eatery/pages/dashboard/payment/payments.page.dart';
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/presentation/providers/company_provider.dart';
+import 'package:eatery/presentation/providers/cart_provider.dart';
 
 import 'order/orders.page.dart';
 import 'pos/cart.page.dart';
 
-class DashboardPage extends StatefulWidget {
+class DashboardPage extends ConsumerStatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
 
   @override
-  _DashboardPageState createState() => _DashboardPageState();
+  ConsumerState<DashboardPage> createState() => _DashboardPageState();
 }
 
-class _DashboardPageState extends State<DashboardPage> {
+class _DashboardPageState extends ConsumerState<DashboardPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
@@ -22,6 +25,8 @@ class _DashboardPageState extends State<DashboardPage> {
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
+    final company = ref.read(companyProvider);
+    final cart = ref.read(cartProvider).cart;
 
     double crossAxisItemCount;
     double menuSize;
@@ -58,7 +63,7 @@ class _DashboardPageState extends State<DashboardPage> {
 
     menuSize = (screenWidth - (spacing * (crossAxisItemCount + 1))) /
         crossAxisItemCount;
-    if (Common.company == null) {
+    if (company == null) {
       return const Center(
         child: CircularProgressIndicator(),
       );
@@ -73,9 +78,9 @@ class _DashboardPageState extends State<DashboardPage> {
           padding: EdgeInsets.symmetric(horizontal: spacing, vertical: 60),
           children: [
             DashboardHeader(
-              companyName: Common.company!.name,
-              image: Common.company?.logo != null
-                  ? LibraryImage(Common.company?.logo).image
+              companyName: company.name,
+              image: company.logo != null
+                  ? LibraryImage(company.logo).image
                   : null,
               suffix: [
                 // Cart with badge
@@ -104,7 +109,7 @@ class _DashboardPageState extends State<DashboardPage> {
                           shape: BoxShape.circle,
                         ),
                         child: Text(
-                          Common.cart.length.toString(),
+                          cart.length.toString(),
                           style: const TextStyle(
                             color: Colors.white,
                             fontSize: 10,
@@ -153,7 +158,7 @@ class _DashboardPageState extends State<DashboardPage> {
               ],
             ),
             UpgradeNotification(
-              company: Common.company,
+              company: company,
             ),
             const SizedBox(
               height: 16,
