@@ -7,6 +7,7 @@ import 'package:eatery/data/database/eatery_database.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// The app's single database instance, initialized once at startup.
@@ -91,11 +92,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
     if (appDatabase.isInitialized) {
-      return MaterialApp.router(
-        title: 'Eatery',
-        debugShowCheckedModeBanner: false,
-        theme: AppTheme.light,
-        routerConfig: createAppRouter(appDatabase),
+      return _KeyboardStateSync(
+        child: MaterialApp.router(
+          title: 'Eatery',
+          debugShowCheckedModeBanner: false,
+          theme: AppTheme.light,
+          routerConfig: createAppRouter(appDatabase),
+        ),
       );
     }
     return MaterialApp(
@@ -114,4 +117,44 @@ class MyApp extends StatelessWidget {
       ),
     );
   }
+}
+
+/// Resets [HardwareKeyboard] state when the app returns to foreground.
+///
+/// Flutter desktop (especially macOS) loses [KeyUpEvent]s when the window
+/// loses focus. The stale pressed-key state causes subsequent keystrokes
+/// to be silently dropped. This widget syncs the framework's keyboard
+/// state with the engine on every [AppLifecycleState.resumed] transition.
+class _KeyboardStateSync extends StatefulWidget {
+  const _KeyboardStateSync({required this.child});
+
+  final Widget child;
+
+  @override
+  State<_KeyboardStateSync> createState() => _KeyboardStateSyncState();
+}
+
+class _KeyboardStateSyncState extends State<_KeyboardStateSync>
+    with WidgetsBindingObserver {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      HardwareKeyboard.instance.syncKeyboardState();
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
 }
