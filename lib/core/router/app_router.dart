@@ -1,6 +1,7 @@
 import 'package:eatery/data/database/eatery_database.dart';
 import 'package:eatery/data/models/product/product.dart';
 import 'package:eatery/pages/authentication/login.page.dart';
+import 'package:eatery/pages/dashboard/pos/views/kProduct.view.dart';
 import 'package:eatery/pages/main.screen.dart';
 import 'package:eatery/pages/create_company/create_company.page.dart';
 import 'package:eatery/pages/dashboard/dashboard.page.dart';
@@ -379,6 +380,14 @@ GoRouter createAppRouter(EateryDatabase db) {
         builder: (context, state) {
           final company = state.extra as dynamic;
           return UpgradePage(company: company);
+        },
+      ),
+      GoRoute(
+        name: 'productView',
+        path: '/pos/product-view',
+        builder: (context, state) {
+          final product = state.extra as Product;
+          return KProductView(product: product);
         },
       ),
     ],

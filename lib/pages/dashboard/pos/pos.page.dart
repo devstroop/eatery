@@ -172,13 +172,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                 delegate: SearchProductDelegate(
                   productsRepo.getAllProducts(),
                   (product) {
-                    // TODO: GoRouter
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => KProductView(product: product),
-                      ),
-                    );
+                    context.pushNamed('productView', extra: product);
                   },
                 ),
               );
