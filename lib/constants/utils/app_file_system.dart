@@ -1,53 +1,55 @@
 import 'package:archive/archive.dart';
 import 'package:eatery/references.dart';
 
+/// Canonical source for app data directory paths.
+///
+/// Replaces the old path fields in [Common]. All app directories are
+/// created on first access under [baseDir].
 class AppFileSystem {
-  static Future<Directory> appDataRoot() async {
-    return Directory(await baseDirectoryPath());
-  }
+  /// Root data directory — set once during app startup.
+  static String _base = '';
 
-  static Future<String> getDataDir() async {
-    if (!(Directory('${(await appDataRoot()).path}/data')).existsSync()) {
-      await Directory('${(await appDataRoot()).path}/data')
-          .create(recursive: true);
+  /// Initialize with the platform-specific app data root.
+  /// Call this once from main.dart.
+  static Future<void> init(String base) async {
+    _base = base;
+    for (final dir in [
+      dataDir,
+      imagesDir,
+      backupDir,
+      exportDir,
+      tempDir,
+      cacheDir,
+      shareDir,
+    ]) {
+      final d = Directory(dir);
+      if (!d.existsSync()) await d.create(recursive: true);
     }
-
-    return '${(await appDataRoot()).path}/data';
   }
 
-  static Future<String> getBackupDir() async {
-    if (!(Directory('${(await appDataRoot()).path}/backup')).existsSync()) {
-      await Directory('${(await appDataRoot()).path}/backup')
-          .create(recursive: true);
-    }
+  /// Root directory (platform-specific app documents/support dir).
+  static String get baseDir => _base;
 
-    return '${(await appDataRoot()).path}/backup';
-  }
+  /// Hive database storage.
+  static String get dataDir => '$_base/data';
 
-  static Future<String> getExportDir() async {
-    if (!(Directory('${(await appDataRoot()).path}/export')).existsSync()) {
-      await Directory('${(await appDataRoot()).path}/export')
-          .create(recursive: true);
-    }
-    return '${(await appDataRoot()).path}/export';
-  }
+  /// Uploaded / imported images.
+  static String get imagesDir => '$_base/images';
 
-  static Future<String> getShareDir() async {
-    if (!(Directory('${(await appDataRoot()).path}/share')).existsSync()) {
-      await Directory('${(await appDataRoot()).path}/share')
-          .create(recursive: true);
-    }
-    return '${(await appDataRoot()).path}/share';
-  }
+  /// Backup ZIP files.
+  static String get backupDir => '$_base/backups';
 
-  static Future<String> getResourcesDir() async {
-    if (!(Directory('${(await appDataRoot()).path}/images')).existsSync()) {
-      await Directory('${(await appDataRoot()).path}/images')
-          .create(recursive: true);
-    }
+  /// Exported Excel/JSON files.
+  static String get exportDir => '$_base/exports';
 
-    return '${(await appDataRoot()).path}/images';
-  }
+  /// Temporary working directory (cleared on restart).
+  static String get tempDir => '$_base/temp';
+
+  /// Image cache.
+  static String get cacheDir => '$_base/cache';
+
+  /// Shared files for system share sheet.
+  static String get shareDir => '$_base/share';
 
   static String? pickedImage;
 
@@ -135,14 +137,14 @@ class AppFileSystem {
 
                             if (photo != null) {
                               if (!(Directory(
-                                      '${(await appDataRoot()).path}/images'))
+                                      '${(await Directory(AppFileSystem.baseDir)).path}/images'))
                                   .existsSync()) {
                                 await Directory(
-                                        '${(await appDataRoot()).path}/images')
+                                        '${(await Directory(AppFileSystem.baseDir)).path}/images')
                                     .create(recursive: true);
                               }
                               String path =
-                                  '${'${(await appDataRoot()).path}/images'}/${getRandomString(32)}.${photo.name.split('.').last}';
+                                  '${'${(await Directory(AppFileSystem.baseDir)).path}/images'}/${getRandomString(32)}.${photo.name.split('.').last}';
                               photo.saveTo(path);
                               pickedImage = path;
                               Navigator.pop(context);
@@ -166,14 +168,14 @@ class AppFileSystem {
 
                           if (photo != null) {
                             if (!(Directory(
-                                    '${(await appDataRoot()).path}/images'))
+                                    '${(await Directory(AppFileSystem.baseDir)).path}/images'))
                                 .existsSync()) {
                               await Directory(
-                                      '${(await appDataRoot()).path}/images')
+                                      '${(await Directory(AppFileSystem.baseDir)).path}/images')
                                   .create(recursive: true);
                             }
                             String path =
-                                '${'${(await appDataRoot()).path}/images'}/${getRandomString(32)}.${photo.name.split('.').last}';
+                                '${'${(await Directory(AppFileSystem.baseDir)).path}/images'}/${getRandomString(32)}.${photo.name.split('.').last}';
                             photo.saveTo(path);
                             pickedImage = path;
                             Navigator.pop(context);

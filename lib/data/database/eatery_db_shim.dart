@@ -17,8 +17,21 @@ class EateryDB {
     instance._db = db;
   }
 
+  /// Throws a descriptive error if the shim was used before [bind] was called.
+  void _ensureBound() {
+    if (_db == null) {
+      throw StateError(
+        'EateryDB.instance accessed before EateryDB.bind() was called in main.dart. '
+        'The app must initialize the database before accessing any box.',
+      );
+    }
+  }
+
   /// Initializes the underlying database. Called from main.dart.
-  Future<void> init([String? _]) => instance._db!.init();
+  Future<void> init([String? _]) {
+    _ensureBound();
+    return instance._db!.init();
+  }
 
   // --- Instance-level box getters (delegate to _db) ---
 

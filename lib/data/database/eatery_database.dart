@@ -10,6 +10,12 @@ class EateryDatabase {
 
   final String dataDir;
 
+  /// True after [init] completes successfully.
+  bool isInitialized = false;
+
+  /// True when [init] completed and a company exists.
+  bool get hasCompany => isInitialized && _companyBox != null && _companyBox!.values.isNotEmpty;
+
   // Lazy-loaded boxes — accessed via getters so they work after init()
   Box<Company>? _companyBox;
   Box<KCurrency>? _currencyBox;
@@ -123,6 +129,7 @@ class EateryDatabase {
     _printerTypeBox = await Hive.openBox<PrinterType>('printerType');
     _paymentBox = await Hive.openBox<Payment>('payment');
     _paymentModeBox = await Hive.openBox<PaymentMode>('paymentMode');
+    isInitialized = true;
   }
 
   /// Deletes all boxes from disk (for data reset).

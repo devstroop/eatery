@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:eatery/constants/utils/app_file_system.dart';
 import 'package:eatery/data/database/eatery_database.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
 import 'package:eatery/pages/main.screen.dart';
@@ -67,16 +68,17 @@ Future setupDataAndInitDB() async {
   }
 
   Common.baseDirectory = basePath;
+  await AppFileSystem.init(basePath);
 
   // Initialize the injectable database
-  appDatabase = EateryDatabase(dataDir: Common.dataDirectory!);
+  appDatabase = EateryDatabase(dataDir: AppFileSystem.dataDir);
   await appDatabase.init();
 
   // Bind legacy shim so EateryDB.instance still works
   EateryDB.bind(appDatabase);
 
   await FastCachedImageConfig.init(
-    subDir: '${Common.cacheDirectory}/',
+    subDir: '${AppFileSystem.cacheDir}/',
     clearCacheAfter: const Duration(days: 15),
   );
 }
@@ -87,14 +89,31 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
+    if (appDatabase.isInitialized) {
+      return MaterialApp(
+        title: 'Eatery',
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(useMaterial3: true, primarySwatch: Colors.blue),
+        home: Scaffold(
+          body: appDatabase.hasCompany
+              ? const LoginPage()
+              : const MainScreen(),
+        ),
+      );
+    }
     return MaterialApp(
-      title: 'Eatery',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(useMaterial3: true, primarySwatch: Colors.blue),
       home: Scaffold(
-        body: appDatabase.companyBox.values.isNotEmpty
-            ? const LoginPage()
-            : const MainScreen(),
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: const [
+              CircularProgressIndicator(),
+              SizedBox(height: 16),
+              Text('Initializing database...'),
+            ],
+          ),
+        ),
       ),
     );
   }

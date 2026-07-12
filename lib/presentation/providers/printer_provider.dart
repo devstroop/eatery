@@ -10,8 +10,8 @@ final printerRepositoryProvider = Provider<PrinterRepository>((ref) {
 
 final printerListProvider =
     AsyncNotifierProvider<PrinterListNotifier, List<Printer>>(
-  PrinterListNotifier.new,
-);
+      PrinterListNotifier.new,
+    );
 
 class PrinterListNotifier extends AsyncNotifier<List<Printer>> {
   @override

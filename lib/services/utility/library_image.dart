@@ -1,11 +1,10 @@
 import 'dart:io';
+import 'package:eatery/constants/utils/app_file_system.dart';
 import 'package:eatery/references.dart';
 import 'package:flutter/material.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
 import 'package:http/http.dart' as http;
-
-import '../../constants/common.dart';
 
 class LibraryImage {
   late String? filename;
@@ -27,7 +26,7 @@ class LibraryImage {
     return filename != null && await file.exists();
   }
 
-  String get absolutePath => '${Common.baseDirectory}$_subDirectory/$filename';
+  String get absolutePath => '${AppFileSystem.baseDir}$_subDirectory/$filename';
 
   String? get basename => exists() ? path.basename(filename!) : null;
 
@@ -84,10 +83,10 @@ class LibraryImageProvider {
     if (sourceFile.existsSync()) {
       try {
         final destinationFile = sourceFile
-            .copySync('${Common.imagesDirectory}/${path.basename(imagePath)}');
+            .copySync('${AppFileSystem.imagesDir}/${path.basename(imagePath)}');
         return LibraryImage(destinationFile.path
             .replaceAll('\\', '/')
-            .replaceFirst(Common.imagesDirectory!, ''));
+            .replaceFirst(AppFileSystem.imagesDir, ''));
       } catch (e) {
         rethrow;
       }
@@ -111,13 +110,13 @@ class LibraryImageProvider {
             extension = extension?.split('/').last ?? 'jpg';
             fileName = '${DateTime.now().millisecondsSinceEpoch}.$extension';
           }
-          final filePath = '${Common.imagesDirectory}/$fileName';
+          final filePath = '${AppFileSystem.imagesDir}/$fileName';
           var file = File(filePath);
           return await file
               .writeAsBytes(bytes)
               .then((value) => LibraryImage(file.path
                   .replaceAll('\\', '/')
-                  .replaceFirst('${Common.imagesDirectory!}/', '')))
+                  .replaceFirst('${AppFileSystem.imagesDir}/', '')))
               .onError((error, stackTrace) =>
                   throw Exception('Failed to write image to file: $error'));
         } else {
@@ -133,17 +132,17 @@ class LibraryImageProvider {
   }
 
   static List<LibraryImage> getAll({Function(LibraryImage)? listen}) {
-    final directory = Directory('${Common.baseDirectory}/images');
+    final directory = Directory('${AppFileSystem.baseDir}/images');
     if (directory.existsSync()) {
       return directory.listSync().map((e) {
         if (listen != null) {
           listen(LibraryImage(e.path
               .replaceAll('\\', '/')
-              .replaceFirst('${Common.baseDirectory}/images/', '')));
+              .replaceFirst('${AppFileSystem.baseDir}/images/', '')));
         }
         return LibraryImage(e.path
             .replaceAll('\\', '/')
-            .replaceFirst('${Common.baseDirectory}/images/', ''));
+            .replaceFirst('${AppFileSystem.baseDir}/images/', ''));
       }).toList();
     }
     return [];
@@ -151,21 +150,21 @@ class LibraryImageProvider {
 
   static Future<List<LibraryImage>> getAllAsync(
       {Function(LibraryImage)? listen}) async {
-    debugPrint(Common.baseDirectory);
-    final directory = Directory('${Common.baseDirectory}/images');
+    debugPrint(AppFileSystem.baseDir);
+    final directory = Directory('${AppFileSystem.baseDir}/images');
     bool exists = await directory.exists();
     if (exists) {
       return directory.list().map((e) {
         if (listen != null) {
           LibraryImage libraryImage = LibraryImage(e.path
               .replaceAll('\\', '/')
-              .replaceFirst('${Common.baseDirectory}/images/', ''));
+              .replaceFirst('${AppFileSystem.baseDir}/images/', ''));
           listen(libraryImage);
         }
 
         return LibraryImage(e.path
             .replaceAll('\\', '/')
-            .replaceFirst('${Common.baseDirectory}/images/', ''));
+            .replaceFirst('${AppFileSystem.baseDir}/images/', ''));
       }).toList();
     }
     return [];

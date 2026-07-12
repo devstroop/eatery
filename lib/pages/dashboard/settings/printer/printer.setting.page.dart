@@ -123,8 +123,10 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          const Text('Saved Printers',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          const Text(
+            'Saved Printers',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 8),
           savedPrinters.when(
             data: (printers) {
@@ -139,22 +141,23 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
               }
               return Column(
                 children: printers
-                    .map((p) => Card(
-                          child: ListTile(
-                            leading: const Icon(Icons.print),
-                            title: Text(p.name),
-                            subtitle: Text(p.bluetoothAddress ?? ''),
-                            trailing: IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () => _removePrinter(p),
-                            ),
+                    .map(
+                      (p) => Card(
+                        child: ListTile(
+                          leading: const Icon(Icons.print),
+                          title: Text(p.name),
+                          subtitle: Text(p.bluetoothAddress ?? ''),
+                          trailing: IconButton(
+                            icon: const Icon(Icons.delete, color: Colors.red),
+                            onPressed: () => _removePrinter(p),
                           ),
-                        ))
+                        ),
+                      ),
+                    )
                     .toList(),
               );
             },
-            loading: () =>
-                const Center(child: CircularProgressIndicator()),
+            loading: () => const Center(child: CircularProgressIndicator()),
             error: (e, _) => Text('Error: $e'),
           ),
 
@@ -162,8 +165,10 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
           const Divider(),
           const SizedBox(height: 16),
 
-          const Text('Bluetooth Discovery',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          const Text(
+            'Bluetooth Discovery',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 8),
           ElevatedButton.icon(
             onPressed: _isScanning ? null : _startScan,
@@ -171,43 +176,48 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
                 ? const SizedBox(
                     width: 18,
                     height: 18,
-                    child: CircularProgressIndicator(strokeWidth: 2))
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  )
                 : const Icon(Icons.bluetooth_searching),
             label: Text(_isScanning ? 'Scanning...' : 'Scan for Printers'),
           ),
           const SizedBox(height: 8),
           if (_discovered.isNotEmpty)
-            ..._discovered.map((bp) => Card(
-                  child: ListTile(
-                    leading: const Icon(Icons.bluetooth),
-                    title: Text(bp.name),
-                    subtitle: Text(bp.address),
-                    trailing: IconButton(
-                      icon: const Icon(Icons.add_circle, color: Colors.green),
-                      onPressed: () => _addPrinter(bp.name, bp.address),
-                    ),
+            ..._discovered.map(
+              (bp) => Card(
+                child: ListTile(
+                  leading: const Icon(Icons.bluetooth),
+                  title: Text(bp.name),
+                  subtitle: Text(bp.address),
+                  trailing: IconButton(
+                    icon: const Icon(Icons.add_circle, color: Colors.green),
+                    onPressed: () => _addPrinter(bp.name, bp.address),
                   ),
-                )),
+                ),
+              ),
+            ),
           if (_discovered.isEmpty && !_isScanning)
             const Padding(
               padding: EdgeInsets.all(8),
               child: Text(
-                  'Tap "Scan for Printers" to discover Bluetooth devices',
-                  style: TextStyle(color: Colors.grey)),
+                'Tap "Scan for Printers" to discover Bluetooth devices',
+                style: TextStyle(color: Colors.grey),
+              ),
             ),
 
           const SizedBox(height: 24),
           const Divider(),
           const SizedBox(height: 16),
 
-          const Text('Print Settings',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+          const Text(
+            'Print Settings',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
           const SizedBox(height: 8),
           Card(
             child: SwitchListTile(
               title: const Text('Auto-print on sale'),
-              subtitle: const Text(
-                  'Automatically print receipt after payment'),
+              subtitle: const Text('Automatically print receipt after payment'),
               value: _autoPrint,
               onChanged: _saveAutoPrint,
             ),
@@ -239,4 +249,3 @@ class _DiscoveredPrinter {
   final String address;
   const _DiscoveredPrinter(this.name, this.address);
 }
-
