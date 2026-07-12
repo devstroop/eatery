@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class PosCategoryWidget extends StatelessWidget {
   const PosCategoryWidget({
@@ -29,19 +30,19 @@ class PosCategoryWidget extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               color:
-                  active ? KColors.black600 : KColors.white,
+                  active ? AppColors.black600 : AppColors.white,
               boxShadow: [
                 BoxShadow(
                   color: active
-                      ? KColors.black600
-                      : KColors.white,
+                      ? AppColors.black600
+                      : AppColors.white,
                 ),
               ],
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
                 color: active
-                    ? KColors.black600
-                    : KColors.white,
+                    ? AppColors.black600
+                    : AppColors.white,
                 width: 1,
               ),
             ),
@@ -68,8 +69,8 @@ class PosCategoryWidget extends StatelessWidget {
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       color: active
-                          ? KColors.white
-                          : KColors.black600,
+                          ? AppColors.white
+                          : AppColors.black600,
                     ),
                   ),
                 ],

@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class CustomTextFromField extends StatefulWidget {
   const CustomTextFromField({
@@ -72,7 +73,7 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
           Text(
             widget.label!,
             style: TextStyle(
-              color: KColors.black600,
+              color: AppColors.black600,
               fontSize: 12,
               fontWeight: FontWeight.w500,
             ),
@@ -108,46 +109,46 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
                         icon: obscureText ?? false
                             ? const Icon(Icons.remove_red_eye)
                             : const Icon(Icons.visibility_off),
-                        color: KColors.white600,
+                        color: AppColors.white600,
                       )
                     : null,
             hintText: widget.hint,
             hintStyle: TextStyle(
-              color: KColors.white600,
+              color: AppColors.white600,
               fontSize: 14,
               fontWeight: FontWeight.normal,
             ),
             enabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: KColors.white600,
+                color: AppColors.white600,
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(8),
             ),
             errorBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: KColors.red,
+                color: AppColors.error,
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(8),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: KColors.red,
+                color: AppColors.error,
                 width: 2,
               ),
               borderRadius: BorderRadius.circular(8),
             ),
             disabledBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: KColors.white600,
+                color: AppColors.white600,
                 width: 1,
               ),
               borderRadius: BorderRadius.circular(8),
             ),
             focusedBorder: OutlineInputBorder(
               borderSide: BorderSide(
-                color: widget.themeColor ?? KColors.primary,
+                color: widget.themeColor ?? AppColors.primary,
                 width: 2,
               ),
               borderRadius: BorderRadius.circular(8),
@@ -162,7 +163,7 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
                 const EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
           ),
           style: TextStyle(
-            color: KColors.black600,
+            color: AppColors.black600,
             fontSize: 14,
             fontWeight: FontWeight.normal,
           ),

@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class LeadingImageWidget extends StatelessWidget {
   const LeadingImageWidget({super.key, required this.image, this.size = 48, this.elevation = 0, this.borderRadius, this.backgroundCo0lor, this.border});
@@ -19,7 +20,7 @@ class LeadingImageWidget extends StatelessWidget {
         decoration: BoxDecoration(
           border: border ?? Border.all(
               width: 0.5,
-              color: (backgroundCo0lor ?? KColors.white600).withOpacity(0.5)
+              color: (backgroundCo0lor ?? AppColors.white600).withOpacity(0.5)
           ),
           borderRadius: borderRadius ?? BorderRadius.circular(size/2),
           color: backgroundCo0lor ?? Colors.white,

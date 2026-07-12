@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class BottomViewGrip extends StatelessWidget {
   const BottomViewGrip({Key? key}) : super(key: key);
@@ -16,7 +17,7 @@ class BottomViewGrip extends StatelessWidget {
             bottomLeft: Radius.circular(2),
             bottomRight: Radius.circular(2),
           ),
-          color: KColors.white600,
+          color: AppColors.white600,
         ));
   }
 }

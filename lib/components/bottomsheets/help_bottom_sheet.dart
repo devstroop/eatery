@@ -1,5 +1,6 @@
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class HelpBottomSheet extends StatelessWidget {
   const HelpBottomSheet({Key? key}) : super(key: key);
@@ -43,7 +44,7 @@ class HelpBottomSheet extends StatelessWidget {
                       }
                     },
                     icon: Icon(Icons.link,
-                        color: KColors.secondary2))
+                        color: AppColors.secondary2))
               ],
             ),
             const SizedBox(
@@ -54,7 +55,7 @@ class HelpBottomSheet extends StatelessWidget {
                 Icon(
                   Icons.call,
                   size: 24,
-                  color: KColors.secondary2,
+                  color: AppColors.secondary2,
                 ),
                 const SizedBox(
                   width: 12,
@@ -73,7 +74,7 @@ class HelpBottomSheet extends StatelessWidget {
                 Icon(
                   Icons.comment,
                   size: 24,
-                  color: KColors.secondary2,
+                  color: AppColors.secondary2,
                 ),
                 const SizedBox(
                   width: 12,

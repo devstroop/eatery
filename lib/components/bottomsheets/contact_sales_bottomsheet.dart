@@ -1,5 +1,6 @@
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class ContactSalesBottomSheet extends StatelessWidget {
   const ContactSalesBottomSheet({Key? key}) : super(key: key);
@@ -53,7 +54,7 @@ class ContactSalesBottomSheet extends StatelessWidget {
                 Icon(
                   Icons.call,
                   size: 24,
-                  color: KColors.secondary2,
+                  color: AppColors.secondary2,
                 ),
                 const SizedBox(
                   width: 12,
@@ -72,7 +73,7 @@ class ContactSalesBottomSheet extends StatelessWidget {
                 Icon(
                   Icons.email,
                   size: 24,
-                  color: KColors.secondary2,
+                  color: AppColors.secondary2,
                 ),
                 const SizedBox(
                   width: 12,

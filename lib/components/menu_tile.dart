@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class MenuTile extends StatelessWidget {
   const MenuTile({Key? key, required this.title, this.subtitle, required this.prefixIcon, required this.postfixIcon, this.color, this.onTap}) : super(key: key);
@@ -12,8 +13,8 @@ class MenuTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       onTap: onTap,
-      leading: Icon(prefixIcon, color: color ?? KColors.black500),
-      title: Text(title, style: TextStyle(fontWeight: FontWeight.w500, color: color ?? KColors.black500)),
+      leading: Icon(prefixIcon, color: color ?? AppColors.black500),
+      title: Text(title, style: TextStyle(fontWeight: FontWeight.w500, color: color ?? AppColors.black500)),
       subtitle: subtitle != null ? Text(subtitle!, style: TextStyle(color: Colors.grey[700])) : null,
       trailing: Icon(postfixIcon, color: Colors.grey[400]),
     );

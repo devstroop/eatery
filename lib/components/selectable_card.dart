@@ -1,5 +1,6 @@
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class SelectableCard extends StatelessWidget {
   const SelectableCard(
@@ -32,7 +33,7 @@ class SelectableCard extends StatelessWidget {
           color: Colors.white,
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
-            color: selected ? (highlightColor ?? KColors.secondary2) : KColors.white600,
+            color: selected ? (highlightColor ?? AppColors.secondary2) : AppColors.white600,
             width: selected ? 2 : 1,
           ),
         ),
@@ -49,7 +50,7 @@ class SelectableCard extends StatelessWidget {
                   Text(
                     header,
                     style: TextStyle(
-                        fontWeight: FontWeight.w500, color: KColors.black500),
+                        fontWeight: FontWeight.w500, color: AppColors.black500),
                   ),
                   selected
                       ? SizedBox(
@@ -63,7 +64,7 @@ class SelectableCard extends StatelessWidget {
                                     width: 24,
                                     height: 24,
                                     decoration: BoxDecoration(
-                                      color: (highlightColor ?? KColors.secondary2),
+                                      color: (highlightColor ?? AppColors.secondary2),
                                       borderRadius: const BorderRadius.all(
                                           Radius.elliptical(24, 24)),
                                     ))),
@@ -74,7 +75,7 @@ class SelectableCard extends StatelessWidget {
                                     width: 10,
                                     height: 10,
                                     decoration: BoxDecoration(
-                                      color: KColors.white,
+                                      color: AppColors.white,
                                       borderRadius: const BorderRadius.all(
                                           Radius.elliptical(10, 10)),
                                     ))),
@@ -99,7 +100,7 @@ class SelectableCard extends StatelessWidget {
                 title,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  color: KColors.black900,
+                  color: AppColors.black900,
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                 ),
@@ -116,7 +117,7 @@ class SelectableCard extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.all(6.0),
                         decoration: BoxDecoration(
-                          color: (highlightColor ?? KColors.secondary2)
+                          color: (highlightColor ?? AppColors.secondary2)
                               .withOpacity(0.2),
                           borderRadius:
                               const BorderRadius.all(Radius.elliptical(4, 4)),
@@ -141,7 +142,7 @@ class SelectableCard extends StatelessWidget {
                   : Container(),
               Text(
                 footer,
-                style: TextStyle(color: KColors.black500),
+                style: TextStyle(color: AppColors.black500),
               )
             ],
           ),
