@@ -143,134 +143,155 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
     GlobalKey<FormState>(),
     GlobalKey<FormState>(),
   ];
-  List<Widget> bottomAppBars() => [
-    CreateCompanyBottomAppBar(
-      formKey: formKeys[0],
-      index: 1,
-      themeColor: themeColor,
-      title: 'Next',
-      callback: (index) {
-        setState(() {
-          viewIndex++;
-        });
-      },
-    ),
-    CreateCompanyBottomAppBar(
-      formKey: formKeys[1],
-      index: 2,
-      themeColor: themeColor,
-      title: 'Next',
-      callback: (index) {
-        setState(() {
-          viewIndex++;
-        });
-      },
-    ),
-    CreateCompanyBottomAppBar(
-      formKey: formKeys[2],
-      index: 3,
-      themeColor: themeColor,
-      title: 'Next',
-      callback: (index) {
-        setState(() {
-          viewIndex++;
-        });
-      },
-    ),
-    CreateCompanyBottomAppBar(
-      formKey: formKeys[3],
-      index: 4,
-      themeColor: themeColor,
-      callback: (index) {
-        setState(() {
-          viewIndex++;
-        });
-      },
-      title: 'Next',
-    ),
-    CreateCompanyBottomAppBar(
-      formKey: formKeys[4],
-      index: 5,
-      themeColor: themeColor,
-      callback: (index) {
-        setState(() {
-          viewIndex++;
-        });
-      },
-      title: 'Next',
-    ),
-    CreateCompanyBottomAppBar(
-      title: 'Continue',
-      formKey: formKeys[5],
-      index: 6,
-      themeColor: themeColor,
-      callback: (index) async {
-        try {
-          // Subscription
-          Subscription subscription = Subscription(
-            purchaseCode: purchaseCode,
-            validFrom: validFrom,
-            validTill: validTill,
-            subscriptionType: subscriptionType,
-          );
-          await ref.read(appDatabaseProvider).subscriptionBox.add(subscription);
-
-          KCurrency? kCurrency;
-          if (currency != null) {
-            kCurrency = KCurrency(
-              name: currency!.name,
-              code: currency!.code,
-              symbol: currency!.symbol,
-              flag: currency!.flag,
-              decimalDigits: currency!.decimalDigits,
-              number: currency!.number,
-              namePlural: currency!.namePlural,
-              thousandsSeparator: currency!.thousandsSeparator,
-              spaceBetweenAmountAndSymbol:
-                  currency!.spaceBetweenAmountAndSymbol,
-              decimalSeparator: currency!.decimalSeparator,
-              symbolOnLeft: currency!.symbolOnLeft,
+  List<Widget> bottomAppBars() {
+    final taxed = taxation != Taxation.none;
+    return [
+      // Body1 nav
+      CreateCompanyBottomAppBar(
+        formKey: formKeys[0],
+        index: 1,
+        themeColor: themeColor,
+        title: 'Next',
+        callback: (index) {
+          setState(() {
+            viewIndex++;
+          });
+        },
+      ),
+      // Body2 nav
+      CreateCompanyBottomAppBar(
+        formKey: formKeys[1],
+        index: 2,
+        themeColor: themeColor,
+        title: 'Next',
+        callback: (index) {
+          setState(() {
+            viewIndex++;
+          });
+        },
+      ),
+      // Body3 nav (taxation selection)
+      CreateCompanyBottomAppBar(
+        formKey: formKeys[2],
+        index: 3,
+        themeColor: themeColor,
+        title: 'Next',
+        callback: (index) {
+          setState(() {
+            viewIndex++;
+          });
+        },
+      ),
+      // Body4 nav (tax registration) — only present when taxed
+      if (taxed)
+        CreateCompanyBottomAppBar(
+          formKey: formKeys[3],
+          index: 4,
+          themeColor: themeColor,
+          callback: (index) {
+            setState(() {
+              viewIndex++;
+            });
+          },
+          title: 'Next',
+        ),
+      // Body5 nav (currency)
+      CreateCompanyBottomAppBar(
+        formKey: taxed ? formKeys[4] : formKeys[3],
+        index: 5,
+        themeColor: themeColor,
+        callback: (index) {
+          setState(() {
+            viewIndex++;
+          });
+        },
+        title: 'Next',
+      ),
+      // Body6 nav (subscription) — final submit
+      CreateCompanyBottomAppBar(
+        title: 'Continue',
+        formKey: taxed ? formKeys[5] : formKeys[4],
+        index: 6,
+        themeColor: themeColor,
+        callback: (index) async {
+          try {
+            // Subscription
+            Subscription subscription = Subscription(
+              purchaseCode: purchaseCode,
+              validFrom: validFrom,
+              validTill: validTill,
+              subscriptionType: subscriptionType,
             );
-            await ref.read(appDatabaseProvider).currencyBox.add(kCurrency);
-          }
-          // COMPANY
-          Company company = Company(
-            name: _controllerRestaurantName.text,
-            logo: libraryImageLogo?.filename,
-            email: _controllerEmailAddress.text,
-            phone: _controllerPhoneNumber.text,
-            address: _controllerAddress.text,
-            password: _controllerPassword.text,
-            taxation: taxation,
-            foodLicenseNo: _controllerFoodLicNo.text,
-            salesTaxNumber: _controllerTaxLicNo.text,
-            subscriptionId: subscription.id,
-            currencyCode: kCurrency?.code,
-          );
-          int? result = await ref
-              .read(appDatabaseProvider)
-              .companyBox
-              .add(company)
-              .whenComplete(
-                () => Navigator.of(this.context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                        const CreateCompanyResultPage(),
-                  ),
-                  (route) => false,
-                ),
+            await ref
+                .read(appDatabaseProvider)
+                .subscriptionBox
+                .add(subscription);
+
+            KCurrency? kCurrency;
+            if (currency != null) {
+              kCurrency = KCurrency(
+                name: currency!.name,
+                code: currency!.code,
+                symbol: currency!.symbol,
+                flag: currency!.flag,
+                decimalDigits: currency!.decimalDigits,
+                number: currency!.number,
+                namePlural: currency!.namePlural,
+                thousandsSeparator: currency!.thousandsSeparator,
+                spaceBetweenAmountAndSymbol:
+                    currency!.spaceBetweenAmountAndSymbol,
+                decimalSeparator: currency!.decimalSeparator,
+                symbolOnLeft: currency!.symbolOnLeft,
               );
-          debugPrint('Company Added: $result');
-        } catch (e) {
-          showMessageDialog(this.context, e.toString(), MessageType.error);
-        }
-      },
-    ),
-  ];
+              await ref.read(appDatabaseProvider).currencyBox.add(kCurrency);
+            }
+            // COMPANY
+            Company company = Company(
+              name: _controllerRestaurantName.text,
+              logo: libraryImageLogo?.filename,
+              email: _controllerEmailAddress.text,
+              phone: _controllerPhoneNumber.text,
+              address: _controllerAddress.text,
+              password: _controllerPassword.text,
+              taxation: taxation,
+              foodLicenseNo: _controllerFoodLicNo.text,
+              salesTaxNumber: _controllerTaxLicNo.text,
+              subscriptionId: subscription.id,
+              currencyCode: kCurrency?.code,
+            );
+            int? result = await ref
+                .read(appDatabaseProvider)
+                .companyBox
+                .add(company)
+                .whenComplete(
+                  () => Navigator.of(this.context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (BuildContext context) =>
+                          const CreateCompanyResultPage(),
+                    ),
+                    (route) => false,
+                  ),
+                );
+            debugPrint('Company Added: $result');
+          } catch (e) {
+            showMessageDialog(this.context, e.toString(), MessageType.error);
+          }
+        },
+      ),
+    ];
+  }
 
   @override
   Widget build(BuildContext context) {
     final isDesktop = Responsive.isDesktop(context);
+
+    // Clamp viewIndex — the step count changes when taxation toggles
+    // between "none" (5 steps) and taxed (6 steps). This prevents a
+    // RangeError if the list shrinks while on a later step.
+    final steps = bodies();
+    if (viewIndex >= steps.length) {
+      viewIndex = steps.length - 1;
+    }
 
     return Scaffold(
       backgroundColor: AppColors.grey200,
@@ -290,7 +311,7 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
             margin: const EdgeInsets.only(right: 12.0),
             child: Center(
               child: Text(
-                'Step ${viewIndex + 1}/${bodies().length}',
+                'Step ${viewIndex + 1}/${steps.length}',
                 style: TextStyle(
                   color: AppColors.black600,
                   fontWeight: FontWeight.w500,
@@ -307,13 +328,13 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
                 constraints: const BoxConstraints(maxWidth: 640),
                 child: Padding(
                   padding: SpacingStyle.defaultPadding,
-                  child: bodies()[viewIndex],
+                  child: steps[viewIndex],
                 ),
               ),
             )
           : Padding(
               padding: SpacingStyle.defaultPadding,
-              child: bodies()[viewIndex],
+              child: steps[viewIndex],
             ),
       bottomNavigationBar: isDesktop
           ? ConstrainedBox(
