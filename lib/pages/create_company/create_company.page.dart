@@ -1,4 +1,4 @@
-import 'package:eatery/core/extensions/double_ext.dart';
+import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/references.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
@@ -269,6 +269,8 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
 
   @override
   Widget build(BuildContext context) {
+    final isDesktop = Responsive.isDesktop(context);
+
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
@@ -302,11 +304,30 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
           ),
         ],
       ),
-      body: Padding(
-        padding: SpacingStyle.defaultPadding,
-        child: bodies()[viewIndex],
-      ),
-      bottomNavigationBar: bottomAppBars()[viewIndex],
+      body: isDesktop
+          ? Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 640),
+                child: Padding(
+                  padding: SpacingStyle.defaultPadding,
+                  child: bodies()[viewIndex],
+                ),
+              ),
+            )
+          : Padding(
+              padding: SpacingStyle.defaultPadding,
+              child: bodies()[viewIndex],
+            ),
+      bottomNavigationBar: isDesktop
+          ? SafeArea(
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 640),
+                  child: bottomAppBars()[viewIndex],
+                ),
+              ),
+            )
+          : bottomAppBars()[viewIndex],
     );
   }
 }
