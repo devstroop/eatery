@@ -168,7 +168,8 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           return InkWell(
             onTap: () => FocusScope.of(context).unfocus(),
             child: isDesktop
-                ? Center(
+                ? Align(
+                    alignment: Alignment.topCenter,
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(maxWidth: 480),
                       child: ListView(

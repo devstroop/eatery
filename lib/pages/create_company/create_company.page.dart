@@ -305,7 +305,8 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
         ],
       ),
       body: isDesktop
-          ? Center(
+          ? Align(
+              alignment: Alignment.topCenter,
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 640),
                 child: Padding(
@@ -319,13 +320,9 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
               child: bodies()[viewIndex],
             ),
       bottomNavigationBar: isDesktop
-          ? SafeArea(
-              child: Center(
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(maxWidth: 640),
-                  child: bottomAppBars()[viewIndex],
-                ),
-              ),
+          ? ConstrainedBox(
+              constraints: const BoxConstraints(maxWidth: 640),
+              child: bottomAppBars()[viewIndex],
             )
           : bottomAppBars()[viewIndex],
     );
