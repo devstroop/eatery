@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:eatery/core/theme/app_theme.dart';
 import 'package:eatery/constants/utils/app_file_system.dart';
 import 'package:eatery/data/database/eatery_database.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
@@ -93,11 +94,9 @@ class MyApp extends StatelessWidget {
       return MaterialApp(
         title: 'Eatery',
         debugShowCheckedModeBanner: false,
-        theme: ThemeData(useMaterial3: true, primarySwatch: Colors.blue),
+        theme: AppTheme.light,
         home: Scaffold(
-          body: appDatabase.hasCompany
-              ? const LoginPage()
-              : const MainScreen(),
+          body: appDatabase.hasCompany ? const LoginPage() : const MainScreen(),
         ),
       );
     }
