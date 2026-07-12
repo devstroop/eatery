@@ -14,9 +14,16 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
+    final spacing = Responsive.spacing(context);
     final isDesktop = Responsive.isDesktop(context);
-    final headlineSize = Responsive.headlineSize(context);
-    final bodySize = Responsive.bodySize(context);
+    final isTablet = Responsive.isTablet(context);
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    // Lottie sizing: fill ~35% of available height, but cap it
+    final lottieMaxHeight = isDesktop ? 280.0 : screenHeight * 0.32;
+    final lottieMaxWidth = isDesktop ? 320.0 : screenWidth * 0.6;
+    final titleFontSize = isDesktop ? 36.0 : isTablet ? 32.0 : 28.0;
 
     return Scaffold(
       appBar: AppBar(
@@ -28,77 +35,58 @@ class _MainScreenState extends State<MainScreen> {
       ),
       backgroundColor: Colors.white,
       body: SafeArea(
-        child: LayoutBuilder(
-          builder: (context, constraints) {
-            return Center(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: isDesktop ? 800 : double.infinity,
-                ),
-                child: ListView(
-                  shrinkWrap: true,
-                  padding: EdgeInsets.symmetric(
-                    horizontal: Responsive.spacing(context),
-                    vertical: isDesktop ? 48 : 24,
-                  ),
-                  children: [
-                    // Lottie animation — height scales with screen
-                    Lottie.asset(
+        child: Center(
+          child: ConstrainedBox(
+            constraints: BoxConstraints(maxWidth: isDesktop ? 800 : double.infinity),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                // Lottie animation — bounded, never scrolls away
+                SizedBox(
+                  height: lottieMaxHeight,
+                  width: lottieMaxWidth,
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: Lottie.asset(
                       'assets/lottie/1699652006712.json',
-                      height: isDesktop ? 360 : constraints.maxWidth * 0.6,
-                      fit: BoxFit.contain,
                     ),
-                    SizedBox(height: isDesktop ? 40 : 24),
-                    // Title
-                    Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: isDesktop ? 64 : 0,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'All-in-one',
-                            style: TextStyle(
-                              fontSize: headlineSize + 8,
-                              fontWeight: FontWeight.w400,
-                            ),
-                          ),
-                          Text(
-                            'restaurant POS System',
-                            style: TextStyle(
-                              fontSize: headlineSize + 8,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          Wrap(
-                            children: [
-                              Text(
-                                'Manage your restaurant with ease',
-                                style: TextStyle(
-                                  fontSize: bodySize,
-                                  fontWeight: FontWeight.w300,
-                                ),
-                              ),
-                              const SizedBox(width: 4),
-                              Text(
-                                'with Eatery',
-                                style: TextStyle(
-                                  fontSize: bodySize,
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
+                  ),
                 ),
-              ),
-            );
-          },
+                SizedBox(height: isDesktop ? 32 : 20),
+                // Title — always visible, centered
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: spacing),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'All-in-one',
+                        style: TextStyle(
+                          fontSize: titleFontSize,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                      Text(
+                        'restaurant POS System',
+                        style: TextStyle(
+                          fontSize: titleFontSize,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Manage your restaurant with ease with Eatery',
+                        style: TextStyle(
+                          fontSize: Responsive.bodySize(context),
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
         ),
       ),
       bottomNavigationBar: BottomAppBar(
