@@ -1,4 +1,5 @@
 import 'package:intl/intl.dart';
+import 'package:eatery/core/utils/device_id.dart';
 import 'package:eatery/references.dart';
 
 class Body6 extends StatefulWidget {
@@ -31,7 +32,7 @@ class _Body6State extends State<Body6> {
     String? deviceId;
     if (Platform.isAndroid || Platform.isIOS) {
       try {
-        deviceId = await PlatformDeviceId.getDeviceId;
+        deviceId = await getDeviceId();
       } on Exception {
         deviceId = null;
       }

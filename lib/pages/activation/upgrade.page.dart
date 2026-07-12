@@ -1,3 +1,4 @@
+import 'package:eatery/core/utils/device_id.dart';
 import 'package:eatery/references.dart';
 final _pageColor = KColors.secondary2;
 class UpgradePage extends StatefulWidget {
@@ -22,7 +23,7 @@ class _UpgradePageState extends State<UpgradePage> {
   }
 
   fetchDeviceInfo() async {
-    String? deviceSerial = await PlatformDeviceId.getDeviceId;
+    String? deviceSerial = await getDeviceId();
     setState(() {
       this.deviceSerial = deviceSerial;
     });
