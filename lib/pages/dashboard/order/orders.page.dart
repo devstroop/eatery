@@ -1,8 +1,8 @@
 import 'package:eatery/core/theme/app_spacing.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery/core/widgets/widgets.dart';
 import 'dart:ui' as ui;
-import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:intl/intl.dart';
@@ -53,75 +53,46 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
     List<Order> orders = ref.read(orderRepositoryProvider).getAllOrders();
     final currencySymbol =
         ref.read(companyProvider.notifier).currency?.symbol ?? '';
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        backgroundColor: _pageColor,
-        foregroundColor: AppColors.white,
-        title: const Text('Orders'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () async {
-              await showSearch(
-                context: context,
-                delegate: SearchOrderDelegate(
-                  orders: orders,
-                  callback: (order) {
-                    Navigator.of(context)
-                        .push(
-                          MaterialPageRoute(
-                            builder: (context) => ViewOrderPage(order: order),
-                          ),
-                        )
-                        .then((_) => setState(() {}));
-                  },
-                  currencySymbol: currencySymbol,
+    return AppPageShell(
+      title: 'Orders',
+      color: _pageColor,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.search),
+          onPressed: () async {
+            await showSearch(
+              context: context,
+              delegate: SearchOrderDelegate(
+                orders: orders,
+                callback: (order) {
+                  Navigator.of(context)
+                      .push(
+                        MaterialPageRoute(
+                          builder: (context) => ViewOrderPage(order: order),
+                        ),
+                      )
+                      .then((_) => setState(() {}));
+                },
+                currencySymbol: currencySymbol,
+              ),
+            );
+          },
+        ),
+        IconButton(
+          icon: const Icon(Icons.barcode_reader),
+          onPressed: () async {},
+        ),
+        IconButton(icon: const Icon(Icons.more_vert), onPressed: () async {}),
+      ],
+      child: orders.isNotEmpty
+          ? ListView(
+              padding: const EdgeInsets.symmetric(vertical: 8),
+              children: [
+                ...orders.map(
+                  (order) =>
+                      _OrderCard(order: order, currencySymbol: currencySymbol),
                 ),
-              );
-            },
-          ),
-          IconButton(
-            icon: const Icon(Icons.barcode_reader),
-            onPressed: () async {},
-          ),
-          IconButton(icon: const Icon(Icons.more_vert), onPressed: () async {}),
-        ],
-      ),
-      body: orders.isNotEmpty
-          ? LayoutBuilder(
-              builder: (context, constraints) {
-                final isDesktop = Responsive.isDesktop(context);
-                if (isDesktop) {
-                  return Center(
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(maxWidth: 900),
-                      child: ListView(
-                        padding: const EdgeInsets.all(16),
-                        children: [
-                          ...orders.map(
-                            (order) => _OrderCard(
-                              order: order,
-                              currencySymbol: currencySymbol,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
-                }
-                return ListView(
-                  padding: const EdgeInsets.symmetric(vertical: 8),
-                  children: [
-                    ...orders.map(
-                      (order) => _OrderCard(
-                        order: order,
-                        currencySymbol: currencySymbol,
-                      ),
-                    ),
-                  ],
-                );
-              },
+              ],
             )
           : const Center(
               child: Opacity(

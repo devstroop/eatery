@@ -3,6 +3,7 @@ import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery/core/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Color _pageColor = AppColors.menuCategories;
@@ -19,15 +20,24 @@ class _DiningTableCategoriesPageState
     extends ConsumerState<DiningTableCategoriesPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
+    return AppPageShell(
+      title: 'Dining Table Categories',
+      color: _pageColor,
+      floatingActionButton: FloatingActionButton.extended(
+        label: const Text('Add Category'),
         backgroundColor: _pageColor,
         foregroundColor: AppColors.white,
-
-        title: const Text('Dining Table Categories'),
+        icon: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const AddDiningTableCategoryPage(),
+            ),
+          ).then((_) => setState(() {}));
+        },
       ),
-      body:
+      child:
           ref.read(appDatabaseProvider).diningTableCategoryBox.values.isNotEmpty
           ? ListView(
               children: [
@@ -159,20 +169,6 @@ class _DiningTableCategoriesPageState
                 ),
               ),
             ),
-      floatingActionButton: FloatingActionButton.extended(
-        label: const Text('Add Category'),
-        backgroundColor: _pageColor,
-        foregroundColor: AppColors.white,
-        icon: const Icon(Icons.add),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AddDiningTableCategoryPage(),
-            ),
-          ).then((_) => setState(() {}));
-        },
-      ),
     );
   }
 }

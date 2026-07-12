@@ -4,6 +4,7 @@ import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery/core/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Color _pageColor = AppColors.menuPayments;
@@ -24,34 +25,42 @@ class _PaymentsPageState extends ConsumerState<PaymentsPage> {
     payments.sort((a, b) => b.date.compareTo(a.date));
     final currencySymbol =
         ref.read(companyProvider.notifier).currency?.symbol ?? '';
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        backgroundColor: _pageColor,
-        title: const Text('Payments'),
-        foregroundColor: AppColors.white,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () {
-              showSearch(
-                context: context,
-                delegate: SearchPaymentDelegate(
-                  payments,
-                  (payment) => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ViewPaymentPage(payment: payment),
-                    ),
+    return AppPageShell(
+      title: 'Payments',
+      color: _pageColor,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.search),
+          onPressed: () {
+            showSearch(
+              context: context,
+              delegate: SearchPaymentDelegate(
+                payments,
+                (payment) => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ViewPaymentPage(payment: payment),
                   ),
-                  currencySymbol: currencySymbol,
                 ),
-              );
-            },
-          ),
-        ],
+                currencySymbol: currencySymbol,
+              ),
+            );
+          },
+        ),
+      ],
+      floatingActionButton: FloatingActionButton.extended(
+        foregroundColor: AppColors.white,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddPaymentPage()),
+          ).then((_) => setState(() {}));
+        },
+        backgroundColor: _pageColor,
+        icon: const Icon(Icons.add),
+        label: const Text('Add Payment'),
       ),
-      body: payments.isNotEmpty
+      child: payments.isNotEmpty
           ? ResponsiveListView(
               itemCount: payments.length,
               childAspectRatio: 4.0,
@@ -90,18 +99,6 @@ class _PaymentsPageState extends ConsumerState<PaymentsPage> {
                 ],
               ),
             ),
-      floatingActionButton: FloatingActionButton.extended(
-        foregroundColor: AppColors.white,
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AddPaymentPage()),
-          ).then((_) => setState(() {}));
-        },
-        backgroundColor: _pageColor,
-        icon: const Icon(Icons.add),
-        label: const Text('Add Payment'),
-      ),
     );
   }
 }

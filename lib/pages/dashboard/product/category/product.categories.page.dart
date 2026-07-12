@@ -1,5 +1,7 @@
 import 'package:eatery/core/theme/app_spacing.dart';
 import 'package:eatery/core/theme/app_typography.dart';
+import 'package:eatery/core/widgets/widgets.dart';
+import 'package:eatery/core/widgets/app_empty_state.dart';
 import 'package:eatery/data/repositories/product_repository.dart';
 import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/references.dart';
@@ -23,109 +25,11 @@ class _ProductCategoriesPageState extends ConsumerState<ProductCategoriesPage> {
   Widget build(BuildContext context) {
     final repo = ref.read(productRepositoryProvider);
     final categories = repo.getAllCategories();
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        backgroundColor: _pageColor,
-        foregroundColor: AppColors.white,
-        title: const Text('Product Categories'),
-      ),
-      body: ListView(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        children: [
-          if (categories.isEmpty)
-            Center(
-              child: Opacity(
-                opacity: 0.50,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Image.asset(
-                      'assets/images/empty-folder.png',
-                      width: 100,
-                      height: 100,
-                    ),
-                    AppSpacing.gapLg,
-                    const Text(
-                      'No categories found',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const Text(
-                      'Add a product category to get started',
-                      style: TextStyle(fontSize: 16, color: AppColors.grey600),
-                    ),
-                    const SizedBox(height: 48),
-                  ],
-                ),
-              ),
-            ),
-          for (var category in categories)
-            ListTile(
-              title: Text(
-                category.name,
-                style: const TextStyle(fontWeight: FontWeight.w600),
-              ),
-              subtitle:
-                  category.description != null &&
-                      category.description?.trim() != ''
-                  ? Text(category.description ?? '')
-                  : null,
-              trailing: IconButton(
-                icon: const Icon(Icons.more_vert),
-                onPressed: () {
-                  showMenu(
-                    context: context,
-                    position: const RelativeRect.fromLTRB(100, 100, 0, 100),
-                    items: [
-                      PopupMenuItem(
-                        child: ListTile(
-                          leading: const Icon(Icons.edit),
-                          title: const Text('Edit'),
-                          onTap: () {
-                            Navigator.pop(context);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    EditProductCategoryPage(category: category),
-                              ),
-                            ).then((_) {
-                              setState(() {});
-                            });
-                          },
-                        ),
-                      ),
-                      PopupMenuItem(
-                        child: ListTile(
-                          leading: const Icon(Icons.delete),
-                          title: const Text('Delete'),
-                          onTap: () => _onCategoryDelete(context, category),
-                        ),
-                      ),
-                    ],
-                  );
-                },
-              ),
-              leading: Container(
-                width: 50.0,
-                height: 50.0,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(12.0),
-                ),
-                child: Image(
-                  image: LibraryImage(category.image).image,
-                  fit: BoxFit.contain,
-                  height: 48,
-                  width: 48,
-                ),
-              ),
-              onTap: () {},
-            ),
-        ],
-      ),
+
+    return AppPageShell(
+      title: 'Product Categories',
+      color: _pageColor,
+      showBack: true,
       floatingActionButton: FloatingActionButton.extended(
         foregroundColor: AppColors.white,
         backgroundColor: _pageColor,
@@ -140,6 +44,100 @@ class _ProductCategoriesPageState extends ConsumerState<ProductCategoriesPage> {
           ).then((_) => setState(() {}));
         },
       ),
+      child: categories.isEmpty
+          ? const AppEmptyState(
+              icon: Icons.category,
+              title: 'No categories found',
+              subtitle: 'Add a product category to get started',
+            )
+          : ListView.builder(
+              padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
+              itemCount: categories.length,
+              itemBuilder: (context, index) {
+                final category = categories[index];
+                return AppCard(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.md,
+                    vertical: AppSpacing.xs,
+                  ),
+                  onTap: () {},
+                  child: ListTile(
+                    leading: Container(
+                      width: 48,
+                      height: 48,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(
+                          AppSpacing.radiusMd,
+                        ),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(
+                          AppSpacing.radiusMd,
+                        ),
+                        child: Image(
+                          image: LibraryImage(category.image).image,
+                          fit: BoxFit.contain,
+                        ),
+                      ),
+                    ),
+                    title: Text(category.name, style: AppTypography.titleSmall),
+                    subtitle: category.description?.trim().isNotEmpty == true
+                        ? Text(
+                            category.description!,
+                            style: AppTypography.bodySmall.copyWith(
+                              color: AppColors.grey500,
+                            ),
+                          )
+                        : null,
+                    trailing: PopupMenuButton<String>(
+                      icon: const Icon(
+                        Icons.more_vert,
+                        color: AppColors.grey500,
+                      ),
+                      onSelected: (value) async {
+                        if (value == 'edit') {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) =>
+                                  EditProductCategoryPage(category: category),
+                            ),
+                          );
+                          setState(() {});
+                        } else if (value == 'delete') {
+                          _onCategoryDelete(context, category);
+                        }
+                      },
+                      itemBuilder: (context) => [
+                        const PopupMenuItem(
+                          value: 'edit',
+                          child: ListTile(
+                            leading: Icon(Icons.edit, size: 20),
+                            title: Text('Edit'),
+                            contentPadding: EdgeInsets.zero,
+                          ),
+                        ),
+                        const PopupMenuItem(
+                          value: 'delete',
+                          child: ListTile(
+                            leading: Icon(
+                              Icons.delete,
+                              size: 20,
+                              color: Colors.red,
+                            ),
+                            title: Text(
+                              'Delete',
+                              style: TextStyle(color: Colors.red),
+                            ),
+                            contentPadding: EdgeInsets.zero,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
     );
   }
 

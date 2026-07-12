@@ -4,6 +4,7 @@ import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery/core/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Color _pageColor = AppColors.error;
@@ -39,27 +40,35 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
               element.category?.id == selectedCategory?.id,
         )
         .toList();
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        backgroundColor: _pageColor,
-        title: const Text('Dining Tables'),
+    return AppPageShell(
+      title: 'Dining Tables',
+      color: _pageColor,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.category),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const DiningTableCategoriesPage(),
+              ),
+            ).then((_) => setState(() {}));
+          },
+        ),
+      ],
+      floatingActionButton: FloatingActionButton.extended(
+        label: const Text('Add Dining Table'),
         foregroundColor: AppColors.white,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.category),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const DiningTableCategoriesPage(),
-                ),
-              ).then((_) => setState(() {}));
-            },
-          ),
-        ],
+        backgroundColor: _pageColor,
+        icon: const Icon(Icons.add),
+        onPressed: () async {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddDiningTablePage()),
+          ).then((_) => setState(() {}));
+        },
       ),
-      body: Column(
+      child: Column(
         children: [
           if (ref
               .read(appDatabaseProvider)
@@ -346,18 +355,6 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                   ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        label: const Text('Add Dining Table'),
-        foregroundColor: AppColors.white,
-        backgroundColor: _pageColor,
-        icon: const Icon(Icons.add),
-        onPressed: () async {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AddDiningTablePage()),
-          ).then((_) => setState(() {}));
-        },
       ),
     );
   }

@@ -5,6 +5,7 @@ import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery/core/widgets/widgets.dart';
 
 Color _pageColor = AppColors.menuInventory;
 
@@ -32,37 +33,33 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
     final repo = ref.read(productRepositoryProvider);
     final companyNotifier = ref.read(companyProvider.notifier);
     final currency = companyNotifier.currency;
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        title: const Text('Inventory'),
-        backgroundColor: _pageColor,
-        foregroundColor: AppColors.white,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () async {
-              await showSearch(
-                context: context,
-                delegate: SearchProductDelegate(
-                  repo.getProductsByType(ProductType.inventoryItem),
-                  (product) {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            EditInventoryItemPage(product: product),
-                      ),
-                    ).then((_) => setState(() {}));
-                  },
-                ),
-              );
-              setState(() {});
-            },
-          ),
-        ],
-      ),
-      body: Column(
+    return AppPageShell(
+      title: 'Inventory',
+      color: _pageColor,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.search),
+          onPressed: () async {
+            await showSearch(
+              context: context,
+              delegate: SearchProductDelegate(
+                repo.getProductsByType(ProductType.inventoryItem),
+                (product) {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          EditInventoryItemPage(product: product),
+                    ),
+                  ).then((_) => setState(() {}));
+                },
+              ),
+            );
+            setState(() {});
+          },
+        ),
+      ],
+      child: Column(
         children: [
           SizedBox(
             height: 60,

@@ -4,6 +4,7 @@ import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/widgets/responsive/responsive_list_view.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery/core/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 
@@ -26,23 +27,31 @@ class _StaffsPageState extends ConsumerState<StaffsPage> {
   @override
   Widget build(BuildContext context) {
     List<Staff> staffs = ref.read(appDatabaseProvider).staffBox.values.toList();
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
+    return AppPageShell(
+      title: 'Staffs',
+      color: _pageColor,
+      actions: [
+        if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
+          IconButton(
+            icon: const Icon(Icons.done),
+            onPressed: () {
+              FocusScope.of(context).unfocus();
+            },
+          ),
+      ],
+      floatingActionButton: FloatingActionButton.extended(
         backgroundColor: _pageColor,
-        title: const Text('Staffs'),
         foregroundColor: AppColors.white,
-        actions: [
-          if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
-            IconButton(
-              icon: const Icon(Icons.done),
-              onPressed: () {
-                FocusScope.of(context).unfocus();
-              },
-            ),
-        ],
+        label: const Text('Add Staff'),
+        icon: const Icon(Icons.add),
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AddStaffPage()),
+          ).then((_) => setState(() {}));
+        },
       ),
-      body: staffs.isNotEmpty
+      child: staffs.isNotEmpty
           ? ResponsiveListView(
               itemCount: staffs.length,
               childAspectRatio: 3.5,
@@ -74,18 +83,6 @@ class _StaffsPageState extends ConsumerState<StaffsPage> {
                 ),
               ),
             ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: _pageColor,
-        foregroundColor: AppColors.white,
-        label: const Text('Add Staff'),
-        icon: const Icon(Icons.add),
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AddStaffPage()),
-          ).then((_) => setState(() {}));
-        },
-      ),
     );
   }
 }
