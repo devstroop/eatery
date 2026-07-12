@@ -1,5 +1,3 @@
-import 'dart:convert';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
@@ -11,40 +9,31 @@ const String _baseUrl =
 
 /// Loads a complete demo company with all entity data.
 ///
-/// 1. Creates Company (PIN-less), KCurrency, Subscription inline
-/// 2. Downloads products, customers, dining tables, staff, tax slabs,
-///    orders, payments from the [eatery_demo_company] repo
-/// 3. Reports progress through the [ProgressDialog]
+/// Follows the exact creation sequence from [CreateCompanyPage]:
+///   1. Subscription
+///   2. KCurrency (USD)
+///   3. Company (PIN-less, linked to subscription + currency)
+///   4. Downloads and seeds all operational entities
 ///
 /// Returns `true` on success, `false` on failure.
 Future<bool> loadDemoCompany({
   required EateryDatabase db,
   required ProgressDialog pd,
 }) async {
-  // ── 1. Company ──────────────────────────────────────────────────
+  // ── 1. Subscription (mirrors create_company.page.dart) ──────────
   try {
-    pd.update(msg: 'Creating demo company...');
-    final company = Company(
-      name: 'Demo Restaurant',
-      email: 'demo@eatery.app',
-      phone: '+1-555-0100',
-      address: '123 Demo Street, Demo City',
-      password: null,
-      taxation: Taxation.none,
-      currencyCode: 'USD',
+    pd.update(msg: 'Setting up subscription...');
+    final subscription = Subscription(
+      purchaseCode: 'DEMO',
+      validFrom: DateTime.now(),
+      validTill: DateTime.now().add(const Duration(days: 365)),
+      subscriptionType: SubscriptionType.business,
     );
-    await db.companyBox.add(company);
+    await db.subscriptionBox.add(subscription);
 
-    pd.update(msg: 'Creating demo company... Done');
-  } catch (e) {
-    pd.update(msg: 'Failed to create company: $e');
-    return false;
-  }
-
-  // ── 2. Currency ─────────────────────────────────────────────────
-  try {
+    // ── 2. KCurrency (USD) ──────────────────────────────────────
     pd.update(msg: 'Setting up currency...');
-    final currency = KCurrency(
+    final kCurrency = KCurrency(
       name: 'US Dollar',
       code: 'USD',
       symbol: r'$',
@@ -57,31 +46,24 @@ Future<bool> loadDemoCompany({
       symbolOnLeft: true,
       spaceBetweenAmountAndSymbol: false,
     );
-    await db.currencyBox.add(currency);
-    pd.update(msg: 'Setting up currency... Done');
-  } catch (e) {
-    pd.update(msg: 'Failed to set up currency: $e');
-    return false;
-  }
+    await db.currencyBox.add(kCurrency);
 
-  // ── 3. Subscription ─────────────────────────────────────────────
-  try {
-    pd.update(msg: 'Setting up subscription...');
-    final subscription = Subscription(
-      purchaseCode: 'DEMO',
-      validFrom: DateTime.now(),
-      validTill: DateTime.now().add(const Duration(days: 365)),
-      subscriptionType: SubscriptionType.business,
+    // ── 3. Company (linked to both) ─────────────────────────────
+    pd.update(msg: 'Creating demo company...');
+    final company = Company(
+      name: 'Demo Restaurant',
+      email: 'demo@eatery.app',
+      phone: '+1-555-0100',
+      address: '123 Demo Street, Demo City',
+      password: null,
+      taxation: Taxation.none,
+      currencyCode: kCurrency.code,
+      subscriptionId: subscription.id,
     );
-    await db.subscriptionBox.add(subscription);
-
-    // Link subscription to company
-    final company = db.companyBox.values.first;
-    company.subscriptionId = subscription.id;
-    await company.save();
-    pd.update(msg: 'Setting up subscription... Done');
+    await db.companyBox.add(company);
+    pd.update(msg: 'Demo company created');
   } catch (e) {
-    pd.update(msg: 'Failed to set up subscription: $e');
+    pd.update(msg: 'Failed to create company: $e');
     return false;
   }
 
@@ -159,6 +141,24 @@ Future<bool> loadDemoCompany({
           pd: pd,
           label: 'Orders',
         ),
+    'Order Products': () => _downloadEntity<OrderProduct>(
+          db: db,
+          endpoint: 'order_products.json',
+          box: db.orderProductBox,
+          fromMap: (m) => OrderProduct.fromMap(m),
+          clearBeforeInsert: true,
+          pd: pd,
+          label: 'Order Products',
+        ),
+    'Payments': () => _downloadEntity<Payment>(
+          db: db,
+          endpoint: 'payments.json',
+          box: db.paymentBox,
+          fromMap: (m) => Payment.fromMap(m),
+          clearBeforeInsert: true,
+          pd: pd,
+          label: 'Payments',
+        ),
   };
 
   for (final entry in downloads.entries) {
@@ -187,7 +187,7 @@ Future<bool> _downloadEntity<T>({
     final response = await http.get(Uri.parse(url));
     if (response.statusCode != 200) {
       pd.update(msg: '⚠️ $label not available (HTTP ${response.statusCode})');
-      return true; // non-fatal
+      return true;
     }
     final list = (jsonDecode(response.body) as List<dynamic>)
         .map<Map<String, dynamic>>((e) => e as Map<String, dynamic>);
@@ -198,7 +198,10 @@ Future<bool> _downloadEntity<T>({
     int count = 0;
     for (final map in list) {
       try {
-        box.add(fromMap(map));
+        // Use put with explicit id so FOREIGN KEY LOOKUPS
+        // (e.g. DiningTable.fromMap → diningTableCategoryBox.values
+        //  .where((e) => e.id == map['categoryId'])) resolve correctly
+        box.put(map['id'] as int, fromMap(map));
         count++;
       } catch (e) {
         pd.update(msg: '⚠️ Error saving $label item: $e');
