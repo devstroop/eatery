@@ -8,6 +8,97 @@ import 'package:eatery/presentation/providers/cart_provider.dart';
 import 'order/orders.page.dart';
 import 'pos/cart.page.dart';
 
+/// Dashboard menu tiles grouped by category.
+final _menuItems = <_MenuItem>[
+  // ── Sales ──
+  _MenuItem(
+    icon: Icons.point_of_sale,
+    label: 'Point of Sale',
+    subtitle: 'Start a new sale',
+    color: Color(0xFF30A8CF),
+    route: 'pos',
+  ),
+  _MenuItem(
+    icon: Icons.history,
+    label: 'Orders',
+    subtitle: 'All orders here',
+    color: Color(0xFFF5A142),
+    route: 'orders',
+  ),
+  _MenuItem(
+    icon: Icons.payment,
+    label: 'Payments',
+    subtitle: 'Payment receipts',
+    color: Color(0xFF2F5EC2),
+    route: 'payments',
+  ),
+  // ── Management ──
+  _MenuItem(
+    icon: Icons.category,
+    label: 'Categories',
+    subtitle: 'Product categories',
+    color: Color(0xFFD98049),
+    route: 'categories',
+  ),
+  _MenuItem(
+    icon: Icons.restaurant,
+    label: 'Kitchen',
+    subtitle: 'Kitchen dishes',
+    color: Color(0xFF4AC3A1),
+    route: 'kitchen',
+  ),
+  _MenuItem(
+    icon: Icons.inventory,
+    label: 'Inventory',
+    subtitle: 'Stock items',
+    color: Color(0xFF705EE0),
+    route: 'inventory',
+  ),
+  _MenuItem(
+    icon: Icons.people,
+    label: 'Customers',
+    subtitle: 'Manage customers',
+    color: Color(0xFF2FC289),
+    route: 'customers',
+  ),
+  _MenuItem(
+    icon: Icons.group,
+    label: 'Staffs',
+    subtitle: 'Manage staff',
+    color: Color(0xFFC2592F),
+    route: 'staffs',
+  ),
+  _MenuItem(
+    icon: Icons.table_restaurant,
+    label: 'Dining Tables',
+    subtitle: 'Manage tables',
+    color: Color(0xFFEF6850),
+    route: 'tables',
+  ),
+  // ── Utilities ──
+  _MenuItem(
+    icon: Icons.photo_library,
+    label: 'Library',
+    subtitle: 'Images & resources',
+    color: Color(0xFF2FC289),
+    route: 'library',
+  ),
+  _MenuItem(
+    icon: FontAwesomeIcons.database,
+    label: 'Data Mgmt.',
+    subtitle: 'Import / Export',
+    color: Color(0xFFEF9050),
+    route: 'data',
+  ),
+  _MenuItem(
+    icon: Icons.settings,
+    label: 'Settings',
+    subtitle: 'App settings',
+    color: Color(0xFF222222),
+    route: 'settings',
+  ),
+];
+
 class DashboardPage extends ConsumerStatefulWidget {
   const DashboardPage({Key? key}) : super(key: key);
 
@@ -19,393 +110,125 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final double screenWidth = MediaQuery.of(context).size.width;
     final company = ref.read(companyProvider);
     final cart = ref.read(cartProvider).cart;
-
-    final double crossAxisItemCount = screenWidth >= 1200
-        ? 5
-        : screenWidth >= 800
-        ? 4
-        : screenWidth >= 600
-        ? 3
-        : 2;
+    final isDesktop = Responsive.isDesktop(context);
     final spacing = Responsive.spacing(context);
-    final iconSize =
-        (screenWidth >= 1200
-                ? 48
-                : screenWidth >= 800
-                ? 44
-                : screenWidth >= 600
-                ? 40
-                : 36)
-            .toDouble();
-    final titleSize = Responsive.titleSize(context);
-    final subtitleSize = Responsive.bodySize(context);
 
-    final menuSize =
-        (screenWidth - (spacing * (crossAxisItemCount + 1))) /
-        crossAxisItemCount;
     if (company == null) {
       return const Center(child: CircularProgressIndicator());
     }
+
     return WillPopScope(
-      onWillPop: () {
-        return Future.value(false);
-      },
+      onWillPop: () => Future.value(false),
       child: Scaffold(
         key: scaffoldKey,
-        body: ListView(
-          padding: EdgeInsets.symmetric(horizontal: spacing, vertical: 60),
-          children: [
-            DashboardHeader(
-              companyName: company.name,
-              image: company.logo != null
-                  ? LibraryImage(company.logo).image
-                  : null,
-              suffix: [
-                // Cart with badge
-                Stack(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.shopping_cart_outlined),
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const CartPage(),
-                          ),
-                        ).then((value) => setState(() {}));
-                      },
-                    ),
-                    Positioned(
-                      top: 0,
-                      right: 0,
-                      child: Container(
-                        padding: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: KColors.primary,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Text(
-                          cart.length.toString(),
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                IconButton(
-                  icon: const Icon(Icons.power_settings_new),
-                  onPressed: () {
-                    showDialog(
-                      context: context,
-                      builder: (BuildContext context) {
-                        return AlertDialog(
-                          title: const Text('Logout'),
-                          content: const Text(
-                            'Are you sure you want to logout?',
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text('No'),
-                            ),
-                            TextButton(
-                              onPressed: () async {
-                                Navigator.pushReplacement(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const LogoutPage(),
-                                  ),
-                                );
-                              },
-                              child: const Text('Yes'),
-                            ),
-                          ],
-                        );
-                      },
-                    );
-                  },
-                ),
-              ],
-            ),
-            UpgradeNotification(company: company),
-            const SizedBox(height: 16),
-            Wrap(
-              spacing: spacing,
-              runSpacing: spacing,
-              alignment: WrapAlignment.spaceBetween,
+        body: LayoutBuilder(
+          builder: (context, constraints) {
+            // Card width: fill available space, cap at 220px on desktop
+            final availableWidth = constraints.maxWidth - spacing * 2;
+            final cardWidth = (isDesktop
+                ? (availableWidth - spacing * 3) / 4
+                : (availableWidth - spacing) / 2)
+                .clamp(140, 220)
+                .toDouble();
+            final cardHeight = cardWidth * 1.1;
+
+            return ListView(
+              padding: EdgeInsets.symmetric(horizontal: spacing, vertical: 32),
               children: [
-                MenuCard(
-                  iconData: Icons.point_of_sale,
-                  iconSize: iconSize,
-                  title: 'Point of Sale',
-                  subtitle: 'Tap here to start your sale',
-                  titleSize: titleSize,
-                  subtitleSize: subtitleSize,
-                  color: KColors.primary,
-                  width: menuSize,
-                  height: menuSize,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const PointOfSalePage(),
-                      ),
-                    ).then((value) => setState(() {}));
-                  },
+                // ── Header ──
+                _DashboardHeader(
+                  companyName: company.name,
+                  image: company.logo != null
+                      ? LibraryImage(company.logo).image
+                      : null,
+                  cartCount: cart.length,
+                  onCartTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (_) => const CartPage()),
+                  ).then((_) => setState(() {})),
+                  onLogout: () => _showLogoutDialog(context),
                 ),
-                SizedBox(
-                  width: menuSize,
-                  height: menuSize,
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      MenuCard(
-                        iconData: Icons.category,
-                        iconSize: iconSize / 1.75,
-                        title: 'Product Categories',
-                        // subtitle: 'Manage product categories',
-                        titleSize: titleSize * 0.7,
-                        subtitleSize: subtitleSize * 0.7,
-                        color: KColors.tertiary,
-                        width: menuSize,
-                        height: (menuSize - 8) / 2,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  const ProductCategoriesPage(),
-                            ),
-                          ).then((value) => setState(() {}));
-                        },
-                      ),
-                      MenuCard(
-                        iconData: Icons.restaurant,
-                        iconSize: iconSize / 1.75,
-                        title: 'Kitchen',
-                        // subtitle: 'Manage kitchen dishes',
-                        titleSize: titleSize * 0.7,
-                        subtitleSize: subtitleSize * 0.7,
-                        color: KColors.secondary,
-                        width: (menuSize - 8) / 2,
-                        height: (menuSize - 8) / 2,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const KitchenPage(),
-                            ),
-                          ).then((value) => setState(() {}));
-                        },
-                      ),
-                      MenuCard(
-                        iconData: Icons.inventory,
-                        iconSize: iconSize / 1.75,
-                        title: 'Inventory',
-                        // subtitle: 'Manage product categories',
-                        titleSize: titleSize * 0.7,
-                        subtitleSize: subtitleSize * 0.7,
-                        color: KColors.alternate,
-                        width: (menuSize - 8) / 2,
-                        height: (menuSize - 8) / 2,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const InventoryItemsPage(),
-                            ),
-                          ).then((value) => setState(() {}));
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  width: menuSize,
-                  height: (menuSize - 8) / 2,
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      MenuCard(
-                        iconSize: iconSize / 1.75,
-                        titleSize: titleSize * 0.7,
-                        subtitleSize: subtitleSize * 0.7,
-                        width: (menuSize - 8) / 2,
-                        height: (menuSize - 8) / 2,
-                        iconData: Icons.people,
-                        title: 'Customers',
-                        color: const Color(0xFF2FC289),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const CustomersPage(),
-                            ),
-                          ).then((value) => setState(() {}));
-                        },
-                      ),
-                      MenuCard(
-                        iconSize: iconSize / 1.75,
-                        titleSize: titleSize * 0.7,
-                        subtitleSize: subtitleSize * 0.7,
-                        width: (menuSize - 8) / 2,
-                        height: (menuSize - 8) / 2,
-                        title: 'Staffs',
-                        iconData: Icons.group,
-                        color: const Color(0xFFC2592F),
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const StaffsPage(),
-                            ),
-                          ).then((value) => setState(() {}));
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  width: menuSize,
-                  height: (menuSize - 8) / 2,
-                  child: Wrap(
-                    spacing: 8,
-                    runSpacing: 8,
-                    children: [
-                      MenuCard(
-                        iconSize: iconSize / 1.75,
-                        titleSize: titleSize * 0.7,
-                        subtitleSize: subtitleSize * 0.7,
-                        width: (menuSize),
-                        height: (menuSize - 8) / 2,
-                        iconData: Icons.table_restaurant,
-                        title: 'Dining Tables',
-                        color: KColors.tertiary3,
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const DiningTablesPage(),
-                            ),
-                          ).then((value) => setState(() {}));
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                MenuCard(
-                  iconData: Icons.history,
-                  iconSize: iconSize,
-                  title: 'Orders',
-                  subtitle: 'All orders are here',
-                  titleSize: titleSize,
-                  subtitleSize: subtitleSize,
-                  color: KColors.tertiary2,
-                  width: menuSize,
-                  height: menuSize,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const OrdersPage(),
-                      ),
-                    ).then((value) => setState(() {}));
-                  },
-                ),
-                MenuCard(
-                  iconData: Icons.payment,
-                  iconSize: iconSize,
-                  title: 'Payments',
-                  subtitle: 'All payment receipts are here',
-                  titleSize: titleSize,
-                  subtitleSize: subtitleSize,
-                  color: KColors.alternate2,
-                  width: menuSize,
-                  height: menuSize,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const PaymentsPage(),
-                      ),
-                    ).then((value) => setState(() {}));
-                  },
-                ),
+                const SizedBox(height: 16),
+                // ── Menu Grid ──
                 Wrap(
-                  spacing: 8,
-                  runSpacing: 8,
-                  children: [
-                    MenuCard(
-                      iconData: Icons.photo_library,
-                      iconSize: iconSize / 1.75,
-                      title: 'Library',
-                      subtitle: 'Images and resources are here',
-                      titleSize: titleSize * 0.7,
-                      subtitleSize: subtitleSize * 0.7,
-                      width: menuSize,
-                      height: (menuSize - 8) / 2,
-                      color: const Color(0xFF2FC289),
-                      onTap: () => _showLibrary(context),
-                    ),
-                    MenuCard(
-                      iconData: FontAwesomeIcons.database,
-                      iconSize: iconSize / 1.75,
-                      title: 'Data Mgmt.',
-                      titleSize: titleSize * 0.7,
-                      subtitleSize: subtitleSize * 0.7,
-                      width: (menuSize - 8) / 2,
-                      height: (menuSize - 8) / 2,
-                      color: const Color(0xFFEF9050),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const DataManagementPage(),
-                          ),
-                        ).then((value) => setState(() {}));
-                      },
-                    ),
-                    MenuCard(
-                      iconData: Icons.settings,
-                      iconSize: iconSize / 1.75,
-                      title: 'Settings',
-                      titleSize: titleSize * 0.7,
-                      subtitleSize: subtitleSize * 0.7,
-                      width: (menuSize - 8) / 2,
-                      height: (menuSize - 8) / 2,
-                      color: const Color(0xFF222222),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const SettingPage(),
-                          ),
-                        ).then((value) => setState(() {}));
-                      },
-                    ),
-                  ],
+                  spacing: spacing,
+                  runSpacing: spacing,
+                  children: _menuItems.map((item) => _DashboardTile(
+                    item: item,
+                    width: cardWidth,
+                    height: cardHeight,
+                  )).toList(),
                 ),
               ],
-            ),
-          ],
+            );
+          },
         ),
+      ),
+    );
+  }
+
+  void _onTap(BuildContext context, String route) {
+    switch (route) {
+      case 'pos':
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const PointOfSalePage()));
+        break;
+      case 'orders':
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const OrdersPage()));
+        break;
+      case 'payments':
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const PaymentsPage()));
+        break;
+      case 'categories':
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const ProductCategoriesPage()));
+        break;
+      case 'kitchen':
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const KitchenPage()));
+        break;
+      case 'inventory':
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const InventoryItemsPage()));
+        break;
+      case 'customers':
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const CustomersPage()));
+        break;
+      case 'staffs':
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const StaffsPage()));
+        break;
+      case 'tables':
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const DiningTablesPage()));
+        break;
+      case 'library':
+        _showLibrary(context);
+        break;
+      case 'data':
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const DataManagementPage()));
+        break;
+      case 'settings':
+        Navigator.push(context, MaterialPageRoute(builder: (_) => const SettingPage()));
+        break;
+    }
+  }
+
+  void _showLogoutDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Logout'),
+        content: const Text('Are you sure you want to logout?'),
+        actions: [
+          TextButton(onPressed: () => Navigator.pop(ctx), child: const Text('No')),
+          TextButton(
+            onPressed: () {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => const LogoutPage()),
+              );
+            },
+            child: const Text('Yes'),
+          ),
+        ],
       ),
     );
   }
@@ -414,32 +237,170 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ImageLibraryPage(context, (value) {
-          // Display in full screen view
-
+        builder: (_) => ImageLibraryPage(context, (value) {
           showDialog(
             context: context,
-            builder: (context) {
+            builder: (ctx) {
               final image = Image(image: (value ?? LibraryImage('')).image);
               return Dialog(
-                // Add close button to dialog (top right)
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    image: DecorationImage(
-                      image: image.image,
-                      fit: BoxFit.contain,
-                    ),
+                    image: DecorationImage(image: image.image, fit: BoxFit.contain),
                   ),
-                  width: MediaQuery.of(context).size.width * 0.80,
-                  // Set height with aspect ratio to image size and screen width
-                  // height: MediaQuery.of(context).size.width * 0.80 * (image.height ?? 1) / (image.width ?? 1),
-                  // height: MediaQuery.of(context).size.height * 0.80,
+                  width: MediaQuery.of(context).size.width * 0.8,
                 ),
               );
             },
-          ).then((value) => setState(() {}));
+          ).then((_) => setState(() {}));
         }),
+      ),
+    );
+  }
+}
+
+// ── Data class ──────────────────────────────────────────────────
+class _MenuItem {
+  final IconData icon;
+  final String label;
+  final String subtitle;
+  final Color color;
+  final String route;
+  const _MenuItem({
+    required this.icon,
+    required this.label,
+    required this.subtitle,
+    required this.color,
+    required this.route,
+  });
+}
+
+// ── Header widget ───────────────────────────────────────────────
+class _DashboardHeader extends StatelessWidget {
+  final String companyName;
+  final ImageProvider? image;
+  final int cartCount;
+  final VoidCallback onCartTap;
+  final VoidCallback onLogout;
+
+  const _DashboardHeader({
+    required this.companyName,
+    this.image,
+    required this.cartCount,
+    required this.onCartTap,
+    required this.onLogout,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isDesktop = Responsive.isDesktop(context);
+    return Row(
+      children: [
+        if (image != null) ...[
+          Container(
+            height: 54,
+            width: 54,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(16),
+              image: DecorationImage(fit: BoxFit.cover, image: image!),
+            ),
+          ),
+          const SizedBox(width: 12),
+        ],
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(companyName, style: TextStyle(
+                color: const Color(0xFF8B97A2),
+                fontSize: isDesktop ? 16 : 14,
+              )),
+              Text('Dashboard', style: TextStyle(
+                color: const Color(0xFF090F13),
+                fontSize: isDesktop ? 28 : 24,
+                fontWeight: FontWeight.bold,
+              )),
+            ],
+          ),
+        ),
+        // Cart badge
+        if (cartCount > 0)
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: Stack(
+              children: [
+                IconButton(icon: const Icon(Icons.shopping_cart_outlined), onPressed: onCartTap),
+                Positioned(
+                  top: 0, right: 0,
+                  child: Container(
+                    padding: const EdgeInsets.all(5),
+                    decoration: BoxDecoration(color: KColors.primary, shape: BoxShape.circle),
+                    child: Text(cartCount.toString(), style: const TextStyle(
+                      color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold,
+                    )),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        IconButton(icon: const Icon(Icons.power_settings_new), onPressed: onLogout),
+      ],
+    );
+  }
+}
+
+// ── Menu tile widget ────────────────────────────────────────────
+class _DashboardTile extends StatelessWidget {
+  final _MenuItem item;
+  final double width;
+  final double height;
+
+  const _DashboardTile({
+    required this.item,
+    required this.width,
+    required this.height,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      width: width,
+      height: height,
+      child: InkWell(
+        onTap: () {
+          // Find the parent DashboardPage state and call _onTap
+          final page = context.findAncestorStateOfType<_DashboardPageState>();
+          page?._onTap(context, item.route);
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: Container(
+          decoration: BoxDecoration(
+            color: item.color,
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: const [
+              BoxShadow(blurRadius: 4, color: Color(0x37000000), offset: Offset(0, 1)),
+            ],
+          ),
+          padding: const EdgeInsets.all(14),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(item.icon, color: Colors.white, size: 32),
+              const Spacer(),
+              Text(item.label, style: TextStyle(
+                color: Colors.white,
+                fontSize: Responsive.bodySize(context),
+                fontWeight: FontWeight.w700,
+              )),
+              const SizedBox(height: 2),
+              Text(item.subtitle, style: TextStyle(
+                color: Colors.white70,
+                fontSize: Responsive.bodySize(context) - 2,
+              )),
+            ],
+          ),
+        ),
       ),
     );
   }
