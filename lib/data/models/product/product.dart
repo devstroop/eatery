@@ -27,6 +27,10 @@ class Product extends HiveObject {
   ProductType type; // enum
   @HiveField(10)
   bool isActive;
+  @HiveField(11)
+  int? stationId;
+  @HiveField(12)
+  String? stationName;
 
   Product(
       {
@@ -39,7 +43,9 @@ class Product extends HiveObject {
       this.taxSlabId,
       this.foodType,
       required this.type,
-      required this.isActive}): id = EateryDB.instance.productBox?.nextId();
+      required this.isActive,
+      this.stationId,
+      this.stationName}): id = EateryDB.instance.productBox?.nextId();
 
   Product.fromMap(Map<String, dynamic> map)
       : id = map['id'],
@@ -54,7 +60,9 @@ class Product extends HiveObject {
             .where((element) => element.id == map['foodType']).firstOrNull,
         type = ProductType.values
             .singleWhere((element) => element.index == map['type']),
-        isActive = map['isActive'];
+        isActive = map['isActive'],
+        stationId = map['stationId'],
+        stationName = map['stationName'];
 
   Map<String, Object?> toMap() {
     return {
@@ -68,7 +76,9 @@ class Product extends HiveObject {
       'taxSlabId': taxSlabId,
       'foodType': foodType != null ? foodType!.id : null,
       'type': type.index,
-      'isActive': isActive
+      'isActive': isActive,
+      'stationId': stationId,
+      'stationName': stationName,
     };
   }
 
@@ -85,7 +95,9 @@ class Product extends HiveObject {
           .singleWhere((element) => element.id == iterable.elementAt(8) as int),
       type: ProductType.values
           .singleWhere((element) => element.index == iterable.elementAt(9) as int),
-      isActive: iterable.elementAt(10) as bool
+      isActive: iterable.elementAt(10) as bool,
+      stationId: iterable.elementAt(11) as int?,
+      stationName: iterable.elementAt(12) as String?,
     );
   }
 
@@ -101,7 +113,9 @@ class Product extends HiveObject {
       this.taxSlabId,
       this.foodType != null ? this.foodType!.id : null,
       this.type.index,
-      this.isActive
+      this.isActive,
+      this.stationId,
+      this.stationName,
     ];
   }
 }

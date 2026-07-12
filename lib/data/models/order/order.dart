@@ -31,6 +31,14 @@ class Order extends HiveObject {
   double? paidTotal;
   @HiveField(12)
   OrderType type;
+  @HiveField(13)
+  String status; // "active", "completed", "voided", "refunded"
+  @HiveField(14)
+  String? voidReason;
+  @HiveField(15)
+  String? voidedBy;
+  @HiveField(16)
+  DateTime? voidedAt;
 
   Order({
     this.customerPhone,
@@ -43,6 +51,10 @@ class Order extends HiveObject {
     required this.grandTotal,
     this.paidTotal,
     required this.type,
+    this.status = 'active',
+    this.voidReason,
+    this.voidedBy,
+    this.voidedAt,
   })   : id = EateryDB.instance.orderBox?.nextId(),
         createdAt = DateTime.now();
 
@@ -59,7 +71,11 @@ class Order extends HiveObject {
         roundOff = map['roundOff'],
         grandTotal = map['grandTotal'],
         paidTotal = map['paidTotal'],
-        type = OrderType.values[map['type']];
+        type = OrderType.values[map['type']],
+        status = map['status'] ?? 'active',
+        voidReason = map['voidReason'],
+        voidedBy = map['voidedBy'],
+        voidedAt = map['voidedAt'] != null ? DateTime.fromMillisecondsSinceEpoch(map['voidedAt']) : null;
 
   Map<String, Object?> toMap() {
     return {
@@ -76,6 +92,10 @@ class Order extends HiveObject {
       'grandTotal': grandTotal,
       'paidTotal': paidTotal,
       'type': type.index,
+      'status': status,
+      'voidReason': voidReason,
+      'voidedBy': voidedBy,
+      'voidedAt': voidedAt?.millisecondsSinceEpoch,
     };
   }
 }

@@ -29,6 +29,10 @@ class OrderProduct extends HiveObject{
   double? taxAmount;
   @HiveField(11)
   double total;
+  @HiveField(12)
+  int? stationId;
+  @HiveField(13)
+  String? stationName;
 
   OrderProduct({
     required this.orderId,
@@ -42,6 +46,8 @@ class OrderProduct extends HiveObject{
     this.discountRate,
     this.discountAmount,
     required this.total,
+    this.stationId,
+    this.stationName,
 
   }) : id = EateryDB.instance.orderProductBox?.nextId();
 
@@ -57,7 +63,9 @@ class OrderProduct extends HiveObject{
         taxAmount = map['taxAmount'],
         discountRate = map['discountRate'],
         discountAmount = map['discountAmount'],
-        total = map['total'];
+        total = map['total'],
+        stationId = map['stationId'],
+        stationName = map['stationName'];
 
   Map<String, Object?> toMap() {
     return {
@@ -73,6 +81,8 @@ class OrderProduct extends HiveObject{
       'discountRate': discountRate,
       'discountAmount': discountAmount,
       'total': total,
+      'stationId': stationId,
+      'stationName': stationName,
     };
   }
 }

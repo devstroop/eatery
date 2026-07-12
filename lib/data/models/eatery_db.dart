@@ -54,6 +54,13 @@ export 'staff/staff_type.dart';
 export 'payment/payment.dart';
 export 'payment/payment_mode.dart';
 
+// KDS
+export 'kds_station.dart';
+
+// Compliance
+export 'compliance/void_log_entry.dart';
+export 'compliance/compliance_report.dart';
+
 // Extensions
 export 'extensions/box.extension.dart';
 
@@ -93,4 +100,7 @@ class TypeIndex {
   static const paymentMode = 22;
   static const diningTableStatus = 23;
   static const orderProduct = 24;
+  static const kdsStation = 25;
+  static const voidLogEntry = 26;
+  static const complianceReport = 27;
 }

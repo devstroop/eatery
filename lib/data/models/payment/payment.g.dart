@@ -2,10 +2,6 @@
 
 part of 'payment.dart';
 
-// **************************************************************************
-// TypeAdapterGenerator
-// **************************************************************************
-
 class PaymentAdapter extends TypeAdapter<Payment> {
   @override
   final int typeId = 21;
@@ -22,6 +18,11 @@ class PaymentAdapter extends TypeAdapter<Payment> {
       mode: fields[4] as PaymentMode,
       reference: fields[5] as String?,
       attachment: fields[6] as String?,
+      processorTransactionId: fields[7] as String?,
+      processorName: fields[8] as String?,
+      processorStatus: fields[9] as String?,
+      cardLastFour: fields[10] as String?,
+      terminalId: fields[11] as String?,
     )
       ..id = fields[0] as int?
       ..date = fields[2] as DateTime;
@@ -30,7 +31,7 @@ class PaymentAdapter extends TypeAdapter<Payment> {
   @override
   void write(BinaryWriter writer, Payment obj) {
     writer
-      ..writeByte(7)
+      ..writeByte(12)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -44,7 +45,17 @@ class PaymentAdapter extends TypeAdapter<Payment> {
       ..writeByte(5)
       ..write(obj.reference)
       ..writeByte(6)
-      ..write(obj.attachment);
+      ..write(obj.attachment)
+      ..writeByte(7)
+      ..write(obj.processorTransactionId)
+      ..writeByte(8)
+      ..write(obj.processorName)
+      ..writeByte(9)
+      ..write(obj.processorStatus)
+      ..writeByte(10)
+      ..write(obj.cardLastFour)
+      ..writeByte(11)
+      ..write(obj.terminalId);
   }
 
   @override

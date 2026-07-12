@@ -42,6 +42,10 @@ class EateryDatabase {
   Box<PrinterType>? _printerTypeBox;
   Box<Payment>? _paymentBox;
   Box<PaymentMode>? _paymentModeBox;
+  Box<KdsStation>? _kdsStationBox;
+  Box<VoidLogEntry>? _voidLogEntryBox;
+  Box<ComplianceReport>? _complianceReportBox;
+  Box<String>? _opLogBox;
 
   // Box getters — mirrors EateryDB.boxName! pattern for compatibility
   Box<Company> get companyBox => _companyBox!;
@@ -69,6 +73,10 @@ class EateryDatabase {
   Box<PrinterType> get printerTypeBox => _printerTypeBox!;
   Box<Payment> get paymentBox => _paymentBox!;
   Box<PaymentMode> get paymentModeBox => _paymentModeBox!;
+  Box<KdsStation> get kdsStationBox => _kdsStationBox!;
+  Box<VoidLogEntry> get voidLogEntryBox => _voidLogEntryBox!;
+  Box<ComplianceReport> get complianceReportBox => _complianceReportBox!;
+  Box<String> get opLogBox => _opLogBox!;
 
   /// Initialize all Hive boxes.
   Future<void> init() async {
@@ -99,6 +107,9 @@ class EateryDatabase {
     Hive.registerAdapter(PrinterTypeAdapter());
     Hive.registerAdapter(PaymentAdapter());
     Hive.registerAdapter(PaymentModeAdapter());
+    Hive.registerAdapter(KdsStationAdapter());
+    Hive.registerAdapter(VoidLogEntryAdapter());
+    Hive.registerAdapter(ComplianceReportAdapter());
 
     _companyBox = await Hive.openBox<Company>('company');
     _currencyBox = await Hive.openBox<KCurrency>('currency');
@@ -130,6 +141,12 @@ class EateryDatabase {
     _printerTypeBox = await Hive.openBox<PrinterType>('printerType');
     _paymentBox = await Hive.openBox<Payment>('payment');
     _paymentModeBox = await Hive.openBox<PaymentMode>('paymentMode');
+    _kdsStationBox = await Hive.openBox<KdsStation>('kdsStation');
+    _voidLogEntryBox = await Hive.openBox<VoidLogEntry>('voidLogEntry');
+    _complianceReportBox = await Hive.openBox<ComplianceReport>(
+      'complianceReport',
+    );
+    _opLogBox = await Hive.openBox<String>('opLog');
     isInitialized = true;
   }
 
@@ -160,6 +177,10 @@ class EateryDatabase {
       _orderTypeBox?.deleteFromDisk() ?? Future.value(),
       _paymentBox?.deleteFromDisk() ?? Future.value(),
       _paymentModeBox?.deleteFromDisk() ?? Future.value(),
+      _kdsStationBox?.deleteFromDisk() ?? Future.value(),
+      _voidLogEntryBox?.deleteFromDisk() ?? Future.value(),
+      _complianceReportBox?.deleteFromDisk() ?? Future.value(),
+      _opLogBox?.deleteFromDisk() ?? Future.value(),
     ]);
   }
 

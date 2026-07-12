@@ -60,6 +60,10 @@ class EateryDB {
   Box<PrinterType>? get printerTypeBox => _db?.printerTypeBox;
   Box<Payment>? get paymentBox => _db?.paymentBox;
   Box<PaymentMode>? get paymentModeBox => _db?.paymentModeBox;
+  Box<KdsStation>? get kdsStationBox => _db?.kdsStationBox;
+  Box<VoidLogEntry>? get voidLogEntryBox => _db?.voidLogEntryBox;
+  Box<ComplianceReport>? get complianceReportBox => _db?.complianceReportBox;
+  Box<String>? get opLogBox => _db?.opLogBox;
 
   /// Clears all boxes from disk.
   Future<void> deleteAll() => _db?.deleteAll() ?? Future.value();

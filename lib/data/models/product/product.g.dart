@@ -2,10 +2,6 @@
 
 part of 'product.dart';
 
-// **************************************************************************
-// TypeAdapterGenerator
-// **************************************************************************
-
 class ProductAdapter extends TypeAdapter<Product> {
   @override
   final int typeId = 8;
@@ -27,13 +23,16 @@ class ProductAdapter extends TypeAdapter<Product> {
       foodType: fields[8] as FoodType?,
       type: fields[9] as ProductType,
       isActive: fields[10] as bool,
-    )..id = fields[0] as int?;
+      stationId: fields[11] as int?,
+      stationName: fields[12] as String?,
+    )
+      ..id = fields[0] as int?;
   }
 
   @override
   void write(BinaryWriter writer, Product obj) {
     writer
-      ..writeByte(11)
+      ..writeByte(13)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -55,7 +54,11 @@ class ProductAdapter extends TypeAdapter<Product> {
       ..writeByte(9)
       ..write(obj.type)
       ..writeByte(10)
-      ..write(obj.isActive);
+      ..write(obj.isActive)
+      ..writeByte(11)
+      ..write(obj.stationId)
+      ..writeByte(12)
+      ..write(obj.stationName);
   }
 
   @override

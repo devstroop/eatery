@@ -19,9 +19,28 @@ class Payment extends HiveObject {
   String? reference;
   @HiveField(6)
   String? attachment;
+  @HiveField(7)
+  String? processorTransactionId;
+  @HiveField(8)
+  String? processorName;
+  @HiveField(9)
+  String? processorStatus;
+  @HiveField(10)
+  String? cardLastFour;
+  @HiveField(11)
+  String? terminalId;
 
   Payment(
-      {this.orderId, required this.amount, required this.mode, this.reference, this.attachment})
+      {this.orderId,
+      required this.amount,
+      required this.mode,
+      this.reference,
+      this.attachment,
+      this.processorTransactionId,
+      this.processorName,
+      this.processorStatus,
+      this.cardLastFour,
+      this.terminalId})
       :id= EateryDB.instance.paymentBox?.nextId(),
         date = DateTime.now();
 
@@ -32,7 +51,12 @@ class Payment extends HiveObject {
         amount = map['amount'],
         mode = PaymentMode.values[map['mode']],
         reference = map['reference'],
-        attachment = map['attachment'];
+        attachment = map['attachment'],
+        processorTransactionId = map['processorTransactionId'],
+        processorName = map['processorName'],
+        processorStatus = map['processorStatus'],
+        cardLastFour = map['cardLastFour'],
+        terminalId = map['terminalId'];
 
   Map<String, Object?> toMap() {
     return {
@@ -42,7 +66,12 @@ class Payment extends HiveObject {
       'amount': amount,
       'mode': mode.index,
       'reference': reference,
-      'attachment': attachment
+      'attachment': attachment,
+      'processorTransactionId': processorTransactionId,
+      'processorName': processorName,
+      'processorStatus': processorStatus,
+      'cardLastFour': cardLastFour,
+      'terminalId': terminalId,
     };
   }
 
@@ -54,7 +83,12 @@ class Payment extends HiveObject {
       'amount': row.elementAt(3),
       'mode': row.elementAt(4),
       'reference': row.elementAt(5),
-      'attachment': row.elementAt(6)
+      'attachment': row.elementAt(6),
+      'processorTransactionId': row.elementAt(7),
+      'processorName': row.elementAt(8),
+      'processorStatus': row.elementAt(9),
+      'cardLastFour': row.elementAt(10),
+      'terminalId': row.elementAt(11),
     });
   }
 
@@ -67,7 +101,12 @@ class Payment extends HiveObject {
       map['amount'],
       map['mode'],
       map['reference'],
-      map['attachment']
+      map['attachment'],
+      map['processorTransactionId'],
+      map['processorName'],
+      map['processorStatus'],
+      map['cardLastFour'],
+      map['terminalId'],
     ];
   }
 }

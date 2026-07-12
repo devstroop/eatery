@@ -2,10 +2,6 @@
 
 part of 'order_product.dart';
 
-// **************************************************************************
-// TypeAdapterGenerator
-// **************************************************************************
-
 class OrderProductAdapter extends TypeAdapter<OrderProduct> {
   @override
   final int typeId = 24;
@@ -23,18 +19,21 @@ class OrderProductAdapter extends TypeAdapter<OrderProduct> {
       quantity: fields[4] as int,
       price: fields[5] as double,
       subTotal: fields[6] as double,
-      taxRate: fields[9] as double?,
-      taxAmount: fields[10] as double?,
       discountRate: fields[7] as double?,
       discountAmount: fields[8] as double?,
+      taxRate: fields[9] as double?,
+      taxAmount: fields[10] as double?,
       total: fields[11] as double,
-    )..id = fields[0] as int?;
+      stationId: fields[12] as int?,
+      stationName: fields[13] as String?,
+    )
+      ..id = fields[0] as int?;
   }
 
   @override
   void write(BinaryWriter writer, OrderProduct obj) {
     writer
-      ..writeByte(12)
+      ..writeByte(14)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -58,7 +57,11 @@ class OrderProductAdapter extends TypeAdapter<OrderProduct> {
       ..writeByte(10)
       ..write(obj.taxAmount)
       ..writeByte(11)
-      ..write(obj.total);
+      ..write(obj.total)
+      ..writeByte(12)
+      ..write(obj.stationId)
+      ..writeByte(13)
+      ..write(obj.stationName);
   }
 
   @override

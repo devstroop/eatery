@@ -2,10 +2,6 @@
 
 part of 'order.dart';
 
-// **************************************************************************
-// TypeAdapterGenerator
-// **************************************************************************
-
 class OrderAdapter extends TypeAdapter<Order> {
   @override
   final int typeId = 4;
@@ -27,6 +23,10 @@ class OrderAdapter extends TypeAdapter<Order> {
       grandTotal: fields[10] as double,
       paidTotal: fields[11] as double?,
       type: fields[12] as OrderType,
+      status: fields[13] as String? ?? 'active',
+      voidReason: fields[14] as String?,
+      voidedBy: fields[15] as String?,
+      voidedAt: fields[16] as DateTime?,
     )
       ..id = fields[0] as int?
       ..createdAt = fields[2] as DateTime
@@ -36,7 +36,7 @@ class OrderAdapter extends TypeAdapter<Order> {
   @override
   void write(BinaryWriter writer, Order obj) {
     writer
-      ..writeByte(13)
+      ..writeByte(17)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -62,7 +62,15 @@ class OrderAdapter extends TypeAdapter<Order> {
       ..writeByte(11)
       ..write(obj.paidTotal)
       ..writeByte(12)
-      ..write(obj.type);
+      ..write(obj.type)
+      ..writeByte(13)
+      ..write(obj.status)
+      ..writeByte(14)
+      ..write(obj.voidReason)
+      ..writeByte(15)
+      ..write(obj.voidedBy)
+      ..writeByte(16)
+      ..write(obj.voidedAt);
   }
 
   @override
