@@ -1,27 +1,26 @@
+import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Color _pageColor = KColors.tertiary;
 
-class EditDiningTableCategoryPage extends StatefulWidget {
+class EditDiningTableCategoryPage extends ConsumerStatefulWidget {
   const EditDiningTableCategoryPage({Key? key, required this.category})
-      : super(key: key);
+    : super(key: key);
   final DiningTableCategory category;
 
   @override
-  State<EditDiningTableCategoryPage> createState() =>
+  ConsumerState<EditDiningTableCategoryPage> createState() =>
       _EditDiningTableCategoryPageState();
 }
 
 class _EditDiningTableCategoryPageState
-    extends State<EditDiningTableCategoryPage> {
+    extends ConsumerState<EditDiningTableCategoryPage> {
   final TextEditingController _controllerCategoryName = TextEditingController();
   final TextEditingController _controllerCategoryDescription =
       TextEditingController();
 
-  final List<FocusNode> _focusNodes = [
-    FocusNode(),
-    FocusNode(),
-  ];
+  final List<FocusNode> _focusNodes = [FocusNode(), FocusNode()];
 
   final _formKey = GlobalKey<FormState>();
 
@@ -31,7 +30,6 @@ class _EditDiningTableCategoryPageState
     setState(() {
       _controllerCategoryName.text = widget.category.name;
       _controllerCategoryDescription.text = widget.category.description ?? '';
-
     });
   }
 
@@ -83,9 +81,7 @@ class _EditDiningTableCategoryPageState
                     return null;
                   },
                 ),
-                const SizedBox(
-                  height: 6.0,
-                ),
+                const SizedBox(height: 6.0),
                 LabeledCustomTextFormField(
                   keyboardType: TextInputType.text,
                   controller: _controllerCategoryDescription,
@@ -100,9 +96,7 @@ class _EditDiningTableCategoryPageState
                     _focusNodes[1].unfocus();
                   },
                 ),
-                const SizedBox(
-                  height: 6.0,
-                ),
+                const SizedBox(height: 6.0),
               ],
             ),
           ),
@@ -117,17 +111,29 @@ class _EditDiningTableCategoryPageState
               return;
             }
             _formKey.currentState!.save();
-            EateryDB.instance.diningTableCategoryBox!.values
+            ref
+                .read(appDatabaseProvider)
+                .diningTableCategoryBox
+                .values
                 .where((element) => element.id == widget.category.id)
                 .first
               ..name = _controllerCategoryName.text
               ..description = _controllerCategoryDescription.text
               ..save()
-                  .then((value) => showMessageDialog(context,
-                  'Updated successfully', MessageType.success)
-                  .then((value) => Navigator.pop(this.context)))
-                  .onError((error, stackTrace) => showMessageDialog(
-                  context, 'Can\'t update', MessageType.error));
+                  .then(
+                    (value) => showMessageDialog(
+                      context,
+                      'Updated successfully',
+                      MessageType.success,
+                    ).then((value) => Navigator.pop(this.context)),
+                  )
+                  .onError(
+                    (error, stackTrace) => showMessageDialog(
+                      context,
+                      'Can\'t update',
+                      MessageType.error,
+                    ),
+                  );
           },
           child: const Text('Update'),
         ),

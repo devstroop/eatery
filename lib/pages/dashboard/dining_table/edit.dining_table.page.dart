@@ -1,25 +1,26 @@
+import 'package:eatery/presentation/providers/order_provider.dart';
+import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Color _pageColor = KColors.tertiary;
 
-class EditDiningTablePage extends StatefulWidget {
+class EditDiningTablePage extends ConsumerStatefulWidget {
   const EditDiningTablePage({Key? key, required this.diningTable})
-      : super(key: key);
+    : super(key: key);
   final DiningTable diningTable;
   @override
-  State<EditDiningTablePage> createState() => _EditDiningTablePageState();
+  ConsumerState<EditDiningTablePage> createState() =>
+      _EditDiningTablePageState();
 }
 
-class _EditDiningTablePageState extends State<EditDiningTablePage> {
+class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
   DiningTableCategory? diningTableCategory;
   final TextEditingController _controllerCategoryName = TextEditingController();
   final TextEditingController _controllerCategoryDescription =
       TextEditingController();
   final TextEditingController _controllerCapacity = TextEditingController();
-  final List<FocusNode> _focusNodes = [
-    FocusNode(),
-    FocusNode(),
-  ];
+  final List<FocusNode> _focusNodes = [FocusNode(), FocusNode()];
 
   DiningTableStatus status = DiningTableStatus.available;
 
@@ -30,12 +31,19 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
     super.initState();
     Future.delayed(Duration.zero, () {
       setState(() {
-        diningTableCategory = EateryDB.instance.diningTableCategoryBox!.values
+        diningTableCategory =
+            ref
+                .read(appDatabaseProvider)
+                .diningTableCategoryBox
+                .values
                 .where((elem) => elem.id == widget.diningTable.category?.id)
                 .isNotEmpty
-            ? EateryDB.instance.diningTableCategoryBox!.values
-                .where((elem) => elem.id == widget.diningTable.category?.id)
-                .first
+            ? ref
+                  .read(appDatabaseProvider)
+                  .diningTableCategoryBox
+                  .values
+                  .where((elem) => elem.id == widget.diningTable.category?.id)
+                  .first
             : null;
         _controllerCategoryName.text = widget.diningTable.name;
         _controllerCategoryDescription.text =
@@ -91,9 +99,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                     return null;
                   },
                 ),
-                const SizedBox(
-                  height: 12.0,
-                ),
+                const SizedBox(height: 12.0),
                 LabeledCustomTextFormField(
                   label: 'Description',
                   controller: _controllerCategoryDescription,
@@ -107,9 +113,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                     FocusScope.of(context).unfocus();
                   },
                 ),
-                const SizedBox(
-                  height: 12.0,
-                ),
+                const SizedBox(height: 12.0),
                 LabeledCustomTextFormField(
                   label: 'Capacity',
                   controller: _controllerCapacity,
@@ -122,9 +126,7 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                     FocusScope.of(context).unfocus();
                   },
                 ),
-                const SizedBox(
-                  height: 12.0,
-                ),
+                const SizedBox(height: 12.0),
                 Text(
                   'Category',
                   style: TextStyle(
@@ -141,33 +143,33 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
                     scrollDirection: Axis.horizontal,
                     children: [
                       PosCategoryWidget(
-                          active: diningTableCategory == null,
-                          label: 'None',
-                          onTap: () {
-                            setState(
-                              () {
-                                diningTableCategory = null;
+                        active: diningTableCategory == null,
+                        label: 'None',
+                        onTap: () {
+                          setState(() {
+                            diningTableCategory = null;
+                          });
+                        },
+                      ),
+                      ...ref
+                          .read(appDatabaseProvider)
+                          .diningTableCategoryBox
+                          .values
+                          .map((e) {
+                            return PosCategoryWidget(
+                              active: diningTableCategory?.id == e.id,
+                              label: e.name,
+                              onTap: () {
+                                setState(() {
+                                  diningTableCategory = e;
+                                });
                               },
                             );
                           }),
-                      ...EateryDB.instance.diningTableCategoryBox!.values
-                          .map((e) {
-                        return PosCategoryWidget(
-                          active: diningTableCategory?.id == e.id,
-                          label: e.name,
-                          onTap: () {
-                            setState(() {
-                              diningTableCategory = e;
-                            });
-                          },
-                        );
-                      }),
                     ],
                   ),
                 ),
-                const SizedBox(
-                  height: 12.0,
-                ),
+                const SizedBox(height: 12.0),
                 DiningTableStatusWidget(
                   status: DiningTableStatus.available,
                   onTap: () {
@@ -190,7 +192,9 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
               return;
             }
 
-            DiningTable diningTable = EateryDB.instance.diningTableBox!.values.where((element) => element.id == widget.diningTable.id).first;
+            DiningTable diningTable = ref
+                .read(diningTableRepositoryProvider)
+                .getTableById(widget.diningTable.id!)!;
 
             diningTable.name = _controllerCategoryName.text;
             diningTable.description = _controllerCategoryDescription.text;
@@ -198,13 +202,23 @@ class _EditDiningTablePageState extends State<EditDiningTablePage> {
             diningTable.status = status;
             diningTable.capacity = int.parse(_controllerCapacity.text);
 
-            await EateryDB.instance.diningTableBox!
-                .put(diningTable.key, diningTable)
+            await ref
+                .read(diningTableRepositoryProvider)
+                .saveTable(diningTable)
                 .then((value) {
-                  showMessageDialog(context, 'Successfully updated', MessageType.success).then((value) => Navigator.of(this.context).pop());
-            }).onError((error, stackTrace) {
-              showMessageDialog(context, 'Failed to update', MessageType.error);
-            });
+                  showMessageDialog(
+                    context,
+                    'Successfully updated',
+                    MessageType.success,
+                  ).then((value) => Navigator.of(this.context).pop());
+                })
+                .onError((error, stackTrace) {
+                  showMessageDialog(
+                    context,
+                    'Failed to update',
+                    MessageType.error,
+                  );
+                });
           },
           child: const Text('Update'),
         ),
@@ -249,5 +263,4 @@ class DiningTableStatusWidget extends StatelessWidget {
       ),
     );
   }
-
 }

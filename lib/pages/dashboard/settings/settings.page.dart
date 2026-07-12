@@ -1,12 +1,15 @@
+import 'package:eatery/dev/database_inspector.dart';
+import 'package:eatery/dev/seed_loader.dart';
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class SettingPage extends StatefulWidget {
+class SettingPage extends ConsumerStatefulWidget {
   const SettingPage({Key? key}) : super(key: key);
   @override
-  State<SettingPage> createState() => _SettingPageState();
+  ConsumerState<SettingPage> createState() => _SettingPageState();
 }
 
-class _SettingPageState extends State<SettingPage> {
+class _SettingPageState extends ConsumerState<SettingPage> {
   @override
   void initState() {
     super.initState();
@@ -31,7 +34,8 @@ class _SettingPageState extends State<SettingPage> {
           onTap: () {
             Navigator.push(
               this.context,
-              MaterialPageRoute(builder: (context) => const ShowCompanyPage()),
+              MaterialPageRoute(
+                  builder: (context) => const ShowCompanyPage()),
             ).then((_) => setState(() {}));
           },
         ),
@@ -56,8 +60,7 @@ class _SettingPageState extends State<SettingPage> {
           onTap: () => Navigator.push(
             this.context,
             MaterialPageRoute(
-                builder: (context) =>
-                    const TaxSlabsSettingsPage()),
+                builder: (context) => const TaxSlabsSettingsPage()),
           ),
         ),
         MenuTile(
@@ -71,6 +74,45 @@ class _SettingPageState extends State<SettingPage> {
             MaterialPageRoute(builder: (context) => PrinterSettingsPage(account: widget.account)),
           ),*/
         ),
+        // Developer section — visible only in debug mode
+        if (const bool.fromEnvironment('dart.vm.product') == false) ...[
+          const Divider(height: 32),
+          const Padding(
+            padding: EdgeInsets.only(left: 16, bottom: 4),
+            child: Text('Developer',
+                style: TextStyle(
+                    fontSize: 12,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.grey)),
+          ),
+          MenuTile(
+            prefixIcon: Icons.storage,
+            title: 'Load Sample Data',
+            subtitle: 'Populate DB with demo data',
+            postfixIcon: Icons.download,
+            color: Colors.orange,
+            onTap: () async {
+              await loadSeedData(ref);
+              if (this.context.mounted) {
+                ScaffoldMessenger.of(this.context).showSnackBar(
+                  const SnackBar(content: Text('Sample data loaded')),
+                );
+              }
+            },
+          ),
+          MenuTile(
+            prefixIcon: Icons.bug_report,
+            title: 'Database Inspector',
+            subtitle: 'View and manage DB contents',
+            postfixIcon: Icons.chevron_right,
+            color: Colors.orange,
+            onTap: () => Navigator.push(
+              this.context,
+              MaterialPageRoute(
+                  builder: (context) => const DatabaseInspector()),
+            ),
+          ),
+        ],
       ]),
     );
   }
@@ -88,7 +130,11 @@ class _SettingPageState extends State<SettingPage> {
       body: Stack(
         children: [
           Positioned(
-              top: 12.0, left: 0.0, right: 0.0, bottom: 72, child: options()),
+              top: 12.0,
+              left: 0.0,
+              right: 0.0,
+              bottom: 72,
+              child: options()),
         ],
       ),
     );

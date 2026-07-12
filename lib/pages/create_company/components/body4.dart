@@ -1,6 +1,5 @@
-import 'package:get/get.dart';
+import 'package:eatery/core/extensions/string_ext.dart';
 import 'package:eatery/references.dart';
-
 
 class Body4 extends StatelessWidget {
   final Color themeColor;
@@ -12,18 +11,18 @@ class Body4 extends StatelessWidget {
   final Function(int? index) onTaxTypeChanged;
   final GlobalKey<FormState> formKey;
   final Function(GlobalKey<FormState> formKey)? callbackFormKey;
-  Body4(
-      {Key? key,
-      required this.themeColor,
-      required this.edition,
-      required this.taxNoController,
-      required this.foodLicNoController,
-      required this.defaultTaxController,
-      required this.onTaxTypeChanged,
-      required this.taxType,
-      required this.formKey,
-      this.callbackFormKey})
-      : super(key: key);
+  Body4({
+    Key? key,
+    required this.themeColor,
+    required this.edition,
+    required this.taxNoController,
+    required this.foodLicNoController,
+    required this.defaultTaxController,
+    required this.onTaxTypeChanged,
+    required this.taxType,
+    required this.formKey,
+    this.callbackFormKey,
+  }) : super(key: key);
 
   final focus1 = FocusNode();
   final focus2 = FocusNode();
@@ -57,7 +56,10 @@ class Body4 extends StatelessWidget {
                 FocusScope.of(context).requestFocus(focus2);
               },
               validator: (value) {
-                if (value!.trim().isNotEmpty /*&& !value.trim().isValidGSTIN()*/ && value.trim().length < 10) {
+                if (value!
+                        .trim()
+                        .isNotEmpty /*&& !value.trim().isValidGSTIN()*/ &&
+                    value.trim().length < 10) {
                   return '${edition.name} license number is not valid';
                 }
                 return null;
@@ -80,7 +82,8 @@ class Body4 extends StatelessWidget {
               },
               validator: (value) {
                 if (value!.trim().isNotEmpty &&
-                    (value.trim().length < 10/* || !value.trim().isNumericOnly*/)) {
+                    (value.trim().length <
+                        10 /* || !value.trim().isNumericOnly*/ )) {
                   return '${edition == Edition.gst ? 'FSSAI' : 'Food'} license number is not valid';
                 }
                 // if (edition == Edition.gst && !value!.trim().isValidGSTIN()) return '${edition.name} license number is not valid';

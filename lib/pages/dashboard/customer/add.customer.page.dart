@@ -1,16 +1,19 @@
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/presentation/providers/order_provider.dart';
 
 Color _pageColor = KColors.primary;
 
-class AddCustomerPage extends StatefulWidget {
-  const AddCustomerPage({Key? key, this.addressRequired = false}) : super(key: key);
+class AddCustomerPage extends ConsumerStatefulWidget {
+  const AddCustomerPage({Key? key, this.addressRequired = false})
+    : super(key: key);
   final bool addressRequired;
 
   @override
-  State<AddCustomerPage> createState() => _AddCustomerPageState();
+  ConsumerState<AddCustomerPage> createState() => _AddCustomerPageState();
 }
 
-class _AddCustomerPageState extends State<AddCustomerPage> {
+class _AddCustomerPageState extends ConsumerState<AddCustomerPage> {
   bool isActive = true;
   final TextEditingController _controllerCustomerName = TextEditingController();
   final TextEditingController _controllerCustomerPhone =
@@ -79,9 +82,10 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Phone number is required';
-                    } else if (EateryDB.instance.customerBox!
-                        .values
-                        .any((element) => element.phone == value)) {
+                    } else if (ref
+                            .read(customerRepositoryProvider)
+                            .getCustomerByPhone(value) !=
+                        null) {
                       return 'Phone number already exists';
                     }
                     return null;
@@ -146,25 +150,21 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Checkbox(
-                        value: isActive,
-                        activeColor: _pageColor,
-                        onChanged: (value) {
-                          setState(() {
-                            isActive = value ?? false;
-                          });
-                        }),
-                    const SizedBox(
-                      width: 6.0,
+                      value: isActive,
+                      activeColor: _pageColor,
+                      onChanged: (value) {
+                        setState(() {
+                          isActive = value ?? false;
+                        });
+                      },
                     ),
+                    const SizedBox(width: 6.0),
                     Text(
                       'Active',
-                      style: TextStyle(
-                        color: KColors.black600,
-                        fontSize: 16.0,
-                      ),
+                      style: TextStyle(color: KColors.black600, fontSize: 16.0),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),
@@ -187,13 +187,23 @@ class _AddCustomerPageState extends State<AddCustomerPage> {
               landmark: _controllerCustomerLandmark.text,
               isActive: isActive,
             );
-            await EateryDB.instance.customerBox!
-                .add(customer)
+            await ref
+                .read(customerRepositoryProvider)
+                .saveCustomer(customer)
                 .then((value) {
-              showMessageDialog(context, 'Customer added successfully', MessageType.success).then((value) => Navigator.pop(this.context, customer));
-            }).onError((error, stackTrace) {
-              showMessageDialog(context, error.toString(), MessageType.error);
-            });
+                  showMessageDialog(
+                    context,
+                    'Customer added successfully',
+                    MessageType.success,
+                  ).then((value) => Navigator.pop(this.context, customer));
+                })
+                .onError((error, stackTrace) {
+                  showMessageDialog(
+                    context,
+                    error.toString(),
+                    MessageType.error,
+                  );
+                });
           },
           child: const Text('Save'),
         ),

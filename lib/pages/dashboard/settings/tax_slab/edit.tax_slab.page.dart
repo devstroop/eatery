@@ -1,18 +1,20 @@
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/presentation/providers/order_provider.dart';
 
 final _pageColor = KColors.primary;
 
-class EditTaxSlabSettingsPage extends StatefulWidget {
+class EditTaxSlabSettingsPage extends ConsumerStatefulWidget {
   const EditTaxSlabSettingsPage({Key? key, required this.taxSlab})
       : super(key: key);
   final TaxSlab taxSlab;
 
   @override
-  State<EditTaxSlabSettingsPage> createState() =>
+  ConsumerState<EditTaxSlabSettingsPage> createState() =>
       _EditTaxSlabSettingsPageState();
 }
 
-class _EditTaxSlabSettingsPageState extends State<EditTaxSlabSettingsPage> {
+class _EditTaxSlabSettingsPageState extends ConsumerState<EditTaxSlabSettingsPage> {
   final TextEditingController controllerSlabName = TextEditingController();
   final TextEditingController controllerTaxRate = TextEditingController();
   final focus1 = FocusNode();

@@ -1,16 +1,17 @@
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'edit.payment.page.dart';
 
-class ViewPaymentPage extends StatefulWidget {
+class ViewPaymentPage extends ConsumerStatefulWidget {
   ViewPaymentPage({super.key, required this.payment});
   late Payment payment;
 
   @override
-  State<ViewPaymentPage> createState() => _ViewPaymentPageState();
+  ConsumerState<ViewPaymentPage> createState() => _ViewPaymentPageState();
 }
 
-class _ViewPaymentPageState extends State<ViewPaymentPage> {
+class _ViewPaymentPageState extends ConsumerState<ViewPaymentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,10 +27,7 @@ class _ViewPaymentPageState extends State<ViewPaymentPage> {
                 context: context,
                 position: const RelativeRect.fromLTRB(100, 100, 0, 100),
                 items: [
-                  const PopupMenuItem(
-                    value: 'edit',
-                    child: Text('Edit'),
-                  ),
+                  const PopupMenuItem(value: 'edit', child: Text('Edit')),
                 ],
               ).then((value) {
                 switch (value) {
@@ -37,8 +35,9 @@ class _ViewPaymentPageState extends State<ViewPaymentPage> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              EditPaymentPage(payment: widget.payment)),
+                        builder: (context) =>
+                            EditPaymentPage(payment: widget.payment),
+                      ),
                     ).then((value) {
                       if (value != null) {
                         setState(() {

@@ -1,15 +1,18 @@
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/presentation/providers/order_provider.dart';
+import 'package:eatery/presentation/providers/company_provider.dart';
 
-class ViewCustomer extends StatefulWidget {
+class ViewCustomer extends ConsumerStatefulWidget {
   ViewCustomer({super.key, required this.customer});
 
   Customer customer;
 
   @override
-  State<ViewCustomer> createState() => _ViewCustomerState();
+  ConsumerState<ViewCustomer> createState() => _ViewCustomerState();
 }
 
-class _ViewCustomerState extends State<ViewCustomer> {
+class _ViewCustomerState extends ConsumerState<ViewCustomer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -25,10 +28,7 @@ class _ViewCustomerState extends State<ViewCustomer> {
                 context: context,
                 position: const RelativeRect.fromLTRB(100, 100, 0, 100),
                 items: [
-                  const PopupMenuItem(
-                    value: 'edit',
-                    child: Text('Edit'),
-                  ),
+                  const PopupMenuItem(value: 'edit', child: Text('Edit')),
                   if (!widget.customer.isActive)
                     const PopupMenuItem(
                       value: 'activate',
@@ -46,8 +46,9 @@ class _ViewCustomerState extends State<ViewCustomer> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) =>
-                              EditCustomerPage(customer: widget.customer)),
+                        builder: (context) =>
+                            EditCustomerPage(customer: widget.customer),
+                      ),
                     ).then((value) {
                       if (value != null) {
                         setState(() {
@@ -57,41 +58,51 @@ class _ViewCustomerState extends State<ViewCustomer> {
                     });
                     break;
                   case 'activate':
-                    EateryDB.instance.customerBox!.values
-                        .where((element) => element.id == widget.customer.id)
-                        .first
-                      ..isActive = true
-                      ..save()
-                          .then((value) => showMessageDialog(
-                              context,
-                              'Successfully activated',
-                              MessageType.success,
-                              () => setState(() {})))
-                          .onError((error, stackTrace) => showMessageDialog(
-                              context,
-                              error.toString(),
-                              MessageType.error,
-                              () => setState(() {})));
+                    widget.customer.isActive = true;
+                    ref
+                        .read(customerRepositoryProvider)
+                        .saveCustomer(widget.customer)
+                        .then(
+                          (value) => showMessageDialog(
+                            context,
+                            'Successfully activated',
+                            MessageType.success,
+                            () => setState(() {}),
+                          ),
+                        )
+                        .onError(
+                          (error, stackTrace) => showMessageDialog(
+                            context,
+                            error.toString(),
+                            MessageType.error,
+                            () => setState(() {}),
+                          ),
+                        );
                     setState(() {
                       widget.customer.isActive = true;
                     });
                     break;
                   case 'suspend':
-                    EateryDB.instance.customerBox!.values
-                        .where((element) => element.id == widget.customer.id)
-                        .first
-                      ..isActive = false
-                      ..save()
-                          .then((value) => showMessageDialog(
-                              context,
-                              'Successfully suspended',
-                              MessageType.success,
-                              () => setState(() {})))
-                          .onError((error, stackTrace) => showMessageDialog(
-                              context,
-                              error.toString(),
-                              MessageType.error,
-                              () => setState(() {})));
+                    widget.customer.isActive = false;
+                    ref
+                        .read(customerRepositoryProvider)
+                        .saveCustomer(widget.customer)
+                        .then(
+                          (value) => showMessageDialog(
+                            context,
+                            'Successfully suspended',
+                            MessageType.success,
+                            () => setState(() {}),
+                          ),
+                        )
+                        .onError(
+                          (error, stackTrace) => showMessageDialog(
+                            context,
+                            error.toString(),
+                            MessageType.error,
+                            () => setState(() {}),
+                          ),
+                        );
                     setState(() {
                       widget.customer.isActive = false;
                     });
@@ -99,7 +110,7 @@ class _ViewCustomerState extends State<ViewCustomer> {
                 }
               });
             },
-          )
+          ),
         ],
       ),
       body: ListView(
@@ -119,9 +130,12 @@ class _ViewCustomerState extends State<ViewCustomer> {
                   children: [
                     const Text('Outstanding\nAmount'),
                     Text(
-                        '${Common.currency?.symbol ?? ''}${widget.customer.getOutstandingAmount.toStringAsFixed(2)}',
-                        style:
-                        const TextStyle(fontSize: 36, fontWeight: FontWeight.bold)),
+                      '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${ref.read(customerRepositoryProvider).getOutstandingAmount(widget.customer.phone).toStringAsFixed(2)}',
+                      style: const TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 10),
@@ -129,9 +143,13 @@ class _ViewCustomerState extends State<ViewCustomer> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text('Name'),
-                    Text(widget.customer.name ?? '',
-                        style:
-                        const TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
+                    Text(
+                      widget.customer.name ?? '',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 5),
@@ -139,9 +157,13 @@ class _ViewCustomerState extends State<ViewCustomer> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text('Phone'),
-                    Text(widget.customer.phone,
-                        style:
-                        const TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
+                    Text(
+                      widget.customer.phone,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 5),
@@ -149,9 +171,15 @@ class _ViewCustomerState extends State<ViewCustomer> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text('Address'),
-                    Text((widget.customer.address ?? '').isNotEmpty ? widget.customer.address! : 'NA',
-                        style:
-                        const TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
+                    Text(
+                      (widget.customer.address ?? '').isNotEmpty
+                          ? widget.customer.address!
+                          : 'NA',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 5),
@@ -160,9 +188,15 @@ class _ViewCustomerState extends State<ViewCustomer> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text('Landmark'),
-                    Text((widget.customer.landmark ?? '').isNotEmpty ? widget.customer.landmark! : 'NA',
-                        style:
-                        const TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
+                    Text(
+                      (widget.customer.landmark ?? '').isNotEmpty
+                          ? widget.customer.landmark!
+                          : 'NA',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 5),
@@ -171,11 +205,15 @@ class _ViewCustomerState extends State<ViewCustomer> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text('Last Order At'),
-                    Text(widget.customer.lastOrderAt != null
-                        ? widget.customer.lastOrderAt!.toIso8601String()
-                        : 'NA',
-                        style:
-                        const TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
+                    Text(
+                      widget.customer.lastOrderAt != null
+                          ? widget.customer.lastOrderAt!.toIso8601String()
+                          : 'NA',
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ],
                 ),
                 const SizedBox(height: 5),
@@ -184,21 +222,18 @@ class _ViewCustomerState extends State<ViewCustomer> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text('Status'),
-                    if(widget.customer.isActive)
+                    if (widget.customer.isActive)
                       const Icon(Icons.check_circle, color: Colors.green),
-                    if(!widget.customer.isActive)
+                    if (!widget.customer.isActive)
                       const Icon(Icons.cancel, color: Colors.red),
                   ],
                 ),
-
               ],
             ),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Divider(
-              color: Colors.grey[200],
-            ),
+            child: Divider(color: Colors.grey[200]),
           ),
 
           Container(
@@ -211,9 +246,10 @@ class _ViewCustomerState extends State<ViewCustomer> {
                   child: Text(
                     'Orders',
                     style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                        color: Colors.grey[700]),
+                      fontSize: 18,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey[700],
+                    ),
                   ),
                 ),
                 Container(
@@ -225,27 +261,34 @@ class _ViewCustomerState extends State<ViewCustomer> {
                   ),
                   child: Column(
                     children: [
-                      ...EateryDB.instance.orderBox!.values.map((e) => ListTile(
-                        title: Text('${e.id ?? 'NA'}'),
-                        subtitle: Text(e.createdAt.toIso8601String()),
-                        trailing: Text(
-                            '${Common.currency?.symbol ?? ''}${e.grandTotal}'),
-                      )),
-                      if (EateryDB.instance.orderBox!.values.isEmpty)
+                      ...ref.read(orderRepositoryProvider).getAllOrders().map(
+                        (e) => ListTile(
+                          title: Text('${e.id ?? 'NA'}'),
+                          subtitle: Text(e.createdAt.toIso8601String()),
+                          trailing: Text(
+                            '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${e.grandTotal}',
+                          ),
+                        ),
+                      ),
+                      if (ref.read(orderRepositoryProvider).getAllOrders().isEmpty)
                         ListTile(
-                          title: Text('No previous orders', style: TextStyle(color: Colors.grey[400]),),
-                        )
+                          title: Text(
+                            'No previous orders',
+                            style: TextStyle(color: Colors.grey[400]),
+                          ),
+                        ),
                     ],
                   ),
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );
   }
-/*
+
+  /*
   double getCustomerOutstandingAmount(Customer? customer){
     if (customer == null) {
       return 0;

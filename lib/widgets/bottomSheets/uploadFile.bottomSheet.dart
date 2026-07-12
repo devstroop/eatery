@@ -38,7 +38,7 @@ class _UploadFileBottomSheetState extends State<UploadFileBottomSheet> {
           shrinkWrap: true,
           children: [
             const Center(
-              child: BottomSheetGrip(),
+              child: BottomViewGrip(),
             ),
             const SizedBox(
               height: 12.0,

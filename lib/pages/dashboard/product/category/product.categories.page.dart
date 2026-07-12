@@ -1,19 +1,25 @@
+import 'package:eatery/data/repositories/product_repository.dart';
+import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'add.product.category.page.dart';
+import 'edit.product.category.page.dart';
 
 Color _pageColor = KColors.tertiary;
 
-class ProductCategoriesPage extends StatefulWidget {
+class ProductCategoriesPage extends ConsumerStatefulWidget {
   const ProductCategoriesPage({Key? key}) : super(key: key);
 
   @override
-  State<ProductCategoriesPage> createState() => _ProductCategoriesPageState();
+  ConsumerState<ProductCategoriesPage> createState() =>
+      _ProductCategoriesPageState();
 }
 
-class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
+class _ProductCategoriesPageState extends ConsumerState<ProductCategoriesPage> {
   @override
   Widget build(BuildContext context) {
-    List<ProductCategory> categories =
-        EateryDB.instance.productCategoryBox!.values.toList();
+    final repo = ref.read(productRepositoryProvider);
+    final categories = repo.getAllCategories();
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
@@ -36,30 +42,31 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
                       width: 100,
                       height: 100,
                     ),
-                    const SizedBox(
-                      height: 16,
-                    ),
+                    const SizedBox(height: 16),
                     const Text(
                       'No categories found',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const Text(
                       'Add a product category to get started',
                       style: TextStyle(fontSize: 16, color: Colors.black54),
                     ),
-                    const SizedBox(
-                      height: 48,
-                    ),
+                    const SizedBox(height: 48),
                   ],
                 ),
               ),
             ),
           for (var category in categories)
             ListTile(
-              title: Text(category.name,
-                  style: const TextStyle(fontWeight: FontWeight.w600)),
-              subtitle: category.description != null &&
+              title: Text(
+                category.name,
+                style: const TextStyle(fontWeight: FontWeight.w600),
+              ),
+              subtitle:
+                  category.description != null &&
                       category.description?.trim() != ''
                   ? Text(category.description ?? '')
                   : null,
@@ -67,35 +74,36 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
                 icon: const Icon(Icons.more_vert),
                 onPressed: () {
                   showMenu(
-                      context: context,
-                      position: const RelativeRect.fromLTRB(100, 100, 0, 100),
-                      items: [
-                        PopupMenuItem(
-                          child: ListTile(
-                            leading: const Icon(Icons.edit),
-                            title: const Text('Edit'),
-                            onTap: () {
-                              Navigator.pop(context);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        EditProductCategoryPage(
-                                            category: category)),
-                              ).then((_) {
-                                setState(() {});
-                              });
-                            },
-                          ),
+                    context: context,
+                    position: const RelativeRect.fromLTRB(100, 100, 0, 100),
+                    items: [
+                      PopupMenuItem(
+                        child: ListTile(
+                          leading: const Icon(Icons.edit),
+                          title: const Text('Edit'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    EditProductCategoryPage(category: category),
+                              ),
+                            ).then((_) {
+                              setState(() {});
+                            });
+                          },
                         ),
-                        PopupMenuItem(
-                          child: ListTile(
-                            leading: const Icon(Icons.delete),
-                            title: const Text('Delete'),
-                            onTap: () => _onCategoryDelete(context, category),
-                          ),
+                      ),
+                      PopupMenuItem(
+                        child: ListTile(
+                          leading: const Icon(Icons.delete),
+                          title: const Text('Delete'),
+                          onTap: () => _onCategoryDelete(context, category),
                         ),
-                      ]);
+                      ),
+                    ],
+                  );
                 },
               ),
               leading: Container(
@@ -105,7 +113,7 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
                   borderRadius: BorderRadius.circular(12.0),
                 ),
                 child: Image(
-                  image: LibraryImage(category.image,).image,
+                  image: LibraryImage(category.image).image,
                   fit: BoxFit.contain,
                   height: 48,
                   width: 48,
@@ -124,7 +132,8 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
           Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => const AddProductCategoryPage()),
+              builder: (context) => const AddProductCategoryPage(),
+            ),
           ).then((_) => setState(() {}));
         },
       ),
@@ -132,6 +141,7 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
   }
 
   _onCategoryDelete(BuildContext context, ProductCategory category) {
+    final repo = ref.read(productRepositoryProvider);
     Navigator.pop(context);
     showDialog(
       context: context,
@@ -147,12 +157,14 @@ class _ProductCategoriesPageState extends State<ProductCategoriesPage> {
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: () {
-                category.delete();
+              onPressed: () async {
+                await repo.deleteCategory(category);
                 setState(() {});
-                Navigator.pop(context);
-                showMessageDialog(context, 'Category deleted successfully',
-                    MessageType.success);
+                showMessageDialog(
+                  context,
+                  'Category deleted successfully',
+                  MessageType.success,
+                );
               },
               child: const Text('Delete'),
             ),

@@ -1,17 +1,22 @@
+import 'package:eatery/core/extensions/double_ext.dart';
 import 'package:eatery/pages/dashboard/customer/view.customer.page.dart';
+import 'package:eatery/presentation/providers/product_provider.dart';
+import 'package:eatery/presentation/providers/company_provider.dart';
+import 'package:eatery/presentation/providers/order_provider.dart';
+import 'package:eatery/presentation/providers/cart_provider.dart';
 import 'package:eatery/references.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../utility/order_print.page.dart';
 import 'cart.page.dart';
 
-class PointOfSalePage extends StatefulWidget {
+class PointOfSalePage extends ConsumerStatefulWidget {
   const PointOfSalePage({Key? key}) : super(key: key);
 
   @override
-  State<PointOfSalePage> createState() => _PointOfSalePageState();
+  ConsumerState<PointOfSalePage> createState() => _PointOfSalePageState();
 }
 
-class _PointOfSalePageState extends State<PointOfSalePage> {
+class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
   ProductCategory? selectedProductCategory;
 
   final ScrollController _scrollControllerCategories = ScrollController();
@@ -19,41 +24,50 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
 
   Future<OrderType?> initOrderType() async {
     OrderType? orderType;
-    if (Common.activeOrderType == null) {
+    if (ref.read(cartProvider).activeOrderType == null) {
       orderType = await _showOrderTypeSelection();
     }
-    return orderType ?? Common.activeOrderType;
+    return orderType ?? ref.read(cartProvider).activeOrderType;
   }
 
   Future<DiningTable?> initDiningTableIfDine() async {
     DiningTable? diningTable;
-    if (Common.activeOrderType == OrderType.dine &&
-        Common.activeDiningTable == null) {
+    if (ref.read(cartProvider).activeOrderType == OrderType.dine &&
+        ref.read(cartProvider).activeDiningTable == null) {
       await showSearch(
-          context: this.context,
-          delegate: SearchDiningTableDelegate(
-              EateryDB.instance.diningTableBox!.values.toList(), (table) async {
+        context: this.context,
+        delegate: SearchDiningTableDelegate(
+          ref.read(diningTableRepositoryProvider).getAllTables(),
+          (table) async {
             diningTable = table;
-          }));
+          },
+          currencySymbol:
+              ref.read(companyProvider.notifier).currency?.symbol ?? '',
+          orders: ref.read(orderRepositoryProvider).getAllOrders(),
+        ),
+      );
     }
-    return diningTable ?? Common.activeDiningTable;
+    return diningTable ?? ref.read(cartProvider).activeDiningTable;
   }
 
   Future<Customer?> initCustomerIfNull() async {
     Customer? customer;
-    if (Common.activeCustomer == null) {
+    if (ref.read(cartProvider).activeCustomer == null) {
       await showSearch(
-          context: this.context,
-          delegate: SearchCustomerDelegate(
-              EateryDB.instance.customerBox!.values.toList(), (customer) {
+        context: this.context,
+        delegate: SearchCustomerDelegate(
+          ref.read(customerRepositoryProvider).getAllCustomers(),
+          (customer) {
             setState(() {
-              Common.activeCustomer = customer;
+              ref.read(cartProvider.notifier).setCustomer(customer);
             });
-          })).then((value) {
+          },
+        ),
+      ).then((value) {
         customer = value;
       });
     }
-    return customer ?? Common.activeCustomer;
+    return customer ?? ref.read(cartProvider).activeCustomer;
   }
 
   @override
@@ -66,25 +80,45 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
           return;
         }
         setState(() {
-          Common.activeOrderType = orderType;
+          ref.read(cartProvider.notifier).setOrderType(orderType);
         });
         initDiningTableIfDine().then((diningTable) {
-          if (Common.activeOrderType == OrderType.dine && diningTable == null) {
+          if (ref.read(cartProvider).activeOrderType == OrderType.dine &&
+              diningTable == null) {
             Navigator.pop(this.context);
             return;
           }
           setState(() {
-            Common.activeDiningTable = diningTable;
-            if (diningTable?.status == DiningTableStatus.reserved) {
-              Common.activeCustomer = EateryDB.instance.customerBox!.values
-                  .firstWhere(
-                      (element) => element.phone == diningTable?.customerPhone);
-            } else if (diningTable?.status == DiningTableStatus.occupied) {
-              Common.activeOrder = EateryDB.instance.orderBox!.values
-                  .firstWhere((element) => element.id == diningTable?.orderId);
-              Common.activeCustomer = EateryDB.instance.customerBox!.values
-                  .firstWhere((element) =>
-                      element.phone == Common.activeOrder?.customerPhone);
+            if (diningTable != null) {
+              ref.read(cartProvider.notifier).setDiningTable(diningTable);
+              if (diningTable.status == DiningTableStatus.reserved) {
+                final reservedCustomer = ref
+                    .read(customerRepositoryProvider)
+                    .getCustomerByPhone(diningTable.customerPhone ?? '');
+                if (reservedCustomer != null) {
+                  ref
+                      .read(cartProvider.notifier)
+                      .setCustomer(reservedCustomer);
+                }
+              } else if (diningTable.status == DiningTableStatus.occupied) {
+                final existingOrder =
+                    ref.read(orderRepositoryProvider).getOrderById(
+                          diningTable.orderId!,
+                        );
+                if (existingOrder != null) {
+                  ref
+                      .read(cartProvider.notifier)
+                      .setActiveOrder(existingOrder);
+                  final occupiedCustomer = ref
+                      .read(customerRepositoryProvider)
+                      .getCustomerByPhone(existingOrder.customerPhone ?? '');
+                  if (occupiedCustomer != null) {
+                    ref
+                        .read(cartProvider.notifier)
+                        .setCustomer(occupiedCustomer);
+                  }
+                }
+              }
             }
           });
           initCustomerIfNull().then((customer) {
@@ -93,7 +127,9 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
             //   return;
             // }
             setState(() {
-              Common.activeCustomer = customer;
+              if (customer != null) {
+                ref.read(cartProvider.notifier).setCustomer(customer);
+              }
             });
           });
         });
@@ -103,10 +139,14 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
 
   @override
   Widget build(BuildContext context) {
-    Color pageColor =
-        Color(Common.activeOrderType?.color ?? KColors.primary.value);
-    List<Product> products =
-        EateryDB.instance.productBox!.values.where((element) {
+    final session = ref.watch(cartProvider);
+    final productsRepo = ref.read(productRepositoryProvider);
+    Color pageColor = Color(
+      session.activeOrderType?.color ?? KColors.primary.value,
+    );
+    List<Product> products = productsRepo.getAllProducts().where((
+      element,
+    ) {
       if (selectedProductCategory == null) {
         return true;
       }
@@ -138,14 +178,17 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
             icon: const Icon(Icons.search),
             onPressed: () {
               showSearch(
-                  context: context,
-                  delegate: SearchProductDelegate(
-                      EateryDB.instance.productBox!.values.toList(),
-                      (product) => Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) =>
-                                  KProductView(product: product)))));
+                context: context,
+                delegate: SearchProductDelegate(
+                  productsRepo.getAllProducts(),
+                  (product) => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => KProductView(product: product),
+                    ),
+                  ),
+                ),
+              );
             },
           ),
           IconButton(icon: const Icon(Icons.qr_code_scanner), onPressed: () {}),
@@ -159,8 +202,8 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                 position: const RelativeRect.fromLTRB(100, 100, 0, 100),
                 items: [
                   // Close this order
-                  if (Common.activeOrderType == OrderType.dine &&
-                      Common.activeOrder != null)
+                  if (session.activeOrderType == OrderType.dine &&
+                      session.activeOrder != null)
                     PopupMenuItem(
                       child: ListTile(
                         leading: const Icon(Icons.close),
@@ -174,7 +217,8 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                               return AlertDialog(
                                 title: const Text('Close Order?'),
                                 content: const Text(
-                                    'Are you sure you want to close this order?'),
+                                  'Are you sure you want to close this order?',
+                                ),
                                 actions: [
                                   TextButton(
                                     child: const Text('Cancel'),
@@ -186,31 +230,31 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                                     child: const Text('Close'),
                                     onPressed: () async {
                                       Navigator.pop(context);
-                                      if (Common.cart.isNotEmpty) {
+                                      if (session.cart.isNotEmpty) {
                                         showMessageDialog(
-                                            context,
-                                            'Please clear cart before closing order',
-                                            MessageType.warning);
+                                          context,
+                                          'Please clear cart before closing order',
+                                          MessageType.warning,
+                                        );
                                         return;
                                       }
 
                                       /*// Confirm Payment
-                                      // Popup: AddPaymentPage(order: Common.activeOrder!,)
-// Popup: AddPaymentPage(order: Common.activeOrder!,)
+                                      // Popup: AddPaymentPage(order: order,)
+// Popup: AddPaymentPage(order: order,)
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (context) =>
                                               AddPaymentPage(
-                                                order: Common
-                                                    .activeOrder!,
+                                                order: order,
                                               ),
                                         ),
                                       ).whenComplete(() async {
-                                        var payments = EateryDB.instance.paymentBox!.values.where((element) => element.orderId == Common.activeOrder!.id).map((e) => e.amount);
+                                        var payments = ref.read(paymentRepositoryProvider).getPaymentsByOrder(order.id);
 
-                                        var totalPaid = payments.fold(0.0, (previousValue, element) => previousValue + element);
-                                        var totalToPay = Common.activeOrder!.grandTotal;
+                                        var totalPaid = payments.fold(0.0, (previousValue, element) => previousValue + element.amount);
+                                        var totalToPay = order.grandTotal;
                                         if(totalPaid < totalToPay){
                                           showMessageDialog(
                                               context,
@@ -225,37 +269,36 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
 
                                       });
 */
-                                      var order = Common.activeOrder!;
-                                      var diningTable = EateryDB
-                                          .instance.diningTableBox?.values
-                                          .firstWhere((element) =>
-                                              element.id ==
-                                              Common.activeDiningTable?.id);
-                                      diningTable?.status =
-                                          DiningTableStatus.available;
-                                      diningTable?.orderId = null;
-                                      diningTable?.save();
+                                      var order = session.activeOrder!;
+                                      var diningTableRepo =
+                                          ref.read(diningTableRepositoryProvider);
+                                      var diningTable = diningTableRepo
+                                          .getTableById(
+                                        session.activeDiningTable?.id ?? 0,
+                                      );
+                                      if (diningTable != null) {
+                                        diningTable.status =
+                                            DiningTableStatus.available;
+                                        diningTable.orderId = null;
+                                        await diningTable.save();
+                                      }
 
                                       var printKOT = false;
                                       var printInvoice = true;
-                                      setState(() {
-                                        Common.activeOrder = null;
-                                        Common.activeCustomer = null;
-                                        Common.activeDiningTable = null;
-                                        Common.activeOrderType = null;
-                                      });
+                                      ref.read(cartProvider.notifier).clearCart();
 
                                       Navigator.pushAndRemoveUntil(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  OrderPrintPage(
-                                                    order: order,
-                                                    currentCart: const [],
-                                                    printKOT: printKOT,
-                                                    printInvoice: printInvoice,
-                                                  )),
-                                          (route) => false);
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => OrderPrintPage(
+                                            order: order,
+                                            currentCart: const [],
+                                            printKOT: printKOT,
+                                            printInvoice: printInvoice,
+                                          ),
+                                        ),
+                                        (route) => false,
+                                      );
                                     },
                                   ),
                                 ],
@@ -278,7 +321,8 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                             return AlertDialog(
                               title: const Text('Discard Order?'),
                               content: const Text(
-                                  'Are you sure you want to discard this order?'),
+                                'Are you sure you want to discard this order?',
+                              ),
                               actions: [
                                 TextButton(
                                   child: const Text('Cancel'),
@@ -291,10 +335,7 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                                   onPressed: () {
                                     Navigator.pop(context);
                                     setState(() {
-                                      Common.activeOrderType = null;
-                                      Common.activeCustomer = null;
-                                      Common.activeDiningTable = null;
-                                      Common.cart.clear();
+                                      ref.read(cartProvider.notifier).clearCart();
                                     });
                                     Navigator.pop(context);
                                   },
@@ -309,39 +350,40 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                 ],
               );
             },
-          )
+          ),
         ],
         bottom: PreferredSize(
           preferredSize: const Size.fromHeight(48),
           child: Container(
             height: 54,
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            decoration: BoxDecoration(
-              color: pageColor,
-            ),
+            decoration: BoxDecoration(color: pageColor),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 InkWell(
                   onTap: () {
-                    if (Common.activeCustomer == null) {
+                    if (session.activeCustomer == null) {
                       showSearch(
-                          context: this.context,
-                          delegate: SearchCustomerDelegate(
-                              EateryDB.instance.customerBox!.values.toList(),
-                              (customer) {
+                        context: this.context,
+                        delegate: SearchCustomerDelegate(
+                          ref.read(customerRepositoryProvider).getAllCustomers(),
+                          (customer) {
                             setState(() {
-                              Common.activeCustomer = customer;
+                              ref.read(cartProvider.notifier).setCustomer(customer);
                             });
-                          })).then((value) => setState(() {}));
+                          },
+                        ),
+                      ).then((value) => setState(() {}));
                     } else {
                       Navigator.push(
-                          this.context,
-                          MaterialPageRoute(
-                              builder: (context) => ViewCustomer(
-                                    customer: Common.activeCustomer!,
-                                  ))).then((value) => setState(() {}));
+                        this.context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ViewCustomer(customer: session.activeCustomer!),
+                        ),
+                      ).then((value) => setState(() {}));
                     }
                   },
                   child: Row(
@@ -360,55 +402,64 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          if (Common.activeCustomer?.phone != null)
+                          if (session.activeCustomer?.phone != null)
                             Text(
-                              Common.activeCustomer?.phone ?? '',
+                              session.activeCustomer?.phone ?? '',
                               style: const TextStyle(
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.normal,
-                                  color: Colors.white),
+                                fontSize: 12,
+                                fontWeight: FontWeight.normal,
+                                color: Colors.white,
+                              ),
                             ),
-                          if (Common.activeCustomer?.name != null)
+                          if (session.activeCustomer?.name != null)
                             Text(
-                              Common.activeCustomer?.name ?? 'NA',
+                              session.activeCustomer?.name ?? 'NA',
                               style: const TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
-                          if (Common.activeCustomer == null)
+                          if (session.activeCustomer == null)
                             const Text(
                               'Select Customer',
                               style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.white),
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
                             ),
                         ],
                       ),
                     ],
                   ),
                 ),
-                if (Common.activeOrderType == OrderType.dine)
+                if (session.activeOrderType == OrderType.dine)
                   InkWell(
                     onTap: () {
-                      if (Common.activeDiningTable?.orderId == null) {
+                      if (session.activeDiningTable?.orderId == null) {
                         showMessageDialog(
-                            this.context,
-                            'No active order for this table',
-                            MessageType.warning);
+                          this.context,
+                          'No active order for this table',
+                          MessageType.warning,
+                        );
                         return;
                       }
-                      Navigator.push(
-                              this.context,
-                              MaterialPageRoute(
-                                  builder: (context) => ViewOrderPage(
-                                      order: EateryDB.instance.orderBox!.values
-                                          .where((element) =>
-                                              element.id ==
-                                              Common.activeDiningTable!.orderId)
-                                          .first)))
-                          .then((value) => setState(() {}));
+                      final tableOrder = ref
+                          .read(orderRepositoryProvider)
+                          .getOrderById(
+                            session.activeDiningTable!.orderId!,
+                          );
+                      if (tableOrder != null) {
+                        Navigator.push(
+                          this.context,
+                          MaterialPageRoute(
+                            builder: (context) => ViewOrderPage(
+                              order: tableOrder,
+                            ),
+                          ),
+                        ).then((value) => setState(() {}));
+                      }
                     },
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -418,42 +469,59 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                           'Outstanding',
                           textAlign: TextAlign.end,
                           style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.white),
+                            fontSize: 10,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.white,
+                          ),
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          '${Common.currency?.symbol ?? ''}${Common.activeOrder?.grandTotal.toPrecision(2) ?? '0.00'}',
+                          '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${session.activeOrder?.grandTotal.toPrecision(2) ?? '0.00'}',
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                       ],
                     ),
                   ),
-                if (Common.activeOrderType == OrderType.dine)
+                if (session.activeOrderType == OrderType.dine)
                   InkWell(
                     onTap: () {
-                      if (Common.activeDiningTable == null) {
+                      if (session.activeDiningTable == null) {
                         showSearch(
-                            context: this.context,
-                            delegate: SearchDiningTableDelegate(
-                                EateryDB.instance.diningTableBox!.values
-                                    .toList(), (table) {
+                          context: this.context,
+                          delegate: SearchDiningTableDelegate(
+                            ref
+                                .read(diningTableRepositoryProvider)
+                                .getAllTables(),
+                            (table) {
                               setState(() {
-                                Common.activeDiningTable = table;
+                                ref
+                                    .read(cartProvider.notifier)
+                                    .setDiningTable(table);
                               });
-                            })).then((value) => setState(() {}));
+                            },
+                            currencySymbol: ref
+                                    .read(companyProvider.notifier)
+                                    .currency
+                                    ?.symbol ??
+                                '',
+                            orders:
+                                ref.read(orderRepositoryProvider).getAllOrders(),
+                          ),
+                        ).then((value) => setState(() {}));
                       } else {
                         Navigator.push(
-                            this.context,
-                            MaterialPageRoute(
-                                builder: (context) => ViewDiningTablePage(
-                                      diningTable: Common.activeDiningTable!,
-                                    ))).then((value) => setState(() {}));
+                          this.context,
+                          MaterialPageRoute(
+                            builder: (context) => ViewDiningTablePage(
+                              diningTable: session.activeDiningTable!,
+                            ),
+                          ),
+                        ).then((value) => setState(() {}));
                       }
                     },
                     child: Column(
@@ -464,18 +532,20 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                           'Dining Table',
                           textAlign: TextAlign.end,
                           style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.normal,
-                              color: Colors.white),
+                            fontSize: 10,
+                            fontWeight: FontWeight.normal,
+                            color: Colors.white,
+                          ),
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          Common.activeDiningTable?.name ?? '~',
+                          session.activeDiningTable?.name ?? '~',
                           overflow: TextOverflow.ellipsis,
                           style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white),
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                          ),
                         ),
                       ],
                     ),
@@ -506,10 +576,13 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                   },
                   label: 'All',
                 ),
-                ...EateryDB.instance.productCategoryBox!.values.map((each) {
+                ...productsRepo.getAllCategories().map((each) {
                   return CircularCategoryPOSWidget(
                     margin: const EdgeInsets.only(bottom: 6),
-                    image: LibraryImage(each.image, defaultImage: 'assets/images/category.png').image,
+                    image: LibraryImage(
+                      each.image,
+                      defaultImage: 'assets/images/category.png',
+                    ).image,
                     themeColor: pageColor,
                     selected: selectedProductCategory?.id == each.id,
                     onTap: () {
@@ -519,78 +592,84 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                     },
                     label: each.name,
                   );
-                })
+                }),
               ],
             ),
           ),
           Expanded(
-              flex: 8,
-              child: products.isNotEmpty
-                  ? SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      controller: _scrollControllerProducts,
-                      child: Wrap(
-                        alignment: WrapAlignment.start,
+            flex: 8,
+            child: products.isNotEmpty
+                ? SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    controller: _scrollControllerProducts,
+                    child: Wrap(
+                      alignment: WrapAlignment.start,
+                      children: [
+                        ...products.map((product) {
+                          final width =
+                              ((MediaQuery.of(context).size.width * 0.8 - 1)
+                                      .abs() -
+                                  (crossAxisCount + 1) * spacing) /
+                              crossAxisCount;
+                          final height = width * 4 / 3;
+                          return ProductCard(
+                            product: product,
+                            width: width,
+                            height: height,
+                            themeColor: pageColor,
+                            currencySymbol: ref
+                                    .read(companyProvider.notifier)
+                                    .currency
+                                    ?.symbol ??
+                                '',
+                            onAdd: () {
+                              setState(() {
+                                ref.read(cartProvider.notifier).addToCart(product);
+                              });
+                            },
+                            onRemove: () {
+                              setState(() {
+                                ref.read(cartProvider.notifier).removeFromCart(product);
+                              });
+                            },
+                            onTap: () => _showProductDetails(product),
+                          );
+                        }),
+                      ],
+                    ),
+                  )
+                : Center(
+                    child: Opacity(
+                      opacity: 0.50,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          ...products.map((product) {
-                            final width =
-                                ((MediaQuery.of(context).size.width * 0.8 - 1)
-                                            .abs() -
-                                        (crossAxisCount + 1) * spacing) /
-                                    crossAxisCount;
-                            final height = width * 4 / 3;
-                            return ProductCard(
-                              product: product,
-                              width: width,
-                              height: height,
-                              themeColor: pageColor,
-                              onAdd: () {
-                                setState(() {
-                                  Common.cart.add(product);
-                                });
-                              },
-                              onRemove: () {
-                                setState(() {
-                                  Common.cart.remove(product);
-                                });
-                              },
-                              onTap: () => _showProductDetails(product),
-                            );
-                          })
+                          Image.asset(
+                            'assets/images/empty-folder.png',
+                            width: 100,
+                            height: 100,
+                          ),
+                          const SizedBox(height: 16),
+                          const Text(
+                            'No dish found',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const Text(
+                            'Add a dish to get started',
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.black54,
+                            ),
+                          ),
+                          const SizedBox(height: 48),
                         ],
                       ),
-                    )
-                  : Center(
-                      child: Opacity(
-                        opacity: 0.50,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Image.asset(
-                              'assets/images/empty-folder.png',
-                              width: 100,
-                              height: 100,
-                            ),
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            const Text(
-                              'No dish found',
-                              style: TextStyle(
-                                  fontSize: 18, fontWeight: FontWeight.bold),
-                            ),
-                            const Text(
-                              'Add a dish to get started',
-                              style: TextStyle(
-                                  fontSize: 16, color: Colors.black54),
-                            ),
-                            const SizedBox(
-                              height: 48,
-                            ),
-                          ],
-                        ),
-                      ),
-                    )),
+                    ),
+                  ),
+          ),
         ],
       ),
       bottomNavigationBar: BottomAppBar(
@@ -602,35 +681,34 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
                 _showOrderTypeSelection().then((value) {
                   // TODO: When only new order, else postpone
                   if (value != null) {
-                    setState(() => Common.activeOrderType = value);
+                    setState(() => ref.read(cartProvider.notifier).setOrderType(value));
                   }
                 });
               },
               icon: Icon(
-                Common.activeOrderType == OrderType.dine
+                session.activeOrderType == OrderType.dine
                     ? Icons.dinner_dining
-                    : Common.activeOrderType == OrderType.delivery
-                        ? Icons.delivery_dining
-                        : Icons.takeout_dining,
+                    : session.activeOrderType == OrderType.delivery
+                    ? Icons.delivery_dining
+                    : Icons.takeout_dining,
                 color: Color(
-                    Common.activeOrderType?.color ?? KColors.black600.value),
+                  session.activeOrderType?.color ?? KColors.black600.value,
+                ),
               ),
               themeColor: pageColor,
-              text: Common.activeOrderType?.name ?? 'Select order type',
+              text: session.activeOrderType?.name ?? 'Select order type',
             ),
             // Cart Information with total price
-            if (Common.activeCustomer != null)
+            if (session.activeCustomer != null)
               PosCartInformation(
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(
-                      builder: (context) => const CartPage(),
-                    ),
+                    MaterialPageRoute(builder: (context) => const CartPage()),
                   );
                 },
                 themeColor: pageColor,
-                cart: Common.cart,
+                cart: session.cart,
               ),
           ],
         ),
@@ -639,87 +717,88 @@ class _PointOfSalePageState extends State<PointOfSalePage> {
   }
 
   void _showProductDetails(Product product) => showModalBottomSheet(
-      showDragHandle: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(24),
-          bottomLeft: Radius.circular(0),
-          bottomRight: Radius.circular(0),
-        ),
+    showDragHandle: true,
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(24),
+        topRight: Radius.circular(24),
+        bottomLeft: Radius.circular(0),
+        bottomRight: Radius.circular(0),
       ),
-      context: this.context,
-      builder: (context) => KProductView(
-            product: product,
-            onAddToCart: () {
-              setState(() {
-                Common.cart.add(product);
-              });
-              Fluttertoast.showToast(
-                  msg: "Added to cart",
-                  toastLength: Toast.LENGTH_SHORT,
-                  gravity: ToastGravity.CENTER,
-                  timeInSecForIosWeb: 1,
-                  backgroundColor: KColors.green,
-                  textColor: Colors.white,
-                  fontSize: 12.0);
-              Navigator.of(context).pop();
-            },
-          ));
+    ),
+    context: this.context,
+    builder: (context) => KProductView(
+      product: product,
+      onAddToCart: () {
+        setState(() {
+          ref.read(cartProvider.notifier).addToCart(product);
+        });
+        Fluttertoast.showToast(
+          msg: "Added to cart",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          backgroundColor: KColors.green,
+          textColor: Colors.white,
+          fontSize: 12.0,
+        );
+        Navigator.of(context).pop();
+      },
+    ),
+  );
 
   Future<OrderType?> _showOrderTypeSelection() => showModalBottomSheet(
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.only(
-          topLeft: Radius.circular(24),
-          topRight: Radius.circular(24),
-          bottomLeft: Radius.circular(0),
-          bottomRight: Radius.circular(0),
-        ),
+    shape: const RoundedRectangleBorder(
+      borderRadius: BorderRadius.only(
+        topLeft: Radius.circular(24),
+        topRight: Radius.circular(24),
+        bottomLeft: Radius.circular(0),
+        bottomRight: Radius.circular(0),
       ),
-      context: this.context,
-      builder: (context) => ListView(
-            shrinkWrap: true,
-            children: [
-              const Center(
-                child: BottomViewGrip(),
+    ),
+    context: this.context,
+    builder: (context) => ListView(
+      shrinkWrap: true,
+      children: [
+        const Center(child: BottomViewGrip()),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
+          child: Text(
+            'Select an order type',
+            style: TextStyle(
+              fontSize: 18.0,
+              fontWeight: FontWeight.w600,
+              color: KColors.black600,
+            ),
+          ),
+        ),
+        for (var orderType in OrderType.values)
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
+            child: SpecialButton(
+              icon: Icon(
+                orderType == OrderType.dine
+                    ? Icons.dinner_dining
+                    : orderType == OrderType.delivery
+                    ? Icons.delivery_dining
+                    : Icons.takeout_dining,
+                color: Colors.white,
               ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
-                child: Text(
-                  'Select an order type',
-                  style: TextStyle(
-                      fontSize: 18.0,
-                      fontWeight: FontWeight.w600,
-                      color: KColors.black600),
-                ),
-              ),
-              for (var orderType in OrderType.values)
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
-                  child: SpecialButton(
-                    icon: Icon(
-                        orderType == OrderType.dine
-                            ? Icons.dinner_dining
-                            : orderType == OrderType.delivery
-                                ? Icons.delivery_dining
-                                : Icons.takeout_dining,
-                        color: Colors.white),
-                    text: orderType.name!,
-                    color: Color(orderType.color!),
-                    foreColor: Colors.white,
-                    onTap: () {
-                      setState(() {
-                        // this.orderType = orderType;
-                        Navigator.of(context).pop(orderType);
-                      });
-                    },
-                  ),
-                ),
-              const SizedBox(
-                height: 20.0,
-              ),
-            ],
-          ));
+              text: orderType.name!,
+              color: Color(orderType.color!),
+              foreColor: Colors.white,
+              onTap: () {
+                setState(() {
+                  // this.orderType = orderType;
+                  Navigator.of(context).pop(orderType);
+                });
+              },
+            ),
+          ),
+        const SizedBox(height: 20.0),
+      ],
+    ),
+  );
 }
 
 class PosCartInformation extends StatelessWidget {
@@ -727,12 +806,12 @@ class PosCartInformation extends StatelessWidget {
   final Color themeColor;
   final List<Product> cart;
 
-  const PosCartInformation(
-      {Key? key,
-      required this.onTap,
-      required this.themeColor,
-      required this.cart})
-      : super(key: key);
+  const PosCartInformation({
+    Key? key,
+    required this.onTap,
+    required this.themeColor,
+    required this.cart,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -741,50 +820,48 @@ class PosCartInformation extends StatelessWidget {
       child: Container(
         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
         decoration: BoxDecoration(
-            color: themeColor,
-            borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(32),
-                bottomLeft: Radius.circular(32),
-                bottomRight: Radius.circular(32),
-                topRight: Radius.circular(32))),
+          color: themeColor,
+          borderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(32),
+            bottomLeft: Radius.circular(32),
+            bottomRight: Radius.circular(32),
+            topRight: Radius.circular(32),
+          ),
+        ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(
-              Icons.shopping_cart,
-              color: Colors.white,
-            ),
-            const SizedBox(
-              width: 8,
-            ),
+            const Icon(Icons.shopping_cart, color: Colors.white),
+            const SizedBox(width: 8),
             const Text(
               'Cart',
               style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold),
+                color: Colors.white,
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            const SizedBox(
-              width: 8,
-            ),
+            const SizedBox(width: 8),
             Container(
               height: 32,
               width: 32,
               decoration: BoxDecoration(
-                  color: Colors.white,
-                  // Border Animation on set state
-                  border: Border.all(color: Colors.grey[200]!, width: 2),
-                  borderRadius: BorderRadius.circular(16)),
+                color: Colors.white,
+                // Border Animation on set state
+                border: Border.all(color: Colors.grey[200]!, width: 2),
+                borderRadius: BorderRadius.circular(16),
+              ),
               child: Center(
                 child: Text(
                   cart.length.toString(),
                   style: const TextStyle(
-                      color: Colors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold),
+                    color: Colors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

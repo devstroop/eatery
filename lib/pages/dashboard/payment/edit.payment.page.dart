@@ -1,24 +1,23 @@
+import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Color _pageColor = KColors.tertiary;
 
-class EditPaymentPage extends StatefulWidget {
+class EditPaymentPage extends ConsumerStatefulWidget {
   const EditPaymentPage({Key? key, required this.payment}) : super(key: key);
   final Payment payment;
 
   @override
-  State<EditPaymentPage> createState() => _EditPaymentPageState();
+  ConsumerState<EditPaymentPage> createState() => _EditPaymentPageState();
 }
 
-class _EditPaymentPageState extends State<EditPaymentPage> {
+class _EditPaymentPageState extends ConsumerState<EditPaymentPage> {
   Order? order;
   final TextEditingController _controllerAmount = TextEditingController();
   LibraryImage? image;
   PaymentMode? paymentMode;
-  final List<FocusNode> _focusNodes = [
-    FocusNode(),
-    FocusNode(),
-  ];
+  final List<FocusNode> _focusNodes = [FocusNode(), FocusNode()];
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -26,7 +25,9 @@ class _EditPaymentPageState extends State<EditPaymentPage> {
     super.initState();
     Future.delayed(Duration.zero, () {
       setState(() {
-        order = EateryDB.instance.orderBox!.values.where((element) => element.id == widget.payment.orderId).firstOrNull;
+        order = ref
+            .read(orderRepositoryProvider)
+            .getOrderById(widget.payment.orderId!);
         _controllerAmount.text = widget.payment.amount.toString();
         paymentMode = widget.payment.mode;
       });
@@ -75,7 +76,8 @@ class _EditPaymentPageState extends State<EditPaymentPage> {
                     });
                   },
                   items: <DropdownMenuItem<Order>>[
-                    for (Order order in EateryDB.instance.orderBox!.values)
+                    for (Order order
+                        in ref.read(orderRepositoryProvider).getAllOrders())
                       DropdownMenuItem<Order>(
                         value: order,
                         child: Text(order.id.toString()),

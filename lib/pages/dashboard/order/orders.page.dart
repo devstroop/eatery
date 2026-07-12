@@ -1,19 +1,21 @@
 import 'dart:ui' as ui;
-import 'package:eatery_db/eatery_db.dart';
+import 'package:eatery/presentation/providers/order_provider.dart';
+import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:qrscan/qrscan.dart' as scanner;
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final Color _pageColor = KColors.tertiary2;
 
-class OrdersPage extends StatefulWidget {
+class OrdersPage extends ConsumerStatefulWidget {
   const OrdersPage({Key? key}) : super(key: key);
 
   @override
-  State<OrdersPage> createState() => _OrdersPageState();
+  ConsumerState<OrdersPage> createState() => _OrdersPageState();
 }
 
-class _OrdersPageState extends State<OrdersPage> {
+class _OrdersPageState extends ConsumerState<OrdersPage> {
   final GlobalKey genKey = GlobalKey();
   late List<Map<String, dynamic>> orders = [];
   DateTime? filterFrom;
@@ -30,8 +32,9 @@ class _OrdersPageState extends State<OrdersPage> {
       RenderRepaintBoundary boundary =
           genKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
       ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-      ByteData? byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
+      ByteData? byteData = await image.toByteData(
+        format: ui.ImageByteFormat.png,
+      );
       var pngBytes = byteData!.buffer.asUint8List();
       var bs64 = base64Encode(pngBytes);
       debugPrint(bs64.length.toString());
@@ -44,7 +47,9 @@ class _OrdersPageState extends State<OrdersPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Order> orders = EateryDB.instance.orderBox!.values.toList();
+    List<Order> orders = ref.read(orderRepositoryProvider).getAllOrders();
+    final currencySymbol =
+        ref.read(companyProvider.notifier).currency?.symbol ?? '';
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
@@ -57,13 +62,19 @@ class _OrdersPageState extends State<OrdersPage> {
             onPressed: () async {
               await showSearch(
                 context: context,
-                delegate: SearchOrderDelegate(orders, (order) {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => ViewOrderPage(order: order),
-                    ),
-                  );
-                }),
+                delegate: SearchOrderDelegate(
+                  orders: orders,
+                  callback: (order) {
+                    Navigator.of(context)
+                        .push(
+                          MaterialPageRoute(
+                            builder: (context) => ViewOrderPage(order: order),
+                          ),
+                        )
+                        .then((_) => setState(() {}));
+                  },
+                  currencySymbol: currencySymbol,
+                ),
               );
             },
           ),
@@ -71,62 +82,83 @@ class _OrdersPageState extends State<OrdersPage> {
             icon: const Icon(Icons.barcode_reader),
             onPressed: () async {},
           ),
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () async {},
-          ),
+          IconButton(icon: const Icon(Icons.more_vert), onPressed: () async {}),
         ],
       ),
       body: orders.isNotEmpty
           ? ListView(
               children: [
-                ...orders.map((order) => ListTile(
-                  // leading: Icon(
-                  //   order.type == OrderType.dine
-                  //       ? Icons.restaurant
-                  //       : order.type == OrderType.delivery
-                  //       ? Icons.delivery_dining
-                  //       : Icons.takeout_dining,
-                  // ),
-                  title: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('${Common.currency?.symbol}${order.finalTotal.toStringAsFixed(2)}', style: const TextStyle(fontSize: 24,fontWeight: FontWeight.w600)),
-                      Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 8,
-                          vertical: 4,
-                        ),
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: Color(order.type.color!),
+                ...orders.map(
+                  (order) => ListTile(
+                    // leading: Icon(
+                    //   order.type == OrderType.dine
+                    //       ? Icons.restaurant
+                    //       : order.type == OrderType.delivery
+                    //       ? Icons.delivery_dining
+                    //       : Icons.takeout_dining,
+                    // ),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '${currencySymbol}${order.finalTotal.toStringAsFixed(2)}',
+                          style: const TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600,
                           ),
-                          borderRadius: BorderRadius.circular(4),
                         ),
-                        child: Text(order.type.description!, style: TextStyle(color: Color(order.type.color!), fontWeight: FontWeight.w500),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 8,
+                            vertical: 4,
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border.all(color: Color(order.type.color!)),
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                          child: Text(
+                            order.type.description!,
+                            style: TextStyle(
+                              color: Color(order.type.color!),
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Date: ${DateFormat.yMMMd().format(order.createdAt)}',
+                        ),
+                        Text('Customer Phone: ${order.customerPhone ?? 'N/A'}'),
+                        Text('Total Quantity: ${order.totalQuantity}'),
+                        Text(
+                          'Sub Total: ${currencySymbol}${order.subTotal.toStringAsFixed(2)}',
+                        ),
+                        Text(
+                          'Discount: ${currencySymbol}${order.discountTotal.toStringAsFixed(2)}',
+                        ),
+                        Text(
+                          'Tax: ${currencySymbol}${order.taxTotal.toStringAsFixed(2)}',
+                        ),
+                        Text(
+                          'Round Off: ${currencySymbol}${order.roundOff.toStringAsFixed(2)}',
+                        ),
+                        Text(
+                          'Grand Total: ${currencySymbol}${order.grandTotal.toStringAsFixed(2)}',
+                        ),
+                        if (order.paidTotal != null)
+                          Text(
+                            'Paid Total: ${currencySymbol}${order.paidTotal!.toStringAsFixed(2)}',
+                          ),
+                      ],
+                    ),
+                    onTap: () {
+                      // Handle tile tap
+                    },
                   ),
-                  subtitle: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Date: ${DateFormat.yMMMd().format(order.createdAt)}'),
-                      Text('Customer Phone: ${order.customerPhone ?? 'N/A'}'),
-                      Text('Total Quantity: ${order.totalQuantity}'),
-                      Text('Sub Total: ${Common.currency?.symbol}${order.subTotal.toStringAsFixed(2)}'),
-                      Text('Discount: ${Common.currency?.symbol}${order.discountTotal.toStringAsFixed(2)}'),
-                      Text('Tax: ${Common.currency?.symbol}${order.taxTotal.toStringAsFixed(2)}'),
-                      Text('Round Off: ${Common.currency?.symbol}${order.roundOff.toStringAsFixed(2)}'),
-                      Text('Grand Total: ${Common.currency?.symbol}${order.grandTotal.toStringAsFixed(2)}'),
-                      if (order.paidTotal != null)
-                        Text('Paid Total: ${Common.currency?.symbol}${order.paidTotal!.toStringAsFixed(2)}'),
-                    ],
-                  ),
-                  onTap: () {
-                    // Handle tile tap
-                  },
-                )
                   /*ListTile(
                         leading: Icon(
                       order.type == OrderType.dine
@@ -137,36 +169,33 @@ class _OrdersPageState extends State<OrdersPage> {
                     ),
                   title: Text(order.finalTotal.toString()),
                   subtitle: Text(DateFormat.yMMMd().format(order.createdAt)),
-                )*/)
+                )*/
+                ),
               ],
             )
           : const Center(
               child: Opacity(
-              opacity: 0.5,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.receipt_long,
-                    size: 64,
-                  ),
-                  SizedBox(height: 16),
-                  Text(
-                    'No orders received yet',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                opacity: 0.5,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.receipt_long, size: 64),
+                    SizedBox(height: 16),
+                    Text(
+                      'No orders received yet',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Text(
-                    'Create a new sale to get started',
-                    style: TextStyle(
-                      fontSize: 16,
+                    Text(
+                      'Create a new sale to get started',
+                      style: TextStyle(fontSize: 16),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            )),
+            ),
     );
   }
 }

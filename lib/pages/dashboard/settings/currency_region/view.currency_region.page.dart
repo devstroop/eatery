@@ -1,13 +1,17 @@
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:eatery/presentation/providers/company_provider.dart';
 
-class ShowCurrencyRegionPage extends StatefulWidget {
+class ShowCurrencyRegionPage extends ConsumerStatefulWidget {
   const ShowCurrencyRegionPage({Key? key}) : super(key: key);
 
   @override
-  State<ShowCurrencyRegionPage> createState() => _ShowCurrencyRegionPageState();
+  ConsumerState<ShowCurrencyRegionPage> createState() =>
+      _ShowCurrencyRegionPageState();
 }
 
-class _ShowCurrencyRegionPageState extends State<ShowCurrencyRegionPage> {
+class _ShowCurrencyRegionPageState extends ConsumerState<ShowCurrencyRegionPage> {
   final themeColor = KColors.primary;
   Currency? selectedCurrency;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -17,9 +21,9 @@ class _ShowCurrencyRegionPageState extends State<ShowCurrencyRegionPage> {
     super.initState();
     Future.delayed(Duration.zero, () {
       setState(() {
-        String? currencyCode = Common.company?.currencyCode;
+        String? currencyCode = ref.read(companyProvider)?.currencyCode;
         KCurrency? curr = currencyCode != null
-            ? EateryDB.instance.currencyBox!.values
+            ? ref.read(appDatabaseProvider).currencyBox.values
                 .singleWhere((element) => element.code == currencyCode)
             : null;
         selectedCurrency = curr != null
@@ -116,19 +120,21 @@ class _ShowCurrencyRegionPageState extends State<ShowCurrencyRegionPage> {
           child: const Text('Save'),
           onPressed: () async {
             if (formKey.currentState!.validate()) {
-              for (var element in EateryDB.instance.currencyBox!.values) {
+              for (var element in ref.read(appDatabaseProvider).currencyBox.values) {
                 await element.delete();
               }
               KCurrency? currency = selectedCurrency != null ? KCurrency.fromMap(selectedCurrency!.toJson()) : null;
               if (currency != null) {
-                await EateryDB.instance.currencyBox!.add(currency);
-                currency = EateryDB.instance.currencyBox!.values.first;
+                await ref.read(appDatabaseProvider).currencyBox.add(currency);
+                currency = ref.read(appDatabaseProvider).currencyBox.values.first;
               }
-              EateryDB.instance.companyBox!.values.first
+              ref.read(appDatabaseProvider).companyBox.values.first
                   ..currencyCode = currency?.code
                 ..save().then((value) {
                   setState(() {
-                    Common.currency = currency;
+                    ref.read(companyProvider.notifier).setCompany(
+                      ref.read(appDatabaseProvider).companyBox.values.first,
+                    );
                   });
                 showDialog(
                   context: context,

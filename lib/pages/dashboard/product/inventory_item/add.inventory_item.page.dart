@@ -1,15 +1,18 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/presentation/providers/product_provider.dart';
+import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/references.dart';
 
 Color _pageColor = KColors.alternate;
 
-class AddInventoryItem extends StatefulWidget {
+class AddInventoryItem extends ConsumerStatefulWidget {
   const AddInventoryItem({Key? key}) : super(key: key);
 
   @override
-  State<AddInventoryItem> createState() => _AddInventoryItemState();
+  ConsumerState<AddInventoryItem> createState() => _AddInventoryItemState();
 }
 
-class _AddInventoryItemState extends State<AddInventoryItem> {
+class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
   LibraryImage? image;
   ProductCategory? selectedCategory;
   FoodType? selectedFoodType;
@@ -17,10 +20,15 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
 
   late final TextEditingController _controllerName = TextEditingController();
   late final TextEditingController _controllerMRP = TextEditingController();
-  late final TextEditingController _controllerSalePrice = TextEditingController();
-  late final TextEditingController _controllerDescription = TextEditingController();
+  late final TextEditingController _controllerSalePrice =
+      TextEditingController();
+  late final TextEditingController _controllerDescription =
+      TextEditingController();
 
-  late final List<FocusNode> _focusNodes = List.generate(4, (index) => FocusNode());
+  late final List<FocusNode> _focusNodes = List.generate(
+    4,
+    (index) => FocusNode(),
+  );
   late final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late final ScrollController _scrollController = ScrollController();
 
@@ -129,7 +137,9 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
           return 'Name must be at least 3 characters long';
         } else if (value.trim().length > 50) {
           return 'Name cannot be more than 50 characters long';
-        } else if (EateryDB.instance.productBox!.values.where((element) => element.name.toLowerCase().trim() == value.toLowerCase().trim()).isNotEmpty){
+        } else if (ref
+            .read(productRepositoryProvider)
+            .isProductNameTaken(value.trim())) {
           return 'Product with this name already exists';
         }
         return null;
@@ -147,7 +157,7 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
         Flexible(
           child: LabeledCustomTextFormField(
             label: 'MRP (Max. retail price)',
-            prefix: const Icon(Icons.currency_rupee, size: 14,),
+            prefix: const Icon(Icons.currency_rupee, size: 14),
             hint: '0.00',
             themeColor: _pageColor,
             validator: (value) => validatePriceField(value),
@@ -160,11 +170,11 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
             },
           ),
         ),
-        const SizedBox(width: 12.0,),
+        const SizedBox(width: 12.0),
         Flexible(
           child: LabeledCustomTextFormField(
             label: 'Sale Price',
-            prefix: const Icon(Icons.currency_rupee, size: 14,),
+            prefix: const Icon(Icons.currency_rupee, size: 14),
             hint: '0.00',
             themeColor: _pageColor,
             focusNode: _focusNodes[2],
@@ -193,11 +203,13 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
   }
 
   Widget buildTaxSlabSwitch() {
-    List<TaxSlab> slabs = EateryDB.instance.taxSlabBox!.values.toList();
+    final slabs = ref.read(taxRepositoryProvider).getAllTaxSlabs();
     return buildToggleSwitch(
       label: 'Select Tax Slab',
       items: ['None', ...slabs.map((e) => e.name)],
-      selectedIndex: (selectedTaxSlab == null) ? 0 : slabs.indexOf(selectedTaxSlab!) + 1,
+      selectedIndex: (selectedTaxSlab == null)
+          ? 0
+          : slabs.indexOf(selectedTaxSlab!) + 1,
       onChange: (index) {
         handleTaxSlabSwitch(index, slabs);
       },
@@ -235,7 +247,7 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
               });
             },
           ),
-          ...EateryDB.instance.productCategoryBox!.values.map((e) {
+          ...ref.read(productRepositoryProvider).getAllCategories().map((e) {
             return buildCircularCategoryWidget(
               image: LibraryImage(e.image).image,
               label: e.name,
@@ -349,6 +361,8 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
     }
     _formKey.currentState!.save();
 
+    final repo = ref.read(productRepositoryProvider);
+
     Product product = Product(
       name: _controllerName.text,
       categoryId: selectedCategory?.id,
@@ -362,12 +376,21 @@ class _AddInventoryItemState extends State<AddInventoryItem> {
       isActive: true,
     );
 
-    await EateryDB.instance.productBox!.add(product).then((value) {
-      showMessageDialog(this.context, 'Product created successfully', MessageType.success).whenComplete(() => Navigator.of(this.context).pop());
-
-    }).onError((error, stackTrace) {
-      showMessageDialog(this.context, 'Error creating product', MessageType.error);
-    });
+    await repo
+        .saveProduct(product)
+        .then((value) {
+          showMessageDialog(
+            this.context,
+            'Product created successfully',
+            MessageType.success,
+          ).whenComplete(() => Navigator.of(this.context).pop());
+        })
+        .onError((error, stackTrace) {
+          showMessageDialog(
+            this.context,
+            'Error creating product',
+            MessageType.error,
+          );
+        });
   }
 }
-

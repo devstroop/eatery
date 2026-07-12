@@ -1,15 +1,18 @@
+import 'package:eatery/presentation/providers/order_provider.dart';
+import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Color _pageColor = KColors.tertiary;
 
-class AddDiningTablePage extends StatefulWidget {
+class AddDiningTablePage extends ConsumerStatefulWidget {
   const AddDiningTablePage({Key? key}) : super(key: key);
 
   @override
-  State<AddDiningTablePage> createState() => _AddDiningTablePageState();
+  ConsumerState<AddDiningTablePage> createState() => _AddDiningTablePageState();
 }
 
-class _AddDiningTablePageState extends State<AddDiningTablePage> {
+class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
   DiningTable? diningTable;
   DiningTableCategory? diningTableCategory;
   final TextEditingController _controllerCategoryName = TextEditingController();
@@ -17,10 +20,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
       TextEditingController();
   final TextEditingController _controllerCapacity = TextEditingController();
 
-  final List<FocusNode> _focusNodes = [
-    FocusNode(),
-    FocusNode(),
-  ];
+  final List<FocusNode> _focusNodes = [FocusNode(), FocusNode()];
 
   final _formKey = GlobalKey<FormState>();
 
@@ -56,7 +56,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                   label: 'Dining Table Name',
                   controller: _controllerCategoryName,
                   hint:
-                      'eg. Table ${EateryDB.instance.diningTableBox!.length + 1}',
+                      'eg. Table ${ref.read(diningTableRepositoryProvider).getAllTables().length + 1}',
                   obscureText: false,
                   themeColor: _pageColor,
                   foregroundColor: KColors.black600,
@@ -79,7 +79,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                           onPressed: () {
                             setState(() {
                               _controllerCategoryName.text =
-                                  'Table ${EateryDB.instance.diningTableBox!.length + 1}';
+                                  'Table ${ref.read(diningTableRepositoryProvider).getAllTables().length + 1}';
                             });
                           },
                         ),
@@ -87,9 +87,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                     _focusNodes[1].requestFocus();
                   },
                 ),
-                const SizedBox(
-                  height: 12.0,
-                ),
+                const SizedBox(height: 12.0),
                 LabeledCustomTextFormField(
                   label: 'Description',
                   controller: _controllerCategoryDescription,
@@ -103,9 +101,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                     FocusScope.of(context).unfocus();
                   },
                 ),
-                const SizedBox(
-                  height: 12.0,
-                ),
+                const SizedBox(height: 12.0),
                 LabeledCustomTextFormField(
                   label: 'Capacity',
                   controller: _controllerCapacity,
@@ -118,9 +114,7 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                     FocusScope.of(context).unfocus();
                   },
                 ),
-                const SizedBox(
-                  height: 12.0,
-                ),
+                const SizedBox(height: 12.0),
                 Text(
                   'Category',
                   style: TextStyle(
@@ -137,27 +131,29 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                     scrollDirection: Axis.horizontal,
                     children: [
                       PosCategoryWidget(
-                          active: diningTableCategory == null,
-                          label: 'None',
-                          onTap: () {
-                            setState(
-                              () {
-                                diningTableCategory = null;
+                        active: diningTableCategory == null,
+                        label: 'None',
+                        onTap: () {
+                          setState(() {
+                            diningTableCategory = null;
+                          });
+                        },
+                      ),
+                      ...ref
+                          .read(appDatabaseProvider)
+                          .diningTableCategoryBox
+                          .values
+                          .map((e) {
+                            return PosCategoryWidget(
+                              active: diningTableCategory?.id == e.id,
+                              label: e.name,
+                              onTap: () {
+                                setState(() {
+                                  diningTableCategory = e;
+                                });
                               },
                             );
                           }),
-                      ...EateryDB.instance.diningTableCategoryBox!.values
-                          .map((e) {
-                        return PosCategoryWidget(
-                          active: diningTableCategory?.id == e.id,
-                          label: e.name,
-                          onTap: () {
-                            setState(() {
-                              diningTableCategory = e;
-                            });
-                          },
-                        );
-                      }),
                       Container(
                         padding: const EdgeInsets.only(bottom: 6, right: 12),
                         child: InkWell(
@@ -165,9 +161,12 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                             showDialog(
                               context: context,
                               builder: (context) => Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 24.0, vertical: 24.0),
-                                  child: const AddDiningTableCategoryPage()),
+                                margin: const EdgeInsets.symmetric(
+                                  horizontal: 24.0,
+                                  vertical: 24.0,
+                                ),
+                                child: const AddDiningTableCategoryPage(),
+                              ),
                             ).then((value) {
                               setState(() {});
                             });
@@ -194,14 +193,11 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
                                 ),
                               ),
                               alignment: Alignment.center,
-                              child: Icon(
-                                Icons.add,
-                                color: KColors.white,
-                              ),
+                              child: Icon(Icons.add, color: KColors.white),
                             ),
                           ),
                         ),
-                      )
+                      ),
                     ],
                   ),
                 ),
@@ -224,17 +220,25 @@ class _AddDiningTablePageState extends State<AddDiningTablePage> {
               category: diningTableCategory,
               capacity: int.parse(_controllerCapacity.text),
             );
-            EateryDB.instance.diningTableBox!.add(diningTable).then((value) {
-              showMessageDialog(context, 'Dining Table created successfully',
-                  MessageType.success, () => Navigator.pop(context));
-            }).onError((error, stackTrace) {
-              debugPrint(error.toString());
-              showMessageDialog(
-                context,
-                'Failed to create Dining Table',
-                MessageType.error,
-              );
-            });
+            ref
+                .read(diningTableRepositoryProvider)
+                .saveTable(diningTable)
+                .then((value) {
+                  showMessageDialog(
+                    context,
+                    'Dining Table created successfully',
+                    MessageType.success,
+                    () => Navigator.pop(context),
+                  );
+                })
+                .onError((error, stackTrace) {
+                  debugPrint(error.toString());
+                  showMessageDialog(
+                    context,
+                    'Failed to create Dining Table',
+                    MessageType.error,
+                  );
+                });
           },
           child: const Text('Save'),
         ),

@@ -1,15 +1,17 @@
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/presentation/providers/company_provider.dart';
 
 final _pageColor = KColors.primary;
 
-class ShowCompanyPage extends StatefulWidget {
+class ShowCompanyPage extends ConsumerStatefulWidget {
   const ShowCompanyPage({Key? key}) : super(key: key);
 
   @override
-  State<ShowCompanyPage> createState() => _ShowCompanyPageState();
+  ConsumerState<ShowCompanyPage> createState() => _ShowCompanyPageState();
 }
 
-class _ShowCompanyPageState extends State<ShowCompanyPage> {
+class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
   @override
   void initState() {
     super.initState();
@@ -95,7 +97,7 @@ class _ShowCompanyPageState extends State<ShowCompanyPage> {
       ),
       body: Builder(
         builder: (context) {
-          Company? company = Common.company;
+          Company? company = ref.read(companyProvider);
           return ListView(
             shrinkWrap: true,
             scrollDirection: Axis.vertical,
@@ -309,7 +311,7 @@ class _ShowCompanyPageState extends State<ShowCompanyPage> {
             onPressed: () {
               Navigator.pop(context);
 
-              if(securePinController.text != Common.company?.password) {
+              if(securePinController.text != ref.read(companyProvider)?.password) {
                 showMessageDialog(
                     context, 'Invalid secure pin', MessageType.error);
                 return;

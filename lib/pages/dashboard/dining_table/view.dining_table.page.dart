@@ -1,16 +1,18 @@
+import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-
-class ViewDiningTablePage extends StatefulWidget {
+class ViewDiningTablePage extends ConsumerStatefulWidget {
   const ViewDiningTablePage({Key? key, required this.diningTable})
-      : super(key: key);
+    : super(key: key);
   final DiningTable diningTable;
 
   @override
-  State<ViewDiningTablePage> createState() => _ViewDiningTablePageState();
+  ConsumerState<ViewDiningTablePage> createState() =>
+      _ViewDiningTablePageState();
 }
 
-class _ViewDiningTablePageState extends State<ViewDiningTablePage> {
+class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
   @override
   initState() {
     super.initState();
@@ -27,26 +29,31 @@ class _ViewDiningTablePageState extends State<ViewDiningTablePage> {
         IconButton(
           icon: const Icon(Icons.more_vert),
           onPressed: () {
-            showMenu(context: context, position: const RelativeRect.fromLTRB(100, 100, 0, 100), items: [
-              const PopupMenuItem(
-                value: 'edit',
-                child: Text('Edit'),
-              ),
-              const PopupMenuItem(
-                value: 'unlink',
-                child: Text('Unlink from Order'),
-              ),
-            ]).then((value) {
+            showMenu(
+              context: context,
+              position: const RelativeRect.fromLTRB(100, 100, 0, 100),
+              items: [
+                const PopupMenuItem(value: 'edit', child: Text('Edit')),
+                const PopupMenuItem(
+                  value: 'unlink',
+                  child: Text('Unlink from Order'),
+                ),
+              ],
+            ).then((value) {
               if (value == 'edit') {
-                Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditDiningTablePage(diningTable: widget.diningTable)));
+                Navigator.of(context).push(
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        EditDiningTablePage(diningTable: widget.diningTable),
+                  ),
+                );
               } else if (value == 'unlink') {
                 widget.diningTable.orderId = null;
                 Navigator.of(context).pop();
               }
             });
-
           },
-        )
+        ),
       ],
     );
     return Scaffold(
@@ -71,7 +78,10 @@ class _ViewDiningTablePageState extends State<ViewDiningTablePage> {
                   ),
                   Container(
                     margin: const EdgeInsets.only(left: 12),
-                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
                     decoration: BoxDecoration(
                       color: widget.diningTable.status.color,
                       borderRadius: BorderRadius.circular(8),
@@ -88,9 +98,7 @@ class _ViewDiningTablePageState extends State<ViewDiningTablePage> {
                 ],
               ),
             ),
-            const SizedBox(
-              height: 8,
-            ),
+            const SizedBox(height: 8),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
@@ -153,59 +161,48 @@ class _ViewDiningTablePageState extends State<ViewDiningTablePage> {
               ),
             ),
             // Description
-            const SizedBox(
-              height: 16,
-            ),
-            if(widget.diningTable.description != null)
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 8),
-                  child: Text(
-                    'Description',
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
+            const SizedBox(height: 16),
+            if (widget.diningTable.description != null)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 8),
+                    child: Text(
+                      'Description',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(
-                  height: 8,
-                ),
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(
-                    color: KColors.white900,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Text(
-                    widget.diningTable.description!,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.normal,
-                      color: KColors.white500,
+                  const SizedBox(height: 8),
+                  Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: KColors.white900,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Text(
+                      widget.diningTable.description!,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal,
+                        color: KColors.white500,
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
+                ],
+              ),
             // If table is occupied show the customer details and order details
             if (widget.diningTable.orderId != null) ...[
-              const SizedBox(
-                height: 16,
-              ),
+              const SizedBox(height: 16),
               const Text(
                 'Customer Details',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -219,23 +216,30 @@ class _ViewDiningTablePageState extends State<ViewDiningTablePage> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Customer Name',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.normal,
-                              ),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Customer Name',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.normal,
                             ),
-                            Text(
-                              EateryDB.instance.customerBox!.values.where((element) => element.phone == widget.diningTable.customerPhone).firstOrNull?.name ?? 'None',
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
+                          ),
+                          Text(
+                            ref
+                                    .read(customerRepositoryProvider)
+                                    .getCustomerByPhone(
+                                      widget.diningTable.customerPhone ?? '',
+                                    )
+                                    ?.name ??
+                                'None',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
-                          ]),
+                          ),
+                        ],
+                      ),
                     ),
                     Container(
                       padding: const EdgeInsets.all(8),
@@ -245,40 +249,40 @@ class _ViewDiningTablePageState extends State<ViewDiningTablePage> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Customer Phone',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.normal,
-                              ),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Customer Phone',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.normal,
                             ),
-                            Text(
-                              EateryDB.instance.customerBox!.values.where((element) => element.phone == widget.diningTable.customerPhone).firstOrNull?.phone ?? 'None',
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
+                          ),
+                          Text(
+                            ref
+                                    .read(customerRepositoryProvider)
+                                    .getCustomerByPhone(
+                                      widget.diningTable.customerPhone ?? '',
+                                    )
+                                    ?.phone ??
+                                'None',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
-                          ]),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 16,
-              ),
+              const SizedBox(height: 16),
               const Text(
                 'Order Details',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
-              const SizedBox(
-                height: 8,
-              ),
+              const SizedBox(height: 8),
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -291,23 +295,24 @@ class _ViewDiningTablePageState extends State<ViewDiningTablePage> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            const Text(
-                              'Order ID',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.normal,
-                              ),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          const Text(
+                            'Order ID',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.normal,
                             ),
-                            Text(
-                              '#${widget.diningTable.orderId ?? 'None'}',
-                              style: const TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
+                          ),
+                          Text(
+                            '#${widget.diningTable.orderId ?? 'None'}',
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
-                          ]),
+                          ),
+                        ],
+                      ),
                     ),
                     Container(
                       padding: const EdgeInsets.all(8),
@@ -317,23 +322,24 @@ class _ViewDiningTablePageState extends State<ViewDiningTablePage> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: const Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              'Order Status',
-                              style: TextStyle(
-                                fontSize: 10,
-                                fontWeight: FontWeight.normal,
-                              ),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Order Status',
+                            style: TextStyle(
+                              fontSize: 10,
+                              fontWeight: FontWeight.normal,
                             ),
-                            Text(
-                              'None',
-                              style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
+                          ),
+                          Text(
+                            'None',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
-                          ]),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 ),

@@ -1,18 +1,23 @@
 import 'package:intl/intl.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/presentation/providers/order_provider.dart';
+import 'package:eatery/presentation/providers/product_provider.dart';
+import 'package:eatery/presentation/providers/company_provider.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../functions/order.function.dart';
 
-class OrderConfirmationPage extends StatefulWidget {
+class OrderConfirmationPage extends ConsumerStatefulWidget {
   const OrderConfirmationPage({Key? key, required this.order})
-      : super(key: key);
+    : super(key: key);
   final Order order;
 
   @override
-  State<OrderConfirmationPage> createState() => _OrderConfirmationPageState();
+  ConsumerState<OrderConfirmationPage> createState() =>
+      _OrderConfirmationPageState();
 }
 
-class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
+class _OrderConfirmationPageState extends ConsumerState<OrderConfirmationPage> {
   final GlobalKey genKey = GlobalKey();
   @override
   void initState() {
@@ -37,25 +42,25 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
   }*/
 
   previewWidget(BuildContext context) => RepaintBoundary(
-        key: genKey,
-        child: Container(
-          color: KColors.white,
-          margin: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0),
-          //height: MediaQuery.of(context).size.height,
-          width: MediaQuery.of(context).size.width,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              /*const SizedBox(
+    key: genKey,
+    child: Container(
+      color: KColors.white,
+      margin: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0),
+      //height: MediaQuery.of(context).size.height,
+      width: MediaQuery.of(context).size.width,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          /*const SizedBox(
                 height: 12.0,
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    EateryDB.instance.customerBox!.values.where((element) => element.id == widget.order.customerId).firstOrNull?.name ?? 'Unnamed',
+                    ref.read(customerRepositoryProvider).getCustomerByPhone(widget.order.customerPhone ?? '')?.name ?? 'Unnamed',
                     style: const TextStyle(
                         fontSize: 24, fontWeight: FontWeight.bold),
                   )
@@ -65,7 +70,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    EateryDB.instance.customerBox!.values.where((element) => element.id == widget.order.customerId).firstOrNull?.phone ?? 'No Phone',
+                    ref.read(customerRepositoryProvider).getCustomerByPhone(widget.order.customerPhone ?? '')?.phone ?? 'No Phone',
                     style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w400),
                   )
@@ -135,10 +140,10 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                   );
                 },
               ),*/
-            ],
-          ),
-        ),
-      );
+        ],
+      ),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -147,16 +152,14 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(
-              height: 60,
-            ),
+            const SizedBox(height: 60),
             const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   'Receipt Preview',
                   style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
-                )
+                ),
               ],
             ),
             const Row(
@@ -165,12 +168,10 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                 Text(
                   'Customer copy',
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                )
+                ),
               ],
             ),
-            const SizedBox(
-              height: 24,
-            ),
+            const SizedBox(height: 24),
             previewWidget(context),
           ],
         ),
@@ -196,9 +197,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                 child: const Text('< Back'),
               ),
             ),
-            const SizedBox(
-              width: 6,
-            ),
+            const SizedBox(width: 6),
             Expanded(
               flex: 1,
               child: PrimaryButton(
@@ -212,15 +211,10 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                   //   showMessageDialog(context, error.toString(), MessageType.error);
                   // });
                 },
-                child: Icon(
-                  Icons.print,
-                  color: KColors.white,
-                ),
+                child: Icon(Icons.print, color: KColors.white),
               ),
             ),
-            const SizedBox(
-              width: 6,
-            ),
+            const SizedBox(width: 6),
             Expanded(
               flex: 1,
               child: PrimaryButton(
@@ -233,10 +227,7 @@ class _OrderConfirmationPageState extends State<OrderConfirmationPage> {
                   //     'Autogenerated by RestaurantPOS');
                   // //await File(path).delete();
                 },
-                child: Icon(
-                  Icons.share,
-                  color: KColors.white,
-                ),
+                child: Icon(Icons.share, color: KColors.white),
               ),
             ),
           ],

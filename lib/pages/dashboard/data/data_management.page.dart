@@ -1,17 +1,19 @@
-import 'package:excel/excel.dart' as excel;
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:http/http.dart' as http;
 
 final _pageColor = KColors.tertiary;
 
-class DataManagementPage extends StatefulWidget {
+class DataManagementPage extends ConsumerStatefulWidget {
   const DataManagementPage({Key? key}) : super(key: key);
 
   @override
-  State<DataManagementPage> createState() => _DataManagementPageState();
+  ConsumerState<DataManagementPage> createState() =>
+      _DataManagementPageState();
 }
 
-class _DataManagementPageState extends State<DataManagementPage> {
+class _DataManagementPageState extends ConsumerState<DataManagementPage> {
   @override
   void initState() {
     super.initState();
@@ -258,49 +260,49 @@ class _DataManagementPageState extends State<DataManagementPage> {
         // Populate Products
         for (var row in productsTable!.rows) {
           Product product = Product.fromIterable(row.map((e) => e?.value.toString()));
-          EateryDB.instance.productBox!.put(product.id, product);
+          db.productBox!.put(product.id, product);
         }
 
         // Populate Product Categories
         for (var row in productCategoriesTable!.rows) {
           ProductCategory productCategory = ProductCategory.fromIterable(row.map((e) => e?.value.toString()));
-          EateryDB.instance.productCategoryBox!.put(productCategory.id, productCategory);
+          db.productCategoryBox!.put(productCategory.id, productCategory);
         }
 
         // Populate Tax Slabs
         for (var row in taxSlabsTable!.rows) {
           TaxSlab taxSlab = TaxSlab.fromIterable(row.map((e) => e?.value));
-          EateryDB.instance.taxSlabBox!.put(taxSlab.id, taxSlab);
+          db.taxSlabBox!.put(taxSlab.id, taxSlab);
         }
 
         // Populate Staffs
         for (var row in staffsTable!.rows) {
           Staff staff = Staff.fromIterable(row.map((e) => e?.value));
-          EateryDB.instance.staffBox!.put(staff.id, staff);
+          db.staffBox!.put(staff.id, staff);
         }
 
         // Populate Dining Tables
         for (var row in diningTablesTable!.rows) {
           DiningTable diningTable = DiningTable.fromIterable(row.map((e) => e?.value));
-          EateryDB.instance.diningTableBox!.put(diningTable.id, diningTable);
+          db.diningTableBox!.put(diningTable.id, diningTable);
         }
 
         // Populate Dining Table Categories
         for (var row in diningTableCategoriesTable!.rows) {
           DiningTableCategory diningTableCategory = DiningTableCategory.fromIterable(row.map((e) => e?.value));
-          EateryDB.instance.diningTableCategoryBox!.put(diningTableCategory.id, diningTableCategory);
+          db.diningTableCategoryBox!.put(diningTableCategory.id, diningTableCategory);
         }
 
         // Populate Customers
         for (var row in customersTable!.rows) {
           Customer customer = Customer.fromIterable(row.map((e) => e?.value));
-          EateryDB.instance.customerBox!.put(customer.id, customer);
+          db.customerBox!.put(customer.id, customer);
         }
 
         // Populate Orders
         for (var row in ordersTable!.rows) {
           Order order = Order.fromIterable(row.map((e) => e?.value));
-          EateryDB.instance.orderBox!.put(order.id, order);
+          db.orderBox!.put(order.id, order);
         }
 
         showMessageDialog(this.context, 'Imported successfully', MessageType.success);
@@ -335,14 +337,14 @@ class _DataManagementPageState extends State<DataManagementPage> {
 
     // Populate Customers Sheet
     index = 0;
-    for (var element in EateryDB.instance.customerBox!.values) {
+    for (var element in db.customerBox!.values) {
       customersSheet.insertRowIterables(element.toMap().values.toList(), index);
       index++;
     }
 
     // Populate Dining Tables Sheet
     index = 0;
-    for (var element in EateryDB.instance.diningTableBox!.values) {
+    for (var element in db.diningTableBox!.values) {
       diningTablesSheet.insertRowIterables(
           element.toMap().values.toList(), index);
       index++;
@@ -350,7 +352,7 @@ class _DataManagementPageState extends State<DataManagementPage> {
 
     // Dining Table Categories Sheet
     index = 0;
-    for (var element in EateryDB.instance.diningTableCategoryBox!.values) {
+    for (var element in db.diningTableCategoryBox!.values) {
       diningTableCategoriesSheet.insertRowIterables(
           element.toMap().values.toList(), index);
       index++;
@@ -358,21 +360,21 @@ class _DataManagementPageState extends State<DataManagementPage> {
 
     // Populate Orders Sheet
     index = 0;
-    for (var element in EateryDB.instance.orderBox!.values) {
+    for (var element in db.orderBox!.values) {
       ordersSheet.insertRowIterables(element.toMap().values.toList(), index);
       index++;
     }
 
     // Populate Products Sheet
     index = 0;
-    for (var element in EateryDB.instance.productBox!.values) {
+    for (var element in db.productBox!.values) {
       productsSheet.insertRowIterables(element.toMap().values.toList(), index);
       index++;
     }
 
     // Populate Product Categories Sheet
     index = 0;
-    for (var element in EateryDB.instance.productCategoryBox!.values) {
+    for (var element in db.productCategoryBox!.values) {
       productCategoriesSheet.insertRowIterables(
           element.toMap().values.toList(), index);
       index++;
@@ -380,14 +382,14 @@ class _DataManagementPageState extends State<DataManagementPage> {
 
     // Populate Tax Slabs Sheet
     index = 0;
-    for (var element in EateryDB.instance.taxSlabBox!.values) {
+    for (var element in db.taxSlabBox!.values) {
       taxSlabsSheet.insertRowIterables(element.toMap().values.toList(), index);
       index++;
     }
 
     // Populate Staffs Sheet
     index = 0;
-    for (var element in EateryDB.instance.staffBox!.values) {
+    for (var element in db.staffBox!.values) {
       staffsSheet.insertRowIterables(element.toMap().values.toList(), index);
       index++;
     }
@@ -409,6 +411,7 @@ class _DataManagementPageState extends State<DataManagementPage> {
   Future<void> _downloadDemoData(BuildContext context) async {
     ProgressDialog pd = ProgressDialog(context: context);
     pd.show();
+    final db = ref.read(appDatabaseProvider);
     List<String> logs = [];
 
     String baseUrl =
@@ -434,8 +437,8 @@ class _DataManagementPageState extends State<DataManagementPage> {
           return Customer(phone: element['phone']);
         }
       });
-      await EateryDB.instance.customerBox!.clear();
-      await EateryDB.instance.customerBox!.addAll(custs);
+      await db.customerBox.clear();
+      await db.customerBox.addAll(custs);
       final msg = '✅ ${custs.length} Customers downloaded successfully';
       logs.add(msg);
       pd.update(msg: msg);
@@ -465,8 +468,8 @@ class _DataManagementPageState extends State<DataManagementPage> {
           return DiningTableCategory(name: element['name']);
         }
       });
-      await EateryDB.instance.diningTableCategoryBox!.clear();
-      await EateryDB.instance.diningTableCategoryBox!.addAll(dtCats);
+      await db.diningTableCategoryBox.clear();
+      await db.diningTableCategoryBox.addAll(dtCats);
       final msg =
           '✅ ${dtCats.length} Dining Table Categories downloaded successfully';
       logs.add(msg);
@@ -497,8 +500,8 @@ class _DataManagementPageState extends State<DataManagementPage> {
           return DiningTable(name: element['name']);
         }
       });
-      await EateryDB.instance.diningTableBox!.clear();
-      await EateryDB.instance.diningTableBox!.addAll(diningTables);
+      await db.diningTableBox.clear();
+      await db.diningTableBox.addAll(diningTables);
       final msg =
           '✅ ${diningTables.length} Dining Tables downloaded successfully';
       logs.add(msg);
@@ -529,8 +532,8 @@ class _DataManagementPageState extends State<DataManagementPage> {
           rethrow;
         }
       });
-      await EateryDB.instance.orderBox!.clear();
-      await EateryDB.instance.orderBox!.addAll(orders);
+      await db.orderBox.clear();
+      await db.orderBox.addAll(orders);
       final msg = '✅ ${orders.length} Orders downloaded successfully';
       logs.add(msg);
       pd.update(msg: msg);
@@ -560,8 +563,8 @@ class _DataManagementPageState extends State<DataManagementPage> {
           rethrow;
         }
       });
-      await EateryDB.instance.paymentBox!.clear();
-      await EateryDB.instance.paymentBox!.addAll(payments);
+      await db.paymentBox.clear();
+      await db.paymentBox.addAll(payments);
       final msg = '✅ ${payments.length} Payments downloaded successfully';
       logs.add(msg);
       pd.update(msg: msg);
@@ -592,8 +595,8 @@ class _DataManagementPageState extends State<DataManagementPage> {
           return ProductCategory(name: element['name']);
         }
       });
-      await EateryDB.instance.productCategoryBox!.clear();
-      await EateryDB.instance.productCategoryBox!.addAll(categories);
+      await db.productCategoryBox.clear();
+      await db.productCategoryBox.addAll(categories);
       final msg =
           '✅ ${categories.length} Product Categories downloaded successfully';
       logs.add(msg);
@@ -629,8 +632,8 @@ class _DataManagementPageState extends State<DataManagementPage> {
               isActive: false);
         }
       });
-      await EateryDB.instance.productBox!.clear();
-      await EateryDB.instance.productBox!.addAll(products);
+      await db.productBox.clear();
+      await db.productBox.addAll(products);
       final msg = '✅ ${products.length} Products downloaded successfully';
       logs.add(msg);
       pd.update(msg: msg);
@@ -661,8 +664,8 @@ class _DataManagementPageState extends State<DataManagementPage> {
               name: element['name'], type: StaffType.other, isActive: false);
         }
       });
-      await EateryDB.instance.staffBox!.clear();
-      await EateryDB.instance.staffBox!.addAll(staffs);
+      await db.staffBox.clear();
+      await db.staffBox.addAll(staffs);
       final msg = '✅ ${staffs.length} Staffs downloaded successfully';
       logs.add(msg);
       pd.update(msg: msg);
@@ -693,8 +696,8 @@ class _DataManagementPageState extends State<DataManagementPage> {
               name: element['name'], rate: 0.0, type: TaxType.exclusive);
         }
       });
-      await EateryDB.instance.taxSlabBox!.clear();
-      await EateryDB.instance.taxSlabBox!.addAll(taxSlabs);
+      await db.taxSlabBox.clear();
+      await db.taxSlabBox.addAll(taxSlabs);
       final msg = '✅ ${taxSlabs.length} Tax Slabs downloaded successfully';
       logs.add(msg);
       pd.update(msg: msg);

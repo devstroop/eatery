@@ -1,16 +1,18 @@
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/presentation/providers/database_provider.dart';
 
 Color _pageColor = const Color(0xFFC2592F);
 
-class EditStaffPage extends StatefulWidget {
+class EditStaffPage extends ConsumerStatefulWidget {
   const EditStaffPage({Key? key, required this.staff}) : super(key: key);
   final Staff staff;
 
   @override
-  State<EditStaffPage> createState() => _EditStaffPageState();
+  ConsumerState<EditStaffPage> createState() => _EditStaffPageState();
 }
 
-class _EditStaffPageState extends State<EditStaffPage> {
+class _EditStaffPageState extends ConsumerState<EditStaffPage> {
   LibraryImage? image;
   bool isActive = true;
   final TextEditingController _controllerStaffName = TextEditingController();
@@ -212,7 +214,7 @@ StaffType? staffType;
             widget.staff.type = staffType!;
             widget.staff.isActive = isActive;
             try {
-              EateryDB.instance.staffBox!.put(widget.staff.id,
+              ref.read(appDatabaseProvider).staffBox.put(widget.staff.id,
                 widget.staff,
               ).whenComplete(() {
                 showMessageDialog(context, 'Staff added successfully', MessageType.success, () => Navigator.pop(context));

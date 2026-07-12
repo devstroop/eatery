@@ -1,4 +1,4 @@
-import 'package:get/get.dart';
+import 'package:eatery/core/extensions/string_ext.dart';
 import 'package:eatery/references.dart';
 
 class Body2 extends StatelessWidget {
@@ -8,19 +8,16 @@ class Body2 extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final Function(GlobalKey<FormState> formKey)? callbackFormKey;
 
-  Body2(
-      {Key? key,
-      required this.themeColor,
-      required this.passwordController,
-      required this.confirmPasswordController,
-      required this.formKey,
-      this.callbackFormKey})
-      : super(key: key);
+  Body2({
+    Key? key,
+    required this.themeColor,
+    required this.passwordController,
+    required this.confirmPasswordController,
+    required this.formKey,
+    this.callbackFormKey,
+  }) : super(key: key);
 
-  List<FocusNode> focusNodes = [
-    FocusNode(),
-    FocusNode(),
-  ];
+  List<FocusNode> focusNodes = [FocusNode(), FocusNode()];
 
   @override
   Widget build(BuildContext context) {

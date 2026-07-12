@@ -1,17 +1,20 @@
 import 'package:eatery/pages/authentication/reset-pin.dart';
-import 'package:get/get.dart';
+import 'package:eatery/core/extensions/string_ext.dart';
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/presentation/providers/company_provider.dart';
+import 'package:eatery/presentation/providers/database_provider.dart';
 
 import '../main.screen.dart';
 
-class LoginPage extends StatefulWidget {
+class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
   final TextEditingController _controllerPassword = TextEditingController();
   Company? company;
 
@@ -20,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
     Future.delayed(Duration.zero, () {
       setState(() {
-        company = EateryDB.instance.companyBox!.values.firstOrNull;
+        company = ref.read(companyRepositoryProvider).getCurrentCompany();
       });
     });
   }
@@ -32,20 +35,10 @@ class _LoginPageState extends State<LoginPage> {
     }
     _formKey.currentState!.save();
     if (_controllerPassword.text == company!.password) {
-      setState(() {
-        Common.company = company;
-        Common.currency = EateryDB.instance.currencyBox!.values
-            .where((element) => element.code == Common.company?.currencyCode)
-            .firstOrNull;
-        Common.activeOrderType = null;
-        Common.activeDiningTable = null;
-        Common.activeCustomer = null;
-      });
+      ref.read(companyProvider.notifier).setCompany(company);
       Navigator.pushAndRemoveUntil(
         this.context,
-        MaterialPageRoute(
-          builder: (context) => const DashboardPage(),
-        ),
+        MaterialPageRoute(builder: (context) => const DashboardPage()),
         (Route<dynamic> route) => false,
       );
     } else {
@@ -63,16 +56,10 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         backgroundColor: Colors.grey[200],
         automaticallyImplyLeading: false,
-        title: Image.asset(
-          'assets/logo.png',
-          height: 36,
-        ),
+        title: Image.asset('assets/logo.png', height: 36),
         actions: [
           IconButton(
-            icon: Icon(
-              Icons.more_vert,
-              color: KColors.black600,
-            ),
+            icon: Icon(Icons.more_vert, color: KColors.black600),
             onPressed: () {
               showMenu(
                 context: context,
@@ -82,16 +69,11 @@ class _LoginPageState extends State<LoginPage> {
                     value: 'reset',
                     child: Row(
                       children: [
-                        Icon(
-                          Icons.lock_reset,
-                          color: KColors.black600,
-                        ),
-                        const SizedBox(width: 8,),
+                        Icon(Icons.lock_reset, color: KColors.black600),
+                        const SizedBox(width: 8),
                         Text(
                           'Reset PIN',
-                          style: TextStyle(
-                            color: KColors.black600,
-                          ),
+                          style: TextStyle(color: KColors.black600),
                         ),
                       ],
                     ),
@@ -100,16 +82,11 @@ class _LoginPageState extends State<LoginPage> {
                     value: 'delete',
                     child: Row(
                       children: [
-                        Icon(
-                          Icons.delete,
-                          color: KColors.red,
-                        ),
-                        const SizedBox(width: 8,),
+                        Icon(Icons.delete, color: KColors.red),
+                        const SizedBox(width: 8),
                         Text(
                           'Delete Company',
-                          style: TextStyle(
-                            color: KColors.red,
-                          ),
+                          style: TextStyle(color: KColors.red),
                         ),
                       ],
                     ),
@@ -124,13 +101,14 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   );
                 } else if (value == 'delete') {
-
                   // ask for confirmation
                   showDialog(
                     context: context,
                     builder: (context) => AlertDialog(
                       title: Text('Delete ${company?.name}'),
-                      content: Text('Are you sure you want to delete ${company?.name} and its data?'),
+                      content: Text(
+                        'Are you sure you want to delete ${company?.name} and its data?',
+                      ),
                       actions: [
                         TextButton(
                           onPressed: () {
@@ -140,7 +118,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                         TextButton(
                           onPressed: () {
-                            EateryDB.instance.deleteAll();
+                            ref.read(appDatabaseProvider).deleteAll();
                             Navigator.pop(context);
                             Navigator.pushAndRemoveUntil(
                               context,
@@ -180,7 +158,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
               );*/
             },
-          )
+          ),
         ],
       ),
       body: InkWell(
@@ -192,9 +170,7 @@ class _LoginPageState extends State<LoginPage> {
             if (company == null)
               LinearProgressIndicator(
                 backgroundColor: KColors.white,
-                valueColor: AlwaysStoppedAnimation<Color>(
-                  KColors.secondary2,
-                ),
+                valueColor: AlwaysStoppedAnimation<Color>(KColors.secondary2),
               ),
             if (company != null)
               Padding(
@@ -219,9 +195,7 @@ class _LoginPageState extends State<LoginPage> {
                             ),
                           ),
                         ),
-                        const SizedBox(
-                          height: 8.0,
-                        ),
+                        const SizedBox(height: 8.0),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -239,7 +213,7 @@ class _LoginPageState extends State<LoginPage> {
                               style: const TextStyle(
                                 fontWeight: FontWeight.normal,
                               ),
-                            )
+                            ),
                           ],
                         ),
                       ],
@@ -254,7 +228,9 @@ class _LoginPageState extends State<LoginPage> {
                           CustomTextFromField(
                             themeColor: themeColor,
                             keyboardType: const TextInputType.numberWithOptions(
-                                decimal: false, signed: false),
+                              decimal: false,
+                              signed: false,
+                            ),
                             controller: _controllerPassword,
                             obscureText: true,
                             isPassword: true,
@@ -295,8 +271,10 @@ class _LoginPageState extends State<LoginPage> {
                             bottomRight: Radius.circular(0),
                           ),
                         ),
-                        builder: (context) =>
-                            EateryDB.instance.subscriptionBox!.values
+                        builder: (context) => ref
+                                        .read(appDatabaseProvider)
+                                        .subscriptionBox
+                                        .values
                                         .singleWhere(
                                           (element) =>
                                               element.id ==

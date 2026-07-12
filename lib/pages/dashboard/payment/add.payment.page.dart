@@ -1,16 +1,19 @@
+import 'package:eatery/presentation/providers/order_provider.dart';
+import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Color _pageColor = KColors.tertiary;
 
-class AddPaymentPage extends StatefulWidget {
+class AddPaymentPage extends ConsumerStatefulWidget {
   const AddPaymentPage({Key? key, this.order}) : super(key: key);
   final Order? order;
 
   @override
-  State<AddPaymentPage> createState() => _AddPaymentPageState();
+  ConsumerState<AddPaymentPage> createState() => _AddPaymentPageState();
 }
 
-class _AddPaymentPageState extends State<AddPaymentPage> {
+class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
   Order? order;
   final TextEditingController _controllerAmount = TextEditingController();
   final TextEditingController _controllerReference = TextEditingController();
@@ -88,14 +91,15 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                       showSearch(
                           context: context,
                           delegate: SearchOrderDelegate(
-                            EateryDB.instance.orderBox!.values.toList(),
-                            (order) {
+                            orders: ref.read(orderRepositoryProvider).getAllOrders(),
+                            callback: (order) {
                               setState(() {
                                 this.order = order;
                                 _controllerAmount.text =
                                     order.grandTotal.toString();
                               });
                             },
+                            currencySymbol: '',
                           ));
                     }),
                 // Payment mode
@@ -153,7 +157,7 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                   decoration: InputDecoration(
                     labelText: 'Amount',
                     hintText: 'Enter Payment Amount',
-                    prefix: Text('${Common.currency?.symbol ?? ''}  '),
+                    prefix: Text('${ref.read(companyProvider.notifier).currency?.symbol ?? ''}  '),
                     border: const OutlineInputBorder(),
                   ),
                   validator: (value) {
@@ -216,27 +220,25 @@ class _AddPaymentPageState extends State<AddPaymentPage> {
                 attachment: image?.filename,
                 orderId: order?.id,
               );
-              EateryDB.instance.paymentBox!
-                  .add(payment)
+              ref.read(paymentRepositoryProvider).savePayment(payment)
                   .then((value) => showMessageDialog(
                           context,
                           'Payment saved successfully',
                           MessageType.success, () async {
 
-                        var diningTable = EateryDB
-                            .instance.diningTableBox?.values
+                        var diningTable = ref.read(diningTableRepositoryProvider).getAllTables()
                             .where((element) =>
                         element.orderId == order?.id).firstOrNull;
                         if(diningTable != null){
                           diningTable.status = DiningTableStatus.available;
                           diningTable.orderId = null;
                           diningTable.customerPhone = null;
-                          await diningTable.save();
+                          await ref.read(diningTableRepositoryProvider).saveTable(diningTable);
                         }
 
                         order?.paidTotal = (order?.paidTotal ?? 0) +
                             double.parse(_controllerAmount.text);
-                        order?.save().then((value) => Navigator.pop(context));
+                        ref.read(orderRepositoryProvider).saveOrder(order!).then((value) => Navigator.pop(context));
                       }))
                   .onError((error, stackTrace) => showMessageDialog(
                       context, 'Error saving payment', MessageType.error));

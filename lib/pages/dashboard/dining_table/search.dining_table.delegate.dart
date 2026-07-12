@@ -1,11 +1,18 @@
+import 'package:eatery/core/extensions/double_ext.dart';
 import 'package:eatery/references.dart';
-import 'package:get/get.dart';
 
 class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
   final List<DiningTable> diningTables;
   final Function(DiningTable diningTable) callback;
+  final String currencySymbol;
+  final List<Order> orders;
 
-  SearchDiningTableDelegate(this.diningTables, this.callback);
+  SearchDiningTableDelegate(
+    this.diningTables,
+    this.callback, {
+    this.currencySymbol = '',
+    this.orders = const [],
+  });
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -76,81 +83,113 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
           ),
         ),
         ...diningTables
-            .map((e) => ListTile(
-                  onTap: () {
-                    callback(e);
-                    close(context, e);
-                  },
-                  leading: Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          e.name.split(' ').last[0].toUpperCase(),
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                      ],
-                    ),
+            .map(
+              (e) => ListTile(
+                onTap: () {
+                  callback(e);
+                  close(context, e);
+                },
+                leading: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
                   ),
-                  title: Text(e.name, style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-                  subtitle: Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      if (e.description?.trim() != '') Text(e.description!.trim()),
                       Text(
-                        '${e.capacity} seats',
+                        e.name.split(' ').last[0].toUpperCase(),
                         style: TextStyle(
-                          fontSize: 12,
+                          fontSize: 18,
                           fontWeight: FontWeight.bold,
                           color: Colors.grey[600],
                         ),
                       ),
                     ],
                   ),
-                  trailing: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 6, vertical: 3),
-                          decoration: BoxDecoration(
-                            color: e.status == DiningTableStatus.available
-                                ? Colors.green : e.status == DiningTableStatus.occupied ? Colors.red
-                                : Colors.blueAccent,
-                            borderRadius: BorderRadius.circular(12),
-                          ),
-                          child: Text(
-                            e.status.name,
-                            style: const TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          )),
-                      if(e.orderId != null) Text('Order #${e.orderId}', style: TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: KColors.black800)),
-                      if(e.orderId != null) Text('Due ${Common.currency?.symbol ?? ''}${EateryDB.instance.orderBox!.values.where((element) => element.id == e.orderId).firstOrNull?.grandTotal.toPrecision(2)}', style: const TextStyle(fontSize: 10, fontWeight: FontWeight.bold, color: Colors.red)),
-                    ],
+                ),
+                title: Text(
+                  e.name,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
                   ),
-                ))
-            .toList()
+                ),
+                subtitle: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (e.description?.trim() != '')
+                      Text(e.description!.trim()),
+                    Text(
+                      '${e.capacity} seats',
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.grey[600],
+                      ),
+                    ),
+                  ],
+                ),
+                trailing: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 3,
+                      ),
+                      decoration: BoxDecoration(
+                        color: e.status == DiningTableStatus.available
+                            ? Colors.green
+                            : e.status == DiningTableStatus.occupied
+                            ? Colors.red
+                            : Colors.blueAccent,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        e.status.name,
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                    if (e.orderId != null)
+                      Text(
+                        'Order #${e.orderId}',
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: KColors.black800,
+                        ),
+                      ),
+                    if (e.orderId != null)
+                      Text(
+                        'Due $currencySymbol${orders.where((element) => element.id == e.orderId).firstOrNull?.grandTotal.toPrecision(2)}',
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            )
+            .toList(),
       ],
     );
   }
 
   Widget _buildSearchResults(BuildContext context, String query) {
-    List<DiningTable> diningTables = this
-        .diningTables
+    List<DiningTable> diningTables = this.diningTables
         .where((element) => element.name.toLowerCase().contains(query))
         .toList();
     return ListView(
@@ -168,35 +207,37 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
           ),
         ),
         ...diningTables
-            .map((e) => ListTile(
-                  onTap: () {
-                    callback(e);
-                    close(context, e);
-                  },
-                  leading: Container(
-                    height: 40,
-                    width: 40,
-                    decoration: BoxDecoration(
-                      color: Colors.grey[300],
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          e.name.split(' ').last.toUpperCase()[0],
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                      ],
-                    ),
+            .map(
+              (e) => ListTile(
+                onTap: () {
+                  callback(e);
+                  close(context, e);
+                },
+                leading: Container(
+                  height: 40,
+                  width: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[300],
+                    borderRadius: BorderRadius.circular(8),
                   ),
-                  title: Text(e.name),
-                ))
-            .toList()
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        e.name.split(' ').last.toUpperCase()[0],
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.grey[600],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                title: Text(e.name),
+              ),
+            )
+            .toList(),
       ],
     );
   }

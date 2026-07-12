@@ -1,24 +1,23 @@
+import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Color _pageColor = KColors.tertiary;
 
-class AddDiningTableCategoryPage extends StatefulWidget {
+class AddDiningTableCategoryPage extends ConsumerStatefulWidget {
   const AddDiningTableCategoryPage({Key? key}) : super(key: key);
 
   @override
-  State<AddDiningTableCategoryPage> createState() =>
+  ConsumerState<AddDiningTableCategoryPage> createState() =>
       _AddDiningTableCategoryPageState();
 }
 
 class _AddDiningTableCategoryPageState
-    extends State<AddDiningTableCategoryPage> {
+    extends ConsumerState<AddDiningTableCategoryPage> {
   final TextEditingController _controllerCategoryName = TextEditingController();
   final TextEditingController _controllerCategoryDescription =
       TextEditingController();
-  final List<FocusNode> _focusNodes = [
-    FocusNode(),
-    FocusNode(),
-  ];
+  final List<FocusNode> _focusNodes = [FocusNode(), FocusNode()];
 
   final _formKey = GlobalKey<FormState>();
   @override
@@ -63,9 +62,7 @@ class _AddDiningTableCategoryPageState
                     _focusNodes[1].requestFocus();
                   },
                 ),
-                const SizedBox(
-                  height: 6.0,
-                ),
+                const SizedBox(height: 6.0),
                 LabeledCustomTextFormField(
                   keyboardType: TextInputType.text,
                   controller: _controllerCategoryDescription,
@@ -80,9 +77,7 @@ class _AddDiningTableCategoryPageState
                     FocusScope.of(context).unfocus();
                   },
                 ),
-                const SizedBox(
-                  height: 6.0,
-                ),
+                const SizedBox(height: 6.0),
               ],
             ),
           ),
@@ -101,13 +96,19 @@ class _AddDiningTableCategoryPageState
               description: _controllerCategoryDescription.text,
               isActive: true,
             );
-            EateryDB.instance.diningTableCategoryBox!
-                .add(
-              diningTableCategory,
-            )
+            ref
+                .read(appDatabaseProvider)
+                .diningTableCategoryBox
+                .add(diningTableCategory)
                 .then((value) {
-              showMessageDialog(context, 'Dining table category added successfully', MessageType.success).then((value) => Navigator.pop(this.context, diningTableCategory));
-            });
+                  showMessageDialog(
+                    context,
+                    'Dining table category added successfully',
+                    MessageType.success,
+                  ).then(
+                    (value) => Navigator.pop(this.context, diningTableCategory),
+                  );
+                });
           },
           child: const Text('Save'),
         ),

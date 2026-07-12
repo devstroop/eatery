@@ -1,16 +1,18 @@
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/presentation/providers/order_provider.dart';
 
 Color _pageColor = KColors.primary;
 
-class EditCustomerPage extends StatefulWidget {
+class EditCustomerPage extends ConsumerStatefulWidget {
   const EditCustomerPage({Key? key, required this.customer}) : super(key: key);
   final Customer customer;
 
   @override
-  State<EditCustomerPage> createState() => _EditCustomerPageState();
+  ConsumerState<EditCustomerPage> createState() => _EditCustomerPageState();
 }
 
-class _EditCustomerPageState extends State<EditCustomerPage> {
+class _EditCustomerPageState extends ConsumerState<EditCustomerPage> {
   bool isActive = true;
   final TextEditingController _controllerCustomerName = TextEditingController();
   final TextEditingController _controllerCustomerPhone =
@@ -87,9 +89,7 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
                     _focusNodes[1].requestFocus();
                   },
                 ),
-                const SizedBox(
-                  height: 6.0,
-                ),
+                const SizedBox(height: 6.0),
                 LabeledCustomTextFormField(
                   controller: _controllerCustomerPhone,
                   label: 'Phone Number',
@@ -104,12 +104,14 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Phone number is required';
-                    } else if (EateryDB.instance.customerBox!
-                        .values
-                        .any((element) =>
-                        element.id != widget.customer.id &&
-                    element.phone.trim() == value.trim())) {
-                      return 'Phone number already exists';
+                    } else {
+                      final existing = ref
+                          .read(customerRepositoryProvider)
+                          .getCustomerByPhone(value.trim());
+                      if (existing != null &&
+                          existing.id != widget.customer.id) {
+                        return 'Phone number already exists';
+                      }
                     }
                     return null;
                   },
@@ -147,24 +149,20 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Checkbox(
-                        value: isActive,
-                        onChanged: (value) {
-                          setState(() {
-                            isActive = value ?? false;
-                          });
-                        }),
-                    const SizedBox(
-                      width: 6.0,
+                      value: isActive,
+                      onChanged: (value) {
+                        setState(() {
+                          isActive = value ?? false;
+                        });
+                      },
                     ),
+                    const SizedBox(width: 6.0),
                     Text(
                       'Active',
-                      style: TextStyle(
-                        color: KColors.black600,
-                        fontSize: 16.0,
-                      ),
+                      style: TextStyle(color: KColors.black600, fontSize: 16.0),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),
@@ -180,32 +178,35 @@ class _EditCustomerPageState extends State<EditCustomerPage> {
             }
             _formKey.currentState!.save();
 
-            EateryDB.instance.customerBox!.values
-                .where((element) => element.id == widget.customer.id)
-                .first
-              ..name = _controllerCustomerName.text
-              ..phone = _controllerCustomerPhone.text
-              ..address = _controllerCustomerAddress.text
-              ..landmark = _controllerCustomerLandmark.text
-              ..isActive = isActive
-              ..save()
-              .then((value) => showMessageDialog(
-                  context,
-                  'Customer updated successfully',
-                  MessageType.success,
-                  () {
-                    Navigator.pop(context);
-                  }
-              )).onError((error, stackTrace) => showMessageDialog(
-                  context,
-                  'Error updating customer',
-                  MessageType.error,
-                  () {
-                    Navigator.pop(context);
-                  }
-              ));
-
-
+            final customer = widget.customer;
+            customer.name = _controllerCustomerName.text;
+            customer.phone = _controllerCustomerPhone.text;
+            customer.address = _controllerCustomerAddress.text;
+            customer.landmark = _controllerCustomerLandmark.text;
+            customer.isActive = isActive;
+            ref
+                .read(customerRepositoryProvider)
+                .saveCustomer(customer)
+                .then(
+                  (value) => showMessageDialog(
+                    context,
+                    'Customer updated successfully',
+                    MessageType.success,
+                    () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                )
+                .onError(
+                  (error, stackTrace) => showMessageDialog(
+                    context,
+                    'Error updating customer',
+                    MessageType.error,
+                    () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                );
           },
           child: const Text('Save'),
         ),

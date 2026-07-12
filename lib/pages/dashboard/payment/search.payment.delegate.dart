@@ -5,8 +5,9 @@ import 'add.payment.page.dart';
 class SearchPaymentDelegate extends SearchDelegate<Payment?>{
   final List<Payment> payments;
   final Function(Payment payment) callback;
+  final String currencySymbol;
 
-  SearchPaymentDelegate(this.payments, this.callback);
+  SearchPaymentDelegate(this.payments, this.callback, {this.currencySymbol = ''});
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -72,7 +73,7 @@ class SearchPaymentDelegate extends SearchDelegate<Payment?>{
             title: Text('${payment.id ?? 'NA'}'),
             subtitle: Text(payment.date.toString()),
             trailing: Text(
-              '${Common.currency?.symbol ?? ''}${payment.amount}',
+              '$currencySymbol${payment.amount}',
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
               ),
@@ -101,7 +102,7 @@ class SearchPaymentDelegate extends SearchDelegate<Payment?>{
             title: Text('${payment.id ?? 'NA'}'),
             subtitle: Text(payment.date.toString()),
             trailing: Text(
-              '${Common.currency?.symbol ?? ''}${payment.amount}',
+              '$currencySymbol${payment.amount}',
               style: const TextStyle(
                 fontWeight: FontWeight.bold,
               ),

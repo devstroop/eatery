@@ -1,15 +1,18 @@
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/presentation/providers/order_provider.dart';
 
 final _pageColor = KColors.primary;
 
-class AddTaxSlabSettingsPage extends StatefulWidget {
+class AddTaxSlabSettingsPage extends ConsumerStatefulWidget {
   const AddTaxSlabSettingsPage({Key? key}) : super(key: key);
 
   @override
-  State<AddTaxSlabSettingsPage> createState() => _AddTaxSlabSettingsPageState();
+  ConsumerState<AddTaxSlabSettingsPage> createState() =>
+      _AddTaxSlabSettingsPageState();
 }
 
-class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
+class _AddTaxSlabSettingsPageState extends ConsumerState<AddTaxSlabSettingsPage> {
   final TextEditingController controllerSlabName = TextEditingController();
   final TextEditingController controllerTaxRate = TextEditingController();
   final focus1 = FocusNode();
@@ -29,7 +32,7 @@ class _AddTaxSlabSettingsPageState extends State<AddTaxSlabSettingsPage> {
           name: controllerSlabName.text,
           rate: double.parse(controllerTaxRate.text),
           type: selectedTaxType);
-      await EateryDB.instance.taxSlabBox!.add(taxSlab).whenComplete(() {
+      await ref.read(taxRepositoryProvider).saveTaxSlab(taxSlab).whenComplete(() {
         showMessageDialog(this.context, 'Tax slab created successfully!',
             MessageType.success, () => Navigator.pop(this.context));
       });

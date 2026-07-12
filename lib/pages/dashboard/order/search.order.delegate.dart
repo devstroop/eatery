@@ -1,10 +1,15 @@
 import 'package:eatery/references.dart';
 
-class SearchOrderDelegate extends SearchDelegate<Order?>{
+class SearchOrderDelegate extends SearchDelegate<Order?> {
   final List<Order> orders;
   final Function(Order order) callback;
+  final String currencySymbol;
 
-  SearchOrderDelegate(this.orders, this.callback);
+  SearchOrderDelegate({
+    required this.orders,
+    required this.callback,
+    required this.currencySymbol,
+  });
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -33,15 +38,10 @@ class SearchOrderDelegate extends SearchDelegate<Order?>{
   ThemeData appBarTheme(BuildContext context) {
     return Theme.of(context).copyWith(
       inputDecorationTheme: const InputDecorationTheme(
-        hintStyle: TextStyle(
-          color: Colors.white,
-        ),
+        hintStyle: TextStyle(color: Colors.white),
       ),
       textTheme: const TextTheme(
-        headlineMedium: TextStyle(
-          color: Colors.white,
-          fontSize: 18,
-        ),
+        headlineMedium: TextStyle(color: Colors.white, fontSize: 18),
       ),
     );
   }
@@ -80,7 +80,7 @@ class SearchOrderDelegate extends SearchDelegate<Order?>{
         ),
         for (final order in orders)
           ListTile(
-            title: Text('${order.id} - ${Common.currency?.symbol ?? ''}${order.grandTotal}'),
+            title: Text('$currencySymbol${order.id} - ${order.grandTotal}'),
             onTap: () {
               callback(order);
               close(context, order);
@@ -91,7 +91,9 @@ class SearchOrderDelegate extends SearchDelegate<Order?>{
   }
 
   Widget _buildSearchResults(BuildContext context, String query) {
-    final List<Order> searchResults = orders.where((order) => order.id.toString().contains(query.trim())).toList();
+    final List<Order> searchResults = orders
+        .where((order) => order.id.toString().contains(query.trim()))
+        .toList();
 
     return ListView(
       children: [
@@ -110,7 +112,7 @@ class SearchOrderDelegate extends SearchDelegate<Order?>{
         ),
         for (final order in searchResults)
           ListTile(
-            title: Text('${order.id} - ${Common.currency?.symbol ?? ''}${order.grandTotal}'),
+            title: Text('$currencySymbol${order.id} - ${order.grandTotal}'),
             onTap: () {
               callback(order);
               close(context, order);
@@ -119,5 +121,4 @@ class SearchOrderDelegate extends SearchDelegate<Order?>{
       ],
     );
   }
-
 }

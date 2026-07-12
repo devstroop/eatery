@@ -1,15 +1,18 @@
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/presentation/providers/order_provider.dart';
 
 Color _pageColor = KColors.primary;
 
-class TaxSlabsSettingsPage extends StatefulWidget {
+class TaxSlabsSettingsPage extends ConsumerStatefulWidget {
   const TaxSlabsSettingsPage({Key? key}) : super(key: key);
 
   @override
-  State<TaxSlabsSettingsPage> createState() => _TaxSlabsSettingsPageState();
+  ConsumerState<TaxSlabsSettingsPage> createState() =>
+      _TaxSlabsSettingsPageState();
 }
 
-class _TaxSlabsSettingsPageState extends State<TaxSlabsSettingsPage> {
+class _TaxSlabsSettingsPageState extends ConsumerState<TaxSlabsSettingsPage> {
   @override
   void initState() {
     super.initState();
@@ -34,7 +37,7 @@ class _TaxSlabsSettingsPageState extends State<TaxSlabsSettingsPage> {
 */
   @override
   Widget build(BuildContext context) {
-    List<TaxSlab> taxSlabs = EateryDB.instance.taxSlabBox!.values.toList();
+    List<TaxSlab> taxSlabs = ref.read(taxRepositoryProvider).getAllTaxSlabs();
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(
@@ -50,7 +53,7 @@ class _TaxSlabsSettingsPageState extends State<TaxSlabsSettingsPage> {
                 ListView(
                   shrinkWrap: true,
                   children: [
-                    ...EateryDB.instance.taxSlabBox!.values.map((e) {
+                    ...ref.read(taxRepositoryProvider).getAllTaxSlabs().map((e) {
                       return ListTile(
                         onTap: () {
                           Navigator.of(context).push(MaterialPageRoute(builder: (context) => EditTaxSlabSettingsPage(taxSlab: e))).then((_) => setState(() {}));

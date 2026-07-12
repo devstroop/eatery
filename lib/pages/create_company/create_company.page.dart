@@ -1,13 +1,16 @@
+import 'package:eatery/core/extensions/double_ext.dart';
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/presentation/providers/database_provider.dart';
 
-class CreateCompanyPage extends StatefulWidget {
+class CreateCompanyPage extends ConsumerStatefulWidget {
   const CreateCompanyPage({Key? key}) : super(key: key);
 
   @override
-  State<CreateCompanyPage> createState() => _CreateCompanyPageState();
+  ConsumerState<CreateCompanyPage> createState() => _CreateCompanyPageState();
 }
 
-class _CreateCompanyPageState extends State<CreateCompanyPage> {
+class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
   int viewIndex = 0;
   LibraryImage? libraryImageLogo; // used
   Edition edition = Edition.gst;
@@ -194,7 +197,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                     validFrom: validFrom,
                     validTill: validTill,
                     subscriptionType: subscriptionType);
-                await EateryDB.instance.subscriptionBox!.add(subscription);
+                await ref.read(appDatabaseProvider).subscriptionBox.add(subscription);
 
                 KCurrency? kCurrency;
                 if (currency != null) {
@@ -211,7 +214,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                           currency!.spaceBetweenAmountAndSymbol,
                       decimalSeparator: currency!.decimalSeparator,
                       symbolOnLeft: currency!.symbolOnLeft);
-                  await EateryDB.instance.currencyBox!.add(kCurrency);
+                  await ref.read(appDatabaseProvider).currencyBox.add(kCurrency);
                 }
                 // COMPANY
                 Company company = Company(
@@ -227,7 +230,7 @@ class _CreateCompanyPageState extends State<CreateCompanyPage> {
                   subscriptionId: subscription.id,
                   currencyCode: kCurrency?.code,
                 );
-                int? result = await EateryDB.instance.companyBox!
+                int? result = await ref.read(appDatabaseProvider).companyBox
                     .add(company)
                     .whenComplete(() => Navigator.of(this.context)
                         .pushAndRemoveUntil(

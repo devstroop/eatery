@@ -1,17 +1,20 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/presentation/providers/product_provider.dart';
+import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/references.dart';
 
 Color _pageColor = KColors.secondary;
 
-class EditKitchenDishPage extends StatefulWidget {
-  const EditKitchenDishPage(
-      {Key? key, required this.product})
-      : super(key: key);
+class EditKitchenDishPage extends ConsumerStatefulWidget {
+  const EditKitchenDishPage({Key? key, required this.product})
+    : super(key: key);
   final Product product;
   @override
-  State<EditKitchenDishPage> createState() => _EditKitchenDishPageState();
+  ConsumerState<EditKitchenDishPage> createState() =>
+      _EditKitchenDishPageState();
 }
 
-class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
+class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
   LibraryImage? image;
   ProductCategory? selectedCategory;
   FoodType? selectedFoodType;
@@ -22,7 +25,6 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
   final TextEditingController _controllerSalePrice = TextEditingController();
   final TextEditingController _controllerDescription = TextEditingController();
 
-
   final List<FocusNode> _focusNodes = [
     FocusNode(),
     FocusNode(),
@@ -32,11 +34,11 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
   ];
 
   final _formKey = GlobalKey<FormState>();
-  
+
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, (){
+    Future.delayed(Duration.zero, () {
       setState(() {
         image = LibraryImage(widget.product.image);
         _controllerName.text = widget.product.name;
@@ -45,10 +47,14 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
             ? widget.product.salePrice.toString()
             : '';
         selectedFoodType = widget.product.foodType;
-        selectedTaxSlab = EateryDB.instance.taxSlabBox!.values
-            .where((element) => element.id == widget.product.taxSlabId).firstOrNull;
-        selectedCategory = EateryDB.instance.productCategoryBox!.values
-            .where((element) => element.id == widget.product.categoryId).firstOrNull;
+        selectedTaxSlab = widget.product.taxSlabId != null
+            ? ref.read(taxRepositoryProvider).getTaxSlabById(widget.product.taxSlabId!)
+            : null;
+        selectedCategory = widget.product.categoryId != null
+            ? ref
+                  .read(productRepositoryProvider)
+                  .getCategoryById(widget.product.categoryId!)
+            : null;
         _controllerDescription.text = widget.product.description ?? '';
       });
     });
@@ -63,7 +69,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
       appBar: AppBar(
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,
-        
+
         title: const Text('Edit Kitchen Dish'),
         actions: [
           if (_focusNodes[0].hasFocus ||
@@ -97,86 +103,84 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
                   });
                 },
               ),
-              const SizedBox(
-                height: 6.0,
-              ),
+              const SizedBox(height: 6.0),
               LabeledCustomTextFormField(
-                  label: 'Name',
-                  hint: 'Enter product name',
-                  focusNode: _focusNodes[0],
-                  validator: (value) {
-                    if (value!.trim().isEmpty) {
-                      return 'Name cannot be blank';
-                    } else if (value.trim().length < 3) {
-                      return 'Name must be at least 3 characters long';
-                    } else if (value.trim().length > 50) {
-                      return 'Name cannot be more than 50 characters long';
-                    } else if (EateryDB.instance.productBox!.values
-                        .any((element) =>
-                    element.id != widget.product.id &&
-                        element.name.toLowerCase() ==
-                            value!.trim().toLowerCase())) {
-                      return 'Product with this name already exists';
-                    }
-                    return null;
-                  },
-                  onFieldSubmitted: (v) {
-                    _focusNodes[1].requestFocus();
-                  },
-                  foregroundColor: KColors.black600,
-                  themeColor: _pageColor,
-                  controller: _controllerName),
-              const SizedBox(
-                height: 6.0,
+                label: 'Name',
+                hint: 'Enter product name',
+                focusNode: _focusNodes[0],
+                validator: (value) {
+                  if (value!.trim().isEmpty) {
+                    return 'Name cannot be blank';
+                  } else if (value.trim().length < 3) {
+                    return 'Name must be at least 3 characters long';
+                  } else if (value.trim().length > 50) {
+                    return 'Name cannot be more than 50 characters long';
+                  } else if (ref
+                      .read(productRepositoryProvider)
+                      .isProductNameTaken(
+                        value!.trim(),
+                        excludeId: widget.product.id,
+                      )) {
+                    return 'Product with this name already exists';
+                  }
+                  return null;
+                },
+                onFieldSubmitted: (v) {
+                  _focusNodes[1].requestFocus();
+                },
+                foregroundColor: KColors.black600,
+                themeColor: _pageColor,
+                controller: _controllerName,
               ),
+              const SizedBox(height: 6.0),
               Row(
                 children: [
                   Flexible(
                     child: LabeledCustomTextFormField(
-                        label: 'MRP (Max. retail price)',
-                        prefix: const Icon(Icons.currency_rupee, size: 14,),
-                        hint: '0.00',
-                        themeColor: _pageColor,
-                        focusNode: _focusNodes[1],
-                        onFieldSubmitted: (v) {
-                          _focusNodes[2].requestFocus();
-                        },
-                        validator: (value) {
-                          if (value!.trim().isEmpty) {
-                            return 'Price cannot be blank';
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.number,
-                        foregroundColor: KColors.black600,
-                        controller: _controllerMRP),
+                      label: 'MRP (Max. retail price)',
+                      prefix: const Icon(Icons.currency_rupee, size: 14),
+                      hint: '0.00',
+                      themeColor: _pageColor,
+                      focusNode: _focusNodes[1],
+                      onFieldSubmitted: (v) {
+                        _focusNodes[2].requestFocus();
+                      },
+                      validator: (value) {
+                        if (value!.trim().isEmpty) {
+                          return 'Price cannot be blank';
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.number,
+                      foregroundColor: KColors.black600,
+                      controller: _controllerMRP,
+                    ),
                   ),
-                  const SizedBox(width: 12.0,),
+                  const SizedBox(width: 12.0),
                   Flexible(
                     child: LabeledCustomTextFormField(
-                        label: 'Sale Price',
-                        prefix: const Icon(Icons.currency_rupee, size: 14,),
-                        hint: '0.00',
-                        themeColor: _pageColor,
-                        focusNode: _focusNodes[2],
-                        onFieldSubmitted: (v) {
-                          _focusNodes[3].requestFocus();
-                        },
-                        validator: (value) {
-                          if (value!.trim().isEmpty) {
-                            return 'Price cannot be blank';
-                          }
-                          return null;
-                        },
-                        keyboardType: TextInputType.number,
-                        foregroundColor: KColors.black600,
-                        controller: _controllerSalePrice),
+                      label: 'Sale Price',
+                      prefix: const Icon(Icons.currency_rupee, size: 14),
+                      hint: '0.00',
+                      themeColor: _pageColor,
+                      focusNode: _focusNodes[2],
+                      onFieldSubmitted: (v) {
+                        _focusNodes[3].requestFocus();
+                      },
+                      validator: (value) {
+                        if (value!.trim().isEmpty) {
+                          return 'Price cannot be blank';
+                        }
+                        return null;
+                      },
+                      keyboardType: TextInputType.number,
+                      foregroundColor: KColors.black600,
+                      controller: _controllerSalePrice,
+                    ),
                   ),
                 ],
               ),
-              const SizedBox(
-                height: 6.0,
-              ),
+              const SizedBox(height: 6.0),
               Text(
                 'Select Food Type',
                 style: TextStyle(
@@ -184,20 +188,17 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              const SizedBox(
-                height: 3.0,
-              ),
+              const SizedBox(height: 3.0),
               ToggleSwitch(
                 highlightColor: selectedFoodType?.color ?? _pageColor,
                 backgroundColor: const Color(0xFFE5E5E5),
                 foregroundColor: Colors.white,
                 inactiveForegroundColor: KColors.black600,
 
-                children: [
-                  'None',
-                  ...FoodType.values.map((e) => e.name),
-                ],
-                selectedIndex: selectedFoodType!= null ? selectedFoodType!.index + 1 : 0,
+                children: ['None', ...FoodType.values.map((e) => e.name)],
+                selectedIndex: selectedFoodType != null
+                    ? selectedFoodType!.index + 1
+                    : 0,
                 onChange: (int? index) {
                   if (index == 0) {
                     setState(() {
@@ -210,10 +211,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
                   }
                 },
               ),
-              const SizedBox(
-                height: 6.0,
-              ),
-
+              const SizedBox(height: 6.0),
 
               Text(
                 'Select Tax Slab',
@@ -222,26 +220,28 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              const SizedBox(
-                height: 3.0,
-              ),
+              const SizedBox(height: 3.0),
               ToggleSwitch(
                 highlightColor: _pageColor,
                 backgroundColor: const Color(0xFFE5E5E5),
-                foregroundColor: selectedTaxSlab == null ? Colors.white : KColors.black600,
+                foregroundColor: selectedTaxSlab == null
+                    ? Colors.white
+                    : KColors.black600,
                 children: [
                   'None',
-                  for (var each in EateryDB.instance.taxSlabBox!.values)
-                    each.name
+                  for (var each in ref.read(taxRepositoryProvider).getAllTaxSlabs())
+                    each.name,
                 ],
-                selectedIndex: (selectedTaxSlab?.id == null) ? 0 : selectedTaxSlab?.id,
+                selectedIndex: (selectedTaxSlab?.id == null)
+                    ? 0
+                    : selectedTaxSlab?.id,
                 onChange: (int? index) {
                   if (index == 0) {
                     selectedTaxSlab = null;
                   } else {
-                    selectedTaxSlab = EateryDB
-                        .instance.taxSlabBox!.values
-                        .singleWhere((element) => element.id == index);
+                    selectedTaxSlab = index != null
+                        ? ref.read(taxRepositoryProvider).getTaxSlabById(index)
+                        : null;
                   }
                   setState(() {});
                 },
@@ -252,14 +252,13 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
                   child: Text(
                     '${selectedTaxSlab?.rate}% (${selectedTaxSlab?.type.name})',
                     style: TextStyle(
-                        color: _pageColor,
-                        fontSize: 14.0,
-                        fontWeight: FontWeight.w500),
+                      color: _pageColor,
+                      fontSize: 14.0,
+                      fontWeight: FontWeight.w500,
+                    ),
                   ),
                 ),
-              const SizedBox(
-                height: 6.0,
-              ),
+              const SizedBox(height: 6.0),
               Text(
                 'Select Category',
                 style: TextStyle(
@@ -267,9 +266,7 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              const SizedBox(
-                height: 3.0,
-              ),
+              const SizedBox(height: 3.0),
               SizedBox(
                 width: double.maxFinite,
                 height: 97,
@@ -279,44 +276,48 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
                     CircularCategoryPOSWidget(
                       themeColor: _pageColor,
                       margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                      image: const AssetImage('assets/images/default.jpg'), label: 'None', selected: selectedCategory == null, onTap: (){
-                      setState(() {
-                        selectedCategory = null;
-                      });
-                    },),
-                    ...EateryDB.instance.productCategoryBox!.values.map((e) {
-                      return CircularCategoryPOSWidget(
-                        themeColor: _pageColor,
-                        margin: const EdgeInsets.symmetric(horizontal: 8.0),
-                        image: LibraryImage(e.image).image,
-                        label: e.name,
-                        selected: selectedCategory == e,
-                        onTap: () {
-                          setState(() {
-                            selectedCategory = e;
-                          });
-                        },
-                      );
-                    }),
+                      image: const AssetImage('assets/images/default.jpg'),
+                      label: 'None',
+                      selected: selectedCategory == null,
+                      onTap: () {
+                        setState(() {
+                          selectedCategory = null;
+                        });
+                      },
+                    ),
+                    ...ref
+                        .read(productRepositoryProvider)
+                        .getAllCategories()
+                        .map((e) {
+                          return CircularCategoryPOSWidget(
+                            themeColor: _pageColor,
+                            margin: const EdgeInsets.symmetric(horizontal: 8.0),
+                            image: LibraryImage(e.image).image,
+                            label: e.name,
+                            selected: selectedCategory == e,
+                            onTap: () {
+                              setState(() {
+                                selectedCategory = e;
+                              });
+                            },
+                          );
+                        }),
                   ],
                 ),
               ),
-              const SizedBox(
-                height: 6.0,
-              ),
+              const SizedBox(height: 6.0),
               LabeledCustomTextFormField(
-                  label: 'Description',
-                  hint: 'Enter product description',
-                  multiline: true,
-                  focusNode: _focusNodes[3],
-                  onFieldSubmitted: (v) {
-                    FocusScope.of(context).unfocus();
-                  },
-                  foregroundColor: KColors.black600,
-                  themeColor: _pageColor,
-                  controller: _controllerDescription),
-
-
+                label: 'Description',
+                hint: 'Enter product description',
+                multiline: true,
+                focusNode: _focusNodes[3],
+                onFieldSubmitted: (v) {
+                  FocusScope.of(context).unfocus();
+                },
+                foregroundColor: KColors.black600,
+                themeColor: _pageColor,
+                controller: _controllerDescription,
+              ),
             ],
           ),
         ),
@@ -340,11 +341,23 @@ class _EditKitchenDishPageState extends State<EditKitchenDishPage> {
             widget.product.taxSlabId = selectedTaxSlab?.id;
             widget.product.categoryId = selectedCategory?.id;
             widget.product.description = _controllerDescription.text;
-            await widget.product.save().then((value) {
-              showMessageDialog(this.context, 'Product updated successfully', MessageType.success).whenComplete(() => Navigator.pop(this.context));
-            }).onError((error, stackTrace) {
-              showMessageDialog(this.context, 'Failed to update product', MessageType.error);
-            });
+            await ref
+                .read(productRepositoryProvider)
+                .saveProduct(widget.product)
+                .then((value) {
+                  showMessageDialog(
+                    this.context,
+                    'Product updated successfully',
+                    MessageType.success,
+                  ).whenComplete(() => Navigator.pop(this.context));
+                })
+                .onError((error, stackTrace) {
+                  showMessageDialog(
+                    this.context,
+                    'Failed to update product',
+                    MessageType.error,
+                  );
+                });
           },
           child: const Text('Save'),
         ),

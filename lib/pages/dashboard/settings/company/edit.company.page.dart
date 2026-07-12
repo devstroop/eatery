@@ -1,29 +1,30 @@
-import 'package:get/get.dart';
+import 'package:eatery/core/extensions/string_ext.dart';
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:eatery/presentation/providers/company_provider.dart';
 
 final _pageColor = KColors.primary;
 
-class EditCompanyPage extends StatefulWidget {
+class EditCompanyPage extends ConsumerStatefulWidget {
   const EditCompanyPage({Key? key}) : super(key: key);
 
   @override
-  State<EditCompanyPage> createState() => _EditCompanyPageState();
+  ConsumerState<EditCompanyPage> createState() => _EditCompanyPageState();
 }
 
-class _EditCompanyPageState extends State<EditCompanyPage> {
+class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
   Company? company;
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, (){
-      
-    });
+    Future.delayed(Duration.zero, () {});
     postInit();
   }
 
   Future postInit() async {
-    company = EateryDB.instance.companyBox!.values.first;
+    company = ref.read(appDatabaseProvider).companyBox.values.first;
     // company = await CompanyLoader(widget.database).load(context);
     setState(() {
       selectedLogo = LibraryImage(company!.logo);
@@ -36,6 +37,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
       _controllerFoodLicNo.text = company!.foodLicenseNo ?? '';
     });
   }
+
   LibraryImage? selectedLogo;
 
   final TextEditingController _controllerCompanyName = TextEditingController();
@@ -73,7 +75,7 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                     primaryColor: _pageColor,
                     secondaryColor: KColors.black600,
                     libraryImage: selectedLogo,
-                    onChanged: (image){
+                    onChanged: (image) {
                       setState(() {
                         selectedLogo = image;
                       });
@@ -82,67 +84,70 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                   SpacingStyle.defaultVerticalSpacing,
                   SpacingStyle.defaultVerticalSpacing,
                   LabeledCustomTextFormField(
-                      themeColor: _pageColor,
-                      foregroundColor: KColors.black600,
-                      keyboardType: TextInputType.name,
-                      controller: _controllerCompanyName,
-                      focusNode: focus1,
-                      label: 'Company name',
-                      hint: 'Enter company name...',
-                      textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (v) {
-                        FocusScope.of(context).requestFocus(focus2);
-                      },
-                      validator: (value) {
-                        if (value!.trim().isEmpty) {
-                          return 'Company name cannot be blank';
-                        }
-                        return null;
-                      }),
+                    themeColor: _pageColor,
+                    foregroundColor: KColors.black600,
+                    keyboardType: TextInputType.name,
+                    controller: _controllerCompanyName,
+                    focusNode: focus1,
+                    label: 'Company name',
+                    hint: 'Enter company name...',
+                    textInputAction: TextInputAction.next,
+                    onFieldSubmitted: (v) {
+                      FocusScope.of(context).requestFocus(focus2);
+                    },
+                    validator: (value) {
+                      if (value!.trim().isEmpty) {
+                        return 'Company name cannot be blank';
+                      }
+                      return null;
+                    },
+                  ),
                   SpacingStyle.defaultVerticalSpacing,
                   LabeledCustomTextFormField(
-                      themeColor: _pageColor,
-                      foregroundColor: KColors.black600,
-                      keyboardType: TextInputType.emailAddress,
-                      controller: _controllerEmail,
-                      label: 'Email address',
-                      hint: 'Enter email address...',
-                      focusNode: focus2,
-                      textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (v) {
-                        FocusScope.of(context).requestFocus(focus3);
-                      },
-                      validator: (value) {
-                        if (value!.trim().isEmpty) {
-                          return 'Email cannot be blank';
-                        }
-                        if (!value.trim().isValidEmail()) {
-                          return 'Email address is not valid';
-                        }
-                        return null;
-                      }),
+                    themeColor: _pageColor,
+                    foregroundColor: KColors.black600,
+                    keyboardType: TextInputType.emailAddress,
+                    controller: _controllerEmail,
+                    label: 'Email address',
+                    hint: 'Enter email address...',
+                    focusNode: focus2,
+                    textInputAction: TextInputAction.next,
+                    onFieldSubmitted: (v) {
+                      FocusScope.of(context).requestFocus(focus3);
+                    },
+                    validator: (value) {
+                      if (value!.trim().isEmpty) {
+                        return 'Email cannot be blank';
+                      }
+                      if (!value.trim().isValidEmail()) {
+                        return 'Email address is not valid';
+                      }
+                      return null;
+                    },
+                  ),
                   SpacingStyle.defaultVerticalSpacing,
                   LabeledCustomTextFormField(
-                      themeColor: _pageColor,
-                      foregroundColor: KColors.black600,
-                      keyboardType: TextInputType.phone,
-                      controller: _controllerPhone,
-                      label: 'Phone no',
-                      hint: 'Enter phone no...',
-                      focusNode: focus3,
-                      textInputAction: TextInputAction.next,
-                      onFieldSubmitted: (v) {
-                        FocusScope.of(context).requestFocus(focus4);
-                      },
-                      validator: (value) {
-                        if (value!.trim().isEmpty) {
-                          return 'Phone number cannot be blank';
-                        }
-                        if (!value.trim().isValidPhone()) {
-                          return 'Phone number is not valid';
-                        }
-                        return null;
-                      }),
+                    themeColor: _pageColor,
+                    foregroundColor: KColors.black600,
+                    keyboardType: TextInputType.phone,
+                    controller: _controllerPhone,
+                    label: 'Phone no',
+                    hint: 'Enter phone no...',
+                    focusNode: focus3,
+                    textInputAction: TextInputAction.next,
+                    onFieldSubmitted: (v) {
+                      FocusScope.of(context).requestFocus(focus4);
+                    },
+                    validator: (value) {
+                      if (value!.trim().isEmpty) {
+                        return 'Phone number cannot be blank';
+                      }
+                      if (!value.trim().isValidPhone()) {
+                        return 'Phone number is not valid';
+                      }
+                      return null;
+                    },
+                  ),
                   SpacingStyle.defaultVerticalSpacing,
                   LabeledCustomTextFormField(
                     themeColor: _pageColor,
@@ -179,7 +184,8 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                       FocusScope.of(context).requestFocus(focus6);
                     },
                     validator: (value) {
-                      if (value!.trim().isNotEmpty && value.trim().length < 10) {
+                      if (value!.trim().isNotEmpty &&
+                          value.trim().length < 10) {
                         return '${Edition.values.singleWhere((element) => element.id == company?.edition.id).name} license number is not valid';
                       }
                       return null;
@@ -202,8 +208,9 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
                     },
                     validator: (value) {
                       if (value!.trim().isNotEmpty &&
-                          (value.trim().length < 10/* ||
-                              !value.trim().isNumericOnly*/)) {
+                          (value.trim().length <
+                              10 /* ||
+                              !value.trim().isNumericOnly*/ )) {
                         return '${Edition.values.singleWhere((element) => element.id == company?.edition.id) == Edition.gst ? 'FSSAI' : 'Food'} license number is not valid';
                       }
                       return null;
@@ -227,13 +234,16 @@ class _EditCompanyPageState extends State<EditCompanyPage> {
 
                   // Update the company in the Hive database
                   company!.save().then((value) {
-                    showMessageDialog(context, 'Company details successfully updated', MessageType.success, (){
-                      Navigator.pop(context);
-                    });
+                    showMessageDialog(
+                      context,
+                      'Company details successfully updated',
+                      MessageType.success,
+                      () {
+                        Navigator.pop(context);
+                      },
+                    );
                   });
-
                 },
-
               ),
             ),
           )

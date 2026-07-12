@@ -1,23 +1,24 @@
+import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Color _pageColor = KColors.tertiary;
 
-class AddProductCategoryPage extends StatefulWidget {
+class AddProductCategoryPage extends ConsumerStatefulWidget {
   const AddProductCategoryPage({Key? key}) : super(key: key);
 
   @override
-  State<AddProductCategoryPage> createState() => _AddProductCategoryPageState();
+  ConsumerState<AddProductCategoryPage> createState() =>
+      _AddProductCategoryPageState();
 }
 
-class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
+class _AddProductCategoryPageState
+    extends ConsumerState<AddProductCategoryPage> {
   LibraryImage? pickedLibraryImage;
   final TextEditingController _controllerCategoryName = TextEditingController();
   final TextEditingController _controllerCategoryDescription =
       TextEditingController();
-  List<FocusNode> _focusNodes = [
-    FocusNode(),
-    FocusNode(),
-  ];
+  List<FocusNode> _focusNodes = [FocusNode(), FocusNode()];
 
   @override
   Widget build(BuildContext context) {
@@ -46,9 +47,7 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
           padding: const EdgeInsets.all(12.0),
           child: ListView(
             children: [
-              const SizedBox(
-                height: 12.0,
-              ),
+              const SizedBox(height: 12.0),
               UploadButton(
                 label: 'Product Category Image',
                 primaryColor: _pageColor,
@@ -60,23 +59,20 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
                   });
                 },
               ),
-              const SizedBox(
-                height: 6.0,
-              ),
+              const SizedBox(height: 6.0),
               LabeledCustomTextFormField(
-                  label: 'Category Name',
-                  hint: 'Enter product category name',
-                  // Write a hint for category name field
-                  foregroundColor: KColors.black600,
-                  themeColor: _pageColor,
-                  controller: _controllerCategoryName,
-                  focusNode: _focusNodes[0],
-                  onFieldSubmitted: (v) {
-                    _focusNodes[1].requestFocus();
-                  }),
-              const SizedBox(
-                height: 6.0,
+                label: 'Category Name',
+                hint: 'Enter product category name',
+                // Write a hint for category name field
+                foregroundColor: KColors.black600,
+                themeColor: _pageColor,
+                controller: _controllerCategoryName,
+                focusNode: _focusNodes[0],
+                onFieldSubmitted: (v) {
+                  _focusNodes[1].requestFocus();
+                },
               ),
+              const SizedBox(height: 6.0),
               LabeledCustomTextFormField(
                 label: 'Description',
                 foregroundColor: KColors.black600,
@@ -89,9 +85,7 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
                   FocusScope.of(context).unfocus();
                 },
               ),
-              const SizedBox(
-                height: 6.0,
-              ),
+              const SizedBox(height: 6.0),
             ],
           ),
         ),
@@ -101,17 +95,29 @@ class _AddProductCategoryPageState extends State<AddProductCategoryPage> {
         child: PrimaryButton(
           color: _pageColor,
           onPressed: () async {
-            EateryDB.instance.productCategoryBox!
-                .add(ProductCategory(
+            final repo = ref.read(productRepositoryProvider);
+            await repo
+                .saveCategory(
+                  ProductCategory(
                     name: _controllerCategoryName.text,
                     description: _controllerCategoryDescription.text,
-                    image: pickedLibraryImage?.filename))
+                    image: pickedLibraryImage?.filename,
+                  ),
+                )
                 .then((response) {
-              showMessageDialog(context, 'Category created successfully',
-                  MessageType.success).then((value) => Navigator.pop(context));
-            }).onError((error, stackTrace) {
-              showMessageDialog(context, error.toString(), MessageType.error);
-            });
+                  showMessageDialog(
+                    context,
+                    'Category created successfully',
+                    MessageType.success,
+                  ).then((value) => Navigator.pop(context));
+                })
+                .onError((error, stackTrace) {
+                  showMessageDialog(
+                    context,
+                    error.toString(),
+                    MessageType.error,
+                  );
+                });
           },
           child: const Text('Save'),
         ),

@@ -1,15 +1,17 @@
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/presentation/providers/database_provider.dart';
 
 Color _pageColor = const Color(0xFFC2592F);
 
-class AddStaffPage extends StatefulWidget {
+class AddStaffPage extends ConsumerStatefulWidget {
   const AddStaffPage({Key? key}) : super(key: key);
 
   @override
-  State<AddStaffPage> createState() => _AddStaffPageState();
+  ConsumerState<AddStaffPage> createState() => _AddStaffPageState();
 }
 
-class _AddStaffPageState extends State<AddStaffPage> {
+class _AddStaffPageState extends ConsumerState<AddStaffPage> {
   LibraryImage? image;
   bool isActive = true;
   final TextEditingController _controllerStaffName = TextEditingController();
@@ -78,7 +80,7 @@ class _AddStaffPageState extends State<AddStaffPage> {
                     if(value.length < 3) {
                       return 'Staff Name must be at least 3 characters';
                     }
-                    if(EateryDB.instance.staffBox!.values.where((element) => element.name == value).isNotEmpty) {
+                    if(ref.read(appDatabaseProvider).staffBox.values.where((element) => element.name == value).isNotEmpty) {
                       return 'Staff Name already exists';
                     }
                     return null;
@@ -99,7 +101,7 @@ class _AddStaffPageState extends State<AddStaffPage> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Enter Phone Number';
-                    } else if(EateryDB.instance.staffBox!.values.where((element) => element.phone == value).isNotEmpty) {
+                    } else if(ref.read(appDatabaseProvider).staffBox.values.where((element) => element.phone == value).isNotEmpty) {
                       return 'Phone Number already exists';
                     }
                     return null;
@@ -211,7 +213,7 @@ class _AddStaffPageState extends State<AddStaffPage> {
                 photo: image?.filename,
                 isActive: isActive,
                 type: staffType!);
-            EateryDB.instance.staffBox!
+            ref.read(appDatabaseProvider).staffBox
                 .add(staff).then((value) => showMessageDialog(
                 context,
                 'Staff has been added successfully',

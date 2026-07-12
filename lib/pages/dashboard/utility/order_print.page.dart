@@ -1,17 +1,21 @@
 import 'dart:ui' as ui;
 
+import 'package:eatery/core/extensions/double_ext.dart';
 import 'package:eatery/functions/order.function.dart';
+import 'package:eatery/presentation/providers/order_provider.dart';
+import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:eatery/references.dart';
-import 'package:get/get.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
-class OrderPrintPage extends StatefulWidget {
-  const OrderPrintPage(
-      {super.key,
-      required this.order,
-      required this.currentCart,
-      this.printKOT = false,
-      this.printInvoice = false});
+class OrderPrintPage extends ConsumerStatefulWidget {
+  const OrderPrintPage({
+    super.key,
+    required this.order,
+    required this.currentCart,
+    this.printKOT = false,
+    this.printInvoice = false,
+  });
 
   final Order order;
   final List<Product> currentCart;
@@ -19,10 +23,10 @@ class OrderPrintPage extends StatefulWidget {
   final bool printInvoice;
 
   @override
-  State<OrderPrintPage> createState() => _OrderPrintPageState();
+  ConsumerState<OrderPrintPage> createState() => _OrderPrintPageState();
 }
 
-class _OrderPrintPageState extends State<OrderPrintPage> {
+class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
   final GlobalKey invKey = GlobalKey();
   final GlobalKey kotKey = GlobalKey();
 
@@ -38,197 +42,193 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 IconButton(
-                    onPressed: () {
-                      Navigator.pushAndRemoveUntil(
-                        this.context,
-                        MaterialPageRoute(
-                          builder: (context) => const DashboardPage(),
-                        ),
-                        (Route<dynamic> route) => false,
-                      );
-                    },
-                    icon: const Icon(Icons.close))
+                  onPressed: () {
+                    Navigator.pushAndRemoveUntil(
+                      this.context,
+                      MaterialPageRoute(
+                        builder: (context) => const DashboardPage(),
+                      ),
+                      (Route<dynamic> route) => false,
+                    );
+                  },
+                  icon: const Icon(Icons.close),
+                ),
               ],
             ),
           ),
-          if(widget.printKOT)
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'KOT Preview',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
+          if (widget.printKOT)
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'KOT Preview',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
                       onPressed: () {},
                       child: const Row(
                         children: [
-                          Icon(
-                            Icons.print,
-                            size: 16,
-                          ),
-                          SizedBox(
-                            width: 3,
-                          ),
+                          Icon(Icons.print, size: 16),
+                          SizedBox(width: 3),
                           Text('Print'),
                         ],
-                      )),
-                  TextButton(
+                      ),
+                    ),
+                    TextButton(
                       onPressed: () {
                         share(context, kotKey);
                       },
                       child: const Row(
                         children: [
-                          Icon(
-                            Icons.share,
-                            size: 16,
-                          ),
-                          SizedBox(
-                            width: 3,
-                          ),
+                          Icon(Icons.share, size: 16),
+                          SizedBox(width: 3),
                           Text('Share'),
                         ],
-                      )),
-                ],
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              kotPreview(context),
-              const SizedBox(
-                height: 24,
-              ),
-            ],
-          ),
-          if(widget.printInvoice)
-          Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Invoice Preview',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
-                  ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  TextButton(
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                kotPreview(context),
+                const SizedBox(height: 24),
+              ],
+            ),
+          if (widget.printInvoice)
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'Invoice Preview',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
                       onPressed: () {},
                       child: const Row(
                         children: [
-                          Icon(
-                            Icons.print,
-                            size: 16,
-                          ),
-                          SizedBox(
-                            width: 3,
-                          ),
+                          Icon(Icons.print, size: 16),
+                          SizedBox(width: 3),
                           Text('Print'),
                         ],
-                      )),
-                  TextButton(
+                      ),
+                    ),
+                    TextButton(
                       onPressed: () {
                         share(context, invKey);
                       },
                       child: const Row(
                         children: [
-                          Icon(
-                            Icons.share,
-                            size: 16,
-                          ),
-                          SizedBox(
-                            width: 3,
-                          ),
+                          Icon(Icons.share, size: 16),
+                          SizedBox(width: 3),
                           Text('Share'),
                         ],
-                      )),
-                ],
-              ),
-              const SizedBox(
-                height: 12,
-              ),
-              invoicePreview(context),
-              const SizedBox(
-                height: 24,
-              ),
-            ],
-          )
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 12),
+                invoicePreview(context),
+                const SizedBox(height: 24),
+              ],
+            ),
         ],
       ),
     );
   }
 
   invoicePreview(BuildContext context) {
-    List<OrderProduct> products = EateryDB.instance.orderProductBox!.values
-        .where((element) => element.orderId == widget.order.id)
-        .toList();
+    final currency = ref.read(companyProvider.notifier).currency?.symbol ?? '';
+    final company = ref.read(companyProvider);
+    final customer = ref
+        .read(customerRepositoryProvider)
+        .getCustomerByPhone(widget.order.customerPhone ?? '');
+    final orderPhone = customer?.phone ?? '';
+    final orderName = customer?.name ?? '';
+    final orderAddress = customer?.address ?? '';
+    List<OrderProduct> products = ref
+        .read(orderRepositoryProvider)
+        .getOrderProducts(widget.order.id!);
     return RepaintBoundary(
       key: invKey,
       child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 12),
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(12)),
-              color: const Color(0xFFFFFFFF),
-              border: Border.all(color: const Color(0xFFF0F0F0), width: 1)),
-          child: Column(children: [
+        margin: const EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
+          color: const Color(0xFFFFFFFF),
+          border: Border.all(color: const Color(0xFFF0F0F0), width: 1),
+        ),
+        child: Column(
+          children: [
             Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '${Common.company?.name ?? ''} (Invoice)',
+                  '${company?.name ?? ''} (Invoice)',
                   style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Text(
-                  Common.company?.address ?? '',
+                  company?.address ?? '',
                   style: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.w400),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
                 Text(
-                  [Common.company?.email ?? '', Common.company?.phone ?? '']
-                      .join(', '),
+                  [company?.email ?? '', company?.phone ?? ''].join(', '),
                   style: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.w400),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
               ],
             ),
-            const SizedBox(
-              height: 12.0,
-              child: Divider(),
-            ),
+            const SizedBox(height: 12.0, child: Divider()),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'Order: #${widget.order.id}',
                   style: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.w400),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
                 Text(
                   'Date: ${DateFormat('dd/MM/yyyy').format(widget.order.createdAt)}',
                   style: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.w400),
-                )
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
               ],
             ),
-            const SizedBox(
-              height: 12.0,
-              child: Divider(),
-            ),
+            const SizedBox(height: 12.0, child: Divider()),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -236,14 +236,18 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      EateryDB.instance.customerBox!.values.where((element) => element.phone == widget.order.customerPhone).firstOrNull?.name ?? '',
+                      orderName,
                       style: const TextStyle(
-                          fontSize: 12, fontWeight: FontWeight.w500),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     Text(
-                      EateryDB.instance.customerBox!.values.where((element) => element.phone == widget.order.customerPhone).firstOrNull?.phone ?? '',
+                      orderPhone,
                       style: const TextStyle(
-                          fontSize: 12, fontWeight: FontWeight.w500),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ],
                 ),
@@ -251,28 +255,28 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                   children: [
                     const Text(
                       'Address: ',
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                     Text(
-                      EateryDB.instance.customerBox!.values.where((element) => element.phone == widget.order.customerPhone).firstOrNull?.address ?? '',
+                      orderAddress ?? '',
                       style: const TextStyle(
-                          fontSize: 12, fontWeight: FontWeight.w500),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ],
                 ),
               ],
             ),
-            const SizedBox(
-              height: 12.0,
-              child: Divider(),
-            ),
+            const SizedBox(height: 12.0, child: Divider()),
             ListView.builder(
               shrinkWrap: true,
               itemCount: products.length,
               itemBuilder: (context, index) {
                 var product = products[index];
-
 
                 return Row(
                   children: [
@@ -281,7 +285,9 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                       child: Text(
                         product.productName,
                         style: const TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w400),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                     Expanded(
@@ -289,7 +295,9 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                       child: Text(
                         'x ${product.quantity}',
                         style: const TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w400),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                     Expanded(
@@ -299,7 +307,9 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                         child: Text(
                           '${product.price.toPrecision(2)}/-',
                           style: const TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.w400),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ),
                     ),
@@ -308,9 +318,11 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                       child: Align(
                         alignment: Alignment.centerRight,
                         child: Text(
-                          '${Common.currency?.symbol ?? ''}${product.subTotal.toPrecision(2)}',
+                          '${currency}${product.subTotal.toPrecision(2)}',
                           style: const TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.w400),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ),
                     ),
@@ -318,10 +330,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                 );
               },
             ),
-            const SizedBox(
-              height: 12.0,
-              child: Divider(),
-            ),
+            const SizedBox(height: 12.0, child: Divider()),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -330,10 +339,12 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                 ),
                 Text(
-                  '${Common.currency?.symbol ?? ''}${widget.order.subTotal.toPrecision(2)}',
+                  '${currency}${widget.order.subTotal.toPrecision(2)}',
                   style: const TextStyle(
-                      fontSize: 12, fontWeight: FontWeight.w400),
-                )
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
               ],
             ),
             Row(
@@ -344,10 +355,12 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                 ),
                 Text(
-                  '${Common.currency?.symbol ?? ''}${(widget.order.taxTotal ?? 0).toPrecision(2)}',
+                  '${currency}${(widget.order.taxTotal ?? 0).toPrecision(2)}',
                   style: const TextStyle(
-                      fontSize: 12, fontWeight: FontWeight.w400),
-                )
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
               ],
             ),
             Row(
@@ -358,16 +371,15 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                 ),
                 Text(
-                  '${Common.currency?.symbol ?? ''}${widget.order.finalTotal.toPrecision(2)}',
+                  '${currency}${widget.order.finalTotal.toPrecision(2)}',
                   style: const TextStyle(
-                      fontSize: 12, fontWeight: FontWeight.w400),
-                )
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
               ],
             ),
-            const SizedBox(
-              height: 12.0,
-              child: Divider(),
-            ),
+            const SizedBox(height: 12.0, child: Divider()),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -376,10 +388,12 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                 ),
                 Text(
-                  '${widget.order.roundOff > 0 ? '+' : '-'} ${Common.currency?.symbol ?? ''}${widget.order.roundOff.toPrecision(2).abs()}',
+                  '${widget.order.roundOff > 0 ? '+' : '-'} ${currency}${widget.order.roundOff.toPrecision(2).abs()}',
                   style: const TextStyle(
-                      fontSize: 12, fontWeight: FontWeight.w400),
-                )
+                    fontSize: 12,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
               ],
             ),
             Row(
@@ -390,66 +404,81 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                 ),
                 Text(
-                  '${Common.currency?.symbol ?? ''}${widget.order.grandTotal.toPrecision(2)}',
+                  '${currency}${widget.order.grandTotal.toPrecision(2)}',
                   style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold),
-                )
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
-          ])),
+          ],
+        ),
+      ),
     );
   }
 
   kotPreview(BuildContext context) {
+    final company = ref.read(companyProvider);
+    final customer = ref
+        .read(customerRepositoryProvider)
+        .getCustomerByPhone(widget.order.customerPhone ?? '');
+    final orderName = customer?.name ?? '';
+    final orderPhone = customer?.phone ?? '';
+    final orderAddress = customer?.address ?? '';
     return RepaintBoundary(
       key: kotKey,
       child: Container(
-          margin: const EdgeInsets.symmetric(horizontal: 12),
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-              borderRadius: const BorderRadius.all(Radius.circular(12)),
-              color: const Color(0xFFFFFFFF),
-              border: Border.all(color: const Color(0xFFF0F0F0), width: 1)),
-          child: Column(children: [
+        margin: const EdgeInsets.symmetric(horizontal: 12),
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
+          color: const Color(0xFFFFFFFF),
+          border: Border.all(color: const Color(0xFFF0F0F0), width: 1),
+        ),
+        child: Column(
+          children: [
             Column(
               mainAxisSize: MainAxisSize.min,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  '${Common.company?.name ?? ''} (KOT)',
+                  '${company?.name ?? ''} (KOT)',
                   style: const TextStyle(
-                      fontSize: 18, fontWeight: FontWeight.bold),
+                    fontSize: 18,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 Text(
-                  Common.company?.address ?? '',
+                  company?.address ?? '',
                   style: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.w400),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
               ],
             ),
-            const SizedBox(
-              height: 12.0,
-              child: Divider(),
-            ),
+            const SizedBox(height: 12.0, child: Divider()),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
                   'Order: #${widget.order.id}',
                   style: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.w400),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
                 Text(
                   'Date: ${DateFormat('dd/MM/yyyy').format(widget.order.createdAt)}',
                   style: const TextStyle(
-                      fontSize: 14, fontWeight: FontWeight.w400),
-                )
+                    fontSize: 14,
+                    fontWeight: FontWeight.w400,
+                  ),
+                ),
               ],
             ),
-            const SizedBox(
-              height: 12.0,
-              child: Divider(),
-            ),
+            const SizedBox(height: 12.0, child: Divider()),
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -457,14 +486,18 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      EateryDB.instance.customerBox!.values.where((element) => element.phone == widget.order.customerPhone).firstOrNull?.name ?? '',
+                      orderName,
                       style: const TextStyle(
-                          fontSize: 12, fontWeight: FontWeight.w500),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                     Text(
-                      EateryDB.instance.customerBox!.values.where((element) => element.phone == widget.order.customerPhone).firstOrNull?.phone ?? '',
+                      orderPhone,
                       style: const TextStyle(
-                          fontSize: 12, fontWeight: FontWeight.w500),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ],
                 ),
@@ -472,22 +505,23 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                   children: [
                     const Text(
                       'Address: ',
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
+                      style: TextStyle(
+                        fontSize: 12,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                     Text(
-                      EateryDB.instance.customerBox!.values.where((element) => element.phone == widget.order.customerPhone).firstOrNull?.address ?? '',
+                      orderAddress ?? '',
                       style: const TextStyle(
-                          fontSize: 12, fontWeight: FontWeight.w500),
+                        fontSize: 12,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
                   ],
                 ),
               ],
             ),
-            const SizedBox(
-              height: 12.0,
-              child: Divider(),
-            ),
+            const SizedBox(height: 12.0, child: Divider()),
             ListView.builder(
               shrinkWrap: true,
               itemCount: widget.currentCart.map((obj) => obj.id).toSet().length,
@@ -498,8 +532,9 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                     .toList()[index];
 
                 // Use firstWhere instead of singleWhere
-                var product = widget.currentCart
-                    .firstWhere((element) => element.id == productId);
+                var product = widget.currentCart.firstWhere(
+                  (element) => element.id == productId,
+                );
 
                 return Row(
                   children: [
@@ -508,7 +543,9 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                       child: Text(
                         product.name,
                         style: const TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.w400),
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ),
                     Expanded(
@@ -518,7 +555,9 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                         child: Text(
                           'x ${widget.currentCart.where((element) => element.id == product.id).length}',
                           style: const TextStyle(
-                              fontSize: 12, fontWeight: FontWeight.w400),
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                          ),
                         ),
                       ),
                     ),
@@ -526,10 +565,7 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                 );
               },
             ),
-            const SizedBox(
-              height: 12.0,
-              child: Divider(),
-            ),
+            const SizedBox(height: 12.0, child: Divider()),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -540,11 +576,15 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
                 Text(
                   '${widget.currentCart.length}',
                   style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold),
-                )
+                    fontSize: 16,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
               ],
             ),
-          ])),
+          ],
+        ),
+      ),
     );
   }
 
@@ -553,8 +593,9 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
       RenderRepaintBoundary boundary =
           key.currentContext!.findRenderObject() as RenderRepaintBoundary;
       ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-      ByteData? byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
+      ByteData? byteData = await image.toByteData(
+        format: ui.ImageByteFormat.png,
+      );
       var pngBytes = byteData!.buffer.asUint8List();
       var bs64 = base64Encode(pngBytes);
       debugPrint(bs64.length.toString());
@@ -567,10 +608,14 @@ class _OrderPrintPageState extends State<OrderPrintPage> {
 
   share(BuildContext context, GlobalKey key) async {
     final dir = await getTemporaryDirectory();
-    final path = '$dir/${getRandomString(5)+getRandomString(5)+getRandomString(5)}.png';
+    final path =
+        '$dir/${getRandomString(5) + getRandomString(5) + getRandomString(5)}.png';
     await File(path).writeAsBytes(await capturePng(key));
-    await shareFile(path, 'Invoice #${widget.order.id}',
-        'Autogenerated by Eatery');
+    await shareFile(
+      path,
+      'Invoice #${widget.order.id}',
+      'Autogenerated by Eatery',
+    );
     //await File(path).delete();
   }
 }

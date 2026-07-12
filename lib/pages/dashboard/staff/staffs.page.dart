@@ -1,15 +1,17 @@
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/presentation/providers/database_provider.dart';
 
 Color _pageColor = const Color(0xFFC2592F);
 
-class StaffsPage extends StatefulWidget {
+class StaffsPage extends ConsumerStatefulWidget {
   const StaffsPage({Key? key}) : super(key: key);
 
   @override
-  State<StaffsPage> createState() => _StaffsPageState();
+  ConsumerState<StaffsPage> createState() => _StaffsPageState();
 }
 
-class _StaffsPageState extends State<StaffsPage> {
+class _StaffsPageState extends ConsumerState<StaffsPage> {
   @override
   void initState() {
     super.initState();
@@ -20,7 +22,7 @@ class _StaffsPageState extends State<StaffsPage> {
   ];
   @override
   Widget build(BuildContext context) {
-    List<Staff> staffs = EateryDB.instance.staffBox!.values.toList();
+    List<Staff> staffs = ref.read(appDatabaseProvider).staffBox.values.toList();
     return Scaffold(
       backgroundColor: Colors.grey[200],
       appBar: AppBar(

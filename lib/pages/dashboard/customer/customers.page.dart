@@ -1,16 +1,18 @@
 import 'package:eatery/pages/dashboard/customer/view.customer.page.dart';
 import 'package:eatery/references.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/presentation/providers/order_provider.dart';
 
 Color _pageColor = KColors.primary;
 
-class CustomersPage extends StatefulWidget {
+class CustomersPage extends ConsumerStatefulWidget {
   const CustomersPage({Key? key}) : super(key: key);
 
   @override
-  State<CustomersPage> createState() => _CustomersPageState();
+  ConsumerState<CustomersPage> createState() => _CustomersPageState();
 }
 
-class _CustomersPageState extends State<CustomersPage> {
+class _CustomersPageState extends ConsumerState<CustomersPage> {
   @override
   void initState() {
     super.initState();
@@ -25,31 +27,39 @@ class _CustomersPageState extends State<CustomersPage> {
         title: const Text('Customers'),
         foregroundColor: Colors.white,
       ),
-      body: EateryDB.instance.customerBox!.values.isNotEmpty
+      body: ref.read(customerRepositoryProvider).getAllCustomers().isNotEmpty
           ? ListView(
               children: [
-                ...EateryDB.instance.customerBox!.values.map((customer) {
+                ...ref.read(customerRepositoryProvider).getAllCustomers().map((
+                  customer,
+                ) {
                   return ListTile(
-                    onTap: (){
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => ViewCustomer(customer: customer)));
-                    },
-                      leading: Container(
-                        width: 48,
-                        height: 48,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: _pageColor,
-                          borderRadius: BorderRadius.circular(8),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ViewCustomer(customer: customer),
                         ),
-                        child: Text(
-                          customer.name![0],
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                          ),
+                      );
+                    },
+                    leading: Container(
+                      width: 48,
+                      height: 48,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: _pageColor,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        customer.name![0],
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 24,
                         ),
                       ),
+                    ),
                     title: Text(
                       customer.name ?? 'NA',
                       style: const TextStyle(fontWeight: FontWeight.w600),
@@ -58,7 +68,8 @@ class _CustomersPageState extends State<CustomersPage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        if(customer.address != null && customer.address!.isNotEmpty)
+                        if (customer.address != null &&
+                            customer.address!.isNotEmpty)
                           Text(customer.address!),
                         Text(customer.phone),
                       ],
@@ -82,8 +93,11 @@ class _CustomersPageState extends State<CustomersPage> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                            builder: (context) =>
-                                                EditCustomerPage(customer: customer)),
+                                          builder: (context) =>
+                                              EditCustomerPage(
+                                                customer: customer,
+                                              ),
+                                        ),
                                       ).then((_) => setState(() {}));
                                     }
                                   },
@@ -99,7 +113,8 @@ class _CustomersPageState extends State<CustomersPage> {
                                         return AlertDialog(
                                           title: const Text('Delete Customer'),
                                           content: const Text(
-                                              'Are you sure you want to delete this customer?'),
+                                            'Are you sure you want to delete this customer?',
+                                          ),
                                           actions: [
                                             TextButton(
                                               onPressed: () {
@@ -109,12 +124,29 @@ class _CustomersPageState extends State<CustomersPage> {
                                             ),
                                             TextButton(
                                               onPressed: () {
-                                                customer.delete().then((value) {
-                                                  showMessageDialog(context, 'Customer deleted successfully', MessageType.success);
-                                                  Navigator.pop(context);
-                                                }).onError((error, stackTrace) {
-                                                  showMessageDialog(context, error.toString(), MessageType.error);
-                                                }).whenComplete(() => setState(() {}));
+                                                customer
+                                                    .delete()
+                                                    .then((value) {
+                                                      showMessageDialog(
+                                                        context,
+                                                        'Customer deleted successfully',
+                                                        MessageType.success,
+                                                      );
+                                                      Navigator.pop(context);
+                                                    })
+                                                    .onError((
+                                                      error,
+                                                      stackTrace,
+                                                    ) {
+                                                      showMessageDialog(
+                                                        context,
+                                                        error.toString(),
+                                                        MessageType.error,
+                                                      );
+                                                    })
+                                                    .whenComplete(
+                                                      () => setState(() {}),
+                                                    );
                                               },
                                               child: const Text('Delete'),
                                             ),
@@ -129,37 +161,34 @@ class _CustomersPageState extends State<CustomersPage> {
                           ),
                         );
                       },
-                    ));
+                    ),
+                  );
                 }),
               ],
             )
           : const Center(
               child: Opacity(
-              opacity: 0.5,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.person,
-                    size: 64,
-                  ),
-                  SizedBox(height: 16),
-                  Text(
-                    'No Customers',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
+                opacity: 0.5,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.person, size: 64),
+                    SizedBox(height: 16),
+                    Text(
+                      'No Customers',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Text(
-                    'Add a customer to get started',
-                    style: TextStyle(
-                      fontSize: 16,
+                    Text(
+                      'Add a customer to get started',
+                      style: TextStyle(fontSize: 16),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            )),
+            ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: _pageColor,
         foregroundColor: Colors.white,

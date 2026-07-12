@@ -6,12 +6,14 @@ class ProductInternalViewBottomsheet extends StatefulWidget {
       required this.product,
       this.color,
       required this.onEdit,
-      required this.onDelete})
+      required this.onDelete,
+      this.categoryName})
       : super(key: key);
   final Product product;
   final Color? color;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
+  final String? categoryName;
 
   @override
   State<ProductInternalViewBottomsheet> createState() =>
@@ -34,12 +36,7 @@ class _ProductInternalViewBottomsheetState
             children: [
               PageTitle(
                   title: widget.product.name,
-                  subtitle: widget.product.categoryId != null
-                      ? EateryDB.instance.productCategoryBox!.values
-                          .singleWhere((element) =>
-                              element.id == widget.product.categoryId)
-                          .name
-                      : 'Uncategorized'),
+                  subtitle: widget.categoryName ?? 'Uncategorized'),
               Switch(
                   activeColor: widget.color,
                   value: widget.product.isActive,
