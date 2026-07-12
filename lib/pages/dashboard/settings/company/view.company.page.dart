@@ -201,14 +201,14 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
                     ),
                     ListTile(
                       leading: const Text(
-                        'Edition',
+                        'Taxation',
                         style: TextStyle(
                             fontWeight: FontWeight.w400, fontSize: 16),
                       ),
                       trailing: Text(
-                        Edition.values
-                            .singleWhere(
-                                (element) => element.id == company.edition.id)
+                        Taxation.values
+                            .singleWhere((element) =>
+                                element.id == company.taxation.id)
                             .name,
                         style: const TextStyle(
                             fontWeight: FontWeight.w500, fontSize: 16),
@@ -216,7 +216,7 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
                     ),
                     ListTile(
                       leading: Text(
-                        '${Edition.values.singleWhere((element) => element.id == company.edition.id).name} License No',
+                        '${Taxation.values.singleWhere((element) => element.id == company.taxation.id).name} License No',
                         style: const TextStyle(
                             fontWeight: FontWeight.w400, fontSize: 16),
                       ),
@@ -231,7 +231,7 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
                     ),
                     ListTile(
                       leading: Text(
-                        '${Edition.values.singleWhere((element) => element.id == company.edition.id) == Edition.gst ? 'FSSAI' : 'Food'} License No',
+                        '${Taxation.values.singleWhere((element) => element.id == company.taxation.id) == Taxation.gst ? 'FSSAI' : 'Food'} License No',
                         style: const TextStyle(
                             fontWeight: FontWeight.w400, fontSize: 16),
                       ),

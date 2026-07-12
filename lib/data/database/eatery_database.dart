@@ -36,7 +36,7 @@ class EateryDatabase {
   Box<ProductType>? _productTypeBox;
   Box<FoodType>? _foodTypeBox;
   Box<SubscriptionType>? _subscriptionTypeBox;
-  Box<Edition>? _editionBox;
+  Box<Taxation>? _taxationBox;
   Box<OrderType>? _orderTypeBox;
   Box<PrinterType>? _printerTypeBox;
   Box<Payment>? _paymentBox;
@@ -63,7 +63,7 @@ class EateryDatabase {
   Box<ProductType> get productTypeBox => _productTypeBox!;
   Box<FoodType> get foodTypeBox => _foodTypeBox!;
   Box<SubscriptionType> get subscriptionTypeBox => _subscriptionTypeBox!;
-  Box<Edition> get editionBox => _editionBox!;
+  Box<Taxation> get taxationBox => _taxationBox!;
   Box<OrderType> get orderTypeBox => _orderTypeBox!;
   Box<PrinterType> get printerTypeBox => _printerTypeBox!;
   Box<Payment> get paymentBox => _paymentBox!;
@@ -93,7 +93,7 @@ class EateryDatabase {
     Hive.registerAdapter(ProductTypeAdapter());
     Hive.registerAdapter(FoodTypeAdapter());
     Hive.registerAdapter(SubscriptionTypeAdapter());
-    Hive.registerAdapter(EditionAdapter());
+    Hive.registerAdapter(TaxationAdapter());
     Hive.registerAdapter(OrderTypeAdapter());
     Hive.registerAdapter(PrinterTypeAdapter());
     Hive.registerAdapter(PaymentAdapter());
@@ -124,7 +124,7 @@ class EateryDatabase {
     _subscriptionTypeBox = await Hive.openBox<SubscriptionType>(
       'subscriptionType',
     );
-    _editionBox = await Hive.openBox<Edition>('edition');
+    _taxationBox = await Hive.openBox<Taxation>('taxation');
     _orderTypeBox = await Hive.openBox<OrderType>('orderType');
     _printerTypeBox = await Hive.openBox<PrinterType>('printerType');
     _paymentBox = await Hive.openBox<Payment>('payment');
@@ -149,7 +149,7 @@ class EateryDatabase {
       _printerTypeBox?.deleteFromDisk() ?? Future.value(),
       _subscriptionBox?.deleteFromDisk() ?? Future.value(),
       _subscriptionTypeBox?.deleteFromDisk() ?? Future.value(),
-      _editionBox?.deleteFromDisk() ?? Future.value(),
+      _taxationBox?.deleteFromDisk() ?? Future.value(),
       _foodTypeBox?.deleteFromDisk() ?? Future.value(),
       _taxSlabBox?.deleteFromDisk() ?? Future.value(),
       _taxTypeBox?.deleteFromDisk() ?? Future.value(),

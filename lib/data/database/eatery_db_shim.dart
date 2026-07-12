@@ -55,7 +55,7 @@ class EateryDB {
   Box<ProductType>? get productTypeBox => _db?.productTypeBox;
   Box<FoodType>? get foodTypeBox => _db?.foodTypeBox;
   Box<SubscriptionType>? get subscriptionTypeBox => _db?.subscriptionTypeBox;
-  Box<Edition>? get editionBox => _db?.editionBox;
+  Box<Taxation>? get taxationBox => _db?.taxationBox;
   Box<OrderType>? get orderTypeBox => _db?.orderTypeBox;
   Box<PrinterType>? get printerTypeBox => _db?.printerTypeBox;
   Box<Payment>? get paymentBox => _db?.paymentBox;

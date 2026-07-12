@@ -23,7 +23,7 @@ class CompanyAdapter extends TypeAdapter<Company> {
       phone: fields[4] as String,
       address: fields[5] as String,
       password: fields[6] as String,
-      edition: fields[7] as Edition,
+      taxation: fields[7] as Taxation,
       currencyCode: fields[8] as String?,
       foodLicenseNo: fields[10] as String?,
       salesTaxNumber: fields[9] as String?,
@@ -50,7 +50,7 @@ class CompanyAdapter extends TypeAdapter<Company> {
       ..writeByte(6)
       ..write(obj.password)
       ..writeByte(7)
-      ..write(obj.edition)
+      ..write(obj.taxation)
       ..writeByte(8)
       ..write(obj.currencyCode)
       ..writeByte(9)

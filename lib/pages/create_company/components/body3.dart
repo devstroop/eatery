@@ -1,19 +1,19 @@
 import 'package:eatery/references.dart';
 
 class Body3 extends StatelessWidget {
-  final Function(Edition edition) callback;
+  final Function(Taxation taxation) callback;
   final Color themeColor;
-  final Edition edition;
+  final Taxation taxation;
   final GlobalKey<FormState> formKey;
   final Function(GlobalKey<FormState> formKey)? callbackFormKey;
-  const Body3(
-      {Key? key,
-      required this.themeColor,
-      required this.callback,
-      required this.edition,
-      required this.formKey,
-      this.callbackFormKey})
-      : super(key: key);
+  const Body3({
+    Key? key,
+    required this.themeColor,
+    required this.callback,
+    required this.taxation,
+    required this.formKey,
+    this.callbackFormKey,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -27,30 +27,41 @@ class Body3 extends StatelessWidget {
           scrollDirection: Axis.vertical,
           children: [
             const PageTitle(
-              title: "Edition",
-              subtitle: "Choose a suitable edition",
+              title: "Taxation",
+              subtitle: "Choose a taxation system",
             ),
             SpacingStyle.defaultVerticalSpacing,
             SpacingStyle.defaultVerticalSpacing,
             SelectableCard(
-              header: "Edition",
-              title: Edition.gst.name,
-              footer: Edition.gst.description,
-              selected: edition == Edition.gst,
+              header: "Taxation",
+              title: Taxation.none.name,
+              footer: Taxation.none.description,
+              selected: taxation == Taxation.none,
               onTap: () {
                 if (callbackFormKey != null) callbackFormKey!(formKey);
-                callback(Edition.gst);
+                callback(Taxation.none);
               },
             ),
             SpacingStyle.defaultVerticalSpacing,
             SelectableCard(
-              header: "Edition",
-              title: Edition.vat.name,
-              footer: Edition.vat.description,
-              selected: edition == Edition.vat,
+              header: "Taxation",
+              title: Taxation.gst.name,
+              footer: Taxation.gst.description,
+              selected: taxation == Taxation.gst,
               onTap: () {
                 if (callbackFormKey != null) callbackFormKey!(formKey);
-                callback(Edition.vat);
+                callback(Taxation.gst);
+              },
+            ),
+            SpacingStyle.defaultVerticalSpacing,
+            SelectableCard(
+              header: "Taxation",
+              title: Taxation.vat.name,
+              footer: Taxation.vat.description,
+              selected: taxation == Taxation.vat,
+              onTap: () {
+                if (callbackFormKey != null) callbackFormKey!(formKey);
+                callback(Taxation.vat);
               },
             ),
           ],

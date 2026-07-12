@@ -3,7 +3,7 @@ import 'package:eatery/references.dart';
 
 class Body4 extends StatelessWidget {
   final Color themeColor;
-  final Edition edition;
+  final Taxation taxation;
   final TextEditingController taxNoController;
   final TextEditingController foodLicNoController;
   final TextEditingController defaultTaxController;
@@ -14,7 +14,7 @@ class Body4 extends StatelessWidget {
   Body4({
     Key? key,
     required this.themeColor,
-    required this.edition,
+    required this.taxation,
     required this.taxNoController,
     required this.foodLicNoController,
     required this.defaultTaxController,
@@ -47,8 +47,8 @@ class Body4 extends StatelessWidget {
               themeColor: themeColor,
               keyboardType: TextInputType.text,
               controller: taxNoController,
-              label: '${edition.name} Registration No',
-              hint: 'Enter ${edition.name} registration number',
+              label: '${taxation.name} Registration No',
+              hint: 'Enter ${taxation.name} registration number',
               focusNode: focus1,
               textInputAction: TextInputAction.next,
               onFieldSubmitted: (v) {
@@ -60,7 +60,7 @@ class Body4 extends StatelessWidget {
                         .trim()
                         .isNotEmpty /*&& !value.trim().isValidGSTIN()*/ &&
                     value.trim().length < 10) {
-                  return '${edition.name} license number is not valid';
+                  return '${taxation.name} license number is not valid';
                 }
                 return null;
               },
@@ -71,9 +71,9 @@ class Body4 extends StatelessWidget {
               keyboardType: TextInputType.number,
               controller: foodLicNoController,
               label:
-                  '${edition == Edition.gst ? 'FSSAI' : 'Food'} Registration Number',
+                  '${taxation == Taxation.gst ? 'FSSAI' : 'Food'} Registration Number',
               hint:
-                  'Enter ${edition == Edition.gst ? 'FSSAI' : 'Food'} registration number',
+                  'Enter ${taxation == Taxation.gst ? 'FSSAI' : 'Food'} registration number',
               focusNode: focus2,
               textInputAction: TextInputAction.done,
               onFieldSubmitted: (v) {
@@ -84,7 +84,7 @@ class Body4 extends StatelessWidget {
                 if (value!.trim().isNotEmpty &&
                     (value.trim().length <
                         10 /* || !value.trim().isNumericOnly*/ )) {
-                  return '${edition == Edition.gst ? 'FSSAI' : 'Food'} license number is not valid';
+                  return '${taxation == Taxation.gst ? 'FSSAI' : 'Food'} license number is not valid';
                 }
                 // if (edition == Edition.gst && !value!.trim().isValidGSTIN()) return '${edition.name} license number is not valid';
                 return null;

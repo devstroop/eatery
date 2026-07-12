@@ -13,7 +13,7 @@ class CreateCompanyPage extends ConsumerStatefulWidget {
 class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
   int viewIndex = 0;
   LibraryImage? libraryImageLogo; // used
-  Edition edition = Edition.gst;
+  Taxation taxation = Taxation.none;
   SubscriptionType subscriptionType = SubscriptionType.individual;
   String? deviceSerial;
   final TextEditingController _controllerRestaurantName =
@@ -66,48 +66,54 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
     ),
     Body3(
       formKey: formKeys[2],
-      edition: edition,
+      taxation: taxation,
       themeColor: themeColor,
-      callback: (Edition edition) {
+      callback: (Taxation taxation) {
         setState(() {
-          this.edition = edition;
+          this.taxation = taxation;
         });
       },
       callbackFormKey: (formKey) => setState(() {
         formKeys[2] = formKey;
       }),
     ),
-    Body4(
-      formKey: formKeys[3],
-      themeColor: themeColor,
-      edition: edition,
-      taxNoController: _controllerTaxLicNo,
-      foodLicNoController: _controllerFoodLicNo,
-      defaultTaxController: _controllerDefaultTaxPercent,
-      taxType: _taxType,
-      onTaxTypeChanged: (int? index) {
-        _taxType = TaxType.values.singleWhere(
-          (element) => element.index == index,
-        );
-        setState(() {});
-      },
-      callbackFormKey: (formKey) => setState(() {
-        formKeys[3] = formKey;
-      }),
-    ),
+    // Skip tax registration step when "No Tax" is selected
+    if (taxation != Taxation.none)
+      Body4(
+        formKey: formKeys[3],
+        themeColor: themeColor,
+        taxation: taxation,
+        taxNoController: _controllerTaxLicNo,
+        foodLicNoController: _controllerFoodLicNo,
+        defaultTaxController: _controllerDefaultTaxPercent,
+        taxType: _taxType,
+        onTaxTypeChanged: (int? index) {
+          _taxType = TaxType.values.singleWhere(
+            (element) => element.index == index,
+          );
+          setState(() {});
+        },
+        callbackFormKey: (formKey) => setState(() {
+          formKeys[3] = formKey;
+        }),
+      ),
     Body5(
-      formKey: formKeys[4],
+      formKey: taxation != Taxation.none ? formKeys[4] : formKeys[3],
       themeColor: themeColor,
       currency: currency,
       callback: (currency) {
         this.currency = currency;
       },
       callbackFormKey: (formKey) => setState(() {
-        formKeys[4] = formKey;
+        if (taxation != Taxation.none) {
+          formKeys[4] = formKey;
+        } else {
+          formKeys[3] = formKey;
+        }
       }),
     ),
     Body6(
-      formKey: formKeys[5],
+      formKey: taxation != Taxation.none ? formKeys[5] : formKeys[4],
       themeColor: themeColor,
       subscriptionType: subscriptionType,
       callback: (subscriptionType, purchaseCode, validFrom, validTill) {
@@ -119,7 +125,11 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
         });
       },
       callbackFormKey: (formKey) => setState(() {
-        formKeys[5] = formKey;
+        if (taxation != Taxation.none) {
+          formKeys[5] = formKey;
+        } else {
+          formKeys[4] = formKey;
+        }
       }),
     ),
   ];
@@ -230,7 +240,7 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
             phone: _controllerPhoneNumber.text,
             address: _controllerAddress.text,
             password: _controllerPassword.text,
-            edition: edition,
+            taxation: taxation,
             foodLicenseNo: _controllerFoodLicNo.text,
             salesTaxNumber: _controllerTaxLicNo.text,
             subscriptionId: subscription.id,

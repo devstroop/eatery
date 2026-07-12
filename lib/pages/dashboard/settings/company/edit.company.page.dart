@@ -175,9 +175,9 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                     keyboardType: TextInputType.text,
                     controller: _controllerSalesTaxNo,
                     label:
-                        '${Edition.values.singleWhere((element) => element.id == company?.edition.id).name} License No',
+                        '${Taxation.values.singleWhere((element) => element.id == company?.taxation.id).name} License No',
                     hint:
-                        'Enter ${Edition.values.singleWhere((element) => element.id == company?.edition.id).name} license number...',
+                        'Enter ${Taxation.values.singleWhere((element) => element.id == company?.taxation.id).name} license number...',
                     focusNode: focus5,
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (v) {
@@ -186,7 +186,7 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                     validator: (value) {
                       if (value!.trim().isNotEmpty &&
                           value.trim().length < 10) {
-                        return '${Edition.values.singleWhere((element) => element.id == company?.edition.id).name} license number is not valid';
+                        return '${Taxation.values.singleWhere((element) => element.id == company?.taxation.id).name} license number is not valid';
                       }
                       return null;
                     },
@@ -198,9 +198,9 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                     keyboardType: TextInputType.text,
                     controller: _controllerFoodLicNo,
                     label:
-                        '${Edition.values.singleWhere((element) => element.id == company?.edition.id) == Edition.gst ? 'FSSAI' : 'Food'} License No',
+                        '${Taxation.values.singleWhere((element) => element.id == company?.taxation.id) == Taxation.gst ? 'FSSAI' : 'Food'} License No',
                     hint:
-                        'Enter ${Edition.values.singleWhere((element) => element.id == company?.edition.id) == Edition.gst ? 'FSSAI' : 'Food'} license number...',
+                        'Enter ${Taxation.values.singleWhere((element) => element.id == company?.taxation.id) == Taxation.gst ? 'FSSAI' : 'Food'} license number...',
                     focusNode: focus6,
                     textInputAction: TextInputAction.next,
                     onFieldSubmitted: (v) {
@@ -211,7 +211,7 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                           (value.trim().length <
                               10 /* ||
                               !value.trim().isNumericOnly*/ )) {
-                        return '${Edition.values.singleWhere((element) => element.id == company?.edition.id) == Edition.gst ? 'FSSAI' : 'Food'} license number is not valid';
+                        return '${Taxation.values.singleWhere((element) => element.id == company?.taxation.id) == Taxation.gst ? 'FSSAI' : 'Food'} license number is not valid';
                       }
                       return null;
                     },
