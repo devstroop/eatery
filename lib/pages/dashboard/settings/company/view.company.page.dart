@@ -1,9 +1,11 @@
 import 'package:eatery/core/widgets/app_page_shell.dart';
+import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
+import 'package:go_router/go_router.dart';
 
 final _pageColor = AppColors.primary;
 
@@ -56,12 +58,7 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
               ],
             ).then((value) {
               if (value == 'edit') {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const EditCompanyPage(),
-                  ),
-                ).then((_) async {
+                GoRouter.of(context).pushNamed('editCompany').then((_) async {
                   setState(() {});
                 });
               } else if (value == 'delete') {
@@ -148,76 +145,49 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     ListTile(
-                      leading: const Text(
+                      leading: Text(
                         'Company name',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
+                        style: AppTypography.bodyLarge,
                       ),
                       trailing: Text(
                         company!.name,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
+                        style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500),
                       ),
                     ),
                     ListTile(
-                      leading: const Text(
+                      leading: Text(
                         'Address',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
+                        style: AppTypography.bodyLarge,
                       ),
                       trailing: Text(
                         company.address,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
+                        style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500),
                       ),
                     ),
                     ListTile(
-                      leading: const Text(
+                      leading: Text(
                         'Email',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
+                        style: AppTypography.bodyLarge,
                       ),
                       trailing: Text(
                         company.email,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
+                        style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500),
                       ),
                     ),
                     ListTile(
-                      leading: const Text(
+                      leading: Text(
                         'Phone',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
+                        style: AppTypography.bodyLarge,
                       ),
                       trailing: Text(
                         company.phone,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
+                        style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500),
                       ),
                     ),
                     ListTile(
-                      leading: const Text(
+                      leading: Text(
                         'Taxation',
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
+                        style: AppTypography.bodyLarge,
                       ),
                       trailing: Text(
                         Taxation.values
@@ -225,48 +195,33 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
                               (element) => element.id == company.taxation.id,
                             )
                             .name,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
+                        style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500),
                       ),
                     ),
                     ListTile(
                       leading: Text(
                         '${Taxation.values.singleWhere((element) => element.id == company.taxation.id).name} License No',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
+                        style: AppTypography.bodyLarge,
                       ),
                       trailing: Text(
                         (company.salesTaxNumber != null &&
                                 company.salesTaxNumber?.trim() != "")
                             ? company.salesTaxNumber!
                             : 'Not Available',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
+                        style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500),
                       ),
                     ),
                     ListTile(
                       leading: Text(
                         '${Taxation.values.singleWhere((element) => element.id == company.taxation.id) == Taxation.gst ? 'FSSAI' : 'Food'} License No',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 16,
-                        ),
+                        style: AppTypography.bodyLarge,
                       ),
                       trailing: Text(
                         (company.foodLicenseNo != null &&
                                 company.foodLicenseNo?.trim() != "")
                             ? company.foodLicenseNo!
                             : 'Not Available',
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 16,
-                        ),
+                        style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500),
                       ),
                     ),
                   ],

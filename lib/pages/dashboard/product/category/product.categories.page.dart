@@ -8,6 +8,7 @@ import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'add.product.category.page.dart';
 import 'edit.product.category.page.dart';
 
@@ -37,12 +38,7 @@ class _ProductCategoriesPageState extends ConsumerState<ProductCategoriesPage> {
         icon: const Icon(Icons.add),
         label: const Text('Add Product Category'),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AddProductCategoryPage(),
-            ),
-          ).then((_) => setState(() {}));
+          GoRouter.of(context).pushNamed('addProductCategory').then((_) => setState(() {}));
         },
       ),
       child: categories.isEmpty
@@ -97,13 +93,7 @@ class _ProductCategoriesPageState extends ConsumerState<ProductCategoriesPage> {
                       ),
                       onSelected: (value) async {
                         if (value == 'edit') {
-                          await Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  EditProductCategoryPage(category: category),
-                            ),
-                          );
+                          await GoRouter.of(context).pushNamed('editProductCategory', extra: category);
                           setState(() {});
                         } else if (value == 'delete') {
                           _onCategoryDelete(context, category);
@@ -118,17 +108,17 @@ class _ProductCategoriesPageState extends ConsumerState<ProductCategoriesPage> {
                             contentPadding: EdgeInsets.zero,
                           ),
                         ),
-                        const PopupMenuItem(
+                        PopupMenuItem(
                           value: 'delete',
                           child: ListTile(
-                            leading: Icon(
+                            leading: const Icon(
                               Icons.delete,
                               size: 20,
                               color: Colors.red,
                             ),
                             title: Text(
                               'Delete',
-                              style: TextStyle(color: Colors.red),
+                              style: AppTypography.bodyMedium.copyWith(color: Colors.red),
                             ),
                             contentPadding: EdgeInsets.zero,
                           ),

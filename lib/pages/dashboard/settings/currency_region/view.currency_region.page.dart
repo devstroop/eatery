@@ -83,9 +83,7 @@ class _ShowCurrencyRegionPageState extends ConsumerState<ShowCurrencyRegionPage>
                               Text(
                                 CurrencyUtils.currencyToEmoji(
                                     selectedCurrency!),
-                                style: const TextStyle(
-                                  fontSize: 32,
-                                ),
+                                style: AppTypography.headlineLarge.copyWith(fontWeight: FontWeight.w400),
                               ),
                             ],
                           )
@@ -93,9 +91,7 @@ class _ShowCurrencyRegionPageState extends ConsumerState<ShowCurrencyRegionPage>
                     trailing: selectedCurrency != null
                         ? Text(
                             selectedCurrency!.symbol,
-                            style: const TextStyle(
-                              fontSize: 18,
-                            ),
+                            style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.w400),
                           )
                         : null,
                     title: Text(

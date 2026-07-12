@@ -1,4 +1,5 @@
 import 'package:eatery/core/widgets/app_page_shell.dart';
+import 'package:eatery/core/theme/app_typography.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
@@ -232,11 +233,7 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
       padding: const EdgeInsets.all(12.0),
       child: Text(
         '${selectedTaxSlab?.rate}% (${selectedTaxSlab?.type.name})',
-        style: TextStyle(
-          color: _pageColor,
-          fontSize: 14.0,
-          fontWeight: FontWeight.w500,
-        ),
+        style: AppTypography.labelLarge.copyWith(color: _pageColor),
       ),
     );
   }
@@ -317,11 +314,7 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
       children: [
         Text(
           label,
-          style: TextStyle(
-            color: AppColors.black600,
-            fontSize: 12,
-            fontWeight: FontWeight.w500,
-          ),
+        style: AppTypography.labelMedium.copyWith(color: AppColors.black600),
         ),
         const SizedBox(height: 3.0),
         ToggleSwitch(

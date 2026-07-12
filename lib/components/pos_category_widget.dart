@@ -1,3 +1,4 @@
+import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 
@@ -66,7 +67,7 @@ class PosCategoryWidget extends StatelessWidget {
                   const SizedBox(width: 2,),
                   Text(
                     label,
-                    style: TextStyle(
+                    style: AppTypography.labelLarge.copyWith(
                       fontWeight: FontWeight.w500,
                       color: active
                           ? AppColors.white

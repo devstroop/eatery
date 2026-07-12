@@ -31,70 +31,49 @@ class _EditOrderPageState extends State<EditOrderPage> {
           children: [
             Text(
               'Order ID: ${widget.order.id}',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(
               height: 10,
             ),
             Text(
               'Table: ',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(
               height: 10,
             ),
             Text(
               'Order Status: ',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(
               height: 10,
             ),
             Text(
               'Order Date: ',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(
               height: 10,
             ),
             Text(
               'Order Time: ',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(
               height: 10,
             ),
             Text(
               'Order Total: ',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(
               height: 10,
             ),
             Text(
               'Order Items: ',
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(
               height: 10,

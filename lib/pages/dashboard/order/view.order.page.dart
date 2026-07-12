@@ -4,6 +4,7 @@ import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'edit.order.page.dart';
 
@@ -33,12 +34,7 @@ class _ViewOrderPageState extends ConsumerState<ViewOrderPage> {
         IconButton(
           icon: const Icon(Icons.edit),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => EditOrderPage(order: widget.order),
-              ),
-            );
+            GoRouter.of(context).pushNamed('editOrder', extra: widget.order);
           },
         ),
       ],
@@ -48,53 +44,53 @@ class _ViewOrderPageState extends ConsumerState<ViewOrderPage> {
           children: [
             Text(
               'Order ID: ${widget.order.id}',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            const Text(
+            Text(
               'Table: ',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             Text(
               'Customer: ${customer?.name ?? 'NA'}',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            const Text(
+            Text(
               'Order Status: NA',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
 
             Text(
               'Payment Status: ${widget.order.grandTotal > (widget.order.paidTotal ?? 0) ? 'Not Paid' : 'Paid'}',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             Text(
               'Order Type: ${widget.order.type.name}',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             Text(
               'Order Date: ${widget.order.createdAt}',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             Text(
               'Order Time: ${widget.order.createdAt}',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
             Text(
               'Total Amount: ${widget.order.grandTotal}',
-              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
-            const Text(
+            Text(
               'Order Items',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
           ],

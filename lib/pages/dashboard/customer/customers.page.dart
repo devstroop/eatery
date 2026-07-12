@@ -2,8 +2,8 @@ import 'package:eatery/core/theme/app_spacing.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/widgets/responsive/responsive_list_view.dart';
-import 'package:eatery/pages/dashboard/customer/view.customer.page.dart';
 import 'package:eatery/references.dart';
+import 'package:go_router/go_router.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:eatery/core/widgets/widgets.dart';
@@ -36,10 +36,7 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
         label: const Text('Add Customer'),
         icon: const Icon(Icons.add),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AddCustomerPage()),
-          ).then((_) => setState(() {}));
+          GoRouter.of(context).pushNamed('addCustomer').then((_) => setState(() {}));
         },
       ),
       child: ref.read(customerRepositoryProvider).getAllCustomers().isNotEmpty
@@ -56,7 +53,7 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
                 return _CustomerCard(customer: customer, pageColor: _pageColor);
               },
             )
-          : const Center(
+          : Center(
               child: Opacity(
                 opacity: 0.5,
                 child: Column(
@@ -66,14 +63,11 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
                     AppSpacing.gapLg,
                     Text(
                       'No Customers',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold),
                     ),
                     Text(
                       'Add a customer to get started',
-                      style: TextStyle(fontSize: 16),
+                      style: AppTypography.bodyLarge,
                     ),
                   ],
                 ),
@@ -103,10 +97,7 @@ class _CustomerCardState extends ConsumerState<_CustomerCard> {
       margin: EdgeInsets.symmetric(horizontal: isDesktop ? 4 : 0, vertical: 2),
       child: ListTile(
         onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ViewCustomer(customer: c)),
-          );
+          GoRouter.of(context).pushNamed('viewCustomer', extra: c);
         },
         leading: Container(
           width: 48,
@@ -118,16 +109,12 @@ class _CustomerCardState extends ConsumerState<_CustomerCard> {
           ),
           child: Text(
             c.name![0],
-            style: const TextStyle(
-              color: AppColors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 24,
-            ),
+            style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold, color: AppColors.white),
           ),
         ),
         title: Text(
           c.name ?? 'NA',
-          style: const TextStyle(fontWeight: FontWeight.w600),
+          style: AppTypography.titleMedium,
         ),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -153,12 +140,7 @@ class _CustomerCardState extends ConsumerState<_CustomerCard> {
                       onTap: () {
                         Navigator.pop(ctx);
                         if (c.id != null) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) => EditCustomerPage(customer: c),
-                            ),
-                          ).then((_) => setState(() {}));
+                          GoRouter.of(context).pushNamed('editCustomer', extra: c).then((_) => setState(() {}));
                         }
                       },
                     ),

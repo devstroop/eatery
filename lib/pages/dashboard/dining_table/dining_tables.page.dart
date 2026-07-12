@@ -6,6 +6,7 @@ import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:eatery/core/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 Color _pageColor = AppColors.error;
 
@@ -47,12 +48,7 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
         IconButton(
           icon: const Icon(Icons.category),
           onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const DiningTableCategoriesPage(),
-              ),
-            ).then((_) => setState(() {}));
+            GoRouter.of(context).pushNamed('diningTableCategories').then((_) => setState(() {}));
           },
         ),
       ],
@@ -62,10 +58,7 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
         backgroundColor: _pageColor,
         icon: const Icon(Icons.add),
         onPressed: () async {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AddDiningTablePage()),
-          ).then((_) => setState(() {}));
+          GoRouter.of(context).pushNamed('addDiningTable').then((_) => setState(() {}));
         },
       ),
       child: Column(
@@ -89,8 +82,7 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
                           child: ChoiceChip(
-                            labelStyle: TextStyle(
-                              fontSize: 14,
+                            labelStyle: AppTypography.bodyMedium.copyWith(
                               color: selectedCategory?.id == category.id
                                   ? AppColors.white
                                   : AppColors.white500,
@@ -157,9 +149,7 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                             children: [
                               Text(
                                 diningTable.name,
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                ),
+                                style: AppTypography.titleMedium,
                               ),
                               const SizedBox(width: 6),
                               if (category != null)
@@ -181,11 +171,7 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                             child: Center(
                               child: Text(
                                 diningTable.id.toString(),
-                                style: const TextStyle(
-                                  color: AppColors.white,
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 20,
-                                ),
+                                style: AppTypography.titleLarge.copyWith(color: AppColors.white),
                               ),
                             ),
                           ),
@@ -195,11 +181,7 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                               Text(
                                 diningTable.status.name,
                                 textAlign: TextAlign.end,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                  color: diningTable.status.color,
-                                ),
+                                style: AppTypography.titleSmall.copyWith(fontWeight: FontWeight.bold, color: diningTable.status.color),
                               ),
                               IconButton(
                                 icon: const Icon(Icons.more_vert),
@@ -225,15 +207,7 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                                     ],
                                   ).then((value) async {
                                     if (value == 'edit') {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              EditDiningTablePage(
-                                                diningTable: diningTable,
-                                              ),
-                                        ),
-                                      ).then((_) => setState(() {}));
+                                      GoRouter.of(context).pushNamed('editDiningTable', extra: diningTable).then((_) => setState(() {}));
                                     } else if (value == 'delete') {
                                       showDialog(
                                         context: context,
@@ -294,60 +268,38 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                               if (order != null)
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) =>
-                                            ViewOrderPage(order: order),
-                                      ),
-                                    ).then((_) => setState(() {}));
+                                    GoRouter.of(context).pushNamed('viewOrder', extra: order).then((_) => setState(() {}));
                                   },
                                   child: Text(
                                     'Order: ${order.id}',
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                    style: AppTypography.titleSmall.copyWith(fontWeight: FontWeight.bold),
                                   ),
                                 ),
                             ],
                           ),
                           onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => ViewDiningTablePage(
-                                  diningTable: diningTable,
-                                ),
-                              ),
-                            ).then((_) => setState(() {}));
+                            GoRouter.of(context).pushNamed('viewDiningTable', extra: diningTable).then((_) => setState(() {}));
                           },
                         );
                       }),
                     ],
                   )
-                : const Center(
-                    child: Opacity(
-                      opacity: 0.5,
-                      child: Column(
+        : Center(
+              child: Opacity(
+                opacity: 0.5,
+                child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.table_restaurant, size: 64),
                           AppSpacing.gapLg,
                           Text(
                             'No Tables Found',
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold),
                           ),
                           SizedBox(height: 12),
                           Text(
                             'Add a dining table to get started',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w400,
-                            ),
+                            style: AppTypography.bodyMedium,
                           ),
                         ],
                       ),

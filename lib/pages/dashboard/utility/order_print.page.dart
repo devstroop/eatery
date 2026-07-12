@@ -9,6 +9,7 @@ import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class OrderPrintPage extends ConsumerStatefulWidget {
@@ -47,13 +48,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
               children: [
                 IconButton(
                   onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                      this.context,
-                      MaterialPageRoute(
-                        builder: (context) => const DashboardPage(),
-                      ),
-                      (Route<dynamic> route) => false,
-                    );
+                    GoRouter.of(context).goNamed('dashboard');
                   },
                   icon: const Icon(Icons.close),
                 ),

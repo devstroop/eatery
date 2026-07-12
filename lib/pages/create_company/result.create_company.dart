@@ -1,6 +1,7 @@
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:go_router/go_router.dart';
 
 class CreateCompanyResultPage extends StatefulWidget {
   const CreateCompanyResultPage({Key? key}) : super(key: key);
@@ -67,11 +68,7 @@ class _CreateCompanyResultPageState extends State<CreateCompanyResultPage> {
                 margin: const EdgeInsets.only(top: 16.0),
                 child: AppButton.primary(
                   onPressed: () {
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(builder: (context) => const LoginPage()),
-                      (Route<dynamic> route) => false,
-                    );
+                    GoRouter.of(context).goNamed('login');
                   },
                   label: 'Continue to Login',
                 ),

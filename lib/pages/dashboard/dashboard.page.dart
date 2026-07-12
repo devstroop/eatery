@@ -1,18 +1,15 @@
 import 'package:eatery/core/theme/app_spacing.dart';
 import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/core/widgets/widgets.dart';
-import 'package:eatery/pages/dashboard/payment/payments.page.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery/core/widgets/app_adaptive_shell.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:eatery/presentation/providers/cart_provider.dart';
-
-import 'order/orders.page.dart';
-import 'pos/cart.page.dart';
+import 'package:go_router/go_router.dart';
 
 // ── Dashboard navigation destinations ──────────────────────────
-// These drive both the menu grid AND any future AppAdaptiveShell.
 abstract final class DashboardRoutes {
   static const pos = 'pos';
   static const orders = 'orders';
@@ -29,112 +26,122 @@ abstract final class DashboardRoutes {
 }
 
 /// Dashboard menu tiles grouped by category.
-final _menuItems = <_MenuItem>[
-  // ── Sales ──
+final _salesItems = <_MenuItem>[
   _MenuItem(
     icon: Icons.point_of_sale,
     label: 'Point of Sale',
     subtitle: 'Start a new sale',
-    color: Color(0xFF30A8CF),
+    color: const Color(0xFF30A8CF),
     route: DashboardRoutes.pos,
   ),
   _MenuItem(
     icon: Icons.history,
     label: 'Orders',
     subtitle: 'All orders here',
-    color: Color(0xFFF5A142),
+    color: const Color(0xFFF5A142),
     route: DashboardRoutes.orders,
   ),
   _MenuItem(
     icon: Icons.payment,
     label: 'Payments',
     subtitle: 'Payment receipts',
-    color: Color(0xFF2F5EC2),
+    color: const Color(0xFF2F5EC2),
     route: DashboardRoutes.payments,
   ),
-  // ── Management ──
+];
+
+final _productItems = <_MenuItem>[
   _MenuItem(
     icon: Icons.category,
     label: 'Categories',
     subtitle: 'Product categories',
-    color: Color(0xFFD98049),
+    color: const Color(0xFFD98049),
     route: DashboardRoutes.categories,
   ),
   _MenuItem(
-    icon: Icons.restaurant,
+    icon: Icons.restaurant_menu,
     label: 'Kitchen',
     subtitle: 'Kitchen dishes',
-    color: Color(0xFF4AC3A1),
+    color: const Color(0xFF873CA8),
     route: DashboardRoutes.kitchen,
   ),
   _MenuItem(
-    icon: Icons.inventory,
+    icon: Icons.inventory_2,
     label: 'Inventory',
-    subtitle: 'Stock items',
-    color: Color(0xFF705EE0),
+    subtitle: 'Inventory items',
+    color: const Color(0xFFC45C27),
     route: DashboardRoutes.inventory,
   ),
+];
+
+final _peopleItems = <_MenuItem>[
   _MenuItem(
     icon: Icons.people,
     label: 'Customers',
     subtitle: 'Manage customers',
-    color: Color(0xFF2FC289),
+    color: const Color(0xFF27AE60),
     route: DashboardRoutes.customers,
   ),
   _MenuItem(
-    icon: Icons.group,
-    label: 'Staffs',
+    icon: Icons.badge,
+    label: 'Staff',
     subtitle: 'Manage staff',
-    color: Color(0xFFC2592F),
+    color: const Color(0xFF2980B9),
     route: DashboardRoutes.staffs,
   ),
   _MenuItem(
     icon: Icons.table_restaurant,
-    label: 'Dining Tables',
-    subtitle: 'Manage tables',
-    color: Color(0xFFEF6850),
+    label: 'Tables',
+    subtitle: 'Dining tables',
+    color: const Color(0xFF8E44AD),
     route: DashboardRoutes.tables,
   ),
-  // ── Utilities ──
+];
+
+final _systemItems = <_MenuItem>[
   _MenuItem(
-    icon: Icons.photo_library,
+    icon: Icons.image,
     label: 'Library',
-    subtitle: 'Images & resources',
-    color: Color(0xFF2FC289),
+    subtitle: 'Image library',
+    color: const Color(0xFF16A085),
     route: DashboardRoutes.library,
   ),
   _MenuItem(
-    icon: FontAwesomeIcons.database,
-    label: 'Data Mgmt.',
-    subtitle: 'Import / Export',
-    color: Color(0xFFEF9050),
+    icon: Icons.storage,
+    label: 'Data',
+    subtitle: 'Backup & restore',
+    color: const Color(0xFFE74C3C),
     route: DashboardRoutes.data,
   ),
   _MenuItem(
     icon: Icons.settings,
     label: 'Settings',
     subtitle: 'App settings',
-    color: Color(0xFF222222),
+    color: const Color(0xFF7F8C8D),
     route: DashboardRoutes.settings,
   ),
 ];
 
 class DashboardPage extends ConsumerStatefulWidget {
-  const DashboardPage({Key? key}) : super(key: key);
+  const DashboardPage({super.key});
 
   @override
   ConsumerState<DashboardPage> createState() => _DashboardPageState();
 }
 
 class _DashboardPageState extends ConsumerState<DashboardPage> {
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  late int _currentTab;
+
+  @override
+  void initState() {
+    super.initState();
+    _currentTab = 0;
+  }
 
   @override
   Widget build(BuildContext context) {
     final company = ref.read(companyProvider);
     final cart = ref.read(cartProvider).cart;
-    final isDesktop = Responsive.isDesktop(context);
-    final spacing = Responsive.spacing(context);
 
     if (company == null) {
       return const Center(child: CircularProgressIndicator());
@@ -142,53 +149,52 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
 
     return PopScope(
       canPop: false,
-      child: Scaffold(
-        key: scaffoldKey,
-        body: LayoutBuilder(
-          builder: (context, constraints) {
-            final availableWidth = constraints.maxWidth - spacing * 2;
-            final cardWidth =
-                (isDesktop
-                        ? (availableWidth - spacing * 3) / 4
-                        : (availableWidth - spacing) / 2)
-                    .clamp(140, 220)
-                    .toDouble();
-            final cardHeight = cardWidth * 1.1;
-
-            return ListView(
-              padding: EdgeInsets.symmetric(horizontal: spacing, vertical: 32),
-              children: [
-                _DashboardHeader(
-                  companyName: company.name,
-                  image: company.logo != null
-                      ? LibraryImage(company.logo).image
-                      : null,
-                  cartCount: cart.length,
-                  onCartTap: () => Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (_) => const CartPage()),
-                  ).then((_) => setState(() {})),
-                  onLogout: () => _showLogoutDialog(context),
-                ),
-                AppSpacing.gapLg,
-                // ── Menu Grid ──
-                Wrap(
-                  spacing: spacing,
-                  runSpacing: spacing,
-                  children: _menuItems
-                      .map(
-                        (item) => _DashboardTile(
-                          item: item,
-                          width: cardWidth,
-                          height: cardHeight,
-                        ),
-                      )
-                      .toList(),
-                ),
-              ],
-            );
-          },
+      child: AppAdaptiveShell(
+        initialIndex: _currentTab,
+        title: company.name,
+        header: (context) => _DashboardHeader(
+          companyName: company.name,
+          image: company.logo != null
+              ? LibraryImage(company.logo!).image
+              : null,
+          cartCount: cart.length,
+          onCartTap: () => GoRouter.of(context).pushNamed('cart').then((_) => setState(() {})),
+          onLogout: () => _showLogoutDialog(context),
         ),
+        destinations: [
+          AppNavDestination(
+            icon: Icons.dashboard,
+            label: 'Sales',
+            page: _DashboardGrid(
+              items: _salesItems,
+              onItemTap: (route) => _onTap(context, route),
+            ),
+          ),
+          AppNavDestination(
+            icon: Icons.restaurant_menu,
+            label: 'Products',
+            page: _DashboardGrid(
+              items: _productItems,
+              onItemTap: (route) => _onTap(context, route),
+            ),
+          ),
+          AppNavDestination(
+            icon: Icons.people,
+            label: 'People',
+            page: _DashboardGrid(
+              items: _peopleItems,
+              onItemTap: (route) => _onTap(context, route),
+            ),
+          ),
+          AppNavDestination(
+            icon: Icons.settings,
+            label: 'System',
+            page: _DashboardGrid(
+              items: _systemItems,
+              onItemTap: (route) => _onTap(context, route),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -196,73 +202,40 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
   void _onTap(BuildContext context, String route) {
     switch (route) {
       case 'pos':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const PointOfSalePage()),
-        );
+        GoRouter.of(context).pushNamed('pos');
         break;
       case 'orders':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const OrdersPage()),
-        );
+        GoRouter.of(context).pushNamed('orders');
         break;
       case 'payments':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const PaymentsPage()),
-        );
+        GoRouter.of(context).pushNamed('payments');
         break;
       case 'categories':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const ProductCategoriesPage()),
-        );
+        GoRouter.of(context).pushNamed('productCategories');
         break;
       case 'kitchen':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const KitchenPage()),
-        );
+        GoRouter.of(context).pushNamed('kitchenDishes');
         break;
       case 'inventory':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const InventoryItemsPage()),
-        );
+        GoRouter.of(context).pushNamed('inventoryItems');
         break;
       case 'customers':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const CustomersPage()),
-        );
+        GoRouter.of(context).pushNamed('customers');
         break;
       case 'staffs':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const StaffsPage()),
-        );
+        GoRouter.of(context).pushNamed('staffs');
         break;
       case 'tables':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const DiningTablesPage()),
-        );
+        GoRouter.of(context).pushNamed('diningTables');
         break;
       case 'library':
         _showLibrary(context);
         break;
       case 'data':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const DataManagementPage()),
-        );
+        GoRouter.of(context).pushNamed('dataManagement');
         break;
       case 'settings':
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const SettingPage()),
-        );
+        GoRouter.of(context).pushNamed('settings');
         break;
     }
   }
@@ -275,10 +248,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
       confirmLabel: 'Yes',
       cancelLabel: 'No',
       onConfirm: () {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const LogoutPage()),
-        );
+        GoRouter.of(context).goNamed('logout');
       },
     );
   }
@@ -308,6 +278,54 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           ).then((_) => setState(() {}));
         }),
       ),
+    );
+  }
+}
+
+// ── Dashboard grid section ─────────────────────────────────────
+class _DashboardGrid extends StatelessWidget {
+  final List<_MenuItem> items;
+  final void Function(String route) onItemTap;
+
+  const _DashboardGrid({
+    required this.items,
+    required this.onItemTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final isDesktop = Responsive.isDesktop(context);
+    final spacing = Responsive.spacing(context);
+
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final availableWidth = constraints.maxWidth - spacing * 2;
+        final cols = isDesktop ? (items.length).clamp(1, 4) : 2;
+        final cardWidth = ((availableWidth - (cols - 1) * spacing) / cols)
+            .clamp(120, 220)
+            .toDouble();
+        final cardHeight = cardWidth * 1.1;
+
+        return ListView(
+          padding: EdgeInsets.all(spacing),
+          children: [
+            Wrap(
+              spacing: spacing,
+              runSpacing: spacing,
+              children: items
+                  .map(
+                    (item) => _DashboardTile(
+                      item: item,
+                      width: cardWidth,
+                      height: cardHeight,
+                      onTap: () => onItemTap(item.route),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ],
+        );
+      },
     );
   }
 }
@@ -428,11 +446,13 @@ class _DashboardTile extends StatelessWidget {
   final _MenuItem item;
   final double width;
   final double height;
+  final VoidCallback onTap;
 
   const _DashboardTile({
     required this.item,
     required this.width,
     required this.height,
+    required this.onTap,
   });
 
   @override
@@ -441,11 +461,7 @@ class _DashboardTile extends StatelessWidget {
       width: width,
       height: height,
       child: InkWell(
-        onTap: () {
-          // Find the parent DashboardPage state and call _onTap
-          final page = context.findAncestorStateOfType<_DashboardPageState>();
-          page?._onTap(context, item.route);
-        },
+        onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Container(
           decoration: BoxDecoration(

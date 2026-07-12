@@ -49,7 +49,7 @@ class SelectableCard extends StatelessWidget {
                 children: [
                   Text(
                     header,
-                    style: TextStyle(
+                    style: AppTypography.bodyMedium.copyWith(
                         fontWeight: FontWeight.w500, color: AppColors.black500),
                   ),
                   selected
@@ -124,7 +124,7 @@ class SelectableCard extends StatelessWidget {
                         ),
                         child: Text(
                           highlight,
-                          style: TextStyle(
+                          style: AppTypography.bodySmall.copyWith(
                               color: highlightColor,
                               fontWeight: FontWeight.w500),
                         ),
@@ -142,7 +142,7 @@ class SelectableCard extends StatelessWidget {
                   : Container(),
               Text(
                 footer,
-                style: TextStyle(color: AppColors.black500),
+                style: AppTypography.bodyMedium.copyWith(color: AppColors.black500),
               )
             ],
           ),

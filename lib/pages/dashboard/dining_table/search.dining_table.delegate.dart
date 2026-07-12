@@ -2,6 +2,7 @@ import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/core/extensions/double_ext.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:go_router/go_router.dart';
 
 class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
   final List<DiningTable> diningTables;
@@ -26,20 +27,17 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
         },
         icon: const Icon(Icons.clear),
       ),
-      /*IconButton(
+      IconButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AddDiningTablePage()),
-          ).then((diningTable) {
+          GoRouter.of(context).pushNamed('addDiningTable').then((diningTable) {
             if (diningTable != null) {
-              callback(diningTable);
-              close(context, diningTable);
+              callback(diningTable as DiningTable);
+              close(context, diningTable as DiningTable);
             }
           });
         },
         icon: const Icon(Icons.add),
-      )*/
+      ),
     ];
   }
 
@@ -77,11 +75,7 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
           alignment: Alignment.center,
           child: Text(
             'Recent dining tables',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.normal,
-              color: AppColors.grey600,
-            ),
+            style: AppTypography.bodyMedium.copyWith(color: AppColors.grey600),
           ),
         ),
         ...diningTables
@@ -105,21 +99,14 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                     children: [
                       Text(
                         e.name.split(' ').last[0].toUpperCase(),
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.grey600,
-                        ),
+                        style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey600),
                       ),
                     ],
                   ),
                 ),
                 title: Text(
                   e.name,
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
                 ),
                 subtitle: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -131,11 +118,7 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                       Text(e.description!.trim()),
                     Text(
                       '${e.capacity} seats',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.grey600,
-                      ),
+                        style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey600),
                     ),
                   ],
                 ),
@@ -157,30 +140,18 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                       ),
                       child: Text(
                         e.status.name,
-                        style: const TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.white,
-                        ),
+                        style: AppTypography.labelSmall.copyWith(fontWeight: FontWeight.bold, color: AppColors.white),
                       ),
                     ),
                     if (e.orderId != null)
                       Text(
                         'Order #${e.orderId}',
-                        style: TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.black800,
-                        ),
+                        style: AppTypography.labelSmall.copyWith(fontWeight: FontWeight.bold, color: AppColors.black800),
                       ),
                     if (e.orderId != null)
                       Text(
                         'Due $currencySymbol${orders.where((element) => element.id == e.orderId).firstOrNull?.grandTotal.toPrecision(2)}',
-                        style: const TextStyle(
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.error,
-                        ),
+                        style: AppTypography.labelSmall.copyWith(fontWeight: FontWeight.bold, color: AppColors.error),
                       ),
                   ],
                 ),
@@ -202,11 +173,7 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
           alignment: Alignment.center,
           child: Text(
             'Search results',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.normal,
-              color: AppColors.grey600,
-            ),
+            style: AppTypography.bodyMedium.copyWith(color: AppColors.grey600),
           ),
         ),
         ...diningTables
@@ -228,11 +195,7 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                     children: [
                       Text(
                         e.name.split(' ').last.toUpperCase()[0],
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.grey600,
-                        ),
+                        style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey600),
                       ),
                     ],
                   ),

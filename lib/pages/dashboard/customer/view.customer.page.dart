@@ -5,6 +5,7 @@ import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/core/widgets/app_dialog.dart';
+import 'package:go_router/go_router.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
 
 class ViewCustomer extends ConsumerStatefulWidget {
@@ -45,16 +46,10 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
               ).then((value) {
                 switch (value) {
                   case 'edit':
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            EditCustomerPage(customer: widget.customer),
-                      ),
-                    ).then((value) {
+                    GoRouter.of(context).pushNamed('editCustomer', extra: widget.customer).then((value) {
                       if (value != null) {
                         setState(() {
-                          widget.customer = value;
+                          widget.customer = value as Customer;
                         });
                       }
                     });
@@ -132,10 +127,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                     const Text('Outstanding\nAmount'),
                     Text(
                       '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${ref.read(customerRepositoryProvider).getOutstandingAmount(widget.customer.phone).toStringAsFixed(2)}',
-                      style: const TextStyle(
-                        fontSize: 36,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: AppTypography.displayMedium.copyWith(fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -146,10 +138,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                     const Text('Name'),
                     Text(
                       widget.customer.name ?? '',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -160,10 +149,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                     const Text('Phone'),
                     Text(
                       widget.customer.phone,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -176,10 +162,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                       (widget.customer.address ?? '').isNotEmpty
                           ? widget.customer.address!
                           : 'NA',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -193,10 +176,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                       (widget.customer.landmark ?? '').isNotEmpty
                           ? widget.customer.landmark!
                           : 'NA',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -210,10 +190,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                       widget.customer.lastOrderAt != null
                           ? widget.customer.lastOrderAt!.toIso8601String()
                           : 'NA',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -246,11 +223,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
                     'Orders',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.grey700,
-                    ),
+                    style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.w500, color: AppColors.grey700),
                   ),
                 ),
                 Container(
@@ -275,7 +248,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                         ListTile(
                           title: Text(
                             'No previous orders',
-                            style: TextStyle(color: AppColors.grey400),
+                            style: AppTypography.bodyMedium.copyWith(color: AppColors.grey400),
                           ),
                         ),
                     ],

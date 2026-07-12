@@ -4,6 +4,7 @@ import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
+import 'package:go_router/go_router.dart';
 
 Color _pageColor = AppColors.primary;
 
@@ -22,11 +23,7 @@ class _TaxSlabsSettingsPageState extends ConsumerState<TaxSlabsSettingsPage> {
   }
 
   /*_edit(TaxSlab taxSlab) =>
-      Navigator.push(
-        this.context,
-        MaterialPageRoute(
-            builder: (context) => EditTaxSlabSettingsPage(taxSlab: taxSlab)),
-      ).then((_) {
+      GoRouter.of(this.context).pushNamed('addTaxSlab').then((_) {
         setState(() {});
         Navigator.of(this.context).pop();
       });
@@ -61,18 +58,11 @@ class _TaxSlabsSettingsPageState extends ConsumerState<TaxSlabsSettingsPage> {
                     },
                     leading: Text(
                       '${e.rate}%',
-                      style: TextStyle(
-                        fontWeight: FontWeight.w500,
-                        fontSize: 18,
-                        color: AppColors.black600,
-                      ),
+                      style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.w500, color: AppColors.black600),
                     ),
                     title: Text(
                       e.name,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16,
-                      ),
+                      style: AppTypography.titleMedium,
                     ),
                     subtitle: Text(e.type.name ?? 'None'),
                     trailing: const Icon(Icons.chevron_right),
@@ -80,7 +70,7 @@ class _TaxSlabsSettingsPageState extends ConsumerState<TaxSlabsSettingsPage> {
                 }),
               ],
             )
-          : const Center(
+          : Center(
               child: Opacity(
                 opacity: 0.5,
                 child: Column(
@@ -90,26 +80,18 @@ class _TaxSlabsSettingsPageState extends ConsumerState<TaxSlabsSettingsPage> {
                     SpacingStyle.defaultVerticalSpacing,
                     Text(
                       'No Tax Slabs Found',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold),
                     ),
                     Text(
                       'Add a tax slab to get started',
-                      style: TextStyle(fontSize: 16),
+                      style: AppTypography.bodyLarge,
                     ),
                   ],
                 ),
               ),
             ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const AddTaxSlabSettingsPage(),
-          ),
-        ).then((_) => setState(() {})),
+        onPressed: () => GoRouter.of(context).pushNamed('addTaxSlab').then((_) => setState(() {})),
         backgroundColor: _pageColor,
         foregroundColor: AppColors.white,
         icon: const Icon(Icons.add),

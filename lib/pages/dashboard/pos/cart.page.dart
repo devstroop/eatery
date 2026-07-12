@@ -11,6 +11,7 @@ import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/references.dart';
+import 'package:go_router/go_router.dart';
 
 class CartPage extends ConsumerStatefulWidget {
   const CartPage({super.key});
@@ -74,7 +75,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                         Expanded(
                           child: Text(
                             product.name,
-                            style: const TextStyle(fontWeight: FontWeight.w500),
+                            style: AppTypography.bodyMedium.copyWith(fontWeight: FontWeight.w500),
                           ),
                         ),
                         Container(
@@ -163,7 +164,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                           children: [
                             Text(
                               '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${OrderFunction.calculateProductPriceWithoutTax(product)}',
-                              style: const TextStyle(
+                              style: AppTypography.titleMedium.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -245,15 +246,15 @@ class _CartPageState extends ConsumerState<CartPage> {
                         ),
                         child: Row(
                           children: [
-                            const Expanded(
+                            Expanded(
                               child: Text(
                                 'Subtotal',
-                                style: TextStyle(fontWeight: FontWeight.w500),
+                                style: AppTypography.bodyMedium.copyWith(fontWeight: FontWeight.w500),
                               ),
                             ),
                             Text(
                               '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${OrderFunction.calculateCartTotalWithoutTax(ref.read(cartProvider).cart)}',
-                              style: const TextStyle(
+                              style: AppTypography.titleMedium.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -269,15 +270,15 @@ class _CartPageState extends ConsumerState<CartPage> {
                         ),
                         child: Row(
                           children: [
-                            const Expanded(
+                            Expanded(
                               child: Text(
                                 'Tax (Incl./Excl.)',
-                                style: TextStyle(fontWeight: FontWeight.w500),
+                                style: AppTypography.bodyMedium.copyWith(fontWeight: FontWeight.w500),
                               ),
                             ),
                             Text(
                               '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${OrderFunction.calculateTaxAmount(ref.read(cartProvider).cart)}',
-                              style: const TextStyle(
+                              style: AppTypography.titleMedium.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -293,15 +294,15 @@ class _CartPageState extends ConsumerState<CartPage> {
                         ),
                         child: Row(
                           children: [
-                            const Expanded(
+                            Expanded(
                               child: Text(
                                 'Total',
-                                style: TextStyle(fontWeight: FontWeight.w500),
+                                style: AppTypography.bodyMedium.copyWith(fontWeight: FontWeight.w500),
                               ),
                             ),
                             Text(
                               '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${OrderFunction.calculateTotalWithTax(ref.read(cartProvider).cart)}',
-                              style: const TextStyle(
+                              style: AppTypography.titleMedium.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -317,15 +318,15 @@ class _CartPageState extends ConsumerState<CartPage> {
                         ),
                         child: Row(
                           children: [
-                            const Expanded(
+                            Expanded(
                               child: Text(
                                 'Round off (+/-)',
-                                style: TextStyle(fontWeight: FontWeight.w500),
+                                style: AppTypography.bodyMedium.copyWith(fontWeight: FontWeight.w500),
                               ),
                             ),
                             Text(
                               '${OrderFunction.calculateRoundOff(OrderFunction.calculateTotalWithTax(ref.read(cartProvider).cart)) > 0 ? '+' : '-'} ${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${OrderFunction.calculateRoundOff(OrderFunction.calculateTotalWithTax(ref.read(cartProvider).cart)).abs()}',
-                              style: const TextStyle(
+                              style: AppTypography.titleMedium.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
@@ -380,7 +381,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                               Expanded(
                                 child: Text(
                                   'Previous',
-                                  style: TextStyle(
+                                  style: AppTypography.bodyMedium.copyWith(
                                     fontWeight: FontWeight.w500,
                                     color: AppColors.error,
                                   ),
@@ -388,10 +389,10 @@ class _CartPageState extends ConsumerState<CartPage> {
                               ),
                               Text(
                                 '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${ref.read(cartProvider).activeOrder?.grandTotal ?? 0}',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  color: AppColors.error,
-                                ),
+                                style: AppTypography.titleMedium.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.error,
+                                  ),
                               ),
                             ],
                           ),
@@ -703,18 +704,12 @@ class _CartPageState extends ConsumerState<CartPage> {
         type: MessageType.success,
       );
       if (context.mounted) {
-        await Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (context) => OrderPrintPage(
-              order: order,
-              currentCart: currentCart,
-              printKOT: printKOT,
-              printInvoice: printInvoice,
-            ),
-          ),
-          (route) => false,
-        );
+        GoRouter.of(context).goNamed('orderPrint', extra: {
+          'order': order,
+          'currentCart': currentCart,
+          'printKOT': printKOT,
+          'printInvoice': printInvoice,
+        });
       }
     } catch (e) {
       AppDialog.showMessage(context, message: 'Failed to place order', type: MessageType.error);

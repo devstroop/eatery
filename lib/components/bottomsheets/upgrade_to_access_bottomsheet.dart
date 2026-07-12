@@ -1,5 +1,6 @@
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
+import 'package:go_router/go_router.dart';
 
 class UpgradeToAccessBottomSheet extends StatefulWidget {
   final BuildContext context;
@@ -21,13 +22,7 @@ class UpgradeToAccessBottomSheet extends StatefulWidget {
 class _UpgradeToAccessBottomSheetState
     extends State<UpgradeToAccessBottomSheet> {
   void _upgrade() {
-    Navigator.push(
-      widget.context,
-      MaterialPageRoute(
-          builder: (context) => UpgradePage(
-                company: widget.company,
-              )),
-    ).then((_) async {
+    GoRouter.of(widget.context).pushNamed('upgrade', extra: widget.company).then((_) async {
       setState(() {
         // DO CHANGE HERE
       });

@@ -1,4 +1,5 @@
 import 'package:eatery/core/widgets/app_page_shell.dart';
+import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
@@ -116,11 +117,7 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
                 const SizedBox(height: 12.0),
                 Text(
                   'Category',
-                  style: TextStyle(
-                    color: AppColors.black600,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: AppTypography.labelMedium.copyWith(color: AppColors.black600),
                 ),
                 Container(
                   width: double.maxFinite,

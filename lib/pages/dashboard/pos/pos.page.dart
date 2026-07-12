@@ -10,7 +10,9 @@ import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/presentation/providers/cart_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/data/repositories/product_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 import '../utility/order_print.page.dart';
 import 'cart.page.dart';
 
@@ -169,12 +171,15 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                 context: context,
                 delegate: SearchProductDelegate(
                   productsRepo.getAllProducts(),
-                  (product) => Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => KProductView(product: product),
-                    ),
-                  ),
+                  (product) {
+                    // TODO: GoRouter
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => KProductView(product: product),
+                      ),
+                    );
+                  },
                 ),
               );
             },
@@ -227,37 +232,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                                         return;
                                       }
 
-                                      /*// Confirm Payment
-                                      // Popup: AddPaymentPage(order: order,)
-// Popup: AddPaymentPage(order: order,)
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) =>
-                                              AddPaymentPage(
-                                                order: order,
-                                              ),
-                                        ),
-                                      ).whenComplete(() async {
-                                        var payments = ref.read(paymentRepositoryProvider).getPaymentsByOrder(order.id);
 
-                                        var totalPaid = payments.fold(0.0, (previousValue, element) => previousValue + element.amount);
-                                        var totalToPay = order.grandTotal;
-                                        if(totalPaid < totalToPay){
-                                          AppDialog.showMessage(
-                                            context,
-                                            message: 'Please pay the remaining amount before closing order',
-                                            type: MessageType.warning,
-                                          );
-                                          return;
-                                        }
-
-                                        order.paidTotal = totalPaid;
-                                        await order.save();
-
-
-                                      });
-*/
                                       var order = session.activeOrder!;
                                       var diningTableRepo = ref.read(
                                         diningTableRepositoryProvider,
@@ -279,18 +254,12 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                                           .read(cartProvider.notifier)
                                           .clearCart();
 
-                                      Navigator.pushAndRemoveUntil(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => OrderPrintPage(
-                                            order: order,
-                                            currentCart: const [],
-                                            printKOT: printKOT,
-                                            printInvoice: printInvoice,
-                                          ),
-                                        ),
-                                        (route) => false,
-                                      );
+                                      GoRouter.of(context).goNamed('orderPrint', extra: {
+                                        'order': order,
+                                        'currentCart': const <Product>[],
+                                        'printKOT': printKOT,
+                                        'printInvoice': printInvoice,
+                                      });
                                     },
                                   ),
                                 ],
@@ -375,13 +344,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                         ),
                       ).then((value) => setState(() {}));
                     } else {
-                      Navigator.push(
-                        this.context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ViewCustomer(customer: session.activeCustomer!),
-                        ),
-                      ).then((value) => setState(() {}));
+                      GoRouter.of(context).pushNamed('viewCustomer', extra: session.activeCustomer!).then((value) => setState(() {}));
                     }
                   },
                   child: Row(
@@ -447,13 +410,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                           .read(orderRepositoryProvider)
                           .getOrderById(session.activeDiningTable!.orderId!);
                       if (tableOrder != null) {
-                        Navigator.push(
-                          this.context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                ViewOrderPage(order: tableOrder),
-                          ),
-                        ).then((value) => setState(() {}));
+                        GoRouter.of(context).pushNamed('viewOrder', extra: tableOrder).then((value) => setState(() {}));
                       }
                     },
                     child: Column(
@@ -511,14 +468,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                           ),
                         ).then((value) => setState(() {}));
                       } else {
-                        Navigator.push(
-                          this.context,
-                          MaterialPageRoute(
-                            builder: (context) => ViewDiningTablePage(
-                              diningTable: session.activeDiningTable!,
-                            ),
-                          ),
-                        ).then((value) => setState(() {}));
+                        GoRouter.of(context).pushNamed('viewDiningTable', extra: session.activeDiningTable!).then((value) => setState(() {}));
                       }
                     },
                     child: Column(
@@ -552,128 +502,9 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
           ),
         ),
       ),
-      body: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Flexible(
-            flex: 2,
-            child: ListView(
-              controller: _scrollControllerCategories,
-              padding: const EdgeInsets.all(6.0),
-              children: [
-                CircularCategoryPOSWidget(
-                  margin: const EdgeInsets.only(bottom: 6),
-                  image: const AssetImage('assets/icons/all.png'),
-                  themeColor: pageColor,
-                  selected: selectedProductCategory?.id == null,
-                  onTap: () {
-                    setState(() {
-                      selectedProductCategory = null;
-                    });
-                  },
-                  label: 'All',
-                ),
-                ...productsRepo.getAllCategories().map((each) {
-                  return CircularCategoryPOSWidget(
-                    margin: const EdgeInsets.only(bottom: 6),
-                    image: LibraryImage(
-                      each.image,
-                      defaultImage: 'assets/images/category.png',
-                    ).image,
-                    themeColor: pageColor,
-                    selected: selectedProductCategory?.id == each.id,
-                    onTap: () {
-                      setState(() {
-                        selectedProductCategory = each;
-                      });
-                    },
-                    label: each.name,
-                  );
-                }),
-              ],
-            ),
-          ),
-          Expanded(
-            flex: 8,
-            child: products.isNotEmpty
-                ? SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    controller: _scrollControllerProducts,
-                    child: Wrap(
-                      alignment: WrapAlignment.start,
-                      children: [
-                        ...products.map((product) {
-                          final width =
-                              ((MediaQuery.of(context).size.width * 0.8 - 1)
-                                      .abs() -
-                                  (crossAxisCount + 1) * spacing) /
-                              crossAxisCount;
-                          final height = width * 4 / 3;
-                          return ProductCard(
-                            product: product,
-                            width: width,
-                            height: height,
-                            themeColor: pageColor,
-                            currencySymbol:
-                                ref
-                                    .read(companyProvider.notifier)
-                                    .currency
-                                    ?.symbol ??
-                                '',
-                            onAdd: () {
-                              setState(() {
-                                ref
-                                    .read(cartProvider.notifier)
-                                    .addToCart(product);
-                              });
-                            },
-                            onRemove: () {
-                              setState(() {
-                                ref
-                                    .read(cartProvider.notifier)
-                                    .removeFromCart(product);
-                              });
-                            },
-                            onTap: () => _showProductDetails(product),
-                          );
-                        }),
-                      ],
-                    ),
-                  )
-                : Center(
-                    child: Opacity(
-                      opacity: 0.50,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Image.asset(
-                            'assets/images/empty-folder.png',
-                            width: 100,
-                            height: 100,
-                          ),
-                          AppSpacing.gapLg,
-                          const Text(
-                            'No dish found',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const Text(
-                            'Add a dish to get started',
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: AppColors.grey600,
-                            ),
-                          ),
-                          const SizedBox(height: 48),
-                        ],
-                      ),
-                    ),
-                  ),
-          ),
-        ],
-      ),
+      body: Responsive.isMobile(context)
+          ? _buildMobileBody(context, pageColor, productsRepo, products, crossAxisCount, spacing)
+          : _buildDesktopBody(context, pageColor, productsRepo, products, crossAxisCount, spacing),
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -706,10 +537,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
             if (session.activeCustomer != null)
               PosCartInformation(
                 onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const CartPage()),
-                  );
+                  GoRouter.of(context).pushNamed('cart');
                 },
                 themeColor: pageColor,
                 cart: session.cart,
@@ -717,6 +545,211 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildCategoriesSidebar(
+    BuildContext context,
+    Color pageColor,
+    ProductRepository productsRepo,
+  ) {
+    return ListView(
+      controller: _scrollControllerCategories,
+      padding: const EdgeInsets.all(6.0),
+      children: [
+        CircularCategoryPOSWidget(
+          margin: const EdgeInsets.only(bottom: 6),
+          image: const AssetImage('assets/icons/all.png'),
+          themeColor: pageColor,
+          selected: selectedProductCategory?.id == null,
+          onTap: () {
+            setState(() {
+              selectedProductCategory = null;
+            });
+          },
+          label: 'All',
+        ),
+        ...productsRepo.getAllCategories().map((each) {
+          return CircularCategoryPOSWidget(
+            margin: const EdgeInsets.only(bottom: 6),
+            image: LibraryImage(
+              each.image,
+              defaultImage: 'assets/images/category.png',
+            ).image,
+            themeColor: pageColor,
+            selected: selectedProductCategory?.id == each.id,
+            onTap: () {
+              setState(() {
+                selectedProductCategory = each;
+              });
+            },
+            label: each.name,
+          );
+        }),
+      ],
+    );
+  }
+
+  Widget _buildCategoriesHorizontalBar(
+    BuildContext context,
+    Color pageColor,
+    ProductRepository productsRepo,
+  ) {
+    return SizedBox(
+      height: 72,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        itemCount: productsRepo.getAllCategories().length + 1,
+        itemBuilder: (context, index) {
+          if (index == 0) {
+            return CircularCategoryPOSWidget(
+              margin: const EdgeInsets.only(right: 6),
+              image: const AssetImage('assets/icons/all.png'),
+              themeColor: pageColor,
+              selected: selectedProductCategory?.id == null,
+              onTap: () {
+                setState(() {
+                  selectedProductCategory = null;
+                });
+              },
+              label: 'All',
+            );
+          }
+          final each = productsRepo.getAllCategories()[index - 1];
+          return CircularCategoryPOSWidget(
+            margin: const EdgeInsets.only(right: 6),
+            image: LibraryImage(
+              each.image,
+              defaultImage: 'assets/images/category.png',
+            ).image,
+            themeColor: pageColor,
+            selected: selectedProductCategory?.id == each.id,
+            onTap: () {
+              setState(() {
+                selectedProductCategory = each;
+              });
+            },
+            label: each.name,
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildProductGrid(
+    BuildContext context,
+    Color pageColor,
+    List<Product> products,
+    int crossAxisCount,
+    double spacing,
+  ) {
+    if (products.isEmpty) {
+      return Center(
+        child: Opacity(
+          opacity: 0.50,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Image.asset(
+                'assets/images/empty-folder.png',
+                width: 100,
+                height: 100,
+              ),
+              AppSpacing.gapLg,
+              const Text(
+                'No dish found',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const Text(
+                'Add a dish to get started',
+                style: TextStyle(
+                  fontSize: 16,
+                  color: AppColors.grey600,
+                ),
+              ),
+              const SizedBox(height: 48),
+            ],
+          ),
+        ),
+      );
+    }
+    return SingleChildScrollView(
+      scrollDirection: Axis.vertical,
+      controller: _scrollControllerProducts,
+      child: Wrap(
+        alignment: WrapAlignment.start,
+        children: [
+          ...products.map((product) {
+            final width =
+                ((MediaQuery.of(context).size.width * 0.8 - 1).abs() -
+                    (crossAxisCount + 1) * spacing) /
+                crossAxisCount;
+            final height = width * 4 / 3;
+            return ProductCard(
+              product: product,
+              width: width,
+              height: height,
+              themeColor: pageColor,
+              currencySymbol:
+                  ref.read(companyProvider.notifier).currency?.symbol ?? '',
+              onAdd: () {
+                setState(() {
+                  ref.read(cartProvider.notifier).addToCart(product);
+                });
+              },
+              onRemove: () {
+                setState(() {
+                  ref.read(cartProvider.notifier).removeFromCart(product);
+                });
+              },
+              onTap: () => _showProductDetails(product),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMobileBody(
+    BuildContext context,
+    Color pageColor,
+    ProductRepository productsRepo,
+    List<Product> products,
+    int crossAxisCount,
+    double spacing,
+  ) {
+    return Column(
+      children: [
+        _buildCategoriesHorizontalBar(context, pageColor, productsRepo),
+        Expanded(child: _buildProductGrid(context, pageColor, products, crossAxisCount, spacing)),
+      ],
+    );
+  }
+
+  Widget _buildDesktopBody(
+    BuildContext context,
+    Color pageColor,
+    ProductRepository productsRepo,
+    List<Product> products,
+    int crossAxisCount,
+    double spacing,
+  ) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Flexible(
+          flex: 2,
+          child: _buildCategoriesSidebar(context, pageColor, productsRepo),
+        ),
+        Expanded(
+          flex: 8,
+          child: _buildProductGrid(context, pageColor, products, crossAxisCount, spacing),
+        ),
+      ],
     );
   }
 

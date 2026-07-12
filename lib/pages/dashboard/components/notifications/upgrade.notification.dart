@@ -2,6 +2,7 @@ import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:go_router/go_router.dart';
 
 class UpgradeNotification extends ConsumerStatefulWidget {
   final Company? company;
@@ -36,12 +37,7 @@ class _UpgradeNotificationState extends ConsumerState<UpgradeNotification> {
               header: "Upgrade",
               leading: const Icon(Icons.workspace_premium, color: AppColors.white),
               onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => UpgradePage(company: widget.company),
-                  ),
-                ).then((_) async {
+                GoRouter.of(context).pushNamed('upgrade', extra: widget.company).then((_) async {
                   setState(() {
                     // DO CHANGE HERE
                   });

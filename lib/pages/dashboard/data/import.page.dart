@@ -1,4 +1,5 @@
 import 'package:eatery/core/widgets/app_page_shell.dart';
+import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:http/http.dart' as http;
@@ -39,12 +40,12 @@ class ImportPage extends StatelessWidget {
                   onTap: () => _downloadDemoData(context),
                   title: Text(
                     'Download Demo Data',
-                    style: TextStyle(
+                    style: AppTypography.titleMedium.copyWith(
                         color: AppColors.green, fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
                     'Get started with demo data',
-                    style: TextStyle(color: AppColors.grey700),
+                    style: AppTypography.bodySmall.copyWith(color: AppColors.grey700),
                   ),
                   trailing: Icon(
                     Icons.file_download_outlined,
@@ -76,12 +77,12 @@ class ImportPage extends StatelessWidget {
                 ListTile(
                   title: Text(
                     'Import from Excel',
-                    style: TextStyle(
+                    style: AppTypography.titleMedium.copyWith(
                         color: AppColors.menuPayments, fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
                     'Select the excel file to import',
-                    style: TextStyle(color: AppColors.grey700),
+                    style: AppTypography.bodySmall.copyWith(color: AppColors.grey700),
                   ),
                   trailing: Icon(
                     Icons.attachment,
@@ -113,12 +114,12 @@ class ImportPage extends StatelessWidget {
                 ListTile(
                   title: Text(
                     'Import from JSON',
-                    style: TextStyle(
+                    style: AppTypography.titleMedium.copyWith(
                         color: AppColors.yellow, fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
                     'Select the json file to import',
-                    style: TextStyle(color: AppColors.grey700),
+                    style: AppTypography.bodySmall.copyWith(color: AppColors.grey700),
                   ),
                   trailing: Icon(
                     Icons.code,

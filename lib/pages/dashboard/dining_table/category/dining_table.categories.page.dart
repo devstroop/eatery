@@ -5,6 +5,7 @@ import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:eatery/core/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 Color _pageColor = AppColors.menuCategories;
 
@@ -29,12 +30,7 @@ class _DiningTableCategoriesPageState
         foregroundColor: AppColors.white,
         icon: const Icon(Icons.add),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const AddDiningTableCategoryPage(),
-            ),
-          ).then((_) => setState(() {}));
+          GoRouter.of(context).pushNamed('addDiningTableCategory').then((_) => setState(() {}));
         },
       ),
       child:
@@ -47,7 +43,7 @@ class _DiningTableCategoriesPageState
                   return ListTile(
                     title: Text(
                       each.name,
-                      style: const TextStyle(fontWeight: FontWeight.w600),
+                      style: AppTypography.titleMedium,
                     ),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
@@ -55,13 +51,7 @@ class _DiningTableCategoriesPageState
                         IconButton(
                           icon: Icon(Icons.edit, color: _pageColor),
                           onPressed: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) =>
-                                    EditDiningTableCategoryPage(category: each),
-                              ),
-                            ).then((_) => setState(() {}));
+                            GoRouter.of(context).pushNamed('editDiningTableCategory', extra: each).then((_) => setState(() {}));
                           },
                         ),
                         IconButton(
@@ -133,11 +123,7 @@ class _DiningTableCategoriesPageState
                       child: Center(
                         child: Text(
                           each.name[0],
-                          style: const TextStyle(
-                            color: AppColors.white,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 24,
-                          ),
+                          style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold, color: AppColors.white),
                         ),
                       ),
                     ),
@@ -146,7 +132,7 @@ class _DiningTableCategoriesPageState
                 }),
               ],
             )
-          : const Center(
+          : Center(
               child: Opacity(
                 opacity: 0.5,
                 child: Column(
@@ -156,14 +142,11 @@ class _DiningTableCategoriesPageState
                     AppSpacing.gapLg,
                     Text(
                       'No Table Categories Found',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold),
                     ),
                     Text(
                       'Add a dining table category to get started',
-                      style: TextStyle(fontSize: 16),
+                      style: AppTypography.bodyLarge,
                     ),
                   ],
                 ),

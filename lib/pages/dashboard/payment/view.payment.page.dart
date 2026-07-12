@@ -2,6 +2,7 @@ import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import 'edit.payment.page.dart';
 
@@ -32,16 +33,10 @@ class _ViewPaymentPageState extends ConsumerState<ViewPaymentPage> {
               ).then((value) {
                 switch (value) {
                   case 'edit':
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            EditPaymentPage(payment: widget.payment),
-                      ),
-                    ).then((value) {
+                    GoRouter.of(context).pushNamed('editPayment', extra: widget.payment).then((value) {
                       if (value != null) {
                         setState(() {
-                          widget.payment = value;
+                          widget.payment = value as Payment;
                         });
                       }
                     });

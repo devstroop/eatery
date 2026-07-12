@@ -69,21 +69,21 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
                 ListTile(
                     title: Text(
                       '${order?.id ?? 'Select Order'}',
-                      style: const TextStyle(
+                      style: AppTypography.titleMedium.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     subtitle: widget.order != null
                         ? Text(
                             widget.order!.type.name!,
-                            style: const TextStyle(
+                            style: AppTypography.titleMedium.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
                           )
                         : null,
                     trailing: Text(
                       (widget.order?.grandTotal ?? '').toString(),
-                      style: const TextStyle(
+                      style: AppTypography.titleMedium.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -117,10 +117,7 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
                             padding: const EdgeInsets.all(16),
                             child: const Text(
                               'Select Payment Mode',
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20,
-                              ),
+                              style: AppTypography.titleLarge,
                             ),
                           ),
                           ...PaymentMode.values

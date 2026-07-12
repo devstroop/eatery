@@ -4,6 +4,7 @@ import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/core/widgets/widgets.dart';
 import 'package:eatery/references.dart';
+import 'package:go_router/go_router.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -191,9 +192,6 @@ class _MainScreenState extends State<MainScreen> {
   _restoreExisting(BuildContext context) {}
 
   _createNew(BuildContext context) {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => const CreateCompanyPage()),
-    );
+    GoRouter.of(context).pushNamed('createCompany');
   }
 }

@@ -4,6 +4,7 @@ import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/core/widgets/app_dialog.dart';
+import 'package:eatery/core/theme/app_typography.dart';
 
 class CreateCompanyPage extends ConsumerStatefulWidget {
   const CreateCompanyPage({Key? key}) : super(key: key);
@@ -313,7 +314,7 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
             child: Center(
               child: Text(
                 'Step ${viewIndex + 1}/${steps.length}',
-                style: TextStyle(
+                style: AppTypography.bodyMedium.copyWith(
                   color: AppColors.black600,
                   fontWeight: FontWeight.w500,
                 ),

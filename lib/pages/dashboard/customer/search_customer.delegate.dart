@@ -2,6 +2,7 @@ import 'package:eatery/core/theme/app_typography.dart';
 import 'dart:ui';
 
 import 'package:eatery/references.dart';
+import 'package:go_router/go_router.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:intl/intl.dart';
 
@@ -23,21 +24,18 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
       ),
       TextButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AddCustomerPage()),
-          ).then((customer) {
+          GoRouter.of(context).pushNamed('addCustomer').then((customer) {
             if (customer != null) {
-              customers.add(customer);
+              customers.add(customer as Customer);
               showSuggestions(context);
             }
           });
         },
-        child: const Row(
+        child: Row(
           children: [
             Icon(Icons.person_add),
             SizedBox(width: 6),
-            Text('New', style: TextStyle(fontWeight: FontWeight.w500, fontSize: 18),)
+            Text('New', style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.w500),)
           ],
         ),
 
@@ -80,11 +78,7 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
           padding: const EdgeInsets.only(top: 8.0),
           child: Text(
             'Recent Customers',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.normal,
-              color: AppColors.grey600,
-            ),
+            style: AppTypography.bodyMedium.copyWith(color: AppColors.grey600),
           ),
         ),
         Expanded(
@@ -117,11 +111,7 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
           padding: const EdgeInsets.all(16),
           child: Text(
             'Search results',
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 14,
-              color: AppColors.black500,
-            ),
+            style: AppTypography.bodyMedium.copyWith(color: AppColors.black500),
           ),
         ),
         Expanded(
@@ -153,34 +143,22 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
         child: Center(
           child: Text(
             (customer.name ?? 'NA')[0],
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppColors.grey600,
-            ),
+            style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey600),
           ),
         ),
 
       ),
       title: Text(
         customer.name ?? 'NA',
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 18,
-          color: AppColors.black600,
-        ),
+        style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.black600),
       ),
       subtitle: Text(
         customer.phone ?? '',
-        style: TextStyle(color: AppColors.black500),
+        style: AppTypography.bodyMedium.copyWith(color: AppColors.black500),
       ),
       trailing: Text(
         timeAgo(customer.lastOrderAt),
-        style: TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 12,
-          color: AppColors.black600,
-        ),
+        style: AppTypography.labelMedium.copyWith(fontWeight: FontWeight.bold, color: AppColors.black600),
       ),
     );
   }

@@ -10,6 +10,7 @@ import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 
 import 'package:eatery/core/widgets/app_dialog.dart';
+import 'package:go_router/go_router.dart';
 import '../main.screen.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
@@ -41,11 +42,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     _formKey.currentState!.save();
     if (_controllerPassword.text == company!.password) {
       ref.read(companyProvider.notifier).setCompany(company);
-      Navigator.pushAndRemoveUntil(
-        this.context,
-        MaterialPageRoute(builder: (context) => const DashboardPage()),
-        (Route<dynamic> route) => false,
-      );
+      GoRouter.of(context as BuildContext).goNamed('dashboard');
     } else {
       AppDialog.showMessage(this.context, message: 'Invalid secure pin', type: MessageType.error);
     }
@@ -78,7 +75,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         const SizedBox(width: 8),
                         Text(
                           'Reset PIN',
-                          style: TextStyle(color: AppColors.grey700),
+                          style: AppTypography.bodyMedium.copyWith(color: AppColors.grey700),
                         ),
                       ],
                     ),
@@ -91,7 +88,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         const SizedBox(width: 8),
                         Text(
                           'Delete Company',
-                          style: TextStyle(color: AppColors.error),
+                          style: AppTypography.bodyMedium.copyWith(color: AppColors.error),
                         ),
                       ],
                     ),
@@ -99,12 +96,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                 ],
               ).then((value) {
                 if (value == 'reset') {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const ResetPinScreen(),
-                    ),
-                  );
+                  GoRouter.of(context).pushNamed('resetPin');
                 } else if (value == 'delete') {
                   AppDialog.show(
                     context,
@@ -116,32 +108,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     destructive: true,
                     onConfirm: () {
                       ref.read(appDatabaseProvider).deleteAll();
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const MainScreen(),
-                        ),
-                        (Route<dynamic> route) => false,
-                      );
+                      GoRouter.of(context).goNamed('mainScreen');
                     },
                   );
                 }
 
-                /*if (value == 'settings') {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const SettingsPage(),
-                    ),
-                  );
-                } else if (value == 'backup_restore') {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const BackupRestorePage(),
-                    ),
-                  );
-                }*/
+
               });
               /*Navigator.push(
                 context,

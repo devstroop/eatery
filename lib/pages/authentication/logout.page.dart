@@ -1,6 +1,7 @@
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:go_router/go_router.dart';
 
 class LogoutPage extends StatefulWidget {
   const LogoutPage({Key? key}) : super(key: key);
@@ -14,11 +15,7 @@ class _LogoutPageState extends State<LogoutPage> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      Navigator.pushAndRemoveUntil(
-        this.context,
-        MaterialPageRoute(builder: (context) => const LoginPage()),
-        (Route<dynamic> route) => false,
-      );
+      GoRouter.of(context as BuildContext).goNamed('login');
     });
   }
 

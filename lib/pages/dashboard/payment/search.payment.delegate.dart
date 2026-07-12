@@ -1,5 +1,7 @@
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery/core/theme/app_typography.dart';
+import 'package:go_router/go_router.dart';
 
 import 'add.payment.page.dart';
 
@@ -22,13 +24,10 @@ class SearchPaymentDelegate extends SearchDelegate<Payment?>{
       ),
       IconButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AddPaymentPage()),
-          ).then((payment) {
+          GoRouter.of(context).pushNamed('addPayment').then((payment) {
             if (payment != null) {
-              callback(payment);
-              close(context, payment);
+              callback(payment as Payment);
+              close(context, payment as Payment?);
             }
           });
         },
@@ -75,7 +74,7 @@ class SearchPaymentDelegate extends SearchDelegate<Payment?>{
             subtitle: Text(payment.date.toString()),
             trailing: Text(
               '$currencySymbol${payment.amount}',
-              style: const TextStyle(
+              style: AppTypography.titleMedium.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -104,7 +103,7 @@ class SearchPaymentDelegate extends SearchDelegate<Payment?>{
             subtitle: Text(payment.date.toString()),
             trailing: Text(
               '$currencySymbol${payment.amount}',
-              style: const TextStyle(
+              style: AppTypography.titleMedium.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),

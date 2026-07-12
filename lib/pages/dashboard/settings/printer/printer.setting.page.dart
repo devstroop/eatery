@@ -1,6 +1,7 @@
 import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/core/theme/app_spacing.dart';
+import 'package:eatery/core/theme/app_typography.dart';
 import 'dart:io';
 
 import 'package:eatery/data/models/eatery_db.dart';
@@ -124,9 +125,9 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
       child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          const Text(
+          Text(
             'Saved Printers',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           savedPrinters.when(
@@ -166,9 +167,9 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
           const Divider(),
           AppSpacing.gapLg,
 
-          const Text(
+          Text(
             'Bluetooth Discovery',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           ElevatedButton.icon(
@@ -198,11 +199,11 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
               ),
             ),
           if (_discovered.isEmpty && !_isScanning)
-            const Padding(
-              padding: EdgeInsets.all(8),
+            Padding(
+              padding: const EdgeInsets.all(8),
               child: Text(
                 'Tap "Scan for Printers" to discover Bluetooth devices',
-                style: TextStyle(color: Colors.grey),
+                style: AppTypography.bodySmall.copyWith(color: Colors.grey),
               ),
             ),
 
@@ -210,9 +211,9 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
           const Divider(),
           AppSpacing.gapLg,
 
-          const Text(
+          Text(
             'Print Settings',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Card(

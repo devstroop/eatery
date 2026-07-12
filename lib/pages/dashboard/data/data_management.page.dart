@@ -1,8 +1,10 @@
 import 'package:eatery/core/widgets/app_page_shell.dart';
+import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 
 final _pageColor = AppColors.menuCategories;
@@ -60,10 +62,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
               ),
               Text(
                 'Google Drive Backup / Restore',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.grey700),
+                style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500, color: AppColors.grey700),
               ),
               const SizedBox(
                 width: 8,
@@ -93,17 +92,11 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
               ),
               Text(
                 'Last Backup: ',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.grey700),
+                style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500, color: AppColors.grey700),
               ),
               Text(
                 'Never',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.grey700),
+                style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey700),
               ),
             ],
           ),
@@ -115,22 +108,14 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
             ),
             title: Text(
               'Backup ↑',
-              style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: AppColors.grey700),
+              style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey700),
             ),
             subtitle: Text(
               'Backup data to Google Drive',
-              style: TextStyle(color: AppColors.grey700),
+              style: AppTypography.bodyMedium.copyWith(color: AppColors.grey700),
             ),
             trailing: const Icon(Icons.chevron_right),
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ImportPage(),
-                  fullscreenDialog: true,
-                ))),
+            onTap: () => GoRouter.of(context).pushNamed('import')),
         ListTile(
           leading: Icon(
             FontAwesomeIcons.download,
@@ -138,22 +123,14 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           ),
           title: Text(
             'Restore ↓',
-            style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: AppColors.grey700),
+            style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey700),
           ),
           subtitle: Text(
             'Restore data from Google Drive',
-            style: TextStyle(color: AppColors.grey700),
+            style: AppTypography.bodyMedium.copyWith(color: AppColors.grey700),
           ),
           trailing: const Icon(Icons.chevron_right),
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const ExportPage(),
-                fullscreenDialog: true),
-          ),
+          onTap: () => GoRouter.of(context).pushNamed('export'),
         ),
         Container(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
@@ -168,10 +145,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
               ),
               Text(
                 'Import / Export',
-                style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
-                    color: AppColors.grey700),
+                style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500, color: AppColors.grey700),
               ),
               const SizedBox(
                 width: 8,
@@ -188,24 +162,15 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
               color: AppColors.grey700,
             ),
             title: Text(
-              'Import',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: AppColors.grey700,
-              ),
-            ),
-            subtitle: Text(
-              'Import data from json/excel file',
-              style: TextStyle(color: AppColors.grey700),
-            ),
+            'Import',
+            style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey700),
+          ),
+          subtitle: Text(
+            'Import data from json/excel file',
+            style: AppTypography.bodyMedium.copyWith(color: AppColors.grey700),
+          ),
             trailing: const Icon(Icons.chevron_right),
-            onTap: () => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const ImportPage(),
-                  fullscreenDialog: true,
-                ))),
+            onTap: () => GoRouter.of(context).pushNamed('import')),
         ListTile(
           leading: Icon(
             FontAwesomeIcons.fileExport,
@@ -213,22 +178,14 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           ),
           title: Text(
             'Export',
-            style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: AppColors.grey700),
+            style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey700),
           ),
           subtitle: Text(
             'Export data to json/excel file',
-            style: TextStyle(color: AppColors.grey700),
+            style: AppTypography.bodyMedium.copyWith(color: AppColors.grey700),
           ),
           trailing: const Icon(Icons.chevron_right),
-          onTap: () => Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const ExportPage(),
-                fullscreenDialog: true),
-          ),
+          onTap: () => GoRouter.of(context).pushNamed('export'),
         ),
       ]),
     );

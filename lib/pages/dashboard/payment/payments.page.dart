@@ -6,6 +6,7 @@ import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:eatery/core/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 Color _pageColor = AppColors.menuPayments;
 
@@ -36,12 +37,7 @@ class _PaymentsPageState extends ConsumerState<PaymentsPage> {
               context: context,
               delegate: SearchPaymentDelegate(
                 payments,
-                (payment) => Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => ViewPaymentPage(payment: payment),
-                  ),
-                ),
+                (payment) => GoRouter.of(context).pushNamed('viewPayment', extra: payment),
                 currencySymbol: currencySymbol,
               ),
             );
@@ -51,10 +47,7 @@ class _PaymentsPageState extends ConsumerState<PaymentsPage> {
       floatingActionButton: FloatingActionButton.extended(
         foregroundColor: AppColors.white,
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AddPaymentPage()),
-          ).then((_) => setState(() {}));
+          GoRouter.of(context).pushNamed('addPayment').then((_) => setState(() {}));
         },
         backgroundColor: _pageColor,
         icon: const Icon(Icons.add),
@@ -77,24 +70,21 @@ class _PaymentsPageState extends ConsumerState<PaymentsPage> {
                     subtitle: Text(payment.date.toString()),
                     trailing: Text(
                       '$currencySymbol${payment.amount}',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
-                      ),
+                      style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
                     ),
                     onTap: () {},
                   ),
                 );
               },
             )
-          : const Center(
-              child: Column(
+           : Center(
+               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.payment, size: 100, color: Colors.grey),
                   Text(
                     'No payments received yet',
-                    style: TextStyle(color: Colors.grey, fontSize: 18),
+                    style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.w400, color: Colors.grey),
                   ),
                 ],
               ),

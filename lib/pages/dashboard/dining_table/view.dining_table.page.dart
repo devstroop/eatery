@@ -5,6 +5,7 @@ import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 class ViewDiningTablePage extends ConsumerStatefulWidget {
   const ViewDiningTablePage({Key? key, required this.diningTable})
@@ -44,12 +45,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
               ],
             ).then((value) {
               if (value == 'edit') {
-                Navigator.of(context).push(
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        EditDiningTablePage(diningTable: widget.diningTable),
-                  ),
-                );
+                GoRouter.of(context).pushNamed('editDiningTable', extra: widget.diningTable);
               } else if (value == 'unlink') {
                 widget.diningTable.orderId = null;
                 Navigator.of(context).pop();
@@ -69,10 +65,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                   Flexible(
                     child: Text(
                       widget.diningTable.name,
-                      style: const TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: AppTypography.headlineLarge.copyWith(fontWeight: FontWeight.bold),
                     ),
                   ),
                   Container(
@@ -87,11 +80,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                     ),
                     child: Text(
                       widget.diningTable.status.name,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.white,
-                      ),
+                      style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500, color: AppColors.white),
                     ),
                   ),
                 ],
@@ -114,17 +103,11 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                       children: [
                         const Text(
                           'Capacity',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.normal,
-                          ),
+                          style: AppTypography.labelSmall,
                         ),
                         Text(
                           (widget.diningTable.capacity ?? 0).toString(),
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -141,17 +124,11 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                       children: [
                         const Text(
                           'Category',
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.normal,
-                          ),
+                          style: AppTypography.labelSmall,
                         ),
                         Text(
                           widget.diningTable.category?.name ?? 'None',
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
+                          style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ],
                     ),
@@ -165,14 +142,11 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 8),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 8),
                     child: Text(
                       'Description',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -185,11 +159,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                     ),
                     child: Text(
                       widget.diningTable.description!,
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.normal,
-                        color: AppColors.white500,
-                      ),
+                      style: AppTypography.bodyMedium.copyWith(color: AppColors.white500),
                     ),
                   ),
                 ],
@@ -197,9 +167,9 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
             // If table is occupied show the customer details and order details
             if (widget.diningTable.orderId != null) ...[
               AppSpacing.gapLg,
-              const Text(
+              Text(
                 'Customer Details',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               SingleChildScrollView(
@@ -219,10 +189,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                         children: [
                           const Text(
                             'Customer Name',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.normal,
-                            ),
+                            style: AppTypography.labelSmall,
                           ),
                           Text(
                             ref
@@ -232,10 +199,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                                     )
                                     ?.name ??
                                 'None',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -252,10 +216,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                         children: [
                           const Text(
                             'Customer Phone',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.normal,
-                            ),
+                            style: AppTypography.labelSmall,
                           ),
                           Text(
                             ref
@@ -265,10 +226,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                                     )
                                     ?.phone ??
                                 'None',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -277,9 +235,9 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                 ),
               ),
               AppSpacing.gapLg,
-              const Text(
+              Text(
                 'Order Details',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 8),
               SingleChildScrollView(
@@ -298,17 +256,11 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                         children: [
                           const Text(
                             'Order ID',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.normal,
-                            ),
+                            style: AppTypography.labelSmall,
                           ),
                           Text(
                             '#${widget.diningTable.orderId ?? 'None'}',
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),
@@ -320,22 +272,16 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                         color: AppColors.primary.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Column(
+                      child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             'Order Status',
-                            style: TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.normal,
-                            ),
+                            style: AppTypography.labelSmall,
                           ),
                           Text(
                             'None',
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                            style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
                           ),
                         ],
                       ),

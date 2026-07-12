@@ -1,3 +1,4 @@
+import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 
@@ -206,7 +207,7 @@ class ProductCard extends StatelessWidget {
                                                             4, 0, 4, 0),
                                                     child: Text(
                                                       cartQuantity.toString(),
-                                                      style: const TextStyle(
+                                                      style: AppTypography.labelSmall.copyWith(
                                                         fontWeight:
                                                             FontWeight.w600,
                                                       ),

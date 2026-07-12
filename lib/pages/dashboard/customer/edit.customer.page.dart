@@ -1,5 +1,6 @@
 import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:eatery/core/widgets/app_page_shell.dart';
+import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -157,7 +158,7 @@ class _EditCustomerPageState extends ConsumerState<EditCustomerPage> {
                     const SizedBox(width: 6.0),
                     Text(
                       'Active',
-                      style: TextStyle(color: AppColors.black600, fontSize: 16.0),
+                      style: AppTypography.bodyLarge.copyWith(color: AppColors.black600),
                     ),
                   ],
                 ),

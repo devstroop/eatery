@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:eatery/core/router/app_router.dart';
 import 'package:eatery/core/theme/app_theme.dart';
 import 'package:eatery/constants/utils/app_file_system.dart';
 import 'package:eatery/data/database/eatery_database.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
-import 'package:eatery/pages/main.screen.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -91,13 +91,11 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
     if (appDatabase.isInitialized) {
-      return MaterialApp(
+      return MaterialApp.router(
         title: 'Eatery',
         debugShowCheckedModeBanner: false,
         theme: AppTheme.light,
-        home: Scaffold(
-          body: appDatabase.hasCompany ? const LoginPage() : const MainScreen(),
-        ),
+        routerConfig: createAppRouter(appDatabase),
       );
     }
     return MaterialApp(

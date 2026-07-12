@@ -1,5 +1,6 @@
 import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:eatery/core/widgets/app_page_shell.dart';
+import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -102,11 +103,7 @@ class _AddTaxSlabSettingsPageState extends ConsumerState<AddTaxSlabSettingsPage>
                 SpacingStyle.defaultVerticalSpacing,
                 Text(
                   'Select Tax Type',
-                  style: TextStyle(
-                    color: AppColors.black600,
-                    fontSize: 12,
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: AppTypography.labelMedium.copyWith(color: AppColors.black600),
                 ),
                 const SizedBox(
                   height: 3.0,

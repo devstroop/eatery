@@ -7,6 +7,7 @@ import 'package:eatery/core/theme/app_colors.dart';
 import 'package:eatery/core/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:go_router/go_router.dart';
 
 Color _pageColor = const Color(0xFFC2592F);
 
@@ -45,10 +46,7 @@ class _StaffsPageState extends ConsumerState<StaffsPage> {
         label: const Text('Add Staff'),
         icon: const Icon(Icons.add),
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AddStaffPage()),
-          ).then((_) => setState(() {}));
+          GoRouter.of(context).pushNamed('addStaff').then((_) => setState(() {}));
         },
       ),
       child: staffs.isNotEmpty
@@ -60,7 +58,7 @@ class _StaffsPageState extends ConsumerState<StaffsPage> {
                 return _StaffCard(staff: e, pageColor: _pageColor);
               },
             )
-          : const Center(
+          : Center(
               child: Opacity(
                 opacity: 0.5,
                 child: Column(
@@ -70,14 +68,11 @@ class _StaffsPageState extends ConsumerState<StaffsPage> {
                     AppSpacing.gapLg,
                     Text(
                       'No Staffs',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold),
                     ),
                     Text(
                       'Add a staff to get started',
-                      style: TextStyle(fontSize: 16),
+                      style: AppTypography.bodyLarge,
                     ),
                   ],
                 ),
@@ -108,7 +103,7 @@ class _StaffCardState extends ConsumerState<_StaffCard> {
       child: ListTile(
         title: Text(
           s.name,
-          style: const TextStyle(fontWeight: FontWeight.w600),
+          style: AppTypography.titleMedium,
         ),
         subtitle: s.phone != null ? Text(s.phone!) : null,
         leading: LeadingImageWidget(
@@ -124,12 +119,7 @@ class _StaffCardState extends ConsumerState<_StaffCard> {
             IconButton(
               icon: Icon(Icons.edit, color: widget.pageColor),
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditStaffPage(staff: s),
-                  ),
-                ).then((_) => setState(() {}));
+                GoRouter.of(context).pushNamed('editStaff', extra: s).then((_) => setState(() {}));
               },
             ),
             IconButton(

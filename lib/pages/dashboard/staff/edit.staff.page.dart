@@ -1,4 +1,5 @@
 import 'package:eatery/core/widgets/app_page_shell.dart';
+import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -114,7 +115,7 @@ StaffType? staffType;
                 DropdownButtonFormField(
                   decoration: InputDecoration(
                     labelText: 'Staff Type',
-                    labelStyle: TextStyle(
+                    labelStyle: AppTypography.bodyMedium.copyWith(
                       color: AppColors.black600,
                     ),
                     enabledBorder: OutlineInputBorder(
@@ -182,10 +183,7 @@ StaffType? staffType;
                     ),
                     Text(
                       'Active',
-                      style: TextStyle(
-                        color: AppColors.black600,
-                        fontSize: 16.0,
-                      ),
+                      style: AppTypography.bodyLarge.copyWith(color: AppColors.black600),
                     ),
                   ],
                 )

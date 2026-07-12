@@ -39,11 +39,11 @@ class SearchOrderDelegate extends SearchDelegate<Order?> {
   @override
   ThemeData appBarTheme(BuildContext context) {
     return Theme.of(context).copyWith(
-      inputDecorationTheme: const InputDecorationTheme(
+      inputDecorationTheme: InputDecorationTheme(
         hintStyle: TextStyle(color: AppColors.white),
       ),
-      textTheme: const TextTheme(
-        headlineMedium: TextStyle(color: AppColors.white, fontSize: 18),
+      textTheme: TextTheme(
+        headlineMedium: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.w400, color: AppColors.white),
       ),
     );
   }
@@ -72,12 +72,7 @@ class SearchOrderDelegate extends SearchDelegate<Order?> {
           alignment: Alignment.center,
           child: Text(
             'Recent orders',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.normal,
-              fontStyle: FontStyle.italic,
-              color: AppColors.grey600,
-            ),
+            style: AppTypography.bodyMedium.copyWith(fontStyle: FontStyle.italic, color: AppColors.grey600),
           ),
         ),
         for (final order in orders)
@@ -104,12 +99,7 @@ class SearchOrderDelegate extends SearchDelegate<Order?> {
           alignment: Alignment.center,
           child: Text(
             'Search results',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.normal,
-              fontStyle: FontStyle.italic,
-              color: AppColors.grey600,
-            ),
+            style: AppTypography.bodyMedium.copyWith(fontStyle: FontStyle.italic, color: AppColors.grey600),
           ),
         ),
         for (final order in searchResults)

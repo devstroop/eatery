@@ -8,6 +8,7 @@ import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:intl/intl.dart';
 import 'package:eatery/references.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 final Color _pageColor = AppColors.warning;
 
@@ -65,12 +66,7 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
               delegate: SearchOrderDelegate(
                 orders: orders,
                 callback: (order) {
-                  Navigator.of(context)
-                      .push(
-                        MaterialPageRoute(
-                          builder: (context) => ViewOrderPage(order: order),
-                        ),
-                      )
+                  GoRouter.of(context).pushNamed('viewOrder', extra: order)
                       .then((_) => setState(() {}));
                 },
                 currencySymbol: currencySymbol,
@@ -94,7 +90,7 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
                 ),
               ],
             )
-          : const Center(
+          : Center(
               child: Opacity(
                 opacity: 0.5,
                 child: Column(
@@ -104,14 +100,11 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
                     AppSpacing.gapLg,
                     Text(
                       'No orders received yet',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                      ),
+                      style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold),
                     ),
                     Text(
                       'Create a new sale to get started',
-                      style: TextStyle(fontSize: 16),
+                      style: AppTypography.bodyLarge,
                     ),
                   ],
                 ),
@@ -138,7 +131,7 @@ class _OrderCard extends StatelessWidget {
           children: [
             Text(
               '${currencySymbol}${order.finalTotal.toStringAsFixed(2)}',
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w600),
+              style: AppTypography.headlineSmall,
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
@@ -148,10 +141,7 @@ class _OrderCard extends StatelessWidget {
               ),
               child: Text(
                 order.type.description!,
-                style: TextStyle(
-                  color: Color(order.type.color!),
-                  fontWeight: FontWeight.w500,
-                ),
+                style: AppTypography.labelLarge.copyWith(color: Color(order.type.color!)),
               ),
             ),
           ],

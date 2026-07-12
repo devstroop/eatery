@@ -25,9 +25,9 @@ class PageTitle extends StatelessWidget {
         if (subtitle != null)
           Text(
             subtitle!,
-            style: const TextStyle(
-              fontWeight: FontWeight.normal,
-            ),
+          style: AppTypography.bodySmall.copyWith(
+            fontWeight: FontWeight.normal,
+          ),
           )
       ],
     );

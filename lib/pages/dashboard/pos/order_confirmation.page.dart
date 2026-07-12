@@ -6,6 +6,7 @@ import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../functions/order.function.dart';
 
@@ -187,13 +188,7 @@ class _OrderConfirmationPageState extends ConsumerState<OrderConfirmationPage> {
               flex: 1,
               child: AppButton.primary(
                 onPressed: () {
-                  Navigator.pushAndRemoveUntil(
-                    this.context,
-                    MaterialPageRoute(
-                      builder: (context) => const DashboardPage(),
-                    ),
-                    (Route<dynamic> route) => false,
-                  );
+                  GoRouter.of(context).goNamed('dashboard');
                 },
                 label: '< Back',
               ),

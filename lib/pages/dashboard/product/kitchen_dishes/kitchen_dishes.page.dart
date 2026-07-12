@@ -7,6 +7,7 @@ import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:go_router/go_router.dart';
 
 import 'package:eatery/core/widgets/app_dialog.dart';
 import '../search_product.delegate.dart';
@@ -87,13 +88,7 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                         );
                       },
                       onEdit: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) =>
-                                EditKitchenDishPage(product: product),
-                          ),
-                        ).then((_) => setState(() {}));
+                        GoRouter.of(context).pushNamed('editKitchenDish', extra: product).then((_) => setState(() {}));
                       },
                     ),
                   );
@@ -149,9 +144,7 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                             ),
                           Text(
                             e.name,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
+                            style: AppTypography.labelLarge.copyWith(
                               color: selectedCategory?.id == e.id
                                   ? const Color(0xFFF5F5F5)
                                   : AppColors.grey700!,
@@ -182,19 +175,11 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                         AppSpacing.gapLg,
                         Text(
                           'Oops!',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.grey500,
-                          ),
+                          style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey500),
                         ),
                         Text(
                           'No dishes found in kitchen',
-                          style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.normal,
-                            color: AppColors.grey500,
-                          ),
+                          style: AppTypography.bodyLarge.copyWith(color: AppColors.grey500),
                         ),
                       ],
                     ),
@@ -246,13 +231,7 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                                 );
                               },
                               onEdit: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        EditKitchenDishPage(product: each),
-                                  ),
-                                ).then((_) => setState(() {}));
+                                GoRouter.of(context).pushNamed('editKitchenDish', extra: each).then((_) => setState(() {}));
                               },
                             ),
                           );
@@ -269,10 +248,7 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                             children: [
                               Text(
                                 each.name,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                                style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500),
                               ),
                               const SizedBox(width: 8),
                               if (each.foodType != null)
@@ -288,12 +264,8 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                             children: [
                               if (each.description != null)
                                 Text(
-                                  each.description!,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w400,
-                                    color: AppColors.grey700,
-                                  ),
+                                each.description!,
+                                style: AppTypography.bodySmall.copyWith(color: AppColors.grey700),
                                 ),
                               Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -302,38 +274,22 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                                 children: [
                                   Text(
                                     'MRP',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                      color: AppColors.grey700,
-                                    ),
+                                    style: AppTypography.labelMedium.copyWith(color: AppColors.grey700),
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
                                     '${currency?.symbol ?? ''}${each.mrpPrice}',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                      color: Color(0xFF2F2F2F),
-                                    ),
+                                    style: AppTypography.labelMedium.copyWith(fontWeight: FontWeight.w600, color: Color(0xFF2F2F2F)),
                                   ),
                                   const SizedBox(width: 8),
                                   Text(
                                     'Sale Price',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w500,
-                                      color: AppColors.grey700,
-                                    ),
+                                    style: AppTypography.labelMedium.copyWith(color: AppColors.grey700),
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
                                     '${currency?.symbol ?? ''}${each.salePrice}',
-                                    style: const TextStyle(
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.green,
-                                    ),
+                                    style: AppTypography.labelMedium.copyWith(fontWeight: FontWeight.w600, color: Colors.green),
                                   ),
                                 ],
                               ),
@@ -362,15 +318,7 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                                           title: const Text('Edit'),
                                           onTap: () {
                                             Navigator.pop(context);
-                                            Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                builder: (context) =>
-                                                    EditKitchenDishPage(
-                                                      product: each,
-                                                    ),
-                                              ),
-                                            ).then((_) => setState(() {}));
+                                            GoRouter.of(context).pushNamed('editKitchenDish', extra: each).then((_) => setState(() {}));
                                           },
                                         ),
                                       ),
@@ -422,10 +370,7 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
         icon: const Icon(Icons.add),
         label: const Text('Add Kitchen Dish'),
         onPressed: () async {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const AddKitchenDish()),
-          ).then((_) => setState(() {}));
+          GoRouter.of(context).pushNamed('addKitchenDish').then((_) => setState(() {}));
         },
       ),
     );
