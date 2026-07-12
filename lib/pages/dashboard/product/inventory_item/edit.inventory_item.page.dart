@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
@@ -64,27 +65,22 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
   Widget build(BuildContext context) {
     final slabs = ref.read(taxRepositoryProvider).getAllTaxSlabs();
 
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        backgroundColor: _pageColor,
-        foregroundColor: AppColors.white,
-
-        title: const Text('Edit Inventory Item'),
-        actions: [
-          if (_focusNodes[0].hasFocus ||
-              _focusNodes[1].hasFocus ||
-              _focusNodes[2].hasFocus ||
-              _focusNodes[3].hasFocus)
-            IconButton(
-              icon: const Icon(Icons.done),
-              onPressed: () {
-                FocusScope.of(context).unfocus();
-              },
-            ),
-        ],
-      ),
-      body: Padding(
+    return AppPageShell(
+      title: 'Edit Inventory Item',
+      color: _pageColor,
+      actions: [
+        if (_focusNodes[0].hasFocus ||
+            _focusNodes[1].hasFocus ||
+            _focusNodes[2].hasFocus ||
+            _focusNodes[3].hasFocus)
+          IconButton(
+            icon: const Icon(Icons.done),
+            onPressed: () {
+              FocusScope.of(context).unfocus();
+            },
+          ),
+      ],
+      child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Form(
           key: _formKey,
@@ -319,8 +315,7 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
       ),
       bottomNavigationBar: BottomAppBar(
         color: AppColors.white,
-        child: PrimaryButton(
-          color: _pageColor,
+        child: AppButton.primary(
           onPressed: () async {
             final isValid = _formKey.currentState!.validate();
             if (!isValid) {
@@ -354,7 +349,7 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
                   );
                 });
           },
-          child: const Text('Save'),
+          label: 'Save',
         ),
       ),
     );

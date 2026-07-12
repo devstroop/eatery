@@ -12,7 +12,7 @@ import '../../core/utils/responsive.dart';
 /// ```dart
 /// AppPageShell(
 ///   title: 'Products',
-///   color: KColors.tertiary,
+///   color: AppColors.menuCategories,
 ///   actions: [IconButton(...)],
 ///   child: ListView(...),
 /// )

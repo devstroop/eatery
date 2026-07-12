@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,34 +23,30 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        backgroundColor: _pageColor,
-        foregroundColor: AppColors.white,
-        title: const Text('Data Management'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {
-              showMenu(
-                  context: context,
-                  position: const RelativeRect.fromLTRB(100, 100, 0, 0),
-                  items: [
-                    const PopupMenuItem(
-                      value: 'demo',
-                      child: Text('Download Demo Data'),
-                    ),
-                  ]).then((value) {
-                if (value == 'demo') {
-                  _downloadDemoData(context);
-                }
-              });
-            },
-          ),
-        ],
-      ),
-      body: ListView(scrollDirection: Axis.vertical, children: [
+    return AppPageShell(
+      title: 'Data Management',
+      color: _pageColor,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.more_vert),
+          onPressed: () {
+            showMenu(
+                context: context,
+                position: const RelativeRect.fromLTRB(100, 100, 0, 0),
+                items: [
+                  const PopupMenuItem(
+                    value: 'demo',
+                    child: Text('Download Demo Data'),
+                  ),
+                ]).then((value) {
+              if (value == 'demo') {
+                _downloadDemoData(context);
+              }
+            });
+          },
+        ),
+      ],
+      child: ListView(scrollDirection: Axis.vertical, children: [
         Container(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
           child: Row(

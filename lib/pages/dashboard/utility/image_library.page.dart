@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
@@ -105,17 +106,10 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     int crossAxisCount = screenWidth ~/ 100;
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: false,
-        title: const Text(
-          'Library',
-          style: TextStyle(color: AppColors.black),
-        ),
-        actions: [
+    return AppPageShell(
+      title: 'Library',
+      color: Colors.transparent,
+      actions: [
           /*FutureBuilder<ClipboardData?>(
                       future: Clipboard.getData('text/plain'),
                       builder: (context, snapshot) {
@@ -182,9 +176,8 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
               color: const Color(0xFF888888),
               onPressed: pickImageFromFile,
             ),
-        ],
-      ),
-      body: _images.isEmpty
+      ],
+      child: _images.isEmpty
           ? Opacity(
               opacity: 0.25,
               child: Center(

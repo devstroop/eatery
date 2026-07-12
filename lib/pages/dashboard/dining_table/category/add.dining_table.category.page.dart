@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
@@ -23,10 +24,9 @@ class _AddDiningTableCategoryPageState
   final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
-    final appBar = AppBar(
-      backgroundColor: _pageColor,
-      foregroundColor: AppColors.white,
-      title: const Text('Add Dining Table Category'),
+    return AppPageShell(
+      title: 'Add Dining Table Category',
+      color: _pageColor,
       actions: [
         if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
           IconButton(
@@ -36,11 +36,7 @@ class _AddDiningTableCategoryPageState
             },
           ),
       ],
-    );
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: appBar,
-      body: InkWell(
+      child: InkWell(
         onTap: () {
           FocusScope.of(context).unfocus();
         },
@@ -86,8 +82,7 @@ class _AddDiningTableCategoryPageState
       ),
       bottomNavigationBar: BottomAppBar(
         color: AppColors.white,
-        child: PrimaryButton(
-          color: _pageColor,
+        child: AppButton.primary(
           onPressed: () async {
             if (!_formKey.currentState!.validate()) {
               return;
@@ -111,7 +106,7 @@ class _AddDiningTableCategoryPageState
                   );
                 });
           },
-          child: const Text('Save'),
+          label: 'Save',
         ),
       ),
     );

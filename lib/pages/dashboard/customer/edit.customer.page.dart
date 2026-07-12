@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -49,10 +50,9 @@ class _EditCustomerPageState extends ConsumerState<EditCustomerPage> {
 
   @override
   Widget build(BuildContext context) {
-    final appBar = AppBar(
-      backgroundColor: _pageColor,
-      foregroundColor: AppColors.white,
-      title: const Text('Edit Customer'),
+    return AppPageShell(
+      title: 'Edit Customer',
+      color: _pageColor,
       actions: [
         if (_focusNodes[0].hasFocus ||
             _focusNodes[1].hasFocus ||
@@ -65,11 +65,7 @@ class _EditCustomerPageState extends ConsumerState<EditCustomerPage> {
             },
           ),
       ],
-    );
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: appBar,
-      body: InkWell(
+      child: InkWell(
         onTap: () {
           FocusScope.of(context).unfocus();
         },
@@ -171,8 +167,7 @@ class _EditCustomerPageState extends ConsumerState<EditCustomerPage> {
       ),
       bottomNavigationBar: BottomAppBar(
         color: AppColors.white,
-        child: PrimaryButton(
-          color: _pageColor,
+        child: AppButton.primary(
           onPressed: () async {
             if (!_formKey.currentState!.validate()) {
               return;
@@ -209,7 +204,7 @@ class _EditCustomerPageState extends ConsumerState<EditCustomerPage> {
                   ),
                 );
           },
-          child: const Text('Save'),
+          label: 'Save',
         ),
       ),
     );

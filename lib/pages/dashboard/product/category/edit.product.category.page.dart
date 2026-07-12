@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
@@ -36,11 +37,9 @@ class _EditProductCategoryPageState
 
   @override
   Widget build(BuildContext context) {
-    final appBar = AppBar(
-      backgroundColor: _pageColor,
-      foregroundColor: AppColors.white,
-
-      title: const Text('Edit Product Category'),
+    return AppPageShell(
+      title: 'Edit Product Category',
+      color: _pageColor,
       actions: [
         if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
           IconButton(
@@ -50,11 +49,7 @@ class _EditProductCategoryPageState
             },
           ),
       ],
-    );
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: appBar,
-      body: InkWell(
+      child: InkWell(
         onTap: () {
           FocusScope.of(context).unfocus();
         },
@@ -108,8 +103,7 @@ class _EditProductCategoryPageState
       ),
       bottomNavigationBar: BottomAppBar(
         color: AppColors.white,
-        child: PrimaryButton(
-          color: _pageColor,
+        child: AppButton.primary(
           onPressed: () async {
             try {
               widget.category.name = _controllerCategoryName.text.trim();
@@ -125,7 +119,7 @@ class _EditProductCategoryPageState
               showMessageDialog(context, 'Failed to update', MessageType.error);
             }
           },
-          child: const Text('Update'),
+          label: 'Update',
         ),
       ),
     );

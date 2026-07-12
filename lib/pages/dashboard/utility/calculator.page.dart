@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
@@ -15,15 +16,10 @@ class _CalculatorPageState extends State<CalculatorPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        title: const Text('Calculator'),
-        backgroundColor: Color.fromARGB(0, 47, 24, 130),
-        foregroundColor: const Color.fromARGB(255, 0, 0, 0),
-        
-      ),
-      body: Container(
+    return AppPageShell(
+      title: 'Calculator',
+      color: const Color.fromARGB(0, 47, 24, 130),
+      child: Container(
         color: AppColors.white,
         child: Column(
           children: [

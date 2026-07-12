@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -28,23 +29,19 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
   @override
   Widget build(BuildContext context) {
     debugPrint('image: ${image?.absolutePath}');
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        backgroundColor: _pageColor,
-        foregroundColor: AppColors.white,
-        title: const Text('Add Staff'),
-        actions: [
-          if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
-            IconButton(
-              icon: const Icon(Icons.done),
-              onPressed: () {
-                FocusScope.of(context).unfocus();
-              },
-            ),
-        ],
-      ),
-      body: InkWell(
+    return AppPageShell(
+      title: 'Add Staff',
+      color: _pageColor,
+      actions: [
+        if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
+          IconButton(
+            icon: const Icon(Icons.done),
+            onPressed: () {
+              FocusScope.of(context).unfocus();
+            },
+          ),
+      ],
+      child: InkWell(
         onTap: () {
           FocusScope.of(context).unfocus();
         },
@@ -200,8 +197,7 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
       ),
       bottomNavigationBar: BottomAppBar(
         color: AppColors.white,
-        child: PrimaryButton(
-          color: _pageColor,
+        child: AppButton.primary(
           onPressed: () async {
             final isValid = _formKey.currentState!.validate();
             if (!isValid) {
@@ -226,7 +222,7 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                 MessageType.error
             ));
           },
-          child: const Text('Save'),
+          label: 'Save',
         ),
       ),
     );

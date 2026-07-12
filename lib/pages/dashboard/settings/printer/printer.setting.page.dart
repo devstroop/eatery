@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/core/theme/app_spacing.dart';
 import 'dart:io';
 
@@ -116,14 +117,10 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
   Widget build(BuildContext context) {
     final savedPrinters = ref.watch(printerListProvider);
 
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        backgroundColor: AppColors.menuCategories,
-        foregroundColor: AppColors.white,
-        title: const Text('Printer Settings'),
-      ),
-      body: ListView(
+    return AppPageShell(
+      title: 'Printer Settings',
+      color: AppColors.menuCategories,
+      child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           const Text(

@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
@@ -37,23 +38,19 @@ class _EditPaymentPageState extends ConsumerState<EditPaymentPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        backgroundColor: _pageColor,
-        foregroundColor: AppColors.white,
-        title: const Text('Edit Payment'),
-        actions: [
-          if (_focusNodes.any((element) => element.hasFocus))
-            IconButton(
-              icon: const Icon(Icons.done),
-              onPressed: () {
-                FocusScope.of(context).unfocus();
-              },
-            ),
-        ],
-      ),
-      body: InkWell(
+    return AppPageShell(
+      title: 'Edit Payment',
+      color: _pageColor,
+      actions: [
+        if (_focusNodes.any((element) => element.hasFocus))
+          IconButton(
+            icon: const Icon(Icons.done),
+            onPressed: () {
+              FocusScope.of(context).unfocus();
+            },
+          ),
+      ],
+      child: InkWell(
         onTap: () {
           FocusScope.of(context).unfocus();
         },

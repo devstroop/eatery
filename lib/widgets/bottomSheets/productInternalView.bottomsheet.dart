@@ -98,17 +98,16 @@ class _ProductInternalViewBottomsheetState
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Expanded(
-                child: PrimaryButton(
-                  color: widget.color ?? const Color(0xFF30A8CF),
-                  onPressed: widget.onEdit,
-                  child: const Text('Edit'),
-                ),
+              child: AppButton.primary(
+                onPressed: widget.onEdit,
+                label: 'Edit',
+              ),
               ),
               const SizedBox(width: 8.0),
-              PrimaryButton(
-                color: const Color(0xFFE53935),
+              AppButton.primary(
+                label: 'Delete',
+                icon: Icons.delete,
                 onPressed: widget.onDelete,
-                child: const Icon(Icons.delete),
               ),
             ],
           ),

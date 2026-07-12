@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
@@ -13,21 +14,18 @@ class EditOrderPage extends StatefulWidget {
 class _EditOrderPageState extends State<EditOrderPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-          backgroundColor: AppColors.menuCategories,
-          foregroundColor: AppColors.white,
-          title: const Text('Edit Order'),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.done),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-          ]),
-      body: Padding(
+    return AppPageShell(
+      title: 'Edit Order',
+      color: AppColors.menuCategories,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.done),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ],
+      child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: ListView(
           children: [

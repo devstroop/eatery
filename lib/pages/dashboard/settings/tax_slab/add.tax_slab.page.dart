@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -45,14 +46,10 @@ class _AddTaxSlabSettingsPageState extends ConsumerState<AddTaxSlabSettingsPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        backgroundColor: _pageColor,
-        foregroundColor: AppColors.white,
-        title: const Text('Add Tax Slab'),
-      ),
-      body: InkWell(
+    return AppPageShell(
+      title: 'Add Tax Slab',
+      color: _pageColor,
+      child: InkWell(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
@@ -136,11 +133,10 @@ class _AddTaxSlabSettingsPageState extends ConsumerState<AddTaxSlabSettingsPage>
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        child: PrimaryButton(
-          color: _pageColor,
+        child: AppButton.primary(
           height: 48.0,
           onPressed: _submit,
-          child: const Text('Save'),
+          label: 'Save',
         ),
       ),
     );

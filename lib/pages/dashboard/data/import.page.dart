@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:http/http.dart' as http;
@@ -9,14 +10,10 @@ class ImportPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        backgroundColor: _pageColor,
-        foregroundColor: AppColors.white,
-        title: const Text('Import'),
-      ),
-      body: ListView(
+    return AppPageShell(
+      title: 'Import',
+      color: _pageColor,
+      child: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           /*Container(
@@ -43,7 +40,7 @@ class ImportPage extends StatelessWidget {
                   title: Text(
                     'Download Demo Data',
                     style: TextStyle(
-                        color: KColors.green, fontWeight: FontWeight.bold),
+                        color: AppColors.green, fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
                     'Get started with demo data',
@@ -51,7 +48,7 @@ class ImportPage extends StatelessWidget {
                   ),
                   trailing: Icon(
                     Icons.file_download_outlined,
-                    color: KColors.green,
+                    color: AppColors.green,
                   ),
                 ),
               ],
@@ -117,7 +114,7 @@ class ImportPage extends StatelessWidget {
                   title: Text(
                     'Import from JSON',
                     style: TextStyle(
-                        color: KColors.yellow, fontWeight: FontWeight.bold),
+                        color: AppColors.yellow, fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
                     'Select the json file to import',
@@ -125,7 +122,7 @@ class ImportPage extends StatelessWidget {
                   ),
                   trailing: Icon(
                     Icons.code,
-                    color: KColors.yellow,
+                    color: AppColors.yellow,
                   ),
                 ),
               ],

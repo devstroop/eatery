@@ -14,6 +14,7 @@ export 'package:devdart_windows_hdsn/drive.dart';
 export './components/bottom_view_grip.dart';
 export './widgets/titles/page_title.dart';
 export './widgets/buttons/primary.button.dart';
+export './core/widgets/app_button.dart';
 // Integrated packages
 export './support/bluetooth_thermal_printer/bluetooth_thermal_printer.dart';
 // External packages

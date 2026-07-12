@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 final _pageColor = AppColors.menuCategories;
@@ -12,14 +13,10 @@ class _ExportPageState extends State<ExportPage> {
   String selectedExportOption = 'Excel';
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        backgroundColor: AppColors.grey200,
-        appBar: AppBar(
-          backgroundColor: _pageColor,
-          foregroundColor: AppColors.white,
-          title: const Text('Export'),
-        ),
-        body: ListView(
+    return AppPageShell(
+      title: 'Export',
+      color: _pageColor,
+      child: ListView(
           children: [
             ListTile(
               leading: const Icon(Icons.check_box_outline_blank_outlined),
@@ -63,7 +60,7 @@ class _ExportPageState extends State<ExportPage> {
             ),
           ],
         ),
-        bottomNavigationBar: BottomAppBar(
+      bottomNavigationBar: BottomAppBar(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -96,6 +93,7 @@ class _ExportPageState extends State<ExportPage> {
                   child: const Text('Export')),
             ],
           ),
-        ));
+      ),
+    );
   }
 }

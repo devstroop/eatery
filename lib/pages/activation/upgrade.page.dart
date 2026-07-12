@@ -168,13 +168,12 @@ class _UpgradePageState extends State<UpgradePage> {
       ),
       bottomNavigationBar: BottomAppBar(
         color: AppColors.white,
-        child: PrimaryButton(
+        child: AppButton.primary(
           height: 50.0,
-          color: _pageColor,
           onPressed: () async {
 
           },
-          child: const Text('Continue'),
+          label: 'Continue',
         ),
       ),
     );

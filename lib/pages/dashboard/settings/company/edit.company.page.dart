@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/core/extensions/string_ext.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
@@ -59,13 +60,10 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
   @override
   Widget build(BuildContext context) {
     return company != null
-        ? Scaffold(
-            appBar: AppBar(
-              backgroundColor: _pageColor,
-              foregroundColor: AppColors.white,
-              title: const Text('Company Details'),
-            ),
-            body: Padding(
+        ? AppPageShell(
+            title: 'Company Details',
+            color: _pageColor,
+            child: Padding(
               padding: SpacingStyle.defaultPadding,
               child: ListView(
                 shrinkWrap: true,
@@ -222,9 +220,8 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
             ),
             bottomNavigationBar: BottomAppBar(
               color: AppColors.white,
-              child: PrimaryButton(
-                color: _pageColor,
-                child: const Text('Save'),
+              child: AppButton.primary(
+                label: 'Save',
                 onPressed: () async {
                   company!.name = _controllerCompanyName.text;
                   company!.email = _controllerEmail.text;

@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/core/theme/app_spacing.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -36,75 +37,71 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
     final repo = ref.read(productRepositoryProvider);
     final companyNotifier = ref.read(companyProvider.notifier);
     final currency = companyNotifier.currency;
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        title: const Text('Kitchen'),
-        backgroundColor: _pageColor,
-        foregroundColor: AppColors.white,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.search),
-            onPressed: () async {
-              await showSearch(
-                context: context,
-                delegate: SearchProductDelegate(
-                  repo.getProductsByType(ProductType.kitchenDish),
-                  (Product product) {
-                    Navigator.pop(context);
-                    showModalBottomSheet(
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(24),
-                          topRight: Radius.circular(24),
-                          bottomLeft: Radius.circular(0),
-                          bottomRight: Radius.circular(0),
-                        ),
+    return AppPageShell(
+      title: 'Kitchen',
+      color: _pageColor,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.search),
+          onPressed: () async {
+            await showSearch(
+              context: context,
+              delegate: SearchProductDelegate(
+                repo.getProductsByType(ProductType.kitchenDish),
+                (Product product) {
+                  Navigator.pop(context);
+                  showModalBottomSheet(
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(24),
+                        topRight: Radius.circular(24),
+                        bottomLeft: Radius.circular(0),
+                        bottomRight: Radius.circular(0),
                       ),
-                      context: this.context,
-                      builder: (context) => KProductView(
-                        product: product,
-                        onDelete: () {
-                          Navigator.pop(context);
-                          showConfirmationDialog(
-                            context,
-                            'Are you sure?',
-                            'Do you want to delete this dish?',
-                            () {
-                              repo.deleteProduct(product);
-                              showMessageDialog(
-                                context,
-                                'Dish has been deleted successfully',
-                                MessageType.success,
-                                () {
-                                  setState(() {});
-                                },
-                              );
-                            },
-                            () {
-                              setState(() {});
-                            },
-                          );
-                        },
-                        onEdit: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) =>
-                                  EditKitchenDishPage(product: product),
-                            ),
-                          ).then((_) => setState(() {}));
-                        },
-                      ),
-                    );
-                  },
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      body: Column(
+                    ),
+                    context: this.context,
+                    builder: (context) => KProductView(
+                      product: product,
+                      onDelete: () {
+                        Navigator.pop(context);
+                        showConfirmationDialog(
+                          context,
+                          'Are you sure?',
+                          'Do you want to delete this dish?',
+                          () {
+                            repo.deleteProduct(product);
+                            showMessageDialog(
+                              context,
+                              'Dish has been deleted successfully',
+                              MessageType.success,
+                              () {
+                                setState(() {});
+                              },
+                            );
+                          },
+                          () {
+                            setState(() {});
+                          },
+                        );
+                      },
+                      onEdit: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                EditKitchenDishPage(product: product),
+                          ),
+                        ).then((_) => setState(() {}));
+                      },
+                    ),
+                  );
+                },
+              ),
+            );
+          },
+        ),
+      ],
+      child: Column(
         children: [
           SizedBox(
             height: 60,

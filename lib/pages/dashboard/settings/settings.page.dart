@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/dev/database_inspector.dart';
 import 'package:eatery/dev/seed_loader.dart';
 import 'package:eatery/pages/dashboard/settings/printer/printer.setting.page.dart';
@@ -133,15 +134,10 @@ class _SettingPageState extends ConsumerState<SettingPage> {
 
   @override
   Widget build(BuildContext context) {
-    final appBar = AppBar(
-      backgroundColor: getThemeColor(),
-      title: const Text('Settings'),
-      foregroundColor: AppColors.white,
-    );
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: appBar,
-      body: Stack(
+    return AppPageShell(
+      title: 'Settings',
+      color: getThemeColor(),
+      child: Stack(
         children: [
           Positioned(
             top: 12.0,

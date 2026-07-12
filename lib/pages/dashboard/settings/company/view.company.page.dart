@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,62 +39,58 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        backgroundColor: _pageColor,
-        foregroundColor: AppColors.white,
-        title: const Text('Company'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {
-              showMenu(
-                context: context,
-                position: const RelativeRect.fromLTRB(100, 100, 0, 100),
-                items: [
-                  const PopupMenuItem(value: 'edit', child: Text('Edit')),
-                  const PopupMenuItem(value: 'delete', child: Text('Delete')),
-                ],
-              ).then((value) {
-                if (value == 'edit') {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const EditCompanyPage(),
+    return AppPageShell(
+      title: 'Company',
+      color: _pageColor,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.more_vert),
+          onPressed: () {
+            showMenu(
+              context: context,
+              position: const RelativeRect.fromLTRB(100, 100, 0, 100),
+              items: [
+                const PopupMenuItem(value: 'edit', child: Text('Edit')),
+                const PopupMenuItem(value: 'delete', child: Text('Delete')),
+              ],
+            ).then((value) {
+              if (value == 'edit') {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const EditCompanyPage(),
+                  ),
+                ).then((_) async {
+                  setState(() {});
+                });
+              } else if (value == 'delete') {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('⚠️ Dangerous Action'),
+                    content: const Text(
+                      'Are you sure you want to delete this company?',
                     ),
-                  ).then((_) async {
-                    setState(() {});
-                  });
-                } else if (value == 'delete') {
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text('⚠️ Dangerous Action'),
-                      content: const Text(
-                        'Are you sure you want to delete this company?',
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('Cancel'),
                       ),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('Cancel'),
-                        ),
-                        TextButton(
-                          onPressed: () => _onDeleteCompanyPressed(context),
-                          child: const Text('Delete'),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-              });
-            },
-          ),
-        ],
-      ),
-      body: Builder(
+                      TextButton(
+                        onPressed: () => _onDeleteCompanyPressed(context),
+                        child: const Text('Delete'),
+                      ),
+                    ],
+                  ),
+                );
+              }
+            });
+          },
+        ),
+      ],
+      child: Builder(
         builder: (context) {
           Company? company = ref.read(companyProvider);
           return ListView(

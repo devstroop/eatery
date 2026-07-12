@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
@@ -40,14 +41,10 @@ class _TaxSlabsSettingsPageState extends ConsumerState<TaxSlabsSettingsPage> {
   @override
   Widget build(BuildContext context) {
     List<TaxSlab> taxSlabs = ref.read(taxRepositoryProvider).getAllTaxSlabs();
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        backgroundColor: _pageColor,
-        foregroundColor: AppColors.white,
-        title: const Text('Tax Slab Settings'),
-      ),
-      body: taxSlabs.isNotEmpty
+    return AppPageShell(
+      title: 'Tax Slab Settings',
+      color: _pageColor,
+      child: taxSlabs.isNotEmpty
           ? ListView(
               children: [
                 ...ref.read(taxRepositoryProvider).getAllTaxSlabs().map((e) {

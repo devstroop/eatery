@@ -110,7 +110,7 @@ class _KProductViewState extends ConsumerState<KProductView> {
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 16,
-                      color: KColors.green,
+                      color: AppColors.green,
                     ),
                   ),
                 ],
@@ -156,15 +156,15 @@ class _KProductViewState extends ConsumerState<KProductView> {
                     child: Container(
                       height: 40,
                       decoration: BoxDecoration(
-                        color: KColors.yellow.withOpacity(0.25),
+                        color: AppColors.yellow.withOpacity(0.25),
                         borderRadius: BorderRadius.circular(8),
-                        border: Border.all(color: KColors.yellow, width: 1),
+                        border: Border.all(color: AppColors.yellow, width: 1),
                       ),
                       child: Center(
                         child: Text(
                           'Edit',
                           style: TextStyle(
-                            color: KColors.yellow,
+                            color: AppColors.yellow,
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
@@ -210,15 +210,15 @@ class _KProductViewState extends ConsumerState<KProductView> {
               child: Container(
                 height: 40,
                 decoration: BoxDecoration(
-                  color: KColors.green.withOpacity(0.25),
+                  color: AppColors.green.withOpacity(0.25),
                   borderRadius: BorderRadius.circular(8),
-                  border: Border.all(color: KColors.green, width: 1),
+                  border: Border.all(color: AppColors.green, width: 1),
                 ),
                 child: Center(
                   child: Text(
                     'Add to Cart',
                     style: TextStyle(
-                      color: KColors.green,
+                      color: AppColors.green,
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),

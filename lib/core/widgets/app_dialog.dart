@@ -19,23 +19,42 @@ import '../../core/utils/responsive.dart';
 /// ```
 class AppDialog {
   /// Shows a confirmation dialog.
+  /// Pass [icon] and [iconColor] to show an icon next to the title
+  /// (mirrors [showMessageDialog] functionality).
   static Future<bool?> show(
     BuildContext context, {
     required String title,
-    required String content,
+    String? content,
+    IconData? icon,
+    Color? iconColor,
     String confirmLabel = 'Confirm',
     String cancelLabel = 'Cancel',
     bool destructive = false,
     VoidCallback? onConfirm,
+    VoidCallback? onCancel,
   }) {
     return showDialog<bool>(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: Text(title, style: AppTypography.titleMedium),
-        content: Text(content, style: AppTypography.bodyMedium),
+        title: icon != null
+            ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(icon, color: iconColor, size: 28),
+                  const SizedBox(width: 8),
+                  Text(title, style: AppTypography.titleMedium),
+                ],
+              )
+            : Text(title, style: AppTypography.titleMedium),
+        content: content != null
+            ? Text(content, style: AppTypography.bodyMedium)
+            : null,
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(ctx, false),
+            onPressed: () {
+              onCancel?.call();
+              Navigator.pop(ctx, false);
+            },
             child: Text(cancelLabel),
           ),
           AppButton.primary(

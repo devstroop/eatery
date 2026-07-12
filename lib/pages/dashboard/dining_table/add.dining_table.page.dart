@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
@@ -27,23 +28,19 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        backgroundColor: _pageColor,
-        foregroundColor: AppColors.white,
-        title: const Text('Add Dining Table'),
-        actions: [
-          if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
-            IconButton(
-              icon: const Icon(Icons.done),
-              onPressed: () {
-                FocusScope.of(context).unfocus();
-              },
-            ),
-        ],
-      ),
-      body: InkWell(
+    return AppPageShell(
+      title: 'Add Dining Table',
+      color: _pageColor,
+      actions: [
+        if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
+          IconButton(
+            icon: const Icon(Icons.done),
+            onPressed: () {
+              FocusScope.of(context).unfocus();
+            },
+          ),
+      ],
+      child: InkWell(
         onTap: () {
           FocusScope.of(context).unfocus();
         },
@@ -181,15 +178,15 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
                             child: Container(
                               width: 54,
                               decoration: BoxDecoration(
-                                color: KColors.green,
+                                color: AppColors.green,
                                 boxShadow: [
                                   BoxShadow(
-                                    color: KColors.green.withOpacity(0.2),
+                                    color: AppColors.green.withOpacity(0.2),
                                   ),
                                 ],
                                 borderRadius: BorderRadius.circular(12),
                                 border: Border.all(
-                                  color: KColors.green,
+                                  color: AppColors.green,
                                   width: 1,
                                 ),
                               ),
@@ -208,8 +205,7 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        child: PrimaryButton(
-          color: _pageColor,
+        child: AppButton.primary(
           onPressed: () async {
             if (!_formKey.currentState!.validate()) {
               return;
@@ -241,7 +237,7 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
                   );
                 });
           },
-          child: const Text('Save'),
+          label: 'Save',
         ),
       ),
     );

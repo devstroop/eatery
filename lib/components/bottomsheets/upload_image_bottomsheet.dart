@@ -124,7 +124,7 @@ class _UploadImageBottomSheetState extends State<UploadImageBottomSheet> {
                       child: IconButton(
                         icon: const Icon(Icons.upload),
                         iconSize: 72.0,
-                        color: KColors.cyan,
+                        color: AppColors.cyan,
                         onPressed: pickFromUrl,
                       ),
                     ),

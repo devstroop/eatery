@@ -160,7 +160,7 @@ class ProductCard extends StatelessWidget {
                                       style: TextStyle(
                                           fontSize: 12.0,
                                           fontWeight: FontWeight.bold,
-                                          color: KColors.green),
+                                          color: AppColors.green),
                                     ),
                                   if (product.salePrice == null)
                                     Text(
@@ -169,7 +169,7 @@ class ProductCard extends StatelessWidget {
                                       style: TextStyle(
                                           fontSize: 12.0,
                                           fontWeight: FontWeight.bold,
-                                          color: KColors.green),
+                                          color: AppColors.green),
                                     ),
                                 ],
                               ),

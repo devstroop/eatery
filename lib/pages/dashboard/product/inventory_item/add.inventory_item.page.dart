@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
@@ -43,10 +44,19 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: buildAppBar(),
-      body: buildBody(),
+    return AppPageShell(
+      title: 'Add Inventory Item',
+      color: _pageColor,
+      actions: [
+        if (_focusNodes.any((node) => node.hasFocus))
+          IconButton(
+            icon: const Icon(Icons.done),
+            onPressed: () {
+              FocusScope.of(this.context).unfocus();
+            },
+          ),
+      ],
+      child: buildBody(),
       bottomNavigationBar: buildBottomAppBar(),
     );
   }
@@ -99,12 +109,11 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
   BottomAppBar buildBottomAppBar() {
     return BottomAppBar(
       color: AppColors.white,
-      child: PrimaryButton(
-        color: _pageColor,
+      child: AppButton.primary(
         onPressed: () async {
           handleSaveButton();
         },
-        child: const Text('Save'),
+        label: 'Save',
       ),
     );
   }

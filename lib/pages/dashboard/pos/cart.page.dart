@@ -451,22 +451,12 @@ class _CartPageState extends ConsumerState<CartPage> {
                       ],
                     ),
                   ),
-                  PrimaryButton(
-                    color: themeColor,
+                  AppButton.primary(
+                    label: 'Checkout',
                     onPressed: () => placeOrder(
                       context,
                       ref.read(cartProvider).cart,
                       ref.read(cartProvider).activeCustomer,
-                    ),
-                    child: const Padding(
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 8,
-                      ),
-                      child: Text(
-                        'Checkout',
-                        style: TextStyle(color: AppColors.white, fontSize: 16),
-                      ),
                     ),
                   ),
                 ],

@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
@@ -41,23 +42,19 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        backgroundColor: _pageColor,
-        foregroundColor: AppColors.white,
-        title: const Text('Add Payment'),
-        actions: [
-          if (_focusNodes.any((element) => element.hasFocus))
-            IconButton(
-              icon: const Icon(Icons.done),
-              onPressed: () {
-                FocusScope.of(context).unfocus();
-              },
-            ),
-        ],
-      ),
-      body: InkWell(
+    return AppPageShell(
+      title: 'Add Payment',
+      color: _pageColor,
+      actions: [
+        if (_focusNodes.any((element) => element.hasFocus))
+          IconButton(
+            icon: const Icon(Icons.done),
+            onPressed: () {
+              FocusScope.of(context).unfocus();
+            },
+          ),
+      ],
+      child: InkWell(
         onTap: () {
           FocusScope.of(context).unfocus();
         },
@@ -206,12 +203,11 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        child: PrimaryButton(
-          color: _pageColor,
-          child: const Text('Save Payment'),
+        child: AppButton.primary(
+          label: 'Save Payment',
           onPressed: () {
             if (order == null)
-              return showMessageDialog(
+              showMessageDialog(
                   context, 'Please select an order', MessageType.error);
 
             if (_formKey.currentState!.validate()) {

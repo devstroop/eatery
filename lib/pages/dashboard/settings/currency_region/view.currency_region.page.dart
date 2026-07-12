@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
@@ -37,14 +38,10 @@ class _ShowCurrencyRegionPageState extends ConsumerState<ShowCurrencyRegionPage>
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        backgroundColor: themeColor,
-        foregroundColor: AppColors.white900,
-        title: const Text('Region and Currency'),
-      ),
-      body: Padding(
+    return AppPageShell(
+      title: 'Region and Currency',
+      color: themeColor,
+      child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: formKey,
@@ -117,9 +114,8 @@ class _ShowCurrencyRegionPageState extends ConsumerState<ShowCurrencyRegionPage>
         ),
       ),
       bottomNavigationBar: BottomAppBar(
-        child: PrimaryButton(
-          color: themeColor,
-          child: const Text('Save'),
+        child: AppButton.primary(
+          label: 'Save',
           onPressed: () async {
             if (formKey.currentState!.validate()) {
               for (var element in ref.read(appDatabaseProvider).currencyBox.values) {

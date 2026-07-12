@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -44,11 +45,9 @@ StaffType? staffType;
 
   @override
   Widget build(BuildContext context) {
-    final appBar = AppBar(
-      backgroundColor: _pageColor,
-      foregroundColor: AppColors.white,
-      
-      title: const Text('Edit Staff'),
+    return AppPageShell(
+      title: 'Edit Staff',
+      color: _pageColor,
       actions: [
         if (_focusNodes[0].hasFocus ||
             _focusNodes[1].hasFocus)
@@ -59,11 +58,7 @@ StaffType? staffType;
             },
           ),
       ],
-    );
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: appBar,
-      body: InkWell(
+      child: InkWell(
         onTap: () {
           FocusScope.of(context).unfocus();
         },
@@ -200,8 +195,7 @@ StaffType? staffType;
       ),
       bottomNavigationBar: BottomAppBar(
         color: AppColors.white,
-        child: PrimaryButton(
-          color: _pageColor,
+        child: AppButton.primary(
           onPressed: () async {
             final isValid = _formKey.currentState!.validate();
             if (!isValid) {
@@ -224,7 +218,7 @@ StaffType? staffType;
               showMessageDialog(context, 'Failed to add staff', MessageType.error);
             }
           },
-          child: const Text('Save'),
+          label: 'Save',
         ),
       ),
     );

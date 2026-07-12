@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -15,11 +16,9 @@ class ViewPaymentPage extends ConsumerStatefulWidget {
 class _ViewPaymentPageState extends ConsumerState<ViewPaymentPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        title: const Text('Payment Details'),
-        actions: [
+    return AppPageShell(
+      title: 'Payment Details',
+      actions: [
           // More Vert
           IconButton(
             icon: const Icon(Icons.more_vert),
@@ -52,8 +51,7 @@ class _ViewPaymentPageState extends ConsumerState<ViewPaymentPage> {
             },
           ),
         ],
-      ),
-      body: Padding(
+      child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: ListView(
           children: [

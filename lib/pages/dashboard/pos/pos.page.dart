@@ -740,7 +740,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
           toastLength: Toast.LENGTH_SHORT,
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
-          backgroundColor: KColors.green,
+          backgroundColor: AppColors.green,
           textColor: AppColors.white,
           fontSize: 12.0,
         );

@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
@@ -65,14 +66,10 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
   final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        backgroundColor: _pageColor,
-        foregroundColor: AppColors.white,
-
-        title: const Text('Edit Kitchen Dish'),
-        actions: [
+    return AppPageShell(
+      title: 'Edit Kitchen Dish',
+      color: _pageColor,
+      actions: [
           if (_focusNodes[0].hasFocus ||
               _focusNodes[1].hasFocus ||
               _focusNodes[2].hasFocus ||
@@ -85,8 +82,7 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
               },
             ),
         ],
-      ),
-      body: Padding(
+      child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Form(
           key: _formKey,
@@ -325,8 +321,7 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
       ),
       bottomNavigationBar: BottomAppBar(
         color: AppColors.white,
-        child: PrimaryButton(
-          color: _pageColor,
+        child: AppButton.primary(
           onPressed: () async {
             final isValid = _formKey.currentState!.validate();
             if (!isValid) {
@@ -360,7 +355,7 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
                   );
                 });
           },
-          child: const Text('Save'),
+          label: 'Save',
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
@@ -17,11 +18,9 @@ class ViewCustomer extends ConsumerStatefulWidget {
 class _ViewCustomerState extends ConsumerState<ViewCustomer> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        title: const Text('Customer Details'),
-        actions: [
+    return AppPageShell(
+      title: 'Customer Details',
+      actions: [
           // More Vert
           IconButton(
             icon: const Icon(Icons.more_vert),
@@ -114,8 +113,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
             },
           ),
         ],
-      ),
-      body: ListView(
+      child: ListView(
         children: [
           Container(
             padding: const EdgeInsets.all(16),

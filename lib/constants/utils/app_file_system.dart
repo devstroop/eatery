@@ -160,8 +160,7 @@ class AppFileSystem {
                       const SizedBox(
                         width: 8.0,
                       ),
-                      PrimaryButton(
-                        color: KColors.secondary2,
+                      AppButton.primary(
                         onPressed: () async {
                           final ImagePicker picker = ImagePicker();
                           final XFile? photo = await picker.pickImage(
@@ -186,7 +185,7 @@ class AppFileSystem {
                           Navigator.pop(context);
                           return;
                         },
-                        child: const Text('Gallery'),
+                        label: 'Gallery',
                       ),
                     ],
                   ),

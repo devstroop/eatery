@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
@@ -56,23 +57,19 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        backgroundColor: _pageColor,
-        foregroundColor: AppColors.white,
-        title: const Text('Edit Dining Table'),
-        actions: [
-          if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
-            IconButton(
-              icon: const Icon(Icons.done),
-              onPressed: () {
-                FocusScope.of(context).unfocus();
-              },
-            ),
-        ],
-      ),
-      body: InkWell(
+    return AppPageShell(
+      title: 'Edit Dining Table',
+      color: _pageColor,
+      actions: [
+        if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
+          IconButton(
+            icon: const Icon(Icons.done),
+            onPressed: () {
+              FocusScope.of(context).unfocus();
+            },
+          ),
+      ],
+      child: InkWell(
         onTap: () {
           FocusScope.of(context).unfocus();
         },
@@ -186,8 +183,7 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
       ),
       bottomNavigationBar: BottomAppBar(
         color: AppColors.white,
-        child: PrimaryButton(
-          color: _pageColor,
+        child: AppButton.primary(
           onPressed: () async {
             if (!_formKey.currentState!.validate()) {
               return;
@@ -221,7 +217,7 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
                   );
                 });
           },
-          child: const Text('Update'),
+          label: 'Update',
         ),
       ),
     );
@@ -247,7 +243,7 @@ class DiningTableStatusWidget extends StatelessWidget {
         width: double.maxFinite,
         decoration: BoxDecoration(
           color: status == DiningTableStatus.available
-              ? KColors.green
+              ? AppColors.green
               : AppColors.error,
           borderRadius: BorderRadius.circular(8.0),
         ),

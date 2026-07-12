@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/references.dart';
@@ -25,27 +26,23 @@ class _ViewOrderPageState extends ConsumerState<ViewOrderPage> {
     final customer = ref
         .read(customerRepositoryProvider)
         .getCustomerByPhone(widget.order.customerPhone ?? '');
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        backgroundColor: AppColors.menuCategories,
-        foregroundColor: AppColors.white,
-        title: const Text('View Order'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.edit),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => EditOrderPage(order: widget.order),
-                ),
-              );
-            },
-          ),
-        ],
-      ),
-      body: Padding(
+    return AppPageShell(
+      title: 'View Order',
+      color: AppColors.menuCategories,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.edit),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => EditOrderPage(order: widget.order),
+              ),
+            );
+          },
+        ),
+      ],
+      child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: ListView(
           children: [

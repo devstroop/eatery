@@ -65,8 +65,7 @@ class _CreateCompanyResultPageState extends State<CreateCompanyResultPage> {
               ),
               Container(
                 margin: const EdgeInsets.only(top: 16.0),
-                child: PrimaryButton(
-                  color: AppColors.secondary2,
+                child: AppButton.primary(
                   onPressed: () {
                     Navigator.pushAndRemoveUntil(
                       context,
@@ -74,7 +73,7 @@ class _CreateCompanyResultPageState extends State<CreateCompanyResultPage> {
                       (Route<dynamic> route) => false,
                     );
                   },
-                  child: const Text('Continue to Login'),
+                  label: 'Continue to Login',
                 ),
               ),
               Spacer(),

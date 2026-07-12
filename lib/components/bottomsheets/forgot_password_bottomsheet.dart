@@ -192,10 +192,9 @@ class _ForgotPasswordBottomSheetState
                 if (verified)
                   Row(
                     children: [
-                      PrimaryButton(
-                        color: widget.themeColor,
+                      AppButton.primary(
                         onPressed: _submit,
-                        child: const Text('Reset'),
+                        label: 'Reset',
                       ),
                     ],
                   ),

@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/core/theme/app_spacing.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
@@ -24,10 +25,9 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
   @override
   Widget build(BuildContext context) {
     Color pageColor = widget.diningTable.status.color;
-    final appBar = AppBar(
-      backgroundColor: pageColor,
-      foregroundColor: AppColors.white,
-      title: const Text('Dining Table Details'),
+    return AppPageShell(
+      title: 'Dining Table Details',
+      color: pageColor,
       actions: [
         IconButton(
           icon: const Icon(Icons.more_vert),
@@ -58,11 +58,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
           },
         ),
       ],
-    );
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: appBar,
-      body: Padding(
+      child: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,

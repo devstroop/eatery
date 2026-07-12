@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
@@ -23,10 +24,9 @@ class _AddProductCategoryPageState
 
   @override
   Widget build(BuildContext context) {
-    final appBar = AppBar(
-      foregroundColor: AppColors.white,
-      backgroundColor: _pageColor,
-      title: const Text('Add Product Category'),
+    return AppPageShell(
+      title: 'Add Product Category',
+      color: _pageColor,
       actions: [
         if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
           IconButton(
@@ -36,11 +36,7 @@ class _AddProductCategoryPageState
             },
           ),
       ],
-    );
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: appBar,
-      body: InkWell(
+      child: InkWell(
         onTap: () {
           FocusScope.of(context).unfocus();
         },
@@ -93,8 +89,7 @@ class _AddProductCategoryPageState
       ),
       bottomNavigationBar: BottomAppBar(
         color: AppColors.white,
-        child: PrimaryButton(
-          color: _pageColor,
+        child: AppButton.primary(
           onPressed: () async {
             final repo = ref.read(productRepositoryProvider);
             await repo
@@ -120,7 +115,7 @@ class _AddProductCategoryPageState
                   );
                 });
           },
-          child: const Text('Save'),
+          label: 'Save',
         ),
       ),
     );

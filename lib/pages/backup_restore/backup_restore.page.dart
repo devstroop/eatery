@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
@@ -206,16 +207,10 @@ class _BackupRestorePageState extends ConsumerState<BackupRestorePage> {
 
   @override
   Widget build(BuildContext context) {
-    final appBar = AppBar(
-      backgroundColor: _pageColor,
-      foregroundColor: AppColors.white,
-      title: const Text('Backup / Restore'),
-    );
-
-    return Scaffold(
-      backgroundColor: AppColors.grey200,
-      appBar: appBar,
-      body: ListView(
+    return AppPageShell(
+      title: 'Backup / Restore',
+      color: _pageColor,
+      child: ListView(
         children: [
           ListTile(
             onTap: () => doBackup(context),
