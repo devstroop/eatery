@@ -62,7 +62,7 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
         ? Scaffold(
             appBar: AppBar(
               backgroundColor: _pageColor,
-              foregroundColor: Colors.white,
+              foregroundColor: AppColors.white,
               title: const Text('Company Details'),
             ),
             body: Padding(

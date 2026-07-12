@@ -26,11 +26,11 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         backgroundColor: _pageColor,
         title: const Text('Customers'),
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
       ),
       body: ref.read(customerRepositoryProvider).getAllCustomers().isNotEmpty
           ? ResponsiveListView(
@@ -71,7 +71,7 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
             ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: _pageColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         label: const Text('Add Customer'),
         icon: const Icon(Icons.add),
         onPressed: () {
@@ -121,7 +121,7 @@ class _CustomerCardState extends ConsumerState<_CustomerCard> {
           child: Text(
             c.name![0],
             style: const TextStyle(
-              color: Colors.white,
+              color: AppColors.white,
               fontWeight: FontWeight.bold,
               fontSize: 24,
             ),

@@ -47,7 +47,7 @@ class _KProductViewState extends ConsumerState<KProductView> {
                 right: 12.0,
                 child: FoodTypeBadge(
                   foodType: widget.product.foodType,
-                  backgroundColor: Colors.white,
+                  backgroundColor: AppColors.white,
                 ),
               ),
             ],
@@ -143,7 +143,7 @@ class _KProductViewState extends ConsumerState<KProductView> {
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
           height: 0.5,
-          color: Colors.grey[300],
+          color: AppColors.grey300,
         ),
         if (widget.onEdit != null || widget.onDelete != null)
           Padding(

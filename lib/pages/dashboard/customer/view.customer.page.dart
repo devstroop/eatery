@@ -1,5 +1,6 @@
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
@@ -17,7 +18,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         title: const Text('Customer Details'),
         actions: [
@@ -120,7 +121,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
             padding: const EdgeInsets.all(16),
             margin: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.grey[200],
+              color: AppColors.grey200,
               borderRadius: BorderRadius.circular(8),
             ),
             child: Column(
@@ -226,7 +227,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                     if (widget.customer.isActive)
                       const Icon(Icons.check_circle, color: Colors.green),
                     if (!widget.customer.isActive)
-                      const Icon(Icons.cancel, color: Colors.red),
+                      const Icon(Icons.cancel, color: AppColors.error),
                   ],
                 ),
               ],
@@ -234,7 +235,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: Divider(color: Colors.grey[200]),
+            child: Divider(color: AppColors.grey200),
           ),
 
           Container(
@@ -249,7 +250,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w500,
-                      color: Colors.grey[700],
+                      color: AppColors.grey700,
                     ),
                   ),
                 ),
@@ -257,7 +258,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                   width: double.infinity,
                   padding: const EdgeInsets.all(10),
                   decoration: BoxDecoration(
-                    color: Colors.grey[200],
+                    color: AppColors.grey200,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Column(
@@ -275,7 +276,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                         ListTile(
                           title: Text(
                             'No previous orders',
-                            style: TextStyle(color: Colors.grey[400]),
+                            style: TextStyle(color: AppColors.grey400),
                           ),
                         ),
                     ],

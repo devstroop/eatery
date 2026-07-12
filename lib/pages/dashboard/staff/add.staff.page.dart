@@ -29,10 +29,10 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
   Widget build(BuildContext context) {
     debugPrint('image: ${image?.absolutePath}');
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         backgroundColor: _pageColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         title: const Text('Add Staff'),
         actions: [
           if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)

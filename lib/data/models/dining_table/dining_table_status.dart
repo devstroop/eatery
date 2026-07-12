@@ -1,3 +1,4 @@
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:eatery/data/models/eatery_db.dart';
 
 part 'dining_table_status.g.dart';
@@ -58,7 +59,7 @@ extension DiningTableStatusExtension on DiningTableStatus {
       case DiningTableStatus.available:
         return Colors.green;
       case DiningTableStatus.occupied:
-        return Colors.red;
+        return AppColors.error;
       case DiningTableStatus.reserved:
         return Colors.orange;
       case DiningTableStatus.inactive:

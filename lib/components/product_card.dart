@@ -87,7 +87,7 @@ class ProductCard extends StatelessWidget {
                           right: 12.0,
                           child: FoodTypeBadge(
                             foodType: product.foodType,
-                            backgroundColor: Colors.white,
+                            backgroundColor: AppColors.white,
                           ),
                         ),
                       ],

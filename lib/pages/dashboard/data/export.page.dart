@@ -13,10 +13,10 @@ class _ExportPageState extends State<ExportPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey[200],
+        backgroundColor: AppColors.grey200,
         appBar: AppBar(
           backgroundColor: _pageColor,
-          foregroundColor: Colors.white,
+          foregroundColor: AppColors.white,
           title: const Text('Export'),
         ),
         body: ListView(
@@ -89,7 +89,7 @@ class _ExportPageState extends State<ExportPage> {
                   onPressed: () {},
                   style: ElevatedButton.styleFrom(
                     backgroundColor: _pageColor,
-                    foregroundColor: Colors.white,
+                    foregroundColor: AppColors.white,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(12)),
                   ),

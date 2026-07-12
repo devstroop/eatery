@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class MenuCard extends StatelessWidget {
   const MenuCard({
@@ -52,7 +53,7 @@ class MenuCard extends StatelessWidget {
           mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(iconData, color: Colors.white, size: iconSize),
+            Icon(iconData, color: AppColors.white, size: iconSize),
             const SizedBox(height: 8),
             Text(
               title,
@@ -60,7 +61,7 @@ class MenuCard extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               style: TextStyle(
-                color: Colors.white,
+                color: AppColors.white,
                 fontSize: titleSize,
                 fontWeight: FontWeight.w700,
               ),

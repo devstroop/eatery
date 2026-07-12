@@ -36,7 +36,7 @@ class _UpgradePageState extends State<UpgradePage> {
   Widget build(BuildContext context) {
 
     final appBar = AppBar(
-      foregroundColor: Colors.white,
+      foregroundColor: AppColors.white,
       backgroundColor: _pageColor,
       title: const Text('Subscription'),
     );
@@ -128,7 +128,7 @@ class _UpgradePageState extends State<UpgradePage> {
           );
         });*/
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: appBar,
       body: Form(
         key: formKey,

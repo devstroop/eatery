@@ -3,6 +3,7 @@ import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/widgets/responsive/responsive_list_view.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 
@@ -26,11 +27,11 @@ class _StaffsPageState extends ConsumerState<StaffsPage> {
   Widget build(BuildContext context) {
     List<Staff> staffs = ref.read(appDatabaseProvider).staffBox.values.toList();
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         backgroundColor: _pageColor,
         title: const Text('Staffs'),
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         actions: [
           if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
             IconButton(
@@ -75,7 +76,7 @@ class _StaffsPageState extends ConsumerState<StaffsPage> {
             ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: _pageColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         label: const Text('Add Staff'),
         icon: const Icon(Icons.add),
         onPressed: () {

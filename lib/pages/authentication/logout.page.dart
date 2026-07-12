@@ -25,7 +25,7 @@ class _LogoutPageState extends State<LogoutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: Colors.grey[200],
+        backgroundColor: AppColors.grey200,
         body: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -35,7 +35,7 @@ class _LogoutPageState extends State<LogoutPage> {
           height: 60,
           width: 60,
           child: CircularProgressIndicator(
-            color: Colors.redAccent,
+            color: AppColors.error,
           ),
         ),
         Row(

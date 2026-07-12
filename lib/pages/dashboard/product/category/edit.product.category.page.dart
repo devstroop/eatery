@@ -38,7 +38,7 @@ class _EditProductCategoryPageState
   Widget build(BuildContext context) {
     final appBar = AppBar(
       backgroundColor: _pageColor,
-      foregroundColor: Colors.white,
+      foregroundColor: AppColors.white,
 
       title: const Text('Edit Product Category'),
       actions: [
@@ -52,7 +52,7 @@ class _EditProductCategoryPageState
       ],
     );
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: appBar,
       body: InkWell(
         onTap: () {

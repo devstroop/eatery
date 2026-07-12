@@ -46,10 +46,10 @@ class _AddTaxSlabSettingsPageState extends ConsumerState<AddTaxSlabSettingsPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         backgroundColor: _pageColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         title: const Text('Add Tax Slab'),
       ),
       body: InkWell(
@@ -116,7 +116,7 @@ class _AddTaxSlabSettingsPageState extends ConsumerState<AddTaxSlabSettingsPage>
                 ToggleSwitch(
                   highlightColor: _pageColor,
                   backgroundColor: const Color(0xFFE5E5E5),
-                  foregroundColor: Colors.white,
+                  foregroundColor: AppColors.white,
                   inactiveForegroundColor: AppColors.black600,
                   children: [
                     ...TaxType.values.map((e) => e.name!)

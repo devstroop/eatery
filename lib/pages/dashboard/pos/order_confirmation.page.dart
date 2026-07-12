@@ -150,7 +150,7 @@ class _OrderConfirmationPageState extends ConsumerState<OrderConfirmationPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       body: SingleChildScrollView(
         child: Column(
           children: [

@@ -1,5 +1,6 @@
 import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 /// A scaffold wrapper for form/detail pages that constrains content
 /// width on desktop while allowing full-width on mobile.
@@ -35,10 +36,10 @@ class ResponsiveFormPage extends StatelessWidget {
     final isDesktop = Responsive.isDesktop(context);
 
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         backgroundColor: color,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         title: Text(title),
         actions: actions,
       ),

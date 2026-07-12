@@ -45,10 +45,10 @@ class _AddCustomerPageState extends ConsumerState<AddCustomerPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         backgroundColor: _pageColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         title: const Text('Add Customer'),
         actions: [
           if (_focusNodes.any((element) => element.hasFocus))

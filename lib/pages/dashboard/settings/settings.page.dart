@@ -136,10 +136,10 @@ class _SettingPageState extends ConsumerState<SettingPage> {
     final appBar = AppBar(
       backgroundColor: getThemeColor(),
       title: const Text('Settings'),
-      foregroundColor: Colors.white,
+      foregroundColor: AppColors.white,
     );
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: appBar,
       body: Stack(
         children: [

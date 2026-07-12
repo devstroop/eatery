@@ -156,9 +156,9 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
             filled: true,
             fillColor: widget.enabled != null
                 ? (widget.enabled!
-                    ? Colors.white
+                    ? AppColors.white
                     : const Color.fromRGBO(240, 240, 240, 1))
-                : Colors.white,
+                : AppColors.white,
             contentPadding:
                 const EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
           ),

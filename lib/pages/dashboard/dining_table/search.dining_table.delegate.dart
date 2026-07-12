@@ -80,7 +80,7 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.normal,
-              color: Colors.grey[600],
+              color: AppColors.grey600,
             ),
           ),
         ),
@@ -97,7 +97,7 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                     vertical: 8,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.grey[300],
+                    color: AppColors.grey300,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
@@ -108,7 +108,7 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.grey[600],
+                          color: AppColors.grey600,
                         ),
                       ),
                     ],
@@ -133,7 +133,7 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey[600],
+                        color: AppColors.grey600,
                       ),
                     ),
                   ],
@@ -150,7 +150,7 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                         color: e.status == DiningTableStatus.available
                             ? Colors.green
                             : e.status == DiningTableStatus.occupied
-                            ? Colors.red
+                            ? AppColors.error
                             : Colors.blueAccent,
                         borderRadius: BorderRadius.circular(12),
                       ),
@@ -159,7 +159,7 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                         style: const TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: AppColors.white,
                         ),
                       ),
                     ),
@@ -178,7 +178,7 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                         style: const TextStyle(
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
-                          color: Colors.red,
+                          color: AppColors.error,
                         ),
                       ),
                   ],
@@ -204,7 +204,7 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.normal,
-              color: Colors.grey[600],
+              color: AppColors.grey600,
             ),
           ),
         ),
@@ -219,7 +219,7 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                   height: 40,
                   width: 40,
                   decoration: BoxDecoration(
-                    color: Colors.grey[300],
+                    color: AppColors.grey300,
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Row(
@@ -230,7 +230,7 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
-                          color: Colors.grey[600],
+                          color: AppColors.grey600,
                         ),
                       ),
                     ],

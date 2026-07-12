@@ -122,8 +122,8 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
       return const Center(child: CircularProgressIndicator());
     }
 
-    return WillPopScope(
-      onWillPop: () => Future.value(false),
+    return PopScope(
+      canPop: false,
       child: Scaffold(
         key: scaffoldKey,
         body: LayoutBuilder(
@@ -397,7 +397,7 @@ class _DashboardHeader extends StatelessWidget {
                     child: Text(
                       cartCount.toString(),
                       style: const TextStyle(
-                        color: Colors.white,
+                        color: AppColors.white,
                         fontSize: 10,
                         fontWeight: FontWeight.bold,
                       ),
@@ -457,12 +457,12 @@ class _DashboardTile extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(item.icon, color: Colors.white, size: 32),
+              Icon(item.icon, color: AppColors.white, size: 32),
               const Spacer(),
               Text(
                 item.label,
                 style: TextStyle(
-                  color: Colors.white,
+                  color: AppColors.white,
                   fontSize: Responsive.bodySize(context),
                   fontWeight: FontWeight.w700,
                 ),
@@ -471,7 +471,7 @@ class _DashboardTile extends StatelessWidget {
               Text(
                 item.subtitle,
                 style: TextStyle(
-                  color: Colors.white70,
+                  color: AppColors.white.withValues(alpha: 0.7),
                   fontSize: Responsive.bodySize(context) - 2,
                 ),
               ),

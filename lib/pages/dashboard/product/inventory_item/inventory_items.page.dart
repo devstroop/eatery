@@ -33,11 +33,11 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
     final companyNotifier = ref.read(companyProvider.notifier);
     final currency = companyNotifier.currency;
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         title: const Text('Inventory'),
         backgroundColor: _pageColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -90,7 +90,7 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                         border: Border.all(
                           color: selectedCategory?.id == e.id
                               ? _pageColor
-                              : Colors.grey[300]!,
+                              : AppColors.grey300!,
                           width: 1,
                         ),
                       ),
@@ -117,7 +117,7 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                               fontWeight: FontWeight.w500,
                               color: selectedCategory?.id == e.id
                                   ? const Color(0xFFF5F5F5)
-                                  : Colors.grey[700]!,
+                                  : AppColors.grey700!,
                             ),
                           ),
                         ],
@@ -140,7 +140,7 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                         Icon(
                           Icons.no_food_outlined,
                           size: 128,
-                          color: Colors.grey[500],
+                          color: AppColors.grey500,
                         ),
                         AppSpacing.gapLg,
                         Text(
@@ -148,7 +148,7 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: Colors.grey[500],
+                            color: AppColors.grey500,
                           ),
                         ),
                         Text(
@@ -156,7 +156,7 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.normal,
-                            color: Colors.grey[500],
+                            color: AppColors.grey500,
                           ),
                         ),
                       ],
@@ -243,7 +243,7 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                               FoodTypeBadge(
                                 size: 16,
                                 foodType: each.foodType,
-                                backgroundColor: Colors.white,
+                                backgroundColor: AppColors.white,
                               ),
                           ],
                         ),
@@ -256,7 +256,7 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                                 style: TextStyle(
                                   fontSize: 12,
                                   fontWeight: FontWeight.w400,
-                                  color: Colors.grey[700],
+                                  color: AppColors.grey700,
                                 ),
                               ),
                             Row(
@@ -269,7 +269,7 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
-                                    color: Colors.grey[700],
+                                    color: AppColors.grey700,
                                   ),
                                 ),
                                 const SizedBox(width: 4),
@@ -287,7 +287,7 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w500,
-                                    color: Colors.grey[700],
+                                    color: AppColors.grey700,
                                   ),
                                 ),
                                 const SizedBox(width: 4),
@@ -382,7 +382,7 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: _pageColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         icon: const Icon(Icons.add),
         label: const Text('Add Inventory Item'),
         onPressed: () async {

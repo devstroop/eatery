@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class ImageContainer extends StatelessWidget {
   const ImageContainer(
@@ -59,7 +60,7 @@ class ImageContainer extends StatelessWidget {
                   child: Text(
                     label!,
                     style: const TextStyle(
-                      color: Colors.white,
+                      color: AppColors.white,
                       fontSize: 10,
                       fontWeight: FontWeight.w500,
                     ),

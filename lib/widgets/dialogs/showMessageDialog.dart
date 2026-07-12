@@ -1,3 +1,4 @@
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 Future<bool?> showMessageDialog(
@@ -72,7 +73,7 @@ extension MessageTypeExtension on MessageType {
       case MessageType.success:
         return Colors.green;
       case MessageType.error:
-        return Colors.red;
+        return AppColors.error;
       case MessageType.warning:
         return Colors.orange;
       case MessageType.info:

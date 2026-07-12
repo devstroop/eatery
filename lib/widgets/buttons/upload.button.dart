@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class UploadButton extends StatefulWidget {
   const UploadButton(
@@ -81,7 +82,7 @@ class _UploadButtonState extends State<UploadButton> {
                             borderRadius: BorderRadius.circular(4),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
+                                color: AppColors.black.withOpacity(0.1),
                                 blurRadius: 4,
                                 offset: const Offset(0, 2),
                               )
@@ -110,10 +111,10 @@ class _UploadButtonState extends State<UploadButton> {
                                 width: 20,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(10),
-                                  color: Colors.redAccent,
+                                  color: AppColors.error,
                                   boxShadow: [
                                     BoxShadow(
-                                      color: Colors.black.withOpacity(0.1),
+                                      color: AppColors.black.withOpacity(0.1),
                                       blurRadius: 4,
                                       offset: const Offset(0, 2),
                                     )
@@ -122,7 +123,7 @@ class _UploadButtonState extends State<UploadButton> {
                                 child: const Icon(
                                   Icons.close,
                                   size: 16,
-                                  color: Colors.white,
+                                  color: AppColors.white,
                                 ),
                               ),
                             ))

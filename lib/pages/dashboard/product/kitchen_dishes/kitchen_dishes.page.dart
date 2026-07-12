@@ -37,11 +37,11 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
     final companyNotifier = ref.read(companyProvider.notifier);
     final currency = companyNotifier.currency;
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         title: const Text('Kitchen'),
         backgroundColor: _pageColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -132,7 +132,7 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                         border: Border.all(
                           color: selectedCategory?.id == e.id
                               ? _pageColor
-                              : Colors.grey[300]!,
+                              : AppColors.grey300!,
                           width: 1,
                         ),
                       ),
@@ -155,7 +155,7 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                               fontWeight: FontWeight.w500,
                               color: selectedCategory?.id == e.id
                                   ? const Color(0xFFF5F5F5)
-                                  : Colors.grey[700]!,
+                                  : AppColors.grey700!,
                             ),
                           ),
                         ],
@@ -178,7 +178,7 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                         Icon(
                           Icons.no_food_outlined,
                           size: 128,
-                          color: Colors.grey[500],
+                          color: AppColors.grey500,
                         ),
                         AppSpacing.gapLg,
                         Text(
@@ -186,7 +186,7 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                           style: TextStyle(
                             fontSize: 24,
                             fontWeight: FontWeight.bold,
-                            color: Colors.grey[500],
+                            color: AppColors.grey500,
                           ),
                         ),
                         Text(
@@ -194,7 +194,7 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.normal,
-                            color: Colors.grey[500],
+                            color: AppColors.grey500,
                           ),
                         ),
                       ],
@@ -280,7 +280,7 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                                 FoodTypeBadge(
                                   size: 16,
                                   foodType: each.foodType,
-                                  backgroundColor: Colors.white,
+                                  backgroundColor: AppColors.white,
                                 ),
                             ],
                           ),
@@ -293,7 +293,7 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                                   style: TextStyle(
                                     fontSize: 12,
                                     fontWeight: FontWeight.w400,
-                                    color: Colors.grey[700],
+                                    color: AppColors.grey700,
                                   ),
                                 ),
                               Row(
@@ -306,7 +306,7 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                                     style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w500,
-                                      color: Colors.grey[700],
+                                      color: AppColors.grey700,
                                     ),
                                   ),
                                   const SizedBox(width: 4),
@@ -324,7 +324,7 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                                     style: TextStyle(
                                       fontSize: 12,
                                       fontWeight: FontWeight.w500,
-                                      color: Colors.grey[700],
+                                      color: AppColors.grey700,
                                     ),
                                   ),
                                   const SizedBox(width: 4),
@@ -419,7 +419,7 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: _pageColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         icon: const Icon(Icons.add),
         label: const Text('Add Kitchen Dish'),
         onPressed: () async {

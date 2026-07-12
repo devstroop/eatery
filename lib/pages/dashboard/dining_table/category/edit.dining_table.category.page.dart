@@ -38,7 +38,7 @@ class _EditDiningTableCategoryPageState
   Widget build(BuildContext context) {
     final appBar = AppBar(
       backgroundColor: _pageColor,
-      foregroundColor: Colors.white,
+      foregroundColor: AppColors.white,
       title: const Text('Edit Table Category'),
       actions: [
         if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
@@ -51,7 +51,7 @@ class _EditDiningTableCategoryPageState
       ],
     );
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: appBar,
       body: InkWell(
         onTap: () {

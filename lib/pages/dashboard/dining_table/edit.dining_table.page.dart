@@ -57,10 +57,10 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         backgroundColor: _pageColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         title: const Text('Edit Dining Table'),
         actions: [
           if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)

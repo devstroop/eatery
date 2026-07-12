@@ -40,11 +40,11 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
         )
         .toList();
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         backgroundColor: _pageColor,
         title: const Text('Dining Tables'),
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         actions: [
           IconButton(
             icon: const Icon(Icons.category),
@@ -173,7 +173,7 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                               child: Text(
                                 diningTable.id.toString(),
                                 style: const TextStyle(
-                                  color: Colors.white,
+                                  color: AppColors.white,
                                   fontWeight: FontWeight.w600,
                                   fontSize: 20,
                                 ),
@@ -349,7 +349,7 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
       ),
       floatingActionButton: FloatingActionButton.extended(
         label: const Text('Add Dining Table'),
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         backgroundColor: _pageColor,
         icon: const Icon(Icons.add),
         onPressed: () async {

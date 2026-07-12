@@ -30,7 +30,7 @@ class SelectableCard extends StatelessWidget {
       onTap: onTap,
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
             color: selected ? (highlightColor ?? AppColors.secondary2) : AppColors.white600,

@@ -24,10 +24,10 @@ class _ProductCategoriesPageState extends ConsumerState<ProductCategoriesPage> {
     final repo = ref.read(productRepositoryProvider);
     final categories = repo.getAllCategories();
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         backgroundColor: _pageColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         title: const Text('Product Categories'),
       ),
       body: ListView(
@@ -55,7 +55,7 @@ class _ProductCategoriesPageState extends ConsumerState<ProductCategoriesPage> {
                     ),
                     const Text(
                       'Add a product category to get started',
-                      style: TextStyle(fontSize: 16, color: Colors.black54),
+                      style: TextStyle(fontSize: 16, color: AppColors.grey600),
                     ),
                     const SizedBox(height: 48),
                   ],
@@ -127,7 +127,7 @@ class _ProductCategoriesPageState extends ConsumerState<ProductCategoriesPage> {
         ],
       ),
       floatingActionButton: FloatingActionButton.extended(
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         backgroundColor: _pageColor,
         icon: const Icon(Icons.add),
         label: const Text('Add Product Category'),

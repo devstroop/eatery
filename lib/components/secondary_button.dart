@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class SecondaryButton extends StatelessWidget {
   const SecondaryButton({
@@ -27,7 +28,7 @@ class SecondaryButton extends StatelessWidget {
         height: height,
         padding: const EdgeInsets.symmetric(horizontal: 8.0),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.white,
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
             color: borderColor,

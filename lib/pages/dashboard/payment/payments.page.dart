@@ -25,11 +25,11 @@ class _PaymentsPageState extends ConsumerState<PaymentsPage> {
     final currencySymbol =
         ref.read(companyProvider.notifier).currency?.symbol ?? '';
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         backgroundColor: _pageColor,
         title: const Text('Payments'),
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -91,7 +91,7 @@ class _PaymentsPageState extends ConsumerState<PaymentsPage> {
               ),
             ),
       floatingActionButton: FloatingActionButton.extended(
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         onPressed: () {
           Navigator.push(
             context,

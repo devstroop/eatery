@@ -14,10 +14,10 @@ class _EditOrderPageState extends State<EditOrderPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
           backgroundColor: AppColors.menuCategories,
-          foregroundColor: Colors.white,
+          foregroundColor: AppColors.white,
           title: const Text('Edit Order'),
           actions: [
             IconButton(

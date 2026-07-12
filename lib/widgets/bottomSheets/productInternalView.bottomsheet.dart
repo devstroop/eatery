@@ -1,5 +1,6 @@
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class ProductInternalViewBottomsheet extends StatefulWidget {
   const ProductInternalViewBottomsheet({
@@ -55,7 +56,7 @@ class _ProductInternalViewBottomsheetState
             child: Center(
               child: Container(
                 decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: AppColors.white,
                   borderRadius: const BorderRadius.all(Radius.circular(16.0)),
                   image:
                       widget.product.image != null &&

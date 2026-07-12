@@ -38,10 +38,10 @@ class _EditPaymentPageState extends ConsumerState<EditPaymentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         backgroundColor: _pageColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         title: const Text('Edit Payment'),
         actions: [
           if (_focusNodes.any((element) => element.hasFocus))

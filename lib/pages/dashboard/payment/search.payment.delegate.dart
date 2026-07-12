@@ -123,7 +123,7 @@ class SearchPaymentDelegate extends SearchDelegate<Payment?>{
     return Theme.of(context).copyWith(
       appBarTheme: AppBarTheme(
         backgroundColor: AppColors.menuCategories,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
       ),
     );
   }

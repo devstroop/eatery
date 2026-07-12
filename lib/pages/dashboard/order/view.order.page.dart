@@ -26,10 +26,10 @@ class _ViewOrderPageState extends ConsumerState<ViewOrderPage> {
         .read(customerRepositoryProvider)
         .getCustomerByPhone(widget.order.customerPhone ?? '');
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         backgroundColor: AppColors.menuCategories,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         title: const Text('View Order'),
         actions: [
           IconButton(

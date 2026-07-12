@@ -46,7 +46,7 @@ class SearchTextField extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
         ),
         filled: true,
-        fillColor: Colors.white,
+        fillColor: AppColors.white,
         contentPadding: const EdgeInsetsDirectional.fromSTEB(16, 16, 16, 16),
       ),
       style: TextStyle(

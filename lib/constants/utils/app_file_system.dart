@@ -1,5 +1,6 @@
 import 'package:archive/archive.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 /// Canonical source for app data directory paths.
 ///
@@ -84,19 +85,19 @@ class AppFileSystem {
                   IconButton(
                     icon: const Icon(Icons.upload),
                     iconSize: 48.0,
-                    color: KColors.black500,
+                    color: AppColors.black500,
                     onPressed: () {},
                   ),
                   IconButton(
                     icon: const Icon(Icons.camera_alt),
                     iconSize: 48.0,
-                    color: KColors.black500,
+                    color: AppColors.black500,
                     onPressed: () {},
                   ),
                   IconButton(
                     icon: const Icon(Icons.link),
                     iconSize: 48.0,
-                    color: KColors.black500,
+                    color: AppColors.black500,
                     onPressed: () {},
                   ),
                 ],
@@ -109,7 +110,7 @@ class AppFileSystem {
                   IconButton(
                     icon: const Icon(Icons.hub),
                     iconSize: 48.0,
-                    color: KColors.black500,
+                    color: AppColors.black500,
                     onPressed: () {},
                   ),
                 ],
@@ -126,8 +127,8 @@ class AppFileSystem {
                       Flexible(
                         flex: 1,
                         child: SecondaryButton(
-                          color: KColors.black500,
-                          borderColor: KColors.white600,
+                          color: AppColors.black500,
+                          borderColor: AppColors.white600,
                           text: 'Camera',
                           height: 50.0,
                           onTap: () async {

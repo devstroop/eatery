@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class SpecialButton extends StatelessWidget {
   const SpecialButton(
@@ -25,7 +26,7 @@ class SpecialButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(8.0),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.30),
+              color: AppColors.black.withOpacity(0.30),
               blurRadius: 4.0,
             ),
           ],

@@ -1,5 +1,6 @@
 import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class CreateCompanyBottomAppBar extends StatelessWidget {
   final Color themeColor;
@@ -31,7 +32,7 @@ class CreateCompanyBottomAppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BottomAppBar(
-      color: Colors.white,
+      color: AppColors.white,
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
         child: Responsive.isDesktop(context)

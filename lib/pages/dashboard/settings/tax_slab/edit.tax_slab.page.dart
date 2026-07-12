@@ -56,10 +56,10 @@ class _EditTaxSlabSettingsPageState extends ConsumerState<EditTaxSlabSettingsPag
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         backgroundColor: _pageColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         title: const Text('Edit Tax Slab'),
         actions: [
           // Delete button
@@ -157,7 +157,7 @@ class _EditTaxSlabSettingsPageState extends ConsumerState<EditTaxSlabSettingsPag
                 ToggleSwitch(
                   highlightColor: _pageColor,
                   backgroundColor: const Color(0xFFE5E5E5),
-                  foregroundColor: Colors.white,
+                  foregroundColor: AppColors.white,
                   inactiveForegroundColor: AppColors.black600,
                   children: [
                     ...TaxType.values.map((e) => e.name!)

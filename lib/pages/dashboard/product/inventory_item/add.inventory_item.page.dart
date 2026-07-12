@@ -44,7 +44,7 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: buildAppBar(),
       body: buildBody(),
       bottomNavigationBar: buildBottomAppBar(),
@@ -54,7 +54,7 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
   AppBar buildAppBar() {
     return AppBar(
       backgroundColor: _pageColor,
-      foregroundColor: Colors.white,
+      foregroundColor: AppColors.white,
       title: const Text('Add Inventory Item'),
       actions: [
         if (_focusNodes.any((node) => node.hasFocus))
@@ -317,7 +317,7 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
         ToggleSwitch(
           highlightColor: selectedFoodType?.color ?? _pageColor,
           backgroundColor: const Color(0xFFE5E5E5),
-          foregroundColor: Colors.white,
+          foregroundColor: AppColors.white,
           inactiveForegroundColor: AppColors.black600,
           children: items,
           selectedIndex: selectedIndex,

@@ -41,10 +41,10 @@ class _TaxSlabsSettingsPageState extends ConsumerState<TaxSlabsSettingsPage> {
   Widget build(BuildContext context) {
     List<TaxSlab> taxSlabs = ref.read(taxRepositoryProvider).getAllTaxSlabs();
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         backgroundColor: _pageColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         title: const Text('Tax Slab Settings'),
       ),
       body: taxSlabs.isNotEmpty
@@ -114,7 +114,7 @@ class _TaxSlabsSettingsPageState extends ConsumerState<TaxSlabsSettingsPage> {
           ),
         ).then((_) => setState(() {})),
         backgroundColor: _pageColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         icon: const Icon(Icons.add),
         label: const Text('Add Tax Slab'),
       ),

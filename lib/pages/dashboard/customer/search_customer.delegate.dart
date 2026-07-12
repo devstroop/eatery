@@ -83,7 +83,7 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
             style: TextStyle(
               fontSize: 14,
               fontWeight: FontWeight.normal,
-              color: Colors.grey[600],
+              color: AppColors.grey600,
             ),
           ),
         ),
@@ -147,7 +147,7 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
         height: 40,
         width: 40,
         decoration: BoxDecoration(
-          color: Colors.grey[300],
+          color: AppColors.grey300,
           borderRadius: BorderRadius.circular(8),
         ),
         child: Center(
@@ -156,7 +156,7 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.grey[600],
+              color: AppColors.grey600,
             ),
           ),
         ),

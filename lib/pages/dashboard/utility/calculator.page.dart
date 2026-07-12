@@ -1,5 +1,6 @@
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CalculatorPage extends StatefulWidget {
@@ -15,7 +16,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         title: const Text('Calculator'),
         backgroundColor: Color.fromARGB(0, 47, 24, 130),
@@ -23,7 +24,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
         
       ),
       body: Container(
-        color: Colors.white,
+        color: AppColors.white,
         child: Column(
           children: [
             Expanded(
@@ -46,7 +47,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
                   childAspectRatio: 1.5,
                   children: [
                     buildButton('AC',
-                        textColor: Colors.red,
+                        textColor: AppColors.error,
                         fontSize: 18,
                         onPressed: clearInput),
                     buildButton('=', textColor: Colors.orange, fontSize: 24),
@@ -96,7 +97,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
     return Container(
       decoration: BoxDecoration(
         border: Border.all(
-          color: Colors.black.withOpacity(0.2),
+          color: AppColors.black.withOpacity(0.2),
           width: 1,
         ),
       ),
@@ -112,7 +113,7 @@ class _CalculatorPageState extends State<CalculatorPage> {
           text,
           style: TextStyle(
             fontSize: fontSize,
-            color: textColor ?? Colors.black,
+            color: textColor ?? AppColors.black,
           ),
         ),
       ),

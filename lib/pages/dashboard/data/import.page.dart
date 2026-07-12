@@ -10,10 +10,10 @@ class ImportPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         backgroundColor: _pageColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         title: const Text('Import'),
       ),
       body: ListView(
@@ -23,7 +23,7 @@ class ImportPage extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 16),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.white,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(color: Colors.grey.withOpacity(0.2)),
               boxShadow: [
@@ -47,7 +47,7 @@ class ImportPage extends StatelessWidget {
                   ),
                   subtitle: Text(
                     'Get started with demo data',
-                    style: TextStyle(color: Colors.grey[700]),
+                    style: TextStyle(color: AppColors.grey700),
                   ),
                   trailing: Icon(
                     Icons.file_download_outlined,
@@ -61,7 +61,7 @@ class ImportPage extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 16),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.white,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(color: Colors.grey.withOpacity(0.2)),
               boxShadow: [
@@ -84,7 +84,7 @@ class ImportPage extends StatelessWidget {
                   ),
                   subtitle: Text(
                     'Select the excel file to import',
-                    style: TextStyle(color: Colors.grey[700]),
+                    style: TextStyle(color: AppColors.grey700),
                   ),
                   trailing: Icon(
                     Icons.attachment,
@@ -98,7 +98,7 @@ class ImportPage extends StatelessWidget {
             margin: const EdgeInsets.only(bottom: 16),
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.white,
               borderRadius: BorderRadius.circular(8),
               border: Border.all(color: Colors.grey.withOpacity(0.2)),
               boxShadow: [
@@ -121,7 +121,7 @@ class ImportPage extends StatelessWidget {
                   ),
                   subtitle: Text(
                     'Select the json file to import',
-                    style: TextStyle(color: Colors.grey[700]),
+                    style: TextStyle(color: AppColors.grey700),
                   ),
                   trailing: Icon(
                     Icons.code,

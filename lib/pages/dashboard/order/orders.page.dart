@@ -54,10 +54,10 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
     final currencySymbol =
         ref.read(companyProvider.notifier).currency?.symbol ?? '';
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         backgroundColor: _pageColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         title: const Text('Orders'),
         actions: [
           IconButton(

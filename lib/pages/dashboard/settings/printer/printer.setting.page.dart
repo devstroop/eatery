@@ -117,10 +117,10 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
     final savedPrinters = ref.watch(printerListProvider);
 
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         backgroundColor: AppColors.menuCategories,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         title: const Text('Printer Settings'),
       ),
       body: ListView(
@@ -151,7 +151,7 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
                           title: Text(p.name),
                           subtitle: Text(p.bluetoothAddress ?? ''),
                           trailing: IconButton(
-                            icon: const Icon(Icons.delete, color: Colors.red),
+                            icon: const Icon(Icons.delete, color: AppColors.error),
                             onPressed: () => _removePrinter(p),
                           ),
                         ),

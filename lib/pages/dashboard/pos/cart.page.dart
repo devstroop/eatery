@@ -24,10 +24,10 @@ class _CartPageState extends ConsumerState<CartPage> {
       ref.read(cartProvider).activeOrderType?.color ?? AppColors.primary.value,
     );
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         backgroundColor: themeColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         title: const Text('Cart'),
         actions: [
           IconButton(
@@ -220,11 +220,11 @@ class _CartPageState extends ConsumerState<CartPage> {
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 8),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.white,
                     borderRadius: BorderRadius.circular(12),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.1),
+                        color: AppColors.black.withOpacity(0.1),
                         blurRadius: 4,
                         offset: const Offset(0, 2),
                       ),
@@ -465,7 +465,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                       ),
                       child: Text(
                         'Checkout',
-                        style: TextStyle(color: Colors.white, fontSize: 16),
+                        style: TextStyle(color: AppColors.white, fontSize: 16),
                       ),
                     ),
                   ),

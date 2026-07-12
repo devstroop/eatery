@@ -1,5 +1,6 @@
 import 'package:intl/intl.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class NotificationWidget extends StatelessWidget {
   const NotificationWidget({Key? key, required this.message, this.timestamp, this.header, this.leading, this.onTap}) : super(key: key);
@@ -71,7 +72,7 @@ class NotificationWidget extends StatelessWidget {
                           Text(
                             message,
                             style: const TextStyle(
-                              color: Colors.white,
+                              color: AppColors.white,
                               fontSize: 14,
                               fontWeight: FontWeight.normal,
                             ),

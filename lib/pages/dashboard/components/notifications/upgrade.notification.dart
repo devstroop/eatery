@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 
@@ -33,7 +34,7 @@ class _UpgradeNotificationState extends ConsumerState<UpgradeNotification> {
             child: NotificationWidget(
               message: 'Activate License',
               header: "Upgrade",
-              leading: const Icon(Icons.workspace_premium, color: Colors.white),
+              leading: const Icon(Icons.workspace_premium, color: AppColors.white),
               onTap: () {
                 Navigator.push(
                   context,

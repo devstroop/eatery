@@ -15,8 +15,8 @@ class MenuTile extends StatelessWidget {
       onTap: onTap,
       leading: Icon(prefixIcon, color: color ?? AppColors.black500),
       title: Text(title, style: TextStyle(fontWeight: FontWeight.w500, color: color ?? AppColors.black500)),
-      subtitle: subtitle != null ? Text(subtitle!, style: TextStyle(color: Colors.grey[700])) : null,
-      trailing: Icon(postfixIcon, color: Colors.grey[400]),
+      subtitle: subtitle != null ? Text(subtitle!, style: TextStyle(color: AppColors.grey700)) : null,
+      trailing: Icon(postfixIcon, color: AppColors.grey400),
     );
   }
 }

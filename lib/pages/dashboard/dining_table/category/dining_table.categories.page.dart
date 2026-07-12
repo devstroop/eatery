@@ -20,10 +20,10 @@ class _DiningTableCategoriesPageState
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         backgroundColor: _pageColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
 
         title: const Text('Dining Table Categories'),
       ),
@@ -124,7 +124,7 @@ class _DiningTableCategoriesPageState
                         child: Text(
                           each.name[0],
                           style: const TextStyle(
-                            color: Colors.white,
+                            color: AppColors.white,
                             fontWeight: FontWeight.bold,
                             fontSize: 24,
                           ),
@@ -162,7 +162,7 @@ class _DiningTableCategoriesPageState
       floatingActionButton: FloatingActionButton.extended(
         label: const Text('Add Category'),
         backgroundColor: _pageColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         icon: const Icon(Icons.add),
         onPressed: () {
           Navigator.push(

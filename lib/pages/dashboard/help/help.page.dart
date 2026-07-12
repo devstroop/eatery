@@ -30,7 +30,7 @@ class _HelpPageState extends State<HelpPage> {
 
 
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: appBar,
       body: Stack(
         children: [

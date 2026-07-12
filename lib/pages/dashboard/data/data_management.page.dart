@@ -23,10 +23,10 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         backgroundColor: _pageColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         title: const Text('Data Management'),
         actions: [
           IconButton(
@@ -66,13 +66,13 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: Colors.grey[700]),
+                    color: AppColors.grey700),
               ),
               const SizedBox(
                 width: 8,
               ),
               Flexible(
-                child: Divider(color: Colors.grey[300]),
+                child: Divider(color: AppColors.grey300),
               ),
             ],
           ),
@@ -81,15 +81,15 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppColors.white,
             borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: Colors.grey[400]!),
+            border: Border.all(color: AppColors.grey400!),
           ),
           child: Row(
             children: [
               Icon(
                 Icons.history,
-                color: Colors.grey[700],
+                color: AppColors.grey700,
               ),
               const SizedBox(
                 width: 8,
@@ -99,14 +99,14 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: Colors.grey[700]),
+                    color: AppColors.grey700),
               ),
               Text(
                 'Never',
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
-                    color: Colors.grey[700]),
+                    color: AppColors.grey700),
               ),
             ],
           ),
@@ -114,18 +114,18 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
         ListTile(
             leading: Icon(
               FontAwesomeIcons.upload,
-              color: Colors.grey[700],
+              color: AppColors.grey700,
             ),
             title: Text(
               'Backup ↑',
               style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.bold,
-                  color: Colors.grey[700]),
+                  color: AppColors.grey700),
             ),
             subtitle: Text(
               'Backup data to Google Drive',
-              style: TextStyle(color: Colors.grey[700]),
+              style: TextStyle(color: AppColors.grey700),
             ),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => Navigator.push(
@@ -137,18 +137,18 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
         ListTile(
           leading: Icon(
             FontAwesomeIcons.download,
-            color: Colors.grey[700],
+            color: AppColors.grey700,
           ),
           title: Text(
             'Restore ↓',
             style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Colors.grey[700]),
+                color: AppColors.grey700),
           ),
           subtitle: Text(
             'Restore data from Google Drive',
-            style: TextStyle(color: Colors.grey[700]),
+            style: TextStyle(color: AppColors.grey700),
           ),
           trailing: const Icon(Icons.chevron_right),
           onTap: () => Navigator.push(
@@ -174,13 +174,13 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
                 style: TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
-                    color: Colors.grey[700]),
+                    color: AppColors.grey700),
               ),
               const SizedBox(
                 width: 8,
               ),
               Flexible(
-                child: Divider(color: Colors.grey[300]),
+                child: Divider(color: AppColors.grey300),
               ),
             ],
           ),
@@ -188,19 +188,19 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
         ListTile(
             leading: Icon(
               FontAwesomeIcons.fileImport,
-              color: Colors.grey[700],
+              color: AppColors.grey700,
             ),
             title: Text(
               'Import',
               style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Colors.grey[700],
+                color: AppColors.grey700,
               ),
             ),
             subtitle: Text(
               'Import data from json/excel file',
-              style: TextStyle(color: Colors.grey[700]),
+              style: TextStyle(color: AppColors.grey700),
             ),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => Navigator.push(
@@ -212,18 +212,18 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
         ListTile(
           leading: Icon(
             FontAwesomeIcons.fileExport,
-            color: Colors.grey[700],
+            color: AppColors.grey700,
           ),
           title: Text(
             'Export',
             style: TextStyle(
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
-                color: Colors.grey[700]),
+                color: AppColors.grey700),
           ),
           subtitle: Text(
             'Export data to json/excel file',
-            style: TextStyle(color: Colors.grey[700]),
+            style: TextStyle(color: AppColors.grey700),
           ),
           trailing: const Icon(Icons.chevron_right),
           onTap: () => Navigator.push(

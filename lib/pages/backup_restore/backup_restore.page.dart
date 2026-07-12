@@ -208,12 +208,12 @@ class _BackupRestorePageState extends ConsumerState<BackupRestorePage> {
   Widget build(BuildContext context) {
     final appBar = AppBar(
       backgroundColor: _pageColor,
-      foregroundColor: Colors.white,
+      foregroundColor: AppColors.white,
       title: const Text('Backup / Restore'),
     );
 
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: appBar,
       body: ListView(
         children: [

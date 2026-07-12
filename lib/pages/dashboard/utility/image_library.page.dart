@@ -1,5 +1,6 @@
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class ImageLibraryPage extends StatefulWidget {
   final BuildContext context;
@@ -105,14 +106,14 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
     double screenWidth = MediaQuery.of(context).size.width;
     int crossAxisCount = screenWidth ~/ 100;
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: false,
         title: const Text(
           'Library',
-          style: TextStyle(color: Colors.black),
+          style: TextStyle(color: AppColors.black),
         ),
         actions: [
           /*FutureBuilder<ClipboardData?>(

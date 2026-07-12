@@ -1,3 +1,4 @@
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'dart:ui' as ui;
 
@@ -34,7 +35,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       body: ListView(
         children: [
           SizedBox(

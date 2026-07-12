@@ -26,7 +26,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
     Color pageColor = widget.diningTable.status.color;
     final appBar = AppBar(
       backgroundColor: pageColor,
-      foregroundColor: Colors.white,
+      foregroundColor: AppColors.white,
       title: const Text('Dining Table Details'),
       actions: [
         IconButton(
@@ -60,7 +60,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
       ],
     );
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: appBar,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -94,7 +94,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                       style: const TextStyle(
                         fontSize: 16,
                         fontWeight: FontWeight.w500,
-                        color: Colors.white,
+                        color: AppColors.white,
                       ),
                     ),
                   ),

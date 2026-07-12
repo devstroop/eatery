@@ -38,7 +38,7 @@ class _ShowCurrencyRegionPageState extends ConsumerState<ShowCurrencyRegionPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         backgroundColor: themeColor,
         foregroundColor: AppColors.white900,

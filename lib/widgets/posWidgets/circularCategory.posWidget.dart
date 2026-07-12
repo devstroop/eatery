@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class CircularCategoryPOSWidget extends StatelessWidget {
   const CircularCategoryPOSWidget({super.key, required this.image, required this.label, this.selected = false, this.themeColor, this.onTap, this.margin});
@@ -43,7 +44,7 @@ class CircularCategoryPOSWidget extends StatelessWidget {
                 width: imageBlockSize,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(imageBlockSize/2),
-                  color: Colors.white,
+                  color: AppColors.white,
                   image: DecorationImage(
                       image: image,
                       fit: BoxFit.cover,

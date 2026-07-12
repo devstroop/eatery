@@ -155,11 +155,11 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
     final crossAxisCount = Responsive.gridColumns(context);
     final spacing = Responsive.spacing(context);
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
         title: const Text('Point of Sale'),
         backgroundColor: pageColor,
-        foregroundColor: Colors.white,
+        foregroundColor: AppColors.white,
         actions: [
           IconButton(
             icon: const Icon(Icons.search),
@@ -386,10 +386,10 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                     children: [
                       CircleAvatar(
                         radius: 16,
-                        backgroundColor: Colors.white,
+                        backgroundColor: AppColors.white,
                         child: Icon(
                           Icons.person,
-                          color: Colors.grey[400],
+                          color: AppColors.grey400,
                           size: 20,
                         ),
                       ),
@@ -404,7 +404,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                               style: const TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.normal,
-                                color: Colors.white,
+                                color: AppColors.white,
                               ),
                             ),
                           if (session.activeCustomer?.name != null)
@@ -413,7 +413,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                               style: const TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                                color: AppColors.white,
                               ),
                             ),
                           if (session.activeCustomer == null)
@@ -422,7 +422,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                               style: TextStyle(
                                 fontSize: 14,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                                color: AppColors.white,
                               ),
                             ),
                         ],
@@ -464,7 +464,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.normal,
-                            color: Colors.white,
+                            color: AppColors.white,
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -474,7 +474,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: AppColors.white,
                           ),
                         ),
                       ],
@@ -529,7 +529,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                           style: TextStyle(
                             fontSize: 10,
                             fontWeight: FontWeight.normal,
-                            color: Colors.white,
+                            color: AppColors.white,
                           ),
                         ),
                         const SizedBox(width: 8),
@@ -539,7 +539,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                           style: const TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.bold,
-                            color: Colors.white,
+                            color: AppColors.white,
                           ),
                         ),
                       ],
@@ -661,7 +661,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                             'Add a dish to get started',
                             style: TextStyle(
                               fontSize: 16,
-                              color: Colors.black54,
+                              color: AppColors.grey600,
                             ),
                           ),
                           const SizedBox(height: 48),
@@ -741,7 +741,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
           gravity: ToastGravity.CENTER,
           timeInSecForIosWeb: 1,
           backgroundColor: KColors.green,
-          textColor: Colors.white,
+          textColor: AppColors.white,
           fontSize: 12.0,
         );
         Navigator.of(context).pop();
@@ -784,11 +784,11 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                     : orderType == OrderType.delivery
                     ? Icons.delivery_dining
                     : Icons.takeout_dining,
-                color: Colors.white,
+                color: AppColors.white,
               ),
               text: orderType.name!,
               color: Color(orderType.color!),
-              foreColor: Colors.white,
+              foreColor: AppColors.white,
               onTap: () {
                 setState(() {
                   // this.orderType = orderType;
@@ -833,12 +833,12 @@ class PosCartInformation extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.shopping_cart, color: Colors.white),
+            const Icon(Icons.shopping_cart, color: AppColors.white),
             const SizedBox(width: 8),
             const Text(
               'Cart',
               style: TextStyle(
-                color: Colors.white,
+                color: AppColors.white,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),
@@ -848,16 +848,16 @@ class PosCartInformation extends StatelessWidget {
               height: 32,
               width: 32,
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 // Border Animation on set state
-                border: Border.all(color: Colors.grey[200]!, width: 2),
+                border: Border.all(color: AppColors.grey200!, width: 2),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Center(
                 child: Text(
                   cart.length.toString(),
                   style: const TextStyle(
-                    color: Colors.black,
+                    color: AppColors.black,
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
                   ),

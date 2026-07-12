@@ -23,7 +23,7 @@ class LeadingImageWidget extends StatelessWidget {
               color: (backgroundCo0lor ?? AppColors.white600).withOpacity(0.5)
           ),
           borderRadius: borderRadius ?? BorderRadius.circular(size/2),
-          color: backgroundCo0lor ?? Colors.white,
+          color: backgroundCo0lor ?? AppColors.white,
           image: DecorationImage(
               image: image,
               fit: BoxFit.cover),

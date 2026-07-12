@@ -273,9 +273,9 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
     final isDesktop = Responsive.isDesktop(context);
 
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
-        backgroundColor: Colors.grey[200],
+        backgroundColor: AppColors.grey200,
         title: Image.asset('assets/logo.png', height: 36),
         leading: viewIndex != 0
             ? IconButton(

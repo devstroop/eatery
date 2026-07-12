@@ -14,9 +14,9 @@ class _CreateCompanyResultPageState extends State<CreateCompanyResultPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey[200],
+      backgroundColor: AppColors.grey200,
       appBar: AppBar(
-        backgroundColor: Colors.grey[200],
+        backgroundColor: AppColors.grey200,
         title: Padding(
           padding: const EdgeInsets.only(top: 16.0),
           child: Image.asset(

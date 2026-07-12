@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class FoodTypeBadge extends StatelessWidget {
   const FoodTypeBadge({Key? key, required this.foodType, this.backgroundColor, this.size = 18})
@@ -15,7 +16,7 @@ class FoodTypeBadge extends StatelessWidget {
           width: size,
           height: size,
           decoration: BoxDecoration(
-            color: backgroundColor ?? Colors.white,
+            color: backgroundColor ?? AppColors.white,
             borderRadius: BorderRadius.circular(3),
             border: Border.all(
               color: const Color(0xFF43A047),
@@ -38,7 +39,7 @@ class FoodTypeBadge extends StatelessWidget {
           width: 18,
           height: 18,
           decoration: BoxDecoration(
-            color: backgroundColor ?? Colors.white,
+            color: backgroundColor ?? AppColors.white,
             borderRadius: BorderRadius.circular(3),
             border: Border.all(
               color: const Color(0xFFE53935),

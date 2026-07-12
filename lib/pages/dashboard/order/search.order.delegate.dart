@@ -1,5 +1,6 @@
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/core/theme/app_colors.dart';
 
 class SearchOrderDelegate extends SearchDelegate<Order?> {
   final List<Order> orders;
@@ -39,10 +40,10 @@ class SearchOrderDelegate extends SearchDelegate<Order?> {
   ThemeData appBarTheme(BuildContext context) {
     return Theme.of(context).copyWith(
       inputDecorationTheme: const InputDecorationTheme(
-        hintStyle: TextStyle(color: Colors.white),
+        hintStyle: TextStyle(color: AppColors.white),
       ),
       textTheme: const TextTheme(
-        headlineMedium: TextStyle(color: Colors.white, fontSize: 18),
+        headlineMedium: TextStyle(color: AppColors.white, fontSize: 18),
       ),
     );
   }
@@ -75,7 +76,7 @@ class SearchOrderDelegate extends SearchDelegate<Order?> {
               fontSize: 14,
               fontWeight: FontWeight.normal,
               fontStyle: FontStyle.italic,
-              color: Colors.grey[600],
+              color: AppColors.grey600,
             ),
           ),
         ),
@@ -107,7 +108,7 @@ class SearchOrderDelegate extends SearchDelegate<Order?> {
               fontSize: 14,
               fontWeight: FontWeight.normal,
               fontStyle: FontStyle.italic,
-              color: Colors.grey[600],
+              color: AppColors.grey600,
             ),
           ),
         ),

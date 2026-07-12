@@ -1,3 +1,4 @@
+import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/data/database/eatery_database.dart';
@@ -33,10 +34,10 @@ class DatabaseInspector extends ConsumerWidget {
           const SizedBox(height: 32),
           TextButton.icon(
             onPressed: () => _clearAllData(context, db),
-            icon: const Icon(Icons.warning_amber_rounded, color: Colors.red),
+            icon: const Icon(Icons.warning_amber_rounded, color: AppColors.error),
             label: const Text(
               'Clear All Data',
-              style: TextStyle(color: Colors.red),
+              style: TextStyle(color: AppColors.error),
             ),
           ),
         ],
@@ -61,7 +62,7 @@ class DatabaseInspector extends ConsumerWidget {
             onPressed: () => Navigator.pop(ctx, true),
             child: const Text(
               'Delete Everything',
-              style: TextStyle(color: Colors.red),
+              style: TextStyle(color: AppColors.error),
             ),
           ),
         ],
