@@ -3,8 +3,9 @@ import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ImageLibraryPage extends StatefulWidget {
+class ImageLibraryPage extends ConsumerStatefulWidget {
   final BuildContext context;
   final Function(LibraryImage? libraryImage) action;
 
@@ -12,10 +13,10 @@ class ImageLibraryPage extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<ImageLibraryPage> createState() => _ImageLibraryPageState();
+  ConsumerState<ImageLibraryPage> createState() => _ImageLibraryPageState();
 }
 
-class _ImageLibraryPageState extends State<ImageLibraryPage> {
+class _ImageLibraryPageState extends ConsumerState<ImageLibraryPage> {
   List<LibraryImage> _images = [];
 
   @override
@@ -122,17 +123,18 @@ class _ImageLibraryPageState extends State<ImageLibraryPage> {
                             iconSize: 24,
                             color: const Color(0xFF888888),
                             onPressed: () {
-                              showConfirmationDialog(
-                                  context,
-                                  "Import from link?",
-                                  "This will download the image from the link and import it to the library.",
-                                  () {
-                                LibraryImageProvider.importFromURL(
-                                        (uri ?? '').toString())
-                                    .then((value) {
-                                  fetchLibrary();
-                                });
-                              }, () {});
+                              AppDialog.showConfirmation(
+                                context,
+                                title: "Import from link?",
+                                content: "This will download the image from the link and import it to the library.",
+                                onConfirm: () {
+                                  LibraryImageProvider.importFromURL(
+                                          (uri ?? '').toString())
+                                      .then((value) {
+                                    fetchLibrary();
+                                  });
+                                },
+                              );
                             },
                           );
                         } else {

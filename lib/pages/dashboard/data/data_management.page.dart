@@ -1,3 +1,4 @@
+import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
@@ -260,7 +261,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           db.orderBox!.put(order.id, order);
         }
 
-        showMessageDialog(this.context, 'Imported successfully', MessageType.success);
+        AppDialog.showMessage(this.context, message: 'Imported successfully', type: MessageType.success);
 
       } else {
         // User canceled the picker
@@ -358,8 +359,8 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     List<int> bytes = excel.encode()!;
     File(filePath)
         .writeAsBytes(bytes)
-        .then((value) => showMessageDialog(this.context, 'Exported successfully', MessageType.success))
-        .onError((error, stackTrace) => showMessageDialog(this.context, 'Export failed', MessageType.error));
+        .then((value) => AppDialog.showMessage(this.context, message: 'Exported successfully', type: MessageType.success))
+        .onError((error, stackTrace) => AppDialog.showMessage(this.context, message: 'Export failed', type: MessageType.error));
   }
   */
 

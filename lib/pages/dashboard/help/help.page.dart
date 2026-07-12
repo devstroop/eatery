@@ -1,16 +1,17 @@
 import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HelpPage extends StatefulWidget {
+class HelpPage extends ConsumerStatefulWidget {
   const HelpPage({Key? key, this.account}) : super(key: key);
   final dynamic account;
 
   @override
-  State<HelpPage> createState() => _HelpPageState();
+  ConsumerState<HelpPage> createState() => _HelpPageState();
 }
 
-class _HelpPageState extends State<HelpPage> {
+class _HelpPageState extends ConsumerState<HelpPage> {
 
 
   @override

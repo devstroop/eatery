@@ -1,17 +1,18 @@
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class CreateCompanyResultPage extends StatefulWidget {
+class CreateCompanyResultPage extends ConsumerStatefulWidget {
   const CreateCompanyResultPage({Key? key}) : super(key: key);
 
   @override
-  State<CreateCompanyResultPage> createState() =>
+  ConsumerState<CreateCompanyResultPage> createState() =>
       _CreateCompanyResultPageState();
 }
 
-class _CreateCompanyResultPageState extends State<CreateCompanyResultPage> {
+class _CreateCompanyResultPageState extends ConsumerState<CreateCompanyResultPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

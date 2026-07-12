@@ -1,8 +1,9 @@
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Body5 extends StatefulWidget {
+class Body5 extends ConsumerStatefulWidget {
   final Color themeColor;
   final Currency? currency;
   final Function(Currency? currency) callback;
@@ -18,10 +19,10 @@ class Body5 extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<Body5> createState() => _Body5State();
+  ConsumerState<Body5> createState() => _Body5State();
 }
 
-class _Body5State extends State<Body5> {
+class _Body5State extends ConsumerState<Body5> {
   Currency? selectedCurrency;
 
   @override

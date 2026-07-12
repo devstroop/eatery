@@ -2,16 +2,17 @@ import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/core/utils/device_id.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 final _pageColor = AppColors.secondary2;
-class UpgradePage extends StatefulWidget {
+class UpgradePage extends ConsumerStatefulWidget {
   const UpgradePage({Key? key, required this.company}) : super(key: key);
   final Company? company;
 
   @override
-  State<UpgradePage> createState() => _UpgradePageState();
+  ConsumerState<UpgradePage> createState() => _UpgradePageState();
 }
 
-class _UpgradePageState extends State<UpgradePage> {
+class _UpgradePageState extends ConsumerState<UpgradePage> {
   SubscriptionType? selectedSubscriptionType;
   var controllerPurchaseCode = TextEditingController();
   late String? deviceSerial = 'Fetching';

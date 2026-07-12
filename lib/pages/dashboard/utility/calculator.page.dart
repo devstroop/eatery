@@ -3,15 +3,16 @@ import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CalculatorPage extends StatefulWidget {
+class CalculatorPage extends ConsumerStatefulWidget {
   const CalculatorPage({Key? key}) : super(key: key);
 
   @override
   _CalculatorPageState createState() => _CalculatorPageState();
 }
 
-class _CalculatorPageState extends State<CalculatorPage> {
+class _CalculatorPageState extends ConsumerState<CalculatorPage> {
   String _input = '';
 
   @override

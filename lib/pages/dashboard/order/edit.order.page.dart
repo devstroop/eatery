@@ -2,16 +2,17 @@ import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class EditOrderPage extends StatefulWidget {
+class EditOrderPage extends ConsumerStatefulWidget {
   const EditOrderPage({super.key, required this.order});
   final Order order;
 
   @override
-  State<EditOrderPage> createState() => _EditOrderPageState();
+  ConsumerState<EditOrderPage> createState() => _EditOrderPageState();
 }
 
-class _EditOrderPageState extends State<EditOrderPage> {
+class _EditOrderPageState extends ConsumerState<EditOrderPage> {
   @override
   Widget build(BuildContext context) {
     return AppPageShell(

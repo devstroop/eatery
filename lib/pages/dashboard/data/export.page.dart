@@ -1,15 +1,16 @@
 import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 final _pageColor = AppColors.menuCategories;
-class ExportPage extends StatefulWidget {
+class ExportPage extends ConsumerStatefulWidget {
   const ExportPage({super.key});
 
   @override
-  State<ExportPage> createState() => _ExportPageState();
+  ConsumerState<ExportPage> createState() => _ExportPageState();
 }
 
-class _ExportPageState extends State<ExportPage> {
+class _ExportPageState extends ConsumerState<ExportPage> {
   String selectedExportOption = 'Excel';
   @override
   Widget build(BuildContext context) {

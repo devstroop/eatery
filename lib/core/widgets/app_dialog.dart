@@ -5,7 +5,49 @@ import '../theme/app_spacing.dart';
 import '../theme/app_shadows.dart';
 import 'app_button.dart';
 import '../../core/utils/responsive.dart';
-import '../../widgets/dialogs/showMessageDialog.dart';
+
+enum MessageType { success, error, warning, info }
+
+extension MessageTypeExtension on MessageType {
+  String get value {
+    switch (this) {
+      case MessageType.success:
+        return 'Success';
+      case MessageType.error:
+        return 'Error';
+      case MessageType.warning:
+        return 'Warning';
+      case MessageType.info:
+        return 'Info';
+    }
+  }
+
+  IconData get icon {
+    switch (this) {
+      case MessageType.success:
+        return Icons.check_circle;
+      case MessageType.error:
+        return Icons.error;
+      case MessageType.warning:
+        return Icons.warning;
+      case MessageType.info:
+        return Icons.info;
+    }
+  }
+
+  Color get color {
+    switch (this) {
+      case MessageType.success:
+        return Colors.green;
+      case MessageType.error:
+        return AppColors.error;
+      case MessageType.warning:
+        return Colors.orange;
+      case MessageType.info:
+        return Colors.blue;
+    }
+  }
+}
 
 /// Responsive dialog/modal — on mobile shows a bottom sheet,
 /// on desktop shows a centered dialog.

@@ -1,15 +1,16 @@
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
-class LogoutPage extends StatefulWidget {
+class LogoutPage extends ConsumerStatefulWidget {
   const LogoutPage({Key? key}) : super(key: key);
   @override
-  State<LogoutPage> createState() => _LogoutPageState();
+  ConsumerState<LogoutPage> createState() => _LogoutPageState();
 }
 
-class _LogoutPageState extends State<LogoutPage> {
+class _LogoutPageState extends ConsumerState<LogoutPage> {
   Color themeColor = AppColors.secondary2;
   @override
   void initState() {

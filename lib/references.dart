@@ -13,7 +13,6 @@ export 'package:devdart_windows_hdsn/drive.dart';
 // External refs by devstroop (*deprecated — moved to local equivalents)
 export './components/bottom_view_grip.dart';
 export './widgets/titles/page_title.dart';
-export './widgets/buttons/primary.button.dart';
 export './core/widgets/app_button.dart';
 // Integrated packages
 export './support/bluetooth_thermal_printer/bluetooth_thermal_printer.dart';
@@ -48,13 +47,10 @@ export './constants/utils/app_file_system.dart';
 export './widgets/imageWidgets/leading.imageWidget.dart';
 export './widgets/labels/caption.label.dart';
 export './widgets/posWidgets/circularCategory.posWidget.dart';
-export './widgets/card/menu.card.dart';
 export './widgets/buttons/upload.button.dart';
 export './widgets/badges/foodType.badge.dart';
-export './widgets/textFields/search.textField.dart';
 export './widgets/switches/toggle.switch.dart';
-export './widgets/dialogs/showConfirmationDialog.dart';
-export './widgets/dialogs/showMessageDialog.dart';
+
 
 // Internal references
 export './components/bottom_view_grip.dart';

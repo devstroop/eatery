@@ -2,8 +2,9 @@ import 'package:intl/intl.dart';
 import 'package:eatery/core/utils/device_id.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/widgets/app_dialog.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class Body6 extends StatefulWidget {
+class Body6 extends ConsumerStatefulWidget {
   final Color themeColor;
   final Function(SubscriptionType subscriptionType, String? purchaseCde,
       DateTime? validFrom, DateTime? validTill) callback;
@@ -20,10 +21,10 @@ class Body6 extends StatefulWidget {
       : super(key: key);
 
   @override
-  State<Body6> createState() => _Body6State();
+  ConsumerState<Body6> createState() => _Body6State();
 }
 
-class _Body6State extends State<Body6> {
+class _Body6State extends ConsumerState<Body6> {
   final TextEditingController _controllerPurchaseCode = TextEditingController();
   DateTime? validFrom;
   DateTime? validTill;
