@@ -1,3 +1,4 @@
+import 'package:eatery/core/theme/app_spacing.dart';
 import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/pages/dashboard/payment/payments.page.dart';
 import 'package:eatery/references.dart';
@@ -153,7 +154,7 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
                   ).then((_) => setState(() {})),
                   onLogout: () => _showLogoutDialog(context),
                 ),
-                const SizedBox(height: 16),
+                AppSpacing.gapLg,
                 // ── Menu Grid ──
                 Wrap(
                   spacing: spacing,

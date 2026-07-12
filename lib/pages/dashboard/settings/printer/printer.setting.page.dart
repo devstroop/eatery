@@ -1,3 +1,4 @@
+import 'package:eatery/core/theme/app_spacing.dart';
 import 'dart:io';
 
 import 'package:eatery/data/models/eatery_db.dart';
@@ -165,7 +166,7 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
 
           const SizedBox(height: 24),
           const Divider(),
-          const SizedBox(height: 16),
+          AppSpacing.gapLg,
 
           const Text(
             'Bluetooth Discovery',
@@ -209,7 +210,7 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
 
           const SizedBox(height: 24),
           const Divider(),
-          const SizedBox(height: 16),
+          AppSpacing.gapLg,
 
           const Text(
             'Print Settings',

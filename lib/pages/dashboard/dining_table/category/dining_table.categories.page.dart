@@ -1,3 +1,5 @@
+import 'package:eatery/core/theme/app_spacing.dart';
+import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
@@ -141,7 +143,7 @@ class _DiningTableCategoriesPageState
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.category, size: 64),
-                    SizedBox(height: 16),
+                    AppSpacing.gapLg,
                     Text(
                       'No Table Categories Found',
                       style: TextStyle(

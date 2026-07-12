@@ -1,3 +1,5 @@
+import 'package:eatery/core/theme/app_spacing.dart';
+import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'dart:ui' as ui;
 import 'package:eatery/core/utils/responsive.dart';
@@ -128,7 +130,7 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.receipt_long, size: 64),
-                    SizedBox(height: 16),
+                    AppSpacing.gapLg,
                     Text(
                       'No orders received yet',
                       style: TextStyle(

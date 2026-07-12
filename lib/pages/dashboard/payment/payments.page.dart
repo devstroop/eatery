@@ -1,3 +1,4 @@
+import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/widgets/responsive/responsive_list_view.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';

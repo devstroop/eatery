@@ -1,3 +1,5 @@
+import 'package:eatery/core/theme/app_spacing.dart';
+import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/data/repositories/product_repository.dart';
 import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/references.dart';
@@ -43,7 +45,7 @@ class _ProductCategoriesPageState extends ConsumerState<ProductCategoriesPage> {
                       width: 100,
                       height: 100,
                     ),
-                    const SizedBox(height: 16),
+                    AppSpacing.gapLg,
                     const Text(
                       'No categories found',
                       style: TextStyle(

@@ -1,3 +1,5 @@
+import 'package:eatery/core/theme/app_spacing.dart';
+import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
@@ -162,7 +164,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
               ),
             ),
             // Description
-            const SizedBox(height: 16),
+            AppSpacing.gapLg,
             if (widget.diningTable.description != null)
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -198,7 +200,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
               ),
             // If table is occupied show the customer details and order details
             if (widget.diningTable.orderId != null) ...[
-              const SizedBox(height: 16),
+              AppSpacing.gapLg,
               const Text(
                 'Customer Details',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
@@ -278,7 +280,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
+              AppSpacing.gapLg,
               const Text(
                 'Order Details',
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),

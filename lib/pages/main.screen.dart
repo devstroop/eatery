@@ -1,3 +1,4 @@
+import 'package:eatery/core/theme/app_spacing.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/core/utils/responsive.dart';
@@ -79,7 +80,7 @@ class _MainScreenState extends State<MainScreen> {
                         color: AppColors.grey900,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    AppSpacing.gapLg,
                     Text(
                       'Manage your restaurant with ease with Eatery',
                       style: AppTypography.bodyLarge.copyWith(

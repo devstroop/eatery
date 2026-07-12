@@ -1,3 +1,5 @@
+import 'package:eatery/core/theme/app_spacing.dart';
+import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/widgets/responsive/responsive_list_view.dart';
 import 'package:eatery/pages/dashboard/customer/view.customer.page.dart';
@@ -51,7 +53,7 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.person, size: 64),
-                    SizedBox(height: 16),
+                    AppSpacing.gapLg,
                     Text(
                       'No Customers',
                       style: TextStyle(

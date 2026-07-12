@@ -1,3 +1,4 @@
+import 'package:eatery/core/theme/app_typography.dart';
 import 'dart:ui' as ui;
 
 import 'package:eatery/core/extensions/double_ext.dart';

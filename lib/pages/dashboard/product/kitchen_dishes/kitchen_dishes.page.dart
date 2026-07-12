@@ -1,3 +1,5 @@
+import 'package:eatery/core/theme/app_spacing.dart';
+import 'package:eatery/core/theme/app_typography.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
@@ -178,7 +180,7 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                           size: 128,
                           color: Colors.grey[500],
                         ),
-                        const SizedBox(height: 16),
+                        AppSpacing.gapLg,
                         Text(
                           'Oops!',
                           style: TextStyle(

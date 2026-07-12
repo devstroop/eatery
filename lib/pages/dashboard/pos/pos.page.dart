@@ -1,3 +1,5 @@
+import 'package:eatery/core/theme/app_spacing.dart';
+import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:eatery/core/utils/responsive.dart';
 import 'package:eatery/core/extensions/double_ext.dart';
@@ -647,7 +649,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                             width: 100,
                             height: 100,
                           ),
-                          const SizedBox(height: 16),
+                          AppSpacing.gapLg,
                           const Text(
                             'No dish found',
                             style: TextStyle(

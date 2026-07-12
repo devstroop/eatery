@@ -1,3 +1,4 @@
+import 'package:eatery/core/theme/app_typography.dart';
 import 'package:flutter/material.dart';
 
 /// Reusable page title widget (migrated from eatery_components).

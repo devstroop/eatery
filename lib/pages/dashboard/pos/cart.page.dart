@@ -1,3 +1,5 @@
+import 'package:eatery/core/theme/app_spacing.dart';
+import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:eatery/core/extensions/double_ext.dart';
 import 'package:eatery/functions/order.function.dart';
@@ -511,7 +513,7 @@ class _CartPageState extends ConsumerState<CartPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             const Text('Are you sure you want to place this order?'),
-            const SizedBox(height: 16),
+            AppSpacing.gapLg,
             Row(
               children: [
                 Expanded(
