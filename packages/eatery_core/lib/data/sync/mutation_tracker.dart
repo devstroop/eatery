@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:eatery_core/data/models/eatery_db.dart';
 import 'package:eatery_core/data/sync/sync_coordinator.dart';
 

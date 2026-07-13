@@ -60,7 +60,6 @@ class SyncService {
   String? _connectedHostId;
   String? _connectedHostName;
   int _lastSyncedClock = 0;
-  int _hostClock = 0;
   Timer? _heartbeatTimer;
   Timer? _hostCheckTimer;
   DateTime? _lastHeartbeat;
@@ -194,7 +193,6 @@ class SyncService {
   }
 
   void receiveHeartbeat(int hostClock) {
-    _hostClock = hostClock;
     _lastHeartbeat = DateTime.now();
     _missedHeartbeats = 0;
   }
@@ -206,7 +204,6 @@ class SyncService {
   }) {
     _connectedHostId = hostDeviceId;
     _connectedHostName = hostName;
-    _hostClock = hostClock;
     _lastHeartbeat = DateTime.now();
     _missedHeartbeats = 0;
     if (_connectionState != HostConnectionState.connected) {
