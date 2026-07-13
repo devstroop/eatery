@@ -120,10 +120,23 @@ class SyncCoordinator {
     }
   }
 
+  /// Maps entity type names to their SQL table names.
+  ///
+  /// Most tables are named after the entity type (product → product),
+  /// but a few have irregular pluralization (order → orders).
+  static String _tableName(String entityType) {
+    return switch (entityType) {
+      'order' => 'orders',
+      _ => entityType,
+    };
+  }
+
   void _applyEntry(OpLogEntry entry) {
+    final table = _tableName(entry.entityType);
+
     if (entry.operation == 'delete' || entry.operation == 'void') {
       _store.execute(
-        'DELETE FROM ${entry.entityType}s WHERE id = ?',
+        'DELETE FROM $table WHERE id = ?',
         [entry.entityId],
       );
       return;
@@ -132,7 +145,6 @@ class SyncCoordinator {
     final data = entry.data;
     if (data.isEmpty) return;
 
-    final table = '${entry.entityType}s';
     final columns = data.keys.join(', ');
     final placeholders = data.keys.map((_) => '?').join(', ');
     final values = data.values.toList();

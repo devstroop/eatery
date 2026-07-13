@@ -139,8 +139,11 @@ class SyncServer {
   }
 
   Future<void> stop() async {
-    for (final client in _clients) {
-      client.sink.close(ws_status.goingAway);
+    final clients = _clients.toList();
+    for (final client in clients) {
+      try {
+        client.sink.close(ws_status.normalClosure);
+      } catch (_) {}
     }
     _clients.clear();
     await _server?.close(force: true);
