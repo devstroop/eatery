@@ -47,9 +47,21 @@ class _SyncInitializerState extends ConsumerState<SyncInitializer> {
   Future<void> _initSync() async {
     if (appStore == null) return;
     final config = SyncHostConfig(appStore!);
+    var hostAddress = config.getHostAddress();
+
+    if (hostAddress == kDefaultHostAddress) {
+      final hosts = await MdnsService.discoverHosts(
+        timeout: const Duration(seconds: 3),
+      );
+      if (hosts.isNotEmpty) {
+        hostAddress = hosts.first.ip;
+        config.setHostAddress(hostAddress);
+      }
+    }
+
     ref.read(syncInitProvider(SyncConfig.leaf(
       deviceId: 'eatery-kds',
-      hostAddress: config.getHostAddress(),
+      hostAddress: hostAddress,
     )));
   }
 

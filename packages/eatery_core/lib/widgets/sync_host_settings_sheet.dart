@@ -22,6 +22,7 @@ class SyncHostSettingsSheet extends ConsumerStatefulWidget {
 class _SyncHostSettingsSheetState
     extends ConsumerState<SyncHostSettingsSheet> {
   late final TextEditingController _controller;
+  bool _discovering = false;
 
   @override
   void initState() {
@@ -49,6 +50,31 @@ class _SyncHostSettingsSheetState
     Navigator.pop(context);
   }
 
+  Future<void> _discover() async {
+    setState(() => _discovering = true);
+    try {
+      final hosts = await MdnsService.discoverHosts(timeout: const Duration(seconds: 4));
+      if (!mounted) return;
+      if (hosts.isEmpty) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('No sync hosts found on the network')),
+        );
+      } else {
+        _controller.text = hosts.first.ip;
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Found host "${hosts.first.name}" at ${hosts.first.ip}')),
+        );
+      }
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Discovery failed: $e')),
+      );
+    } finally {
+      if (mounted) setState(() => _discovering = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -67,7 +93,7 @@ class _SyncHostSettingsSheetState
           AppSpacing.gapMd,
           Text(
             'Enter the IP address or hostname of the admin device running '
-            'the sync server. Changes take effect after restart.',
+            'the sync server, or tap Discover to find one automatically.',
             style: theme.textTheme.bodySmall,
           ),
           AppSpacing.gapSm,
@@ -82,7 +108,27 @@ class _SyncHostSettingsSheetState
             autofocus: true,
           ),
           AppSpacing.gapMd,
-          ElevatedButton(onPressed: _save, child: const Text('Save')),
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: _discovering ? null : _discover,
+                  icon: _discovering
+                      ? const SizedBox(
+                          width: 16,
+                          height: 16,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Icon(Icons.search),
+                  label: Text(_discovering ? 'Scanning…' : 'Discover'),
+                ),
+              ),
+              AppSpacing.gapSm,
+              Expanded(
+                child: ElevatedButton(onPressed: _save, child: const Text('Save')),
+              ),
+            ],
+          ),
         ],
       ),
     );

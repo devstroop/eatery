@@ -1,3 +1,4 @@
+export 'mdns_service.dart';
 export 'mutation_hook.dart';
 export 'mutation_tracker.dart';
 export 'sync_host_config.dart';

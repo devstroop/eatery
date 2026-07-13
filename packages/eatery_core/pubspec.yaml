@@ -22,6 +22,7 @@ dependencies:
   riverpod_annotation: ^2.6.1
   freezed_annotation: ^3.0.0
   json_annotation: ^4.9.0
+  multicast_dns: ^0.3.2
 
 dev_dependencies:
   flutter_test:

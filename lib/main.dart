@@ -8,6 +8,7 @@ import 'package:eatery_core/data/database/eatery_database.dart';
 import 'package:eatery_core/data/database/native/eatery_schema.dart';
 import 'package:eatery_core/data/database/native/eatery_store.dart';
 import 'package:eatery_core/data/database/native/store_config.dart';
+import 'package:eatery_core/data/sync/mdns_service.dart';
 import 'package:eatery_core/data/sync/sync_providers.dart';
 import 'package:eatery_core/providers/database_provider.dart';
 import 'package:eatery/references.dart';
@@ -110,6 +111,11 @@ Future<void> startSync(WidgetRef ref) async {
   final deviceId = await getDeviceId() ?? 'eatery-admin';
   ref.read(syncInitProvider(SyncConfig.host(deviceId: deviceId)));
   debugPrint('Sync host started on port 9876');
+
+  unawaited(MdnsService.startAdvertising(
+    port: 9876,
+    deviceName: deviceId,
+  ));
 }
 
 class MyApp extends ConsumerStatefulWidget {

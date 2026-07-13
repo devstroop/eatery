@@ -19,6 +19,7 @@ export 'data/sync/sync_server.dart';
 export 'data/sync/sync_message.dart';
 export 'data/sync/op_log_entry.dart';
 export 'data/sync/op_log_service.dart';
+export 'data/sync/mdns_service.dart';
 
 /// Theme
 export 'theme/app_colors.dart';
