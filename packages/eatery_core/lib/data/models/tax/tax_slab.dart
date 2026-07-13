@@ -1,27 +1,21 @@
 import 'package:eatery_core/data/models/eatery_db.dart';
-import 'package:eatery_core/data/database/eatery_db_shim.dart';
-import 'package:eatery_core/data/database/native/store_config.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class TaxSlab {
-  int? id;
-  String name;
-  double rate;
-  TaxType type;
+part 'tax_slab.freezed.dart';
+part 'tax_slab.g.dart';
 
-  TaxSlab({required this.name, required this.rate, required this.type})
-    : id = kUseSqliteTaxStore ? null : EateryDB.instance.taxSlabBox?.nextId();
+@freezed
+abstract class TaxSlab with _$TaxSlab {
+  const factory TaxSlab({
+    int? id,
+    required String name,
+    required double rate,
+    @Default(TaxType.inclusive) TaxType type,
+  }) = _TaxSlab;
 
-  TaxSlab.fromMap(Map<String, dynamic> map)
-    : id = map['id'],
-      name = map['name'],
-      rate = map['rate'],
-      type = TaxType.values.singleWhere(
-        (element) => element.index == map['type'],
-      );
+  factory TaxSlab.fromJson(Map<String, dynamic> json) => _$TaxSlabFromJson(json);
 
-  Map<String, Object?> toMap() {
-    return {'id': id, 'name': name, 'rate': rate, 'type': type.index};
-  }
+  static TaxSlab fromMap(Map<String, dynamic> map) => TaxSlab.fromJson(map);
 
   static TaxSlab fromIterable(Iterable<dynamic> row) {
     return TaxSlab.fromMap({
@@ -31,6 +25,10 @@ class TaxSlab {
       'type': row.elementAt(3),
     });
   }
+}
+
+extension TaxSlabX on TaxSlab {
+  Map<String, Object?> toMap() => toJson() as Map<String, Object?>;
 
   List<dynamic> toIterable() {
     var map = toMap();

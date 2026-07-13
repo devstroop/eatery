@@ -79,7 +79,7 @@ class SqliteOrderRepository implements OrderRepository {
       values,
     );
     final id = _store.queryScalar('SELECT last_insert_rowid()') as int;
-    order.id = id;
+    order = order.copyWith(id: id);
     return id;
   }
 
@@ -103,7 +103,7 @@ class SqliteOrderRepository implements OrderRepository {
   @override
   Future<int> addOrderProduct(OrderProduct op) async {
     final id = _insertOrderProduct(op);
-    op.id = id;
+    op = op.copyWith(id: id);
     return id;
   }
 
@@ -120,7 +120,7 @@ class SqliteOrderRepository implements OrderRepository {
       );
       return;
     }
-    op.id = _insertOrderProduct(op);
+    op = op.copyWith(id: _insertOrderProduct(op));
   }
 
   // ---------------------------------------------------------------------------

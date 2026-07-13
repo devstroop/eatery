@@ -34,9 +34,9 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
     super.initState();
     Future.delayed(Duration.zero, () {
       setState(() {
-        diningTableCategory = widget.diningTable.category?.id != null
+        diningTableCategory = widget.diningTable.categoryId != null
             ? (ref.read(diningTableRepositoryProvider) as dynamic)
-                  .getCategoryById(widget.diningTable.category!.id)
+                  .getCategoryById(widget.diningTable.categoryId!)
             : null;
         _controllerCategoryName.text = widget.diningTable.name;
         _controllerCategoryDescription.text =
@@ -180,11 +180,13 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
                 .read(diningTableRepositoryProvider)
                 .getTableById(widget.diningTable.id!)!;
 
-            diningTable.name = _controllerCategoryName.text;
-            diningTable.description = _controllerCategoryDescription.text;
-            diningTable.category = diningTableCategory;
-            diningTable.status = status;
-            diningTable.capacity = int.parse(_controllerCapacity.text);
+            diningTable = diningTable.copyWith(
+              name: _controllerCategoryName.text,
+              description: _controllerCategoryDescription.text,
+              categoryId: diningTableCategory?.id,
+              status: status,
+              capacity: int.parse(_controllerCapacity.text),
+            );
 
             await ref
                 .read(diningTableRepositoryProvider)

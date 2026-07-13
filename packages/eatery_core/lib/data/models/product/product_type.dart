@@ -1,4 +1,12 @@
-enum ProductType { kitchenDish, inventoryItem }
+import 'package:json_annotation/json_annotation.dart';
+
+@JsonEnum()
+enum ProductType {
+  @JsonValue(0)
+  kitchenDish,
+  @JsonValue(1)
+  inventoryItem,
+}
 
 extension ProductTypeExtension on ProductType {
   int get id {

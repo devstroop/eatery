@@ -1,4 +1,12 @@
-enum TaxType { inclusive, exclusive }
+import 'package:json_annotation/json_annotation.dart';
+
+@JsonEnum()
+enum TaxType {
+  @JsonValue(0)
+  inclusive,
+  @JsonValue(1)
+  exclusive,
+}
 
 extension TaxTypeExtension on TaxType {
   int? get id {

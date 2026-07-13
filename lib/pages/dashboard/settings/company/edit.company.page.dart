@@ -222,16 +222,18 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
               child: AppButton.primary(
                 label: 'Save',
                 onPressed: () async {
-                  company!.name = _controllerCompanyName.text;
-                  company!.email = _controllerEmail.text;
-                  company!.phone = _controllerPhone.text;
-                  company!.address = _controllerAddress.text;
-                  company!.foodLicenseNo = _controllerFoodLicNo.text;
-                  company!.salesTaxNumber = _controllerSalesTaxNo.text;
+                  final updated = company!.copyWith(
+                    name: _controllerCompanyName.text,
+                    email: _controllerEmail.text,
+                    phone: _controllerPhone.text,
+                    address: _controllerAddress.text,
+                    foodLicenseNo: _controllerFoodLicNo.text,
+                    salesTaxNumber: _controllerSalesTaxNo.text,
+                  );
 
                   // Update the company in the database
                   final repo = ref.read(companyRepositoryProvider);
-                  repo.saveCompany(company!).then((value) {
+                  repo.saveCompany(updated).then((value) {
                     AppDialog.showMessage(
                       context,
                       message: 'Company details successfully updated',

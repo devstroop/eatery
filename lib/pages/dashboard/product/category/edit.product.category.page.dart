@@ -107,11 +107,13 @@ class _EditProductCategoryPageState
         child: AppButton.primary(
           onPressed: () async {
             try {
-              widget.category.name = _controllerCategoryName.text.trim();
-              widget.category.description = _controllerDescription.text.trim();
-              widget.category.image = pickedLibraryImage?.filename;
+              final updated = widget.category.copyWith(
+                name: _controllerCategoryName.text.trim(),
+                description: _controllerDescription.text.trim(),
+                image: pickedLibraryImage?.filename,
+              );
               final repo = ref.read(productRepositoryProvider);
-              await repo.saveCategory(widget.category);
+              await repo.saveCategory(updated);
               AppDialog.showMessage(
                 context,
                 message: 'Updated successfully',

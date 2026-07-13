@@ -1,72 +1,36 @@
 import 'package:eatery_core/data/models/eatery_db.dart';
-import 'package:eatery_core/data/database/eatery_db_shim.dart';
-import 'package:eatery_core/data/database/native/store_config.dart';
+import 'package:eatery_core/data/models/converters.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Payment {
-  int? id;
-  int? orderId;
-  DateTime date;
-  double amount;
-  PaymentMode mode;
-  String? reference;
-  String? attachment;
-  String? processorTransactionId;
-  String? processorName;
-  String? processorStatus;
-  String? cardLastFour;
-  String? terminalId;
+part 'payment.freezed.dart';
+part 'payment.g.dart';
 
-  Payment({
-    this.orderId,
-    required this.amount,
-    required this.mode,
-    this.reference,
-    this.attachment,
-    this.processorTransactionId,
-    this.processorName,
-    this.processorStatus,
-    this.cardLastFour,
-    this.terminalId,
-  }) : id = kUseSqlitePaymentStore
-           ? null
-           : EateryDB.instance.paymentBox?.nextId(),
-       date = DateTime.now();
+@freezed
+abstract class Payment with _$Payment {
+  const factory Payment({
+    int? id,
+    int? orderId,
+    @JsonKey(fromJson: epochFromJson, toJson: epochToJson)
+    required DateTime date,
+    required double amount,
+    required PaymentMode mode,
+    String? reference,
+    String? attachment,
+    String? processorTransactionId,
+    String? processorName,
+    String? processorStatus,
+    String? cardLastFour,
+    String? terminalId,
+  }) = _Payment;
 
-  Payment.fromMap(Map<String, dynamic> map)
-    : id = map['id'],
-      orderId = map['orderId'],
-      date = DateTime.fromMillisecondsSinceEpoch(map['date']),
-      amount = map['amount'],
-      mode = PaymentMode.values[map['mode']],
-      reference = map['reference'],
-      attachment = map['attachment'],
-      processorTransactionId = map['processorTransactionId'],
-      processorName = map['processorName'],
-      processorStatus = map['processorStatus'],
-      cardLastFour = map['cardLastFour'],
-      terminalId = map['terminalId'];
+  factory Payment.fromJson(Map<String, dynamic> json) => _$PaymentFromJson(json);
 
-  Map<String, Object?> toMap() {
-    return {
-      'id': id,
-      'orderId': orderId,
-      'date': date.millisecondsSinceEpoch,
-      'amount': amount,
-      'mode': mode.index,
-      'reference': reference,
-      'attachment': attachment,
-      'processorTransactionId': processorTransactionId,
-      'processorName': processorName,
-      'processorStatus': processorStatus,
-      'cardLastFour': cardLastFour,
-      'terminalId': terminalId,
-    };
-  }
+  static Payment fromMap(Map<String, dynamic> map) => Payment.fromJson(map);
 
   static Payment fromIterable(Iterable<dynamic> row) {
     return Payment.fromMap({
       'id': row.elementAt(0),
-      'order': row.elementAt(1),
+      'orderId': row.elementAt(1),
       'date': row.elementAt(2),
       'amount': row.elementAt(3),
       'mode': row.elementAt(4),
@@ -79,12 +43,16 @@ class Payment {
       'terminalId': row.elementAt(11),
     });
   }
+}
+
+extension PaymentX on Payment {
+  Map<String, Object?> toMap() => toJson() as Map<String, Object?>;
 
   List<dynamic> toIterable() {
     var map = toMap();
     return [
       map['id'],
-      map['order'],
+      map['orderId'],
       map['date'],
       map['amount'],
       map['mode'],

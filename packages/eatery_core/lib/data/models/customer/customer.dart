@@ -1,59 +1,44 @@
-import 'package:eatery_core/data/database/eatery_db_shim.dart';
-import 'package:eatery_core/data/database/native/store_config.dart';
+import 'package:eatery_core/data/models/converters.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Customer {
-  int? id;
-  String? name;
-  String phone;
-  String? address;
-  String? landmark;
-  double? latitude;
-  double? longitude;
-  bool isActive;
-  DateTime? lastOrderAt;
+part 'customer.freezed.dart';
+part 'customer.g.dart';
 
-  Customer({
-    this.name,
-    required this.phone,
-    this.address,
-    this.landmark,
-    this.latitude,
-    this.longitude,
-    this.isActive = true,
-    this.lastOrderAt,
-  }) : id = kUseSqliteCustomerStore
-           ? null
-           : EateryDB.instance.customerBox?.nextId();
+@freezed
+abstract class Customer with _$Customer {
+  const factory Customer({
+    int? id,
+    String? name,
+    required String phone,
+    String? address,
+    String? landmark,
+    double? latitude,
+    double? longitude,
+    @Default(true) bool isActive,
+    @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)
+    DateTime? lastOrderAt,
+  }) = _Customer;
 
-  Customer.fromMap(Map<String, dynamic> map)
-    : id = map['id'],
-      name = map['name'],
-      phone = map['phone'],
-      address = map['address'],
-      landmark = map['landmark'],
-      latitude = map['latitude'] != null
+  factory Customer.fromJson(Map<String, dynamic> json) =>
+      _$CustomerFromJson(json);
+
+  static Customer fromMap(Map<String, dynamic> map) {
+    return Customer.fromJson({
+      'id': map['id'],
+      'name': map['name'],
+      'phone': map['phone'],
+      'address': map['address'],
+      'landmark': map['landmark'],
+      'latitude': map['latitude'] != null
           ? double.parse(map['latitude'].toString())
           : null,
-      longitude = map['longitude'] != null
+      'longitude': map['longitude'] != null
           ? double.parse(map['longitude'].toString())
           : null,
-      isActive = map['isActive'] == 1 ? true : false,
-      lastOrderAt = map['lastOrderAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['lastOrderAt'])
-          : null;
-
-  Map<String, Object?> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'phone': phone,
-      'address': address,
-      'landmark': landmark,
-      'latitude': latitude,
-      'longitude': longitude,
-      'isActive': isActive ? 1 : 0,
-      'lastOrderAt': lastOrderAt?.millisecondsSinceEpoch,
-    };
+      'isActive':
+          map['isActive'] is int ? map['isActive'] == 1 : (map['isActive'] ?? false),
+      'lastOrderAt': map['lastOrderAt'],
+    });
   }
 
   static Customer fromIterable(Iterable<dynamic> list) {
@@ -68,6 +53,22 @@ class Customer {
       'isActive': list.elementAt(7),
       'lastOrderAt': list.elementAt(8),
     });
+  }
+}
+
+extension CustomerX on Customer {
+  Map<String, Object?> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'phone': phone,
+      'address': address,
+      'landmark': landmark,
+      'latitude': latitude,
+      'longitude': longitude,
+      'isActive': isActive ? 1 : 0,
+      'lastOrderAt': lastOrderAt?.millisecondsSinceEpoch,
+    };
   }
 
   Iterable<dynamic> toIterable() {

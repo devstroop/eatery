@@ -36,7 +36,7 @@ class SqliteTaxRepository implements TaxRepository {
 
     _store.execute('INSERT INTO tax_slab ($_columns) VALUES (?,?,?)', values);
     final id = _store.queryScalar('SELECT last_insert_rowid()') as int;
-    slab.id = id;
+    slab = slab.copyWith(id: id);
     return id;
   }
 

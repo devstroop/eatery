@@ -1,43 +1,30 @@
-class VoidLogEntry {
-  int? id;
-  int orderId;
-  DateTime voidedAt;
-  String voidedBy;
-  String reasonCode;
-  String? reasonDescription;
-  double amount;
-  String? orderReference;
+import 'package:eatery_core/data/models/converters.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  VoidLogEntry({
-    required this.orderId,
-    required this.voidedAt,
-    required this.voidedBy,
-    required this.reasonCode,
-    this.reasonDescription,
-    required this.amount,
-    this.orderReference,
-  });
+part 'void_log_entry.freezed.dart';
+part 'void_log_entry.g.dart';
 
-  VoidLogEntry.fromMap(Map<String, dynamic> map)
-    : id = map['id'],
-      orderId = map['orderId'],
-      voidedAt = DateTime.fromMillisecondsSinceEpoch(map['voidedAt']),
-      voidedBy = map['voidedBy'],
-      reasonCode = map['reasonCode'],
-      reasonDescription = map['reasonDescription'],
-      amount = (map['amount'] as num).toDouble(),
-      orderReference = map['orderReference'];
+@freezed
+abstract class VoidLogEntry with _$VoidLogEntry {
+  const factory VoidLogEntry({
+    int? id,
+    required int orderId,
+    @JsonKey(fromJson: epochFromJson, toJson: epochToJson)
+    required DateTime voidedAt,
+    required String voidedBy,
+    required String reasonCode,
+    String? reasonDescription,
+    required double amount,
+    String? orderReference,
+  }) = _VoidLogEntry;
 
-  Map<String, Object?> toMap() {
-    return {
-      'id': id,
-      'orderId': orderId,
-      'voidedAt': voidedAt.millisecondsSinceEpoch,
-      'voidedBy': voidedBy,
-      'reasonCode': reasonCode,
-      'reasonDescription': reasonDescription,
-      'amount': amount,
-      'orderReference': orderReference,
-    };
-  }
+  factory VoidLogEntry.fromJson(Map<String, dynamic> json) =>
+      _$VoidLogEntryFromJson(json);
+
+  static VoidLogEntry fromMap(Map<String, dynamic> map) =>
+      VoidLogEntry.fromJson(map);
+}
+
+extension VoidLogEntryX on VoidLogEntry {
+  Map<String, Object?> toMap() => toJson() as Map<String, Object?>;
 }

@@ -72,7 +72,7 @@ class SqliteCustomerRepository implements CustomerRepository {
       values,
     );
     final id = _store.queryScalar('SELECT last_insert_rowid()') as int;
-    customer.id = id;
+    customer = customer.copyWith(id: id);
     return id;
   }
 

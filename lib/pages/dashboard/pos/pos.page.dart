@@ -235,11 +235,11 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                                             session.activeDiningTable?.id ?? 0,
                                           );
                                       if (diningTable != null) {
-                                        diningTable.status =
-                                            DiningTableStatus.available;
-                                        diningTable.orderId = null;
                                         await diningTableRepo.saveTable(
-                                          diningTable,
+                                          diningTable.copyWith(
+                                            status: DiningTableStatus.available,
+                                            orderId: null,
+                                          ),
                                         );
                                       }
 

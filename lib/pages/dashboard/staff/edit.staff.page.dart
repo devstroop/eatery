@@ -190,13 +190,15 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
             }
             _formKey.currentState!.save();
 
-            widget.staff.name = _controllerStaffName.text;
-            widget.staff.phone = _controllerStaffPhone.text;
-            widget.staff.photo = image?.filename;
-            widget.staff.type = staffType!;
-            widget.staff.isActive = isActive;
+            final updated = widget.staff.copyWith(
+              name: _controllerStaffName.text,
+              phone: _controllerStaffPhone.text,
+              photo: image?.filename,
+              type: staffType!,
+              isActive: isActive,
+            );
             try {
-              ref.read(staffRepositoryProvider).saveStaff(widget.staff).then((
+              ref.read(staffRepositoryProvider).saveStaff(updated).then((
                 id,
               ) {
                 AppDialog.showMessage(

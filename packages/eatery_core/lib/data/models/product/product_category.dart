@@ -1,27 +1,22 @@
-import 'package:eatery_core/data/models/eatery_db.dart';
-import 'package:eatery_core/data/database/eatery_db_shim.dart';
-import 'package:eatery_core/data/database/native/store_config.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class ProductCategory {
-  int? id;
-  String name;
-  String? description;
-  String? image;
+part 'product_category.freezed.dart';
+part 'product_category.g.dart';
 
-  ProductCategory({required this.name, this.description, this.image})
-    : id = kUseSqliteProductStore
-          ? null
-          : EateryDB.instance.productCategoryBox?.nextId();
+@freezed
+abstract class ProductCategory with _$ProductCategory {
+  const factory ProductCategory({
+    int? id,
+    required String name,
+    String? description,
+    String? image,
+  }) = _ProductCategory;
 
-  ProductCategory.fromMap(Map<String, dynamic> map)
-    : id = map['id'],
-      name = map['name'],
-      description = map['description'],
-      image = map['image'];
+  factory ProductCategory.fromJson(Map<String, dynamic> json) =>
+      _$ProductCategoryFromJson(json);
 
-  Map<String, Object?> toMap() {
-    return {'id': id, 'name': name, 'description': description, 'image': image};
-  }
+  static ProductCategory fromMap(Map<String, dynamic> map) =>
+      ProductCategory.fromJson(map);
 
   static ProductCategory fromIterable(Iterable<dynamic> row) {
     return ProductCategory.fromMap({
@@ -31,6 +26,10 @@ class ProductCategory {
       'image': row.elementAt(3),
     });
   }
+}
+
+extension ProductCategoryX on ProductCategory {
+  Map<String, Object?> toMap() => toJson() as Map<String, Object?>;
 
   List<dynamic> toIterable() {
     return [name, description, image];

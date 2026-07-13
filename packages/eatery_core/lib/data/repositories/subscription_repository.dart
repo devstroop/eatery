@@ -15,12 +15,12 @@ class SubscriptionRepository {
     }
     _db.execute('INSERT INTO subscription (purchaseCode,validFrom,validTill,subscriptionType) VALUES (?,?,?,?)', v);
     final id = _db.queryScalar('SELECT last_insert_rowid()') as int;
-    sub.id = id; return id;
+    sub = sub.copyWith(id: id); return id;
   }
   Future<void> clearAll() async => _db.execute('DELETE FROM subscription');
   Subscription _toSub(Map<String, Object?> r) {
     SubscriptionType? st; final stId = r['subscriptionType'] as int?;
     if (stId != null) st = SubscriptionType.values.firstWhere((e) => e.id == stId, orElse: () => SubscriptionType.individual);
-    return Subscription(purchaseCode: r['purchaseCode'] as String?, validFrom: r['validFrom'] != null ? DateTime.fromMillisecondsSinceEpoch(r['validFrom'] as int) : null, validTill: r['validTill'] != null ? DateTime.fromMillisecondsSinceEpoch(r['validTill'] as int) : null, subscriptionType: st)..id = r['id'] as int;
+    return Subscription(purchaseCode: r['purchaseCode'] as String?, validFrom: r['validFrom'] != null ? DateTime.fromMillisecondsSinceEpoch(r['validFrom'] as int) : null, validTill: r['validTill'] != null ? DateTime.fromMillisecondsSinceEpoch(r['validTill'] as int) : null, subscriptionType: st, id: r['id'] as int);
   }
 }

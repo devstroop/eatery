@@ -42,7 +42,7 @@ class SqliteStaffRepository implements StaffRepository {
 
     _store.execute('INSERT INTO staff ($_columns) VALUES (?,?,?,?,?)', values);
     final id = _store.queryScalar('SELECT last_insert_rowid()') as int;
-    staff.id = id;
+    staff = staff.copyWith(id: id);
     return id;
   }
 
@@ -93,6 +93,6 @@ class SqliteStaffRepository implements StaffRepository {
       phone: row['phone'] as String?,
       type: type,
       isActive: (row['isActive'] as int) == 1,
-    )..id = row['id'] as int;
+      id: row['id'] as int);
   }
 }

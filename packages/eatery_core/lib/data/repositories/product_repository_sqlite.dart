@@ -107,7 +107,7 @@ class SqliteProductRepository implements ProductRepository {
       values,
     );
     final id = _store.queryScalar('SELECT last_insert_rowid()') as int;
-    product.id = id;
+    product = product.copyWith(id: id);
     return id;
   }
 
@@ -151,7 +151,7 @@ class SqliteProductRepository implements ProductRepository {
       values,
     );
     final id = _store.queryScalar('SELECT last_insert_rowid()') as int;
-    category.id = id;
+    category = category.copyWith(id: id);
     return id;
   }
 

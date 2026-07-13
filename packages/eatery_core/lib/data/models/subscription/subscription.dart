@@ -1,50 +1,31 @@
 import 'package:eatery_core/data/models/eatery_db.dart';
-import 'package:eatery_core/data/database/eatery_db_shim.dart';
-import 'package:eatery_core/data/database/native/store_config.dart';
+import 'package:eatery_core/data/models/converters.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Subscription {
-  int? id;
-  String? purchaseCode;
-  DateTime? validFrom;
-  DateTime? validTill;
-  SubscriptionType? subscriptionType = SubscriptionType.individual;
+part 'subscription.freezed.dart';
+part 'subscription.g.dart';
 
-  Subscription(
-      {
-      this.purchaseCode,
-      this.validFrom,
-      this.validTill,
-      required this.subscriptionType}): id = kUseSqliteSubscriptionStore ? null : EateryDB.instance.subscriptionBox?.nextId();
+@freezed
+abstract class Subscription with _$Subscription {
+  const factory Subscription({
+    int? id,
+    String? purchaseCode,
+    @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)
+    DateTime? validFrom,
+    @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)
+    DateTime? validTill,
+    @Default(SubscriptionType.individual) SubscriptionType? subscriptionType,
+  }) = _Subscription;
 
-  Subscription.fromMap(Map<String, dynamic> map)
-      : id = map['id'],
-        purchaseCode = map['purchaseCode'],
-        validFrom =
-            DateTime.fromMillisecondsSinceEpoch(map['validFrom'] as int? ?? 0),
-        validTill =
-            DateTime.fromMillisecondsSinceEpoch(map['validTill'] as int? ?? 0),
-        subscriptionType = SubscriptionType.values
-            .singleWhere((element) => element.id == map['subscriptionType']);
+  factory Subscription.fromJson(Map<String, dynamic> json) =>
+      _$SubscriptionFromJson(json);
 
-  Map<String, Object?> toMap() {
-    return {
-      'id': id,
-      'name': purchaseCode,
-      'validFrom': validFrom?.millisecondsSinceEpoch,
-      'validTill': validTill?.millisecondsSinceEpoch,
-      'subscriptionType': subscriptionType?.id
-    };
-  }
+  static Subscription fromMap(Map<String, dynamic> map) =>
+      Subscription.fromJson(map);
+}
 
-  static Subscription fromIterable(Iterable<dynamic> row) {
-    return Subscription.fromMap({
-      'id': row.elementAt(0),
-      'purchaseCode': row.elementAt(1),
-      'validFrom': row.elementAt(2),
-      'validTill': row.elementAt(3),
-      'subscriptionType': row.elementAt(4)
-    });
-  }
+extension SubscriptionX on Subscription {
+  Map<String, Object?> toMap() => toJson() as Map<String, Object?>;
 
   List<dynamic> toIterable() {
     var map = toMap();
@@ -53,7 +34,7 @@ class Subscription {
       map['purchaseCode'],
       map['validFrom'],
       map['validTill'],
-      map['subscriptionType']
+      map['subscriptionType'],
     ];
   }
 }

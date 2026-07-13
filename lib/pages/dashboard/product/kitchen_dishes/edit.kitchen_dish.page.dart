@@ -324,17 +324,19 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
             }
             _formKey.currentState!.save();
 
-            widget.product.image = image?.filename;
-            widget.product.name = _controllerName.text;
-            widget.product.mrpPrice = _controllerMRP.text.toDouble() ?? 0;
-            widget.product.salePrice = _controllerSalePrice.text.toDouble();
-            widget.product.foodType = selectedFoodType;
-            widget.product.taxSlabId = selectedTaxSlab?.id;
-            widget.product.categoryId = selectedCategory?.id;
-            widget.product.description = _controllerDescription.text;
+            final updated = widget.product.copyWith(
+              image: image?.filename,
+              name: _controllerName.text,
+              mrpPrice: _controllerMRP.text.toDouble() ?? 0,
+              salePrice: _controllerSalePrice.text.toDouble(),
+              foodType: selectedFoodType,
+              taxSlabId: selectedTaxSlab?.id,
+              categoryId: selectedCategory?.id,
+              description: _controllerDescription.text,
+            );
             await ref
                 .read(productRepositoryProvider)
-                .saveProduct(widget.product)
+                .saveProduct(updated)
                 .then((value) {
                   AppDialog.showMessage(
                     this.context,

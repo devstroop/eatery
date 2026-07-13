@@ -1,6 +1,3 @@
-/// Models barrel — re-exports all models for convenient imports.
-library eatery_models;
-
 export 'dart:convert' show jsonEncode, jsonDecode;
 
 // Order

@@ -73,7 +73,7 @@ class _DiningTableCategoriesPageState
                                     .getAllTables()
                                     .any(
                                       (element) =>
-                                          element.category?.id == each.id,
+                                          element.categoryId == each.id,
                                     )) {
                                   return AlertDialog(
                                     title: const Text('Delete Category'),

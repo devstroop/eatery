@@ -1,4 +1,18 @@
-enum PaymentMode { cash, card, upi, wallet, other }
+import 'package:json_annotation/json_annotation.dart';
+
+@JsonEnum()
+enum PaymentMode {
+  @JsonValue(0)
+  cash,
+  @JsonValue(1)
+  card,
+  @JsonValue(2)
+  upi,
+  @JsonValue(3)
+  wallet,
+  @JsonValue(4)
+  other,
+}
 
 extension PaymentModeExtension on PaymentMode {
   String get name {

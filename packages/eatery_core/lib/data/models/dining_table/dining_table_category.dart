@@ -1,26 +1,35 @@
-import 'package:eatery_core/data/database/eatery_db_shim.dart';
-import 'package:eatery_core/data/database/native/store_config.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class DiningTableCategory {
-  int? id;
-  String name;
-  String? description;
-  bool isActive;
+part 'dining_table_category.freezed.dart';
+part 'dining_table_category.g.dart';
 
-  DiningTableCategory({
-    required this.name,
-    this.description,
-    this.isActive = false,
-  }) : id = kUseSqliteDiningTableStore
-           ? null
-           : EateryDB.instance.diningTableCategoryBox?.nextId();
+@freezed
+abstract class DiningTableCategory with _$DiningTableCategory {
+  const factory DiningTableCategory({
+    int? id,
+    required String name,
+    String? description,
+    @Default(false) bool isActive,
+  }) = _DiningTableCategory;
 
-  DiningTableCategory.fromMap(Map<String, dynamic> map)
-    : id = map['id'],
-      name = map['name'],
-      description = map['description'],
-      isActive = map['isActive'] == 1 ? true : false;
+  factory DiningTableCategory.fromJson(Map<String, dynamic> json) =>
+      _$DiningTableCategoryFromJson(json);
 
+  static DiningTableCategory fromMap(Map<String, dynamic> map) {
+    return DiningTableCategory.fromJson(map);
+  }
+
+  static DiningTableCategory fromIterable(Iterable<dynamic> row) {
+    return DiningTableCategory.fromMap({
+      'id': row.elementAt(0),
+      'name': row.elementAt(1),
+      'description': row.elementAt(2),
+      'isActive': row.elementAt(3),
+    });
+  }
+}
+
+extension DiningTableCategoryX on DiningTableCategory {
   Map<String, Object?> toMap() {
     return {
       'id': id,
@@ -30,24 +39,7 @@ class DiningTableCategory {
     };
   }
 
-  static DiningTableCategory fromIterable(Iterable<dynamic> row) {
-    return DiningTableCategory.fromMap({
-      'id': row.elementAt(0),
-      'name': row.elementAt(1),
-      'description': row.elementAt(2),
-      'image': row.elementAt(3),
-      'isActive': row.elementAt(4),
-    });
-  }
-
-  Iterable<dynamic> toIterable() {
-    var map = toMap();
-    return [
-      map['id'],
-      map['name'],
-      map['description'],
-      map['image'],
-      map['isActive'],
-    ];
+  List<dynamic> toIterable() {
+    return [name, description, isActive];
   }
 }

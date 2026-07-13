@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-enum SubscriptionType { individual, business }
+@JsonEnum()
+enum SubscriptionType {
+  @JsonValue(0)
+  individual,
+  @JsonValue(1)
+  business,
+}
 
 extension SubscriptionTypeExtension on SubscriptionType {
   int get id {

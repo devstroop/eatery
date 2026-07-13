@@ -1,45 +1,27 @@
 import 'package:eatery_core/data/models/eatery_db.dart';
-import 'package:eatery_core/data/database/eatery_db_shim.dart';
-import 'package:eatery_core/data/database/native/store_config.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Printer {
-  int? id;
-  String name;
-  String? bluetoothAddress;
-  String? usbVendorId;
-  String? usbProductId;
-  PrinterType? type; // enum?
+part 'printer.freezed.dart';
+part 'printer.g.dart';
 
-  Printer({
-    required this.name,
-    this.bluetoothAddress,
-    this.usbVendorId,
-    this.usbProductId,
-    this.type,
-  }) : id = kUseSqlitePrinterStore
-           ? null
-           : EateryDB.instance.printerBox?.nextId();
+@freezed
+abstract class Printer with _$Printer {
+  const factory Printer({
+    int? id,
+    required String name,
+    String? bluetoothAddress,
+    String? usbVendorId,
+    String? usbProductId,
+    @Default(PrinterType.bluetooth) PrinterType type,
+  }) = _Printer;
 
-  Printer.fromMap(Map<String, dynamic> map)
-    : id = map['id'],
-      name = map['name'],
-      bluetoothAddress = map['bluetoothAddress'],
-      usbVendorId = map['usbVendorId'],
-      usbProductId = map['usbProductId'],
-      type = PrinterType.values.singleWhere(
-        (element) => element.id == map['type'],
-      );
+  factory Printer.fromJson(Map<String, dynamic> json) => _$PrinterFromJson(json);
 
-  Map<String, Object?> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'bluetoothAddress': bluetoothAddress,
-      'usbVendorId': usbVendorId,
-      'usbProductId': usbProductId,
-      'type': type != null ? type!.id : null,
-    };
-  }
+  static Printer fromMap(Map<String, dynamic> map) => Printer.fromJson(map);
+}
+
+extension PrinterX on Printer {
+  Map<String, Object?> toMap() => toJson() as Map<String, Object?>;
 
   static Printer fromIterable(Iterable<dynamic> row) {
     return Printer.fromMap({

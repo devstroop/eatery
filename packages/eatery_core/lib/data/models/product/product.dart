@@ -1,75 +1,31 @@
-import 'package:eatery_core/data/models/eatery_db.dart';
-import 'package:eatery_core/data/database/eatery_db_shim.dart';
-import 'package:eatery_core/data/database/native/store_config.dart';
+import 'package:eatery_core/data/models/product/food_type.dart';
+import 'package:eatery_core/data/models/product/product_type.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Product {
-  int? id;
-  String name;
-  int? categoryId; // id?
-  String? description;
-  String? image;
-  double mrpPrice;
-  double? salePrice;
-  int? taxSlabId;
-  FoodType? foodType;
-  ProductType type;
-  bool isActive;
-  int? stationId;
-  String? stationName;
+part 'product.freezed.dart';
+part 'product.g.dart';
 
-  Product({
-    required this.name,
-    this.categoryId,
-    this.description,
-    this.image,
-    required this.mrpPrice,
-    this.salePrice,
-    this.taxSlabId,
-    this.foodType,
-    required this.type,
-    required this.isActive,
-    this.stationId,
-    this.stationName,
-  }) : id = kUseSqliteProductStore
-           ? null
-           : EateryDB.instance.productBox?.nextId();
+@freezed
+abstract class Product with _$Product {
+  const factory Product({
+    int? id,
+    required String name,
+    int? categoryId,
+    String? description,
+    String? image,
+    required double mrpPrice,
+    double? salePrice,
+    int? taxSlabId,
+    FoodType? foodType,
+    required ProductType type,
+    required bool isActive,
+    int? stationId,
+    String? stationName,
+  }) = _Product;
 
-  Product.fromMap(Map<String, dynamic> map)
-    : id = map['id'],
-      name = map['name'],
-      categoryId = map['categoryId'],
-      description = map['description'],
-      image = map['image'],
-      mrpPrice = map['mrpPrice'],
-      salePrice = map['salePrice'],
-      taxSlabId = map['taxSlabId'],
-      foodType = FoodType.values
-          .where((element) => element.id == map['foodType'])
-          .firstOrNull,
-      type = ProductType.values.singleWhere(
-        (element) => element.index == map['type'],
-      ),
-      isActive = map['isActive'],
-      stationId = map['stationId'],
-      stationName = map['stationName'];
+  factory Product.fromJson(Map<String, dynamic> json) => _$ProductFromJson(json);
 
-  Map<String, Object?> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'categoryId': categoryId,
-      'description': description,
-      'image': image,
-      'mrpPrice': mrpPrice,
-      'salePrice': salePrice,
-      'taxSlabId': taxSlabId,
-      'foodType': foodType != null ? foodType!.id : null,
-      'type': type.index,
-      'isActive': isActive,
-      'stationId': stationId,
-      'stationName': stationName,
-    };
-  }
+  static Product fromMap(Map<String, dynamic> map) => Product.fromJson(map);
 
   static Product fromIterable(Iterable<dynamic> iterable) {
     return Product(
@@ -91,22 +47,26 @@ class Product {
       stationName: iterable.elementAt(12) as String?,
     );
   }
+}
+
+extension ProductX on Product {
+  Map<String, Object?> toMap() => toJson() as Map<String, Object?>;
 
   List<dynamic> toIterable() {
     return [
-      this.id,
-      this.name,
-      this.categoryId,
-      this.description,
-      this.image,
-      this.mrpPrice,
-      this.salePrice,
-      this.taxSlabId,
-      this.foodType != null ? this.foodType!.id : null,
-      this.type.index,
-      this.isActive,
-      this.stationId,
-      this.stationName,
+      id,
+      name,
+      categoryId,
+      description,
+      image,
+      mrpPrice,
+      salePrice,
+      taxSlabId,
+      foodType?.id,
+      type.index,
+      isActive,
+      stationId,
+      stationName,
     ];
   }
 }

@@ -1,12 +1,16 @@
 name: eatery
 description: A simple and sober restaurant management with pos application.
 
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
+publish_to: "none"
 
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.8.0 <4.0.0'
+  sdk: '>=3.11.3 <4.0.0'
+
+workspace:
+  - apps/*
+  - packages/*
 
 dependencies:
   flutter:
@@ -70,8 +74,46 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: any
-  flutter_lints: ^4.0.0
+  # flutter_launcher_icons removed (version conflicts with melos)
+  flutter_lints: ^6.0.0
+  melos: ^8.2.2
+
+melos:
+  useRootAsPackage: true
+  scripts:
+    analyze:
+      run: melos exec -c 1 -- flutter analyze --no-fatal-infos --no-fatal-warnings lib/
+      description: Analyze all packages
+    analyze:all:
+      run: melos exec -c 1 -- flutter analyze --no-fatal-infos --no-fatal-warnings
+      description: Analyze all packages with all issues
+    test:
+      run: melos exec -- flutter test
+      description: Run tests in all packages
+    format:
+      run: melos exec -- dart format .
+      description: Format all Dart code
+    get:
+      run: melos exec -- flutter pub get
+      description: Get dependencies for all packages
+    build:admin:
+      run: melos exec -c 1 --scope="eatery" -- flutter build macos --debug
+      description: Build admin app
+    build:waiter:
+      run: melos exec -c 1 --scope="eatery_waiter" -- flutter build macos --debug
+      description: Build waiter app
+    build:kds:
+      run: melos exec -c 1 --scope="eatery_kds" -- flutter build macos --debug
+      description: Build KDS app
+    build:display:
+      run: melos exec -c 1 --scope="eatery_display" -- flutter build macos --debug
+      description: Build display app
+    generate:
+      run: melos exec -c 1 --scope="eatery_core" -- dart run build_runner build --delete-conflicting-outputs
+      description: Run code generation (freezed, json_serializable)
+    generate:watch:
+      run: melos exec -c 1 --scope="eatery_core" -- dart run build_runner watch --delete-conflicting-outputs
+      description: Watch mode for code generation
 
 flutter_icons:
   android: "ic_launcher"

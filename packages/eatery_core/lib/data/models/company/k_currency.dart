@@ -1,58 +1,29 @@
-class KCurrency {
-  String code;
-  String name;
-  String symbol;
-  String? flag;
-  int number;
-  int decimalDigits;
-  String namePlural;
-  String decimalSeparator;
-  String thousandsSeparator;
-  bool symbolOnLeft;
-  bool spaceBetweenAmountAndSymbol;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  KCurrency({
-    required this.name,
-    required this.code,
-    required this.symbol,
-    required this.flag,
-    required this.number,
-    required this.decimalDigits,
-    required this.namePlural,
-    required this.decimalSeparator,
-    required this.thousandsSeparator,
-    required this.symbolOnLeft,
-    required this.spaceBetweenAmountAndSymbol,
-  });
+part 'k_currency.freezed.dart';
+part 'k_currency.g.dart';
 
-  KCurrency.fromMap(Map<String, dynamic> map)
-    : code = map['code'],
-      name = map['name'],
-      symbol = map['symbol'],
-      number = map['number'],
-      flag = map['flag'],
-      decimalDigits = map['decimal_digits'],
-      namePlural = map['name_plural'],
-      symbolOnLeft = map['symbol_on_left'],
-      decimalSeparator = map['decimal_separator'],
-      thousandsSeparator = map['thousands_separator'],
-      spaceBetweenAmountAndSymbol = map['space_between_amount_and_symbol'];
+@freezed
+abstract class KCurrency with _$KCurrency {
+  const factory KCurrency({
+    required String code,
+    required String name,
+    required String symbol,
+    String? flag,
+    required int number,
+    @JsonKey(name: 'decimal_digits') required int decimalDigits,
+    @JsonKey(name: 'name_plural') required String namePlural,
+    @JsonKey(name: 'decimal_separator') required String decimalSeparator,
+    @JsonKey(name: 'thousands_separator') required String thousandsSeparator,
+    @JsonKey(name: 'symbol_on_left') required bool symbolOnLeft,
+    @JsonKey(name: 'space_between_amount_and_symbol')
+    required bool spaceBetweenAmountAndSymbol,
+  }) = _KCurrency;
 
-  Map<String, Object?> toMap() {
-    return {
-      'code': code,
-      'name': name,
-      'symbol': symbol,
-      'number': number,
-      'flag': flag,
-      'decimal_digits': decimalDigits,
-      'name_plural': namePlural,
-      'symbol_on_left': symbolOnLeft,
-      'decimal_separator': decimalSeparator,
-      'thousands_separator': thousandsSeparator,
-      'space_between_amount_and_symbol': spaceBetweenAmountAndSymbol,
-    };
-  }
+  factory KCurrency.fromJson(Map<String, dynamic> json) =>
+      _$KCurrencyFromJson(json);
+
+  static KCurrency fromMap(Map<String, dynamic> map) => KCurrency.fromJson(map);
 
   static KCurrency fromIterable(Iterable<dynamic> list) {
     return KCurrency.fromMap({
@@ -69,6 +40,10 @@ class KCurrency {
       'space_between_amount_and_symbol': list.elementAt(10),
     });
   }
+}
+
+extension KCurrencyX on KCurrency {
+  Map<String, Object?> toMap() => toJson() as Map<String, Object?>;
 
   Iterable<dynamic> toIterable() {
     var map = toMap();

@@ -40,7 +40,7 @@ class SqliteSubscriptionRepository implements SubscriptionRepository {
       values,
     );
     final id = _store.queryScalar('SELECT last_insert_rowid()') as int;
-    sub.id = id;
+    sub = sub.copyWith(id: id);
     return id;
   }
 
@@ -65,7 +65,7 @@ class SqliteSubscriptionRepository implements SubscriptionRepository {
           ? DateTime.fromMillisecondsSinceEpoch(row['validTill'] as int)
           : null,
       subscriptionType: st,
-    )..id = row['id'] as int;
+      id: row['id'] as int);
   }
 
   bool _exists(int id) =>

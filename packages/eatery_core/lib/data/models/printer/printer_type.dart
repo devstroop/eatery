@@ -1,4 +1,12 @@
-enum PrinterType { bluetooth, usb }
+import 'package:json_annotation/json_annotation.dart';
+
+@JsonEnum()
+enum PrinterType {
+  @JsonValue(0)
+  bluetooth,
+  @JsonValue(1)
+  usb,
+}
 
 extension PrinterTypeExtension on PrinterType {
   int? get id {

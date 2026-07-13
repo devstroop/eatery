@@ -54,6 +54,7 @@ extension PaymentDtoX on PaymentDto {
         reference: reference, processorTransactionId: processorTransactionId,
         processorName: processorName, processorStatus: processorStatus,
         cardLastFour: cardLastFour, terminalId: terminalId,
+        date: DateTime.now(),
       );
 }
 extension PaymentX on Payment {
@@ -84,6 +85,7 @@ extension OrderDtoX on OrderDto {
         taxTotal: taxTotal, finalTotal: finalTotal,
         roundOff: roundOff, grandTotal: grandTotal, paidTotal: paidTotal,
         type: OrderType.values.firstWhere((e) => (e.name ?? "").toLowerCase() == (orderType ?? "dine").toLowerCase(), orElse: () => OrderType.dine),
+        createdAt: DateTime.now(),
       );
 }
 extension OrderX on Order {
@@ -104,7 +106,7 @@ extension DiningTableDtoX on DiningTableDto {
   DiningTable toModel() => DiningTable(name: name, capacity: capacity, status: DiningTableStatus.values.firstWhere((e) => (e.name ?? "").toLowerCase() == status.toLowerCase(), orElse: () => DiningTableStatus.available));
 }
 extension DiningTableX on DiningTable {
-  DiningTableDto toDto() => DiningTableDto(id: id?.toString(), name: name, capacity: capacity ?? 0, categoryId: category?.id?.toString(), status: status.name ?? "", orderId: orderId, customerPhone: customerPhone);
+  DiningTableDto toDto() => DiningTableDto(id: id?.toString(), name: name, capacity: capacity ?? 0, categoryId: categoryId?.toString(), status: status.name ?? "", orderId: orderId, customerPhone: customerPhone);
 }
 
 // Company

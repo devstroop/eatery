@@ -47,8 +47,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
               if (value == 'edit') {
                 GoRouter.of(context).pushNamed('editDiningTable', extra: widget.diningTable);
               } else if (value == 'unlink') {
-                widget.diningTable.orderId = null;
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(widget.diningTable.copyWith(orderId: null));
               }
             });
           },
@@ -127,7 +126,11 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                           style: AppTypography.labelSmall,
                         ),
                         Text(
-                          widget.diningTable.category?.name ?? 'None',
+                          widget.diningTable.categoryId != null
+                              ? (ref.read(diningTableRepositoryProvider) as dynamic)
+                                      .getCategoryById(widget.diningTable.categoryId!)
+                                      ?.name ?? 'None'
+                              : 'None',
                           style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ],

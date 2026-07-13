@@ -1,86 +1,85 @@
 import 'package:eatery_core/data/models/eatery_db.dart';
-import 'package:eatery_core/data/database/eatery_db_shim.dart';
-import 'package:eatery_core/data/database/native/store_config.dart';
+import 'package:eatery_core/data/models/converters.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Order {
-  int? id;
-  String? customerPhone;
-  DateTime createdAt;
-  DateTime? updatedAt;
-  int totalQuantity;
-  double subTotal;
-  double discountTotal;
-  double taxTotal;
-  double finalTotal;
-  double roundOff;
-  double grandTotal;
-  double? paidTotal;
-  OrderType type;
-  String status; // "active", "completed", "voided", "refunded"
-  String? voidReason;
-  String? voidedBy;
-  DateTime? voidedAt;
+part 'order.freezed.dart';
+part 'order.g.dart';
 
-  Order({
-    this.customerPhone,
-    required this.totalQuantity,
-    required this.subTotal,
-    required this.discountTotal,
-    required this.taxTotal,
-    required this.finalTotal,
-    required this.roundOff,
-    required this.grandTotal,
-    this.paidTotal,
-    required this.type,
-    this.status = 'active',
-    this.voidReason,
-    this.voidedBy,
-    this.voidedAt,
-  }) : id = kUseSqliteOrderStore ? null : EateryDB.instance.orderBox?.nextId(),
-       createdAt = DateTime.now();
+@freezed
+abstract class Order with _$Order {
+  const factory Order({
+    int? id,
+    String? customerPhone,
+    @JsonKey(fromJson: epochFromJson, toJson: epochToJson)
+    required DateTime createdAt,
+    @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)
+    DateTime? updatedAt,
+    required int totalQuantity,
+    required double subTotal,
+    required double discountTotal,
+    required double taxTotal,
+    required double finalTotal,
+    required double roundOff,
+    required double grandTotal,
+    double? paidTotal,
+    required OrderType type,
+    @Default('active') String status,
+    String? voidReason,
+    String? voidedBy,
+    @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)
+    DateTime? voidedAt,
+  }) = _Order;
 
-  Order.fromMap(Map<String, dynamic> map)
-    : id = map['id'],
-      customerPhone = map['customerPhone'],
-      createdAt = DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
-      updatedAt = map['updatedAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['updatedAt'])
-          : null,
-      totalQuantity = map['totalQuantity'],
-      subTotal = map['subTotal'],
-      discountTotal = map['discountTotal'],
-      taxTotal = map['taxTotal'],
-      finalTotal = map['finalTotal'],
-      roundOff = map['roundOff'],
-      grandTotal = map['grandTotal'],
-      paidTotal = map['paidTotal'],
-      type = OrderType.values[map['type']],
-      status = map['status'] ?? 'active',
-      voidReason = map['voidReason'],
-      voidedBy = map['voidedBy'],
-      voidedAt = map['voidedAt'] != null
-          ? DateTime.fromMillisecondsSinceEpoch(map['voidedAt'])
-          : null;
+  factory Order.fromJson(Map<String, dynamic> json) => _$OrderFromJson(json);
 
-  Map<String, Object?> toMap() {
-    return {
-      'id': id,
-      'customerPhone': customerPhone,
-      'createdAt': createdAt.millisecondsSinceEpoch,
-      'updatedAt': updatedAt?.millisecondsSinceEpoch,
-      'totalQuantity': totalQuantity,
-      'subTotal': subTotal,
-      'discountTotal': discountTotal,
-      'taxTotal': taxTotal,
-      'finalTotal': finalTotal,
-      'roundOff': roundOff,
-      'grandTotal': grandTotal,
-      'paidTotal': paidTotal,
-      'type': type.index,
-      'status': status,
-      'voidReason': voidReason,
-      'voidedBy': voidedBy,
-      'voidedAt': voidedAt?.millisecondsSinceEpoch,
-    };
+  static Order fromMap(Map<String, dynamic> map) => Order.fromJson(map);
+}
+
+extension OrderX on Order {
+  Map<String, Object?> toMap() => toJson() as Map<String, Object?>;
+
+  static Order fromIterable(Iterable<dynamic> row) {
+    return Order.fromMap({
+      'id': row.elementAt(0),
+      'customerPhone': row.elementAt(1),
+      'createdAt': row.elementAt(2),
+      'updatedAt': row.elementAt(3),
+      'totalQuantity': row.elementAt(4),
+      'subTotal': row.elementAt(5),
+      'discountTotal': row.elementAt(6),
+      'taxTotal': row.elementAt(7),
+      'finalTotal': row.elementAt(8),
+      'roundOff': row.elementAt(9),
+      'grandTotal': row.elementAt(10),
+      'paidTotal': row.elementAt(11),
+      'type': row.elementAt(12),
+      'status': row.elementAt(13),
+      'voidReason': row.elementAt(14),
+      'voidedBy': row.elementAt(15),
+      'voidedAt': row.elementAt(16),
+    });
+  }
+
+  List<dynamic> toIterable() {
+    var map = toMap();
+    return [
+      map['id'],
+      map['customerPhone'],
+      map['createdAt'],
+      map['updatedAt'],
+      map['totalQuantity'],
+      map['subTotal'],
+      map['discountTotal'],
+      map['taxTotal'],
+      map['finalTotal'],
+      map['roundOff'],
+      map['grandTotal'],
+      map['paidTotal'],
+      map['type'],
+      map['status'],
+      map['voidReason'],
+      map['voidedBy'],
+      map['voidedAt'],
+    ];
   }
 }

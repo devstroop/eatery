@@ -55,7 +55,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                     });
                     break;
                   case 'activate':
-                    widget.customer.isActive = true;
+                    widget.customer = widget.customer.copyWith(isActive: true);
                     ref
                         .read(customerRepositoryProvider)
                         .saveCustomer(widget.customer)
@@ -75,12 +75,9 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                             onConfirm: () => setState(() {}),
                           ),
                         );
-                    setState(() {
-                      widget.customer.isActive = true;
-                    });
                     break;
                   case 'suspend':
-                    widget.customer.isActive = false;
+                    widget.customer = widget.customer.copyWith(isActive: false);
                     ref
                         .read(customerRepositoryProvider)
                         .saveCustomer(widget.customer)
@@ -100,9 +97,6 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                             onConfirm: () => setState(() {}),
                           ),
                         );
-                    setState(() {
-                      widget.customer.isActive = false;
-                    });
                     break;
                 }
               });

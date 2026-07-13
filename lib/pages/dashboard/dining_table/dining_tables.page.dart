@@ -38,7 +38,7 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
         .where(
           (element) =>
               selectedCategory == null ||
-              element.category?.id == selectedCategory?.id,
+              element.categoryId == selectedCategory?.id,
         )
         .toList();
     return AppPageShell(
@@ -119,10 +119,10 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                     children: [
                       ...diningTables.map((diningTable) {
                         DiningTableCategory? category =
-                            diningTable.category?.id != null
+                            diningTable.categoryId != null
                             ? (ref.read(diningTableRepositoryProvider)
                                       as dynamic)
-                                  .getCategoryById(diningTable.category!.id)
+                                  .getCategoryById(diningTable.categoryId!)
                             : null;
                         Order? order = diningTable.orderId != null
                             ? ref

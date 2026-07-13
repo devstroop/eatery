@@ -43,7 +43,7 @@ class SqliteCompanyRepository implements CompanyRepository {
       m['foodLicenseNo'],
       m['subscriptionId'],
     ]);
-    company.id = 1;
+    company = company.copyWith(id: 1);
   }
 
   // ── Currencies ───────────────────────────────────────────────────────────
@@ -111,7 +111,7 @@ class SqliteCompanyRepository implements CompanyRepository {
       salesTaxNumber: row['salesTaxNumber'] as String?,
       foodLicenseNo: row['foodLicenseNo'] as String?,
       subscriptionId: row['subscriptionId'] as int?,
-    )..id = row['id'] as int;
+      id: row['id'] as int);
   }
 
   KCurrency _toCurrency(Map<String, Object?> row) => KCurrency(

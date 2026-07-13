@@ -1,4 +1,16 @@
-enum StaffType { waiter, chef, driver, other }
+import 'package:json_annotation/json_annotation.dart';
+
+@JsonEnum()
+enum StaffType {
+  @JsonValue(0)
+  waiter,
+  @JsonValue(1)
+  chef,
+  @JsonValue(2)
+  driver,
+  @JsonValue(3)
+  other,
+}
 
 extension StaffTypeExtension on StaffType {
   int get id {

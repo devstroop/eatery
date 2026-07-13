@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-enum FoodType { veg, nonVeg }
+@JsonEnum()
+enum FoodType {
+  @JsonValue(0)
+  veg,
+  @JsonValue(1)
+  nonVeg,
+}
 
 extension EditionExtension on FoodType {
   int get id {

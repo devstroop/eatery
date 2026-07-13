@@ -211,7 +211,7 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
             DiningTable diningTable = DiningTable(
               name: _controllerCategoryName.text,
               description: _controllerCategoryDescription.text,
-              category: diningTableCategory,
+              categoryId: diningTableCategory?.id,
               capacity: int.parse(_controllerCapacity.text),
             );
             ref

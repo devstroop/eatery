@@ -1,31 +1,24 @@
-class KdsStation {
-  int? id;
-  String name;
-  String? description;
-  int sortOrder;
-  bool isActive;
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-  KdsStation({
-    required this.name,
-    this.description,
-    this.sortOrder = 0,
-    this.isActive = true,
-  });
+part 'kds_station.freezed.dart';
+part 'kds_station.g.dart';
 
-  KdsStation.fromMap(Map<String, dynamic> map)
-    : id = map['id'],
-      name = map['name'],
-      description = map['description'],
-      sortOrder = map['sortOrder'] ?? 0,
-      isActive = map['isActive'] ?? true;
+@freezed
+abstract class KdsStation with _$KdsStation {
+  const factory KdsStation({
+    int? id,
+    required String name,
+    String? description,
+    @Default(0) int sortOrder,
+    @Default(true) bool isActive,
+  }) = _KdsStation;
 
-  Map<String, Object?> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'description': description,
-      'sortOrder': sortOrder,
-      'isActive': isActive,
-    };
-  }
+  factory KdsStation.fromJson(Map<String, dynamic> json) =>
+      _$KdsStationFromJson(json);
+
+  static KdsStation fromMap(Map<String, dynamic> map) => KdsStation.fromJson(map);
+}
+
+extension KdsStationX on KdsStation {
+  Map<String, Object?> toMap() => toJson() as Map<String, Object?>;
 }

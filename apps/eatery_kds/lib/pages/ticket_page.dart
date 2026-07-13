@@ -266,7 +266,9 @@ class _TicketDetail extends ConsumerWidget {
                     grandTotal: order.grandTotal,
                     paidTotal: order.paidTotal,
                     customerPhone: order.customerPhone,
-                  )..id = order.id;
+                    id: order.id,
+                    createdAt: order.createdAt,
+                  );
                   await repo.saveOrder(updated);
                   if (!context.mounted) return;
                   Navigator.pop(context);

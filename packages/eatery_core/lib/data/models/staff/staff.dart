@@ -1,41 +1,27 @@
 import 'package:eatery_core/data/models/eatery_db.dart';
-import 'package:eatery_core/data/database/eatery_db_shim.dart';
-import 'package:eatery_core/data/database/native/store_config.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Staff {
-  int? id;
-  String name;
-  String? photo;
-  String? phone;
-  StaffType type;
-  bool isActive;
+part 'staff.freezed.dart';
+part 'staff.g.dart';
 
-  Staff(
-      {
-      required this.name,
-      this.photo,
-      this.phone,
-      required this.type,
-      required this.isActive}) : id = kUseSqliteStaffStore ? null : EateryDB.instance.staffBox?.nextId();
+@freezed
+abstract class Staff with _$Staff {
+  const factory Staff({
+    int? id,
+    required String name,
+    String? photo,
+    String? phone,
+    @Default(StaffType.waiter) StaffType type,
+    @Default(true) bool isActive,
+  }) = _Staff;
 
-  Staff.fromMap(Map<String, dynamic> map)
-      : id = map['id'],
-        name = map['name'],
-        photo = map['photo'],
-        phone = map['phone'],
-        type = StaffType.values.singleWhere((element) => element.id == map['type']),
-        isActive = map['isActive'];
+  factory Staff.fromJson(Map<String, dynamic> json) => _$StaffFromJson(json);
 
-  Map<String, Object?> toMap() {
-    return {
-      'id': id,
-      'name': name,
-      'photo': photo,
-      'phone': phone,
-      'type': type.id,
-      'isActive': isActive
-    };
-  }
+  static Staff fromMap(Map<String, dynamic> map) => Staff.fromJson(map);
+}
+
+extension StaffX on Staff {
+  Map<String, Object?> toMap() => toJson() as Map<String, Object?>;
 
   static Staff fromIterable(Iterable<dynamic> row) {
     return Staff.fromMap({
@@ -44,9 +30,8 @@ class Staff {
       'photo': row.elementAt(2),
       'phone': row.elementAt(3),
       'type': row.elementAt(4),
-      'isActive': row.elementAt(5)
-    }
-    );
+      'isActive': row.elementAt(5),
+    });
   }
 
   List<dynamic> toIterable() {
@@ -57,7 +42,7 @@ class Staff {
       map['photo'],
       map['phone'],
       map['type'],
-      map['isActive']
+      map['isActive'],
     ];
   }
 }

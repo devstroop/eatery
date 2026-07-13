@@ -1,4 +1,14 @@
-enum OrderType { dine, delivery, takeout }
+import 'package:json_annotation/json_annotation.dart';
+
+@JsonEnum()
+enum OrderType {
+  @JsonValue(0)
+  dine,
+  @JsonValue(1)
+  delivery,
+  @JsonValue(2)
+  takeout,
+}
 
 extension OrderTypeExtension on OrderType {
   int? get id {

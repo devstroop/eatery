@@ -557,22 +557,30 @@ class _CartPageState extends ConsumerState<CartPage> {
             .where((element) => element.id == product.id)
             .firstOrNull;
         if (existing != null) {
-          existing.quantity += 1;
-          existing.price = OrderFunction.calculateProductPriceWithoutTax(
+          final newQuantity = existing.quantity + 1;
+          final newPrice = OrderFunction.calculateProductPriceWithoutTax(
             product,
           ).toPrecision(2);
-          existing.subTotal =
+          final newSubTotal =
               (OrderFunction.calculateProductPriceWithoutTax(product) *
-                      existing.quantity)
+                      newQuantity)
                   .toPrecision(2);
-          existing.taxRate = OrderFunction.getProductTaxRate(
+          final newTaxRate = OrderFunction.getProductTaxRate(
             product,
           )?.toPrecision(2);
-          existing.taxAmount = OrderFunction.calculateProductTaxAmount(
+          final newTaxAmount = OrderFunction.calculateProductTaxAmount(
             product,
           )?.toPrecision(2);
-          existing.total = (existing.subTotal + (existing.taxAmount ?? 0))
+          final newTotal = (newSubTotal + (newTaxAmount ?? 0))
               .toPrecision(2);
+          existing = existing.copyWith(
+            quantity: newQuantity,
+            price: newPrice,
+            subTotal: newSubTotal,
+            taxRate: newTaxRate,
+            taxAmount: newTaxAmount,
+            total: newTotal,
+          );
           await ref.read(orderRepositoryProvider).saveOrderProduct(existing);
         } else {
           var orderProduct = OrderProduct(
@@ -598,43 +606,30 @@ class _CartPageState extends ConsumerState<CartPage> {
           await ref.read(orderRepositoryProvider).addOrderProduct(orderProduct);
         }
       }
-      order.totalQuantity = ref
+      final orderProducts = ref
           .read(orderRepositoryProvider)
           .getOrderProducts(order.id!)
           .where((element) => element.orderId == order.id)
-          .toList()
-          .fold(
-            0,
-            (previousValue, element) => previousValue + element.quantity,
-          );
-      order.subTotal = ref
-          .read(orderRepositoryProvider)
-          .getOrderProducts(order.id!)
-          .where((element) => element.orderId == order.id)
-          .toList()
-          .fold(
-            0,
-            (previousValue, element) => previousValue + element.subTotal,
-          );
-      order.taxTotal = ref
-          .read(orderRepositoryProvider)
-          .getOrderProducts(order.id!)
-          .where((element) => element.orderId == order.id)
-          .toList()
-          .fold(
-            0,
-            (previousValue, element) =>
-                previousValue + (element.taxAmount ?? 0),
-          );
-      order.finalTotal = ref
-          .read(orderRepositoryProvider)
-          .getOrderProducts(order.id!)
-          .where((element) => element.orderId == order.id)
-          .toList()
-          .fold(0, (previousValue, element) => previousValue + element.total);
-      order.roundOff = OrderFunction.calculateRoundOff(order.finalTotal);
-      order.grandTotal = (order.finalTotal + order.roundOff).toPrecision(2);
-      order.updatedAt = DateTime.now();
+          .toList();
+      final newTotalQuantity = orderProducts.fold(
+          0, (previousValue, element) => previousValue + element.quantity);
+      final newSubTotal = orderProducts.fold(
+          0.0, (previousValue, element) => previousValue + element.subTotal);
+      final newTaxTotal = orderProducts.fold(
+          0.0, (previousValue, element) => previousValue + (element.taxAmount ?? 0));
+      final newFinalTotal = orderProducts.fold(
+          0.0, (previousValue, element) => previousValue + element.total);
+      final newRoundOff = OrderFunction.calculateRoundOff(newFinalTotal);
+      final newGrandTotal = (newFinalTotal + newRoundOff).toPrecision(2);
+      order = order.copyWith(
+        totalQuantity: newTotalQuantity,
+        subTotal: newSubTotal,
+        taxTotal: newTaxTotal,
+        finalTotal: newFinalTotal,
+        roundOff: newRoundOff,
+        grandTotal: newGrandTotal,
+        updatedAt: DateTime.now(),
+      );
       await ref.read(orderRepositoryProvider).saveOrder(order);
     } else {
       order = Order(
@@ -649,6 +644,7 @@ class _CartPageState extends ConsumerState<CartPage> {
         grandTotal: OrderFunction.calculatePayable(cart).toPrecision(2),
         totalQuantity: cart.length,
         discountTotal: 0,
+        createdAt: DateTime.now(),
       );
       await ref.read(orderRepositoryProvider).saveOrder(order);
       for (var product in cart) {
@@ -681,9 +677,12 @@ class _CartPageState extends ConsumerState<CartPage> {
           .read(diningTableRepositoryProvider)
           .getTableById(ref.read(cartProvider).activeDiningTable?.id ?? 0);
       if (existingTable != null) {
-        existingTable.status = DiningTableStatus.occupied;
-        existingTable.orderId = order.id;
-        await ref.read(diningTableRepositoryProvider).saveTable(existingTable);
+        await ref.read(diningTableRepositoryProvider).saveTable(
+          existingTable.copyWith(
+            status: DiningTableStatus.occupied,
+            orderId: order.id,
+          ),
+        );
       }
     }
 

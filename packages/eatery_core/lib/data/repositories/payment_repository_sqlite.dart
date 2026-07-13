@@ -57,7 +57,7 @@ class SqlitePaymentRepository implements PaymentRepository {
       values,
     );
     final id = _store.queryScalar('SELECT last_insert_rowid()') as int;
-    payment.id = id;
+    payment = payment.copyWith(id: id);
     return id;
   }
 

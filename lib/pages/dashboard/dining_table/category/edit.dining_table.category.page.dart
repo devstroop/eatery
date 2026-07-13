@@ -109,11 +109,13 @@ class _EditDiningTableCategoryPageState
               return;
             }
             _formKey.currentState!.save();
-            widget.category.name = _controllerCategoryName.text;
-            widget.category.description = _controllerCategoryDescription.text;
+            final updated = widget.category.copyWith(
+              name: _controllerCategoryName.text,
+              description: _controllerCategoryDescription.text,
+            );
             final repo = ref.read(diningTableRepositoryProvider) as dynamic;
             repo
-                .saveCategory(widget.category)
+                .saveCategory(updated)
                 .then(
                   (value) => AppDialog.showMessage(
                     context,

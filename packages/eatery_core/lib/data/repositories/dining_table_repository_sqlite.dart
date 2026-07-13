@@ -38,7 +38,7 @@ class SqliteDiningTableRepository implements DiningTableRepository {
   Future<int> saveTable(DiningTable table) async {
     final values = <Object?>[
       table.name,
-      table.category?.id,
+      table.categoryId,
       table.description,
       table.orderId,
       table.capacity,
@@ -60,7 +60,7 @@ class SqliteDiningTableRepository implements DiningTableRepository {
       values,
     );
     final id = _store.queryScalar('SELECT last_insert_rowid()') as int;
-    table.id = id;
+    table = table.copyWith(id: id);
     return id;
   }
 
@@ -107,7 +107,7 @@ class SqliteDiningTableRepository implements DiningTableRepository {
       values,
     );
     final id = _store.queryScalar('SELECT last_insert_rowid()') as int;
-    category.id = id;
+    category = category.copyWith(id: id);
     return id;
   }
 
@@ -128,7 +128,7 @@ class SqliteDiningTableRepository implements DiningTableRepository {
       orderId: row['orderId'] as int?,
       // category is a Hive-backed object; leave null for now; the model
       // already handles nullable category and pages work without it set.
-    )..id = row['id'] as int;
+      id: row['id'] as int);
   }
 
   bool _tableExists(int id) =>

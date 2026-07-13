@@ -176,12 +176,13 @@ class _EditCustomerPageState extends ConsumerState<EditCustomerPage> {
             }
             _formKey.currentState!.save();
 
-            final customer = widget.customer;
-            customer.name = _controllerCustomerName.text;
-            customer.phone = _controllerCustomerPhone.text;
-            customer.address = _controllerCustomerAddress.text;
-            customer.landmark = _controllerCustomerLandmark.text;
-            customer.isActive = isActive;
+            final customer = widget.customer.copyWith(
+              name: _controllerCustomerName.text,
+              phone: _controllerCustomerPhone.text,
+              address: _controllerCustomerAddress.text,
+              landmark: _controllerCustomerLandmark.text,
+              isActive: isActive,
+            );
             ref
                 .read(customerRepositoryProvider)
                 .saveCustomer(customer)

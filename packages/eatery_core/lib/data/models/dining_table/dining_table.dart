@@ -1,47 +1,62 @@
 import 'package:eatery_core/data/models/eatery_db.dart';
-import 'package:eatery_core/data/database/eatery_db_shim.dart';
-import 'package:eatery_core/data/database/native/store_config.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class DiningTable {
-  int? id;
-  String name;
-  DiningTableCategory? category;
-  String? description;
-  int? orderId;
-  int? capacity;
-  DiningTableStatus status;
-  String? customerPhone;
-  DiningTable({
-    required this.name,
-    this.category,
-    this.description,
-    this.orderId,
-    this.capacity = 0,
-    this.status = DiningTableStatus.available,
-    this.customerPhone,
-  }) : id = kUseSqliteDiningTableStore
-           ? null
-           : EateryDB.instance.diningTableBox?.nextId();
+part 'dining_table.freezed.dart';
+part 'dining_table.g.dart';
 
-  DiningTable.fromMap(Map<String, dynamic> map)
-    : id = map['id'],
-      name = map['name'],
-      category = EateryDB.instance.diningTableCategoryBox!.values
-          .where((element) => element.id == map['categoryId'])
-          .firstOrNull,
-      description = map['description'],
-      orderId = map['orderId'],
-      capacity = map['capacity'],
-      status = DiningTableStatus.values.singleWhere(
-        (element) => element.id == map['status'],
-      ),
-      customerPhone = map['customerPhone'];
+@freezed
+abstract class DiningTable with _$DiningTable {
+  const factory DiningTable({
+    int? id,
+    required String name,
+    String? description,
+    int? orderId,
+    int? categoryId,
+    @Default(0) int capacity,
+    @Default(DiningTableStatus.available) DiningTableStatus status,
+    String? customerPhone,
+  }) = _DiningTable;
 
+  factory DiningTable.fromJson(Map<String, dynamic> json) =>
+      _$DiningTableFromJson(json);
+
+  static DiningTable fromMap(Map<String, dynamic> map) {
+    return DiningTable.fromJson({
+      'id': map['id'],
+      'name': map['name'],
+      'description': map['description'],
+      'orderId': map['orderId'],
+      'categoryId': map['categoryId'],
+      'capacity': map['capacity'] ?? 0,
+      'status': map['status'] != null
+          ? DiningTableStatus.values.singleWhere(
+              (element) => element.id == map['status'],
+            )
+          : DiningTableStatus.available,
+      'customerPhone': map['customerPhone'],
+    });
+  }
+
+  static DiningTable fromIterable(Iterable<dynamic> row) {
+    return DiningTable.fromMap({
+      'id': row.elementAt(0),
+      'name': row.elementAt(1),
+      'description': row.elementAt(2),
+      'orderId': row.elementAt(3),
+      'categoryId': row.elementAt(4),
+      'capacity': row.elementAt(5),
+      'status': row.elementAt(6),
+      'customerPhone': row.elementAt(7),
+    });
+  }
+}
+
+extension DiningTableX on DiningTable {
   Map<String, Object?> toMap() {
     return {
       'id': id,
       'name': name,
-      'categoryId': category?.id,
+      'categoryId': categoryId,
       'description': description,
       'orderId': orderId,
       'capacity': capacity,
@@ -50,30 +65,7 @@ class DiningTable {
     };
   }
 
-  static DiningTable fromIterable(Iterable<dynamic> row) {
-    return DiningTable.fromMap({
-      'id': row.elementAt(0),
-      'name': row.elementAt(1),
-      'categoryId': row.elementAt(2),
-      'description': row.elementAt(3),
-      'orderId': row.elementAt(4),
-      'capacity': row.elementAt(5),
-      'status': row.elementAt(6),
-      'customerPhone': row.elementAt(7),
-    });
-  }
-
   List<dynamic> toIterable() {
-    var map = toMap();
-    return [
-      map['id'],
-      map['name'],
-      map['categoryId'],
-      map['description'],
-      map['orderId'],
-      map['capacity'],
-      map['status'],
-      map['customerPhone'],
-    ];
+    return [name, categoryId, description, orderId, capacity, status.id, customerPhone];
   }
 }

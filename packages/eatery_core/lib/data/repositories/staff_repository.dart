@@ -16,7 +16,7 @@ class StaffRepository {
     }
     _db.execute('INSERT INTO staff (name,photo,phone,type,isActive) VALUES (?,?,?,?,?)', v);
     final id = _db.queryScalar('SELECT last_insert_rowid()') as int;
-    staff.id = id; return id;
+    staff = staff.copyWith(id: id); return id;
   }
   bool isStaffNameTaken(String name) => _db.query('SELECT id FROM staff WHERE lower(trim(name))=?', [name.toLowerCase().trim()]).isNotEmpty;
   bool isStaffPhoneTaken(String phone) => _db.query('SELECT id FROM staff WHERE phone=?', [phone]).isNotEmpty;
@@ -24,5 +24,5 @@ class StaffRepository {
   Future<void> addAll(List<Staff> list) async {
     for (final s in list) _db.execute('INSERT INTO staff (name,photo,phone,type,isActive) VALUES (?,?,?,?,?)', [s.name, s.photo, s.phone, s.type.id, s.isActive ? 1 : 0]);
   }
-  Staff _toStaff(Map<String, Object?> r) => Staff(name: r['name'] as String, photo: r['photo'] as String?, phone: r['phone'] as String?, type: StaffType.values.firstWhere((e) => e.id == (r['type'] as int)), isActive: (r['isActive'] as int) == 1)..id = r['id'] as int;
+  Staff _toStaff(Map<String, Object?> r) => Staff(name: r['name'] as String, photo: r['photo'] as String?, phone: r['phone'] as String?, type: StaffType.values.firstWhere((e) => e.id == (r['type'] as int)), isActive: (r['isActive'] as int) == 1, id: r['id'] as int);
 }

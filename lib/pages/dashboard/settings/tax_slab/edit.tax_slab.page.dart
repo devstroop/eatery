@@ -46,10 +46,12 @@ class _EditTaxSlabSettingsPageState
     _formKey.currentState!.save();
 
     try {
-      widget.taxSlab.name = controllerSlabName.text;
-      widget.taxSlab.rate = double.parse(controllerTaxRate.text);
-      widget.taxSlab.type = selectedTaxType;
-      ref.read(taxRepositoryProvider).saveTaxSlab(widget.taxSlab);
+      final updated = widget.taxSlab.copyWith(
+        name: controllerSlabName.text,
+        rate: double.parse(controllerTaxRate.text),
+        type: selectedTaxType,
+      );
+      ref.read(taxRepositoryProvider).saveTaxSlab(updated);
       AppDialog.showMessage(
         this.context,
         message: 'Tax slab updated successfully!',

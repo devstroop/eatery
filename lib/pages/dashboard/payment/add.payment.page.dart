@@ -215,6 +215,7 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
                 mode: paymentMode,
                 attachment: image?.filename,
                 orderId: order?.id,
+                date: DateTime.now(),
               );
               ref.read(paymentRepositoryProvider).savePayment(payment)
                   .then((value) => AppDialog.showMessage(
@@ -226,14 +227,19 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
                             .where((element) =>
                         element.orderId == order?.id).firstOrNull;
                         if(diningTable != null){
-                          diningTable.status = DiningTableStatus.available;
-                          diningTable.orderId = null;
-                          diningTable.customerPhone = null;
-                          await ref.read(diningTableRepositoryProvider).saveTable(diningTable);
+                          await ref.read(diningTableRepositoryProvider).saveTable(
+                            diningTable.copyWith(
+                              status: DiningTableStatus.available,
+                              orderId: null,
+                              customerPhone: null,
+                            ),
+                          );
                         }
 
-                        order?.paidTotal = (order?.paidTotal ?? 0) +
-                            double.parse(_controllerAmount.text);
+                        order = order?.copyWith(
+                          paidTotal: (order?.paidTotal ?? 0) +
+                              double.parse(_controllerAmount.text),
+                        );
                         ref.read(orderRepositoryProvider).saveOrder(order!).then((value) => Navigator.pop(context));
                       }))
                   .onError((error, stackTrace) => AppDialog.showMessage(

@@ -1,7 +1,18 @@
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-enum DiningTableStatus { available, occupied, reserved, inactive }
+@JsonEnum()
+enum DiningTableStatus {
+  @JsonValue(0)
+  available,
+  @JsonValue(1)
+  occupied,
+  @JsonValue(2)
+  reserved,
+  @JsonValue(3)
+  inactive,
+}
 
 extension DiningTableStatusExtension on DiningTableStatus {
   int get id {

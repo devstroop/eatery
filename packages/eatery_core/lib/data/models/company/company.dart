@@ -1,83 +1,29 @@
-import 'package:eatery_core/data/models/eatery_db.dart';
+import 'package:eatery_core/data/models/company/edition.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
-class Company {
-  int? id;
-  String? logo;
-  String name;
-  String email;
-  String phone;
-  String address;
-  String? password;
-  Taxation taxation;
-  String? currencyCode;
-  String? salesTaxNumber;
-  String? foodLicenseNo;
-  int? subscriptionId;
+part 'company.freezed.dart';
+part 'company.g.dart';
 
-  Company({
-    this.logo,
-    required this.name,
-    required this.email,
-    required this.phone,
-    required this.address,
-    this.password,
-    required this.taxation,
-    this.currencyCode,
-    this.foodLicenseNo,
-    this.salesTaxNumber,
-    this.subscriptionId,
-  }) : id = 1;
+@freezed
+abstract class Company with _$Company {
+  const factory Company({
+    @Default(1) int? id,
+    String? logo,
+    required String name,
+    required String email,
+    required String phone,
+    required String address,
+    String? password,
+    required Taxation taxation,
+    String? currencyCode,
+    @JsonKey(name: 'foodLicNo') String? foodLicenseNo,
+    @JsonKey(name: 'taxLicNo') String? salesTaxNumber,
+    int? subscriptionId,
+  }) = _Company;
 
-  Company.fromMap(Map<String, dynamic> map)
-    : id = map['id'],
-      logo = map['logo'],
-      name = map['name'],
-      email = map['email'],
-      phone = map['phone'],
-      address = map['address'],
-      password = map['password'],
-      taxation = map['edition'] as Taxation,
-      currencyCode = map['currencyCode'],
-      foodLicenseNo = map['foodLicNo'],
-      salesTaxNumber = map['taxLicNo'],
-      subscriptionId = map['subscriptionId'];
+  factory Company.fromJson(Map<String, dynamic> json) => _$CompanyFromJson(json);
 
-  Map<String, Object?> toMap() {
-    return {
-      'id': id,
-      'logo': logo,
-      'name': name,
-      'email': email,
-      'phone': phone,
-      'address': address,
-      'password': password,
-      'edition': taxation.id,
-      'currencyCode': currencyCode,
-      'foodLicNo': foodLicenseNo,
-      'taxLicNo': salesTaxNumber,
-      'subscriptionId': subscriptionId,
-    };
-  }
-  // Use this style
-  // static DiningTableCategory fromIterable(Iterable<dynamic> row) {
-  //     return DiningTableCategory.fromMap({
-  //       'id': row.elementAt(0),
-  //       'name': row.elementAt(1),
-  //       'description': row.elementAt(2),
-  //       'image': row.elementAt(3),
-  //       'isActive': row.elementAt(4)
-  //     });
-  //   }
-
-  //   Iterable<dynamic> toIterable() {
-  //     return [
-  //       id,
-  //       name,
-  //       description,
-  //       image,
-  //       isActive
-  //     ];
-  //   }
+  static Company fromMap(Map<String, dynamic> map) => Company.fromJson(map);
 
   static Company fromIterable(Iterable<dynamic> list) {
     return Company.fromMap({
@@ -97,6 +43,10 @@ class Company {
       'subscriptionId': list.elementAt(11),
     });
   }
+}
+
+extension CompanyX on Company {
+  Map<String, Object?> toMap() => toJson() as Map<String, Object?>;
 
   Iterable<dynamic> toIterable() {
     var map = toMap();

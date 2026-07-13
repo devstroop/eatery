@@ -145,8 +145,8 @@ class _ShowCurrencyRegionPageState
                   .read(companyRepositoryProvider)
                   .getCurrentCompany();
               if (company != null) {
-                company.currencyCode = currency?.code;
-                ref.read(companyRepositoryProvider).saveCompany(company).then((
+                final updated = company.copyWith(currencyCode: currency?.code);
+                ref.read(companyRepositoryProvider).saveCompany(updated).then((
                   _,
                 ) {
                   setState(() {
