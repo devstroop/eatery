@@ -67,16 +67,14 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
       ),
       child: Column(
         children: [
-          if ((ref.read(diningTableRepositoryProvider) as dynamic)
-              .getAllCategories()
-              .isNotEmpty)
+          if (ref.read(diningTableRepositoryProvider).getAllCategories().isNotEmpty)
             SizedBox(
               height: 60,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
                   const SizedBox(width: 10),
-                  ...(ref.read(diningTableRepositoryProvider) as dynamic)
+                  ...ref.read(diningTableRepositoryProvider)
                       .getAllCategories()
                       .map((category) {
                         return Padding(
@@ -120,8 +118,7 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                       ...diningTables.map((diningTable) {
                         DiningTableCategory? category =
                             diningTable.categoryId != null
-                            ? (ref.read(diningTableRepositoryProvider)
-                                      as dynamic)
+                            ? ref.read(diningTableRepositoryProvider)
                                   .getCategoryById(diningTable.categoryId!)
                             : null;
                         Order? order = diningTable.orderId != null

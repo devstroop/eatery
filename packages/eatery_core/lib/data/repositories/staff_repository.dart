@@ -18,6 +18,9 @@ class StaffRepository {
     final id = _db.queryScalar('SELECT last_insert_rowid()') as int;
     staff = staff.copyWith(id: id); return id;
   }
+  Future<void> deleteStaff(int id) async {
+    _db.execute('DELETE FROM staff WHERE id = ?', [id]);
+  }
   bool isStaffNameTaken(String name) => _db.query('SELECT id FROM staff WHERE lower(trim(name))=?', [name.toLowerCase().trim()]).isNotEmpty;
   bool isStaffPhoneTaken(String phone) => _db.query('SELECT id FROM staff WHERE phone=?', [phone]).isNotEmpty;
   Future<void> clearAll() async => _db.execute('DELETE FROM staff');

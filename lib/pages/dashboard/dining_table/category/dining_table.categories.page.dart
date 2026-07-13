@@ -37,12 +37,12 @@ class _DiningTableCategoriesPageState
         },
       ),
       child:
-          (ref.read(diningTableRepositoryProvider) as dynamic)
+          ref.read(diningTableRepositoryProvider)
               .getAllCategories()
               .isNotEmpty
           ? ListView(
               children: [
-                ...(ref.read(diningTableRepositoryProvider) as dynamic).getAllCategories().map((
+                ...ref.read(diningTableRepositoryProvider).getAllCategories().map((
                   each,
                 ) {
                   return ListTile(

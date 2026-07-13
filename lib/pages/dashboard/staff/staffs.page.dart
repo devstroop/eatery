@@ -89,7 +89,7 @@ class _StaffsPageState extends ConsumerState<StaffsPage> {
 
 /// Desktop-friendly card wrapper for a staff list item.
 class _StaffCard extends ConsumerStatefulWidget {
-  final dynamic staff;
+  final Staff staff;
   final Color pageColor;
 
   const _StaffCard({required this.staff, required this.pageColor});
@@ -144,7 +144,10 @@ class _StaffCardState extends ConsumerState<_StaffCard> {
                         ),
                         TextButton(
                           onPressed: () {
-                            s.delete().whenComplete(() {
+                            ref
+                                .read(staffRepositoryProvider)
+                                .deleteStaff(s.id!)
+                                .whenComplete(() {
                               Navigator.pop(context);
                               setState(() {});
                             });

@@ -74,11 +74,6 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
             );
           },
         ),
-        IconButton(
-          icon: const Icon(Icons.barcode_reader),
-          onPressed: () async {},
-        ),
-        IconButton(icon: const Icon(Icons.more_vert), onPressed: () async {}),
       ],
       child: orders.isNotEmpty
           ? ListView(
@@ -116,7 +111,7 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
 
 /// Desktop-friendly order card.
 class _OrderCard extends StatelessWidget {
-  final dynamic order;
+  final Order order;
   final String currencySymbol;
 
   const _OrderCard({required this.order, required this.currencySymbol});

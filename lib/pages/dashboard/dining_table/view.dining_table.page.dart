@@ -127,7 +127,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                         ),
                         Text(
                           widget.diningTable.categoryId != null
-                              ? (ref.read(diningTableRepositoryProvider) as dynamic)
+                              ? ref.read(diningTableRepositoryProvider)
                                       .getCategoryById(widget.diningTable.categoryId!)
                                       ?.name ?? 'None'
                               : 'None',

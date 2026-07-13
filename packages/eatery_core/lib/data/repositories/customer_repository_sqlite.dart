@@ -82,6 +82,12 @@ class SqliteCustomerRepository implements CustomerRepository {
   /// Outstanding amount computed via an aggregate SQL query on the orders and
   /// payment tables in the native store.
   @override
+  Future<void> deleteCustomer(int id) async {
+    _store.execute('DELETE FROM customer WHERE id = ?', [id]);
+    notifyMutation('customer', id, 'delete', {'id': id});
+  }
+
+  @override
   double getOutstandingAmount(String phone) {
     final result = _store.queryScalar(
       '''

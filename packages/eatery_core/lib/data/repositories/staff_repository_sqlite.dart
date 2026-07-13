@@ -66,6 +66,12 @@ class SqliteStaffRepository implements StaffRepository {
   }
 
   @override
+  Future<void> deleteStaff(int id) async {
+    _store.execute('DELETE FROM staff WHERE id = ?', [id]);
+    notifyMutation('staff', id, 'delete', {'id': id});
+  }
+
+  @override
   Future<void> clearAll() async {
     _store.execute('DELETE FROM staff');
   }

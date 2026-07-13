@@ -79,7 +79,7 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
 
 /// Desktop-friendly card wrapper for a customer list item.
 class _CustomerCard extends ConsumerStatefulWidget {
-  final dynamic customer;
+  final Customer customer;
   final Color pageColor;
 
   const _CustomerCard({required this.customer, required this.pageColor});
@@ -163,15 +163,16 @@ class _CustomerCardState extends ConsumerState<_CustomerCard> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                      c
-                                        .delete()
-                                        .then((_) {
-                                          AppDialog.showMessage(
-                                            context,
-                                            message: 'Customer deleted successfully',
-                                            type: MessageType.success,
-                                          );
-                                        Navigator.pop(ctx2);
+                                  ref
+                                      .read(customerRepositoryProvider)
+                                      .deleteCustomer(c.id!)
+                                      .then((_) {
+                                        AppDialog.showMessage(
+                                          context,
+                                          message: 'Customer deleted successfully',
+                                          type: MessageType.success,
+                                        );
+                                      Navigator.pop(ctx2);
                                       })
                                       .onError((error, _) {
                                         AppDialog.showMessage(

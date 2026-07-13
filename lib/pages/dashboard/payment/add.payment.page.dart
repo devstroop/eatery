@@ -204,9 +204,11 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
         child: AppButton.primary(
           label: 'Save Payment',
           onPressed: () {
-            if (order == null)
+            if (order == null) {
               AppDialog.showMessage(
                   context, message: 'Please select an order', type: MessageType.error);
+              return;
+            }
 
             if (_formKey.currentState!.validate()) {
               final payment = Payment(

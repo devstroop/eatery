@@ -136,7 +136,7 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
                           });
                         },
                       ),
-                      ...(ref.read(diningTableRepositoryProvider) as dynamic)
+                      ...ref.read(diningTableRepositoryProvider)
                           .getAllCategories()
                           .map((e) {
                             return PosCategoryWidget(
