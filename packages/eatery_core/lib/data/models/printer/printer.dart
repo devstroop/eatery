@@ -1,0 +1,66 @@
+import 'package:eatery_core/data/models/eatery_db.dart';
+import 'package:eatery_core/data/database/eatery_db_shim.dart';
+import 'package:eatery_core/data/database/native/store_config.dart';
+
+class Printer {
+  int? id;
+  String name;
+  String? bluetoothAddress;
+  String? usbVendorId;
+  String? usbProductId;
+  PrinterType? type; // enum?
+
+  Printer({
+    required this.name,
+    this.bluetoothAddress,
+    this.usbVendorId,
+    this.usbProductId,
+    this.type,
+  }) : id = kUseSqlitePrinterStore
+           ? null
+           : EateryDB.instance.printerBox?.nextId();
+
+  Printer.fromMap(Map<String, dynamic> map)
+    : id = map['id'],
+      name = map['name'],
+      bluetoothAddress = map['bluetoothAddress'],
+      usbVendorId = map['usbVendorId'],
+      usbProductId = map['usbProductId'],
+      type = PrinterType.values.singleWhere(
+        (element) => element.id == map['type'],
+      );
+
+  Map<String, Object?> toMap() {
+    return {
+      'id': id,
+      'name': name,
+      'bluetoothAddress': bluetoothAddress,
+      'usbVendorId': usbVendorId,
+      'usbProductId': usbProductId,
+      'type': type != null ? type!.id : null,
+    };
+  }
+
+  static Printer fromIterable(Iterable<dynamic> row) {
+    return Printer.fromMap({
+      'id': row.elementAt(0),
+      'name': row.elementAt(1),
+      'bluetoothAddress': row.elementAt(2),
+      'usbVendorId': row.elementAt(3),
+      'usbProductId': row.elementAt(4),
+      'type': row.elementAt(5),
+    });
+  }
+
+  List<dynamic> toIterable() {
+    var map = toMap();
+    return [
+      map['id'],
+      map['name'],
+      map['bluetoothAddress'],
+      map['usbVendorId'],
+      map['usbProductId'],
+      map['type'],
+    ];
+  }
+}
