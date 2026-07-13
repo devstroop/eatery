@@ -50,6 +50,9 @@ class SyncServer {
       port,
     );
 
+    syncService.onSendMessage = (json) {
+      _broadcastRaw(json);
+    };
     syncService.becomeHost();
 
     // Broadcast heartbeats to all clients
@@ -85,7 +88,10 @@ class SyncServer {
   }
 
   void _broadcast(SyncMessage msg) {
-    final json = msg.toJsonString();
+    _broadcastRaw(msg.toJsonString());
+  }
+
+  void _broadcastRaw(String json) {
     for (final client in _clients.toList()) {
       try {
         client.sink.add(json);
@@ -104,6 +110,14 @@ class SyncServer {
               msg.entries?.map((e) => OpLogEntry.fromJson(e)).toList() ?? [];
           opLogService.applyBatch(entries);
           syncService.receiveAck(opLogService.clock);
+          // Ack the sender so it can advance its lastSyncedClock.
+          sender.sink.add(
+            SyncMessage.ack(
+              deviceId: syncService.deviceId,
+              clock: opLogService.clock,
+              lastAppliedClock: opLogService.clock,
+            ).toJsonString(),
+          );
           // Re-broadcast to all other clients
           final broadcast = SyncMessage.opLogBroadcast(
             deviceId: syncService.deviceId,

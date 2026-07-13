@@ -46,6 +46,9 @@ class SyncStatus {
   });
 }
 
+/// Signature for sending a raw JSON string over the active transport.
+typedef SendMessageCallback = void Function(String message);
+
 /// High-level sync service that manages the device's role in the network,
 /// heartbeat monitoring, host election, and push/pull of OpLog entries.
 class SyncService {
@@ -62,6 +65,12 @@ class SyncService {
   Timer? _hostCheckTimer;
   DateTime? _lastHeartbeat;
   int _missedHeartbeats = 0;
+
+  /// Callback invoked by [_sendMessage] to actually transmit a message.
+  ///
+  /// Set by [SyncClient] / [SyncServer] to their transport-specific send
+  /// function.  When null, [#_sendMessage] is a no-op.
+  SendMessageCallback? onSendMessage;
 
   // Callbacks for state changes
   final void Function(SyncStatus status)? onStatusChange;
@@ -272,7 +281,7 @@ class SyncService {
   }
 
   void _sendMessage(SyncMessage message) {
-    // TODO: Implement actual WebSocket send
+    onSendMessage?.call(message.toJsonString());
   }
 
   /// Dispose timers on service teardown.

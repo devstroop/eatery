@@ -38,7 +38,8 @@ class SyncCoordinator {
   }) : _store = store {
     opLogService = OpLogService(store: store, deviceId: deviceId);
 
-    setMutationHook((entityType, entityId, operation, data) {
+    final hook = MutationHook();
+    hook.set((entityType, entityId, operation, data) {
       trackMutation(
         entityType: entityType,
         entityId: entityId,
@@ -46,6 +47,7 @@ class SyncCoordinator {
         data: data,
       );
     });
+    MutationHook.install(hook);
 
     syncService = SyncService(
       opLogService: opLogService,
@@ -104,6 +106,8 @@ class SyncCoordinator {
   }
 
   void _pushPending() {
+    final client = _client;
+    if (client == null) return;
     final entries = opLogService.getEntriesSince(
       syncService.status.lastSyncedClock,
     );
@@ -114,7 +118,7 @@ class SyncCoordinator {
       clock: opLogService.clock,
       entries: entries.map((e) => e.toJson()).toList(),
     );
-    _client!.sendMessage(msg);
+    client.sendMessage(msg);
   }
 
   /// Applies incoming op log entries to the local database.
@@ -128,6 +132,27 @@ class SyncCoordinator {
     }
   }
 
+  /// Entity types that are allowed in incoming sync entries.
+  ///
+  /// Any entity type not in this set is rejected, preventing SQL injection
+  /// via the [entityType] field.
+  static const _allowedEntityTypes = {
+    'company',
+    'currency',
+    'customer',
+    'dining_table',
+    'dining_table_category',
+    'order',
+    'order_product',
+    'payment',
+    'printer',
+    'product',
+    'product_category',
+    'staff',
+    'subscription',
+    'tax_slab',
+  };
+
   /// Maps entity type names to their SQL table names.
   ///
   /// Most tables are named after the entity type (product → product),
@@ -140,6 +165,12 @@ class SyncCoordinator {
   }
 
   void _applyEntry(OpLogEntry entry) {
+    if (!_allowedEntityTypes.contains(entry.entityType)) {
+      debugPrint(
+        'SyncCoordinator: rejecting unknown entity type "${entry.entityType}"',
+      );
+      return;
+    }
     final table = _tableName(entry.entityType);
 
     if (entry.operation == 'delete' || entry.operation == 'void') {
@@ -165,7 +196,7 @@ class SyncCoordinator {
   }
 
   Future<void> dispose() async {
-    clearMutationHook();
+    MutationHook.reset();
     await _client?.disconnect();
     await _server?.stop();
     syncService.dispose();

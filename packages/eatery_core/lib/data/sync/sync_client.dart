@@ -36,6 +36,11 @@ class SyncClient {
       final uri = Uri.parse('ws://$host:$port');
       _channel = WebSocketChannel.connect(uri);
 
+      syncService.onSendMessage = (json) {
+        try {
+          _channel?.sink.add(json);
+        } catch (_) {}
+      };
       syncService.connectToHost(host, host);
 
       _channel!.stream.listen(
@@ -63,6 +68,7 @@ class SyncClient {
       _send(pullMsg);
 
       // Periodically push pending local entries
+      _pushTimer?.cancel();
       _pushTimer = Timer.periodic(const Duration(seconds: 3), (_) {
         _pushPending();
       });
@@ -137,14 +143,20 @@ class SyncClient {
     }
   }
 
+  Timer? _reconnectTimer;
+
   void _scheduleReconnect() {
-    Future.delayed(const Duration(seconds: 5), () {
+    _reconnectTimer?.cancel();
+    _reconnectTimer = Timer(const Duration(seconds: 5), () {
       if (!_connected) connect();
     });
   }
 
   Future<void> disconnect() async {
     _pushTimer?.cancel();
+    _pushTimer = null;
+    _reconnectTimer?.cancel();
+    _reconnectTimer = null;
     _connected = false;
     await _channel?.sink.close();
     _channel = null;

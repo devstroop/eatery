@@ -4,6 +4,7 @@ import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery_core/data/sync/mutation_hook.dart';
 import 'package:eatery_core/providers/database_provider.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery_core/providers/product_provider.dart';
@@ -374,6 +375,19 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
   }
   */
 
+  /// Clears [table] and notifies the sync layer about every deleted row.
+  void _clearTable(String table, String entityType) {
+    final store = ref.read(eateryStoreProvider);
+    final oldIds = store
+        .query('SELECT id FROM $table')
+        .map((r) => r['id'] as int)
+        .toList();
+    store.execute('DELETE FROM $table');
+    for (final id in oldIds) {
+      notifyMutation(entityType, id, 'delete', {'id': id});
+    }
+  }
+
   Future<void> _downloadDemoData(BuildContext context) async {
     ProgressDialog pd = ProgressDialog(context: context);
     pd.show();
@@ -393,18 +407,18 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
       logs.add('🛢️ Customers');
       Iterable<Customer> custs = list.map((element) {
         try {
-          final msg = '\t👤 ${element['name']} downloaded';
+          final msg = '👤 ${element['name']} downloaded';
           logs.add(msg);
           pd.update(msg: msg);
           return Customer.fromMap(element);
         } catch (e) {
-          final msg = '\t❌ Error downloading 👤 ${element['name']}: $e';
+          final msg = '❌ Error downloading 👤 ${element['name']}: $e';
           logs.add(msg);
           pd.update(msg: msg);
           return Customer(phone: element['phone']);
         }
       });
-      store.execute('DELETE FROM customer');
+      _clearTable('customer', 'customer');
       for (final c in custs) {
         await ref.read(customerRepositoryProvider).saveCustomer(c);
       }
@@ -427,18 +441,18 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
       logs.add('🛢️ Dining Table Categories');
       Iterable<DiningTableCategory> dtCats = list.map((element) {
         try {
-          final msg = '\t📖 ${element['name']} downloaded successfully';
+          final msg = '📖 ${element['name']} downloaded successfully';
           logs.add(msg);
           pd.update(msg: msg);
           return DiningTableCategory.fromMap(element);
         } catch (e) {
-          final msg = '\t❌ Error downloading ${element['name']}: $e';
+          final msg = '❌ Error downloading ${element['name']}: $e';
           logs.add(msg);
           pd.update(msg: msg);
           return DiningTableCategory(name: element['name']);
         }
       });
-      store.execute('DELETE FROM dining_table_category');
+      _clearTable('dining_table_category', 'dining_table_category');
       for (final c in dtCats) {
         (ref.read(diningTableRepositoryProvider) as dynamic).saveCategory(c);
       }
@@ -462,18 +476,18 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
       logs.add('🛢️ Dining Tables');
       Iterable<DiningTable> diningTables = list.map((element) {
         try {
-          final msg = '\t🍽️ ${element['name']} downloaded successfully';
+          final msg = '🍽️ ${element['name']} downloaded successfully';
           logs.add(msg);
           pd.update(msg: msg);
           return DiningTable.fromMap(element);
         } catch (e) {
-          final msg = '\t❌ Error downloading ${element['name']}: $e';
+          final msg = '❌ Error downloading ${element['name']}: $e';
           logs.add(msg);
           pd.update(msg: msg);
           return DiningTable(name: element['name']);
         }
       });
-      store.execute('DELETE FROM dining_table');
+      _clearTable('dining_table', 'dining_table');
       for (final t in diningTables) {
         await ref.read(diningTableRepositoryProvider).saveTable(t);
       }
@@ -497,18 +511,18 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
       logs.add('🛢️ Orders');
       Iterable<Order> orders = ordersList.map((element) {
         try {
-          final msg = '\t📦 ${element['id']} downloaded successfully';
+          final msg = '📦 ${element['id']} downloaded successfully';
           logs.add(msg);
           pd.update(msg: msg);
           return Order.fromMap(element);
         } catch (e) {
-          final msg = '\t❌ Error downloading ${element['id']}: $e';
+          final msg = '❌ Error downloading ${element['id']}: $e';
           logs.add(msg);
           pd.update(msg: msg);
           rethrow;
         }
       });
-      store.execute('DELETE FROM "order"');
+      _clearTable('"order"', 'order');
       for (final o in orders) {
         await ref.read(orderRepositoryProvider).saveOrder(o);
       }
@@ -531,18 +545,18 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
       logs.add('🛢️ Payments');
       Iterable<Payment> payments = paymentsList.map((element) {
         try {
-          final msg = '\t💰 ${element['id']} downloaded successfully';
+          final msg = '💰 ${element['id']} downloaded successfully';
           logs.add(msg);
           pd.update(msg: msg);
           return Payment.fromMap(element);
         } catch (e) {
-          final msg = '\t❌ Error downloading ${element['id']}: $e';
+          final msg = '❌ Error downloading ${element['id']}: $e';
           logs.add(msg);
           pd.update(msg: msg);
           rethrow;
         }
       });
-      store.execute('DELETE FROM payment');
+      _clearTable('payment', 'payment');
       for (final p in payments) {
         await ref.read(paymentRepositoryProvider).savePayment(p);
       }
@@ -567,18 +581,18 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
         element,
       ) {
         try {
-          final msg = '\t📖 ${element['name']} downloaded successfully';
+          final msg = '📖 ${element['name']} downloaded successfully';
           logs.add(msg);
           pd.update(msg: msg);
           return ProductCategory.fromMap(element);
         } catch (e) {
-          final msg = '\t❌ Error downloading ${element['name']}: $e';
+          final msg = '❌ Error downloading ${element['name']}: $e';
           logs.add(msg);
           pd.update(msg: msg);
           return ProductCategory(name: element['name']);
         }
       });
-      store.execute('DELETE FROM product_category');
+      _clearTable('product_category', 'product_category');
       for (final c in categories) {
         await ref.read(productRepositoryProvider).saveCategory(c);
       }
@@ -602,12 +616,12 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
       logs.add('🛢️ Products');
       Iterable<Product> products = productsList.map((element) {
         try {
-          final msg = '\t⌗ ${element['name']} downloaded successfully';
+          final msg = '⌗ ${element['name']} downloaded successfully';
           logs.add(msg);
           pd.update(msg: msg);
           return Product.fromMap(element);
         } catch (e) {
-          final msg = '\t❌ Error downloading ${element['name']}: $e';
+          final msg = '❌ Error downloading ${element['name']}: $e';
           logs.add(msg);
           pd.update(msg: msg);
           return Product(
@@ -619,7 +633,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           );
         }
       });
-      store.execute('DELETE FROM product');
+      _clearTable('product', 'product');
       for (final p in products) {
         await ref.read(productRepositoryProvider).saveProduct(p);
       }
@@ -642,12 +656,12 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
       logs.add('🛢️ Staffs');
       Iterable<Staff> staffs = staffsList.map((element) {
         try {
-          final msg = '\t👨🏻‍🔧 ${element['name']} downloaded successfully';
+          final msg = '👨🏻‍🔧 ${element['name']} downloaded successfully';
           logs.add(msg);
           pd.update(msg: msg);
           return Staff.fromMap(element);
         } catch (e) {
-          final msg = '\t❌ Error downloading ${element['name']}: $e';
+          final msg = '❌ Error downloading ${element['name']}: $e';
           logs.add(msg);
           pd.update(msg: msg);
           return Staff(
@@ -657,7 +671,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           );
         }
       });
-      await ref.read(staffRepositoryProvider).clearAll();
+      _clearTable('staff', 'staff');
       for (final s in staffs) {
         await ref.read(staffRepositoryProvider).saveStaff(s);
       }
@@ -680,12 +694,12 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
       logs.add('🛢️ Tax Slabs');
       Iterable<TaxSlab> taxSlabs = taxSlabsList.map((element) {
         try {
-          final msg = '\t％ ${element['name']} downloaded successfully';
+          final msg = '％ ${element['name']} downloaded successfully';
           logs.add(msg);
           pd.update(msg: msg);
           return TaxSlab.fromMap(element);
         } catch (e) {
-          final msg = '\t❌ Error downloading ${element['name']}: $e';
+          final msg = '❌ Error downloading ${element['name']}: $e';
           logs.add(msg);
           pd.update(msg: msg);
           return TaxSlab(
@@ -695,7 +709,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           );
         }
       });
-      store.execute('DELETE FROM tax_slab');
+      _clearTable('tax_slab', 'tax_slab');
       for (final t in taxSlabs) {
         await ref.read(taxRepositoryProvider).saveTaxSlab(t);
       }
