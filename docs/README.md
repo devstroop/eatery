@@ -29,6 +29,8 @@
 | [07-provider-hierarchy.md](specs/07-provider-hierarchy.md) | Riverpod provider tree, init order, lifecycle |
 | [08-testing.md](specs/08-testing.md) | Unit, widget, integration, E2E testing strategy |
 | [09-migration-plan.md](specs/09-migration-plan.md) | Step-by-step migration per phase |
+| [10-onboarding-redesign.md](specs/10-onboarding-redesign.md) | Company creation, welcome screen, demo mode, setup checklist |
+| [11-schema-audit.md](specs/11-schema-audit.md) | Schema review, 22 new tables, design improvements |
 
 ### Codebase Audit (`docs/audit/`)
 

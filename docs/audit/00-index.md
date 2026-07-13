@@ -26,3 +26,12 @@
 | 11 | [Quick Wins](11-quick-wins.md) | 10 | 0 | 0 |
 
 **Total: 95 issues** (6 critical, 23 high, 42 medium, 24 low)
+
+## Cross-Reference: New Analysis Documents
+
+| Document | Contents |
+|----------|----------|
+| [Schema Audit](../specs/11-schema-audit.md) | Full schema review: 21 design flaws, 22 missing entity types, migration strategy |
+| [PRD Audit](../prd/06-prd-audit.md) | PRD gap analysis: 6 missing feature areas, 17 new user stories, phase reorganization |
+| [Onboarding Redesign](../specs/10-onboarding-redesign.md) | Company creation redesign: 2-field setup, demo mode, setup checklist |
+| [Consolidated Issues](../../ISSUES.md) | All 106 open issues merged from audit + schema + PRD analysis |
