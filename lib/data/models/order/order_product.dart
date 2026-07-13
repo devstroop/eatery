@@ -1,10 +1,11 @@
 import 'package:eatery/data/models/eatery_db.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
+import 'package:eatery/data/database/native/store_config.dart';
 
 part 'order_product.g.dart';
 
 @HiveType(typeId: TypeIndex.orderProduct)
-class OrderProduct extends HiveObject{
+class OrderProduct extends HiveObject {
   @HiveField(0)
   int? id;
   @HiveField(1)
@@ -48,24 +49,25 @@ class OrderProduct extends HiveObject{
     required this.total,
     this.stationId,
     this.stationName,
-
-  }) : id = EateryDB.instance.orderProductBox?.nextId();
+  }) : id = kUseSqliteOrderStore
+           ? null
+           : EateryDB.instance.orderProductBox?.nextId();
 
   OrderProduct.fromMap(Map<String, dynamic> map)
-      : id = map['id'],
-        orderId = map['orderId'],
-        productId = map['productId'],
-        productName = map['productName'],
-        quantity = map['quantity'],
-        price = map['price'],
-        subTotal = map['subTotal'],
-        taxRate = map['taxRate'],
-        taxAmount = map['taxAmount'],
-        discountRate = map['discountRate'],
-        discountAmount = map['discountAmount'],
-        total = map['total'],
-        stationId = map['stationId'],
-        stationName = map['stationName'];
+    : id = map['id'],
+      orderId = map['orderId'],
+      productId = map['productId'],
+      productName = map['productName'],
+      quantity = map['quantity'],
+      price = map['price'],
+      subTotal = map['subTotal'],
+      taxRate = map['taxRate'],
+      taxAmount = map['taxAmount'],
+      discountRate = map['discountRate'],
+      discountAmount = map['discountAmount'],
+      total = map['total'],
+      stationId = map['stationId'],
+      stationName = map['stationName'];
 
   Map<String, Object?> toMap() {
     return {

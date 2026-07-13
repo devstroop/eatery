@@ -1,5 +1,6 @@
 import 'package:eatery/data/models/eatery_db.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
+import 'package:eatery/data/database/native/store_config.dart';
 
 part 'subscription.g.dart';
 
@@ -21,7 +22,7 @@ class Subscription extends HiveObject {
       this.purchaseCode,
       this.validFrom,
       this.validTill,
-      required this.subscriptionType}): id = EateryDB.instance.subscriptionBox?.nextId();
+      required this.subscriptionType}): id = kUseSqliteSubscriptionStore ? null : EateryDB.instance.subscriptionBox?.nextId();
 
   Subscription.fromMap(Map<String, dynamic> map)
       : id = map['id'],

@@ -1,42 +1,22 @@
-def localProperties = new Properties()
-def localPropertiesFile = rootProject.file('local.properties')
-if (localPropertiesFile.exists()) {
-    localPropertiesFile.withReader('UTF-8') { reader ->
-        localProperties.load(reader)
-    }
+plugins {
+    id "com.android.application"
+    id "kotlin-android"
+    // The Flutter Gradle Plugin must be applied after the Android and Kotlin plugins.
+    id "dev.flutter.flutter-gradle-plugin"
 }
-
-def flutterRoot = localProperties.getProperty('flutter.sdk')
-if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
-}
-
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
-}
-
-def flutterVersionName = localProperties.getProperty('flutter.versionName')
-if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
-}
-
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
 android {
     namespace 'com.devstroop.eatery'
-    compileSdkVersion 34
+    compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = JavaVersion.VERSION_17.toString()
     }
 
     sourceSets {
@@ -45,10 +25,10 @@ android {
 
     defaultConfig {
         applicationId "com.devstroop.eatery"
-        minSdkVersion 22
-        targetSdkVersion 33
-        versionCode flutterVersionCode.toInteger()
-        versionName flutterVersionName
+        minSdkVersion flutter.minSdkVersion
+        targetSdkVersion flutter.targetSdkVersion
+        versionCode flutter.versionCode
+        versionName flutter.versionName
     }
 
     buildTypes {
@@ -65,6 +45,56 @@ flutter {
     source '../..'
 }
 
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+// ---------------------------------------------------------------------------
+// libeaterystore (Zig + embedded SQLite) native library.
+//
+// Cross-compiles libeaterystore.so for each Android ABI with Zig, using the
+// NDK that Gradle already resolved (android.ndkDirectory), and drops the
+// results into src/main/jniLibs/<abi>/ so AGP packs them into the APK. The
+// Dart FFI loader then opens "libeaterystore.so" from the app's native lib dir.
+// ---------------------------------------------------------------------------
+def eateryStoreDir = file("${projectDir}/../../libeaterystore")
+def eateryStoreAbis = [
+    'arm64-v8a'  : 'aarch64-linux-android',
+    'armeabi-v7a': 'arm-linux-androideabi',
+    'x86_64'     : 'x86_64-linux-android',
+]
+
+tasks.register('buildEateryStore') {
+    description 'Cross-compiles libeaterystore.so for all Android ABIs via Zig.'
+    doLast {
+        def zigOk = false
+        try {
+            def probe = ['zig', 'version'].execute()
+            probe.waitFor()
+            zigOk = probe.exitValue() == 0
+        } catch (ignored) {
+            zigOk = false
+        }
+        if (!zigOk) {
+            throw new GradleException(
+                "Zig not found on PATH. Install Zig 0.15.x to build libeaterystore " +
+                "(see libeaterystore/README.md).")
+        }
+
+        def jniLibsDir = file("${projectDir}/src/main/jniLibs")
+        def apiLevel = android.defaultConfig.minSdkVersion.apiLevel.toString()
+        eateryStoreAbis.each { abi, zigTarget ->
+            exec {
+                workingDir eateryStoreDir
+                environment 'ANDROID_NDK_HOME', android.ndkDirectory.absolutePath
+                environment 'ANDROID_API_LEVEL', apiLevel
+                commandLine 'zig', 'build', 'shared-lib',
+                    "-Dtarget=${zigTarget}", '--release=fast'
+            }
+            copy {
+                from new File(eateryStoreDir, 'zig-out/lib/libeaterystore.so')
+                into new File(jniLibsDir, abi)
+            }
+        }
+    }
+}
+
+tasks.matching { it.name == 'preBuild' }.configureEach {
+    dependsOn 'buildEateryStore'
 }

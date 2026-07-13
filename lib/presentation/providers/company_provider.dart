@@ -1,10 +1,15 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery/data/database/native/store_config.dart';
 import 'package:eatery/data/models/eatery_db.dart';
 import 'package:eatery/data/repositories/company_repository.dart';
+import 'package:eatery/data/repositories/company_repository_sqlite.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 
 /// Provides the [CompanyRepository] singleton.
 final companyRepositoryProvider = Provider<CompanyRepository>((ref) {
+  if (kUseSqliteCompanyStore) {
+    return SqliteCompanyRepository(store: ref.read(eateryStoreProvider));
+  }
   final db = ref.read(appDatabaseProvider);
   return CompanyRepository(db: db);
 });

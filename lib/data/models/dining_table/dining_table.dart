@@ -1,5 +1,6 @@
 import 'package:eatery/data/models/eatery_db.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
+import 'package:eatery/data/database/native/store_config.dart';
 
 part 'dining_table.g.dart';
 
@@ -21,28 +22,31 @@ class DiningTable extends HiveObject {
   DiningTableStatus status;
   @HiveField(7)
   String? customerPhone;
-  DiningTable(
-      {
-        required this.name,
-      this.category,
-      this.description,
-      this.orderId,
-      this.capacity = 0,
-      this.status = DiningTableStatus.available, this.customerPhone})
-      : id = EateryDB.instance.diningTableBox?.nextId();
+  DiningTable({
+    required this.name,
+    this.category,
+    this.description,
+    this.orderId,
+    this.capacity = 0,
+    this.status = DiningTableStatus.available,
+    this.customerPhone,
+  }) : id = kUseSqliteDiningTableStore
+           ? null
+           : EateryDB.instance.diningTableBox?.nextId();
 
   DiningTable.fromMap(Map<String, dynamic> map)
-      : id = map['id'],
-        name = map['name'],
-        category = EateryDB.instance.diningTableCategoryBox!.values
-            .where((element) => element.id == map['categoryId'])
-            .firstOrNull,
-        description = map['description'],
-        orderId = map['orderId'],
-        capacity = map['capacity'],
-        status = DiningTableStatus.values.singleWhere(
-            (element) => element.id == map['status']),
-    customerPhone = map['customerPhone'];
+    : id = map['id'],
+      name = map['name'],
+      category = EateryDB.instance.diningTableCategoryBox!.values
+          .where((element) => element.id == map['categoryId'])
+          .firstOrNull,
+      description = map['description'],
+      orderId = map['orderId'],
+      capacity = map['capacity'],
+      status = DiningTableStatus.values.singleWhere(
+        (element) => element.id == map['status'],
+      ),
+      customerPhone = map['customerPhone'];
 
   Map<String, Object?> toMap() {
     return {
@@ -53,7 +57,7 @@ class DiningTable extends HiveObject {
       'orderId': orderId,
       'capacity': capacity,
       'status': status.id,
-      'customerPhone': customerPhone
+      'customerPhone': customerPhone,
     };
   }
 
@@ -66,7 +70,7 @@ class DiningTable extends HiveObject {
       'orderId': row.elementAt(4),
       'capacity': row.elementAt(5),
       'status': row.elementAt(6),
-      'customerPhone': row.elementAt(7)
+      'customerPhone': row.elementAt(7),
     });
   }
 
@@ -80,11 +84,7 @@ class DiningTable extends HiveObject {
       map['orderId'],
       map['capacity'],
       map['status'],
-      map['customerPhone']
+      map['customerPhone'],
     ];
   }
 }
-
-
-
-

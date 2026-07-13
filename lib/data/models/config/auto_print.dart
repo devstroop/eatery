@@ -1,5 +1,7 @@
 import 'package:eatery/data/models/eatery_db.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
+import 'package:eatery/data/database/native/store_config.dart';
+
 part 'auto_print.g.dart';
 
 @HiveType(typeId: TypeIndex.autoPrint)
@@ -20,7 +22,7 @@ class AutoPrint extends HiveObject {
       this.invoicePrintEnabled,
       this.kotPrintEnabled,
       this.invoicePrinterId,
-      this.kotPrinterId}): id = EateryDB.instance.autoPrintBox?.nextId();
+      this.kotPrinterId}): id = kUseSqliteAutoPrintStore ? null : EateryDB.instance.autoPrintBox?.nextId();
 
   AutoPrint.fromMap(Map<String, dynamic> map)
       : id = map['id'],

@@ -1,20 +1,54 @@
-buildscript {
-    ext.kotlin_version = '1.7.20'
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.4.2'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
-
 allprojects {
     repositories {
         google()
         mavenCentral()
+    }
+}
+
+// AGP 8 requires every Android module to declare a `namespace`. Several older
+// Flutter plugins (e.g. external_path, qrscan) predate this and only set the
+// legacy `package` attribute in their AndroidManifest.xml. Inject a namespace
+// derived from that package so they build under AGP 8 without upgrading each.
+// Registered before `evaluationDependsOn(':app')` so the afterEvaluate hook is
+// attached before any project is forced to evaluate.
+subprojects {
+    afterEvaluate { project ->
+        def androidExt = project.extensions.findByName('android')
+        if (androidExt != null) {
+            // Inject a namespace from the legacy manifest package if missing.
+            if (androidExt.namespace == null) {
+                def manifest = project.file('src/main/AndroidManifest.xml')
+                if (manifest.exists()) {
+                    def pkg = new groovy.xml.XmlSlurper()
+                        .parse(manifest)
+                        .@package
+                        .text()
+                    if (pkg != null && !pkg.isEmpty()) {
+                        androidExt.namespace = pkg
+                        project.logger.lifecycle(
+                            "eatery: injected namespace '${pkg}' for :${project.name}")
+                    }
+                }
+            }
+
+            // Older plugins pin Java to 1.8 while the Kotlin 2.x plugin
+            // defaults to 17, which AGP 8 rejects as an inconsistent JVM
+            // target. Align both to 1.8 for plugin modules (their original
+            // intent) — bumping them to 17 would instead require compileSdk>=30,
+            // which several old plugins don't set. The :app module keeps 17
+            // (configured in app/build.gradle).
+            if (project.name != 'app') {
+                androidExt.compileOptions {
+                    sourceCompatibility JavaVersion.VERSION_1_8
+                    targetCompatibility JavaVersion.VERSION_1_8
+                }
+                try {
+                    androidExt.kotlinOptions { jvmTarget = '1.8' }
+                } catch (ignored) {
+                    // Module has no Kotlin — nothing to align.
+                }
+            }
+        }
     }
 }
 

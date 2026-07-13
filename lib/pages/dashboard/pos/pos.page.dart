@@ -169,16 +169,15 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
             onPressed: () {
               showSearch(
                 context: context,
-                delegate: SearchProductDelegate(
-                  productsRepo.getAllProducts(),
-                  (product) {
-                    context.pushNamed('productView', extra: product);
-                  },
-                ),
+                delegate: SearchProductDelegate(productsRepo.getAllProducts(), (
+                  product,
+                ) {
+                  context.pushNamed('productView', extra: product);
+                }),
               );
             },
           ),
-          IconButton(icon: const Icon(Icons.qr_code_scanner), onPressed: () {}),
+          // IconButton(icon: const Icon(Icons.qr_code_scanner), onPressed: () {}),  // dead button; qrscan plugin removed (abandoned)
           IconButton(
             icon: const Icon(Icons.more_vert),
             onPressed: () {
@@ -220,12 +219,12 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                                       if (session.cart.isNotEmpty) {
                                         AppDialog.showMessage(
                                           context,
-                                          message: 'Please clear cart before closing order',
+                                          message:
+                                              'Please clear cart before closing order',
                                           type: MessageType.warning,
                                         );
                                         return;
                                       }
-
 
                                       var order = session.activeOrder!;
                                       var diningTableRepo = ref.read(
@@ -248,12 +247,15 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                                           .read(cartProvider.notifier)
                                           .clearCart();
 
-                                      GoRouter.of(context).goNamed('orderPrint', extra: {
-                                        'order': order,
-                                        'currentCart': const <Product>[],
-                                        'printKOT': printKOT,
-                                        'printInvoice': printInvoice,
-                                      });
+                                      GoRouter.of(context).goNamed(
+                                        'orderPrint',
+                                        extra: {
+                                          'order': order,
+                                          'currentCart': const <Product>[],
+                                          'printKOT': printKOT,
+                                          'printInvoice': printInvoice,
+                                        },
+                                      );
                                     },
                                   ),
                                 ],
@@ -338,7 +340,12 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                         ),
                       ).then((value) => setState(() {}));
                     } else {
-                      GoRouter.of(context).pushNamed('viewCustomer', extra: session.activeCustomer!).then((value) => setState(() {}));
+                      GoRouter.of(context)
+                          .pushNamed(
+                            'viewCustomer',
+                            extra: session.activeCustomer!,
+                          )
+                          .then((value) => setState(() {}));
                     }
                   },
                   child: Row(
@@ -404,7 +411,9 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                           .read(orderRepositoryProvider)
                           .getOrderById(session.activeDiningTable!.orderId!);
                       if (tableOrder != null) {
-                        GoRouter.of(context).pushNamed('viewOrder', extra: tableOrder).then((value) => setState(() {}));
+                        GoRouter.of(context)
+                            .pushNamed('viewOrder', extra: tableOrder)
+                            .then((value) => setState(() {}));
                       }
                     },
                     child: Column(
@@ -462,7 +471,12 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                           ),
                         ).then((value) => setState(() {}));
                       } else {
-                        GoRouter.of(context).pushNamed('viewDiningTable', extra: session.activeDiningTable!).then((value) => setState(() {}));
+                        GoRouter.of(context)
+                            .pushNamed(
+                              'viewDiningTable',
+                              extra: session.activeDiningTable!,
+                            )
+                            .then((value) => setState(() {}));
                       }
                     },
                     child: Column(
@@ -497,8 +511,22 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
         ),
       ),
       body: Responsive.isMobile(context)
-          ? _buildMobileBody(context, pageColor, productsRepo, products, crossAxisCount, spacing)
-          : _buildDesktopBody(context, pageColor, productsRepo, products, crossAxisCount, spacing),
+          ? _buildMobileBody(
+              context,
+              pageColor,
+              productsRepo,
+              products,
+              crossAxisCount,
+              spacing,
+            )
+          : _buildDesktopBody(
+              context,
+              pageColor,
+              productsRepo,
+              products,
+              crossAxisCount,
+              spacing,
+            ),
       bottomNavigationBar: BottomAppBar(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -653,17 +681,11 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
               AppSpacing.gapLg,
               const Text(
                 'No dish found',
-                style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                ),
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               const Text(
                 'Add a dish to get started',
-                style: TextStyle(
-                  fontSize: 16,
-                  color: AppColors.grey600,
-                ),
+                style: TextStyle(fontSize: 16, color: AppColors.grey600),
               ),
               const SizedBox(height: 48),
             ],
@@ -719,7 +741,15 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
     return Column(
       children: [
         _buildCategoriesHorizontalBar(context, pageColor, productsRepo),
-        Expanded(child: _buildProductGrid(context, pageColor, products, crossAxisCount, spacing)),
+        Expanded(
+          child: _buildProductGrid(
+            context,
+            pageColor,
+            products,
+            crossAxisCount,
+            spacing,
+          ),
+        ),
       ],
     );
   }
@@ -741,7 +771,13 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
         ),
         Expanded(
           flex: 8,
-          child: _buildProductGrid(context, pageColor, products, crossAxisCount, spacing),
+          child: _buildProductGrid(
+            context,
+            pageColor,
+            products,
+            crossAxisCount,
+            spacing,
+          ),
         ),
       ],
     );

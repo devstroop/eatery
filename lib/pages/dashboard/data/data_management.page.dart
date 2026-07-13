@@ -5,6 +5,7 @@ import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,8 +15,7 @@ class DataManagementPage extends ConsumerStatefulWidget {
   const DataManagementPage({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<DataManagementPage> createState() =>
-      _DataManagementPageState();
+  ConsumerState<DataManagementPage> createState() => _DataManagementPageState();
 }
 
 class _DataManagementPageState extends ConsumerState<DataManagementPage> {
@@ -34,14 +34,15 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           icon: const Icon(Icons.more_vert),
           onPressed: () {
             showMenu(
-                context: context,
-                position: const RelativeRect.fromLTRB(100, 100, 0, 0),
-                items: [
-                  const PopupMenuItem(
-                    value: 'demo',
-                    child: Text('Download Demo Data'),
-                  ),
-                ]).then((value) {
+              context: context,
+              position: const RelativeRect.fromLTRB(100, 100, 0, 0),
+              items: [
+                const PopupMenuItem(
+                  value: 'demo',
+                  child: Text('Download Demo Data'),
+                ),
+              ],
+            ).then((value) {
               if (value == 'demo') {
                 _downloadDemoData(context);
               }
@@ -49,150 +50,158 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           },
         ),
       ],
-      child: ListView(scrollDirection: Axis.vertical, children: [
-        Container(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: Row(
-            children: [
-              Icon(
-                FontAwesomeIcons.googleDrive,
-                color: _pageColor,
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Text(
-                'Google Drive Backup / Restore',
-                style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500, color: AppColors.grey700),
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Flexible(
-                child: Divider(color: AppColors.grey300),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppColors.grey400!),
-          ),
-          child: Row(
-            children: [
-              Icon(
-                Icons.history,
-                color: AppColors.grey700,
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Text(
-                'Last Backup: ',
-                style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500, color: AppColors.grey700),
-              ),
-              Text(
-                'Never',
-                style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey700),
-              ),
-            ],
-          ),
-        ),
-        ListTile(
-            leading: Icon(
-              FontAwesomeIcons.upload,
-              color: AppColors.grey700,
+      child: ListView(
+        scrollDirection: Axis.vertical,
+        children: [
+          Container(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            child: Row(
+              children: [
+                Icon(FontAwesomeIcons.googleDrive, color: _pageColor),
+                const SizedBox(width: 8),
+                Text(
+                  'Google Drive Backup / Restore',
+                  style: AppTypography.titleMedium.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.grey700,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Flexible(child: Divider(color: AppColors.grey300)),
+              ],
             ),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: AppColors.grey400!),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.history, color: AppColors.grey700),
+                const SizedBox(width: 8),
+                Text(
+                  'Last Backup: ',
+                  style: AppTypography.titleMedium.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.grey700,
+                  ),
+                ),
+                Text(
+                  'Never',
+                  style: AppTypography.titleMedium.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.grey700,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ListTile(
+            leading: Icon(FontAwesomeIcons.upload, color: AppColors.grey700),
             title: Text(
               'Backup ↑',
-              style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey700),
+              style: AppTypography.titleMedium.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppColors.grey700,
+              ),
             ),
             subtitle: Text(
               'Backup data to Google Drive',
-              style: AppTypography.bodyMedium.copyWith(color: AppColors.grey700),
+              style: AppTypography.bodyMedium.copyWith(
+                color: AppColors.grey700,
+              ),
             ),
             trailing: const Icon(Icons.chevron_right),
-            onTap: () => GoRouter.of(context).pushNamed('import')),
-        ListTile(
-          leading: Icon(
-            FontAwesomeIcons.download,
-            color: AppColors.grey700,
+            onTap: () => GoRouter.of(context).pushNamed('import'),
           ),
-          title: Text(
-            'Restore ↓',
-            style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey700),
+          ListTile(
+            leading: Icon(FontAwesomeIcons.download, color: AppColors.grey700),
+            title: Text(
+              'Restore ↓',
+              style: AppTypography.titleMedium.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppColors.grey700,
+              ),
+            ),
+            subtitle: Text(
+              'Restore data from Google Drive',
+              style: AppTypography.bodyMedium.copyWith(
+                color: AppColors.grey700,
+              ),
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => GoRouter.of(context).pushNamed('export'),
           ),
-          subtitle: Text(
-            'Restore data from Google Drive',
-            style: AppTypography.bodyMedium.copyWith(color: AppColors.grey700),
+          Container(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            child: Row(
+              children: [
+                Icon(FontAwesomeIcons.fileExcel, color: _pageColor),
+                const SizedBox(width: 8),
+                Text(
+                  'Import / Export',
+                  style: AppTypography.titleMedium.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.grey700,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Flexible(child: Divider(color: AppColors.grey300)),
+              ],
+            ),
           ),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () => GoRouter.of(context).pushNamed('export'),
-        ),
-        Container(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: Row(
-            children: [
-              Icon(
-                FontAwesomeIcons.fileExcel,
-                color: _pageColor,
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Text(
-                'Import / Export',
-                style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500, color: AppColors.grey700),
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Flexible(
-                child: Divider(color: AppColors.grey300),
-              ),
-            ],
-          ),
-        ),
-        ListTile(
+          ListTile(
             leading: Icon(
               FontAwesomeIcons.fileImport,
               color: AppColors.grey700,
             ),
             title: Text(
-            'Import',
-            style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey700),
-          ),
-          subtitle: Text(
-            'Import data from json/excel file',
-            style: AppTypography.bodyMedium.copyWith(color: AppColors.grey700),
-          ),
+              'Import',
+              style: AppTypography.titleMedium.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppColors.grey700,
+              ),
+            ),
+            subtitle: Text(
+              'Import data from json/excel file',
+              style: AppTypography.bodyMedium.copyWith(
+                color: AppColors.grey700,
+              ),
+            ),
             trailing: const Icon(Icons.chevron_right),
-            onTap: () => GoRouter.of(context).pushNamed('import')),
-        ListTile(
-          leading: Icon(
-            FontAwesomeIcons.fileExport,
-            color: AppColors.grey700,
+            onTap: () => GoRouter.of(context).pushNamed('import'),
           ),
-          title: Text(
-            'Export',
-            style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey700),
+          ListTile(
+            leading: Icon(
+              FontAwesomeIcons.fileExport,
+              color: AppColors.grey700,
+            ),
+            title: Text(
+              'Export',
+              style: AppTypography.titleMedium.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppColors.grey700,
+              ),
+            ),
+            subtitle: Text(
+              'Export data to json/excel file',
+              style: AppTypography.bodyMedium.copyWith(
+                color: AppColors.grey700,
+              ),
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => GoRouter.of(context).pushNamed('export'),
           ),
-          subtitle: Text(
-            'Export data to json/excel file',
-            style: AppTypography.bodyMedium.copyWith(color: AppColors.grey700),
-          ),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () => GoRouter.of(context).pushNamed('export'),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 
-/*
+  /*
 
   Future<void> doImportProducts() async {
     await FilePicker.platform.pickFiles(
@@ -234,7 +243,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
         // Populate Staffs
         for (var row in staffsTable!.rows) {
           Staff staff = Staff.fromIterable(row.map((e) => e?.value));
-          db.staffBox!.put(staff.id, staff);
+          await ref.read(staffRepositoryProvider).saveStaff(staff);
         }
 
         // Populate Dining Tables
@@ -345,7 +354,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
 
     // Populate Staffs Sheet
     index = 0;
-    for (var element in db.staffBox!.values) {
+    for (var element in ref.read(staffRepositoryProvider).getAllStaff()) {
       staffsSheet.insertRowIterables(element.toMap().values.toList(), index);
       index++;
     }
@@ -376,8 +385,9 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     // Customers
     try {
       pd.update(msg: '⏳ Downloading Customers');
-      Iterable<Map<String, dynamic>> list =
-          await getList('$baseUrl/customers.json');
+      Iterable<Map<String, dynamic>> list = await getList(
+        '$baseUrl/customers.json',
+      );
       pd.update(msg: '⌛️ Saving Customers');
       logs.add('🛢️ Customers');
       Iterable<Customer> custs = list.map((element) {
@@ -407,8 +417,9 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     // Dining Table Categories
     try {
       pd.update(msg: '⏳ Downloading Dining Table Categories');
-      Iterable<Map<String, dynamic>> list =
-          await getList('$baseUrl/dining_table_categories.json');
+      Iterable<Map<String, dynamic>> list = await getList(
+        '$baseUrl/dining_table_categories.json',
+      );
       pd.update(msg: '⌛️ Saving Dining Table Categories');
       logs.add('🛢️ Dining Table Categories');
       Iterable<DiningTableCategory> dtCats = list.map((element) {
@@ -439,8 +450,9 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     // Dining Tables
     try {
       pd.update(msg: '⏳ Downloading Dining Tables');
-      Iterable<Map<String, dynamic>> list =
-          await getList('$baseUrl/dining_tables.json');
+      Iterable<Map<String, dynamic>> list = await getList(
+        '$baseUrl/dining_tables.json',
+      );
       pd.update(msg: '⌛️ Saving Dining Tables');
       logs.add('🛢️ Dining Tables');
       Iterable<DiningTable> diningTables = list.map((element) {
@@ -471,8 +483,9 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     // Orders
     try {
       pd.update(msg: '⏳ Downloading Orders');
-      Iterable<Map<String, dynamic>> ordersList =
-          await getList('$baseUrl/orders.json');
+      Iterable<Map<String, dynamic>> ordersList = await getList(
+        '$baseUrl/orders.json',
+      );
       pd.update(msg: '⌛️ Saving Orders');
       logs.add('🛢️ Orders');
       Iterable<Order> orders = ordersList.map((element) {
@@ -502,8 +515,9 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     // Payments
     try {
       pd.update(msg: '⏳ Downloading Payments');
-      Iterable<Map<String, dynamic>> paymentsList =
-          await getList('$baseUrl/payments.json');
+      Iterable<Map<String, dynamic>> paymentsList = await getList(
+        '$baseUrl/payments.json',
+      );
       pd.update(msg: '⌛️ Saving Payments');
       logs.add('🛢️ Payments');
       Iterable<Payment> payments = paymentsList.map((element) {
@@ -533,12 +547,14 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     // Product Categories
     try {
       pd.update(msg: '⏳ Downloading Product Categories');
-      Iterable<Map<String, dynamic>> productCategoriesList =
-          await getList('$baseUrl/product_categories.json');
+      Iterable<Map<String, dynamic>> productCategoriesList = await getList(
+        '$baseUrl/product_categories.json',
+      );
       pd.update(msg: '⌛️ Saving Categories');
       logs.add('🛢️ Product Categories');
-      Iterable<ProductCategory> categories =
-          productCategoriesList.map((element) {
+      Iterable<ProductCategory> categories = productCategoriesList.map((
+        element,
+      ) {
         try {
           final msg = '\t📖 ${element['name']} downloaded successfully';
           logs.add(msg);
@@ -566,8 +582,9 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     // Products
     try {
       pd.update(msg: '⏳ Downloading Products');
-      Iterable<Map<String, dynamic>> productsList =
-          await getList('$baseUrl/products.json');
+      Iterable<Map<String, dynamic>> productsList = await getList(
+        '$baseUrl/products.json',
+      );
       pd.update(msg: '⌛️ Saving Products');
       logs.add('🛢️ Products');
       Iterable<Product> products = productsList.map((element) {
@@ -581,11 +598,12 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           logs.add(msg);
           pd.update(msg: msg);
           return Product(
-              name: element['name'],
-              mrpPrice: 0.0,
-              salePrice: 0.0,
-              type: ProductType.inventoryItem,
-              isActive: false);
+            name: element['name'],
+            mrpPrice: 0.0,
+            salePrice: 0.0,
+            type: ProductType.inventoryItem,
+            isActive: false,
+          );
         }
       });
       await db.productBox.clear();
@@ -602,8 +620,9 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     // Staffs
     try {
       pd.update(msg: '⏳ Downloading Staffs');
-      Iterable<Map<String, dynamic>> staffsList =
-          await getList('$baseUrl/staffs.json');
+      Iterable<Map<String, dynamic>> staffsList = await getList(
+        '$baseUrl/staffs.json',
+      );
       pd.update(msg: '⌛️ Saving Staffs');
       logs.add('🛢️ Staffs');
       Iterable<Staff> staffs = staffsList.map((element) {
@@ -617,11 +636,15 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           logs.add(msg);
           pd.update(msg: msg);
           return Staff(
-              name: element['name'], type: StaffType.other, isActive: false);
+            name: element['name'],
+            type: StaffType.other,
+            isActive: false,
+          );
         }
       });
-      await db.staffBox.clear();
-      await db.staffBox.addAll(staffs);
+      final staffList = ref.read(staffRepositoryProvider).getAllStaff();
+      await ref.read(staffRepositoryProvider).clearAll();
+      await ref.read(staffRepositoryProvider).addAll(staffs);
       final msg = '✅ ${staffs.length} Staffs downloaded successfully';
       logs.add(msg);
       pd.update(msg: msg);
@@ -634,8 +657,9 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     // Tax Slabs
     try {
       pd.update(msg: '⏳ Downloading Tax Slabs');
-      Iterable<Map<String, dynamic>> taxSlabsList =
-          await getList('$baseUrl/tax_slabs.json');
+      Iterable<Map<String, dynamic>> taxSlabsList = await getList(
+        '$baseUrl/tax_slabs.json',
+      );
       pd.update(msg: '⌛️ Saving Tax Slabs');
       logs.add('🛢️ Tax Slabs');
       Iterable<TaxSlab> taxSlabs = taxSlabsList.map((element) {
@@ -649,7 +673,10 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           logs.add(msg);
           pd.update(msg: msg);
           return TaxSlab(
-              name: element['name'], rate: 0.0, type: TaxType.exclusive);
+            name: element['name'],
+            rate: 0.0,
+            type: TaxType.exclusive,
+          );
         }
       });
       await db.taxSlabBox.clear();

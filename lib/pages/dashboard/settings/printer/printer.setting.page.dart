@@ -9,7 +9,7 @@ import 'package:eatery/presentation/providers/printer_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
+import '../../../../support/bluetooth_thermal_printer/flutter_bluetooth_adapter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 
@@ -64,7 +64,8 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
       if (this.context.mounted) {
         AppDialog.showMessage(
           this.context,
-          message: 'Bluetooth scanning is only available on mobile devices.\nFor desktop, connect via WiFi/Ethernet ESC/POS.',
+          message:
+              'Bluetooth scanning is only available on mobile devices.\nFor desktop, connect via WiFi/Ethernet ESC/POS.',
           type: MessageType.info,
         );
       }
@@ -90,7 +91,11 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
       await Future.delayed(const Duration(seconds: 8));
     } catch (e) {
       if (this.context.mounted) {
-        AppDialog.showMessage(this.context, message: 'Scan failed: $e', type: MessageType.error);
+        AppDialog.showMessage(
+          this.context,
+          message: 'Scan failed: $e',
+          type: MessageType.error,
+        );
       }
     } finally {
       if (mounted) setState(() => _isScanning = false);
@@ -106,7 +111,11 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
     await ref.read(printerRepositoryProvider).addPrinter(printer);
     ref.invalidate(printerListProvider);
     if (this.context.mounted) {
-      AppDialog.showMessage(this.context, message: 'Printer added', type: MessageType.success);
+      AppDialog.showMessage(
+        this.context,
+        message: 'Printer added',
+        type: MessageType.success,
+      );
     }
   }
 
@@ -127,7 +136,9 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
         children: [
           Text(
             'Saved Printers',
-            style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
+            style: AppTypography.titleMedium.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 8),
           savedPrinters.when(
@@ -150,7 +161,10 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
                           title: Text(p.name),
                           subtitle: Text(p.bluetoothAddress ?? ''),
                           trailing: IconButton(
-                            icon: const Icon(Icons.delete, color: AppColors.error),
+                            icon: const Icon(
+                              Icons.delete,
+                              color: AppColors.error,
+                            ),
                             onPressed: () => _removePrinter(p),
                           ),
                         ),
@@ -169,7 +183,9 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
 
           Text(
             'Bluetooth Discovery',
-            style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
+            style: AppTypography.titleMedium.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 8),
           ElevatedButton.icon(
@@ -213,7 +229,9 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
 
           Text(
             'Print Settings',
-            style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
+            style: AppTypography.titleMedium.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
           ),
           const SizedBox(height: 8),
           Card(

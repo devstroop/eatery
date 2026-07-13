@@ -1,5 +1,6 @@
 import 'package:eatery/data/models/eatery_db.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
+import 'package:eatery/data/database/native/store_config.dart';
 
 part 'customer.g.dart';
 
@@ -24,26 +25,35 @@ class Customer extends HiveObject {
   @HiveField(8)
   DateTime? lastOrderAt;
 
-  Customer(
-      {
-      this.name,
-      required this.phone,
-      this.address,
-      this.landmark,
-      this.latitude,
-      this.longitude,
-      this.isActive = true, this.lastOrderAt}): id = EateryDB.instance.customerBox?.nextId();
+  Customer({
+    this.name,
+    required this.phone,
+    this.address,
+    this.landmark,
+    this.latitude,
+    this.longitude,
+    this.isActive = true,
+    this.lastOrderAt,
+  }) : id = kUseSqliteCustomerStore
+           ? null
+           : EateryDB.instance.customerBox?.nextId();
 
   Customer.fromMap(Map<String, dynamic> map)
-      : id = map['id'],
-        name = map['name'],
-        phone = map['phone'],
-        address = map['address'],
-        landmark = map['landmark'],
-        latitude = map['latitude'] != null ? double.parse(map['latitude'].toString()) : null,
-        longitude = map['longitude'] != null ? double.parse(map['longitude'].toString()) : null,
-        isActive = map['isActive'] == 1 ? true : false,
-        lastOrderAt = map['lastOrderAt'] != null ? DateTime.fromMillisecondsSinceEpoch(map['lastOrderAt']) : null;
+    : id = map['id'],
+      name = map['name'],
+      phone = map['phone'],
+      address = map['address'],
+      landmark = map['landmark'],
+      latitude = map['latitude'] != null
+          ? double.parse(map['latitude'].toString())
+          : null,
+      longitude = map['longitude'] != null
+          ? double.parse(map['longitude'].toString())
+          : null,
+      isActive = map['isActive'] == 1 ? true : false,
+      lastOrderAt = map['lastOrderAt'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['lastOrderAt'])
+          : null;
 
   Map<String, Object?> toMap() {
     return {
@@ -55,10 +65,9 @@ class Customer extends HiveObject {
       'latitude': latitude,
       'longitude': longitude,
       'isActive': isActive ? 1 : 0,
-      'lastOrderAt': lastOrderAt?.millisecondsSinceEpoch
+      'lastOrderAt': lastOrderAt?.millisecondsSinceEpoch,
     };
   }
-
 
   static Customer fromIterable(Iterable<dynamic> list) {
     return Customer.fromMap({
@@ -70,7 +79,7 @@ class Customer extends HiveObject {
       'latitude': list.elementAt(5),
       'longitude': list.elementAt(6),
       'isActive': list.elementAt(7),
-      'lastOrderAt': list.elementAt(8)
+      'lastOrderAt': list.elementAt(8),
     });
   }
 
@@ -85,7 +94,7 @@ class Customer extends HiveObject {
       map['latitude'],
       map['longitude'],
       map['isActive'],
-      map['lastOrderAt']
+      map['lastOrderAt'],
     ];
   }
 }

@@ -7,68 +7,54 @@ import 'package:eatery/data/models/eatery_db.dart';
 const String _baseUrl =
     'https://raw.githubusercontent.com/devstroop/eatery_demo_company/main';
 
-/// Loads a complete demo company with all entity data.
+/// Loads a complete demo company from [eatery_demo_company] repo JSON files.
 ///
-/// Follows the exact creation sequence from [CreateCompanyPage]:
-///   1. Subscription
-///   2. KCurrency (USD)
-///   3. Company (PIN-less, linked to subscription + currency)
-///   4. Downloads and seeds all operational entities
+/// All records (company, subscription, currency, customers, products, tables,
+/// staff, tax slabs, orders, line items, payments) come from the repo.
+/// The loader has zero inline creation logic.
+///
+/// Loading order matches the creation flow: Subscription → Currency → Company,
+/// so foreign key references (subscriptionId, currencyCode) resolve correctly.
 ///
 /// Returns `true` on success, `false` on failure.
 Future<bool> loadDemoCompany({
   required EateryDatabase db,
   required ProgressDialog pd,
 }) async {
-  // ── 1. Subscription (mirrors create_company.page.dart) ──────────
-  try {
-    pd.update(msg: 'Setting up subscription...');
-    final subscription = Subscription(
-      purchaseCode: 'DEMO',
-      validFrom: DateTime.now(),
-      validTill: DateTime.now().add(const Duration(days: 365)),
-      subscriptionType: SubscriptionType.business,
-    );
-    await db.subscriptionBox.add(subscription);
-
-    // ── 2. KCurrency (USD) ──────────────────────────────────────
-    pd.update(msg: 'Setting up currency...');
-    final kCurrency = KCurrency(
-      name: 'US Dollar',
-      code: 'USD',
-      symbol: r'$',
-      flag: null,
-      number: 840,
-      decimalDigits: 2,
-      namePlural: 'US dollars',
-      decimalSeparator: '.',
-      thousandsSeparator: ',',
-      symbolOnLeft: true,
-      spaceBetweenAmountAndSymbol: false,
-    );
-    await db.currencyBox.add(kCurrency);
-
-    // ── 3. Company (linked to both) ─────────────────────────────
-    pd.update(msg: 'Creating demo company...');
-    final company = Company(
-      name: 'Demo Restaurant',
-      email: 'demo@eatery.app',
-      phone: '+1-555-0100',
-      address: '123 Demo Street, Demo City',
-      password: null,
-      taxation: Taxation.none,
-      currencyCode: kCurrency.code,
-      subscriptionId: subscription.id,
-    );
-    await db.companyBox.add(company);
-    pd.update(msg: 'Demo company created');
-  } catch (e) {
-    pd.update(msg: 'Failed to create company: $e');
-    return false;
-  }
-
-  // ── 4. Download entities ───────────────────────────────────────
+  // Loading order: Subscription → Currency → Company → rest
+  // Subscription and Currency must precede Company because Company
+  // references subscriptionId and currencyCode from the JSON.
   final downloads = <String, Future<bool> Function()>{
+    'Subscription': () => _downloadEntity<Subscription>(
+          db: db,
+          endpoint: 'subscription.json',
+          box: db.subscriptionBox,
+          fromMap: (m) => Subscription.fromMap(m),
+          clearBeforeInsert: true,
+          pd: pd,
+          label: 'Subscription',
+          keyFn: (m) => m['id'] as int,
+        ),
+    'Currency': () => _downloadEntity<KCurrency>(
+          db: db,
+          endpoint: 'currency.json',
+          box: db.currencyBox,
+          fromMap: (m) => KCurrency.fromMap(m),
+          clearBeforeInsert: true,
+          pd: pd,
+          label: 'Currency',
+          // KCurrency has no id field — use box.add()
+        ),
+    'Company': () => _downloadEntity<Company>(
+          db: db,
+          endpoint: 'company.json',
+          box: db.companyBox,
+          fromMap: (m) => Company.fromMap(m),
+          clearBeforeInsert: true,
+          pd: pd,
+          label: 'Company',
+          keyFn: (m) => m['id'] as int,
+        ),
     'Customers': () => _downloadEntity<Customer>(
           db: db,
           endpoint: 'customers.json',
@@ -77,6 +63,7 @@ Future<bool> loadDemoCompany({
           clearBeforeInsert: true,
           pd: pd,
           label: 'Customers',
+          keyFn: (m) => m['id'] as int,
         ),
     'Dining Table Categories': () => _downloadEntity<DiningTableCategory>(
           db: db,
@@ -86,6 +73,7 @@ Future<bool> loadDemoCompany({
           clearBeforeInsert: true,
           pd: pd,
           label: 'Dining Table Categories',
+          keyFn: (m) => m['id'] as int,
         ),
     'Dining Tables': () => _downloadEntity<DiningTable>(
           db: db,
@@ -95,6 +83,7 @@ Future<bool> loadDemoCompany({
           clearBeforeInsert: true,
           pd: pd,
           label: 'Dining Tables',
+          keyFn: (m) => m['id'] as int,
         ),
     'Product Categories': () => _downloadEntity<ProductCategory>(
           db: db,
@@ -104,6 +93,7 @@ Future<bool> loadDemoCompany({
           clearBeforeInsert: true,
           pd: pd,
           label: 'Product Categories',
+          keyFn: (m) => m['id'] as int,
         ),
     'Products': () => _downloadEntity<Product>(
           db: db,
@@ -113,6 +103,7 @@ Future<bool> loadDemoCompany({
           clearBeforeInsert: true,
           pd: pd,
           label: 'Products',
+          keyFn: (m) => m['id'] as int,
         ),
     'Staffs': () => _downloadEntity<Staff>(
           db: db,
@@ -122,6 +113,7 @@ Future<bool> loadDemoCompany({
           clearBeforeInsert: true,
           pd: pd,
           label: 'Staffs',
+          keyFn: (m) => m['id'] as int,
         ),
     'Tax Slabs': () => _downloadEntity<TaxSlab>(
           db: db,
@@ -131,6 +123,7 @@ Future<bool> loadDemoCompany({
           clearBeforeInsert: true,
           pd: pd,
           label: 'Tax Slabs',
+          keyFn: (m) => m['id'] as int,
         ),
     'Orders': () => _downloadEntity<Order>(
           db: db,
@@ -140,6 +133,7 @@ Future<bool> loadDemoCompany({
           clearBeforeInsert: true,
           pd: pd,
           label: 'Orders',
+          keyFn: (m) => m['id'] as int,
         ),
     'Order Products': () => _downloadEntity<OrderProduct>(
           db: db,
@@ -149,6 +143,7 @@ Future<bool> loadDemoCompany({
           clearBeforeInsert: true,
           pd: pd,
           label: 'Order Products',
+          keyFn: (m) => m['id'] as int,
         ),
     'Payments': () => _downloadEntity<Payment>(
           db: db,
@@ -158,6 +153,7 @@ Future<bool> loadDemoCompany({
           clearBeforeInsert: true,
           pd: pd,
           label: 'Payments',
+          keyFn: (m) => m['id'] as int,
         ),
   };
 
@@ -180,6 +176,7 @@ Future<bool> _downloadEntity<T>({
   required bool clearBeforeInsert,
   required ProgressDialog pd,
   required String label,
+  int Function(Map<String, dynamic>)? keyFn,
 }) async {
   try {
     pd.update(msg: 'Downloading $label...');
@@ -192,16 +189,24 @@ Future<bool> _downloadEntity<T>({
     final list = (jsonDecode(response.body) as List<dynamic>)
         .map<Map<String, dynamic>>((e) => e as Map<String, dynamic>);
     pd.update(msg: 'Saving $label...');
+
+    // All entities share a single box per type. When keyFn is provided,
+    // use box.put(explicitKey, obj) so foreign-key lookups resolve by id.
+    // When keyFn is null (e.g. KCurrency which has no id field), use add().
+    final usePut = keyFn != null;
+
     if (clearBeforeInsert) {
       await box.clear();
     }
     int count = 0;
     for (final map in list) {
       try {
-        // Use put with explicit id so FOREIGN KEY LOOKUPS
-        // (e.g. DiningTable.fromMap → diningTableCategoryBox.values
-        //  .where((e) => e.id == map['categoryId'])) resolve correctly
-        box.put(map['id'] as int, fromMap(map));
+        final obj = fromMap(map);
+        if (usePut) {
+          box.put(keyFn(map), obj);
+        } else {
+          box.add(obj);
+        }
         count++;
       } catch (e) {
         pd.update(msg: '⚠️ Error saving $label item: $e');

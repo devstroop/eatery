@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
-import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
+import '../../flutter_bluetooth_adapter.dart';
 import 'package:rxdart/streams.dart';
 import 'package:rxdart/subjects.dart';
 import '../../bluetooth_thermal_printer.dart';
@@ -34,8 +34,9 @@ class BluetoothPrinterService {
       _scanResults.add(devices.map((d) => BluetoothPrinter(d)).toList());
     });
 
-    _isScanningSubscription =
-        _bluetoothManager.isScanning.listen((isScanningCurrent) async {
+    _isScanningSubscription = _bluetoothManager.isScanning.listen((
+      isScanningCurrent,
+    ) async {
       // If isScanning value changed (scan just stopped)
       if (_isScanning.value! && !isScanningCurrent) {
         _scanResultsSubscription!.cancel();

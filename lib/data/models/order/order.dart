@@ -1,5 +1,6 @@
 import 'package:eatery/data/models/eatery_db.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
+import 'package:eatery/data/database/native/store_config.dart';
 
 part 'order.g.dart';
 
@@ -55,27 +56,31 @@ class Order extends HiveObject {
     this.voidReason,
     this.voidedBy,
     this.voidedAt,
-  })   : id = EateryDB.instance.orderBox?.nextId(),
-        createdAt = DateTime.now();
+  }) : id = kUseSqliteOrderStore ? null : EateryDB.instance.orderBox?.nextId(),
+       createdAt = DateTime.now();
 
   Order.fromMap(Map<String, dynamic> map)
-      : id = map['id'],
-        customerPhone = map['customerPhone'],
-        createdAt = DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
-        updatedAt = map['updatedAt'] != null ? DateTime.fromMillisecondsSinceEpoch(map['updatedAt']) : null,
-        totalQuantity = map['totalQuantity'],
-        subTotal = map['subTotal'],
-        discountTotal = map['discountTotal'],
-        taxTotal = map['taxTotal'],
-        finalTotal = map['finalTotal'],
-        roundOff = map['roundOff'],
-        grandTotal = map['grandTotal'],
-        paidTotal = map['paidTotal'],
-        type = OrderType.values[map['type']],
-        status = map['status'] ?? 'active',
-        voidReason = map['voidReason'],
-        voidedBy = map['voidedBy'],
-        voidedAt = map['voidedAt'] != null ? DateTime.fromMillisecondsSinceEpoch(map['voidedAt']) : null;
+    : id = map['id'],
+      customerPhone = map['customerPhone'],
+      createdAt = DateTime.fromMillisecondsSinceEpoch(map['createdAt']),
+      updatedAt = map['updatedAt'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['updatedAt'])
+          : null,
+      totalQuantity = map['totalQuantity'],
+      subTotal = map['subTotal'],
+      discountTotal = map['discountTotal'],
+      taxTotal = map['taxTotal'],
+      finalTotal = map['finalTotal'],
+      roundOff = map['roundOff'],
+      grandTotal = map['grandTotal'],
+      paidTotal = map['paidTotal'],
+      type = OrderType.values[map['type']],
+      status = map['status'] ?? 'active',
+      voidReason = map['voidReason'],
+      voidedBy = map['voidedBy'],
+      voidedAt = map['voidedAt'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(map['voidedAt'])
+          : null;
 
   Map<String, Object?> toMap() {
     return {

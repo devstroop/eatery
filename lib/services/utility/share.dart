@@ -1,9 +1,5 @@
-import 'package:flutter_share/flutter_share.dart';
+import 'package:share_plus/share_plus.dart';
 
-Future<bool?> shareFile(String filePath, String title, String text) async {
-  return await FlutterShare.shareFile(
-    title: title,
-    text: text,
-    filePath: filePath,
-  );
+Future<void> shareFile(String filePath, String title, String text) async {
+  await Share.shareXFiles([XFile(filePath)], subject: title, text: text);
 }

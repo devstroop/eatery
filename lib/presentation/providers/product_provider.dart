@@ -1,10 +1,18 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/data/models/eatery_db.dart';
+import 'package:eatery/data/database/native/store_config.dart';
 import 'package:eatery/data/repositories/product_repository.dart';
+import 'package:eatery/data/repositories/product_repository_sqlite.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 
 /// Provides the [ProductRepository] singleton.
+///
+/// When [kUseSqliteProductStore] is enabled, this returns the native
+/// SQLite-backed implementation; otherwise the original Hive-backed one.
 final productRepositoryProvider = Provider<ProductRepository>((ref) {
+  if (kUseSqliteProductStore) {
+    return SqliteProductRepository(store: ref.read(eateryStoreProvider));
+  }
   final db = ref.read(appDatabaseProvider);
   return ProductRepository(db: db);
 });

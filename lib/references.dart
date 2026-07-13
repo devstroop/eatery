@@ -30,9 +30,13 @@ export 'package:lottie/lottie.dart';
 export 'package:number_to_words/number_to_words.dart';
 export 'package:flutter_svg/svg.dart';
 export 'package:flutter_secure_storage/flutter_secure_storage.dart';
-export 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
+// flutter_bluetooth_basic removed (abandoned, v1 Registrar). The local
+// support/bluetooth_thermal_printer module now imports an adapter stub.
+// TODO: replace with esc_pos_bluetooth or flutter_blue_plus when adding a
+// real printer device.
+export './support/bluetooth_thermal_printer/flutter_bluetooth_adapter.dart';
 export 'package:permission_handler/permission_handler.dart';
-export 'package:external_path/external_path.dart';
+// external_path removed (abandoned, v1 Registrar; usage was inside block comment)
 export 'package:fluttertoast/fluttertoast.dart';
 export 'package:font_awesome_flutter/font_awesome_flutter.dart';
 export 'package:fast_cached_network_image/fast_cached_network_image.dart';
@@ -50,7 +54,6 @@ export './widgets/posWidgets/circularCategory.posWidget.dart';
 export './widgets/buttons/upload.button.dart';
 export './widgets/badges/foodType.badge.dart';
 export './widgets/switches/toggle.switch.dart';
-
 
 // Internal references
 export './components/bottom_view_grip.dart';

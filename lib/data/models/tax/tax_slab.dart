@@ -1,5 +1,6 @@
 import 'package:eatery/data/models/eatery_db.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
+import 'package:eatery/data/database/native/store_config.dart';
 
 part 'tax_slab.g.dart';
 
@@ -14,14 +15,16 @@ class TaxSlab extends HiveObject {
   @HiveField(3)
   TaxType type;
 
-  TaxSlab({required this.name, required this.rate, required this.type}): id = EateryDB.instance.taxSlabBox?.nextId();
+  TaxSlab({required this.name, required this.rate, required this.type})
+    : id = kUseSqliteTaxStore ? null : EateryDB.instance.taxSlabBox?.nextId();
 
   TaxSlab.fromMap(Map<String, dynamic> map)
-      : id = map['id'],
-        name = map['name'],
-        rate = map['rate'],
-        type = TaxType.values
-            .singleWhere((element) => element.index == map['type']);
+    : id = map['id'],
+      name = map['name'],
+      rate = map['rate'],
+      type = TaxType.values.singleWhere(
+        (element) => element.index == map['type'],
+      );
 
   Map<String, Object?> toMap() {
     return {'id': id, 'name': name, 'rate': rate, 'type': type.index};
@@ -32,7 +35,7 @@ class TaxSlab extends HiveObject {
       'id': row.elementAt(0),
       'name': row.elementAt(1),
       'rate': row.elementAt(2),
-      'type': row.elementAt(3)
+      'type': row.elementAt(3),
     });
   }
 
@@ -40,5 +43,4 @@ class TaxSlab extends HiveObject {
     var map = toMap();
     return [map['id'], map['name'], map['rate'], map['type']];
   }
-
 }

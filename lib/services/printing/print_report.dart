@@ -1,6 +1,6 @@
 /*
 import 'package:esc_pos_bluetooth/esc_pos_bluetooth.dart';
-import 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
+import '../../support/bluetooth_thermal_printer/flutter_bluetooth_adapter.dart';
 import 'package:intl/intl.dart';
 import 'package:eatery/database/printer.dart';
 class PrintReport{
@@ -57,7 +57,7 @@ class PrintReport{
 /*if(DateTime.fromMicrosecondsSinceEpoch(order['timestamp']).isAfter(from) && DateTime.fromMicrosecondsSinceEpoch(order['timestamp']).isBefore(till.add(const Duration(days: 1)))){
         
 
-      }*//*
+      }*/ /*
 
       bytes += ticket.row([
         PosColumn(text: DateFormat("yyyy-MM-dd hh:mm:ss").format(DateTime.fromMicrosecondsSinceEpoch(order['timestamp'])) , width: 6, styles: const PosStyles(align: PosAlign.left)),

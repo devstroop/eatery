@@ -1,5 +1,6 @@
 import 'package:eatery/data/models/eatery_db.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
+import 'package:eatery/data/database/native/store_config.dart';
 
 part 'staff.g.dart';
 
@@ -24,7 +25,7 @@ class Staff extends HiveObject {
       this.photo,
       this.phone,
       required this.type,
-      required this.isActive}) : id = EateryDB.instance.staffBox?.nextId();
+      required this.isActive}) : id = kUseSqliteStaffStore ? null : EateryDB.instance.staffBox?.nextId();
 
   Staff.fromMap(Map<String, dynamic> map)
       : id = map['id'],

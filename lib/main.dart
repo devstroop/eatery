@@ -5,6 +5,9 @@ import 'package:eatery/core/theme/app_theme.dart';
 import 'package:eatery/constants/utils/app_file_system.dart';
 import 'package:eatery/data/database/eatery_database.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
+import 'package:eatery/data/database/native/eatery_schema.dart';
+import 'package:eatery/data/database/native/eatery_store.dart';
+import 'package:eatery/data/database/native/store_config.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +15,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// The app's single database instance, initialized once at startup.
 late final EateryDatabase appDatabase;
+
+/// The native SQLite store, initialized at startup when the spike flag is on.
+EateryStore? appStore;
 
 void main() async {
   runZonedGuarded(
@@ -48,7 +54,11 @@ void main() async {
       await setupDataAndInitDB();
       runApp(
         ProviderScope(
-          overrides: [appDatabaseProvider.overrideWithValue(appDatabase)],
+          overrides: [
+            appDatabaseProvider.overrideWithValue(appDatabase),
+            if (appStore != null)
+              eateryStoreProvider.overrideWithValue(appStore!),
+          ],
           child: const MyApp(),
         ),
       );
@@ -78,6 +88,16 @@ Future setupDataAndInitDB() async {
 
   // Bind legacy shim so EateryDB.instance still works
   EateryDB.bind(appDatabase);
+
+  // Native SQLite store spike: open the DB and create the schema when any
+  // entity is routed through the store.
+  if (kUseSqliteStore) {
+    final store = EateryStore.open(
+      '${AppFileSystem.dataDir}/$kEateryDbFileName',
+    );
+    initEaterySchema(store);
+    appStore = store;
+  }
 
   await FastCachedImageConfig.init(
     subDir: '${AppFileSystem.cacheDir}/',

@@ -1,5 +1,6 @@
 import 'package:eatery/data/models/eatery_db.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
+import 'package:eatery/data/database/native/store_config.dart';
 
 part 'payment.g.dart';
 
@@ -30,33 +31,35 @@ class Payment extends HiveObject {
   @HiveField(11)
   String? terminalId;
 
-  Payment(
-      {this.orderId,
-      required this.amount,
-      required this.mode,
-      this.reference,
-      this.attachment,
-      this.processorTransactionId,
-      this.processorName,
-      this.processorStatus,
-      this.cardLastFour,
-      this.terminalId})
-      :id= EateryDB.instance.paymentBox?.nextId(),
-        date = DateTime.now();
+  Payment({
+    this.orderId,
+    required this.amount,
+    required this.mode,
+    this.reference,
+    this.attachment,
+    this.processorTransactionId,
+    this.processorName,
+    this.processorStatus,
+    this.cardLastFour,
+    this.terminalId,
+  }) : id = kUseSqlitePaymentStore
+           ? null
+           : EateryDB.instance.paymentBox?.nextId(),
+       date = DateTime.now();
 
   Payment.fromMap(Map<String, dynamic> map)
-      : id = map['id'],
-        orderId = map['orderId'],
-        date = DateTime.fromMillisecondsSinceEpoch(map['date']),
-        amount = map['amount'],
-        mode = PaymentMode.values[map['mode']],
-        reference = map['reference'],
-        attachment = map['attachment'],
-        processorTransactionId = map['processorTransactionId'],
-        processorName = map['processorName'],
-        processorStatus = map['processorStatus'],
-        cardLastFour = map['cardLastFour'],
-        terminalId = map['terminalId'];
+    : id = map['id'],
+      orderId = map['orderId'],
+      date = DateTime.fromMillisecondsSinceEpoch(map['date']),
+      amount = map['amount'],
+      mode = PaymentMode.values[map['mode']],
+      reference = map['reference'],
+      attachment = map['attachment'],
+      processorTransactionId = map['processorTransactionId'],
+      processorName = map['processorName'],
+      processorStatus = map['processorStatus'],
+      cardLastFour = map['cardLastFour'],
+      terminalId = map['terminalId'];
 
   Map<String, Object?> toMap() {
     return {

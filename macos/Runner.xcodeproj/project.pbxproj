@@ -185,6 +185,7 @@
 				33CC110E2044A8840003C045 /* Bundle Framework */,
 				3399D490228B24CF009A79C7 /* ShellScript */,
 				83D3E1BC1B3742193D27731C /* [CP] Embed Pods Frameworks */,
+				650C1FA52B3E8FC8B198DB28 /* Bundle libeaterystore */,
 			);
 			buildRules = (
 			);
@@ -291,6 +292,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"$FLUTTER_ROOT\"/packages/flutter_tools/bin/macos_assemble.sh && touch Flutter/ephemeral/tripwire";
+		};
+		650C1FA52B3E8FC8B198DB28 /* Bundle libeaterystore */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			name = "Bundle libeaterystore";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "set -e\nLIB_DIR=\"$SRCROOT/../libeaterystore\"\nLIB=\"$LIB_DIR/zig-out/lib/libeaterystore.dylib\"\nif [ ! -f \"$LIB\" ]; then\n  if command -v zig >/dev/null 2>&1; then\n    ( cd \"$LIB_DIR\" && zig build shared-lib )\n  else\n    echo \"warning: zig not found and $LIB missing — skipping bundle\"\n    exit 0\n  fi\nfi\nDEST=\"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}\"\nmkdir -p \"$DEST\"\ncp -f \"$LIB\" \"$DEST/libeaterystore.dylib\"\nif [ -n \"${EXPANDED_CODE_SIGN_IDENTITY:-}\" ]; then\n  codesign --force --timestamp=none --sign \"${EXPANDED_CODE_SIGN_IDENTITY}\" \"$DEST/libeaterystore.dylib\" || true\nfi\n";
 		};
 		83D3E1BC1B3742193D27731C /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;

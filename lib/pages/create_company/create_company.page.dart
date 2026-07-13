@@ -3,6 +3,7 @@ import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 
@@ -224,10 +225,7 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
               validTill: validTill,
               subscriptionType: subscriptionType,
             );
-            await ref
-                .read(appDatabaseProvider)
-                .subscriptionBox
-                .add(subscription);
+            await ref.read(subscriptionRepositoryProvider).save(subscription);
 
             KCurrency? kCurrency;
             if (currency != null) {
@@ -276,7 +274,11 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
                 );
             debugPrint('Company Added: $result');
           } catch (e) {
-            AppDialog.showMessage(this.context, message: e.toString(), type: MessageType.error);
+            AppDialog.showMessage(
+              this.context,
+              message: e.toString(),
+              type: MessageType.error,
+            );
           }
         },
       ),
