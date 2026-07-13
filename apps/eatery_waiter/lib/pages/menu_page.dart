@@ -8,9 +8,14 @@ final _categoriesProvider = FutureProvider<List<ProductCategory>>((ref) {
   return repo.getAllCategories();
 });
 
-final _productsProvider = FutureProvider<List<Product>>((ref) {
+final _selectedCategoryProvider = StateProvider<int?>((ref) => null);
+
+final _filteredProductsProvider = FutureProvider<List<Product>>((ref) {
   final repo = ref.read(productRepositoryProvider);
-  return repo.getAllProducts();
+  final all = repo.getAllProducts();
+  final catId = ref.watch(_selectedCategoryProvider);
+  if (catId == null) return all;
+  return all.where((p) => p.categoryId == catId).toList();
 });
 
 class MenuPage extends ConsumerWidget {
@@ -19,12 +24,18 @@ class MenuPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final categories = ref.watch(_categoriesProvider);
-    final products = ref.watch(_productsProvider);
+    final products = ref.watch(_filteredProductsProvider);
     final cart = ref.watch(cartProvider);
+    final selectedCat = ref.watch(_selectedCategoryProvider);
+    final session = ref.watch(cartProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Menu'),
+        title: Text(
+          session.activeDiningTable != null
+              ? 'Table ${session.activeDiningTable!.name} — Menu'
+              : 'Menu',
+        ),
         actions: [
           Stack(
             children: [
@@ -65,8 +76,16 @@ class MenuPage extends ConsumerWidget {
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 children: [
-                  _CategoryChip(label: 'All', selected: true),
-                  ...list.map((c) => _CategoryChip(label: c.name)),
+                  _CategoryChip(
+                    label: 'All',
+                    selected: selectedCat == null,
+                    onTap: () => ref.read(_selectedCategoryProvider.notifier).state = null,
+                  ),
+                  ...list.map((c) => _CategoryChip(
+                    label: c.name,
+                    selected: selectedCat == c.id,
+                    onTap: () => ref.read(_selectedCategoryProvider.notifier).state = c.id,
+                  )),
                 ],
               ),
             ),
@@ -86,6 +105,7 @@ class MenuPage extends ConsumerWidget {
                 itemCount: list.length,
                 itemBuilder: (context, index) => _ProductCard(
                   product: list[index],
+                  quantity: ref.read(cartProvider.notifier).cartQuantity(list[index]),
                   onTap: () => ref.read(cartProvider.notifier).addToCart(list[index]),
                 ),
               ),
@@ -102,7 +122,12 @@ class MenuPage extends ConsumerWidget {
 class _CategoryChip extends StatelessWidget {
   final String label;
   final bool selected;
-  const _CategoryChip({required this.label, this.selected = false});
+  final VoidCallback onTap;
+  const _CategoryChip({
+    required this.label,
+    required this.selected,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -111,7 +136,7 @@ class _CategoryChip extends StatelessWidget {
       child: ChoiceChip(
         label: Text(label),
         selected: selected,
-        onSelected: (_) {},
+        onSelected: (_) => onTap(),
       ),
     );
   }
@@ -119,8 +144,13 @@ class _CategoryChip extends StatelessWidget {
 
 class _ProductCard extends StatelessWidget {
   final Product product;
+  final int quantity;
   final VoidCallback onTap;
-  const _ProductCard({required this.product, required this.onTap});
+  const _ProductCard({
+    required this.product,
+    required this.quantity,
+    required this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -133,7 +163,31 @@ class _ProductCard extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(Icons.restaurant, size: 32, color: AppColors.primary),
+              Stack(
+                children: [
+                  Icon(Icons.restaurant, size: 32, color: AppColors.primary),
+                  if (quantity > 0)
+                    Positioned(
+                      right: -4,
+                      top: -4,
+                      child: Container(
+                        padding: const EdgeInsets.all(3),
+                        decoration: const BoxDecoration(
+                          color: Colors.red,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Text(
+                          '$quantity',
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
               AppSpacing.gapSm,
               Text(
                 product.name,

@@ -1,8 +1,9 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/eatery_core.dart';
 
-final _activeOrdersProvider = FutureProvider<List<Order>>((ref) {
+final _activeOrdersProvider = FutureProvider.autoDispose<List<Order>>((ref) {
   final repo = ref.read(orderRepositoryProvider);
   return repo.getAllOrders().where((o) => o.status == 'active').toList();
 });
@@ -13,11 +14,32 @@ final _orderProductsProvider =
   return repo.getOrderProducts(orderId);
 });
 
-class TicketPage extends ConsumerWidget {
+class TicketPage extends ConsumerStatefulWidget {
   const TicketPage({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<TicketPage> createState() => _TicketPageState();
+}
+
+class _TicketPageState extends ConsumerState<TicketPage> {
+  Timer? _refreshTimer;
+
+  @override
+  void initState() {
+    super.initState();
+    _refreshTimer = Timer.periodic(const Duration(seconds: 30), (_) {
+      ref.invalidate(_activeOrdersProvider);
+    });
+  }
+
+  @override
+  void dispose() {
+    _refreshTimer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     final orders = ref.watch(_activeOrdersProvider);
 
     return Scaffold(
@@ -45,16 +67,21 @@ class TicketPage extends ConsumerWidget {
               ),
             );
           }
-          return GridView.builder(
-            padding: const EdgeInsets.all(12),
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 4,
-              mainAxisSpacing: 12,
-              crossAxisSpacing: 12,
-              childAspectRatio: 0.75,
-            ),
-            itemCount: list.length,
-            itemBuilder: (_, i) => _TicketCard(order: list[i]),
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              final crossAxisCount = (constraints.maxWidth / 260).floor().clamp(2, 6);
+              return GridView.builder(
+                padding: const EdgeInsets.all(12),
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: crossAxisCount,
+                  mainAxisSpacing: 12,
+                  crossAxisSpacing: 12,
+                  childAspectRatio: 0.75,
+                ),
+                itemCount: list.length,
+                itemBuilder: (_, i) => _TicketCard(order: list[i]),
+              );
+            },
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -79,6 +106,10 @@ class _TicketCard extends ConsumerWidget {
     }
   }
 
+  bool get _isNew {
+    return DateTime.now().difference(order.createdAt).inMinutes < 2;
+  }
+
   String get _elapsed {
     final diff = DateTime.now().difference(order.createdAt);
     if (diff.inMinutes < 1) return 'Just now';
@@ -93,65 +124,95 @@ class _TicketCard extends ConsumerWidget {
     return Material(
       color: Colors.white,
       borderRadius: BorderRadius.circular(12),
-      elevation: 2,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () => _showDetail(context, ref),
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      elevation: _isNew ? 4 : 2,
+      child: Stack(
+        children: [
+          if (_isNew)
+            Positioned(
+              top: -4,
+              right: -4,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                decoration: BoxDecoration(
+                  color: Colors.red,
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: const Text(
+                  'NEW',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+          InkWell(
+            borderRadius: BorderRadius.circular(12),
+            onTap: () => _showDetail(context, ref),
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(_elapsed,
-                      style: TextStyle(
-                        color: _statusColor,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 13,
-                      )),
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
-                    decoration: BoxDecoration(
-                      color: _statusColor,
-                      borderRadius: BorderRadius.circular(8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(_elapsed,
+                          style: TextStyle(
+                            color: _statusColor,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          )),
+                      Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 8, vertical: 2),
+                        decoration: BoxDecoration(
+                          color: _statusColor,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          order.status.toUpperCase(),
+                          style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 10,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
+                  AppSpacing.gapSm,
+                  Text(
+                    '#${order.id ?? '-'}',
+                    style: AppTypography.titleLarge,
+                  ),
+                  if (order.customerPhone != null &&
+                      order.customerPhone!.isNotEmpty)
+                    Text(
+                      order.customerPhone!,
+                      style: AppTypography.bodySmall,
                     ),
-                    child: Text(
-                      order.status.toUpperCase(),
-                      style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold),
+                  AppSpacing.gapXs,
+                  Text(
+                    (order.type.name ?? '').toUpperCase(),
+                    style: AppTypography.bodySmall,
+                  ),
+                  const Spacer(),
+                  items.when(
+                    data: (list) => Text(
+                      '${list.length} items',
+                      style: AppTypography.bodyMedium,
                     ),
+                    loading: () =>
+                        const Text('...', style: AppTypography.bodyMedium),
+                    error: (_, _) =>
+                        const Text('?', style: AppTypography.bodyMedium),
                   ),
                 ],
               ),
-              AppSpacing.gapSm,
-              Text(
-                '#${order.id ?? '-'}',
-                style: AppTypography.titleLarge,
-              ),
-              AppSpacing.gapXs,
-              Text(
-                (order.type.name ?? '').toUpperCase(),
-                style: AppTypography.bodySmall,
-              ),
-              const Spacer(),
-              items.when(
-                data: (list) => Text(
-                  '${list.length} items',
-                  style: AppTypography.bodyMedium,
-                ),
-                loading: () =>
-                    const Text('...', style: AppTypography.bodyMedium),
-                error: (_, _) =>
-                    const Text('?', style: AppTypography.bodyMedium),
-              ),
-            ],
+            ),
           ),
-        ),
+        ],
       ),
     );
   }
@@ -254,20 +315,9 @@ class _TicketDetail extends ConsumerWidget {
                 label: 'Mark Complete',
                 onPressed: () async {
                   final repo = ref.read(orderRepositoryProvider);
-                  final updated = Order(
-                    type: order.type,
+                  final updated = order.copyWith(
                     status: 'completed',
-                    totalQuantity: order.totalQuantity,
-                    subTotal: order.subTotal,
-                    discountTotal: order.discountTotal,
-                    taxTotal: order.taxTotal,
-                    finalTotal: order.finalTotal,
-                    roundOff: order.roundOff,
-                    grandTotal: order.grandTotal,
-                    paidTotal: order.paidTotal,
-                    customerPhone: order.customerPhone,
-                    id: order.id,
-                    createdAt: order.createdAt,
+                    updatedAt: DateTime.now(),
                   );
                   await repo.saveOrder(updated);
                   if (!context.mounted) return;

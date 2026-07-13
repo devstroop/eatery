@@ -51,7 +51,14 @@ class TablePage extends ConsumerWidget {
         ],
       ),
       body: tables.when(
-        data: (list) => _TableGrid(tables: list),
+        data: (list) => _TableGrid(
+          tables: list,
+          onTableTap: (table) {
+            ref.read(cartProvider.notifier).setOrderType(OrderType.dine);
+            ref.read(cartProvider.notifier).setDiningTable(table);
+            context.push('/menu');
+          },
+        ),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('Error: $e')),
       ),
@@ -61,7 +68,8 @@ class TablePage extends ConsumerWidget {
 
 class _TableGrid extends StatelessWidget {
   final List<DiningTable> tables;
-  const _TableGrid({required this.tables});
+  final void Function(DiningTable) onTableTap;
+  const _TableGrid({required this.tables, required this.onTableTap});
 
   @override
   Widget build(BuildContext context) {
@@ -83,7 +91,7 @@ class _TableGrid extends StatelessWidget {
               itemCount: tables.length,
               itemBuilder: (context, index) => _TableTile(
                 table: tables[index],
-                onTap: () => context.push('/menu'),
+                onTap: () => onTableTap(tables[index]),
               ),
             ),
           ),
