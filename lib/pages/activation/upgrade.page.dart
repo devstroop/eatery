@@ -1,4 +1,3 @@
-import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/core/utils/device_id.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';

@@ -1,9 +1,7 @@
-
-import 'package:eatery/functions/order.function.dart';
 import 'package:eatery/references.dart';
 
-extension CartExtension on List<OrderProduct>{
-  double get getSubTotal{
+extension CartExtension on List<OrderProduct> {
+  double get getSubTotal {
     double subTotal = 0;
     for (var orderProduct in this) {
       subTotal += orderProduct.subTotal;
@@ -11,7 +9,7 @@ extension CartExtension on List<OrderProduct>{
     return subTotal;
   }
 
-  double get getDiscountAmount{
+  double get getDiscountAmount {
     double discountAmount = 0;
     for (var orderProduct in this) {
       discountAmount += orderProduct.discountAmount ?? 0;
@@ -19,7 +17,7 @@ extension CartExtension on List<OrderProduct>{
     return discountAmount;
   }
 
-  double get getTaxAmount{
+  double get getTaxAmount {
     double taxAmount = 0;
     for (var orderProduct in this) {
       taxAmount += orderProduct.taxAmount ?? 0;
@@ -27,8 +25,7 @@ extension CartExtension on List<OrderProduct>{
     return taxAmount;
   }
 
-  double get getGrandTotal{
+  double get getGrandTotal {
     return getSubTotal - getDiscountAmount + getTaxAmount;
   }
-
 }

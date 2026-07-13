@@ -1,5 +1,4 @@
 import 'package:eatery/core/widgets/app_page_shell.dart';
-import 'package:eatery/core/extensions/string_ext.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:eatery/core/widgets/app_dialog.dart';

@@ -13,8 +13,6 @@ extension PaymentModeExtension on PaymentMode {
         return 'Wallet';
       case PaymentMode.other:
         return 'Other';
-      default:
-        return 'Unknown';
     }
   }
 }

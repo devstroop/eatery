@@ -7,8 +7,6 @@ extension TaxTypeExtension on TaxType {
         return 0;
       case TaxType.exclusive:
         return 1;
-      default:
-        return null;
     }
   }
 
@@ -18,8 +16,6 @@ extension TaxTypeExtension on TaxType {
         return "Inclusive";
       case TaxType.exclusive:
         return "Exclusive";
-      default:
-        return null;
     }
   }
 
@@ -29,8 +25,6 @@ extension TaxTypeExtension on TaxType {
         return 'Tax Inclusive rates will always include tax in the total that you see in the unit price';
       case TaxType.exclusive:
         return 'Tax Exclusive rates will be excluding the tax that will be added at the point of purchase';
-      default:
-        return null;
     }
   }
 }

@@ -1,4 +1,3 @@
-import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/core/extensions/string_ext.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';

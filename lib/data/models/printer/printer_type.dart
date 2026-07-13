@@ -7,8 +7,6 @@ extension PrinterTypeExtension on PrinterType {
         return 0;
       case PrinterType.usb:
         return 1;
-      default:
-        return null;
     }
   }
 
@@ -18,8 +16,6 @@ extension PrinterTypeExtension on PrinterType {
         return "Bluetooth printer";
       case PrinterType.usb:
         return "USB printer";
-      default:
-        return null;
     }
   }
 
@@ -29,8 +25,6 @@ extension PrinterTypeExtension on PrinterType {
         return 'Print via bluetooth';
       case PrinterType.usb:
         return 'Print via usb';
-      default:
-        return null;
     }
   }
 }

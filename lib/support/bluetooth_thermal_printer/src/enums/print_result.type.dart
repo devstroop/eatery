@@ -39,8 +39,6 @@ extension PrintResultExtension on PrintResult {
         return 'Error. Another print in progress';
       case PrintResult.scanInProgress:
         return 'Error. Printer scanning in progress';
-      default:
-        return 'Unknown error';
     }
   }
 }

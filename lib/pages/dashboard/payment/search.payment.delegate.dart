@@ -3,14 +3,16 @@ import 'package:eatery/core/theme/app_colors.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:go_router/go_router.dart';
 
-import 'add.payment.page.dart';
-
-class SearchPaymentDelegate extends SearchDelegate<Payment?>{
+class SearchPaymentDelegate extends SearchDelegate<Payment?> {
   final List<Payment> payments;
   final Function(Payment payment) callback;
   final String currencySymbol;
 
-  SearchPaymentDelegate(this.payments, this.callback, {this.currencySymbol = ''});
+  SearchPaymentDelegate(
+    this.payments,
+    this.callback, {
+    this.currencySymbol = '',
+  });
 
   @override
   List<Widget>? buildActions(BuildContext context) {
@@ -32,7 +34,7 @@ class SearchPaymentDelegate extends SearchDelegate<Payment?>{
           });
         },
         icon: const Icon(Icons.add),
-      )
+      ),
     ];
   }
 
@@ -90,8 +92,9 @@ class SearchPaymentDelegate extends SearchDelegate<Payment?>{
 
   Widget _buildSearchResults(BuildContext context, String query) {
     List<Payment> searchResults = payments
-        .where((element) =>
-    element.id?.toString().contains(query.trim()) ?? false)
+        .where(
+          (element) => element.id?.toString().contains(query.trim()) ?? false,
+        )
         .toList();
     searchResults.sort((a, b) => b.date.compareTo(a.date));
     return ListView(

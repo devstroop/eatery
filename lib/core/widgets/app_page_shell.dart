@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
-import '../theme/app_typography.dart';
-import '../theme/app_spacing.dart';
 import '../../core/utils/responsive.dart';
 
 /// Consistent page layout wrapper used by every screen in the app.

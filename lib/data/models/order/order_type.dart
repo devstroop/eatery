@@ -9,8 +9,6 @@ extension OrderTypeExtension on OrderType {
         return 1;
       case OrderType.takeout:
         return 2;
-      default:
-        return null;
     }
   }
 
@@ -22,8 +20,6 @@ extension OrderTypeExtension on OrderType {
         return "Delivery";
       case OrderType.takeout:
         return "Takeout";
-      default:
-        return null;
     }
   }
 
@@ -35,8 +31,6 @@ extension OrderTypeExtension on OrderType {
         return 'Delivery';
       case OrderType.takeout:
         return 'Takeout';
-      default:
-        return null;
     }
   }
 
@@ -48,8 +42,6 @@ extension OrderTypeExtension on OrderType {
         return 0xFF705EE0;
       case OrderType.takeout:
         return 0xFF4AC3A1;
-      default:
-        return null;
     }
   }
 }

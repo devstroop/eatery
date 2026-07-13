@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_typography.dart';
 import '../theme/app_spacing.dart';
-import '../theme/app_shadows.dart';
 import 'app_button.dart';
 import '../../core/utils/responsive.dart';
 
@@ -103,6 +102,7 @@ class AppDialog {
       onCancel: onCancel,
     );
   }
+
   static Future<bool?> show(
     BuildContext context, {
     required String title,
