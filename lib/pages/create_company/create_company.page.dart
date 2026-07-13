@@ -243,7 +243,7 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
                 decimalSeparator: currency!.decimalSeparator,
                 symbolOnLeft: currency!.symbolOnLeft,
               );
-              await ref.read(appDatabaseProvider).currencyBox.add(kCurrency);
+              ref.read(appDatabaseProvider).currencyBox.add(kCurrency);
             }
             // COMPANY
             Company company = Company(
@@ -259,20 +259,15 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
               subscriptionId: subscription.id,
               currencyCode: kCurrency?.code,
             );
-            int? result = await ref
-                .read(appDatabaseProvider)
-                .companyBox
-                .add(company)
-                .whenComplete(
-                  () => Navigator.of(this.context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          const CreateCompanyResultPage(),
-                    ),
-                    (route) => false,
-                  ),
-                );
-            debugPrint('Company Added: $result');
+            ref.read(appDatabaseProvider).companyBox.add(company);
+            Navigator.of(this.context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    const CreateCompanyResultPage(),
+              ),
+              (route) => false,
+            );
+            debugPrint('Company Added');
           } catch (e) {
             AppDialog.showMessage(
               this.context,

@@ -48,7 +48,9 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
         IconButton(
           icon: const Icon(Icons.category),
           onPressed: () {
-            GoRouter.of(context).pushNamed('diningTableCategories').then((_) => setState(() {}));
+            GoRouter.of(
+              context,
+            ).pushNamed('diningTableCategories').then((_) => setState(() {}));
           },
         ),
       ],
@@ -58,7 +60,9 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
         backgroundColor: _pageColor,
         icon: const Icon(Icons.add),
         onPressed: () async {
-          GoRouter.of(context).pushNamed('addDiningTable').then((_) => setState(() {}));
+          GoRouter.of(
+            context,
+          ).pushNamed('addDiningTable').then((_) => setState(() {}));
         },
       ),
       child: Column(
@@ -171,7 +175,9 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                             child: Center(
                               child: Text(
                                 diningTable.id.toString(),
-                                style: AppTypography.titleLarge.copyWith(color: AppColors.white),
+                                style: AppTypography.titleLarge.copyWith(
+                                  color: AppColors.white,
+                                ),
                               ),
                             ),
                           ),
@@ -181,7 +187,10 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                               Text(
                                 diningTable.status.name,
                                 textAlign: TextAlign.end,
-                                style: AppTypography.titleSmall.copyWith(fontWeight: FontWeight.bold, color: diningTable.status.color),
+                                style: AppTypography.titleSmall.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: diningTable.status.color,
+                                ),
                               ),
                               IconButton(
                                 icon: const Icon(Icons.more_vert),
@@ -207,7 +216,12 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                                     ],
                                   ).then((value) async {
                                     if (value == 'edit') {
-                                      GoRouter.of(context).pushNamed('editDiningTable', extra: diningTable).then((_) => setState(() {}));
+                                      GoRouter.of(context)
+                                          .pushNamed(
+                                            'editDiningTable',
+                                            extra: diningTable,
+                                          )
+                                          .then((_) => setState(() {}));
                                     } else if (value == 'delete') {
                                       showDialog(
                                         context: context,
@@ -229,22 +243,13 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                                               TextButton(
                                                 onPressed: () async {
                                                   ref
-                                                      .read(appDatabaseProvider)
-                                                      .diningTableBox
-                                                      .values
-                                                      .where(
-                                                        (element) =>
-                                                            element.id ==
-                                                            diningTable.id,
-                                                      )
-                                                      .firstOrNull
-                                                      ?.delete()
-                                                      .then((value) {
-                                                        Navigator.pop(
-                                                          this.context,
-                                                        );
-                                                        setState(() {});
-                                                      });
+                                                      .read(eateryStoreProvider)
+                                                      .execute(
+                                                        'DELETE FROM dining_table WHERE id = ?',
+                                                        [diningTable.id],
+                                                      );
+                                                  Navigator.pop(this.context);
+                                                  setState(() {});
                                                 },
                                                 child: const Text('Delete'),
                                               ),
@@ -268,33 +273,44 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                               if (order != null)
                                 TextButton(
                                   onPressed: () {
-                                    GoRouter.of(context).pushNamed('viewOrder', extra: order).then((_) => setState(() {}));
+                                    GoRouter.of(context)
+                                        .pushNamed('viewOrder', extra: order)
+                                        .then((_) => setState(() {}));
                                   },
                                   child: Text(
                                     'Order: ${order.id}',
-                                    style: AppTypography.titleSmall.copyWith(fontWeight: FontWeight.bold),
+                                    style: AppTypography.titleSmall.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                             ],
                           ),
                           onTap: () {
-                            GoRouter.of(context).pushNamed('viewDiningTable', extra: diningTable).then((_) => setState(() {}));
+                            GoRouter.of(context)
+                                .pushNamed(
+                                  'viewDiningTable',
+                                  extra: diningTable,
+                                )
+                                .then((_) => setState(() {}));
                           },
                         );
                       }),
                     ],
                   )
-        : Center(
-              child: Opacity(
-                opacity: 0.5,
-                child: Column(
+                : Center(
+                    child: Opacity(
+                      opacity: 0.5,
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.table_restaurant, size: 64),
                           AppSpacing.gapLg,
                           Text(
                             'No Tables Found',
-                            style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold),
+                            style: AppTypography.headlineSmall.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           SizedBox(height: 12),
                           Text(

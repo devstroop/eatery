@@ -1,30 +1,14 @@
-import 'package:eatery/data/models/eatery_db.dart';
-
-part 'k_currency.g.dart';
-
-@HiveType(typeId: TypeIndex.currency)
-class KCurrency extends HiveObject {
-  @HiveField(0)
+class KCurrency {
   String code;
-  @HiveField(1)
   String name;
-  @HiveField(2)
   String symbol;
-  @HiveField(3)
   String? flag;
-  @HiveField(4)
   int number;
-  @HiveField(5)
   int decimalDigits;
-  @HiveField(6)
   String namePlural;
-  @HiveField(7)
   String decimalSeparator;
-  @HiveField(8)
   String thousandsSeparator;
-  @HiveField(9)
   bool symbolOnLeft;
-  @HiveField(10)
   bool spaceBetweenAmountAndSymbol;
 
   KCurrency({
@@ -42,17 +26,17 @@ class KCurrency extends HiveObject {
   });
 
   KCurrency.fromMap(Map<String, dynamic> map)
-      : code = map['code'],
-        name = map['name'],
-        symbol = map['symbol'],
-        number = map['number'],
-        flag = map['flag'],
-        decimalDigits = map['decimal_digits'],
-        namePlural = map['name_plural'],
-        symbolOnLeft = map['symbol_on_left'],
-        decimalSeparator = map['decimal_separator'],
-        thousandsSeparator = map['thousands_separator'],
-        spaceBetweenAmountAndSymbol = map['space_between_amount_and_symbol'];
+    : code = map['code'],
+      name = map['name'],
+      symbol = map['symbol'],
+      number = map['number'],
+      flag = map['flag'],
+      decimalDigits = map['decimal_digits'],
+      namePlural = map['name_plural'],
+      symbolOnLeft = map['symbol_on_left'],
+      decimalSeparator = map['decimal_separator'],
+      thousandsSeparator = map['thousands_separator'],
+      spaceBetweenAmountAndSymbol = map['space_between_amount_and_symbol'];
 
   Map<String, Object?> toMap() {
     return {
@@ -66,7 +50,7 @@ class KCurrency extends HiveObject {
       'symbol_on_left': symbolOnLeft,
       'decimal_separator': decimalSeparator,
       'thousands_separator': thousandsSeparator,
-      'space_between_amount_and_symbol': spaceBetweenAmountAndSymbol
+      'space_between_amount_and_symbol': spaceBetweenAmountAndSymbol,
     };
   }
 
@@ -82,7 +66,7 @@ class KCurrency extends HiveObject {
       'symbol_on_left': list.elementAt(7),
       'decimal_separator': list.elementAt(8),
       'thousands_separator': list.elementAt(9),
-      'space_between_amount_and_symbol': list.elementAt(10)
+      'space_between_amount_and_symbol': list.elementAt(10),
     });
   }
 
@@ -99,7 +83,7 @@ class KCurrency extends HiveObject {
       map['symbol_on_left'],
       map['decimal_separator'],
       map['thousands_separator'],
-      map['space_between_amount_and_symbol']
+      map['space_between_amount_and_symbol'],
     ];
   }
 }

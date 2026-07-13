@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:eatery/data/database/eatery_database.dart';
 import 'package:eatery/data/models/product/product.dart';
 import 'package:eatery/pages/authentication/login.page.dart';
@@ -51,7 +52,6 @@ import 'package:eatery/pages/dashboard/staff/edit.staff.page.dart';
 import 'package:eatery/pages/dashboard/data/data_management.page.dart';
 import 'package:eatery/pages/dashboard/data/export.page.dart';
 import 'package:eatery/pages/dashboard/data/import.page.dart';
-import 'package:eatery/dev/database_inspector.dart';
 import 'package:eatery/pages/activation/upgrade.page.dart';
 import 'package:eatery/pages/authentication/reset-pin.dart';
 import 'package:eatery/pages/authentication/logout.page.dart';
@@ -60,7 +60,9 @@ import 'package:go_router/go_router.dart';
 GoRouter createAppRouter(EateryDatabase db) {
   return GoRouter(
     initialLocation: db.hasCompany
-        ? (db.companyBox.values.first.password != null ? '/login' : '/dashboard')
+        ? (db.companyBox.values.first.password != null
+              ? '/login'
+              : '/dashboard')
         : '/',
     routes: [
       GoRoute(
@@ -118,7 +120,8 @@ GoRouter createAppRouter(EateryDatabase db) {
           final extra = state.extra as Map<String, dynamic>?;
           return OrderPrintPage(
             order: extra?['order'],
-            currentCart: (extra?['currentCart'] as List?)?.cast<Product>() ?? const [],
+            currentCart:
+                (extra?['currentCart'] as List?)?.cast<Product>() ?? const [],
             printKOT: extra?['printKOT'] as bool? ?? false,
             printInvoice: extra?['printInvoice'] as bool? ?? true,
           );
@@ -374,7 +377,7 @@ GoRouter createAppRouter(EateryDatabase db) {
       GoRoute(
         name: 'databaseInspector',
         path: '/dev/db-inspector',
-        builder: (context, state) => const DatabaseInspector(),
+        builder: (context, state) => const SizedBox.shrink(),
       ),
       GoRoute(
         name: 'upgrade',

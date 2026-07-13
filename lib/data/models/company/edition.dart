@@ -1,15 +1,4 @@
-import 'package:eatery/data/models/eatery_db.dart';
-part 'edition.g.dart';
-
-@HiveType(typeId: TypeIndex.edition)
-enum Taxation {
-  @HiveField(0, defaultValue: true)
-  none,
-  @HiveField(1)
-  gst,
-  @HiveField(2)
-  vat,
-}
+enum Taxation { none, gst, vat }
 
 extension NatureOfTaxExtension on Taxation {
   int get id {

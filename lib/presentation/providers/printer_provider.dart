@@ -4,8 +4,8 @@ import 'package:eatery/data/repositories/printer_repository.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 
 final printerRepositoryProvider = Provider<PrinterRepository>((ref) {
-  final db = ref.read(appDatabaseProvider);
-  return PrinterRepository(db: db);
+  final store = ref.read(eateryStoreProvider);
+  return PrinterRepository(store: store);
 });
 
 final printerListProvider =

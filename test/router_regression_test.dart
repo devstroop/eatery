@@ -2,13 +2,16 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:eatery/core/router/app_router.dart';
 import 'package:eatery/data/database/eatery_database.dart';
+import 'package:eatery/data/database/native/eatery_store.dart';
 
 void main() {
   group('GoRouter regression tests', () {
     late GoRouter router;
 
     setUp(() {
-      router = createAppRouter(EateryDatabase(dataDir: ''));
+      router = createAppRouter(
+        EateryDatabase(dataDir: '', store: EateryStore.open(':memory:')),
+      );
     });
 
     test('constructs without error', () {
@@ -73,12 +76,14 @@ void main() {
         'productView',
       ];
 
-      expect(routeNames.length, 54,
-          reason: 'Expected 54 named routes');
+      expect(routeNames.length, 54, reason: 'Expected 54 named routes');
 
       for (final name in routeNames) {
-        expect(() => router.namedLocation(name), returnsNormally,
-            reason: 'Route "$name" could not be resolved');
+        expect(
+          () => router.namedLocation(name),
+          returnsNormally,
+          reason: 'Route "$name" could not be resolved',
+        );
       }
     });
 
@@ -111,22 +116,57 @@ void main() {
       // 54 named routes, 1 unnamed (initial / upgrade route?), let's just test
       // that namedLocation works for the complete list
       final names = [
-        'login', 'mainScreen', 'createCompany', 'resetPin', 'logout',
-        'dashboard', 'pos', 'cart', 'orderConfirmation', 'orderPrint',
-        'orders', 'viewOrder', 'editOrder',
-        'payments', 'addPayment', 'viewPayment', 'editPayment',
-        'customers', 'addCustomer', 'viewCustomer', 'editCustomer',
-        'diningTables', 'addDiningTable', 'viewDiningTable', 'editDiningTable',
-        'diningTableCategories', 'addDiningTableCategory', 'editDiningTableCategory',
-        'kitchenDishes', 'addKitchenDish', 'editKitchenDish',
-        'inventoryItems', 'addInventoryItem', 'editInventoryItem',
-        'productCategories', 'addProductCategory', 'editProductCategory',
-        'settings', 'companySettings', 'editCompany',
+        'login',
+        'mainScreen',
+        'createCompany',
+        'resetPin',
+        'logout',
+        'dashboard',
+        'pos',
+        'cart',
+        'orderConfirmation',
+        'orderPrint',
+        'orders',
+        'viewOrder',
+        'editOrder',
+        'payments',
+        'addPayment',
+        'viewPayment',
+        'editPayment',
+        'customers',
+        'addCustomer',
+        'viewCustomer',
+        'editCustomer',
+        'diningTables',
+        'addDiningTable',
+        'viewDiningTable',
+        'editDiningTable',
+        'diningTableCategories',
+        'addDiningTableCategory',
+        'editDiningTableCategory',
+        'kitchenDishes',
+        'addKitchenDish',
+        'editKitchenDish',
+        'inventoryItems',
+        'addInventoryItem',
+        'editInventoryItem',
+        'productCategories',
+        'addProductCategory',
+        'editProductCategory',
+        'settings',
+        'companySettings',
+        'editCompany',
         'printerSettings',
-        'taxSlabs', 'addTaxSlab', 'editTaxSlab',
+        'taxSlabs',
+        'addTaxSlab',
+        'editTaxSlab',
         'currencyRegion',
-        'staffs', 'addStaff', 'editStaff',
-        'dataManagement', 'import', 'export',
+        'staffs',
+        'addStaff',
+        'editStaff',
+        'dataManagement',
+        'import',
+        'export',
         'databaseInspector',
         'upgrade',
         'productView',

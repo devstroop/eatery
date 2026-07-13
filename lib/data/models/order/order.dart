@@ -2,43 +2,23 @@ import 'package:eatery/data/models/eatery_db.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
 import 'package:eatery/data/database/native/store_config.dart';
 
-part 'order.g.dart';
-
-@HiveType(typeId: TypeIndex.order)
-class Order extends HiveObject {
-  @HiveField(0)
+class Order {
   int? id;
-  @HiveField(1)
   String? customerPhone;
-  @HiveField(2)
   DateTime createdAt;
-  @HiveField(3)
   DateTime? updatedAt;
-  @HiveField(4)
   int totalQuantity;
-  @HiveField(5)
   double subTotal;
-  @HiveField(6)
   double discountTotal;
-  @HiveField(7)
   double taxTotal;
-  @HiveField(8)
   double finalTotal;
-  @HiveField(9)
   double roundOff;
-  @HiveField(10)
   double grandTotal;
-  @HiveField(11)
   double? paidTotal;
-  @HiveField(12)
   OrderType type;
-  @HiveField(13)
   String status; // "active", "completed", "voided", "refunded"
-  @HiveField(14)
   String? voidReason;
-  @HiveField(15)
   String? voidedBy;
-  @HiveField(16)
   DateTime? voidedAt;
 
   Order({

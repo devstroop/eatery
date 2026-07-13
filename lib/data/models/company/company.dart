@@ -1,32 +1,17 @@
 import 'package:eatery/data/models/eatery_db.dart';
 
-part 'company.g.dart';
-
-@HiveType(typeId: TypeIndex.company)
-class Company extends HiveObject {
-  @HiveField(0)
+class Company {
   int? id;
-  @HiveField(1)
   String? logo;
-  @HiveField(2)
   String name;
-  @HiveField(3)
   String email;
-  @HiveField(4)
   String phone;
-  @HiveField(5)
   String address;
-  @HiveField(6)
   String? password;
-  @HiveField(7)
   Taxation taxation;
-  @HiveField(8)
   String? currencyCode;
-  @HiveField(9)
   String? salesTaxNumber;
-  @HiveField(10)
   String? foodLicenseNo;
-  @HiveField(11)
   int? subscriptionId;
 
   Company({

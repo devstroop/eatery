@@ -2,35 +2,19 @@ import 'package:eatery/data/models/eatery_db.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
 import 'package:eatery/data/database/native/store_config.dart';
 
-part 'product.g.dart';
-
-@HiveType(typeId: TypeIndex.product)
-class Product extends HiveObject {
-  @HiveField(0)
+class Product {
   int? id;
-  @HiveField(1)
   String name;
-  @HiveField(2)
   int? categoryId; // id?
-  @HiveField(3)
   String? description;
-  @HiveField(4)
   String? image;
-  @HiveField(5)
   double mrpPrice;
-  @HiveField(6)
   double? salePrice;
-  @HiveField(7)
-  int? taxSlabId; // id?
-  @HiveField(8)
-  FoodType? foodType; // enum?
-  @HiveField(9)
-  ProductType type; // enum
-  @HiveField(10)
+  int? taxSlabId;
+  FoodType? foodType;
+  ProductType type;
   bool isActive;
-  @HiveField(11)
   int? stationId;
-  @HiveField(12)
   String? stationName;
 
   Product({

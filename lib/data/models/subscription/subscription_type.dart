@@ -1,13 +1,6 @@
-import 'package:eatery/data/models/eatery_db.dart';
-part 'subscription_type.g.dart';
+import 'package:flutter/material.dart';
 
-@HiveType(typeId: TypeIndex.subscriptionType)
-enum SubscriptionType {
-  @HiveField(0, defaultValue: true)
-  individual,
-  @HiveField(1)
-  business
-}
+enum SubscriptionType { individual, business }
 
 extension SubscriptionTypeExtension on SubscriptionType {
   int get id {
@@ -40,13 +33,25 @@ extension SubscriptionTypeExtension on SubscriptionType {
   List<String> get highlights {
     switch (this) {
       case SubscriptionType.individual:
-        return ['20 Products (Inventory/Kitchen)', '5 Dining Tables', '2 Staffs', '100 Sales per month'];
+        return [
+          '20 Products (Inventory/Kitchen)',
+          '5 Dining Tables',
+          '2 Staffs',
+          '100 Sales per month',
+        ];
       case SubscriptionType.business:
-        return ['Unlimited Products (Inventory/Kitchen)', 'Unlimited Dining Tables', 'Unlimited Staffs', 'Unlimited Sales', 'Invoice Printing & Sharing', 'and more...'];
+        return [
+          'Unlimited Products (Inventory/Kitchen)',
+          'Unlimited Dining Tables',
+          'Unlimited Staffs',
+          'Unlimited Sales',
+          'Invoice Printing & Sharing',
+          'and more...',
+        ];
     }
   }
 
-  String get label{
+  String get label {
     switch (this) {
       case SubscriptionType.individual:
         return 'Free Forever';
@@ -55,7 +60,7 @@ extension SubscriptionTypeExtension on SubscriptionType {
     }
   }
 
-  Color get color{
+  Color get color {
     switch (this) {
       case SubscriptionType.individual:
         return Colors.cyan;

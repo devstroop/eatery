@@ -10,11 +10,7 @@ import 'package:eatery/presentation/providers/database_provider.dart';
 /// When [kUseSqliteProductStore] is enabled, this returns the native
 /// SQLite-backed implementation; otherwise the original Hive-backed one.
 final productRepositoryProvider = Provider<ProductRepository>((ref) {
-  if (kUseSqliteProductStore) {
-    return SqliteProductRepository(store: ref.read(eateryStoreProvider));
-  }
-  final db = ref.read(appDatabaseProvider);
-  return ProductRepository(db: db);
+  return SqliteProductRepository(store: ref.read(eateryStoreProvider));
 });
 
 /// In-memory list of products — refreshes when data changes.

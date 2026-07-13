@@ -238,7 +238,9 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                                         diningTable.status =
                                             DiningTableStatus.available;
                                         diningTable.orderId = null;
-                                        await diningTable.save();
+                                        await diningTableRepo.saveTable(
+                                          diningTable,
+                                        );
                                       }
 
                                       var printKOT = false;

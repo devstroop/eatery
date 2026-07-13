@@ -1,13 +1,4 @@
-import 'package:eatery/data/models/eatery_db.dart';
-part 'product_type.g.dart';
-
-@HiveType(typeId: TypeIndex.productType)
-enum ProductType {
-  @HiveField(0, defaultValue: true)
-  kitchenDish,
-  @HiveField(1)
-  inventoryItem
-}
+enum ProductType { kitchenDish, inventoryItem }
 
 extension ProductTypeExtension on ProductType {
   int get id {

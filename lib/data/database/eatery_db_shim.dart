@@ -1,73 +1,43 @@
-import 'package:eatery/data/models/eatery_db.dart';
-
-import '../database/eatery_database.dart';
-
-/// Legacy shim — delegates to the injectable [EateryDatabase].
+/// Stub — Hive has been fully eliminated.
 ///
-/// Will be removed once all consumers migrate to repositories.
+/// These model constructors still reference `EateryDB.instance.xxxBox` in
+/// guarded fallbacks (`kUseSqliteXxxStore ? null : ...`). Since all flags are
+/// `true`, the fallback is never reached, but the symbol must exist to compile.
+///
+/// This file will be removed once model constructors are cleaned up.
+library;
+
 class EateryDB {
   EateryDB._();
-
   static final EateryDB instance = EateryDB._();
 
-  EateryDatabase? _db;
-
-  /// Called once to bind this shim to the real database after initialization.
-  static void bind(EateryDatabase db) {
-    instance._db = db;
-  }
-
-  /// Throws a descriptive error if the shim was used before [bind] was called.
-  void _ensureBound() {
-    if (_db == null) {
-      throw StateError(
-        'EateryDB.instance accessed before EateryDB.bind() was called in main.dart. '
-        'The app must initialize the database before accessing any box.',
-      );
-    }
-  }
-
-  /// Initializes the underlying database. Called from main.dart.
-  Future<void> init([String? _]) {
-    _ensureBound();
-    return instance._db!.init();
-  }
-
-  // --- Instance-level box getters (delegate to _db) ---
-
-  Box<Company>? get companyBox => _db?.companyBox;
-  Box<KCurrency>? get currencyBox => _db?.currencyBox;
-  Box<AutoPrint>? get autoPrintBox => _db?.autoPrintBox;
-  Box<Customer>? get customerBox => _db?.customerBox;
-  Box<DiningTable>? get diningTableBox => _db?.diningTableBox;
-  Box<DiningTableCategory>? get diningTableCategoryBox =>
-      _db?.diningTableCategoryBox;
-  Box<Order>? get orderBox => _db?.orderBox;
-  Box<OrderProduct>? get orderProductBox => _db?.orderProductBox;
-  Box<Printer>? get printerBox => _db?.printerBox;
-  Box<Product>? get productBox => _db?.productBox;
-  Box<ProductCategory>? get productCategoryBox => _db?.productCategoryBox;
-  Box<Subscription>? get subscriptionBox => _db?.subscriptionBox;
-  Box<TaxSlab>? get taxSlabBox => _db?.taxSlabBox;
-  Box<Staff>? get staffBox => _db?.staffBox;
-  Box<StaffType>? get staffTypeBox => _db?.staffTypeBox;
-  Box<TaxType>? get taxTypeBox => _db?.taxTypeBox;
-  Box<ProductType>? get productTypeBox => _db?.productTypeBox;
-  Box<FoodType>? get foodTypeBox => _db?.foodTypeBox;
-  Box<SubscriptionType>? get subscriptionTypeBox => _db?.subscriptionTypeBox;
-  Box<Taxation>? get taxationBox => _db?.taxationBox;
-  Box<OrderType>? get orderTypeBox => _db?.orderTypeBox;
-  Box<PrinterType>? get printerTypeBox => _db?.printerTypeBox;
-  Box<Payment>? get paymentBox => _db?.paymentBox;
-  Box<PaymentMode>? get paymentModeBox => _db?.paymentModeBox;
-  Box<KdsStation>? get kdsStationBox => _db?.kdsStationBox;
-  Box<VoidLogEntry>? get voidLogEntryBox => _db?.voidLogEntryBox;
-  Box<ComplianceReport>? get complianceReportBox => _db?.complianceReportBox;
-  Box<String>? get opLogBox => _db?.opLogBox;
-
-  /// Clears all boxes from disk.
-  Future<void> deleteAll() => _db?.deleteAll() ?? Future.value();
-
-  /// Closes Hive.
-  Future<void> dispose() => _db?.dispose() ?? Future.value();
+  dynamic get companyBox => null;
+  dynamic get customerBox => null;
+  dynamic get productBox => null;
+  dynamic get productCategoryBox => null;
+  dynamic get orderBox => null;
+  dynamic get orderProductBox => null;
+  dynamic get paymentBox => null;
+  dynamic get paymentModeBox => null;
+  dynamic get diningTableBox => null;
+  dynamic get diningTableCategoryBox => null;
+  dynamic get diningTableStatusBox => null;
+  dynamic get taxSlabBox => null;
+  dynamic get taxTypeBox => null;
+  dynamic get staffBox => null;
+  dynamic get staffTypeBox => null;
+  dynamic get printerBox => null;
+  dynamic get printerTypeBox => null;
+  dynamic get subscriptionBox => null;
+  dynamic get subscriptionTypeBox => null;
+  dynamic get currencyBox => null;
+  dynamic get autoPrintBox => null;
+  dynamic get foodTypeBox => null;
+  dynamic get productTypeBox => null;
+  dynamic get orderTypeBox => null;
+  dynamic get voidLogEntryBox => null;
+  dynamic get complianceReportBox => null;
+  dynamic get kdsStationBox => null;
+  dynamic get taxationBox => null;
+  dynamic get opLogBox => null;
 }

@@ -3,14 +3,17 @@ import 'package:eatery/data/database/native/eatery_store.dart';
 import 'package:eatery/data/models/eatery_db.dart';
 import 'package:eatery/data/repositories/staff_repository_sqlite.dart';
 import 'package:eatery/data/repositories/subscription_repository_sqlite.dart';
+import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
   late EateryStore store;
 
-  setUp(() {
+  setUp(() async {
     store = EateryStore.open(':memory:');
-    initEaterySchema(store);
+    final sql = await rootBundle.loadString(kSchemaAssetPath);
+    initEaterySchema(store, sql);
   });
 
   tearDown(() => store.close());

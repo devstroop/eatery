@@ -1,38 +1,20 @@
-import 'package:eatery/data/models/eatery_db.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
 import 'package:eatery/data/database/native/store_config.dart';
 
-part 'order_product.g.dart';
-
-@HiveType(typeId: TypeIndex.orderProduct)
-class OrderProduct extends HiveObject {
-  @HiveField(0)
+class OrderProduct {
   int? id;
-  @HiveField(1)
   int? orderId;
-  @HiveField(2)
   int? productId;
-  @HiveField(3)
   String productName;
-  @HiveField(4)
   int quantity;
-  @HiveField(5)
   double price;
-  @HiveField(6)
   double subTotal;
-  @HiveField(7)
   double? discountRate;
-  @HiveField(8)
   double? discountAmount;
-  @HiveField(9)
   double? taxRate;
-  @HiveField(10)
   double? taxAmount;
-  @HiveField(11)
   double total;
-  @HiveField(12)
   int? stationId;
-  @HiveField(13)
   String? stationName;
 
   OrderProduct({

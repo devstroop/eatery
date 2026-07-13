@@ -1,13 +1,4 @@
-import 'package:eatery/data/models/eatery_db.dart';
-part 'printer_type.g.dart';
-
-@HiveType(typeId: TypeIndex.printerType)
-enum PrinterType {
-  @HiveField(0, defaultValue: true)
-  bluetooth,
-  @HiveField(1)
-  usb
-}
+enum PrinterType { bluetooth, usb }
 
 extension PrinterTypeExtension on PrinterType {
   int? get id {

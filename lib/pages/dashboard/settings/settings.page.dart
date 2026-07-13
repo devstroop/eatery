@@ -1,7 +1,5 @@
 import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/core/theme/app_typography.dart';
-import 'package:eatery/dev/database_inspector.dart';
-import 'package:eatery/dev/seed_loader.dart';
 import 'package:eatery/pages/dashboard/settings/printer/printer.setting.page.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
@@ -39,7 +37,9 @@ class _SettingPageState extends ConsumerState<SettingPage> {
             postfixIcon: Icons.chevron_right,
             color: getThemeColor(),
             onTap: () {
-              GoRouter.of(context).pushNamed('companySettings').then((_) => setState(() {}));
+              GoRouter.of(
+                context,
+              ).pushNamed('companySettings').then((_) => setState(() {}));
             },
           ),
           MenuTile(
@@ -64,7 +64,9 @@ class _SettingPageState extends ConsumerState<SettingPage> {
             subtitle: 'Manage Printing Devices',
             postfixIcon: Icons.chevron_right,
             color: getThemeColor(),
-            onTap: () => GoRouter.of(context).pushNamed('printerSettings').then((_) => setState(() {})),
+            onTap: () => GoRouter.of(
+              context,
+            ).pushNamed('printerSettings').then((_) => setState(() {})),
           ),
           // Developer section — visible only in debug mode
           if (const bool.fromEnvironment('dart.vm.product') == false) ...[
@@ -73,7 +75,10 @@ class _SettingPageState extends ConsumerState<SettingPage> {
               padding: const EdgeInsets.only(left: 16, bottom: 4),
               child: Text(
                 'Developer',
-                style: AppTypography.labelMedium.copyWith(fontWeight: FontWeight.w600, color: Colors.grey),
+                style: AppTypography.labelMedium.copyWith(
+                  fontWeight: FontWeight.w600,
+                  color: Colors.grey,
+                ),
               ),
             ),
             MenuTile(
@@ -83,10 +88,11 @@ class _SettingPageState extends ConsumerState<SettingPage> {
               postfixIcon: Icons.download,
               color: Colors.orange,
               onTap: () async {
-                await loadSeedData(ref);
                 if (this.context.mounted) {
                   ScaffoldMessenger.of(this.context).showSnackBar(
-                    const SnackBar(content: Text('Sample data loaded')),
+                    const SnackBar(
+                      content: Text('Sample data loading removed'),
+                    ),
                   );
                 }
               },

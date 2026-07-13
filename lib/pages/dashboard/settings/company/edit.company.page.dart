@@ -231,8 +231,9 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                   company!.foodLicenseNo = _controllerFoodLicNo.text;
                   company!.salesTaxNumber = _controllerSalesTaxNo.text;
 
-                  // Update the company in the Hive database
-                  company!.save().then((value) {
+                  // Update the company in the database
+                  final repo = ref.read(companyRepositoryProvider);
+                  repo.saveCompany(company!).then((value) {
                     AppDialog.showMessage(
                       context,
                       message: 'Company details successfully updated',

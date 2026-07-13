@@ -110,14 +110,19 @@ class _EditProductCategoryPageState
               widget.category.name = _controllerCategoryName.text.trim();
               widget.category.description = _controllerDescription.text.trim();
               widget.category.image = pickedLibraryImage?.filename;
-              widget.category.save();
+              final repo = ref.read(productRepositoryProvider);
+              await repo.saveCategory(widget.category);
               AppDialog.showMessage(
                 context,
                 message: 'Updated successfully',
                 type: MessageType.success,
               ).then((value) => Navigator.pop(context));
             } catch (_) {
-              AppDialog.showMessage(context, message: 'Failed to update', type: MessageType.error);
+              AppDialog.showMessage(
+                context,
+                message: 'Failed to update',
+                type: MessageType.error,
+              );
             }
           },
           label: 'Update',

@@ -2,21 +2,12 @@ import 'package:eatery/data/models/eatery_db.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
 import 'package:eatery/data/database/native/store_config.dart';
 
-part 'staff.g.dart';
-
-@HiveType(typeId: TypeIndex.staff)
-class Staff extends HiveObject {
-  @HiveField(0)
+class Staff {
   int? id;
-  @HiveField(1)
   String name;
-  @HiveField(2)
   String? photo;
-  @HiveField(3)
   String? phone;
-  @HiveField(4)
   StaffType type;
-  @HiveField(5)
   bool isActive;
 
   Staff(

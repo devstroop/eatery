@@ -14,7 +14,8 @@ class ShowCurrencyRegionPage extends ConsumerStatefulWidget {
       _ShowCurrencyRegionPageState();
 }
 
-class _ShowCurrencyRegionPageState extends ConsumerState<ShowCurrencyRegionPage> {
+class _ShowCurrencyRegionPageState
+    extends ConsumerState<ShowCurrencyRegionPage> {
   final themeColor = AppColors.primary;
   Currency? selectedCurrency;
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
@@ -26,8 +27,11 @@ class _ShowCurrencyRegionPageState extends ConsumerState<ShowCurrencyRegionPage>
       setState(() {
         String? currencyCode = ref.read(companyProvider)?.currencyCode;
         KCurrency? curr = currencyCode != null
-            ? ref.read(appDatabaseProvider).currencyBox.values
-                .singleWhere((element) => element.code == currencyCode)
+            ? ref
+                  .read(appDatabaseProvider)
+                  .currencyBox
+                  .values
+                  .singleWhere((element) => element.code == currencyCode)
             : null;
         selectedCurrency = curr != null
             ? Currency.from(json: curr.toMap())
@@ -62,17 +66,15 @@ class _ShowCurrencyRegionPageState extends ConsumerState<ShowCurrencyRegionPage>
                   showCurrencyCode: true,
                   // currencyFilter: const ['INR', 'AED'],
                   theme: CurrencyPickerThemeData(
-                      bottomSheetHeight:
-                          MediaQuery.of(context).size.height * 4 / 5),
+                    bottomSheetHeight:
+                        MediaQuery.of(context).size.height * 4 / 5,
+                  ),
                   onSelect: _onCurrencySelected,
                 ),
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(6),
-                    border: Border.all(
-                      color: themeColor,
-                      width: 2,
-                    ),
+                    border: Border.all(color: themeColor, width: 2),
                   ),
                   child: ListTile(
                     leading: selectedCurrency != null
@@ -82,8 +84,11 @@ class _ShowCurrencyRegionPageState extends ConsumerState<ShowCurrencyRegionPage>
                             children: [
                               Text(
                                 CurrencyUtils.currencyToEmoji(
-                                    selectedCurrency!),
-                                style: AppTypography.headlineLarge.copyWith(fontWeight: FontWeight.w400),
+                                  selectedCurrency!,
+                                ),
+                                style: AppTypography.headlineLarge.copyWith(
+                                  fontWeight: FontWeight.w400,
+                                ),
                               ),
                             ],
                           )
@@ -91,7 +96,9 @@ class _ShowCurrencyRegionPageState extends ConsumerState<ShowCurrencyRegionPage>
                     trailing: selectedCurrency != null
                         ? Text(
                             selectedCurrency!.symbol,
-                            style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.w400),
+                            style: AppTypography.titleLarge.copyWith(
+                              fontWeight: FontWeight.w400,
+                            ),
                           )
                         : null,
                     title: Text(
@@ -114,38 +121,41 @@ class _ShowCurrencyRegionPageState extends ConsumerState<ShowCurrencyRegionPage>
           label: 'Save',
           onPressed: () async {
             if (formKey.currentState!.validate()) {
-              for (var element in ref.read(appDatabaseProvider).currencyBox.values) {
-                await element.delete();
-              }
-              KCurrency? currency = selectedCurrency != null ? KCurrency.fromMap(selectedCurrency!.toJson()) : null;
+              ref.read(eateryStoreProvider).execute('DELETE FROM currency');
+              KCurrency? currency = selectedCurrency != null
+                  ? KCurrency.fromMap(selectedCurrency!.toJson())
+                  : null;
               if (currency != null) {
-                await ref.read(appDatabaseProvider).currencyBox.add(currency);
-                currency = ref.read(appDatabaseProvider).currencyBox.values.first;
+                ref.read(appDatabaseProvider).currencyBox.add(currency);
               }
-              ref.read(appDatabaseProvider).companyBox.values.first
-                  ..currencyCode = currency?.code
-                ..save().then((value) {
+              final company = ref
+                  .read(companyRepositoryProvider)
+                  .getCurrentCompany();
+              if (company != null) {
+                company.currencyCode = currency?.code;
+                ref.read(companyRepositoryProvider).saveCompany(company).then((
+                  _,
+                ) {
                   setState(() {
-                    ref.read(companyProvider.notifier).setCompany(
-                      ref.read(appDatabaseProvider).companyBox.values.first,
-                    );
+                    ref.read(companyProvider.notifier).setCompany(company);
                   });
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: const Text('Success'),
-                    content: const Text('Successfully saved'),
-                    actions: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        child: const Text('OK'),
-                      ),
-                    ],
-                  ),
-                ).then((value) => Navigator.pop(context));
-              });
+                  showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                      title: const Text('Success'),
+                      content: const Text('Successfully saved'),
+                      actions: [
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Text('OK'),
+                        ),
+                      ],
+                    ),
+                  ).then((value) => Navigator.pop(context));
+                });
+              }
             }
           },
         ),

@@ -4,7 +4,6 @@ import 'package:eatery/core/router/app_router.dart';
 import 'package:eatery/core/theme/app_theme.dart';
 import 'package:eatery/constants/utils/app_file_system.dart';
 import 'package:eatery/data/database/eatery_database.dart';
-import 'package:eatery/data/database/eatery_db_shim.dart';
 import 'package:eatery/data/database/native/eatery_schema.dart';
 import 'package:eatery/data/database/native/eatery_store.dart';
 import 'package:eatery/data/database/native/store_config.dart';
@@ -13,11 +12,11 @@ import 'package:eatery/references.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// The app's single database instance, initialized once at startup.
-late final EateryDatabase appDatabase;
-
-/// The native SQLite store, initialized at startup when the spike flag is on.
+/// The native SQLite store, initialized at startup.
 EateryStore? appStore;
+
+/// Compatibility database wrapper (provides dataDir + deleteAll for legacy pages).
+EateryDatabase? appDatabase;
 
 void main() async {
   runZonedGuarded(
@@ -55,9 +54,10 @@ void main() async {
       runApp(
         ProviderScope(
           overrides: [
-            appDatabaseProvider.overrideWithValue(appDatabase),
             if (appStore != null)
               eateryStoreProvider.overrideWithValue(appStore!),
+            if (appDatabase != null)
+              appDatabaseProvider.overrideWithValue(appDatabase!),
           ],
           child: const MyApp(),
         ),
@@ -82,21 +82,16 @@ Future setupDataAndInitDB() async {
   Common.baseDirectory = basePath;
   await AppFileSystem.init(basePath);
 
-  // Initialize the injectable database
-  appDatabase = EateryDatabase(dataDir: AppFileSystem.dataDir);
-  await appDatabase.init();
-
-  // Bind legacy shim so EateryDB.instance still works
-  EateryDB.bind(appDatabase);
-
-  // Native SQLite store spike: open the DB and create the schema when any
-  // entity is routed through the store.
+  // Open the native SQLite store and initialize the schema.
   if (kUseSqliteStore) {
     final store = EateryStore.open(
       '${AppFileSystem.dataDir}/$kEateryDbFileName',
     );
-    initEaterySchema(store);
+    final schema = await rootBundle.loadString(kSchemaAssetPath);
+    initEaterySchema(store, schema);
     appStore = store;
+    // Compatibility wrapper for legacy pages that still read appDatabaseProvider.
+    appDatabase = EateryDatabase(dataDir: AppFileSystem.dataDir, store: store);
   }
 
   await FastCachedImageConfig.init(
@@ -111,28 +106,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
-    if (appDatabase.isInitialized) {
-      return _KeyboardStateSync(
-        child: MaterialApp.router(
-          title: 'Eatery',
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.light,
-          routerConfig: createAppRouter(appDatabase),
-        ),
-      );
-    }
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: const [
-              CircularProgressIndicator(),
-              SizedBox(height: 16),
-              Text('Initializing database...'),
-            ],
-          ),
+    return _KeyboardStateSync(
+      child: MaterialApp.router(
+        title: 'Eatery',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.light,
+        routerConfig: createAppRouter(
+          appDatabase ??
+              EateryDatabase(dataDir: '', store: EateryStore.open(':memory:')),
         ),
       ),
     );

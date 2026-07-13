@@ -1,15 +1,4 @@
-import 'package:eatery/data/models/eatery_db.dart';
-part 'order_type.g.dart';
-
-@HiveType(typeId: TypeIndex.orderType)
-enum OrderType {
-  @HiveField(0, defaultValue: true)
-  dine,
-  @HiveField(1)
-  delivery,
-  @HiveField(2)
-  takeout
-}
+enum OrderType { dine, delivery, takeout }
 
 extension OrderTypeExtension on OrderType {
   int? get id {

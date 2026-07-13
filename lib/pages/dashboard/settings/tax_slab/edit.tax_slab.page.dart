@@ -5,12 +5,13 @@ import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
+import 'package:eatery/presentation/providers/database_provider.dart';
 
 final _pageColor = AppColors.primary;
 
 class EditTaxSlabSettingsPage extends ConsumerStatefulWidget {
   const EditTaxSlabSettingsPage({Key? key, required this.taxSlab})
-      : super(key: key);
+    : super(key: key);
   final TaxSlab taxSlab;
 
   @override
@@ -18,7 +19,8 @@ class EditTaxSlabSettingsPage extends ConsumerStatefulWidget {
       _EditTaxSlabSettingsPageState();
 }
 
-class _EditTaxSlabSettingsPageState extends ConsumerState<EditTaxSlabSettingsPage> {
+class _EditTaxSlabSettingsPageState
+    extends ConsumerState<EditTaxSlabSettingsPage> {
   final TextEditingController controllerSlabName = TextEditingController();
   final TextEditingController controllerTaxRate = TextEditingController();
   final focus1 = FocusNode();
@@ -47,12 +49,19 @@ class _EditTaxSlabSettingsPageState extends ConsumerState<EditTaxSlabSettingsPag
       widget.taxSlab.name = controllerSlabName.text;
       widget.taxSlab.rate = double.parse(controllerTaxRate.text);
       widget.taxSlab.type = selectedTaxType;
-      widget.taxSlab.save();
-      AppDialog.showMessage(this.context, message: 'Tax slab updated successfully!',
-          type: MessageType.success, onConfirm: () => Navigator.pop(this.context));
+      ref.read(taxRepositoryProvider).saveTaxSlab(widget.taxSlab);
+      AppDialog.showMessage(
+        this.context,
+        message: 'Tax slab updated successfully!',
+        type: MessageType.success,
+        onConfirm: () => Navigator.pop(this.context),
+      );
     } catch (_) {
       AppDialog.showMessage(
-          this.context, message: 'Something went wrong!', type: MessageType.error);
+        this.context,
+        message: 'Something went wrong!',
+        type: MessageType.error,
+      );
     }
   }
 
@@ -67,28 +76,36 @@ class _EditTaxSlabSettingsPageState extends ConsumerState<EditTaxSlabSettingsPag
           icon: const Icon(Icons.delete),
           onPressed: () {
             // Confirm before delete
-            showDialog(context: context, builder: (context) {
-              return AlertDialog(
-                title: const Text('Delete Tax Slab'),
-                content: const Text('Are you sure you want to delete this tax slab?'),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Cancel'),
+            showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text('Delete Tax Slab'),
+                  content: const Text(
+                    'Are you sure you want to delete this tax slab?',
                   ),
-                  TextButton(
-                    onPressed: () {
-                      widget.taxSlab.delete();
-                      Navigator.pop(context);
-                      Navigator.pop(context);
-                    },
-                    child: const Text('Delete'),
-                  ),
-                ],
-              );
-            });
+                  actions: [
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        ref.read(eateryStoreProvider).execute(
+                          'DELETE FROM tax_slab WHERE id = ?',
+                          [widget.taxSlab.id],
+                        );
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      },
+                      child: const Text('Delete'),
+                    ),
+                  ],
+                );
+              },
+            );
           },
         ),
       ],
@@ -126,14 +143,13 @@ class _EditTaxSlabSettingsPageState extends ConsumerState<EditTaxSlabSettingsPag
                   hint: 'Enter tax slab rate',
                   themeColor: _pageColor,
                   focusNode: focus2,
-                  suffix: Icon(
-                    Icons.percent,
-                    color: AppColors.white600,
+                  suffix: Icon(Icons.percent, color: AppColors.white600),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
                   ),
-                  keyboardType:
-                  const TextInputType.numberWithOptions(decimal: true),
                   validator: (value) {
-                    if (value!.trim().isEmpty) return 'Tax slab rate cannot be blank';
+                    if (value!.trim().isEmpty)
+                      return 'Tax slab rate cannot be blank';
                     return null;
                   },
                   onFieldSubmitted: (v) {
@@ -144,19 +160,17 @@ class _EditTaxSlabSettingsPageState extends ConsumerState<EditTaxSlabSettingsPag
                 SpacingStyle.defaultVerticalSpacing,
                 Text(
                   'Select Tax Type',
-                  style: AppTypography.labelMedium.copyWith(color: AppColors.black600),
+                  style: AppTypography.labelMedium.copyWith(
+                    color: AppColors.black600,
+                  ),
                 ),
-                const SizedBox(
-                  height: 3.0,
-                ),
+                const SizedBox(height: 3.0),
                 ToggleSwitch(
                   highlightColor: _pageColor,
                   backgroundColor: const Color(0xFFE5E5E5),
                   foregroundColor: AppColors.white,
                   inactiveForegroundColor: AppColors.black600,
-                  children: [
-                    ...TaxType.values.map((e) => e.name!)
-                  ],
+                  children: [...TaxType.values.map((e) => e.name!)],
                   selectedIndex: selectedTaxType.index,
                   onChange: (int? index) {
                     if (index != null) {

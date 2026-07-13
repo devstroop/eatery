@@ -1,18 +1,10 @@
-import 'package:eatery/data/models/eatery_db.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
 import 'package:eatery/data/database/native/store_config.dart';
 
-part 'dining_table_category.g.dart';
-
-@HiveType(typeId: TypeIndex.diningTableCategory)
-class DiningTableCategory extends HiveObject {
-  @HiveField(0)
+class DiningTableCategory {
   int? id;
-  @HiveField(1)
   String name;
-  @HiveField(2)
   String? description;
-  @HiveField(3)
   bool isActive;
 
   DiningTableCategory({

@@ -1,20 +1,11 @@
-import 'package:eatery/data/models/eatery_db.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
 import 'package:eatery/data/database/native/store_config.dart';
 
-part 'auto_print.g.dart';
-
-@HiveType(typeId: TypeIndex.autoPrint)
-class AutoPrint extends HiveObject {
-  @HiveField(0)
+class AutoPrint {
   int? id;
-  @HiveField(1)
   bool? invoicePrintEnabled;
-  @HiveField(2)
   bool? kotPrintEnabled;
-  @HiveField(3)
-  int? invoicePrinterId; // id?
-  @HiveField(4)
+  int? invoicePrinterId;
   int? kotPrinterId; // id?
 
   AutoPrint(

@@ -76,26 +76,22 @@ class SqliteCustomerRepository implements CustomerRepository {
     return id;
   }
 
-  /// Outstanding amount aggregates Orders and Payments, which remain Hive-backed
-  /// during the spike — so this reads from [EateryDatabase], not the store.
+  /// Outstanding amount computed via an aggregate SQL query on the orders and
+  /// payment tables in the native store.
   @override
   double getOutstandingAmount(String phone) {
-    double amount = 0;
-    for (final order in _db.orderBox.values.where(
-      (o) => o.customerPhone == phone,
-    )) {
-      final payments = _db.paymentBox.values.where(
-        (p) => p.orderId == order.id,
-      );
-      if (payments.isNotEmpty) {
-        amount +=
-            order.grandTotal -
-            payments.map((e) => e.amount).reduce((a, b) => a + b);
-      } else {
-        amount += order.grandTotal;
-      }
-    }
-    return amount;
+    final result = _store.queryScalar(
+      '''
+      SELECT COALESCE(SUM(o.grandTotal - COALESCE(p.paid, 0)), 0)
+      FROM orders o
+      LEFT JOIN (
+        SELECT orderId, SUM(amount) AS paid FROM payment GROUP BY orderId
+      ) p ON p.orderId = o.id
+      WHERE o.customerPhone = ?
+    ''',
+      [phone],
+    );
+    return (result as num?)?.toDouble() ?? 0.0;
   }
 
   bool _exists(int id) =>

@@ -96,16 +96,12 @@ class _AddDiningTableCategoryPageState
             ref
                 .read(appDatabaseProvider)
                 .diningTableCategoryBox
-                .add(diningTableCategory)
-                .then((value) {
-                  AppDialog.showMessage(
-                    context,
-                    message: 'Dining table category added successfully',
-                    type: MessageType.success,
-                  ).then(
-                    (value) => Navigator.pop(this.context, diningTableCategory),
-                  );
-                });
+                .add(diningTableCategory);
+            AppDialog.showMessage(
+              context,
+              message: 'Dining table category added successfully',
+              type: MessageType.success,
+            ).then((value) => Navigator.pop(this.context, diningTableCategory));
           },
           label: 'Save',
         ),

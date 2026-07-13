@@ -1,22 +1,10 @@
 import 'package:eatery/core/theme/app_colors.dart';
-import 'package:eatery/data/models/eatery_db.dart';
+import 'package:flutter/material.dart';
 
-part 'dining_table_status.g.dart';
-
-@HiveType(typeId: TypeIndex.diningTableStatus)
-enum DiningTableStatus {
-  @HiveField(0)
-  available,
-  @HiveField(1)
-  occupied,
-  @HiveField(2)
-  reserved,
-  @HiveField(3)
-  inactive
-}
+enum DiningTableStatus { available, occupied, reserved, inactive }
 
 extension DiningTableStatusExtension on DiningTableStatus {
-  int get id{
+  int get id {
     switch (this) {
       case DiningTableStatus.available:
         return 0;
@@ -28,6 +16,7 @@ extension DiningTableStatusExtension on DiningTableStatus {
         return 3;
     }
   }
+
   String get name {
     switch (this) {
       case DiningTableStatus.available:

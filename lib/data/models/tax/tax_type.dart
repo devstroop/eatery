@@ -1,13 +1,4 @@
-import 'package:eatery/data/models/eatery_db.dart';
-part 'tax_type.g.dart';
-
-@HiveType(typeId: TypeIndex.taxSlabType)
-enum TaxType {
-  @HiveField(0, defaultValue: true)
-  inclusive,
-  @HiveField(1)
-  exclusive
-}
+enum TaxType { inclusive, exclusive }
 
 extension TaxTypeExtension on TaxType {
   int? get id {

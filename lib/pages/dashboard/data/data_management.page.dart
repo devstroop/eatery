@@ -644,7 +644,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
       });
       final staffList = ref.read(staffRepositoryProvider).getAllStaff();
       await ref.read(staffRepositoryProvider).clearAll();
-      await ref.read(staffRepositoryProvider).addAll(staffs);
+      await ref.read(staffRepositoryProvider).addAll(staffs.toList());
       final msg = '✅ ${staffs.length} Staffs downloaded successfully';
       logs.add(msg);
       pd.update(msg: msg);

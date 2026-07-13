@@ -2,17 +2,10 @@ import 'package:eatery/data/models/eatery_db.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
 import 'package:eatery/data/database/native/store_config.dart';
 
-part 'product_category.g.dart';
-
-@HiveType(typeId: TypeIndex.productCategory)
-class ProductCategory extends HiveObject {
-  @HiveField(0)
+class ProductCategory {
   int? id;
-  @HiveField(1)
   String name;
-  @HiveField(2)
   String? description;
-  @HiveField(3)
   String? image;
 
   ProductCategory({required this.name, this.description, this.image})

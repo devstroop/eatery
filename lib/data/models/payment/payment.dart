@@ -2,33 +2,18 @@ import 'package:eatery/data/models/eatery_db.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
 import 'package:eatery/data/database/native/store_config.dart';
 
-part 'payment.g.dart';
-
-@HiveType(typeId: TypeIndex.payment)
-class Payment extends HiveObject {
-  @HiveField(0)
+class Payment {
   int? id;
-  @HiveField(1)
   int? orderId;
-  @HiveField(2)
   DateTime date;
-  @HiveField(3)
   double amount;
-  @HiveField(4)
   PaymentMode mode;
-  @HiveField(5)
   String? reference;
-  @HiveField(6)
   String? attachment;
-  @HiveField(7)
   String? processorTransactionId;
-  @HiveField(8)
   String? processorName;
-  @HiveField(9)
   String? processorStatus;
-  @HiveField(10)
   String? cardLastFour;
-  @HiveField(11)
   String? terminalId;
 
   Payment({

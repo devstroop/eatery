@@ -30,7 +30,9 @@ class _DiningTableCategoriesPageState
         foregroundColor: AppColors.white,
         icon: const Icon(Icons.add),
         onPressed: () {
-          GoRouter.of(context).pushNamed('addDiningTableCategory').then((_) => setState(() {}));
+          GoRouter.of(
+            context,
+          ).pushNamed('addDiningTableCategory').then((_) => setState(() {}));
         },
       ),
       child:
@@ -41,17 +43,19 @@ class _DiningTableCategoriesPageState
                   each,
                 ) {
                   return ListTile(
-                    title: Text(
-                      each.name,
-                      style: AppTypography.titleMedium,
-                    ),
+                    title: Text(each.name, style: AppTypography.titleMedium),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
                           icon: Icon(Icons.edit, color: _pageColor),
                           onPressed: () {
-                            GoRouter.of(context).pushNamed('editDiningTableCategory', extra: each).then((_) => setState(() {}));
+                            GoRouter.of(context)
+                                .pushNamed(
+                                  'editDiningTableCategory',
+                                  extra: each,
+                                )
+                                .then((_) => setState(() {}));
                           },
                         ),
                         IconButton(
@@ -97,10 +101,12 @@ class _DiningTableCategoriesPageState
                                     ),
                                     TextButton(
                                       onPressed: () {
-                                        each.delete().whenComplete(() {
-                                          Navigator.pop(context);
-                                          setState(() {});
-                                        });
+                                        ref.read(eateryStoreProvider).execute(
+                                          'DELETE FROM dining_table_category WHERE id = ?',
+                                          [each.id],
+                                        );
+                                        Navigator.pop(context);
+                                        setState(() {});
                                       },
                                       child: const Text('Delete'),
                                     ),
@@ -123,7 +129,10 @@ class _DiningTableCategoriesPageState
                       child: Center(
                         child: Text(
                           each.name[0],
-                          style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold, color: AppColors.white),
+                          style: AppTypography.headlineSmall.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.white,
+                          ),
                         ),
                       ),
                     ),
@@ -142,7 +151,9 @@ class _DiningTableCategoriesPageState
                     AppSpacing.gapLg,
                     Text(
                       'No Table Categories Found',
-                      style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold),
+                      style: AppTypography.headlineSmall.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     Text(
                       'Add a dining table category to get started',

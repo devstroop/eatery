@@ -1,28 +1,15 @@
-import 'package:eatery/data/models/eatery_db.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
 import 'package:eatery/data/database/native/store_config.dart';
 
-part 'customer.g.dart';
-
-@HiveType(typeId: TypeIndex.customer)
-class Customer extends HiveObject {
-  @HiveField(0)
+class Customer {
   int? id;
-  @HiveField(1)
   String? name;
-  @HiveField(2)
   String phone;
-  @HiveField(3)
   String? address;
-  @HiveField(4)
   String? landmark;
-  @HiveField(5)
   double? latitude;
-  @HiveField(6)
   double? longitude;
-  @HiveField(7)
   bool isActive;
-  @HiveField(8)
   DateTime? lastOrderAt;
 
   Customer({

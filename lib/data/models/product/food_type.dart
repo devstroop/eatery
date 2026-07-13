@@ -1,14 +1,6 @@
-import 'package:eatery/data/models/eatery_db.dart';
+import 'package:flutter/material.dart';
 
-part 'food_type.g.dart';
-
-@HiveType(typeId: TypeIndex.foodType)
-enum FoodType {
-  @HiveField(0, defaultValue: true)
-  veg,
-  @HiveField(1)
-  nonVeg
-}
+enum FoodType { veg, nonVeg }
 
 extension EditionExtension on FoodType {
   int get id {

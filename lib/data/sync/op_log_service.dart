@@ -1,16 +1,19 @@
 import 'dart:convert';
-import 'package:hive/hive.dart';
+import 'package:eatery/data/database/native/eatery_store.dart';
 import 'package:eatery/data/models/eatery_db.dart';
 import 'op_log_entry.dart';
 
 /// Service for recording and querying the operation log.
 ///
-/// Every mutation goes through this service to produce an OpLog entry.
+/// Uses an `op_log` table in the native SQLite store instead of a Hive Box.
+/// Same `int -> String` interface as the original Hive-backed version.
 class OpLogService {
-  OpLogService({required Box<String> opLogBox, required this.deviceId})
-      : _opLogBox = opLogBox;
+  OpLogService({required EateryStore store, required this.deviceId})
+      : _store = store {
+    _initClock();
+  }
 
-  final Box<String> _opLogBox;
+  final EateryStore _store;
   final String deviceId;
 
   int _clock = 0;
@@ -18,17 +21,11 @@ class OpLogService {
   /// Current logical clock value.
   int get clock => _clock;
 
-  /// Initialize clock from existing entries.
-  void init() {
-    if (_opLogBox.isNotEmpty) {
-      final lastKey = _opLogBox.keys.last;
-      if (lastKey is int) {
-        _clock = lastKey;
-      }
-    }
+  void _initClock() {
+    final max = _store.queryScalar('SELECT MAX(clock) FROM op_log');
+    if (max is int) _clock = max;
   }
 
-  /// Commit an OpLog entry and return it.
   OpLogEntry commit({
     required String entityType,
     required int entityId,
@@ -39,7 +36,6 @@ class OpLogService {
     Map<String, dynamic>? metadata,
   }) {
     _clock++;
-
     final entry = OpLogEntry(
       id: '${deviceId}_$_clock',
       entityType: entityType,
@@ -52,101 +48,62 @@ class OpLogService {
       parentId: parentId,
       metadata: metadata,
     );
-
-    _opLogBox.put(_clock, entry.toJsonString());
+    _store.execute(
+      'INSERT OR REPLACE INTO op_log (clock, value) VALUES (?, ?)',
+      [_clock, entry.toJsonString()],
+    );
     return entry;
   }
 
-  /// Get all entries since a given clock value.
   List<OpLogEntry> getEntriesSince(int sinceClock) {
-    final entries = <OpLogEntry>[];
-    for (var i = sinceClock + 1; i <= _clock; i++) {
-      final raw = _opLogBox.get(i);
-      if (raw != null) {
-        entries.add(OpLogEntry.fromJson(jsonDecode(raw) as Map<String, dynamic>));
-      }
-    }
-    return entries;
+    final rows = _store.query(
+      'SELECT value FROM op_log WHERE clock > ? ORDER BY clock', [sinceClock],
+    );
+    return rows.map((r) => OpLogEntry.fromJson(
+      jsonDecode(r['value'] as String) as Map<String, dynamic>,
+    )).toList();
   }
 
-  /// Get all entries for a specific entity.
   List<OpLogEntry> getEntriesForEntity(String entityType, int entityId) {
     return getAllEntries()
         .where((e) => e.entityType == entityType && e.entityId == entityId)
-        .toList()
-      ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
+        .toList()..sort((a, b) => a.timestamp.compareTo(b.timestamp));
   }
 
-  /// Get all entries.
   List<OpLogEntry> getAllEntries() {
-    return _opLogBox.values
-        .map((raw) => OpLogEntry.fromJson(jsonDecode(raw) as Map<String, dynamic>))
-        .toList()
-      ..sort((a, b) => a.timestamp.compareTo(b.timestamp));
+    final rows = _store.query('SELECT value FROM op_log ORDER BY clock');
+    return rows.map((r) => OpLogEntry.fromJson(
+      jsonDecode(r['value'] as String) as Map<String, dynamic>,
+    )).toList()..sort((a, b) => a.timestamp.compareTo(b.timestamp));
   }
 
-  /// Rebuild current state of an entity by folding its ops.
   Map<String, dynamic>? rebuildState(String entityType, int entityId) {
     final entries = getEntriesForEntity(entityType, entityId);
     if (entries.isEmpty) return null;
-
     Map<String, dynamic>? state;
     for (final entry in entries) {
       state = entry.data;
-      // If the entity was voided/deleted, return null
-      if (entry.operation == 'void' || entry.operation == 'delete') {
-        return null;
-      }
+      if (entry.operation == 'void' || entry.operation == 'delete') return null;
     }
     return state;
   }
 
-  /// Total number of entries.
-  int get entryCount => _opLogBox.length;
-
-  /// Advance clock (called when receiving ops from host).
-  void advanceClockTo(int newClock) {
-    if (newClock > _clock) {
-      _clock = newClock;
-    }
+  int get entryCount {
+    final count = _store.queryScalar('SELECT COUNT(*) FROM op_log');
+    return (count as int?) ?? 0;
   }
 
-  /// Apply a batch of entries received from sync.
+  void advanceClockTo(int newClock) {
+    if (newClock > _clock) _clock = newClock;
+  }
+
   void applyBatch(List<OpLogEntry> entries) {
     for (final entry in entries) {
       _clock++;
-      _opLogBox.put(_clock, entry.toJsonString());
+      _store.execute(
+        'INSERT INTO op_log (clock, value) VALUES (?, ?)',
+        [_clock, entry.toJsonString()],
+      );
     }
-  }
-
-  /// Serialize order state for OpLog data field.
-  static Map<String, dynamic> orderToData(Order order) {
-    return {
-      'id': order.id,
-      'customerPhone': order.customerPhone,
-      'createdAt': order.createdAt.millisecondsSinceEpoch,
-      'updatedAt': order.updatedAt?.millisecondsSinceEpoch,
-      'totalQuantity': order.totalQuantity,
-      'subTotal': order.subTotal,
-      'discountTotal': order.discountTotal,
-      'taxTotal': order.taxTotal,
-      'finalTotal': order.finalTotal,
-      'roundOff': order.roundOff,
-      'grandTotal': order.grandTotal,
-      'paidTotal': order.paidTotal,
-      'orderType': order.type.index,
-    };
-  }
-
-  /// Serialize payment state for OpLog data field.
-  static Map<String, dynamic> paymentToData(Payment payment) {
-    return {
-      'id': payment.id,
-      'orderId': payment.orderId,
-      'date': payment.date.millisecondsSinceEpoch,
-      'amount': payment.amount,
-      'mode': payment.mode.index,
-      'reference': payment.reference,
-    };
   }
 }

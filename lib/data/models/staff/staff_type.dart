@@ -1,20 +1,6 @@
-import 'package:eatery/data/models/eatery_db.dart';
+enum StaffType { waiter, chef, driver, other }
 
-part 'staff_type.g.dart';
-
-@HiveType(typeId: TypeIndex.staffType)
-enum StaffType {
-  @HiveField(0, defaultValue: true)
-  waiter,
-  @HiveField(1)
-  chef,
-  @HiveField(2)
-  driver,
-  @HiveField(3)
-  other
-}
-
-extension StaffTypeExtension on StaffType{
+extension StaffTypeExtension on StaffType {
   int get id {
     switch (this) {
       case StaffType.waiter:

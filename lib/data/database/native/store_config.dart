@@ -41,13 +41,18 @@ const bool kUseSqliteKdsStationStore = true;
 const bool kUseSqliteComplianceStore = true;
 const bool kUseSqliteVoidLogStore = true;
 
+/// When true, [printerRepositoryProvider] is backed by the native SQLite store
+/// instead of Hive.
+const bool kUseSqlitePrinterStore = true;
+
 /// All Phase A+B flags aggregated — used in main.dart to open the store
 /// when any entity is routed through SQLite.
 const bool kUseSqliteStore = kUseSqliteProductStore || kUseSqliteCustomerStore ||
     kUseSqliteOrderStore || kUseSqlitePaymentStore || kUseSqliteTaxStore ||
     kUseSqliteDiningTableStore || kUseSqliteCompanyStore || kUseSqliteStaffStore ||
     kUseSqliteSubscriptionStore || kUseSqliteAutoPrintStore ||
-    kUseSqliteKdsStationStore || kUseSqliteComplianceStore || kUseSqliteVoidLogStore;
+    kUseSqliteKdsStationStore || kUseSqliteComplianceStore || kUseSqliteVoidLogStore ||
+    kUseSqlitePrinterStore;
 
 /// Filename of the SQLite database inside the app data directory.
 const String kEateryDbFileName = 'eatery.db';

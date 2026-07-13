@@ -2,19 +2,11 @@ import 'package:eatery/data/models/eatery_db.dart';
 import 'package:eatery/data/database/eatery_db_shim.dart';
 import 'package:eatery/data/database/native/store_config.dart';
 
-part 'subscription.g.dart';
-
-@HiveType(typeId: TypeIndex.subscription)
-class Subscription extends HiveObject {
-  @HiveField(0)
+class Subscription {
   int? id;
-  @HiveField(1)
   String? purchaseCode;
-  @HiveField(2)
   DateTime? validFrom;
-  @HiveField(3)
   DateTime? validTill;
-  @HiveField(4)
   SubscriptionType? subscriptionType = SubscriptionType.individual;
 
   Subscription(
