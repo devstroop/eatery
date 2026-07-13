@@ -13,6 +13,12 @@ class HomePage extends ConsumerWidget {
     return AppPageShell(
       title: 'Eatery Display',
       showBack: false,
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.settings),
+          onPressed: () => SyncHostSettingsSheet.show(context),
+        ),
+      ],
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,

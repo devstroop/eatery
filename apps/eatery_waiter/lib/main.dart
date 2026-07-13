@@ -47,9 +47,10 @@ class _SyncInitializerState extends ConsumerState<SyncInitializer> {
 
   Future<void> _initSync() async {
     if (appStore == null) return;
+    final config = SyncHostConfig(appStore!);
     ref.read(syncInitProvider(SyncConfig.leaf(
       deviceId: 'eatery-waiter',
-      hostAddress: 'localhost', // TODO: make configurable
+      hostAddress: config.getHostAddress(),
     )));
   }
 

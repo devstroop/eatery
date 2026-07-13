@@ -1,4 +1,5 @@
 export 'mutation_tracker.dart';
+export 'sync_host_config.dart';
 export 'op_log_entry.dart';
 export 'op_log_service.dart';
 export 'sync_coordinator.dart';
