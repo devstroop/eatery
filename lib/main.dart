@@ -113,7 +113,11 @@ Future<void> startSync(WidgetRef ref) async {
   final opLog = OpLogService(store: appStore!, deviceId: deviceId);
   final syncService = SyncService(opLogService: opLog, deviceId: deviceId);
 
-  final server = SyncServer(port: 9876, opLogService: opLog, syncService: syncService);
+  final server = SyncServer(
+    port: 9876,
+    opLogService: opLog,
+    syncService: syncService,
+  );
   await server.start();
   debugPrint('Sync server started on port 9876');
 }
