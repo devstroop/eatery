@@ -1,10 +1,7 @@
-/// Stub — Hive has been fully eliminated.
+/// Minimal stub — Hive has been fully eliminated.
 ///
-/// These model constructors still reference `EateryDB.instance.xxxBox` in
-/// guarded fallbacks (`kUseSqliteXxxStore ? null : ...`). Since all flags are
-/// `true`, the fallback is never reached, but the symbol must exist to compile.
-///
-/// This file will be removed once model constructors are cleaned up.
+/// Model constructors reference `EateryDB.instance.xxxBox?.nextId()` in guarded
+/// fallbacks. All return null since all flags are true.
 library;
 
 class EateryDB {

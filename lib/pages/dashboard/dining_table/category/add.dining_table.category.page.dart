@@ -1,5 +1,5 @@
 import 'package:eatery/core/widgets/app_page_shell.dart';
-import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -94,9 +94,8 @@ class _AddDiningTableCategoryPageState
               isActive: true,
             );
             ref
-                .read(appDatabaseProvider)
-                .diningTableCategoryBox
-                .add(diningTableCategory);
+                .read(diningTableRepositoryProvider)
+                .saveCategory(diningTableCategory);
             AppDialog.showMessage(
               context,
               message: 'Dining table category added successfully',

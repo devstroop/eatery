@@ -226,19 +226,19 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
         // Populate Products
         for (var row in productsTable!.rows) {
           Product product = Product.fromIterable(row.map((e) => e?.value.toString()));
-          db.productBox!.put(product.id, product);
+          ref.read(productRepositoryProvider).saveProduct(product);
         }
 
         // Populate Product Categories
         for (var row in productCategoriesTable!.rows) {
           ProductCategory productCategory = ProductCategory.fromIterable(row.map((e) => e?.value.toString()));
-          db.productCategoryBox!.put(productCategory.id, productCategory);
+          ref.read(productRepositoryProvider).saveCategory(productCategory);
         }
 
         // Populate Tax Slabs
         for (var row in taxSlabsTable!.rows) {
           TaxSlab taxSlab = TaxSlab.fromIterable(row.map((e) => e?.value));
-          db.taxSlabBox!.put(taxSlab.id, taxSlab);
+          ref.read(taxRepositoryProvider).saveTaxSlab(taxSlab);
         }
 
         // Populate Staffs
@@ -250,25 +250,25 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
         // Populate Dining Tables
         for (var row in diningTablesTable!.rows) {
           DiningTable diningTable = DiningTable.fromIterable(row.map((e) => e?.value));
-          db.diningTableBox!.put(diningTable.id, diningTable);
+          ref.read(diningTableRepositoryProvider).saveTable(diningTable);
         }
 
         // Populate Dining Table Categories
         for (var row in diningTableCategoriesTable!.rows) {
           DiningTableCategory diningTableCategory = DiningTableCategory.fromIterable(row.map((e) => e?.value));
-          db.diningTableCategoryBox!.put(diningTableCategory.id, diningTableCategory);
+          ref.read(diningTableRepositoryProvider).saveCategory(diningTableCategory);
         }
 
         // Populate Customers
         for (var row in customersTable!.rows) {
           Customer customer = Customer.fromIterable(row.map((e) => e?.value));
-          db.customerBox!.put(customer.id, customer);
+          ref.read(customerRepositoryProvider).saveCustomer(customer);
         }
 
         // Populate Orders
         for (var row in ordersTable!.rows) {
           Order order = Order.fromIterable(row.map((e) => e?.value));
-          db.orderBox!.put(order.id, order);
+          ref.read(orderRepositoryProvider).saveOrder(order);
         }
 
         AppDialog.showMessage(this.context, message: 'Imported successfully', type: MessageType.success);
@@ -303,14 +303,14 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
 
     // Populate Customers Sheet
     index = 0;
-    for (var element in db.customerBox!.values) {
+    for (var element in ref.read(customerRepositoryProvider).getAllCustomers()) {
       customersSheet.insertRowIterables(element.toMap().values.toList(), index);
       index++;
     }
 
     // Populate Dining Tables Sheet
     index = 0;
-    for (var element in db.diningTableBox!.values) {
+    for (var element in ref.read(diningTableRepositoryProvider).getAllTables()) {
       diningTablesSheet.insertRowIterables(
           element.toMap().values.toList(), index);
       index++;
@@ -318,7 +318,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
 
     // Dining Table Categories Sheet
     index = 0;
-    for (var element in db.diningTableCategoryBox!.values) {
+    for (var element in ref.read(diningTableRepositoryProvider).getAllCategories()) {
       diningTableCategoriesSheet.insertRowIterables(
           element.toMap().values.toList(), index);
       index++;
@@ -326,21 +326,21 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
 
     // Populate Orders Sheet
     index = 0;
-    for (var element in db.orderBox!.values) {
+    for (var element in ref.read(orderRepositoryProvider).getAllOrders()) {
       ordersSheet.insertRowIterables(element.toMap().values.toList(), index);
       index++;
     }
 
     // Populate Products Sheet
     index = 0;
-    for (var element in db.productBox!.values) {
+    for (var element in ref.read(productRepositoryProvider).getAllProducts()) {
       productsSheet.insertRowIterables(element.toMap().values.toList(), index);
       index++;
     }
 
     // Populate Product Categories Sheet
     index = 0;
-    for (var element in db.productCategoryBox!.values) {
+    for (var element in ref.read(productRepositoryProvider).getAllCategories()) {
       productCategoriesSheet.insertRowIterables(
           element.toMap().values.toList(), index);
       index++;
@@ -348,7 +348,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
 
     // Populate Tax Slabs Sheet
     index = 0;
-    for (var element in db.taxSlabBox!.values) {
+    for (var element in ref.read(taxRepositoryProvider).getAllTaxSlabs()) {
       taxSlabsSheet.insertRowIterables(element.toMap().values.toList(), index);
       index++;
     }
