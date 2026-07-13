@@ -14,6 +14,7 @@ class HomePage extends ConsumerWidget {
       title: 'Eatery Display',
       showBack: false,
       actions: [
+        const SyncStatusChip(),
         IconButton(
           icon: const Icon(Icons.settings),
           onPressed: () => SyncHostSettingsSheet.show(context),

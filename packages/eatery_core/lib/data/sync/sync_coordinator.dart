@@ -25,10 +25,14 @@ class SyncCoordinator {
   SyncServer? _server;
   SyncClient? _client;
 
+  /// Called when the sync status changes.
+  final void Function(SyncStatus status)? onStatusChange;
+
   SyncCoordinator({
     required EateryStore store,
     required this.deviceId,
     required this.isHost,
+    this.onStatusChange,
     String? host,
     int port = 9876,
   }) : _store = store {
@@ -42,11 +46,15 @@ class SyncCoordinator {
         data: data,
       );
     });
+
     syncService = SyncService(
       opLogService: opLogService,
       deviceId: deviceId,
       onStatusChange: (status) {
-        debugPrint('SyncCoordinator: $deviceId status — ${status.connectionState}');
+        debugPrint(
+          'SyncCoordinator: $deviceId status — ${status.connectionState}',
+        );
+        onStatusChange?.call(status);
       },
       onEntriesReceived: (entries) {
         _applyIncomingEntries(entries);
