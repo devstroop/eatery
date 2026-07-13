@@ -28,6 +28,14 @@ export 'theme/app_theme.dart';
 export 'extensions/double_ext.dart';
 export 'extensions/string_ext.dart';
 
+/// Providers
+export 'providers/database_provider.dart';
+export 'providers/company_provider.dart';
+export 'providers/order_provider.dart';
+export 'providers/product_provider.dart';
+export 'providers/cart_provider.dart';
+export 'providers/printer_provider.dart';
+
 /// Repositories
 export 'data/repositories/company_repository.dart';
 export 'data/repositories/company_repository_sqlite.dart';

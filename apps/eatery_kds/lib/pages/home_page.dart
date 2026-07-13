@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/eatery_core.dart';
 
-class HomePage extends StatelessWidget {
+final _greetingProvider = Provider<String>((ref) => 'Kitchen Display');
+
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final greeting = ref.watch(_greetingProvider);
     return AppPageShell(
       title: 'Eatery KDS',
       showBack: false,
@@ -17,8 +21,7 @@ class HomePage extends StatelessWidget {
             AppSpacing.gapLg,
             Text('Eatery KDS', style: AppTypography.headlineMedium),
             AppSpacing.gapSm,
-            Text('Kitchen Display System',
-                style: AppTypography.bodyMedium),
+            Text(greeting, style: AppTypography.bodyMedium),
           ],
         ),
       ),

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/eatery_core.dart';
 
-class HomePage extends StatelessWidget {
+final _greetingProvider = Provider<String>((ref) => 'Ready to take orders');
+
+class HomePage extends ConsumerWidget {
   const HomePage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final greeting = ref.watch(_greetingProvider);
     return AppPageShell(
       title: 'Eatery Waiter',
       showBack: false,
@@ -17,8 +21,7 @@ class HomePage extends StatelessWidget {
             AppSpacing.gapLg,
             Text('Eatery Waiter', style: AppTypography.headlineMedium),
             AppSpacing.gapSm,
-            Text('Floor staff order management',
-                style: AppTypography.bodyMedium),
+            Text(greeting, style: AppTypography.bodyMedium),
             AppSpacing.gapLg,
             AppButton.primary(
               label: 'Take Order',
