@@ -554,7 +554,7 @@ class _CartPageState extends ConsumerState<CartPage> {
         var existing = ref
             .read(orderRepositoryProvider)
             .getOrderProducts(order.id!)
-            .where((element) => element.id == product.id)
+            .where((element) => element.productId == product.id)
             .firstOrNull;
         if (existing != null) {
           final newQuantity = existing.quantity + 1;

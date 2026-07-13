@@ -36,6 +36,15 @@ class SqliteDiningTableRepository implements DiningTableRepository {
   }
 
   @override
+  DiningTable? getTableByOrderId(int orderId) {
+    final rows = _store.query(
+      'SELECT * FROM dining_table WHERE orderId = ? LIMIT 1',
+      [orderId],
+    );
+    return rows.isEmpty ? null : _toTable(rows.first);
+  }
+
+  @override
   Future<void> deleteTable(int id) async {
     _store.execute('DELETE FROM dining_table WHERE id = ?', [id]);
     notifyMutation('dining_table', id, 'delete', {'id': id});
