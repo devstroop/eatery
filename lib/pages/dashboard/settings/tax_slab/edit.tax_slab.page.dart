@@ -94,11 +94,10 @@ class _EditTaxSlabSettingsPageState
                       child: const Text('Cancel'),
                     ),
                     TextButton(
-                      onPressed: () {
-                        ref.read(eateryStoreProvider).execute(
-                          'DELETE FROM tax_slab WHERE id = ?',
-                          [widget.taxSlab.id],
-                        );
+                      onPressed: () async {
+                        await ref
+                            .read(taxRepositoryProvider)
+                            .deleteTaxSlab(widget.taxSlab.id!);
                         Navigator.pop(context);
                         Navigator.pop(context);
                       },

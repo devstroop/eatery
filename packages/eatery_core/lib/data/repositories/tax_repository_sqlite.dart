@@ -43,6 +43,12 @@ class SqliteTaxRepository implements TaxRepository {
     return id;
   }
 
+  @override
+  Future<void> deleteTaxSlab(int id) async {
+    _store.execute('DELETE FROM tax_slab WHERE id = ?', [id]);
+    notifyMutation('tax_slab', id, 'delete', {'id': id});
+  }
+
   bool _exists(int id) =>
       _store.queryScalar('SELECT 1 FROM tax_slab WHERE id = ?', [id]) != null;
 }

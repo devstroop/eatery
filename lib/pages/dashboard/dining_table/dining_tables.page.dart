@@ -224,12 +224,11 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                                               ),
                                               TextButton(
                                                 onPressed: () async {
-                                                  ref
-                                                      .read(eateryStoreProvider)
-                                                      .execute(
-                                                        'DELETE FROM dining_table WHERE id = ?',
-                                                        [diningTable.id],
-                                                      );
+                                                  await ref
+                                                      .read(
+                                                        diningTableRepositoryProvider,
+                                                      )
+                                                      .deleteTable(diningTable.id!);
                                                   Navigator.pop(this.context);
                                                   setState(() {});
                                                 },

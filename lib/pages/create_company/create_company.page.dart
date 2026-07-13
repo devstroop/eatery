@@ -2,6 +2,7 @@ import 'package:eatery_core/utils/responsive.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery_core/data/sync/mutation_hook.dart';
 import 'package:eatery_core/providers/database_provider.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery_core/providers/company_provider.dart';
@@ -260,6 +261,7 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
                   kCurrency.spaceBetweenAmountAndSymbol ? 1 : 0,
                 ],
               );
+              notifyMutation('currency', 0, 'save', kCurrency.toMap());
             }
             // COMPANY
             Company company = Company(

@@ -103,11 +103,10 @@ class _DiningTableCategoriesPageState
                                       child: const Text('Cancel'),
                                     ),
                                     TextButton(
-                                      onPressed: () {
-                                        ref.read(eateryStoreProvider).execute(
-                                          'DELETE FROM dining_table_category WHERE id = ?',
-                                          [each.id],
-                                        );
+                                      onPressed: () async {
+                                        await ref
+                                            .read(diningTableRepositoryProvider)
+                                            .deleteCategory(each.id!);
                                         Navigator.pop(context);
                                         setState(() {});
                                       },

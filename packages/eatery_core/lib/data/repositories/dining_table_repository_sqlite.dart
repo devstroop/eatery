@@ -36,6 +36,18 @@ class SqliteDiningTableRepository implements DiningTableRepository {
   }
 
   @override
+  Future<void> deleteTable(int id) async {
+    _store.execute('DELETE FROM dining_table WHERE id = ?', [id]);
+    notifyMutation('dining_table', id, 'delete', {'id': id});
+  }
+
+  @override
+  Future<void> deleteCategory(int id) async {
+    _store.execute('DELETE FROM dining_table_category WHERE id = ?', [id]);
+    notifyMutation('dining_table_category', id, 'delete', {'id': id});
+  }
+
+  @override
   Future<int> saveTable(DiningTable table) async {
     final values = <Object?>[
       table.name,
