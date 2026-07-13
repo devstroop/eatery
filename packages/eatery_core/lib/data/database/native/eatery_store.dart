@@ -4,6 +4,7 @@ import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 
 import 'eatery_store_bindings.dart';
+import 'eatery_store_interface.dart';
 
 /// Thrown when a native store operation fails. Carries the message reported
 /// by the native layer via `es_last_error`.
@@ -33,7 +34,7 @@ class EateryStoreException implements Exception {
 ///
 /// Booleans and enums are the caller's responsibility to encode/decode (see
 /// the SQLite-backed repositories).
-class EateryStore {
+class EateryStore implements EateryStoreInterface {
   EateryStore._(this._bindings, this._handle);
 
   final EateryStoreBindings _bindings;
@@ -56,11 +57,13 @@ class EateryStore {
   }
 
   /// Native library version string.
+  @override
   String get version => _bindings.esVersion().toDartString();
 
   /// Set the SQLCipher encryption key. Must be called immediately after open
   /// when using an encrypted database. No-op with plain SQLite (the symbol
   /// exists but the underlying library is compiled without SQLCipher).
+  @override
   void setKey(String key) {
     final keyBytes = utf8.encode(key);
     final keyPtr = malloc.allocate<Uint8>(keyBytes.length);
@@ -72,6 +75,7 @@ class EateryStore {
   /// Executes a non-query statement (INSERT/UPDATE/DELETE/DDL). Returns the
   /// number of affected rows. Multiple `;`-separated statements are supported
   /// (params bind to the first statement only — intended for schema setup).
+  @override
   int execute(String sql, [List<Object?>? params]) {
     _ensureOpen();
     final sqlPtr = sql.toNativeUtf8();
@@ -89,6 +93,7 @@ class EateryStore {
   }
 
   /// Runs a SELECT and returns the decoded rows.
+  @override
   List<Map<String, Object?>> query(String sql, [List<Object?>? params]) {
     _ensureOpen();
     final sqlPtr = sql.toNativeUtf8();
@@ -113,6 +118,7 @@ class EateryStore {
 
   /// Convenience: run a query expected to return a single scalar in the first
   /// column of the first row (e.g. `SELECT last_insert_rowid()`).
+  @override
   Object? queryScalar(String sql, [List<Object?>? params]) {
     final rows = query(sql, params);
     if (rows.isEmpty) return null;
@@ -126,6 +132,7 @@ class EateryStore {
   /// writes (e.g. saving an order together with its line items).
   ///
   /// Not re-entrant: SQLite does not support nested transactions via BEGIN.
+  @override
   T transaction<T>(T Function() action) {
     _ensureOpen();
     execute('BEGIN IMMEDIATE');
@@ -144,6 +151,7 @@ class EateryStore {
   }
 
   /// Closes the underlying database. Safe to call multiple times.
+  @override
   void close() {
     if (_closed) return;
     _closed = true;

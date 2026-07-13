@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:eatery_core/data/database/native/eatery_store.dart';
+import 'package:eatery_core/data/database/native/eatery_store_interface.dart';
 import 'package:eatery_core/data/models/eatery_db.dart';
 import 'op_log_entry.dart';
 
@@ -8,12 +8,12 @@ import 'op_log_entry.dart';
 /// Uses an `op_log` table in the native SQLite store instead of a Hive Box.
 /// Same `int -> String` interface as the original Hive-backed version.
 class OpLogService {
-  OpLogService({required EateryStore store, required this.deviceId})
+  OpLogService({required EateryStoreInterface store, required this.deviceId})
       : _store = store {
     _initClock();
   }
 
-  final EateryStore _store;
+  final EateryStoreInterface _store;
   final String deviceId;
 
   int _clock = 0;
