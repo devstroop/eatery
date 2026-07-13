@@ -320,6 +320,14 @@ class _TicketDetail extends ConsumerWidget {
                     updatedAt: DateTime.now(),
                   );
                   await repo.saveOrder(updated);
+                  final coordinator = ref.read(syncCoordinatorProvider);
+                  if (coordinator != null) {
+                    MutationTracker.trackSave(
+                      coordinator: coordinator,
+                      entityType: 'order',
+                      entity: updated,
+                    );
+                  }
                   if (!context.mounted) return;
                   Navigator.pop(context);
                   ref.invalidate(_activeOrdersProvider);

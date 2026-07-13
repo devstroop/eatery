@@ -126,6 +126,9 @@ class SyncClient {
     }
   }
 
+  /// Sends a message to the host (called externally by coordinator).
+  void sendMessage(SyncMessage msg) => _send(msg);
+
   void _send(SyncMessage msg) {
     try {
       _channel?.sink.add(msg.toJsonString());

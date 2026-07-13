@@ -29,3 +29,30 @@ void main() async {
     ),
   );
 }
+
+class SyncInitializer extends ConsumerStatefulWidget {
+  final Widget child;
+  const SyncInitializer({super.key, required this.child});
+
+  @override
+  ConsumerState<SyncInitializer> createState() => _SyncInitializerState();
+}
+
+class _SyncInitializerState extends ConsumerState<SyncInitializer> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _initSync());
+  }
+
+  Future<void> _initSync() async {
+    if (appStore == null) return;
+    ref.read(syncInitProvider(SyncConfig.leaf(
+      deviceId: 'eatery-waiter',
+      hostAddress: 'localhost', // TODO: make configurable
+    )));
+  }
+
+  @override
+  Widget build(BuildContext context) => widget.child;
+}

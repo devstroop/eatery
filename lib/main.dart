@@ -8,9 +8,7 @@ import 'package:eatery_core/data/database/eatery_database.dart';
 import 'package:eatery_core/data/database/native/eatery_schema.dart';
 import 'package:eatery_core/data/database/native/eatery_store.dart';
 import 'package:eatery_core/data/database/native/store_config.dart';
-import 'package:eatery_core/data/sync/op_log_service.dart';
-import 'package:eatery_core/data/sync/sync_server.dart';
-import 'package:eatery_core/data/sync/sync_service.dart';
+import 'package:eatery_core/data/sync/sync_providers.dart';
 import 'package:eatery_core/providers/database_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/functions/order.function.dart';
@@ -109,17 +107,9 @@ Future setupDataAndInitDB() async {
 Future<void> startSync(WidgetRef ref) async {
   if (!kUseSqliteStore) return;
 
-  final deviceId = await getDeviceId() ?? 'unknown-device';
-  final opLog = OpLogService(store: appStore!, deviceId: deviceId);
-  final syncService = SyncService(opLogService: opLog, deviceId: deviceId);
-
-  final server = SyncServer(
-    port: 9876,
-    opLogService: opLog,
-    syncService: syncService,
-  );
-  await server.start();
-  debugPrint('Sync server started on port 9876');
+  final deviceId = await getDeviceId() ?? 'eatery-admin';
+  ref.read(syncInitProvider(SyncConfig.host(deviceId: deviceId)));
+  debugPrint('Sync host started on port 9876');
 }
 
 class MyApp extends ConsumerStatefulWidget {

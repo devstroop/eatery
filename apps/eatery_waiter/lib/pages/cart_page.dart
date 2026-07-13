@@ -129,6 +129,16 @@ class CartPage extends ConsumerWidget {
 
     final orderId = await orderRepo.saveOrder(order);
 
+    final savedOrder = order.copyWith(id: orderId);
+    final coordinator = ref.read(syncCoordinatorProvider);
+    if (coordinator != null) {
+      MutationTracker.trackSave(
+        coordinator: coordinator,
+        entityType: 'order',
+        entity: savedOrder,
+      );
+    }
+
     for (final p in uniqueProducts) {
       final qty = grouped[p.id ?? 0] ?? 1;
       final lineTotal = p.mrpPrice * qty;
