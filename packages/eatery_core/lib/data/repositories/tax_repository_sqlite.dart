@@ -1,5 +1,6 @@
 import 'package:eatery_core/data/models/eatery_db.dart';
 import 'package:eatery_core/data/repositories/tax_repository.dart';
+import 'package:eatery_core/data/sync/mutation_hook.dart';
 
 import '../database/native/eatery_store.dart';
 
@@ -26,17 +27,19 @@ class SqliteTaxRepository implements TaxRepository {
   Future<int> saveTaxSlab(TaxSlab slab) async {
     final values = <Object?>[slab.name, slab.rate, slab.type.index];
 
+    final int id;
     if (slab.id != null && _exists(slab.id!)) {
+      id = slab.id!;
       _store.execute('UPDATE tax_slab SET name=?, rate=?, type=? WHERE id=?', [
         ...values,
-        slab.id,
+        id,
       ]);
-      return slab.id!;
+    } else {
+      _store.execute('INSERT INTO tax_slab ($_columns) VALUES (?,?,?)', values);
+      id = _store.queryScalar('SELECT last_insert_rowid()') as int;
+      slab = slab.copyWith(id: id);
     }
-
-    _store.execute('INSERT INTO tax_slab ($_columns) VALUES (?,?,?)', values);
-    final id = _store.queryScalar('SELECT last_insert_rowid()') as int;
-    slab = slab.copyWith(id: id);
+    notifyMutation('tax_slab', id, 'save', slab.toMap());
     return id;
   }
 

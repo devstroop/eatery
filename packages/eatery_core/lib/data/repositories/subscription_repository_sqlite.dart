@@ -1,4 +1,5 @@
 import 'package:eatery_core/data/models/eatery_db.dart';
+import 'package:eatery_core/data/sync/mutation_hook.dart';
 import '../database/native/eatery_store.dart';
 import 'subscription_repository.dart';
 
@@ -26,21 +27,23 @@ class SqliteSubscriptionRepository implements SubscriptionRepository {
       sub.subscriptionType?.id,
     ];
 
+    final int id;
     if (sub.id != null && _exists(sub.id!)) {
+      id = sub.id!;
       _store.execute(
         'UPDATE subscription SET purchaseCode=?, validFrom=?, validTill=?, '
         'subscriptionType=? WHERE id=?',
-        [...values, sub.id],
+        [...values, id],
       );
-      return sub.id!;
+    } else {
+      _store.execute(
+        'INSERT INTO subscription ($_columns) VALUES (?,?,?,?)',
+        values,
+      );
+      id = _store.queryScalar('SELECT last_insert_rowid()') as int;
+      sub = sub.copyWith(id: id);
     }
-
-    _store.execute(
-      'INSERT INTO subscription ($_columns) VALUES (?,?,?,?)',
-      values,
-    );
-    final id = _store.queryScalar('SELECT last_insert_rowid()') as int;
-    sub = sub.copyWith(id: id);
+    notifyMutation('subscription', id, 'save', sub.toMap());
     return id;
   }
 

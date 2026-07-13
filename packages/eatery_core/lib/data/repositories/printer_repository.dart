@@ -1,4 +1,5 @@
 import 'package:eatery_core/data/models/eatery_db.dart';
+import 'package:eatery_core/data/sync/mutation_hook.dart';
 import '../database/native/eatery_store.dart';
 
 class PrinterRepository {
@@ -10,10 +11,15 @@ class PrinterRepository {
     final m = printer.toMap();
     _db.execute('INSERT INTO printer (name, bluetoothAddress, usbVendorId, usbProductId, type) VALUES (?,?,?,?,?)',
         [m['name'], m['bluetoothAddress'], m['usbVendorId'], m['usbProductId'], m['type']]);
-    return _db.queryScalar('SELECT last_insert_rowid()') as int;
+    final id = _db.queryScalar('SELECT last_insert_rowid()') as int;
+    notifyMutation('printer', id, 'save', printer.toMap());
+    return id;
   }
   Future<void> deletePrinter(Printer printer) async {
-    if (printer.id != null) _db.execute('DELETE FROM printer WHERE id = ?', [printer.id]);
+    if (printer.id != null) {
+      _db.execute('DELETE FROM printer WHERE id = ?', [printer.id]);
+      notifyMutation('printer', printer.id!, 'delete', {'id': printer.id});
+    }
   }
   Future<void> clearAll() async => _db.execute('DELETE FROM printer');
 }

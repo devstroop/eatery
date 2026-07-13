@@ -1,5 +1,6 @@
 import 'package:eatery_core/data/models/eatery_db.dart';
 import 'package:eatery_core/data/repositories/order_repository.dart';
+import 'package:eatery_core/data/sync/mutation_hook.dart';
 
 import '../database/native/eatery_store.dart';
 
@@ -61,25 +62,26 @@ class SqliteOrderRepository implements OrderRepository {
       m['voidedAt'],
     ];
 
+    final int id;
     if (order.id != null && _exists('orders', order.id!)) {
+      id = order.id!;
       _store.execute(
         'UPDATE orders SET '
         'customerPhone=?, createdAt=?, updatedAt=?, totalQuantity=?, '
         'subTotal=?, discountTotal=?, taxTotal=?, finalTotal=?, roundOff=?, '
         'grandTotal=?, paidTotal=?, type=?, status=?, voidReason=?, '
         'voidedBy=?, voidedAt=? WHERE id=?',
-        [...values, order.id],
+        [...values, id],
       );
-      return order.id!;
+    } else {
+      _store.execute(
+        'INSERT INTO orders ($_orderColumns) '
+        'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+        values,
+      );
+      id = _store.queryScalar('SELECT last_insert_rowid()') as int;
     }
-
-    _store.execute(
-      'INSERT INTO orders ($_orderColumns) '
-      'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
-      values,
-    );
-    final id = _store.queryScalar('SELECT last_insert_rowid()') as int;
-    order = order.copyWith(id: id);
+    notifyMutation('order', id, 'save', order.toMap());
     return id;
   }
 
@@ -88,6 +90,7 @@ class SqliteOrderRepository implements OrderRepository {
     if (order.id == null) return;
     // order_product rows cascade-delete via the foreign key.
     _store.execute('DELETE FROM orders WHERE id = ?', [order.id]);
+    notifyMutation('order', order.id!, 'delete', {'id': order.id});
   }
 
   // ---------------------------------------------------------------------------
@@ -104,23 +107,27 @@ class SqliteOrderRepository implements OrderRepository {
   Future<int> addOrderProduct(OrderProduct op) async {
     final id = _insertOrderProduct(op);
     op = op.copyWith(id: id);
+    notifyMutation('order_product', id, 'save', op.toMap());
     return id;
   }
 
   @override
   Future<void> saveOrderProduct(OrderProduct op) async {
+    final int id;
     if (op.id != null && _exists('order_product', op.id!)) {
+      id = op.id!;
       final v = _orderProductValues(op);
       _store.execute(
         'UPDATE order_product SET '
         'orderId=?, productId=?, productName=?, quantity=?, price=?, '
         'subTotal=?, discountRate=?, discountAmount=?, taxRate=?, taxAmount=?, '
         'total=?, stationId=?, stationName=? WHERE id=?',
-        [...v, op.id],
+        [...v, id],
       );
-      return;
+    } else {
+      id = _insertOrderProduct(op);
     }
-    op = op.copyWith(id: _insertOrderProduct(op));
+    notifyMutation('order_product', id, 'save', op.toMap());
   }
 
   // ---------------------------------------------------------------------------

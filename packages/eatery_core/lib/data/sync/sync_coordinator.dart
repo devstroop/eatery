@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:eatery_core/data/database/native/eatery_store.dart';
+import 'package:eatery_core/data/sync/mutation_hook.dart';
 import 'package:eatery_core/data/sync/op_log_entry.dart';
 import 'package:eatery_core/data/sync/op_log_service.dart';
 import 'package:eatery_core/data/sync/sync_client.dart';
@@ -32,6 +33,15 @@ class SyncCoordinator {
     int port = 9876,
   }) : _store = store {
     opLogService = OpLogService(store: store, deviceId: deviceId);
+
+    setMutationHook((entityType, entityId, operation, data) {
+      trackMutation(
+        entityType: entityType,
+        entityId: entityId,
+        operation: operation,
+        data: data,
+      );
+    });
     syncService = SyncService(
       opLogService: opLogService,
       deviceId: deviceId,
@@ -135,6 +145,7 @@ class SyncCoordinator {
   }
 
   Future<void> dispose() async {
+    clearMutationHook();
     await _client?.disconnect();
     await _server?.stop();
     syncService.dispose();

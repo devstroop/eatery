@@ -1,5 +1,6 @@
 import 'package:eatery_core/data/models/eatery_db.dart';
 import 'package:eatery_core/data/repositories/dining_table_repository.dart';
+import 'package:eatery_core/data/sync/mutation_hook.dart';
 
 import '../database/native/eatery_store.dart';
 
@@ -46,21 +47,23 @@ class SqliteDiningTableRepository implements DiningTableRepository {
       table.customerPhone,
     ];
 
+    final int id;
     if (table.id != null && _tableExists(table.id!)) {
+      id = table.id!;
       _store.execute(
         'UPDATE dining_table SET name=?, categoryId=?, description=?, '
         'orderId=?, capacity=?, status=?, customerPhone=? WHERE id=?',
-        [...values, table.id],
+        [...values, id],
       );
-      return table.id!;
+    } else {
+      _store.execute(
+        'INSERT INTO dining_table ($_tableColumns) VALUES (?,?,?,?,?,?,?)',
+        values,
+      );
+      id = _store.queryScalar('SELECT last_insert_rowid()') as int;
+      table = table.copyWith(id: id);
     }
-
-    _store.execute(
-      'INSERT INTO dining_table ($_tableColumns) VALUES (?,?,?,?,?,?,?)',
-      values,
-    );
-    final id = _store.queryScalar('SELECT last_insert_rowid()') as int;
-    table = table.copyWith(id: id);
+    notifyMutation('dining_table', id, 'save', table.toMap());
     return id;
   }
 
@@ -92,22 +95,24 @@ class SqliteDiningTableRepository implements DiningTableRepository {
       category.isActive ? 1 : 0,
     ];
 
+    final int id;
     if (category.id != null && _catExists(category.id!)) {
+      id = category.id!;
       _store.execute(
         'UPDATE dining_table_category SET name=?, description=?, '
         'isActive=? WHERE id=?',
-        [...values, category.id],
+        [...values, id],
       );
-      return category.id!;
+    } else {
+      _store.execute(
+        'INSERT INTO dining_table_category ($_categoryColumns) '
+        'VALUES (?,?,?)',
+        values,
+      );
+      id = _store.queryScalar('SELECT last_insert_rowid()') as int;
+      category = category.copyWith(id: id);
     }
-
-    _store.execute(
-      'INSERT INTO dining_table_category ($_categoryColumns) '
-      'VALUES (?,?,?)',
-      values,
-    );
-    final id = _store.queryScalar('SELECT last_insert_rowid()') as int;
-    category = category.copyWith(id: id);
+    notifyMutation('dining_table_category', id, 'save', category.toMap());
     return id;
   }
 

@@ -1,5 +1,6 @@
 import 'package:eatery_core/data/models/eatery_db.dart';
 import 'package:eatery_core/data/repositories/product_repository.dart';
+import 'package:eatery_core/data/sync/mutation_hook.dart';
 
 import '../database/native/eatery_store.dart';
 
@@ -91,23 +92,25 @@ class SqliteProductRepository implements ProductRepository {
       m['stationName'],
     ];
 
+    final int id;
     if (product.id != null && _exists('product', product.id!)) {
+      id = product.id!;
       _store.execute(
         'UPDATE product SET '
         'name=?, categoryId=?, description=?, image=?, mrpPrice=?, '
         'salePrice=?, taxSlabId=?, foodType=?, type=?, isActive=?, '
         'stationId=?, stationName=? WHERE id=?',
-        [...values, product.id],
+        [...values, id],
       );
-      return product.id!;
+    } else {
+      _store.execute(
+        'INSERT INTO product ($_columns) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
+        values,
+      );
+      id = _store.queryScalar('SELECT last_insert_rowid()') as int;
+      product = product.copyWith(id: id);
     }
-
-    _store.execute(
-      'INSERT INTO product ($_columns) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)',
-      values,
-    );
-    final id = _store.queryScalar('SELECT last_insert_rowid()') as int;
-    product = product.copyWith(id: id);
+    notifyMutation('product', id, 'save', product.toMap());
     return id;
   }
 
@@ -115,6 +118,7 @@ class SqliteProductRepository implements ProductRepository {
   Future<void> deleteProduct(Product product) async {
     if (product.id == null) return;
     _store.execute('DELETE FROM product WHERE id = ?', [product.id]);
+    notifyMutation('product', product.id!, 'delete', {'id': product.id});
   }
 
   // ---------------------------------------------------------------------------
@@ -138,20 +142,22 @@ class SqliteProductRepository implements ProductRepository {
     final m = category.toMap();
     final values = <Object?>[m['name'], m['description'], m['image']];
 
+    final int id;
     if (category.id != null && _exists('product_category', category.id!)) {
+      id = category.id!;
       _store.execute(
         'UPDATE product_category SET name=?, description=?, image=? WHERE id=?',
-        [...values, category.id],
+        [...values, id],
       );
-      return category.id!;
+    } else {
+      _store.execute(
+        'INSERT INTO product_category (name, description, image) VALUES (?,?,?)',
+        values,
+      );
+      id = _store.queryScalar('SELECT last_insert_rowid()') as int;
+      category = category.copyWith(id: id);
     }
-
-    _store.execute(
-      'INSERT INTO product_category (name, description, image) VALUES (?,?,?)',
-      values,
-    );
-    final id = _store.queryScalar('SELECT last_insert_rowid()') as int;
-    category = category.copyWith(id: id);
+    notifyMutation('product_category', id, 'save', category.toMap());
     return id;
   }
 
@@ -159,6 +165,7 @@ class SqliteProductRepository implements ProductRepository {
   Future<void> deleteCategory(ProductCategory category) async {
     if (category.id == null) return;
     _store.execute('DELETE FROM product_category WHERE id = ?', [category.id]);
+    notifyMutation('product_category', category.id!, 'delete', {'id': category.id});
   }
 
   // ---------------------------------------------------------------------------

@@ -1,5 +1,6 @@
 import 'package:eatery_core/data/models/eatery_db.dart';
 import 'package:eatery_core/data/repositories/company_repository.dart';
+import 'package:eatery_core/data/sync/mutation_hook.dart';
 
 import '../database/native/eatery_store.dart';
 
@@ -44,6 +45,7 @@ class SqliteCompanyRepository implements CompanyRepository {
       m['subscriptionId'],
     ]);
     company = company.copyWith(id: 1);
+    notifyMutation('company', 1, 'save', company.toMap());
   }
 
   // ── Currencies ───────────────────────────────────────────────────────────

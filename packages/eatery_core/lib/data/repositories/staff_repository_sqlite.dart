@@ -1,4 +1,5 @@
 import 'package:eatery_core/data/models/eatery_db.dart';
+import 'package:eatery_core/data/sync/mutation_hook.dart';
 
 import '../database/native/eatery_store.dart';
 import 'staff_repository.dart';
@@ -32,17 +33,19 @@ class SqliteStaffRepository implements StaffRepository {
       staff.isActive ? 1 : 0,
     ];
 
+    final int id;
     if (staff.id != null && _exists(staff.id!)) {
+      id = staff.id!;
       _store.execute(
         'UPDATE staff SET name=?, photo=?, phone=?, type=?, isActive=? WHERE id=?',
-        [...values, staff.id],
+        [...values, id],
       );
-      return staff.id!;
+    } else {
+      _store.execute('INSERT INTO staff ($_columns) VALUES (?,?,?,?,?)', values);
+      id = _store.queryScalar('SELECT last_insert_rowid()') as int;
+      staff = staff.copyWith(id: id);
     }
-
-    _store.execute('INSERT INTO staff ($_columns) VALUES (?,?,?,?,?)', values);
-    final id = _store.queryScalar('SELECT last_insert_rowid()') as int;
-    staff = staff.copyWith(id: id);
+    notifyMutation('staff', id, 'save', staff.toMap());
     return id;
   }
 
@@ -77,6 +80,8 @@ class SqliteStaffRepository implements StaffRepository {
         s.type.id,
         s.isActive ? 1 : 0,
       ]);
+      final id = _store.queryScalar('SELECT last_insert_rowid()') as int;
+      notifyMutation('staff', id, 'save', s.toMap());
     }
   }
 

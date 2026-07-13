@@ -1,5 +1,6 @@
 import 'package:eatery_core/data/models/eatery_db.dart';
 import 'package:eatery_core/data/repositories/payment_repository.dart';
+import 'package:eatery_core/data/sync/mutation_hook.dart';
 
 import '../database/native/eatery_store.dart';
 
@@ -42,22 +43,24 @@ class SqlitePaymentRepository implements PaymentRepository {
       m['terminalId'],
     ];
 
+    final int id;
     if (payment.id != null && _exists(payment.id!)) {
+      id = payment.id!;
       _store.execute(
         'UPDATE payment SET orderId=?, date=?, amount=?, mode=?, reference=?, '
         'attachment=?, processorTransactionId=?, processorName=?, '
         'processorStatus=?, cardLastFour=?, terminalId=? WHERE id=?',
-        [...values, payment.id],
+        [...values, id],
       );
-      return payment.id!;
+    } else {
+      _store.execute(
+        'INSERT INTO payment ($_columns) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
+        values,
+      );
+      id = _store.queryScalar('SELECT last_insert_rowid()') as int;
+      payment = payment.copyWith(id: id);
     }
-
-    _store.execute(
-      'INSERT INTO payment ($_columns) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
-      values,
-    );
-    final id = _store.queryScalar('SELECT last_insert_rowid()') as int;
-    payment = payment.copyWith(id: id);
+    notifyMutation('payment', id, 'save', payment.toMap());
     return id;
   }
 

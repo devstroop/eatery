@@ -2,6 +2,7 @@ import 'package:eatery_core/data/database/eatery_database.dart';
 import 'package:eatery_core/data/models/eatery_db.dart';
 import 'package:eatery_core/data/repositories/customer_repository.dart';
 
+import 'package:eatery_core/data/sync/mutation_hook.dart';
 import '../database/native/eatery_store.dart';
 
 /// SQLite-backed implementation of [CustomerRepository], powered by the native
@@ -57,22 +58,24 @@ class SqliteCustomerRepository implements CustomerRepository {
       m['lastOrderAt'],
     ];
 
+    final int id;
     if (customer.id != null && _exists(customer.id!)) {
+      id = customer.id!;
       _store.execute(
         'UPDATE customer SET '
         'name=?, phone=?, address=?, landmark=?, latitude=?, longitude=?, '
         'isActive=?, lastOrderAt=? WHERE id=?',
-        [...values, customer.id],
+        [...values, id],
       );
-      return customer.id!;
+    } else {
+      _store.execute(
+        'INSERT INTO customer ($_columns) VALUES (?,?,?,?,?,?,?,?)',
+        values,
+      );
+      id = _store.queryScalar('SELECT last_insert_rowid()') as int;
+      customer = customer.copyWith(id: id);
     }
-
-    _store.execute(
-      'INSERT INTO customer ($_columns) VALUES (?,?,?,?,?,?,?,?)',
-      values,
-    );
-    final id = _store.queryScalar('SELECT last_insert_rowid()') as int;
-    customer = customer.copyWith(id: id);
+    notifyMutation('customer', id, 'save', customer.toMap());
     return id;
   }
 
