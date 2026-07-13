@@ -28,6 +28,31 @@ export 'theme/app_theme.dart';
 export 'extensions/double_ext.dart';
 export 'extensions/string_ext.dart';
 
+/// Repositories
+export 'data/repositories/company_repository.dart';
+export 'data/repositories/company_repository_sqlite.dart';
+export 'data/repositories/customer_repository.dart';
+export 'data/repositories/customer_repository_sqlite.dart';
+export 'data/repositories/dining_table_repository.dart';
+export 'data/repositories/dining_table_repository_sqlite.dart';
+export 'data/repositories/order_repository.dart';
+export 'data/repositories/order_repository_sqlite.dart';
+export 'data/repositories/payment_repository.dart';
+export 'data/repositories/payment_repository_sqlite.dart';
+export 'data/repositories/printer_repository.dart';
+export 'data/repositories/product_repository.dart';
+export 'data/repositories/product_repository_sqlite.dart';
+export 'data/repositories/sqlite_preference_store.dart';
+export 'data/repositories/staff_repository.dart';
+export 'data/repositories/staff_repository_sqlite.dart';
+export 'data/repositories/subscription_repository.dart';
+export 'data/repositories/subscription_repository_sqlite.dart';
+export 'data/repositories/tax_repository.dart';
+export 'data/repositories/tax_repository_sqlite.dart';
+
+/// Core widgets
+export 'widgets/widgets.dart';
+
 /// Utils
 export 'utils/device_id.dart';
 export 'utils/responsive.dart';

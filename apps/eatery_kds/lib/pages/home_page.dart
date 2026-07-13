@@ -6,16 +6,17 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Eatery KDS')),
-      body: Center(
+    return AppPageShell(
+      title: 'Eatery KDS',
+      showBack: false,
+      child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(Icons.kitchen, size: 64, color: AppColors.primary),
-            const SizedBox(height: 24),
+            AppSpacing.gapLg,
             Text('Eatery KDS', style: AppTypography.headlineMedium),
-            const SizedBox(height: 8),
+            AppSpacing.gapSm,
             Text('Kitchen Display System',
                 style: AppTypography.bodyMedium),
           ],

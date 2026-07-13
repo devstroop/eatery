@@ -6,18 +6,24 @@ class HomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Eatery Waiter')),
-      body: Center(
+    return AppPageShell(
+      title: 'Eatery Waiter',
+      showBack: false,
+      child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
             Icon(Icons.restaurant_menu, size: 64, color: AppColors.primary),
-            const SizedBox(height: 24),
+            AppSpacing.gapLg,
             Text('Eatery Waiter', style: AppTypography.headlineMedium),
-            const SizedBox(height: 8),
+            AppSpacing.gapSm,
             Text('Floor staff order management',
                 style: AppTypography.bodyMedium),
+            AppSpacing.gapLg,
+            AppButton.primary(
+              label: 'Take Order',
+              onPressed: () {},
+            ),
           ],
         ),
       ),
