@@ -16,6 +16,11 @@ typedef EsOpenDart = Pointer<EsStore> Function(Pointer<Utf8> path);
 typedef _EsCloseNative = Void Function(Pointer<EsStore> store);
 typedef EsCloseDart = void Function(Pointer<EsStore> store);
 
+typedef _EsKeyNative =
+    Void Function(Pointer<EsStore> store, Pointer<Uint8> key, Int32 keyLen);
+typedef EsKeyDart =
+    void Function(Pointer<EsStore> store, Pointer<Uint8> key, int keyLen);
+
 typedef _EsExecNative =
     LongLong Function(
       Pointer<EsStore> store,
@@ -59,6 +64,7 @@ class EateryStoreBindings {
   EateryStoreBindings(DynamicLibrary lib)
     : esOpen = lib.lookupFunction<_EsOpenNative, EsOpenDart>('es_open'),
       esClose = lib.lookupFunction<_EsCloseNative, EsCloseDart>('es_close'),
+      esKey = lib.lookupFunction<_EsKeyNative, EsKeyDart>('es_key'),
       esExec = lib.lookupFunction<_EsExecNative, EsExecDart>('es_exec'),
       esQuery = lib.lookupFunction<_EsQueryNative, EsQueryDart>('es_query'),
       esLastError = lib.lookupFunction<_EsLastErrorNative, EsLastErrorDart>(
@@ -71,6 +77,7 @@ class EateryStoreBindings {
 
   final EsOpenDart esOpen;
   final EsCloseDart esClose;
+  final EsKeyDart esKey;
   final EsExecDart esExec;
   final EsQueryDart esQuery;
   final EsLastErrorDart esLastError;

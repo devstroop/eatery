@@ -54,6 +54,16 @@ export fn es_open(path: [*:0]const u8) ?*Store {
     return store;
 }
 
+/// Set the SQLCipher encryption key. Must be called immediately after es_open
+/// when encryption is enabled. No-op when using plain SQLite (sqlite3_key
+/// won't exist as a symbol, so the check is compile-time).
+export fn es_key(store: ?*Store, key: [*c]const u8, key_len: c_int) void {
+    const s = store orelse return;
+    if (@hasDecl(c, "sqlite3_key")) {
+        _ = c.sqlite3_key(s.db, key, key_len);
+    }
+}
+
 export fn es_close(store: ?*Store) void {
     const s = store orelse return;
     _ = c.sqlite3_close(s.db);

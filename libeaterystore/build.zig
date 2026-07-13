@@ -20,8 +20,12 @@ pub fn build(b: *std.Build) void {
     const is_android =
         target_os == .linux and (target_abi == .android or target_abi == .androideabi);
 
-    // SQLite amalgamation compile flags. These match the recommended
-    // production configuration and disable features we do not use.
+    // Optional: link SQLCipher for AES-256 at-rest encryption.
+    //   zig build shared-lib -Denable-encryption
+    // Requires libsqlcipher installed (brew install sqlcipher on macOS).
+    const enable_encryption = b.option(bool, "enable-encryption", "Link SQLCipher instead of plain SQLite") orelse false;
+
+    // Compile flags for the SQLite amalgamation (unused when encryption is on).
     const sqlite_flags = [_][]const u8{
         "-DSQLITE_ENABLE_FTS5=1",
         "-DSQLITE_ENABLE_JSON1=1",
@@ -51,7 +55,7 @@ pub fn build(b: *std.Build) void {
             .strip = optimize != .Debug and target_os != .macos,
         }),
     });
-    configure(b, shared_lib, &sqlite_flags, target_os, is_android, target_arch);
+    configure(b, shared_lib, &sqlite_flags, target_os, is_android, target_arch, enable_encryption);
     if (target_os == .macos) {
         shared_lib.headerpad_max_install_names = true;
     }
@@ -72,7 +76,7 @@ pub fn build(b: *std.Build) void {
             .strip = optimize != .Debug,
         }),
     });
-    configure(b, static_lib, &sqlite_flags, target_os, is_android, target_arch);
+    configure(b, static_lib, &sqlite_flags, target_os, is_android, target_arch, enable_encryption);
     const install_static = b.addInstallArtifact(static_lib, .{});
     const static_step = b.step("static-lib", "Build static library (libeaterystore.a)");
     static_step.dependOn(&install_static.step);
@@ -81,7 +85,7 @@ pub fn build(b: *std.Build) void {
     b.installArtifact(shared_lib);
 }
 
-/// Attach the vendored SQLite amalgamation and libc to a compile step.
+/// Attach the SQLite backend (plain or SQLCipher) and libc.
 fn configure(
     b: *std.Build,
     lib: *std.Build.Step.Compile,
@@ -89,17 +93,49 @@ fn configure(
     target_os: std.Target.Os.Tag,
     is_android: bool,
     arch: std.Target.Cpu.Arch,
+    enable_encryption: bool,
 ) void {
-    lib.addIncludePath(b.path("deps/sqlite"));
     lib.addIncludePath(b.path("include"));
-    lib.addCSourceFile(.{
-        .file = b.path("deps/sqlite/sqlite3.c"),
-        .flags = sqlite_flags,
-    });
+
+    if (enable_encryption) {
+        // SQLCipher — drop-in replacement, same C API.
+        // Defines SQLCIPHER so store.zig calls sqlite3_key() on open.
+        lib.root_module.addCMacro("SQLCIPHER", "1");
+        // Homebrew-installed SQLCipher on macOS.
+        if (target_os == .macos) {
+            for ([_][]const u8{
+                "/opt/homebrew/opt/sqlcipher/include",
+                "/usr/local/opt/sqlcipher/include",
+                "/opt/homebrew/include",
+                "/usr/local/include",
+            }) |p| {
+                if (std.fs.cwd().access(p, .{})) |_| {
+                    lib.addIncludePath(.{ .cwd_relative = p });
+                    break;
+                } else |_| continue;
+            }
+            for ([_][]const u8{
+                "/opt/homebrew/opt/sqlcipher/lib",
+                "/usr/local/opt/sqlcipher/lib",
+            }) |p| {
+                if (std.fs.cwd().access(p, .{})) |_| {
+                    lib.addLibraryPath(.{ .cwd_relative = p });
+                    break;
+                } else |_| continue;
+            }
+        }
+        lib.linkSystemLibrary2("sqlcipher", .{ .use_pkg_config = .no });
+    } else {
+        // Plain SQLite amalgamation.
+        lib.addIncludePath(b.path("deps/sqlite"));
+        lib.addCSourceFile(.{
+            .file = b.path("deps/sqlite/sqlite3.c"),
+            .flags = sqlite_flags,
+        });
+    }
+
     if (is_android) setupAndroidNdk(b, lib, arch);
     if (target_os == .ios) {
-        // iOS SDK sysroot for system headers (stdio.h, sys/types.h, ...).
-        // The versionless `iPhoneOS.sdk` path tracks the installed SDK.
         lib.addSystemIncludePath(.{
             .cwd_relative = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include",
         });

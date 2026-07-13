@@ -58,6 +58,17 @@ class EateryStore {
   /// Native library version string.
   String get version => _bindings.esVersion().toDartString();
 
+  /// Set the SQLCipher encryption key. Must be called immediately after open
+  /// when using an encrypted database. No-op with plain SQLite (the symbol
+  /// exists but the underlying library is compiled without SQLCipher).
+  void setKey(String key) {
+    final keyBytes = utf8.encode(key);
+    final keyPtr = malloc.allocate<Uint8>(keyBytes.length);
+    keyPtr.asTypedList(keyBytes.length).setAll(0, keyBytes);
+    _bindings.esKey(_handle, keyPtr, keyBytes.length);
+    malloc.free(keyPtr);
+  }
+
   /// Executes a non-query statement (INSERT/UPDATE/DELETE/DDL). Returns the
   /// number of affected rows. Multiple `;`-separated statements are supported
   /// (params bind to the first statement only — intended for schema setup).
