@@ -3,7 +3,7 @@ import 'package:eatery/core/extensions/string_ext.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:eatery/presentation/providers/order_provider.dart';
 
 class ForgotPasswordBottomSheet extends ConsumerStatefulWidget {
   final BuildContext context;
@@ -119,14 +119,10 @@ class _ForgotPasswordBottomSheetState
                       return null;
                     },
                     onChanged: (value) {
-                      var temp = ref
-                          .read(appDatabaseProvider)
-                          .subscriptionBox
-                          .values
-                          .singleWhere(
-                            (element) => element.id == company!.subscriptionId!,
-                          );
-                      if (value == temp.purchaseCode) {
+                      final sub = ref
+                          .read(subscriptionRepositoryProvider)
+                          .getFirst();
+                      if (sub != null && value == sub.purchaseCode) {
                         setState(() {
                           verified = true;
                         });
@@ -192,10 +188,7 @@ class _ForgotPasswordBottomSheetState
                 if (verified)
                   Row(
                     children: [
-                      AppButton.primary(
-                        onPressed: _submit,
-                        label: 'Reset',
-                      ),
+                      AppButton.primary(onPressed: _submit, label: 'Reset'),
                     ],
                   ),
                 const SizedBox(height: 20.0),

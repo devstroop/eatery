@@ -4,7 +4,6 @@ import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/presentation/providers/company_provider.dart';
 
 final _pageColor = AppColors.primary;
@@ -27,7 +26,7 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
   }
 
   Future postInit() async {
-    company = ref.read(appDatabaseProvider).companyBox.values.first;
+    company = ref.read(companyRepositoryProvider).getCurrentCompany();
     // company = await CompanyLoader(widget.database).load(context);
     setState(() {
       selectedLogo = LibraryImage(company!.logo);

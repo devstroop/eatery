@@ -9,8 +9,10 @@ void main() {
     late GoRouter router;
 
     setUp(() {
+      final store = EateryStore.open(':memory:');
       router = createAppRouter(
-        EateryDatabase(dataDir: '', store: EateryStore.open(':memory:')),
+        EateryDatabase(dataDir: '', store: store),
+        store: store,
       );
     });
 

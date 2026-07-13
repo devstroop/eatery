@@ -1,6 +1,7 @@
 import 'package:eatery/core/theme/app_spacing.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:eatery/core/widgets/widgets.dart';
@@ -36,10 +37,12 @@ class _DiningTableCategoriesPageState
         },
       ),
       child:
-          ref.read(appDatabaseProvider).diningTableCategoryBox.values.isNotEmpty
+          (ref.read(diningTableRepositoryProvider) as dynamic)
+              .getAllCategories()
+              .isNotEmpty
           ? ListView(
               children: [
-                ...ref.read(appDatabaseProvider).diningTableCategoryBox.values.map((
+                ...(ref.read(diningTableRepositoryProvider) as dynamic).getAllCategories().map((
                   each,
                 ) {
                   return ListTile(
@@ -66,11 +69,11 @@ class _DiningTableCategoriesPageState
                               builder: (context) {
                                 // category exists in dining table then show message and return
                                 if (ref
-                                    .read(appDatabaseProvider)
-                                    .diningTableBox
-                                    .values
+                                    .read(diningTableRepositoryProvider)
+                                    .getAllTables()
                                     .any(
-                                      (element) => element.category == each.id,
+                                      (element) =>
+                                          element.category?.id == each.id,
                                     )) {
                                   return AlertDialog(
                                     title: const Text('Delete Category'),

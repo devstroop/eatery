@@ -1,7 +1,6 @@
 import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
-import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -35,19 +34,9 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
     super.initState();
     Future.delayed(Duration.zero, () {
       setState(() {
-        diningTableCategory =
-            ref
-                .read(appDatabaseProvider)
-                .diningTableCategoryBox
-                .values
-                .where((elem) => elem.id == widget.diningTable.category?.id)
-                .isNotEmpty
-            ? ref
-                  .read(appDatabaseProvider)
-                  .diningTableCategoryBox
-                  .values
-                  .where((elem) => elem.id == widget.diningTable.category?.id)
-                  .first
+        diningTableCategory = widget.diningTable.category?.id != null
+            ? (ref.read(diningTableRepositoryProvider) as dynamic)
+                  .getCategoryById(widget.diningTable.category!.id)
             : null;
         _controllerCategoryName.text = widget.diningTable.name;
         _controllerCategoryDescription.text =
@@ -129,7 +118,9 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
                 const SizedBox(height: 12.0),
                 Text(
                   'Category',
-                  style: AppTypography.labelMedium.copyWith(color: AppColors.black600),
+                  style: AppTypography.labelMedium.copyWith(
+                    color: AppColors.black600,
+                  ),
                 ),
                 Container(
                   width: double.maxFinite,
@@ -147,10 +138,8 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
                           });
                         },
                       ),
-                      ...ref
-                          .read(appDatabaseProvider)
-                          .diningTableCategoryBox
-                          .values
+                      ...(ref.read(diningTableRepositoryProvider) as dynamic)
+                          .getAllCategories()
                           .map((e) {
                             return PosCategoryWidget(
                               active: diningTableCategory?.id == e.id,
@@ -248,7 +237,10 @@ class DiningTableStatusWidget extends StatelessWidget {
         child: Center(
           child: Text(
             status.name,
-            style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500, color: AppColors.white),
+            style: AppTypography.titleMedium.copyWith(
+              fontWeight: FontWeight.w500,
+              color: AppColors.white,
+            ),
           ),
         ),
       ),

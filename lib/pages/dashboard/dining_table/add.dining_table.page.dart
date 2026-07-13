@@ -1,7 +1,6 @@
 import 'package:eatery/core/widgets/app_page_shell.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
-import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -117,7 +116,9 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
                 const SizedBox(height: 12.0),
                 Text(
                   'Category',
-                  style: AppTypography.labelMedium.copyWith(color: AppColors.black600),
+                  style: AppTypography.labelMedium.copyWith(
+                    color: AppColors.black600,
+                  ),
                 ),
                 Container(
                   width: double.maxFinite,
@@ -135,10 +136,8 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
                           });
                         },
                       ),
-                      ...ref
-                          .read(appDatabaseProvider)
-                          .diningTableCategoryBox
-                          .values
+                      ...(ref.read(diningTableRepositoryProvider) as dynamic)
+                          .getAllCategories()
                           .map((e) {
                             return PosCategoryWidget(
                               active: diningTableCategory?.id == e.id,

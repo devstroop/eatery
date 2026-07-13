@@ -9,6 +9,7 @@ import 'package:eatery/data/database/native/eatery_store.dart';
 import 'package:eatery/data/database/native/store_config.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/functions/order.function.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -92,6 +93,8 @@ Future setupDataAndInitDB() async {
     appStore = store;
     // Compatibility wrapper for legacy pages that still read appDatabaseProvider.
     appDatabase = EateryDatabase(dataDir: AppFileSystem.dataDir, store: store);
+    // Init static helpers that need the native store.
+    OrderFunction.init(store);
   }
 
   await FastCachedImageConfig.init(
@@ -114,6 +117,7 @@ class MyApp extends StatelessWidget {
         routerConfig: createAppRouter(
           appDatabase ??
               EateryDatabase(dataDir: '', store: EateryStore.open(':memory:')),
+          store: appStore,
         ),
       ),
     );

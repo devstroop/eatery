@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eatery/data/database/eatery_database.dart';
+import 'package:eatery/data/repositories/company_repository_sqlite.dart';
 import 'package:eatery/data/models/product/product.dart';
 import 'package:eatery/pages/authentication/login.page.dart';
 import 'package:eatery/pages/dashboard/pos/views/kProduct.view.dart';
@@ -55,14 +56,20 @@ import 'package:eatery/pages/dashboard/data/import.page.dart';
 import 'package:eatery/pages/activation/upgrade.page.dart';
 import 'package:eatery/pages/authentication/reset-pin.dart';
 import 'package:eatery/pages/authentication/logout.page.dart';
+import 'package:eatery/data/database/native/eatery_store.dart';
 import 'package:go_router/go_router.dart';
 
-GoRouter createAppRouter(EateryDatabase db) {
+GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
+  String? password;
+  try {
+    final repo = SqliteCompanyRepository(
+      store: store ?? EateryStore.open(':memory:'),
+    );
+    password = repo.getCurrentCompany()?.password;
+  } catch (_) {}
   return GoRouter(
     initialLocation: db.hasCompany
-        ? (db.companyBox.values.first.password != null
-              ? '/login'
-              : '/dashboard')
+        ? (password != null ? '/login' : '/dashboard')
         : '/',
     routes: [
       GoRoute(

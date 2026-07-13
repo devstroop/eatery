@@ -1,7 +1,7 @@
 import 'package:eatery/references.dart';
 import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:eatery/presentation/providers/order_provider.dart';
 import 'package:go_router/go_router.dart';
 
 class UpgradeNotification extends ConsumerStatefulWidget {
@@ -19,14 +19,7 @@ class UpgradeNotification extends ConsumerStatefulWidget {
 class _UpgradeNotificationState extends ConsumerState<UpgradeNotification> {
   @override
   Widget build(BuildContext context) {
-    return ref
-                .read(appDatabaseProvider)
-                .subscriptionBox
-                .values
-                .singleWhere(
-                  (element) => element.id == widget.company!.subscriptionId!,
-                )
-                .purchaseCode ==
+    return ref.read(subscriptionRepositoryProvider).getFirst()?.purchaseCode ==
             null
         ? Container(
             margin: widget.margin,
@@ -35,9 +28,14 @@ class _UpgradeNotificationState extends ConsumerState<UpgradeNotification> {
             child: NotificationWidget(
               message: 'Activate License',
               header: "Upgrade",
-              leading: const Icon(Icons.workspace_premium, color: AppColors.white),
+              leading: const Icon(
+                Icons.workspace_premium,
+                color: AppColors.white,
+              ),
               onTap: () {
-                GoRouter.of(context).pushNamed('upgrade', extra: widget.company).then((_) async {
+                GoRouter.of(
+                  context,
+                ).pushNamed('upgrade', extra: widget.company).then((_) async {
                   setState(() {
                     // DO CHANGE HERE
                   });

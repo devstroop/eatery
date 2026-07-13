@@ -28,10 +28,8 @@ class _ShowCurrencyRegionPageState
         String? currencyCode = ref.read(companyProvider)?.currencyCode;
         KCurrency? curr = currencyCode != null
             ? ref
-                  .read(appDatabaseProvider)
-                  .currencyBox
-                  .values
-                  .singleWhere((element) => element.code == currencyCode)
+                  .read(companyRepositoryProvider)
+                  .getCurrencyByCode(currencyCode)
             : null;
         selectedCurrency = curr != null
             ? Currency.from(json: curr.toMap())
@@ -126,7 +124,22 @@ class _ShowCurrencyRegionPageState
                   ? KCurrency.fromMap(selectedCurrency!.toJson())
                   : null;
               if (currency != null) {
-                ref.read(appDatabaseProvider).currencyBox.add(currency);
+                ref.read(eateryStoreProvider).execute(
+                  'INSERT INTO currency (code, name, symbol, flag, number, decimal_digits, name_plural, symbol_on_left, decimal_separator, thousands_separator, space_between_amount_and_symbol) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
+                  [
+                    currency.code,
+                    currency.name,
+                    currency.symbol,
+                    currency.flag,
+                    currency.number,
+                    currency.decimalDigits,
+                    currency.namePlural,
+                    currency.symbolOnLeft ? 1 : 0,
+                    currency.decimalSeparator,
+                    currency.thousandsSeparator,
+                    currency.spaceBetweenAmountAndSymbol ? 1 : 0,
+                  ],
+                );
               }
               final company = ref
                   .read(companyRepositoryProvider)

@@ -6,6 +6,7 @@ import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
+import 'package:eatery/presentation/providers/product_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 
@@ -376,7 +377,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
   Future<void> _downloadDemoData(BuildContext context) async {
     ProgressDialog pd = ProgressDialog(context: context);
     pd.show();
-    final db = ref.read(appDatabaseProvider);
+    final store = ref.read(eateryStoreProvider);
     List<String> logs = [];
 
     String baseUrl =
@@ -403,8 +404,10 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           return Customer(phone: element['phone']);
         }
       });
-      await db.customerBox.clear();
-      await db.customerBox.addAll(custs);
+      store.execute('DELETE FROM customer');
+      for (final c in custs) {
+        await ref.read(customerRepositoryProvider).saveCustomer(c);
+      }
       final msg = '✅ ${custs.length} Customers downloaded successfully';
       logs.add(msg);
       pd.update(msg: msg);
@@ -435,8 +438,10 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           return DiningTableCategory(name: element['name']);
         }
       });
-      await db.diningTableCategoryBox.clear();
-      await db.diningTableCategoryBox.addAll(dtCats);
+      store.execute('DELETE FROM dining_table_category');
+      for (final c in dtCats) {
+        (ref.read(diningTableRepositoryProvider) as dynamic).saveCategory(c);
+      }
       final msg =
           '✅ ${dtCats.length} Dining Table Categories downloaded successfully';
       logs.add(msg);
@@ -468,8 +473,10 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           return DiningTable(name: element['name']);
         }
       });
-      await db.diningTableBox.clear();
-      await db.diningTableBox.addAll(diningTables);
+      store.execute('DELETE FROM dining_table');
+      for (final t in diningTables) {
+        await ref.read(diningTableRepositoryProvider).saveTable(t);
+      }
       final msg =
           '✅ ${diningTables.length} Dining Tables downloaded successfully';
       logs.add(msg);
@@ -501,8 +508,10 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           rethrow;
         }
       });
-      await db.orderBox.clear();
-      await db.orderBox.addAll(orders);
+      store.execute('DELETE FROM "order"');
+      for (final o in orders) {
+        await ref.read(orderRepositoryProvider).saveOrder(o);
+      }
       final msg = '✅ ${orders.length} Orders downloaded successfully';
       logs.add(msg);
       pd.update(msg: msg);
@@ -533,8 +542,10 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           rethrow;
         }
       });
-      await db.paymentBox.clear();
-      await db.paymentBox.addAll(payments);
+      store.execute('DELETE FROM payment');
+      for (final p in payments) {
+        await ref.read(paymentRepositoryProvider).savePayment(p);
+      }
       final msg = '✅ ${payments.length} Payments downloaded successfully';
       logs.add(msg);
       pd.update(msg: msg);
@@ -567,8 +578,10 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           return ProductCategory(name: element['name']);
         }
       });
-      await db.productCategoryBox.clear();
-      await db.productCategoryBox.addAll(categories);
+      store.execute('DELETE FROM product_category');
+      for (final c in categories) {
+        await ref.read(productRepositoryProvider).saveCategory(c);
+      }
       final msg =
           '✅ ${categories.length} Product Categories downloaded successfully';
       logs.add(msg);
@@ -606,8 +619,10 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           );
         }
       });
-      await db.productBox.clear();
-      await db.productBox.addAll(products);
+      store.execute('DELETE FROM product');
+      for (final p in products) {
+        await ref.read(productRepositoryProvider).saveProduct(p);
+      }
       final msg = '✅ ${products.length} Products downloaded successfully';
       logs.add(msg);
       pd.update(msg: msg);
@@ -642,9 +657,10 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           );
         }
       });
-      final staffList = ref.read(staffRepositoryProvider).getAllStaff();
       await ref.read(staffRepositoryProvider).clearAll();
-      await ref.read(staffRepositoryProvider).addAll(staffs.toList());
+      for (final s in staffs) {
+        await ref.read(staffRepositoryProvider).saveStaff(s);
+      }
       final msg = '✅ ${staffs.length} Staffs downloaded successfully';
       logs.add(msg);
       pd.update(msg: msg);
@@ -679,8 +695,10 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           );
         }
       });
-      await db.taxSlabBox.clear();
-      await db.taxSlabBox.addAll(taxSlabs);
+      store.execute('DELETE FROM tax_slab');
+      for (final t in taxSlabs) {
+        await ref.read(taxRepositoryProvider).saveTaxSlab(t);
+      }
       final msg = '✅ ${taxSlabs.length} Tax Slabs downloaded successfully';
       logs.add(msg);
       pd.update(msg: msg);

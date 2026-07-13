@@ -67,10 +67,8 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
       ),
       child: Column(
         children: [
-          if (ref
-              .read(appDatabaseProvider)
-              .diningTableCategoryBox
-              .values
+          if ((ref.read(diningTableRepositoryProvider) as dynamic)
+              .getAllCategories()
               .isNotEmpty)
             SizedBox(
               height: 60,
@@ -78,10 +76,8 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                 scrollDirection: Axis.horizontal,
                 children: [
                   const SizedBox(width: 10),
-                  ...ref
-                      .read(appDatabaseProvider)
-                      .diningTableCategoryBox
-                      .values
+                  ...(ref.read(diningTableRepositoryProvider) as dynamic)
+                      .getAllCategories()
                       .map((category) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -123,24 +119,10 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                     children: [
                       ...diningTables.map((diningTable) {
                         DiningTableCategory? category =
-                            ref
-                                .read(appDatabaseProvider)
-                                .diningTableCategoryBox
-                                .values
-                                .where(
-                                  (element) =>
-                                      element.id == diningTable.category?.id,
-                                )
-                                .isNotEmpty
-                            ? ref
-                                  .read(appDatabaseProvider)
-                                  .diningTableCategoryBox
-                                  .values
-                                  .where(
-                                    (element) =>
-                                        element.id == diningTable.category?.id,
-                                  )
-                                  .first
+                            diningTable.category?.id != null
+                            ? (ref.read(diningTableRepositoryProvider)
+                                      as dynamic)
+                                  .getCategoryById(diningTable.category!.id)
                             : null;
                         Order? order = diningTable.orderId != null
                             ? ref

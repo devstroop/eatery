@@ -4,6 +4,7 @@ import 'package:eatery/core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/presentation/providers/database_provider.dart';
 import 'package:eatery/presentation/providers/order_provider.dart';
+import 'package:eatery/presentation/providers/company_provider.dart';
 import 'package:eatery/core/widgets/app_dialog.dart';
 import 'package:eatery/core/theme/app_typography.dart';
 
@@ -243,7 +244,22 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
                 decimalSeparator: currency!.decimalSeparator,
                 symbolOnLeft: currency!.symbolOnLeft,
               );
-              ref.read(appDatabaseProvider).currencyBox.add(kCurrency);
+              ref.read(eateryStoreProvider).execute(
+                'INSERT INTO currency (code, name, symbol, flag, number, decimal_digits, name_plural, symbol_on_left, decimal_separator, thousands_separator, space_between_amount_and_symbol) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
+                [
+                  kCurrency.code,
+                  kCurrency.name,
+                  kCurrency.symbol,
+                  kCurrency.flag,
+                  kCurrency.number,
+                  kCurrency.decimalDigits,
+                  kCurrency.namePlural,
+                  kCurrency.symbolOnLeft ? 1 : 0,
+                  kCurrency.decimalSeparator,
+                  kCurrency.thousandsSeparator,
+                  kCurrency.spaceBetweenAmountAndSymbol ? 1 : 0,
+                ],
+              );
             }
             // COMPANY
             Company company = Company(
@@ -259,7 +275,7 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
               subscriptionId: subscription.id,
               currencyCode: kCurrency?.code,
             );
-            ref.read(appDatabaseProvider).companyBox.add(company);
+            ref.read(companyRepositoryProvider).saveCompany(company);
             Navigator.of(this.context).pushAndRemoveUntil(
               MaterialPageRoute(
                 builder: (BuildContext context) =>
