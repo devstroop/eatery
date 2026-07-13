@@ -28,7 +28,12 @@ class SyncClient {
 
   WebSocketChannel? _channel;
   Timer? _pushTimer;
+  Timer? _reconnectTimer;
   bool _connected = false;
+  int _reconnectAttempt = 0;
+
+  /// Maximum reconnect delay in seconds.
+  static const _maxReconnectDelay = 30;
 
   /// Connects to the sync host and starts listening.
   Future<void> connect() async {
@@ -36,11 +41,6 @@ class SyncClient {
       final uri = Uri.parse('ws://$host:$port');
       _channel = WebSocketChannel.connect(uri);
 
-      syncService.onSendMessage = (json) {
-        try {
-          _channel?.sink.add(json);
-        } catch (_) {}
-      };
       syncService.connectToHost(host, host);
 
       _channel!.stream.listen(
@@ -58,6 +58,7 @@ class SyncClient {
       );
 
       _connected = true;
+      _reconnectAttempt = 0;
 
       // Pull initial state from host
       final pullMsg = SyncMessage.opLogPull(
@@ -142,11 +143,16 @@ class SyncClient {
     }
   }
 
-  Timer? _reconnectTimer;
-
   void _scheduleReconnect() {
+    _reconnectAttempt++;
+    final delay = Duration(
+      seconds: (1 << (_reconnectAttempt - 1)).clamp(1, _maxReconnectDelay),
+    );
+    debugPrint(
+      'SyncClient: reconnect in ${delay.inSeconds}s (attempt $_reconnectAttempt)',
+    );
     _reconnectTimer?.cancel();
-    _reconnectTimer = Timer(const Duration(seconds: 5), () {
+    _reconnectTimer = Timer(delay, () {
       if (!_connected) connect();
     });
   }

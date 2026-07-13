@@ -50,9 +50,6 @@ class SyncServer {
       port,
     );
 
-    syncService.onSendMessage = (json) {
-      _broadcastRaw(json);
-    };
     syncService.becomeHost();
 
     // Broadcast heartbeats to all clients
@@ -88,10 +85,7 @@ class SyncServer {
   }
 
   void _broadcast(SyncMessage msg) {
-    _broadcastRaw(msg.toJsonString());
-  }
-
-  void _broadcastRaw(String json) {
+    final json = msg.toJsonString();
     for (final client in _clients.toList()) {
       try {
         client.sink.add(json);

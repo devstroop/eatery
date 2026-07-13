@@ -45,7 +45,7 @@ void main() {
       store.close();
     });
 
-    OpLogEntry _entry({
+    OpLogEntry anEntry({
       required String entityType,
       required int entityId,
       String operation = 'save',
@@ -63,13 +63,13 @@ void main() {
     }
 
     test('inserts a product row from entry data', () {
-      final entry = _entry(
+      final e = anEntry(
         entityType: 'product',
         entityId: 1,
         data: {'name': 'Mocha', 'mrpPrice': 5.5, 'type': 0, 'isActive': 1},
       );
 
-      coordinator.syncService.receiveEntries([entry]);
+      coordinator.syncService.receiveEntries([e]);
 
       final rows = store.query('SELECT * FROM product WHERE id = ?', [1]);
       expect(rows, hasLength(1));
@@ -86,12 +86,12 @@ void main() {
       );
 
       // Then delete via sync
-      final entry = _entry(
+      final e = anEntry(
         entityType: 'product',
         entityId: 1,
         operation: 'delete',
       );
-      coordinator.syncService.receiveEntries([entry]);
+      coordinator.syncService.receiveEntries([e]);
 
       final rows = store.query('SELECT * FROM product WHERE id = ?', [1]);
       expect(rows, isEmpty);
@@ -106,12 +106,12 @@ void main() {
       );
 
       // Apply update via sync
-      final entry = _entry(
+      final e = anEntry(
         entityType: 'product',
         entityId: 1,
         data: {'name': 'Updated', 'mrpPrice': 3.0, 'type': 0, 'isActive': 1},
       );
-      coordinator.syncService.receiveEntries([entry]);
+      coordinator.syncService.receiveEntries([e]);
 
       final rows = store.query('SELECT * FROM product WHERE id = ?', [1]);
       expect(rows, hasLength(1));
@@ -120,12 +120,12 @@ void main() {
     });
 
     test('maps order entityType to orders table', () {
-      final entry = _entry(
+      final e = anEntry(
         entityType: 'order',
         entityId: 1,
         data: {'status': 1},
       );
-      coordinator.syncService.receiveEntries([entry]);
+      coordinator.syncService.receiveEntries([e]);
 
       final rows = store.query('SELECT * FROM orders WHERE id = ?', [1]);
       expect(rows, hasLength(1));
@@ -134,14 +134,14 @@ void main() {
 
     test('rejects unknown entity types silently', () {
       // This should produce a debugPrint but not crash and not insert
-      final entry = _entry(
+      final e = anEntry(
         entityType: 'unknown_entity',
         entityId: 1,
         data: {'name': 'Should not appear'},
       );
 
       // Should not throw
-      coordinator.syncService.receiveEntries([entry]);
+      coordinator.syncService.receiveEntries([e]);
 
       final rows = store.query('SELECT * FROM unknown_entity');
       expect(rows, isEmpty);
@@ -154,12 +154,12 @@ void main() {
         [1, 'Void Me', 1.0, 0, 1],
       );
 
-      final entry = _entry(
+      final e = anEntry(
         entityType: 'product',
         entityId: 1,
         operation: 'void',
       );
-      coordinator.syncService.receiveEntries([entry]);
+      coordinator.syncService.receiveEntries([e]);
 
       final rows = store.query('SELECT * FROM product WHERE id = ?', [1]);
       expect(rows, isEmpty);

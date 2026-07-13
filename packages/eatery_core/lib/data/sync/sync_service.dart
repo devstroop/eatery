@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:eatery_core/data/sync/op_log_entry.dart';
 import 'package:eatery_core/data/sync/op_log_service.dart';
-import 'package:eatery_core/data/sync/sync_message.dart';
 
 /// Possible roles for a device in the sync network.
 enum SyncRole {
@@ -46,9 +45,6 @@ class SyncStatus {
   });
 }
 
-/// Signature for sending a raw JSON string over the active transport.
-typedef SendMessageCallback = void Function(String message);
-
 /// High-level sync service that manages the device's role in the network,
 /// heartbeat monitoring, host election, and push/pull of OpLog entries.
 class SyncService {
@@ -60,16 +56,9 @@ class SyncService {
   String? _connectedHostId;
   String? _connectedHostName;
   int _lastSyncedClock = 0;
-  Timer? _heartbeatTimer;
   Timer? _hostCheckTimer;
   DateTime? _lastHeartbeat;
   int _missedHeartbeats = 0;
-
-  /// Callback invoked by [_sendMessage] to actually transmit a message.
-  ///
-  /// Set by [SyncClient] / [SyncServer] to their transport-specific send
-  /// function.  When null, [#_sendMessage] is a no-op.
-  SendMessageCallback? onSendMessage;
 
   // Callbacks for state changes
   final void Function(SyncStatus status)? onStatusChange;
@@ -108,7 +97,6 @@ class SyncService {
     _connectionState = HostConnectionState.connected;
     _connectedHostId = deviceId;
     _connectedHostName = '${deviceId}_host';
-    _startHeartbeat();
     onStatusChange?.call(status);
     onHostElected?.call();
   }
@@ -118,7 +106,6 @@ class SyncService {
     _connectionState = HostConnectionState.disconnected;
     _connectedHostId = null;
     _connectedHostName = null;
-    _stopHeartbeat();
     onStatusChange?.call(status);
   }
 
@@ -127,7 +114,6 @@ class SyncService {
     _connectionState = HostConnectionState.disconnected;
     _connectedHostId = null;
     _connectedHostName = null;
-    _stopHeartbeat();
     onStatusChange?.call(status);
   }
 
@@ -150,7 +136,6 @@ class SyncService {
     _connectedHostId = null;
     _connectedHostName = null;
     _stopHostCheck();
-    _stopHeartbeat();
     onStatusChange?.call(status);
   }
 
@@ -189,7 +174,7 @@ class SyncService {
     }
   }
 
-  // ── Host election (for leaf nodes when host is lost) ──
+  // ── Host loss detection (for leaf nodes when host is lost) ──
 
   void detectHostLoss() {
     _missedHeartbeats++;
@@ -198,37 +183,10 @@ class SyncService {
       onHostLost?.call();
       _connectionState = HostConnectionState.reconnecting;
       onStatusChange?.call(status);
-
-      // Broadcast vote for new host
-      final voteMsg = SyncMessage.hostVote(
-        deviceId: deviceId,
-        clock: _opLogService.clock,
-        uptimeSeconds: _getUptimeSeconds(),
-      );
-      _sendMessage(voteMsg);
     }
   }
 
   // ── Internal ──
-
-  void _startHeartbeat() {
-    _heartbeatTimer?.cancel();
-    _heartbeatTimer = Timer.periodic(const Duration(seconds: 5), (_) {
-      if (_role == SyncRole.host) {
-        final msg = SyncMessage.hostAnnounce(
-          deviceId: deviceId,
-          clock: _opLogService.clock,
-          deviceName: deviceId,
-        );
-        _sendMessage(msg);
-      }
-    });
-  }
-
-  void _stopHeartbeat() {
-    _heartbeatTimer?.cancel();
-    _heartbeatTimer = null;
-  }
 
   void _startHostCheck() {
     _hostCheckTimer?.cancel();
@@ -249,18 +207,8 @@ class SyncService {
     _hostCheckTimer = null;
   }
 
-  int _getUptimeSeconds() {
-    // Placeholder — in production, track process start time
-    return DateTime.now().millisecondsSinceEpoch ~/ 1000;
-  }
-
-  void _sendMessage(SyncMessage message) {
-    onSendMessage?.call(message.toJsonString());
-  }
-
   /// Dispose timers on service teardown.
   void dispose() {
-    _stopHeartbeat();
     _stopHostCheck();
   }
 }
