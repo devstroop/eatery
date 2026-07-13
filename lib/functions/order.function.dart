@@ -1,6 +1,6 @@
-import '../core/extensions/double_ext.dart';
-import '../data/database/native/eatery_store.dart';
-import '../data/models/eatery_db.dart';
+import 'package:eatery_core/extensions/double_ext.dart';
+import 'package:eatery_core/data/database/native/eatery_store.dart';
+import 'package:eatery_core/data/models/eatery_db.dart';
 
 class OrderFunction {
   static EateryStore? _store;

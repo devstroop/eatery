@@ -1,6 +1,6 @@
-import 'package:eatery/core/theme/app_typography.dart';
+import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_colors.dart';
 
 class MenuTile extends StatelessWidget {
   const MenuTile({Key? key, required this.title, this.subtitle, required this.prefixIcon, required this.postfixIcon, this.color, this.onTap}) : super(key: key);

@@ -6,14 +6,14 @@ export 'package:flutter/material.dart';
 export 'package:flutter/services.dart';
 export 'package:flutter/rendering.dart';
 // External packages by devstroop
-export 'package:eatery/data/models/eatery_db.dart';
-export 'package:eatery/data/database/eatery_db_shim.dart';
+export 'package:eatery_core/data/models/eatery_db.dart';
+export 'package:eatery_core/data/database/eatery_db_shim.dart';
 export 'package:devdart_windows_hdsn/devdart_windows_hdsn.dart';
 export 'package:devdart_windows_hdsn/drive.dart';
 // External refs by devstroop (*deprecated — moved to local equivalents)
 export './components/bottom_view_grip.dart';
 export './widgets/titles/page_title.dart';
-export './core/widgets/app_button.dart';
+export 'package:eatery_core/widgets/app_button.dart';
 // Integrated packages
 export './support/bluetooth_thermal_printer/bluetooth_thermal_printer.dart';
 // External packages

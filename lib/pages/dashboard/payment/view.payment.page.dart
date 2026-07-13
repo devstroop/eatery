@@ -1,4 +1,4 @@
-import 'package:eatery/core/widgets/app_page_shell.dart';
+import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery/references.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

@@ -1,4 +1,4 @@
-import 'package:eatery/core/utils/responsive.dart';
+import 'package:eatery_core/utils/responsive.dart';
 import 'package:eatery/references.dart';
 
 /// A list view that automatically switches between single-column ListView

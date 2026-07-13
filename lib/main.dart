@@ -1,17 +1,17 @@
 import 'dart:async';
 
 import 'package:eatery/core/router/app_router.dart';
-import 'package:eatery/core/theme/app_theme.dart';
-import 'package:eatery/core/utils/device_id.dart';
+import 'package:eatery_core/theme/app_theme.dart';
+import 'package:eatery_core/utils/device_id.dart';
 import 'package:eatery/constants/utils/app_file_system.dart';
-import 'package:eatery/data/database/eatery_database.dart';
-import 'package:eatery/data/database/native/eatery_schema.dart';
-import 'package:eatery/data/database/native/eatery_store.dart';
-import 'package:eatery/data/database/native/store_config.dart';
-import 'package:eatery/data/sync/op_log_service.dart';
-import 'package:eatery/data/sync/sync_server.dart';
-import 'package:eatery/data/sync/sync_service.dart';
-import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:eatery_core/data/database/eatery_database.dart';
+import 'package:eatery_core/data/database/native/eatery_schema.dart';
+import 'package:eatery_core/data/database/native/eatery_store.dart';
+import 'package:eatery_core/data/database/native/store_config.dart';
+import 'package:eatery_core/data/sync/op_log_service.dart';
+import 'package:eatery_core/data/sync/sync_server.dart';
+import 'package:eatery_core/data/sync/sync_service.dart';
+import 'package:eatery_core/providers/database_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/functions/order.function.dart';
 import 'package:flutter/services.dart';

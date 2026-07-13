@@ -1,17 +1,17 @@
-import 'package:eatery/core/widgets/app_dialog.dart';
-import 'package:eatery/core/widgets/app_page_shell.dart';
-import 'package:eatery/core/theme/app_spacing.dart';
-import 'package:eatery/core/theme/app_typography.dart';
+import 'package:eatery_core/widgets/app_dialog.dart';
+import 'package:eatery_core/widgets/app_page_shell.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
+import 'package:eatery_core/theme/app_typography.dart';
 import 'dart:io';
 
-import 'package:eatery/data/models/eatery_db.dart';
-import 'package:eatery/presentation/providers/printer_provider.dart';
+import 'package:eatery_core/data/models/eatery_db.dart';
+import 'package:eatery_core/providers/printer_provider.dart';
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../support/bluetooth_thermal_printer/flutter_bluetooth_adapter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_colors.dart';
 
 /// Printer configuration page.
 /// Mobile: discovers Bluetooth ESC/POS printers and saves them.

@@ -1,7 +1,7 @@
 /// Mappers between Hive models and sync DTOs.
 library;
 
-import 'package:eatery/data/models/eatery_db.dart';
+import 'package:eatery_core/data/models/eatery_db.dart';
 import 'package:eatery/data/dtos/dtos.dart';
 
 // Product

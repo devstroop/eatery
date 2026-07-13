@@ -1,8 +1,8 @@
-import 'package:eatery/core/widgets/app_page_shell.dart';
-import 'package:eatery/core/theme/app_typography.dart';
+import 'package:eatery_core/widgets/app_page_shell.dart';
+import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/pages/dashboard/settings/printer/printer.setting.page.dart';
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 

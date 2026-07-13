@@ -1,10 +1,10 @@
-import 'package:eatery/core/theme/app_spacing.dart';
-import 'package:eatery/core/theme/app_typography.dart';
-import 'package:eatery/core/widgets/widgets.dart';
-import 'package:eatery/data/repositories/product_repository.dart';
-import 'package:eatery/presentation/providers/product_provider.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
+import 'package:eatery_core/theme/app_typography.dart';
+import 'package:eatery_core/widgets/widgets.dart';
+import 'package:eatery_core/data/repositories/product_repository.dart';
+import 'package:eatery_core/providers/product_provider.dart';
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'add.product.category.page.dart';
 import 'edit.product.category.page.dart';
