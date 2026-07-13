@@ -45,15 +45,11 @@ class MutationTracker {
   // ── Private helpers ──
 
   static Map<String, dynamic> _entityToMap(Object entity) {
-    // Prefer toJson() for freezed models
     if (entity is Map) return entity as Map<String, dynamic>;
     try {
-      final m = entity is Order
-          ? (entity).toJson()
-          : (entity is OrderProduct
-              ? (entity).toJson()
-              : (entity as dynamic).toMap());
-      return m as Map<String, dynamic>;
+      // All freezed models expose toJson() as a real instance method.
+      // toMap() is an extension method and can't be dispatched via dynamic.
+      return (entity as dynamic).toJson() as Map<String, dynamic>;
     } catch (_) {
       return {};
     }

@@ -140,11 +140,11 @@ class SyncServer {
 
         case 'host_vote':
           // Forward vote to current host logic
-          syncService.receiveHeartbeat(msg.clock);
+          syncService.receiveHeartbeat();
           break;
 
         case 'heartbeat':
-          syncService.receiveHeartbeat(msg.clock);
+          syncService.receiveHeartbeat();
           break;
       }
     } catch (e) {

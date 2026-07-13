@@ -101,7 +101,6 @@ class SyncClient {
           syncService.receiveHostAnnounce(
             hostDeviceId: msg.deviceId,
             hostName: msg.deviceName ?? msg.deviceId,
-            hostClock: msg.clock,
           );
           break;
 

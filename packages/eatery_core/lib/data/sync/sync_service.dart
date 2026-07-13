@@ -139,14 +139,6 @@ class SyncService {
     _connectedHostName = hostName;
     onStatusChange?.call(status);
 
-    // Pull missed ops
-    final pullMsg = SyncMessage.opLogPull(
-      deviceId: deviceId,
-      clock: _opLogService.clock,
-      sinceClock: _lastSyncedClock,
-    );
-    _sendMessage(pullMsg);
-
     _connectionState = HostConnectionState.connected;
     _missedHeartbeats = 0;
     _startHostCheck();
@@ -160,20 +152,6 @@ class SyncService {
     _stopHostCheck();
     _stopHeartbeat();
     onStatusChange?.call(status);
-  }
-
-  // ── OpLog push ──
-
-  void pushPendingEntries() {
-    final entries = _opLogService.getEntriesSince(_lastSyncedClock);
-    if (entries.isEmpty) return;
-
-    final pushMsg = SyncMessage.opLogPush(
-      deviceId: deviceId,
-      clock: _opLogService.clock,
-      entries: entries.map((e) => e.toJson()).toList(),
-    );
-    _sendMessage(pushMsg);
   }
 
   // ── Receiving data ──
@@ -192,7 +170,7 @@ class SyncService {
     }
   }
 
-  void receiveHeartbeat(int hostClock) {
+  void receiveHeartbeat() {
     _lastHeartbeat = DateTime.now();
     _missedHeartbeats = 0;
   }
@@ -200,7 +178,6 @@ class SyncService {
   void receiveHostAnnounce({
     required String hostDeviceId,
     required String hostName,
-    required int hostClock,
   }) {
     _connectedHostId = hostDeviceId;
     _connectedHostName = hostName;
