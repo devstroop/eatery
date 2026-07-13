@@ -1,13 +1,14 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'pages/home_page.dart';
+import 'pages/ticket_page.dart';
 
 final _router = GoRouter(
   initialLocation: '/',
   routes: [
     GoRoute(
       path: '/',
-      builder: (context, state) => const HomePage(),
+      name: 'tickets',
+      builder: (context, state) => const TicketPage(),
     ),
   ],
 );
