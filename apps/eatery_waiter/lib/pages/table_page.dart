@@ -15,11 +15,13 @@ class TablePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final tables = ref.watch(_tablesProvider);
     final cart = ref.watch(cartProvider);
+    final staff = ref.watch(authSessionProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Eatery Waiter'),
+        title: Text(staff != null ? '${staff.name}\'s Tables' : 'Eatery Waiter'),
         actions: [
+          const SyncStatusChip(),
           Stack(
             children: [
               IconButton(
@@ -28,20 +30,16 @@ class TablePage extends ConsumerWidget {
               ),
               if (cart.cart.isNotEmpty)
                 Positioned(
-                  right: 6,
-                  top: 6,
+                  right: 6, top: 6,
                   child: Container(
                     padding: const EdgeInsets.all(4),
                     decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
+                      color: Colors.red, shape: BoxShape.circle,
                     ),
                     child: Text(
-                      '${cart.cart.length}',
+                      '${cart.cartTotalQuantity}',
                       style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
+                        color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -53,6 +51,7 @@ class TablePage extends ConsumerWidget {
       body: tables.when(
         data: (list) => _TableGrid(
           tables: list,
+          staffId: staff?.id,
           onTableTap: (table) {
             ref.read(cartProvider.notifier).setOrderType(OrderType.dine);
             ref.read(cartProvider.notifier).setDiningTable(table);
@@ -66,34 +65,103 @@ class TablePage extends ConsumerWidget {
   }
 }
 
-class _TableGrid extends StatelessWidget {
+class _TableGrid extends ConsumerStatefulWidget {
   final List<DiningTable> tables;
+  final int? staffId;
   final void Function(DiningTable) onTableTap;
-  const _TableGrid({required this.tables, required this.onTableTap});
+  const _TableGrid({
+    required this.tables,
+    this.staffId,
+    required this.onTableTap,
+  });
+
+  @override
+  ConsumerState<_TableGrid> createState() => _TableGridState();
+}
+
+class _TableGridState extends ConsumerState<_TableGrid> {
+  bool _showMyTables = false;
 
   @override
   Widget build(BuildContext context) {
+    var filtered = widget.tables;
+    if (_showMyTables && widget.staffId != null) {
+      filtered = filtered.where((t) => t.staffId == widget.staffId).toList();
+    }
+    final available = filtered.where((t) => t.status == DiningTableStatus.available).toList();
+    final occupied = filtered.where((t) => t.status == DiningTableStatus.occupied).toList();
+    final other = filtered.where((t) =>
+      t.status != DiningTableStatus.available && t.status != DiningTableStatus.occupied
+    ).toList();
+
     return Padding(
       padding: const EdgeInsets.all(12),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Select Table', style: AppTypography.titleLarge),
+          Row(
+            children: [
+              Text('Select Table', style: AppTypography.titleLarge),
+              const Spacer(),
+              if (widget.staffId != null)
+                TextButton.icon(
+                  icon: Icon(
+                    _showMyTables ? Icons.table_restaurant : Icons.person,
+                    size: 18,
+                  ),
+                  label: Text(_showMyTables ? 'All Tables' : 'My Tables'),
+                  onPressed: () => setState(() => _showMyTables = !_showMyTables),
+                ),
+            ],
+          ),
           AppSpacing.gapMd,
           Expanded(
-            child: GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 4,
-                mainAxisSpacing: 8,
-                crossAxisSpacing: 8,
-                childAspectRatio: 1,
-              ),
-              itemCount: tables.length,
-              itemBuilder: (context, index) => _TableTile(
-                table: tables[index],
-                onTap: () => onTableTap(tables[index]),
-              ),
-            ),
+            child: filtered.isEmpty
+                ? Center(
+                    child: Text(
+                      _showMyTables ? 'No tables assigned to you' : 'No tables found',
+                      style: TextStyle(color: Colors.grey[500]),
+                    ),
+                  )
+                : ListView(
+                    children: [
+                      if (available.isNotEmpty) ...[
+                        Text('Available (${available.length})',
+                            style: AppTypography.titleSmall),
+                        AppSpacing.gapSm,
+                        Wrap(
+                          spacing: 8, runSpacing: 8,
+                          children: available.map((t) => _TableTile(
+                            table: t, onTap: () => widget.onTableTap(t),
+                          )).toList(),
+                        ),
+                        AppSpacing.gapMd,
+                      ],
+                      if (occupied.isNotEmpty) ...[
+                        Text('Occupied (${occupied.length})',
+                            style: AppTypography.titleSmall),
+                        AppSpacing.gapSm,
+                        Wrap(
+                          spacing: 8, runSpacing: 8,
+                          children: occupied.map((t) => _TableTile(
+                            table: t, onTap: () => widget.onTableTap(t),
+                          )).toList(),
+                        ),
+                        AppSpacing.gapMd,
+                      ],
+                      if (other.isNotEmpty) ...[
+                        Text('Other (${other.length})',
+                            style: AppTypography.titleSmall),
+                        AppSpacing.gapSm,
+                        Wrap(
+                          spacing: 8, runSpacing: 8,
+                          children: other.map((t) => _TableTile(
+                            table: t, onTap: () => widget.onTableTap(t),
+                          )).toList(),
+                        ),
+                      ],
+                    ],
+                  ),
           ),
         ],
       ),
@@ -109,14 +177,17 @@ class _TableTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final color = table.status.color;
-    final shortName = table.status.shortName;
+    final isOccupied = table.status == DiningTableStatus.occupied;
 
-    return Material(
-      color: color.withValues(alpha: 0.15),
-      borderRadius: BorderRadius.circular(12),
-      child: InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(12),
+    return GestureDetector(
+      onTap: isOccupied ? null : onTap,
+      child: Container(
+        width: 80, height: 80,
+        decoration: BoxDecoration(
+          color: color.withValues(alpha: 0.15),
+          borderRadius: BorderRadius.circular(12),
+          border: isOccupied ? Border.all(color: color, width: 2) : null,
+        ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -125,18 +196,17 @@ class _TableTile extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
               decoration: BoxDecoration(
-                color: color,
-                borderRadius: BorderRadius.circular(8),
+                color: color, borderRadius: BorderRadius.circular(8),
               ),
               child: Text(
-                shortName,
+                table.status.shortName,
                 style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 11,
-                  fontWeight: FontWeight.bold,
+                  color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold,
                 ),
               ),
             ),
+            if (table.capacity > 0)
+              Text('Cap: ${table.capacity}', style: const TextStyle(fontSize: 9)),
           ],
         ),
       ),
