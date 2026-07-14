@@ -23,6 +23,7 @@ class CartPage extends ConsumerStatefulWidget {
 }
 
 class _CartPageState extends ConsumerState<CartPage> {
+  Discount? _activeDiscount;
   @override
   Widget build(BuildContext context) {
     Color themeColor = Color(
@@ -43,7 +44,8 @@ class _CartPageState extends ConsumerState<CartPage> {
                     child: const Text('Clear Cart'),
                     onTap: () {
                       setState(() {
-                        ref.read(cartProvider.notifier).clearCart();
+      ref.read(cartProvider.notifier).clearCart();
+      _activeDiscount = null;
                       });
                     },
                   ),
@@ -473,9 +475,13 @@ class _CartPageState extends ConsumerState<CartPage> {
                         ),
                         ...discounts.map((d) => ListTile(
                           title: Text(d.name),
-                          subtitle: Text(d.type == 0 ? '${d.value}% off' : d.type == 1 ? '₹${d.value} off' : 'BOGO'),
+                          subtitle: Text(d.type == 0 ? '${d.value}% off' : d.type == 1 ? '\$${d.value} off' : 'BOGO'),
+                          trailing: _activeDiscount?.id == d.id
+                              ? const Icon(Icons.check_circle, color: Colors.green)
+                              : null,
                           onTap: () {
                             Navigator.pop(context);
+                            setState(() => _activeDiscount = d);
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(content: Text('${d.name} applied')),
                             );
@@ -485,15 +491,33 @@ class _CartPageState extends ConsumerState<CartPage> {
                     ),
                   );
                 },
-                child: const Text('Apply Discount'),
+                child: Text(_activeDiscount != null ? 'Remove Discount' : 'Apply Discount'),
               ),
+              if (_activeDiscount != null)
+                Padding(
+                  padding: const EdgeInsets.only(right: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(_activeDiscount!.name,
+                          style: const TextStyle(fontSize: 9, color: Colors.green)),
+                      Text(
+                        _activeDiscount!.type == 0
+                            ? '-${_activeDiscount!.value}%'
+                            : '-\$${_activeDiscount!.value}',
+                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.green),
+                      ),
+                    ],
+                  ),
+                ),
               AppButton.primary(
-                    label: 'Checkout',
-                    onPressed: () => placeOrder(
-                      context,
-                      ref.read(cartProvider).cart,
-                      ref.read(cartProvider).activeCustomer,
-                    ),
+                label: 'Checkout',
+                onPressed: () => placeOrder(
+                  context,
+                  ref.read(cartProvider).cart,
+                  ref.read(cartProvider).activeCustomer,
+                  _activeDiscount,
+                ),
                   ),
                 ],
               ),
@@ -506,6 +530,7 @@ class _CartPageState extends ConsumerState<CartPage> {
     BuildContext context,
     Map<int, CartItem> cart,
     Customer? customer,
+    Discount? discount,
   ) async {
     if (customer == null) {
       AppDialog.showMessage(
@@ -674,22 +699,39 @@ class _CartPageState extends ConsumerState<CartPage> {
     } else {
       final cartProducts = cart.values.map((e) => e.product).toList();
       final totalQty = cart.values.fold(0, (sum, e) => sum + e.quantity);
+      final subtotal = OrderFunction.calculateSubtotal(cartProducts);
+      final taxTotal = OrderFunction.calculateTaxAmount(cartProducts);
+      final baseTotal = subtotal + taxTotal;
+      final roundOff = OrderFunction.calculateRoundOff(baseTotal);
+      final discountAmount = discount != null
+          ? (discount.type == 0 ? baseTotal * discount.value / 100 : discount.value)
+          : 0.0;
+      final grandTotal = (baseTotal + roundOff - discountAmount).toPrecision(2);
       order = Order(
         customerPhone: ref.read(cartProvider).activeCustomer?.phone,
         type: type,
         status: OrderStatus.pending,
         totalQuantity: totalQty,
-        subTotal: OrderFunction.calculateSubtotal(cartProducts).toPrecision(2),
-        taxTotal: OrderFunction.calculateTaxAmount(cartProducts).toPrecision(2),
-        finalTotal: OrderFunction.calculateTotalWithTax(cartProducts).toPrecision(2),
-        roundOff: OrderFunction.calculateRoundOff(
-          OrderFunction.calculateTotalWithTax(cartProducts),
-        ).toPrecision(2),
-        grandTotal: OrderFunction.calculatePayable(cartProducts).toPrecision(2),
-        discountTotal: 0,
+        subTotal: subtotal.toPrecision(2),
+        taxTotal: taxTotal.toPrecision(2),
+        finalTotal: (baseTotal + roundOff).toPrecision(2),
+        roundOff: roundOff.toPrecision(2),
+        grandTotal: grandTotal,
+        discountTotal: discountAmount.toPrecision(2),
         createdAt: DateTime.now(),
       );
       await ref.read(orderRepositoryProvider).saveOrder(order);
+      if (discount != null) {
+        DiscountRepository(ref.read(eateryStoreProvider)).applyDiscount(OrderDiscount(
+          orderId: order.id!,
+          discountId: discount.id,
+          name: discount.name,
+          type: discount.type,
+          value: discount.value,
+          amount: discountAmount.toPrecision(2),
+          createdAt: DateTime.now(),
+        ));
+      }
       for (final entry in cart.entries) {
         final product = entry.value.product;
         final qty = entry.value.quantity;

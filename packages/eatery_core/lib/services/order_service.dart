@@ -79,6 +79,10 @@ class OrderService {
           stationName: p.stationName,
         ));
       }
+      // Auto-adjust inventory stock for inventory items
+      if (p.type == ProductType.inventoryItem && p.id != null) {
+        orderRepo.adjustStock(p.id!, -item.quantity);
+      }
     }
 
     // Mark dining table as occupied

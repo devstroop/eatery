@@ -24,6 +24,7 @@ abstract final class DashboardRoutes {
   static const data = 'data';
   static const settings = 'settings';
   static const reports = 'reports';
+  static const reservations = 'reservations';
 }
 
 /// Dashboard menu tiles grouped by category.
@@ -55,6 +56,13 @@ final _salesItems = <_MenuItem>[
     subtitle: 'Sales reports',
     color: const Color(0xFF43A047),
     route: DashboardRoutes.reports,
+  ),
+  _MenuItem(
+    icon: Icons.event,
+    label: 'Reservations',
+    subtitle: 'Table bookings',
+    color: const Color(0xFF9C27B0),
+    route: DashboardRoutes.reservations,
   ),
 ];
 
@@ -247,6 +255,9 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
         break;
       case 'reports':
         GoRouter.of(context).pushNamed('reports');
+        break;
+      case 'reservations':
+        GoRouter.of(context).pushNamed('reservations');
         break;
     }
   }
