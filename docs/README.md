@@ -14,6 +14,7 @@
 | [03-features-by-phase.md](prd/03-features-by-phase.md) | Detailed feature requirements per phase (P0–P8) |
 | [04-nonfunctional.md](prd/04-nonfunctional.md) | Performance, security, reliability, scalability targets |
 | [05-release-criteria.md](prd/05-release-criteria.md) | Exit criteria for each phase |
+| [06-prd-audit.md](prd/06-prd-audit.md) | PRD gap analysis, missing features, phase reorganization |
 
 ### Technical Specifications (`docs/specs/`)
 
