@@ -14,7 +14,7 @@
   <img src="https://img.shields.io/badge/Dart-3.8-0175C2?logo=dart" alt="Dart">
   <img src="https://img.shields.io/badge/platform-Android%20%7C%20iOS%20%7C%20macOS%20%7C%20Windows%20%7C%20Linux-lightgrey" alt="Platforms">
   <img src="https://img.shields.io/badge/state-Riverpod-purple" alt="Riverpod">
-  <img src="https://img.shields.io/badge/db-SQLite%20%7C%20Hive-orange" alt="Database">
+  <img src="https://img.shields.io/badge/db-SQLite-brightgreen" alt="Database">
 </p>
 
 ---
@@ -45,7 +45,7 @@ Eatery is a family of four applications forming a complete restaurant management
 | **Language** | Dart 3.11+ / Flutter 3.41+ |
 | **State Management** | Riverpod (NotifierProvider / AsyncNotifierProvider) |
 | **Navigation** | GoRouter 17.x (migrating) |
-| **Database** | Hive (legacy, 24 boxes) + SQLite via native Zig FFI (migrating) |
+| **Database** | SQLite via native Zig FFI (`libeaterystore`) |
 | **Native Store** | Zig 0.15+ / `libeaterystore` (embedded SQLite via `dart:ffi`) |
 | **Sync** | WebSocket + OpLog (operation log) + mDNS discovery |
 | **Code Gen** | freezed, json_serializable, riverpod_generator, build_runner |
