@@ -31,7 +31,9 @@ CREATE TABLE IF NOT EXISTS product (
   type        INTEGER NOT NULL,
   isActive    INTEGER NOT NULL DEFAULT 1,
   stationId   INTEGER,
-  stationName TEXT
+  stationName TEXT,
+  stockQuantity REAL DEFAULT 0,
+  lowStockThreshold REAL
 );
 
 CREATE INDEX IF NOT EXISTS idx_product_category ON product(categoryId);
@@ -84,6 +86,8 @@ CREATE TABLE IF NOT EXISTS order_product (
   taxRate        REAL,
   taxAmount      REAL,
   total          REAL NOT NULL,
+  note           TEXT,
+  status         INTEGER NOT NULL DEFAULT 0,
   stationId      INTEGER,
   stationName    TEXT
 );
@@ -130,7 +134,10 @@ CREATE TABLE IF NOT EXISTS dining_table (
   orderId       INTEGER,
   capacity      INTEGER DEFAULT 0,
   status        INTEGER NOT NULL,
-  customerPhone TEXT
+  customerPhone TEXT,
+  posX          REAL,
+  posY          REAL,
+  shape         INTEGER DEFAULT 0
 );
 
 CREATE INDEX IF NOT EXISTS idx_dining_table_category ON dining_table(categoryId);
@@ -150,7 +157,8 @@ CREATE TABLE IF NOT EXISTS company (
   currencyCode   TEXT,
   salesTaxNumber TEXT,
   foodLicenseNo  TEXT,
-  subscriptionId INTEGER
+  subscriptionId INTEGER,
+  adminStaffId   INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS currency (
@@ -168,12 +176,16 @@ CREATE TABLE IF NOT EXISTS currency (
 );
 
 CREATE TABLE IF NOT EXISTS staff (
-  id       INTEGER PRIMARY KEY AUTOINCREMENT,
-  name     TEXT NOT NULL,
-  photo    TEXT,
-  phone    TEXT,
-  type     INTEGER NOT NULL,
-  isActive INTEGER NOT NULL DEFAULT 1
+  id             INTEGER PRIMARY KEY AUTOINCREMENT,
+  name           TEXT NOT NULL,
+  email          TEXT,
+  photo          TEXT,
+  phone          TEXT,
+  pin            TEXT,
+  pinUpdatedAt   INTEGER,
+  lastLoginAt    INTEGER,
+  type           INTEGER NOT NULL,
+  isActive       INTEGER NOT NULL DEFAULT 1
 );
 
 CREATE TABLE IF NOT EXISTS subscription (
@@ -249,6 +261,20 @@ CREATE TABLE IF NOT EXISTS printer (
   usbProductId    TEXT,
   type            INTEGER
 );
+
+-- ── Order status history (order lifecycle audit trail) ──────────────────────
+
+CREATE TABLE IF NOT EXISTS order_status_history (
+  id               INTEGER PRIMARY KEY AUTOINCREMENT,
+  orderId          INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+  fromStatus       INTEGER NOT NULL,
+  toStatus         INTEGER NOT NULL,
+  changedByStaffId INTEGER,
+  changedAt        INTEGER NOT NULL,
+  reason           TEXT
+);
+
+CREATE INDEX IF NOT EXISTS idx_osh_order ON order_status_history(orderId);
 
 -- ── OpLog (sync layer) ──────────────────────────────────────────────────────
 

@@ -16,6 +16,7 @@ void main() async {
     final store = EateryStore.open('${dir.path}/$kEateryDbFileName');
     final schema = await rootBundle.loadString(kSchemaAssetPath);
     initEaterySchema(store, schema);
+    SchemaMigrator(store).migrate();
     appStore = store;
   }
 

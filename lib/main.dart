@@ -7,6 +7,7 @@ import 'package:eatery/constants/utils/app_file_system.dart';
 import 'package:eatery_core/data/database/eatery_database.dart';
 import 'package:eatery_core/data/database/native/eatery_schema.dart';
 import 'package:eatery_core/data/database/native/eatery_store.dart';
+import 'package:eatery_core/data/database/native/schema_migrator.dart';
 import 'package:eatery_core/data/database/native/store_config.dart';
 import 'package:eatery_core/data/sync/mdns_service.dart';
 import 'package:eatery_core/data/sync/sync_providers.dart';
@@ -93,6 +94,7 @@ Future setupDataAndInitDB() async {
     );
     final schema = await rootBundle.loadString(kSchemaAssetPath);
     initEaterySchema(store, schema);
+    SchemaMigrator(store).migrate();
     appStore = store;
     appDatabase = EateryDatabase(dataDir: AppFileSystem.dataDir, store: store);
     OrderFunction.init(store);
