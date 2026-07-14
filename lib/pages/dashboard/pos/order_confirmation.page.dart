@@ -49,7 +49,7 @@ class _OrderConfirmationPageState extends ConsumerState<OrderConfirmationPage> {
               children: [
                 Text(
                   'Receipt Preview',
-                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
+                  style: AppTypography.headlineSmall,
                 ),
               ],
             ),
@@ -58,7 +58,7 @@ class _OrderConfirmationPageState extends ConsumerState<OrderConfirmationPage> {
               children: [
                 Text(
                   'Customer copy',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
+                  style: AppTypography.bodyLarge,
                 ),
               ],
             ),
