@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:eatery_core/data/models/eatery_db.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 
 /// A scrollable floor plan that positions dining tables on a canvas
 /// using their [DiningTable.posX] / [DiningTable.posY] coordinates.
@@ -71,10 +72,10 @@ class FloorPlanWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(Icons.map, size: 64, color: Colors.grey[400]),
-                  const SizedBox(height: 16),
+                  AppSpacing.gapLg,
                   Text('No tables positioned yet',
                       style: TextStyle(color: Colors.grey[600], fontSize: 16)),
-                  const SizedBox(height: 8),
+                  AppSpacing.gapSm,
                   Text('Edit a table to set its position on the floor plan',
                       style: TextStyle(color: Colors.grey[500])),
                 ],
@@ -90,7 +91,7 @@ class FloorPlanWidget extends StatelessWidget {
               children: [
                 Text('Unplaced tables (${unpositioned.length})',
                     style: const TextStyle(fontWeight: FontWeight.bold)),
-                const SizedBox(height: 4),
+                AppSpacing.gapXs,
                 Wrap(
                   spacing: 8,
                   children: unpositioned.map((t) => Chip(

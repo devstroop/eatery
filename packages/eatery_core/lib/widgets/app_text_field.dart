@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
+import '../theme/app_spacing.dart';
 import '../theme/app_typography.dart';
 
 /// Consistent text field with label, hint, and validation.
@@ -62,7 +63,7 @@ class AppTextField extends StatelessWidget {
           label,
           style: AppTypography.labelMedium.copyWith(color: AppColors.grey600),
         ),
-        const SizedBox(height: 4),
+        AppSpacing.gapXs,
         TextFormField(
           controller: controller,
           validator: validator,

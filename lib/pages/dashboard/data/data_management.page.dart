@@ -3,6 +3,7 @@ import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/data/sync/mutation_hook.dart';
 import 'package:eatery_core/providers/database_provider.dart';
@@ -60,7 +61,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
             child: Row(
               children: [
                 Icon(FontAwesomeIcons.googleDrive, color: _pageColor),
-                const SizedBox(width: 8),
+                AppSpacing.gapSm,
                 Text(
                   'Google Drive Backup / Restore',
                   style: AppTypography.titleMedium.copyWith(
@@ -68,7 +69,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
                     color: AppColors.grey700,
                   ),
                 ),
-                const SizedBox(width: 8),
+                AppSpacing.gapSm,
                 Flexible(child: Divider(color: AppColors.grey300)),
               ],
             ),
@@ -84,7 +85,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
             child: Row(
               children: [
                 Icon(Icons.history, color: AppColors.grey700),
-                const SizedBox(width: 8),
+                AppSpacing.gapSm,
                 Text(
                   'Last Backup: ',
                   style: AppTypography.titleMedium.copyWith(
@@ -143,7 +144,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
             child: Row(
               children: [
                 Icon(FontAwesomeIcons.fileExcel, color: _pageColor),
-                const SizedBox(width: 8),
+                AppSpacing.gapSm,
                 Text(
                   'Import / Export',
                   style: AppTypography.titleMedium.copyWith(
@@ -151,7 +152,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
                     color: AppColors.grey700,
                   ),
                 ),
-                const SizedBox(width: 8),
+                AppSpacing.gapSm,
                 Flexible(child: Divider(color: AppColors.grey300)),
               ],
             ),

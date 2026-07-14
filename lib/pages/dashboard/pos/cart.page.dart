@@ -521,7 +521,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                     child: const Text('Cancel'),
                   ),
                 ),
-                const SizedBox(width: 16),
+                AppSpacing.gapLg,
                 Expanded(
                   child: ElevatedButton(
                     style: ButtonStyle(

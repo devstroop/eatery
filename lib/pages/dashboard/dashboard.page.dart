@@ -387,7 +387,7 @@ class _DashboardHeader extends StatelessWidget {
               image: DecorationImage(fit: BoxFit.cover, image: image!),
             ),
           ),
-          const SizedBox(width: 12),
+          AppSpacing.gapMd,
         ],
         Expanded(
           child: Column(

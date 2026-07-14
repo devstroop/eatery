@@ -1,5 +1,6 @@
 import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'dart:ui' as ui;
 
@@ -98,9 +99,9 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                AppSpacing.gapMd,
                 kotPreview(context),
-                const SizedBox(height: 24),
+                AppSpacing.gapXl,
               ],
             ),
           if (widget.printInvoice)
@@ -146,9 +147,9 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                AppSpacing.gapMd,
                 invoicePreview(context),
-                const SizedBox(height: 24),
+                AppSpacing.gapXl,
               ],
             ),
         ],

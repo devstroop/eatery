@@ -2,6 +2,7 @@ import 'package:eatery_core/theme/app_typography.dart';
 import 'package:intl/intl.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery_core/providers/company_provider.dart';
 import 'package:eatery_core/widgets/widgets.dart';
@@ -43,7 +44,7 @@ class _OrderConfirmationPageState extends ConsumerState<OrderConfirmationPage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            const SizedBox(height: 60),
+            SizedBox(height: 48),
             const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
@@ -62,7 +63,7 @@ class _OrderConfirmationPageState extends ConsumerState<OrderConfirmationPage> {
                 ),
               ],
             ),
-            const SizedBox(height: 24),
+            AppSpacing.gapXl,
             RepaintBoundary(
               key: genKey,
               child: Container(
@@ -72,7 +73,7 @@ class _OrderConfirmationPageState extends ConsumerState<OrderConfirmationPage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    const SizedBox(height: 12),
+                    AppSpacing.gapMd,
                     if (customer != null) ...[
                       Text(
                         customer.name ?? 'Unnamed',
@@ -85,7 +86,7 @@ class _OrderConfirmationPageState extends ConsumerState<OrderConfirmationPage> {
                           fontSize: 16, fontWeight: FontWeight.w400),
                       ),
                     ],
-                    const SizedBox(height: 8),
+                    AppSpacing.gapSm,
                     Text(
                       'Order #${widget.order.id}',
                       style: const TextStyle(
@@ -97,9 +98,9 @@ class _OrderConfirmationPageState extends ConsumerState<OrderConfirmationPage> {
                       style: const TextStyle(
                         fontSize: 16, fontWeight: FontWeight.w400),
                     ),
-                    const SizedBox(height: 12),
+                    AppSpacing.gapMd,
                     Divider(color: AppColors.white900),
-                    const SizedBox(height: 12),
+                    AppSpacing.gapMd,
                     ..._items.map((item) => Padding(
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       child: Row(
@@ -117,7 +118,7 @@ class _OrderConfirmationPageState extends ConsumerState<OrderConfirmationPage> {
                             style: const TextStyle(
                               fontSize: 14, fontWeight: FontWeight.w400),
                           ),
-                          const SizedBox(width: 8),
+                          AppSpacing.gapSm,
                           Text(
                             '$currencySymbol${item.total}',
                             style: const TextStyle(
@@ -126,9 +127,9 @@ class _OrderConfirmationPageState extends ConsumerState<OrderConfirmationPage> {
                         ],
                       ),
                     )),
-                    const SizedBox(height: 12),
+                    AppSpacing.gapMd,
                     Divider(color: AppColors.white900),
-                    const SizedBox(height: 8),
+                    AppSpacing.gapSm,
                     _totalRow('Sub Total', '$currencySymbol${widget.order.subTotal}'),
                     if (widget.order.discountTotal > 0)
                       _totalRow('Discount', '-$currencySymbol${widget.order.discountTotal}'),
@@ -136,7 +137,7 @@ class _OrderConfirmationPageState extends ConsumerState<OrderConfirmationPage> {
                     if (widget.order.roundOff != 0)
                       _totalRow('Round Off', '$currencySymbol${widget.order.roundOff}'),
                     _totalRow('Grand Total', '$currencySymbol${widget.order.grandTotal}', bold: true),
-                    const SizedBox(height: 12),
+                    AppSpacing.gapMd,
                   ],
                 ),
               ),

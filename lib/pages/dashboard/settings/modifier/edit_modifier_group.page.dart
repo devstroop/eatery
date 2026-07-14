@@ -2,6 +2,7 @@ import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/widgets/widgets.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery/references.dart';
@@ -69,7 +70,7 @@ class _EditModifierGroupPageState extends ConsumerState<EditModifierGroupPage> {
         padding: const EdgeInsets.all(12),
         children: [
           Text('Options', style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 8),
+          AppSpacing.gapSm,
           if (_showAddForm)
             Card(
               child: Padding(
@@ -81,13 +82,13 @@ class _EditModifierGroupPageState extends ConsumerState<EditModifierGroupPage> {
                       label: 'Option Name',
                       hint: 'e.g. Extra Cheese',
                     ),
-                    const SizedBox(height: 8),
+                    AppSpacing.gapSm,
                     TextField(
                       controller: _priceCtrl,
                       decoration: const InputDecoration(labelText: 'Price Adjustment'),
                       keyboardType: TextInputType.number,
                     ),
-                    const SizedBox(height: 8),
+                    AppSpacing.gapSm,
                     AppButton.primary(label: 'Add', onPressed: _addModifier),
                   ],
                 ),
@@ -107,7 +108,7 @@ class _EditModifierGroupPageState extends ConsumerState<EditModifierGroupPage> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text('+${m.priceAdjust}', style: AppTypography.bodyMedium),
-                    const SizedBox(width: 8),
+                    AppSpacing.gapSm,
                     IconButton(
                       icon: const Icon(Icons.delete, size: 20),
                       onPressed: () {

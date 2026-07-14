@@ -140,7 +140,7 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 8),
+          AppSpacing.gapSm,
           savedPrinters.when(
             data: (printers) {
               if (printers.isEmpty) {
@@ -177,7 +177,7 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
             error: (e, _) => Text('Error: $e'),
           ),
 
-          const SizedBox(height: 24),
+          AppSpacing.gapXl,
           const Divider(),
           AppSpacing.gapLg,
 
@@ -187,7 +187,7 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 8),
+          AppSpacing.gapSm,
           ElevatedButton.icon(
             onPressed: _isScanning ? null : _startScan,
             icon: _isScanning
@@ -199,7 +199,7 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
                 : const Icon(Icons.bluetooth_searching),
             label: Text(_isScanning ? 'Scanning...' : 'Scan for Printers'),
           ),
-          const SizedBox(height: 8),
+          AppSpacing.gapSm,
           if (_discovered.isNotEmpty)
             ..._discovered.map(
               (bp) => Card(
@@ -223,7 +223,7 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
               ),
             ),
 
-          const SizedBox(height: 24),
+          AppSpacing.gapXl,
           const Divider(),
           AppSpacing.gapLg,
 
@@ -233,7 +233,7 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          const SizedBox(height: 8),
+          AppSpacing.gapSm,
           Card(
             child: SwitchListTile(
               title: const Text('Auto-print on sale'),

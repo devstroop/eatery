@@ -366,7 +366,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                           size: 20,
                         ),
                       ),
-                      const SizedBox(width: 8),
+                      AppSpacing.gapSm,
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -436,7 +436,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                             color: AppColors.white,
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        AppSpacing.gapSm,
                         Text(
                           '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${session.activeOrder?.grandTotal.toPrecision(2) ?? '0.00'}',
                           overflow: TextOverflow.ellipsis,
@@ -499,7 +499,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                             color: AppColors.white,
                           ),
                         ),
-                        const SizedBox(width: 8),
+                        AppSpacing.gapSm,
                         Text(
                           session.activeDiningTable?.name ?? '~',
                           overflow: TextOverflow.ellipsis,
@@ -696,7 +696,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                 'Add a dish to get started',
                 style: TextStyle(fontSize: 16, color: AppColors.grey600),
               ),
-              const SizedBox(height: 48),
+              SizedBox(height: 48),
             ],
           ),
         ),
@@ -910,7 +910,7 @@ class PosCartInformation extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Icon(Icons.shopping_cart, color: AppColors.white),
-            const SizedBox(width: 8),
+            AppSpacing.gapSm,
             const Text(
               'Cart',
               style: TextStyle(
@@ -919,7 +919,7 @@ class PosCartInformation extends StatelessWidget {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(width: 8),
+            AppSpacing.gapSm,
             Container(
               height: 32,
               width: 32,
