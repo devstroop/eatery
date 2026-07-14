@@ -1,6 +1,6 @@
-# Specs 09 — Migration Plan
+# Migration Plan
 
-## Phase 0 — Core Extraction (Estimated: 2–3 weeks)
+## Phase 0 -- Core Extraction (Estimated: 2-3 weeks)
 
 ### Step 0.1: Create monorepo scaffold
 
@@ -17,23 +17,23 @@ flutter create --template=package .
 
 ### Step 0.3: Move files into eatery_core
 
-Move (not copy) — maintain git history:
+Move (not copy) -- maintain git history:
 
 | Source | Destination |
 |--------|-------------|
-| `lib/data/models/` → | `packages/eatery_core/lib/data/models/` |
-| `lib/data/dtos/` → | `packages/eatery_core/lib/data/dtos/` |
-| `lib/data/repositories/` (interfaces + SQLite impls) → | `packages/eatery_core/lib/data/repositories/` |
-| `lib/data/database/native/` (EateryStore, schema, config) → | `packages/eatery_core/lib/data/database/native/` |
-| `lib/data/sync/` → | `packages/eatery_core/lib/data/sync/` |
-| `lib/core/theme/` → | `packages/eatery_core/lib/core/theme/` |
-| `lib/core/widgets/` (shared) → | `packages/eatery_core/lib/core/widgets/` |
-| `lib/core/extensions/` → | `packages/eatery_core/lib/core/extensions/` |
-| `lib/core/utils/` (device_id, responsive) → | `packages/eatery_core/lib/core/utils/` |
-| `lib/functions/` → | `packages/eatery_core/lib/functions/` |
-| `lib/presentation/providers/` → | `packages/eatery_core/lib/presentation/providers/` |
-| `lib/references.dart` → | `packages/eatery_core/lib/eatery_core.dart` |
-| `assets/db/schema.sql` → | `packages/eatery_core/assets/db/schema.sql` |
+| `lib/data/models/` -> | `packages/eatery_core/lib/data/models/` |
+| `lib/data/dtos/` -> | `packages/eatery_core/lib/data/dtos/` |
+| `lib/data/repositories/` (interfaces + SQLite impls) -> | `packages/eatery_core/lib/data/repositories/` |
+| `lib/data/database/native/` (EateryStore, schema, config) -> | `packages/eatery_core/lib/data/database/native/` |
+| `lib/data/sync/` -> | `packages/eatery_core/lib/data/sync/` |
+| `lib/core/theme/` -> | `packages/eatery_core/lib/core/theme/` |
+| `lib/core/widgets/` (shared) -> | `packages/eatery_core/lib/core/widgets/` |
+| `lib/core/extensions/` -> | `packages/eatery_core/lib/core/extensions/` |
+| `lib/core/utils/` (device_id, responsive) -> | `packages/eatery_core/lib/core/utils/` |
+| `lib/functions/` -> | `packages/eatery_core/lib/functions/` |
+| `lib/presentation/providers/` -> | `packages/eatery_core/lib/presentation/providers/` |
+| `lib/references.dart` -> | `packages/eatery_core/lib/eatery_core.dart` |
+| `assets/db/schema.sql` -> | `packages/eatery_core/assets/db/schema.sql` |
 
 ### Step 0.4: Keep in Admin app
 
@@ -76,7 +76,7 @@ cd apps/eatery_admin && flutter run
 
 ---
 
-## Phase 1 — Role-Based Auth (Estimated: 2 weeks)
+## Phase 1 -- Role-Based Auth (Estimated: 2 weeks)
 
 ### Step 1.1: Schema migration
 
@@ -128,11 +128,11 @@ ALTER TABLE dining_table ADD COLUMN pos_y INTEGER;
 
 ### Step 1.9: Admin PIN migration
 
-- Copy `Company.password` → new admin `Staff` entry
+- Copy `Company.password` -> new admin `Staff` entry
 
 ---
 
-## Phase 2 — Order Status (Estimated: 1 week)
+## Phase 2 -- Order Status (Estimated: 1 week)
 
 ### Step 2.1: Schema
 
@@ -163,7 +163,7 @@ CREATE TABLE order_status_history (...);
 
 ---
 
-## Phase 3 — Sync Transport (Estimated: 2–3 weeks)
+## Phase 3 -- Sync Transport (Estimated: 2-3 weeks)
 
 ### Step 3.1: Implement WebSocket in SyncService
 
@@ -224,6 +224,6 @@ class SyncHostServer {
 
 ---
 
-## Phase 4–8
+## Phase 4-8
 
-See [PRD 03 — Features by Phase](/docs/prd/03-features-by-phase.md) for detailed scope of each phase. Estimated total: 12–16 weeks for all 8 phases.
+See [PRD 03 -- Features by Phase](../product/03-features-by-phase.md) for detailed scope of each phase. Estimated total: 12-16 weeks for all 8 phases.
