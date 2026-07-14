@@ -3,6 +3,7 @@ import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:eatery_core/utils/responsive.dart';
 import 'package:eatery_core/extensions/double_ext.dart';
+import 'package:eatery_core/widgets/modifier_sheet.dart';
 import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:eatery/pages/dashboard/customer/view.customer.page.dart';
 import 'package:eatery_core/providers/product_provider.dart';
@@ -139,6 +140,29 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
           SnackBar(content: Text('Failed to initialize POS: $e')),
         );
       }
+    }
+  }
+
+  void _addWithModifiers(Product product) {
+    final modGroups = ref.read(modifierRepositoryProvider).getGroupsForProduct(product.id ?? 0);
+    if (modGroups.isEmpty) {
+      ref.read(cartProvider.notifier).addToCart(product);
+    } else {
+      showModalBottomSheet(
+        context: this.context,
+        isScrollControlled: true,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
+        ),
+        builder: (_) => ModifierSheet(
+          product: product,
+          groups: modGroups,
+          onConfirm: () {
+            ref.read(cartProvider.notifier).addToCart(product);
+            Navigator.pop(this.context);
+          },
+        ),
+      );
     }
   }
 
@@ -723,7 +747,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                   ref.read(companyProvider.notifier).currency?.symbol ?? '',
               onAdd: () {
                 setState(() {
-                  ref.read(cartProvider.notifier).addToCart(product);
+                  _addWithModifiers(product);
                 });
               },
               onRemove: () {
@@ -809,7 +833,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
       product: product,
       onAddToCart: () {
         setState(() {
-          ref.read(cartProvider.notifier).addToCart(product);
+          _addWithModifiers(product);
         });
         Fluttertoast.showToast(
           msg: "Added to cart",
