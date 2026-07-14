@@ -69,6 +69,22 @@ class _SettingPageState extends ConsumerState<SettingPage> {
             onTap: () => GoRouter.of(context).pushNamed('modifierGroups').then((_) => setState(() {})),
           ),
           MenuTile(
+            prefixIcon: Icons.business,
+            title: 'Suppliers',
+            subtitle: 'Manage vendors',
+            postfixIcon: Icons.chevron_right,
+            color: getThemeColor(),
+            onTap: () => GoRouter.of(context).pushNamed('suppliers').then((_) => setState(() {})),
+          ),
+          MenuTile(
+            prefixIcon: Icons.receipt_long,
+            title: 'Purchase Orders',
+            subtitle: 'Inventory procurement',
+            postfixIcon: Icons.chevron_right,
+            color: getThemeColor(),
+            onTap: () => GoRouter.of(context).pushNamed('purchaseOrders').then((_) => setState(() {})),
+          ),
+          MenuTile(
             prefixIcon: Icons.local_offer,
             title: 'Discounts',
             subtitle: 'Promotions & discount rules',

@@ -16,6 +16,7 @@ import 'package:eatery_core/data/repositories/modifier_repository.dart';
 import 'package:eatery_core/data/repositories/modifier_repository_sqlite.dart';
 import 'package:eatery_core/data/repositories/inventory_repository.dart';
 import 'package:eatery_core/data/repositories/discount_repository.dart';
+import 'package:eatery_core/data/repositories/shift_repository.dart';
 import 'package:eatery_core/data/repositories/subscription_repository_sqlite.dart';
 import 'package:eatery_core/data/repositories/sqlite_preference_store.dart';
 import 'package:eatery_core/providers/database_provider.dart';
@@ -50,6 +51,10 @@ final sqlitePreferenceStoreProvider = Provider<SqlitePreferenceStore>((ref) {
 final modifierRepositoryProvider = Provider<ModifierRepository>((ref) {
   return SqliteModifierRepository(store: ref.read(eateryStoreProvider));
 });
+final shiftRepositoryProvider = Provider<ShiftRepository>((ref) {
+  return ShiftRepository(ref.read(eateryStoreProvider));
+});
+
 final discountRepositoryProvider = Provider<DiscountRepository>((ref) {
   return DiscountRepository(ref.read(eateryStoreProvider));
 });

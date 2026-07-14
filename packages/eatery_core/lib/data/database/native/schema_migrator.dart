@@ -68,6 +68,7 @@ class SchemaMigrator {
     _migrationV2,
     _migrationV3,
     _migrationV4,
+    _migrationV5,
   ];
 
   /// v1: Auth & order lifecycle fields.
@@ -173,6 +174,13 @@ class SchemaMigrator {
   static void _migrationV4(EateryStore store) {
     store.execute("CREATE TABLE IF NOT EXISTS discount (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, type INTEGER NOT NULL, value REAL NOT NULL, minOrder REAL, maxUses INTEGER, isActive INTEGER NOT NULL DEFAULT 1, startsAt INTEGER, endsAt INTEGER, createdAt INTEGER NOT NULL, updatedAt INTEGER)");
     store.execute("CREATE TABLE IF NOT EXISTS order_discount (id INTEGER PRIMARY KEY AUTOINCREMENT, orderId INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE, discountId INTEGER REFERENCES discount(id), name TEXT NOT NULL, type INTEGER NOT NULL, value REAL NOT NULL, amount REAL NOT NULL, appliedBy INTEGER REFERENCES staff(id), createdAt INTEGER NOT NULL)");
+  }
+
+
+  /// v5: Staff shifts and time tracking.
+  static void _migrationV5(EateryStore store) {
+    store.execute("CREATE TABLE IF NOT EXISTS shift (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, startTime TEXT NOT NULL, endTime TEXT NOT NULL, isActive INTEGER NOT NULL DEFAULT 1)");
+    store.execute("CREATE TABLE IF NOT EXISTS time_entry (id INTEGER PRIMARY KEY AUTOINCREMENT, staffId INTEGER NOT NULL REFERENCES staff(id), shiftId INTEGER REFERENCES shift(id), clockIn INTEGER NOT NULL, clockOut INTEGER, breakStart INTEGER, breakEnd INTEGER, note TEXT, createdAt INTEGER NOT NULL)");
   }
 
   /// Safely adds a column if it doesn't already exist.

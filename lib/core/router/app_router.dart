@@ -56,6 +56,9 @@ import 'package:eatery/pages/dashboard/staff/edit.staff.page.dart';
 import 'package:eatery/pages/setup/setup.page.dart';
 import 'package:eatery/pages/dashboard/help/help.page.dart';
 import 'package:eatery/pages/dashboard/reports/reports.page.dart';
+import 'package:eatery/pages/dashboard/inventory/suppliers.page.dart';
+import 'package:eatery/pages/dashboard/inventory/add_supplier.page.dart';
+import 'package:eatery/pages/dashboard/inventory/purchase_orders.page.dart';
 import 'package:eatery/pages/dashboard/settings/discount/discounts.page.dart';
 import 'package:eatery/pages/dashboard/settings/discount/add_discount.page.dart';
 import 'package:eatery/pages/dashboard/settings/modifier/modifier_groups.page.dart';
@@ -408,6 +411,29 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
           final discount = state.extra as Discount;
           return AddDiscountPage(discount: discount);
         },
+      ),
+      GoRoute(
+        name: 'suppliers',
+        path: '/suppliers',
+        builder: (context, state) => const SuppliersPage(),
+      ),
+      GoRoute(
+        name: 'addSupplier',
+        path: '/suppliers/add',
+        builder: (context, state) => const AddSupplierPage(),
+      ),
+      GoRoute(
+        name: 'editSupplier',
+        path: '/suppliers/edit',
+        builder: (context, state) {
+          final supplier = state.extra as Supplier;
+          return AddSupplierPage(supplier: supplier);
+        },
+      ),
+      GoRoute(
+        name: 'purchaseOrders',
+        path: '/purchase-orders',
+        builder: (context, state) => const PurchaseOrdersPage(),
       ),
       GoRoute(
         name: 'staffs',

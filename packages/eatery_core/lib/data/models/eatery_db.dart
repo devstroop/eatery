@@ -58,6 +58,9 @@ export 'modifier/modifier.dart';
 export 'modifier/product_modifier.dart';
 export 'modifier/order_product_modifier.dart';
 
+// Shift
+export 'shift/shift.dart';
+export 'shift/time_entry.dart';
 // Discount
 export 'discount/discount.dart';
 export 'discount/order_discount.dart';

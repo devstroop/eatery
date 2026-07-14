@@ -140,6 +140,8 @@ class SyncCoordinator {
     'company',
     'currency',
     'customer',
+    'shift',
+    'time_entry',
     'discount',
     'order_discount',
     'dining_table',
