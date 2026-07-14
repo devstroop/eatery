@@ -116,11 +116,13 @@ class SchemaMigrator {
     );
   }
 
-  /// v2: Product modifiers.
+  /// v2: Product modifiers + staffId on orders.
   ///
   /// - Create `modifier_group`, `modifier`, `product_modifier`,
   ///   `order_product_modifier` tables
+  /// - Add `orders.staffId` column
   static void _migrationV2(EateryStore store) {
+    _addColumn(store, 'orders', 'staffId', 'INTEGER');
     store.execute('''
       CREATE TABLE IF NOT EXISTS modifier_group (
         id          INTEGER PRIMARY KEY AUTOINCREMENT,

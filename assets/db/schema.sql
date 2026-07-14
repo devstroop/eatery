@@ -70,7 +70,8 @@ CREATE TABLE IF NOT EXISTS orders (
   status        TEXT NOT NULL DEFAULT 'active',
   voidReason    TEXT,
   voidedBy      TEXT,
-  voidedAt      INTEGER
+  voidedAt      INTEGER,
+  staffId       INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS order_product (

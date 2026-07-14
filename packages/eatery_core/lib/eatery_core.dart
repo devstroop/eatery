@@ -70,3 +70,6 @@ export 'widgets/widgets.dart';
 /// Utils
 export 'utils/device_id.dart';
 export 'utils/responsive.dart';
+
+/// Services
+export 'services/order_service.dart';
