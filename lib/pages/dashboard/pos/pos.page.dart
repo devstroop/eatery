@@ -182,7 +182,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
               );
             },
           ),
-          // IconButton(icon: const Icon(Icons.qr_code_scanner), onPressed: () {}),  // dead button; qrscan plugin removed (abandoned)
+          
           IconButton(
             icon: const Icon(Icons.more_vert),
             onPressed: () {

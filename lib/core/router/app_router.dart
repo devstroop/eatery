@@ -54,6 +54,7 @@ import 'package:eatery/pages/dashboard/staff/staffs.page.dart';
 import 'package:eatery/pages/dashboard/staff/add.staff.page.dart';
 import 'package:eatery/pages/dashboard/staff/edit.staff.page.dart';
 import 'package:eatery/pages/setup/setup.page.dart';
+import 'package:eatery/pages/dashboard/help/help.page.dart';
 import 'package:eatery/pages/dashboard/reports/reports.page.dart';
 import 'package:eatery/pages/dashboard/settings/modifier/modifier_groups.page.dart';
 import 'package:eatery/pages/dashboard/settings/modifier/add_modifier_group.page.dart';
@@ -326,6 +327,11 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
         name: 'settings',
         path: '/settings',
         builder: (context, state) => const SettingPage(),
+      ),
+      GoRoute(
+        name: 'help',
+        path: '/help',
+        builder: (context, state) => const HelpPage(),
       ),
       GoRoute(
         name: 'companySettings',
