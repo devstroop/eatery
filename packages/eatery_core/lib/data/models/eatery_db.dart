@@ -58,6 +58,9 @@ export 'modifier/modifier.dart';
 export 'modifier/product_modifier.dart';
 export 'modifier/order_product_modifier.dart';
 
+// Loyalty
+export 'loyalty/customer_loyalty.dart';
+export 'loyalty/loyalty_transaction.dart';
 // Reservation
 export 'reservation/reservation.dart';
 // Hours

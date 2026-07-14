@@ -6,8 +6,10 @@ import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery_core/widgets/app_dialog.dart';
+import 'package:eatery_core/data/repositories/loyalty_repository.dart';
 import 'package:go_router/go_router.dart';
 import 'package:eatery_core/providers/company_provider.dart';
+import 'package:eatery_core/providers/database_provider.dart';
 
 class ViewCustomer extends ConsumerStatefulWidget {
   ViewCustomer({super.key, required this.customer});
@@ -189,6 +191,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                     ),
                   ],
                 ),
+                _buildLoyaltyCard(),
                 const SizedBox(height: 5),
                 // Status
                 Row(
@@ -271,4 +274,55 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
     }
     return outstandingAmount;
   }*/
+
+  Widget _buildLoyaltyCard() {
+    final loyalty = LoyaltyRepository(ref.read(eateryStoreProvider)).getByCustomer(widget.customer.id ?? 0);
+    if (loyalty == null) return const SizedBox.shrink();
+    final tierNames = ['Regular', 'Silver', 'Gold', 'Platinum'];
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 8),
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                const Icon(Icons.card_giftcard, color: Colors.amber),
+                const SizedBox(width: 8),
+                Text('Loyalty', style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold)),
+                const Spacer(),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: AppColors.primary, borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(tierNames[loyalty.tier.clamp(0, 3)],
+                      style: const TextStyle(color: Colors.white, fontSize: 11, fontWeight: FontWeight.bold)),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                _loyaltyStat('${loyalty.points.toStringAsFixed(0)}', 'Points'),
+                _loyaltyStat('${loyalty.totalVisits}', 'Visits'),
+                _loyaltyStat('\$${loyalty.totalSpent.toStringAsFixed(0)}', 'Spent'),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _loyaltyStat(String value, String label) {
+    return Column(
+      children: [
+        Text(value, style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.primary)),
+        Text(label, style: AppTypography.labelSmall),
+      ],
+    );
+  }
 }

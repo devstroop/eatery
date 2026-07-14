@@ -140,6 +140,8 @@ class SyncCoordinator {
     'company',
     'currency',
     'customer',
+    'customer_loyalty',
+    'loyalty_transaction',
     'business_hours',
     'reservation',
     'expense',
