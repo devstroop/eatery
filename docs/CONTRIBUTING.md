@@ -28,7 +28,7 @@ melos run test
 
 - UI code **never** calls database boxes or native store directly.
 - All data access goes through **repository interfaces** (e.g., `ProductRepository`).
-- Choose SQLite-backed implementation unless the entity hasn't been migrated yet (Hive fallback controlled by feature flags in `store_config.dart`).
+- Use SQLite-backed implementations exclusively (all entities migrated). Feature flags in `store_config.dart` are kept for backward compatibility.
 
 ## Pull Request Process
 
@@ -51,6 +51,6 @@ melos run test
 This project is mid-strangler-fig migration. When touching legacy code:
 
 1. Replace `setState` / `StatefulWidget` with Riverpod where practical.
-2. Use repository interfaces instead of direct `EateryDB.instance.*Box` calls.
+2. Use repository interfaces for all data access.
 3. Wrap new/edited pages in `AppPageShell` instead of raw `Scaffold`.
 4. Reference `AppColors.*`, `AppTypography.*`, and `AppSpacing.*` — not `KColors.*` or raw `TextStyle`.

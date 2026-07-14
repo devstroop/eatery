@@ -2,18 +2,18 @@
 
 ## What Is Eatery
 
-Eatery is an offline-first, multi-app restaurant operating system. It replaces legacy POS terminals with a cross-platform Flutter suite: an Admin app for full restaurant management, a Waiter app for wireless order entry, a Kitchen Display System (KDS) for chefs, and a public Display for customer-facing order status. All apps sync over the local network via WebSocket — no internet or cloud required.
+Eatery is an offline-first restaurant operating system built as a **single Flutter binary** that dispatches four distinct UIs based on the device's configured role. The same app, installed on every device in the restaurant, behaves as an Admin terminal, a Waiter tablet, a Kitchen Display (KDS), or a Customer Display — determined by a first-launch role picker (or `--dart-define=role=` for dev). All devices sync over the local network via WebSocket — no internet or cloud required.
 
-## The Four Apps
+## The Four Roles (Single App)
 
-| App | Package | Purpose | Status |
-|-----|---------|---------|--------|
-| **Admin** | `apps/eatery_admin/` (migrating from `lib/`) | Full POS, menu management, customers, payments, staff, settings, reports | Functional |
-| **Waiter** | `apps/eatery_waiter/` | Order taking, table management, lightweight POS | In progress |
-| **KDS** | `apps/eatery_kds/` | Real-time order feed, KOT display, station routing | In progress |
-| **Display** | `apps/eatery_display/` | Customer-facing order status, read-only | In progress |
+| Role | Activated By | Purpose | Status |
+|------|-------------|---------|--------|
+| **Admin** | "I'm Staff" → login as StaffType.admin | Full POS, menu management, customers, payments, staff, settings, reports | Functional |
+| **Waiter** | "I'm Staff" → login as StaffType.waiter | Order taking, table management, lightweight POS | In progress |
+| **KDS** | "Kitchen Display" (no login) | Real-time order feed, KOT display, station routing | In progress |
+| **Display** | "Customer Display" (no login) | Customer-facing order status, read-only | In progress |
 
-All four share `packages/eatery_core` for models, database, sync, theme, widgets, and providers.
+All four share `packages/eatery_core` for models, database, sync, theme, widgets, and providers. Role-specific pages live in `lib/pages/{waiter,kds,display}/`.
 
 ## Technology Stack
 
@@ -22,7 +22,7 @@ All four share `packages/eatery_core` for models, database, sync, theme, widgets
 | Language | Dart 3.11+ / Flutter 3.41+ |
 | State Management | Riverpod (`NotifierProvider`, `AsyncNotifierProvider`) |
 | Navigation | GoRouter 17.x |
-| Database | Hive (legacy) + SQLite via native Zig FFI (migrating) |
+| Database | SQLite via native Zig FFI (`libeaterystore`) |
 | Native Store | Zig 0.15+ / `libeaterystore` (embedded SQLite amalgamation v3.47.0 via `dart:ffi`) |
 | Sync | WebSocket + OpLog (operation log) + mDNS discovery |
 | Code Gen | `freezed`, `json_serializable`, `riverpod_generator`, `build_runner` |
@@ -43,7 +43,7 @@ All four share `packages/eatery_core` for models, database, sync, theme, widgets
 ├──────────────────────────────────────────────────┤
 │                    Data                           │
 │  Repositories (SqliteProductRepository, etc.)     │
-│  Database (Hive boxes / EateryStore FFI)         │
+│  Database (EateryStore FFI — SQLite)              │
 │  Sync (OpLogService, SyncService, WebSocket)     │
 │  DTOs (sync serialization)                       │
 ��──────────────────────────────────────────────────┘
@@ -71,19 +71,30 @@ abstract class ProductRepository {
 }
 ```
 
-Implementations swap between Hive (`HiveProductRepository` — legacy) and SQLite (`SqliteProductRepository` — current). The swap is controlled by feature flags in `store_config.dart`.
+All implementations use SQLite (`Sqlite*Repository`). The legacy Hive implementations have been removed.
 
-### Navigation: GoRouter
+## Navigation: GoRouter with RBAC
 
-Declarative routing with `GoRouter`. Route guards check authentication state. Pages navigate via `context.push()` / `context.go()`. Legacy `Navigator.push` calls are being migrated (see [UI Standardization Plan](../plan/ui-standardization.md)).
+A single unified GoRouter (~50 routes) with role-based access control. Route guards check both authentication state and the device's configured role against a permission matrix.
+
+| Role | Auth | Allowed Routes |
+|------|------|----------------|
+| `admin` | PIN | `*` (all) |
+| `waiter` | PIN | `tables`, `menu`, `cart`, `orders`, `viewOrder`, `orderConfirmation`, `orderPrint`, `customers`, `viewCustomer` |
+| `kds` | None | `kds`, `viewOrder`, `orderConfirmation` |
+| `display` | None | `display`, `viewOrder` |
+
+Pages navigate via `context.push()` / `context.go()`. Unauthorized routes redirect to the role's home page with an "Access denied" toast.
+
+See [Single-App Architecture](../architecture/single-app-architecture.md) for the full role dispatch flow and RBAC sequence diagram.
 
 ## Database Strategy: Dual DB During Migration
 
-The app is mid-migration from Hive (NoSQL) to SQLite (relational).
+The migration from Hive (NoSQL) to SQLite (relational) is complete.
 
-| Aspect | Hive (Legacy) | SQLite (Target) |
+| Aspect | Hive (Legacy — Removed) | SQLite (Current) |
 |--------|---------------|-----------------|
-| Storage | `*.hive` files on disk | Single `eatery.db` file |
+| Storage | (removed) | Single `eatery.db` file |
 | Queries | Full scan + Dart filter | SQL WHERE/ORDER/JOIN |
 | Relations | Manual key management | Foreign keys, CASCADE |
 | Migrations | Manual code | Schema versioning + `SchemaMigrator` |
@@ -101,18 +112,24 @@ const bool kUseSqliteStore = kUseSqliteProductStore || kUseSqliteCustomerStore |
 ## Sync Architecture
 
 ```
-┌──────────────┐     WebSocket      ┌─���────────────┐
-│  Admin App   │ ◄─────────────────► │  Waiter App  │
-│  (Sync Host) │                     │  (Leaf Node) │
-│              │ ◄─────────────────► │  KDS App     │
-│  OpLog DB    │                     │  (Leaf Node) │
-└──────┬───────┘                     └──────────────┘
+┌─────────────────────────────────┐
+│  Device: role = admin           │  ← Sync Host
+│  Runs SyncServer on :9876       │
+└────────────┬────────────────────┘
+             │ WebSocket
+    ┌────────┼────────┬───────────┐
+    │        │        │           │
+    ▼        ▼        ▼           ▼
+┌──────┐ ┌──────┐ ┌──────┐ ┌──────────┐
+│ admin │ │waiter│ │ kds  │ │ display  │
+│(other)│ │ leaf │ │ leaf │ │  leaf    │
+└──────┘ └──────┘ └──────┘ └──────────┘
 ```
 
 - **OpLog:** Every write commits an operation log entry with clock, entity, operation type, and data snapshot.
 - **Conflict Resolution:** Last-Writer-Wins by logical clock.
-- **Discovery:** mDNS (`_eatery-sync._tcp`) with manual IP fallback.
-- **Offline-First:** All apps work without a connection; sync when available.
+- **Discovery:** mDNS (`_eatery-sync._tcp`) with `localhost` fallback.
+- **Offline-First:** All roles work without a connection; sync when available.
 - See [Sync Protocol spec](../architecture/sync-protocol.md)
 
 ## Design System

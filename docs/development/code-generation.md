@@ -10,7 +10,7 @@ Eatery uses several code generation tools to reduce boilerplate. All generated f
 | `freezed` | Immutable data classes, `copyWith`, equality | Models, DTOs |
 | `json_serializable` | JSON serialization (`toJson`/`fromJson`) | Models, DTOs |
 | `riverpod_generator` | Riverpod provider code gen | Providers |
-| Hive type adapters | Hive box serialization (`@HiveType`) | Models (legacy) |
+| Hive type adapters | Hive box serialization (`@HiveType`) | Models (legacy — removed) |
 
 ## Commands
 

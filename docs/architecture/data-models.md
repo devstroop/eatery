@@ -131,7 +131,7 @@ models/
 
 ### Company (`packages/eatery_core/lib/data/models/company/company.dart`)
 - `id`, `logo`, `name`, `email`, `phone`, `address`
-- `password` (deprecated — migrating to Staff PINs)
+- `password` (deprecated — auth uses `Staff.pin`; kept for backward compat)
 - `taxation` (Taxation), `currencyCode`, `foodLicenseNo`, `salesTaxNumber`, `subscriptionId`
 
 ## Entity Relationships

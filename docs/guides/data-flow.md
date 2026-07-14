@@ -17,16 +17,14 @@ CartPage / PosPage reads ref.watch(cartProvider)   ← Reactive rebuild
 "Place Order" → OrderConfirmationPage
   │
   ▼
-OrderRepository.saveOrder(order)   ← Repository (SQLite or Hive)
+OrderRepository.saveOrder(order)   ← Repository (SQLite)
   ��
   ├─ SQLite path: SqliteOrderRepository
   │     ��─ _store.execute('INSERT INTO orders ...')
   │     ├─ _opLog.commit("order", "create", data, prevData)
   │     └─ Returns id
   │
-  └─ Hive path (legacy): HiveOrderRepository
-        ├─ EateryDB.instance.ordersBox!.put(...)
-        └─ No OpLog integration
+  └─ (Legacy Hive path — removed)
   │
   ▼
 SyncService.pushToHost()           ← Async, fire-and-forget
@@ -115,7 +113,7 @@ for (final entry in batch) {
 ```
 
 DTOs live in `packages/eatery_core/lib/data/dtos/`. They are:
-- Independent of Hive annotations
+- (no Hive annotations needed)
 - Versioned (each DTO has a `schemaVersion` field)
 - Validated (null checks, range checks on deserialization)
 
@@ -128,9 +126,9 @@ App starts
   │     ├─ Run schema initialization from schema.sql
   │     └─ Run SchemaMigrator for incremental migrations
   │
-  ├─ Open Hive boxes (for entities not yet migrated)
+  ├─ Initialize SQLite store (all entities — Hive fully migrated)
   │
-  ├─ Initialize repositories (SQLite or Hive based on feature flags)
+  ├─ Initialize repositories (SQLite)
   │
   ├─ Connect to sync host (if available)
   │     ├─ Pull missed ops since last connection
@@ -139,18 +137,18 @@ App starts
   └─ Ready for use
 ```
 
-## Hive → SQLite Transition
+## Hive → SQLite Transition (Complete)
 
-The data flow changes as each entity migrates from Hive to SQLite:
+The migration from Hive to SQLite is complete for all entities:
 
 | Phase | Entity | Repository | OpLog |
 |-------|--------|-----------|-------|
-| Legacy | All | Hive (direct box calls) | None |
+| Removed | All | SQLite via EateryStore | All migrated |
 | Phase A | Product, Customer, Order | SQLite | ✅ |
 | Phase B | Payment, Tax, DiningTable, Company, Staff, etc. | SQLite | ✅ |
 | Post-migration | All | SQLite only | ✅ |
 
-Feature flags in `store_config.dart` control the per-entity migration state. When a flag is `true`, the repository provider injects the SQLite implementation; when `false`, it falls back to Hive.
+All entities use SQLite. All feature flags in `store_config.dart` are `true` and the legacy Hive fallback code has been fully removed.
 
 ## See Also
 
