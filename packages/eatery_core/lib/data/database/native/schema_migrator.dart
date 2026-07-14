@@ -66,6 +66,7 @@ class SchemaMigrator {
   static const _migrations = <void Function(EateryStore)>[
     _migrationV1,
     _migrationV2,
+    _migrationV3,
   ];
 
   /// v1: Auth & order lifecycle fields.
@@ -183,5 +184,49 @@ class SchemaMigrator {
     } catch (_) {
       // Column already exists — safe to ignore.
     }
+  }
+
+  /// v3: Suppliers, purchase orders, stock adjustments.
+  static void _migrationV3(EateryStore store) {
+    store.execute('''
+      CREATE TABLE IF NOT EXISTS supplier (
+        id          INTEGER PRIMARY KEY AUTOINCREMENT,
+        name        TEXT NOT NULL,
+        contactName TEXT, phone TEXT, email TEXT, address TEXT, gstin TEXT,
+        isActive    INTEGER NOT NULL DEFAULT 1,
+        createdAt   INTEGER NOT NULL, updatedAt INTEGER
+      )
+    ''');
+    store.execute('''
+      CREATE TABLE IF NOT EXISTS purchase_order (
+        id              INTEGER PRIMARY KEY AUTOINCREMENT,
+        supplierId      INTEGER REFERENCES supplier(id),
+        orderDate       INTEGER NOT NULL,
+        expectedDate    INTEGER, deliveredDate INTEGER,
+        status          INTEGER NOT NULL DEFAULT 0,
+        totalAmount     REAL NOT NULL DEFAULT 0, notes TEXT,
+        createdBy       INTEGER REFERENCES staff(id),
+        createdAt       INTEGER NOT NULL, updatedAt INTEGER
+      )
+    ''');
+    store.execute('''
+      CREATE TABLE IF NOT EXISTS purchase_order_item (
+        id              INTEGER PRIMARY KEY AUTOINCREMENT,
+        purchaseOrderId INTEGER NOT NULL REFERENCES purchase_order(id) ON DELETE CASCADE,
+        productId       INTEGER NOT NULL REFERENCES product(id),
+        quantity        REAL NOT NULL, unitPrice REAL NOT NULL,
+        totalPrice      REAL NOT NULL, receivedQty REAL DEFAULT 0
+      )
+    ''');
+    store.execute('''
+      CREATE TABLE IF NOT EXISTS stock_adjustment (
+        id          INTEGER PRIMARY KEY AUTOINCREMENT,
+        productId   INTEGER NOT NULL REFERENCES product(id),
+        quantity    REAL NOT NULL, reason TEXT NOT NULL,
+        referenceId INTEGER, notes TEXT,
+        createdBy   INTEGER REFERENCES staff(id),
+        createdAt   INTEGER NOT NULL
+      )
+    ''');
   }
 }
