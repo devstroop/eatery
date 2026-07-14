@@ -59,6 +59,14 @@ class _SettingPageState extends ConsumerState<SettingPage> {
             onTap: () => GoRouter.of(context).pushNamed('taxSlabs'),
           ),
           MenuTile(
+            prefixIcon: Icons.tune,
+            title: 'Modifiers',
+            subtitle: 'Product customization options',
+            postfixIcon: Icons.chevron_right,
+            color: getThemeColor(),
+            onTap: () => GoRouter.of(context).pushNamed('modifierGroups').then((_) => setState(() {})),
+          ),
+          MenuTile(
             prefixIcon: Icons.print,
             title: 'Printer',
             subtitle: 'Manage Printing Devices',

@@ -65,6 +65,7 @@ class SchemaMigrator {
   /// List of migration functions, indexed by version (0 = first migration).
   static const _migrations = <void Function(EateryStore)>[
     _migrationV1,
+    _migrationV2,
   ];
 
   /// v1: Auth & order lifecycle fields.
@@ -113,6 +114,56 @@ class SchemaMigrator {
     store.execute(
       'CREATE INDEX IF NOT EXISTS idx_osh_order ON order_status_history(orderId)',
     );
+  }
+
+  /// v2: Product modifiers.
+  ///
+  /// - Create `modifier_group`, `modifier`, `product_modifier`,
+  ///   `order_product_modifier` tables
+  static void _migrationV2(EateryStore store) {
+    store.execute('''
+      CREATE TABLE IF NOT EXISTS modifier_group (
+        id          INTEGER PRIMARY KEY AUTOINCREMENT,
+        name        TEXT NOT NULL,
+        description TEXT,
+        minSelect   INTEGER NOT NULL DEFAULT 0,
+        maxSelect   INTEGER NOT NULL DEFAULT 1,
+        sortOrder   INTEGER DEFAULT 0,
+        isRequired  INTEGER NOT NULL DEFAULT 0,
+        createdAt   INTEGER NOT NULL,
+        updatedAt   INTEGER
+      )
+    ''');
+    store.execute('''
+      CREATE TABLE IF NOT EXISTS modifier (
+        id              INTEGER PRIMARY KEY AUTOINCREMENT,
+        modifierGroupId INTEGER NOT NULL REFERENCES modifier_group(id) ON DELETE CASCADE,
+        name            TEXT NOT NULL,
+        priceAdjust     REAL NOT NULL DEFAULT 0,
+        sortOrder       INTEGER DEFAULT 0,
+        isDefault       INTEGER NOT NULL DEFAULT 0,
+        createdAt       INTEGER NOT NULL,
+        updatedAt       INTEGER
+      )
+    ''');
+    store.execute('''
+      CREATE TABLE IF NOT EXISTS product_modifier (
+        productId       INTEGER NOT NULL REFERENCES product(id) ON DELETE CASCADE,
+        modifierGroupId INTEGER NOT NULL REFERENCES modifier_group(id) ON DELETE CASCADE,
+        PRIMARY KEY (productId, modifierGroupId)
+      )
+    ''');
+    store.execute('''
+      CREATE TABLE IF NOT EXISTS order_product_modifier (
+        id              INTEGER PRIMARY KEY AUTOINCREMENT,
+        orderProductId  INTEGER NOT NULL REFERENCES order_product(id) ON DELETE CASCADE,
+        modifierGroupId INTEGER NOT NULL REFERENCES modifier_group(id),
+        modifierId      INTEGER NOT NULL REFERENCES modifier(id),
+        modifierName    TEXT NOT NULL,
+        priceAdjust     REAL NOT NULL DEFAULT 0,
+        quantity        INTEGER NOT NULL DEFAULT 1
+      )
+    ''');
   }
 
   /// Safely adds a column if it doesn't already exist.

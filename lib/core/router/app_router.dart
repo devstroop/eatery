@@ -53,6 +53,9 @@ import 'package:eatery/pages/dashboard/settings/currency_region/view.currency_re
 import 'package:eatery/pages/dashboard/staff/staffs.page.dart';
 import 'package:eatery/pages/dashboard/staff/add.staff.page.dart';
 import 'package:eatery/pages/dashboard/staff/edit.staff.page.dart';
+import 'package:eatery/pages/dashboard/settings/modifier/modifier_groups.page.dart';
+import 'package:eatery/pages/dashboard/settings/modifier/add_modifier_group.page.dart';
+import 'package:eatery/pages/dashboard/settings/modifier/edit_modifier_group.page.dart';
 import 'package:eatery/pages/dashboard/data/data_management.page.dart';
 import 'package:eatery/pages/dashboard/data/export.page.dart';
 import 'package:eatery/pages/dashboard/data/import.page.dart';
@@ -354,6 +357,24 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
         name: 'currencyRegion',
         path: '/settings/currency',
         builder: (context, state) => const ShowCurrencyRegionPage(),
+      ),
+      GoRoute(
+        name: 'modifierGroups',
+        path: '/settings/modifier-groups',
+        builder: (context, state) => const ModifierGroupsPage(),
+      ),
+      GoRoute(
+        name: 'addModifierGroup',
+        path: '/settings/modifier-groups/add',
+        builder: (context, state) => const AddModifierGroupPage(),
+      ),
+      GoRoute(
+        name: 'editModifierGroup',
+        path: '/settings/modifier-groups/edit',
+        builder: (context, state) {
+          final group = state.extra as ModifierGroup;
+          return EditModifierGroupPage(group: group);
+        },
       ),
       GoRoute(
         name: 'staffs',
