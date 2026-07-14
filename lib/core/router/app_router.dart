@@ -53,6 +53,7 @@ import 'package:eatery/pages/dashboard/settings/currency_region/view.currency_re
 import 'package:eatery/pages/dashboard/staff/staffs.page.dart';
 import 'package:eatery/pages/dashboard/staff/add.staff.page.dart';
 import 'package:eatery/pages/dashboard/staff/edit.staff.page.dart';
+import 'package:eatery/pages/setup/setup.page.dart';
 import 'package:eatery/pages/dashboard/reports/reports.page.dart';
 import 'package:eatery/pages/dashboard/settings/modifier/modifier_groups.page.dart';
 import 'package:eatery/pages/dashboard/settings/modifier/add_modifier_group.page.dart';
@@ -68,7 +69,7 @@ import 'package:eatery_core/data/database/native/eatery_store.dart';
 import 'package:go_router/go_router.dart';
 
 /// Routes that don't require authentication.
-const _publicRoutes = {'login', 'mainScreen', 'createCompany', 'resetPin'};
+const _publicRoutes = {'login', 'mainScreen', 'createCompany', 'resetPin', 'setup'};
 
 GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
   String? password;
@@ -83,6 +84,11 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
         ? (password != null ? '/login' : '/dashboard')
         : '/',
     routes: [
+      GoRoute(
+        name: 'setup',
+        path: '/setup',
+        builder: (context, state) => const SetupPage(),
+      ),
       GoRoute(
         name: 'login',
         path: '/login',
