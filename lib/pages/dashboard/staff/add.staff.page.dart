@@ -20,6 +20,7 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
   bool isActive = true;
   final TextEditingController _controllerStaffName = TextEditingController();
   final TextEditingController _controllerStaffPhone = TextEditingController();
+  final TextEditingController _controllerStaffPin = TextEditingController();
   StaffType? staffType;
   final _formKey = GlobalKey<FormState>();
 
@@ -112,6 +113,24 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                   },
                 ),
                 SpacingStyle.defaultVerticalSpacing,
+                LabeledCustomTextFormField(
+                  controller: _controllerStaffPin,
+                  label: 'PIN (4 digits)',
+                  themeColor: _pageColor,
+                  foregroundColor: AppColors.black600,
+                  keyboardType: TextInputType.number,
+                  obscureText: true,
+                  hint: 'Enter PIN',
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Enter PIN';
+                    if (value.length < 4) return 'Minimum 4 digits';
+                    if (!RegExp(r'^\d{4,}$').hasMatch(value)) {
+                      return 'Numbers only';
+                    }
+                    return null;
+                  },
+                ),
+                SpacingStyle.defaultVerticalSpacing,
                 SpacingStyle.defaultVerticalSpacing,
                 // Drop down for staff type
                 DropdownButtonFormField(
@@ -198,6 +217,9 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
               photo: image?.filename,
               isActive: isActive,
               type: staffType!,
+              pin: _controllerStaffPin.text.isNotEmpty
+                  ? _controllerStaffPin.text
+                  : null,
             );
             ref
                 .read(staffRepositoryProvider)

@@ -11,6 +11,7 @@ abstract class Staff with _$Staff {
     required String name,
     String? photo,
     String? phone,
+    String? pin,
     @Default(StaffType.waiter) StaffType type,
     @Default(true) bool isActive,
   }) = _Staff;
@@ -31,6 +32,7 @@ extension StaffX on Staff {
       'phone': row.elementAt(3),
       'type': row.elementAt(4),
       'isActive': row.elementAt(5),
+      'pin': row.elementAt(6),
     });
   }
 
@@ -43,6 +45,7 @@ extension StaffX on Staff {
       map['phone'],
       map['type'],
       map['isActive'],
+      map['pin'],
     ];
   }
 }

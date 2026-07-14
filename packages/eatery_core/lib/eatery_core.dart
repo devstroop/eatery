@@ -40,6 +40,7 @@ export 'providers/order_provider.dart';
 export 'providers/product_provider.dart';
 export 'providers/cart_provider.dart';
 export 'providers/printer_provider.dart';
+export 'providers/auth_session.dart';
 
 /// Repositories
 export 'data/repositories/company_repository.dart';

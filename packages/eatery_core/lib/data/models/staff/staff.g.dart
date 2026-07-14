@@ -11,6 +11,7 @@ _Staff _$StaffFromJson(Map<String, dynamic> json) => _Staff(
   name: json['name'] as String,
   photo: json['photo'] as String?,
   phone: json['phone'] as String?,
+  pin: json['pin'] as String?,
   type:
       $enumDecodeNullable(_$StaffTypeEnumMap, json['type']) ?? StaffType.waiter,
   isActive: json['isActive'] as bool? ?? true,
@@ -21,6 +22,7 @@ Map<String, dynamic> _$StaffToJson(_Staff instance) => <String, dynamic>{
   'name': instance.name,
   'photo': instance.photo,
   'phone': instance.phone,
+  'pin': instance.pin,
   'type': _$StaffTypeEnumMap[instance.type]!,
   'isActive': instance.isActive,
 };
@@ -30,4 +32,5 @@ const _$StaffTypeEnumMap = {
   StaffType.chef: 1,
   StaffType.driver: 2,
   StaffType.other: 3,
+  StaffType.admin: 4,
 };

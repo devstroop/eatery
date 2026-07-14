@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Staff {
 
- int? get id; String get name; String? get photo; String? get phone; StaffType get type; bool get isActive;
+ int? get id; String get name; String? get photo; String? get phone; String? get pin; StaffType get type; bool get isActive;
 /// Create a copy of Staff
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $StaffCopyWith<Staff> get copyWith => _$StaffCopyWithImpl<Staff>(this as Staff, 
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Staff&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.photo, photo) || other.photo == photo)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.type, type) || other.type == type)&&(identical(other.isActive, isActive) || other.isActive == isActive));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Staff&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.photo, photo) || other.photo == photo)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.pin, pin) || other.pin == pin)&&(identical(other.type, type) || other.type == type)&&(identical(other.isActive, isActive) || other.isActive == isActive));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,photo,phone,type,isActive);
+int get hashCode => Object.hash(runtimeType,id,name,photo,phone,pin,type,isActive);
 
 @override
 String toString() {
-  return 'Staff(id: $id, name: $name, photo: $photo, phone: $phone, type: $type, isActive: $isActive)';
+  return 'Staff(id: $id, name: $name, photo: $photo, phone: $phone, pin: $pin, type: $type, isActive: $isActive)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $StaffCopyWith<$Res>  {
   factory $StaffCopyWith(Staff value, $Res Function(Staff) _then) = _$StaffCopyWithImpl;
 @useResult
 $Res call({
- int? id, String name, String? photo, String? phone, StaffType type, bool isActive
+ int? id, String name, String? photo, String? phone, String? pin, StaffType type, bool isActive
 });
 
 
@@ -65,12 +65,13 @@ class _$StaffCopyWithImpl<$Res>
 
 /// Create a copy of Staff
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = null,Object? photo = freezed,Object? phone = freezed,Object? type = null,Object? isActive = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = null,Object? photo = freezed,Object? phone = freezed,Object? pin = freezed,Object? type = null,Object? isActive = null,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,photo: freezed == photo ? _self.photo : photo // ignore: cast_nullable_to_non_nullable
 as String?,phone: freezed == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String?,pin: freezed == pin ? _self.pin : pin // ignore: cast_nullable_to_non_nullable
 as String?,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as StaffType,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
 as bool,
@@ -158,10 +159,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String name,  String? photo,  String? phone,  StaffType type,  bool isActive)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String name,  String? photo,  String? phone,  String? pin,  StaffType type,  bool isActive)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Staff() when $default != null:
-return $default(_that.id,_that.name,_that.photo,_that.phone,_that.type,_that.isActive);case _:
+return $default(_that.id,_that.name,_that.photo,_that.phone,_that.pin,_that.type,_that.isActive);case _:
   return orElse();
 
 }
@@ -179,10 +180,10 @@ return $default(_that.id,_that.name,_that.photo,_that.phone,_that.type,_that.isA
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String name,  String? photo,  String? phone,  StaffType type,  bool isActive)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String name,  String? photo,  String? phone,  String? pin,  StaffType type,  bool isActive)  $default,) {final _that = this;
 switch (_that) {
 case _Staff():
-return $default(_that.id,_that.name,_that.photo,_that.phone,_that.type,_that.isActive);case _:
+return $default(_that.id,_that.name,_that.photo,_that.phone,_that.pin,_that.type,_that.isActive);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -199,10 +200,10 @@ return $default(_that.id,_that.name,_that.photo,_that.phone,_that.type,_that.isA
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String name,  String? photo,  String? phone,  StaffType type,  bool isActive)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String name,  String? photo,  String? phone,  String? pin,  StaffType type,  bool isActive)?  $default,) {final _that = this;
 switch (_that) {
 case _Staff() when $default != null:
-return $default(_that.id,_that.name,_that.photo,_that.phone,_that.type,_that.isActive);case _:
+return $default(_that.id,_that.name,_that.photo,_that.phone,_that.pin,_that.type,_that.isActive);case _:
   return null;
 
 }
@@ -214,13 +215,14 @@ return $default(_that.id,_that.name,_that.photo,_that.phone,_that.type,_that.isA
 @JsonSerializable()
 
 class _Staff implements Staff {
-  const _Staff({this.id, required this.name, this.photo, this.phone, this.type = StaffType.waiter, this.isActive = true});
+  const _Staff({this.id, required this.name, this.photo, this.phone, this.pin, this.type = StaffType.waiter, this.isActive = true});
   factory _Staff.fromJson(Map<String, dynamic> json) => _$StaffFromJson(json);
 
 @override final  int? id;
 @override final  String name;
 @override final  String? photo;
 @override final  String? phone;
+@override final  String? pin;
 @override@JsonKey() final  StaffType type;
 @override@JsonKey() final  bool isActive;
 
@@ -237,16 +239,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Staff&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.photo, photo) || other.photo == photo)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.type, type) || other.type == type)&&(identical(other.isActive, isActive) || other.isActive == isActive));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Staff&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.photo, photo) || other.photo == photo)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.pin, pin) || other.pin == pin)&&(identical(other.type, type) || other.type == type)&&(identical(other.isActive, isActive) || other.isActive == isActive));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,photo,phone,type,isActive);
+int get hashCode => Object.hash(runtimeType,id,name,photo,phone,pin,type,isActive);
 
 @override
 String toString() {
-  return 'Staff(id: $id, name: $name, photo: $photo, phone: $phone, type: $type, isActive: $isActive)';
+  return 'Staff(id: $id, name: $name, photo: $photo, phone: $phone, pin: $pin, type: $type, isActive: $isActive)';
 }
 
 
@@ -257,7 +259,7 @@ abstract mixin class _$StaffCopyWith<$Res> implements $StaffCopyWith<$Res> {
   factory _$StaffCopyWith(_Staff value, $Res Function(_Staff) _then) = __$StaffCopyWithImpl;
 @override @useResult
 $Res call({
- int? id, String name, String? photo, String? phone, StaffType type, bool isActive
+ int? id, String name, String? photo, String? phone, String? pin, StaffType type, bool isActive
 });
 
 
@@ -274,12 +276,13 @@ class __$StaffCopyWithImpl<$Res>
 
 /// Create a copy of Staff
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = null,Object? photo = freezed,Object? phone = freezed,Object? type = null,Object? isActive = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = null,Object? photo = freezed,Object? phone = freezed,Object? pin = freezed,Object? type = null,Object? isActive = null,}) {
   return _then(_Staff(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
 as String,photo: freezed == photo ? _self.photo : photo // ignore: cast_nullable_to_non_nullable
 as String?,phone: freezed == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
+as String?,pin: freezed == pin ? _self.pin : pin // ignore: cast_nullable_to_non_nullable
 as String?,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as StaffType,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
 as bool,

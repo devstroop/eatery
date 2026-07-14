@@ -10,6 +10,8 @@ enum StaffType {
   driver,
   @JsonValue(3)
   other,
+  @JsonValue(4)
+  admin,
 }
 
 extension StaffTypeExtension on StaffType {
@@ -23,6 +25,8 @@ extension StaffTypeExtension on StaffType {
         return 2;
       case StaffType.other:
         return 3;
+      case StaffType.admin:
+        return 4;
     }
   }
 
@@ -36,6 +40,8 @@ extension StaffTypeExtension on StaffType {
         return 'Driver';
       case StaffType.other:
         return 'Other';
+      case StaffType.admin:
+        return 'Admin';
     }
   }
 }

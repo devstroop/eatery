@@ -11,7 +11,7 @@ class SqliteStaffRepository implements StaffRepository {
 
   final EateryStore _store;
 
-  static const _columns = 'name, photo, phone, type, isActive';
+  static const _columns = 'name, photo, phone, type, isActive, pin';
 
   @override
   List<Staff> getAllStaff() =>
@@ -24,6 +24,15 @@ class SqliteStaffRepository implements StaffRepository {
   }
 
   @override
+  Staff? getStaffByPhone(String phone) {
+    final rows = _store.query(
+      'SELECT * FROM staff WHERE phone = ? LIMIT 1',
+      [phone],
+    );
+    return rows.isEmpty ? null : _toStaff(rows.first);
+  }
+
+  @override
   Future<int> saveStaff(Staff staff) async {
     final values = <Object?>[
       staff.name,
@@ -31,17 +40,18 @@ class SqliteStaffRepository implements StaffRepository {
       staff.phone,
       staff.type.id,
       staff.isActive ? 1 : 0,
+      staff.pin,
     ];
 
     final int id;
     if (staff.id != null && _exists(staff.id!)) {
       id = staff.id!;
       _store.execute(
-        'UPDATE staff SET name=?, photo=?, phone=?, type=?, isActive=? WHERE id=?',
+        'UPDATE staff SET name=?, photo=?, phone=?, type=?, isActive=?, pin=? WHERE id=?',
         [...values, id],
       );
     } else {
-      _store.execute('INSERT INTO staff ($_columns) VALUES (?,?,?,?,?)', values);
+      _store.execute('INSERT INTO staff ($_columns) VALUES (?,?,?,?,?,?)', values);
       id = _store.queryScalar('SELECT last_insert_rowid()') as int;
       staff = staff.copyWith(id: id);
     }
@@ -79,12 +89,13 @@ class SqliteStaffRepository implements StaffRepository {
   @override
   Future<void> addAll(Iterable<Staff> staffList) async {
     for (final s in staffList) {
-      _store.execute('INSERT INTO staff ($_columns) VALUES (?,?,?,?,?)', [
+      _store.execute('INSERT INTO staff ($_columns) VALUES (?,?,?,?,?,?)', [
         s.name,
         s.photo,
         s.phone,
         s.type.id,
         s.isActive ? 1 : 0,
+        s.pin,
       ]);
       final id = _store.queryScalar('SELECT last_insert_rowid()') as int;
       notifyMutation('staff', id, 'save', s.toMap());
@@ -102,6 +113,7 @@ class SqliteStaffRepository implements StaffRepository {
       name: row['name'] as String,
       photo: row['photo'] as String?,
       phone: row['phone'] as String?,
+      pin: row['pin'] as String?,
       type: type,
       isActive: (row['isActive'] as int) == 1,
       id: row['id'] as int);

@@ -21,6 +21,7 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
   bool isActive = true;
   final TextEditingController _controllerStaffName = TextEditingController();
   final TextEditingController _controllerStaffPhone = TextEditingController();
+  final TextEditingController _controllerStaffPin = TextEditingController();
   StaffType? staffType;
   final _formKey = GlobalKey<FormState>();
 
@@ -33,6 +34,7 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
       setState(() {
         _controllerStaffName.text = widget.staff.name;
         _controllerStaffPhone.text = widget.staff.phone ?? '';
+        _controllerStaffPin.text = widget.staff.pin ?? '';
         staffType = widget.staff.type;
         isActive = widget.staff.isActive;
         image = LibraryImage(widget.staff.photo ?? '');
@@ -107,6 +109,25 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
                   focusNode: _focusNodes[1],
                   onFieldSubmitted: (v) {
                     FocusScope.of(context).unfocus();
+                  },
+                ),
+                SpacingStyle.defaultVerticalSpacing,
+                LabeledCustomTextFormField(
+                  controller: _controllerStaffPin,
+                  label: 'PIN (4 digits)',
+                  themeColor: _pageColor,
+                  foregroundColor: AppColors.black600,
+                  keyboardType: TextInputType.number,
+                  obscureText: true,
+                  hint: 'Enter PIN',
+                  validator: (value) {
+                    if (value != null && value.isNotEmpty && value.length < 4) {
+                      return 'Minimum 4 digits';
+                    }
+                    if (value != null && value.isNotEmpty && !RegExp(r'^\d{4,}$').hasMatch(value)) {
+                      return 'Numbers only';
+                    }
+                    return null;
                   },
                 ),
                 SpacingStyle.defaultVerticalSpacing,
@@ -196,6 +217,9 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
               photo: image?.filename,
               type: staffType!,
               isActive: isActive,
+              pin: _controllerStaffPin.text.isNotEmpty
+                  ? _controllerStaffPin.text
+                  : null,
             );
             try {
               ref.read(staffRepositoryProvider).saveStaff(updated).then((
