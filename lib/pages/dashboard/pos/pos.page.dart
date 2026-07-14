@@ -143,10 +143,12 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
   Widget build(BuildContext context) {
     final session = ref.watch(cartProvider);
     final productsRepo = ref.read(productRepositoryProvider);
+    final allProducts = productsRepo.getAllProducts();
+    final allCategories = productsRepo.getAllCategories();
     Color pageColor = Color(
       session.activeOrderType?.color ?? AppColors.primary.value,
     );
-    List<Product> products = productsRepo.getAllProducts().where((element) {
+    List<Product> products = allProducts.where((element) {
       if (selectedProductCategory == null) {
         return true;
       }
@@ -169,7 +171,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
             onPressed: () {
               showSearch(
                 context: context,
-                delegate: SearchProductDelegate(productsRepo.getAllProducts(), (
+                delegate: SearchProductDelegate(allProducts, (
                   product,
                 ) {
                   context.pushNamed('productView', extra: product);
@@ -517,6 +519,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
               context,
               pageColor,
               productsRepo,
+              allCategories,
               products,
               crossAxisCount,
               spacing,
@@ -525,6 +528,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
               context,
               pageColor,
               productsRepo,
+              allCategories,
               products,
               crossAxisCount,
               spacing,
@@ -575,7 +579,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
   Widget _buildCategoriesSidebar(
     BuildContext context,
     Color pageColor,
-    ProductRepository productsRepo,
+    List<ProductCategory> allCategories,
   ) {
     return ListView(
       controller: _scrollControllerCategories,
@@ -593,7 +597,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
           },
           label: 'All',
         ),
-        ...productsRepo.getAllCategories().map((each) {
+        ...allCategories.map((each) {
           return CircularCategoryPOSWidget(
             margin: const EdgeInsets.only(bottom: 6),
             image: LibraryImage(
@@ -617,14 +621,14 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
   Widget _buildCategoriesHorizontalBar(
     BuildContext context,
     Color pageColor,
-    ProductRepository productsRepo,
+    List<ProductCategory> allCategories,
   ) {
     return SizedBox(
       height: 72,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        itemCount: productsRepo.getAllCategories().length + 1,
+        itemCount: allCategories.length + 1,
         itemBuilder: (context, index) {
           if (index == 0) {
             return CircularCategoryPOSWidget(
@@ -640,7 +644,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
               label: 'All',
             );
           }
-          final each = productsRepo.getAllCategories()[index - 1];
+          final each = allCategories[index - 1];
           return CircularCategoryPOSWidget(
             margin: const EdgeInsets.only(right: 6),
             image: LibraryImage(
@@ -736,13 +740,14 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
     BuildContext context,
     Color pageColor,
     ProductRepository productsRepo,
+    List<ProductCategory> allCategories,
     List<Product> products,
     int crossAxisCount,
     double spacing,
   ) {
     return Column(
       children: [
-        _buildCategoriesHorizontalBar(context, pageColor, productsRepo),
+        _buildCategoriesHorizontalBar(context, pageColor, allCategories),
         Expanded(
           child: _buildProductGrid(
             context,
@@ -760,6 +765,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
     BuildContext context,
     Color pageColor,
     ProductRepository productsRepo,
+    List<ProductCategory> allCategories,
     List<Product> products,
     int crossAxisCount,
     double spacing,
@@ -769,7 +775,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
       children: [
         Flexible(
           flex: 2,
-          child: _buildCategoriesSidebar(context, pageColor, productsRepo),
+          child: _buildCategoriesSidebar(context, pageColor, allCategories),
         ),
         Expanded(
           flex: 8,

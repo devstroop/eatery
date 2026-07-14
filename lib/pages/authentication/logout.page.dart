@@ -1,4 +1,5 @@
 import 'package:eatery_core/theme/app_typography.dart';
+import 'package:eatery_core/providers/auth_session.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,10 +12,10 @@ class LogoutPage extends ConsumerStatefulWidget {
 }
 
 class _LogoutPageState extends ConsumerState<LogoutPage> {
-  Color themeColor = AppColors.secondary2;
   @override
   void initState() {
     super.initState();
+    ref.read(authSessionProvider.notifier).state = null;
     Future.delayed(Duration.zero, () {
       GoRouter.of(context as BuildContext).goNamed('login');
     });
@@ -36,16 +37,12 @@ class _LogoutPageState extends ConsumerState<LogoutPage> {
             color: AppColors.error,
           ),
         ),
-        Row(
-          children: [
-            Text(
-              'Logging out...',
-              style: TextStyle(
-                  color: AppColors.secondary2,
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold),
-            ),
-          ],
+        Text(
+          'Logging out...',
+          style: TextStyle(
+              color: AppColors.secondary2,
+              fontSize: 20,
+              fontWeight: FontWeight.bold),
         ),
       ],
     ));
