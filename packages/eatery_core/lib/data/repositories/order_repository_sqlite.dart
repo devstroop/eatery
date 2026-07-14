@@ -32,7 +32,7 @@ class SqliteOrderRepository implements OrderRepository {
 
   @override
   List<Order> getAllOrders() =>
-      _store.query('SELECT * FROM orders').map(Order.fromMap).toList();
+      _store.query('SELECT * FROM orders LIMIT 100').map(Order.fromMap).toList();
 
   @override
   Order? getOrderById(int id) {

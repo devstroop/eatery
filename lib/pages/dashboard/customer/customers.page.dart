@@ -39,40 +39,41 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
           GoRouter.of(context).pushNamed('addCustomer').then((_) => setState(() {}));
         },
       ),
-      child: ref.read(customerRepositoryProvider).getAllCustomers().isNotEmpty
-          ? ResponsiveListView(
-              itemCount: ref
-                  .read(customerRepositoryProvider)
-                  .getAllCustomers()
-                  .length,
-              childAspectRatio: 3.5,
-              itemBuilder: (context, index) {
-                final customer = ref
-                    .read(customerRepositoryProvider)
-                    .getAllCustomers()[index];
-                return _CustomerCard(customer: customer, pageColor: _pageColor);
-              },
-            )
-          : Center(
-              child: Opacity(
-                opacity: 0.5,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.person, size: 64),
-                    AppSpacing.gapLg,
-                    Text(
-                      'No Customers',
-                      style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      'Add a customer to get started',
-                      style: AppTypography.bodyLarge,
-                    ),
-                  ],
-                ),
+      child: _buildCustomerList(),
+    );
+  }
+
+  Widget _buildCustomerList() {
+    final customers = ref.read(customerRepositoryProvider).getAllCustomers();
+    if (customers.isEmpty) {
+      return Center(
+        child: Opacity(
+          opacity: 0.5,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.person, size: 64),
+              AppSpacing.gapLg,
+              Text(
+                'No Customers',
+                style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold),
               ),
-            ),
+              Text(
+                'Add a customer to get started',
+                style: AppTypography.bodyLarge,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    return ResponsiveListView(
+      itemCount: customers.length,
+      childAspectRatio: 3.5,
+      itemBuilder: (context, index) {
+        final customer = customers[index];
+        return _CustomerCard(customer: customer, pageColor: _pageColor);
+      },
     );
   }
 }

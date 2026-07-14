@@ -40,6 +40,7 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
     final repo = ref.read(productRepositoryProvider);
     final companyNotifier = ref.read(companyProvider.notifier);
     final currency = companyNotifier.currency;
+    final dishes = repo.getProductsByType(ProductType.kitchenDish);
     return AppPageShell(
       title: 'Kitchen',
       color: _pageColor,
@@ -159,11 +160,8 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
             ),
           ),
           Expanded(
-            child: ListView(
-              scrollDirection: Axis.vertical,
-              children: [
-                if (repo.getProductsByType(ProductType.kitchenDish).isEmpty)
-                  Center(
+            child: dishes.isEmpty
+                ? Center(
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
@@ -183,15 +181,16 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                         ),
                       ],
                     ),
-                  ),
-                ...repo
-                    .getProductsByType(ProductType.kitchenDish)
-                    .where(
-                      (element) => (selectedCategory != null
-                          ? element.categoryId == selectedCategory?.id
-                          : true),
-                    )
-                    .map((each) {
+                  )
+                : ListView(
+                    scrollDirection: Axis.vertical,
+                    children: dishes
+                        .where(
+                          (element) => (selectedCategory != null
+                              ? element.categoryId == selectedCategory?.id
+                              : true),
+                        )
+                        .map((each) {
                       return InkWell(
                         onTap: () {
                           // Show detailed bottom sheet
@@ -358,12 +357,11 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                           ),
                         ),
                       );
-                    }),
+                    }).toList(),
+                  ),
+                ),
               ],
             ),
-          ),
-        ],
-      ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: _pageColor,
         foregroundColor: AppColors.white,

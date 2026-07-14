@@ -18,7 +18,7 @@ class SqlitePaymentRepository implements PaymentRepository {
 
   @override
   List<Payment> getAllPayments() =>
-      _store.query('SELECT * FROM payment').map(Payment.fromMap).toList();
+      _store.query('SELECT * FROM payment LIMIT 100').map(Payment.fromMap).toList();
 
   @override
   List<Payment> getPaymentsByOrder(int orderId) => _store

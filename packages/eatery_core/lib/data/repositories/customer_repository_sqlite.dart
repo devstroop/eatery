@@ -33,7 +33,7 @@ class SqliteCustomerRepository implements CustomerRepository {
 
   @override
   List<Customer> getAllCustomers() =>
-      _store.query('SELECT * FROM customer').map(Customer.fromMap).toList();
+      _store.query('SELECT * FROM customer LIMIT 100').map(Customer.fromMap).toList();
 
   @override
   Customer? getCustomerByPhone(String phone) {
