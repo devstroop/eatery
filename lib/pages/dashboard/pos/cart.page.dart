@@ -388,7 +388,12 @@ class _CartPageState extends ConsumerState<CartPage> {
                                 ),
                               ),
                               Text(
-                                '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${ref.read(cartProvider).activeOrder?.grandTotal ?? 0}',
+                                () {
+                                  final active = ref.read(cartProvider).activeOrder;
+                                  if (active == null) return '0';
+                                  final outstanding = active.grandTotal - (active.paidTotal ?? 0);
+                                  return '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${outstanding.toStringAsFixed(2)}';
+                                }(),
                                 style: AppTypography.titleMedium.copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.error,

@@ -80,63 +80,66 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
-      initOrderType().then((orderType) {
-        if (orderType == null) {
-          Navigator.pop(this.context);
+    Future.delayed(Duration.zero, () => _initPos());
+  }
+
+  Future<void> _initPos() async {
+    try {
+      final orderType = await initOrderType();
+      if (orderType == null) {
+        if (mounted) Navigator.pop(this.context);
+        return;
+      }
+      setState(() {
+        ref.read(cartProvider.notifier).setOrderType(orderType);
+      });
+
+      if (ref.read(cartProvider).activeOrderType == OrderType.dine) {
+        final diningTable = await initDiningTableIfDine();
+        if (diningTable == null) {
+          if (mounted) Navigator.pop(this.context);
           return;
         }
         setState(() {
-          ref.read(cartProvider.notifier).setOrderType(orderType);
-        });
-        initDiningTableIfDine().then((diningTable) {
-          if (ref.read(cartProvider).activeOrderType == OrderType.dine &&
-              diningTable == null) {
-            Navigator.pop(this.context);
-            return;
-          }
-          setState(() {
-            if (diningTable != null) {
-              ref.read(cartProvider.notifier).setDiningTable(diningTable);
-              if (diningTable.status == DiningTableStatus.reserved) {
-                final reservedCustomer = ref
-                    .read(customerRepositoryProvider)
-                    .getCustomerByPhone(diningTable.customerPhone ?? '');
-                if (reservedCustomer != null) {
-                  ref.read(cartProvider.notifier).setCustomer(reservedCustomer);
-                }
-              } else if (diningTable.status == DiningTableStatus.occupied) {
-                final existingOrder = ref
-                    .read(orderRepositoryProvider)
-                    .getOrderById(diningTable.orderId!);
-                if (existingOrder != null) {
-                  ref.read(cartProvider.notifier).setActiveOrder(existingOrder);
-                  final occupiedCustomer = ref
-                      .read(customerRepositoryProvider)
-                      .getCustomerByPhone(existingOrder.customerPhone ?? '');
-                  if (occupiedCustomer != null) {
-                    ref
-                        .read(cartProvider.notifier)
-                        .setCustomer(occupiedCustomer);
-                  }
-                }
+          ref.read(cartProvider.notifier).setDiningTable(diningTable);
+          if (diningTable.status == DiningTableStatus.reserved) {
+            final reservedCustomer = ref
+                .read(customerRepositoryProvider)
+                .getCustomerByPhone(diningTable.customerPhone ?? '');
+            if (reservedCustomer != null) {
+              ref.read(cartProvider.notifier).setCustomer(reservedCustomer);
+            }
+          } else if (diningTable.status == DiningTableStatus.occupied) {
+            final existingOrder = ref
+                .read(orderRepositoryProvider)
+                .getOrderById(diningTable.orderId!);
+            if (existingOrder != null) {
+              ref.read(cartProvider.notifier).setActiveOrder(existingOrder);
+              final occupiedCustomer = ref
+                  .read(customerRepositoryProvider)
+                  .getCustomerByPhone(existingOrder.customerPhone ?? '');
+              if (occupiedCustomer != null) {
+                ref.read(cartProvider.notifier).setCustomer(occupiedCustomer);
               }
             }
-          });
-          initCustomerIfNull().then((customer) {
-            // if(customer == null){
-            //   Navigator.pop(this.context);
-            //   return;
-            // }
-            setState(() {
-              if (customer != null) {
-                ref.read(cartProvider.notifier).setCustomer(customer);
-              }
-            });
-          });
+          }
         });
+      }
+
+      final customer = await initCustomerIfNull();
+      setState(() {
+        if (customer != null) {
+          ref.read(cartProvider.notifier).setCustomer(customer);
+        }
       });
-    });
+    } catch (e) {
+      debugPrint('POS init error: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(this.context).showSnackBar(
+          SnackBar(content: Text('Failed to initialize POS: $e')),
+        );
+      }
+    }
   }
 
   @override
