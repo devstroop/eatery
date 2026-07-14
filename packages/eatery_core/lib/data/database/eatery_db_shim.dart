@@ -25,6 +25,8 @@ class EateryDB {
   dynamic get staffTypeBox => null;
   dynamic get printerBox => null;
   dynamic get printerTypeBox => null;
+  dynamic get subscriptionBox => null;
+  dynamic get subscriptionTypeBox => null;
   dynamic get currencyBox => null;
   dynamic get autoPrintBox => null;
   dynamic get foodTypeBox => null;

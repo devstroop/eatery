@@ -11,10 +11,11 @@ import 'package:eatery_core/data/repositories/payment_repository.dart';
 import 'package:eatery_core/data/repositories/payment_repository_sqlite.dart';
 import 'package:eatery_core/data/repositories/staff_repository.dart';
 import 'package:eatery_core/data/repositories/staff_repository_sqlite.dart';
-import 'package:eatery_core/data/repositories/inventory_repository.dart';
+import 'package:eatery_core/data/repositories/subscription_repository.dart';
 import 'package:eatery_core/data/repositories/modifier_repository.dart';
 import 'package:eatery_core/data/repositories/modifier_repository_sqlite.dart';
-
+import 'package:eatery_core/data/repositories/inventory_repository.dart';
+import 'package:eatery_core/data/repositories/subscription_repository_sqlite.dart';
 import 'package:eatery_core/data/repositories/sqlite_preference_store.dart';
 import 'package:eatery_core/providers/database_provider.dart';
 
@@ -38,6 +39,9 @@ final diningTableRepositoryProvider = Provider<DiningTableRepository>((ref) {
 });
 final staffRepositoryProvider = Provider<StaffRepository>((ref) {
   return SqliteStaffRepository(store: ref.read(eateryStoreProvider));
+});
+final subscriptionRepositoryProvider = Provider<SubscriptionRepository>((ref) {
+  return SqliteSubscriptionRepository(store: ref.read(eateryStoreProvider));
 });
 final sqlitePreferenceStoreProvider = Provider<SqlitePreferenceStore>((ref) {
   return SqlitePreferenceStore(store: ref.read(eateryStoreProvider));

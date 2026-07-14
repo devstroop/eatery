@@ -158,6 +158,7 @@ CREATE TABLE IF NOT EXISTS company (
   currencyCode   TEXT,
   salesTaxNumber TEXT,
   foodLicenseNo  TEXT,
+  subscriptionId INTEGER,
   adminStaffId   INTEGER
 );
 
@@ -186,6 +187,14 @@ CREATE TABLE IF NOT EXISTS staff (
   lastLoginAt    INTEGER,
   type           INTEGER NOT NULL,
   isActive       INTEGER NOT NULL DEFAULT 1
+);
+
+CREATE TABLE IF NOT EXISTS subscription (
+  id               INTEGER PRIMARY KEY AUTOINCREMENT,
+  purchaseCode     TEXT,
+  validFrom        INTEGER,
+  validTill        INTEGER,
+  subscriptionType INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS auto_print (

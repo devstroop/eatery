@@ -76,7 +76,21 @@ class _ViewOrderPageState extends ConsumerState<ViewOrderPage> {
             ),
             const SizedBox(height: 10),
             if (_items.isEmpty)
-              _label('No items found')
+              Padding(
+                padding: const EdgeInsets.all(24),
+                child: Center(
+                  child: Opacity(
+                    opacity: 0.5,
+                    child: Column(
+                      children: [
+                        Icon(Icons.receipt_long, size: 48, color: Colors.grey),
+                        const SizedBox(height: 8),
+                        Text('No items', style: AppTypography.bodyMedium),
+                      ],
+                    ),
+                  ),
+                ),
+              )
             else
               ..._items.map(
                 (item) => Card(

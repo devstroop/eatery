@@ -154,6 +154,7 @@ class SyncCoordinator {
     'product_modifier',
     'staff',
     'stock_adjustment',
+    'subscription',
     'supplier',
     'tax_slab',
   };

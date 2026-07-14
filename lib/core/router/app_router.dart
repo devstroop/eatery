@@ -8,6 +8,7 @@ import 'package:eatery_core/data/models/product/product.dart';
 import 'package:eatery/pages/authentication/login.page.dart';
 import 'package:eatery/pages/dashboard/pos/views/kProduct.view.dart';
 import 'package:eatery/pages/main.screen.dart';
+import 'package:eatery/pages/create_company/create_company.page.dart';
 import 'package:eatery/pages/dashboard/dashboard.page.dart';
 import 'package:eatery/pages/dashboard/pos/pos.page.dart';
 import 'package:eatery/pages/dashboard/pos/cart.page.dart';
@@ -61,6 +62,7 @@ import 'package:eatery/pages/dashboard/settings/modifier/edit_modifier_group.pag
 import 'package:eatery/pages/dashboard/data/data_management.page.dart';
 import 'package:eatery/pages/dashboard/data/export.page.dart';
 import 'package:eatery/pages/dashboard/data/import.page.dart';
+import 'package:eatery/pages/activation/upgrade.page.dart';
 import 'package:eatery/pages/authentication/reset-pin.dart';
 import 'package:eatery/pages/authentication/logout.page.dart';
 import 'package:eatery_core/providers/database_provider.dart';
@@ -97,6 +99,11 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
         name: 'mainScreen',
         path: '/',
         builder: (context, state) => const MainScreen(),
+      ),
+      GoRoute(
+        name: 'createCompany',
+        path: '/create-company',
+        builder: (context, state) => const CreateCompanyPage(),
       ),
       GoRoute(
         name: 'resetPin',
@@ -424,6 +431,22 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
         name: 'databaseInspector',
         path: '/dev/db-inspector',
         builder: (context, state) => const SizedBox.shrink(),
+      ),
+      GoRoute(
+        name: 'upgrade',
+        path: '/upgrade',
+        builder: (context, state) {
+          final company = state.extra as dynamic;
+          return UpgradePage(company: company);
+        },
+      ),
+      GoRoute(
+        name: 'productView',
+        path: '/pos/product-view',
+        builder: (context, state) {
+          final product = state.extra as Product;
+          return KProductView(product: product);
+        },
       ),
     ],
     redirect: (context, state) {

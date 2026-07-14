@@ -60,6 +60,8 @@ export './components/bottom_view_grip.dart';
 export './components/secondary_button.dart';
 export './components/custom_text_from_field.dart';
 export './components/selectable_card.dart';
+export './components/bottomsheets/forgot_password_bottomsheet.dart';
+export './components/bottomsheets/upgrade_to_access_bottomsheet.dart';
 export './components/labeled_custom_text_from_field.dart';
 export './components/notification_widget.dart';
 export './components/pos_category_widget.dart';
@@ -85,10 +87,12 @@ export './services/printing/print_invoice.dart';
 export './services/utility/share.dart';
 export './services/cloud/secure_storage.dart';
 // Internal references
+export './pages/activation/upgrade.page.dart';
 // Internal references
 export './pages/dashboard/dashboard.page.dart';
 // Components
 export './pages/dashboard/components/dashboardHeader.dart';
+export './pages/dashboard/components/notifications/upgrade.notification.dart';
 
 // Product
 export './pages/dashboard/product/search_product.delegate.dart';
@@ -152,6 +156,15 @@ export './pages/dashboard/utility/calculator.page.dart';
 export './pages/dashboard/utility/image_library.page.dart';
 export './widgets/containers/image.container.dart';
 // Create Company
+export './pages/create_company/create_company.page.dart';
+export './pages/create_company/components/body1.dart';
+export './pages/create_company/components/body2.dart';
+export './pages/create_company/components/body3.dart';
+export './pages/create_company/components/body4.dart';
+export './pages/create_company/components/body5.dart';
+export './pages/create_company/components/body6.dart';
+export './pages/create_company/components/create_company.bap.dart';
+export './pages/create_company/result.create_company.dart';
 // Settings
 export './pages/dashboard/settings/settings.page.dart';
 export './pages/dashboard/settings/company/view.company.page.dart';
