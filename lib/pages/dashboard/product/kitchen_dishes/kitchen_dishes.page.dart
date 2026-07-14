@@ -249,7 +249,7 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                                 each.name,
                                 style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500),
                               ),
-                              const SizedBox(width: 8),
+                              AppSpacing.gapSm,
                               if (each.foodType != null)
                                 FoodTypeBadge(
                                   size: 16,
@@ -280,7 +280,7 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                                     '${currency?.symbol ?? ''}${each.mrpPrice}',
                                     style: AppTypography.labelMedium.copyWith(fontWeight: FontWeight.w600, color: Color(0xFF2F2F2F)),
                                   ),
-                                  const SizedBox(width: 8),
+                                  AppSpacing.gapSm,
                                   Text(
                                     'Sale Price',
                                     style: AppTypography.labelMedium.copyWith(color: AppColors.grey700),

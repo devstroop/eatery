@@ -4,6 +4,7 @@ import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery_core/providers/company_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -143,7 +144,7 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
                     }
                   },
                 ),
-                const SizedBox(height: 20),
+                AppSpacing.gapXl,
                 TextFormField(
                   controller: _controllerAmount,
                   focusNode: _focusNodes[1],
@@ -165,7 +166,7 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
                   },
                 ),
                 // Upload screenshot image
-                const SizedBox(height: 20),
+                AppSpacing.gapXl,
                 // Reference number
                 TextFormField(
                   controller: _controllerReference,
@@ -183,7 +184,7 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
+                AppSpacing.gapXl,
                 UploadButton(
                   label: 'Payment Screenshot',
                   primaryColor: _pageColor,

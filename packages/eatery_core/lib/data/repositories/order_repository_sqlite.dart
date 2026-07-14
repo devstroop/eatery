@@ -35,6 +35,16 @@ class SqliteOrderRepository implements OrderRepository {
       _store.query('SELECT * FROM orders LIMIT 100').map(Order.fromMap).toList();
 
   @override
+  List<Order> getOrdersPage(int limit, int offset) =>
+      _store.query('SELECT * FROM orders ORDER BY id DESC LIMIT ? OFFSET ?', [limit, offset])
+          .map(Order.fromMap).toList();
+
+  @override
+  int getOrderCount() =>
+      (_store.queryScalar('SELECT COUNT(*) FROM orders') as int?) ?? 0;
+
+  @override
+  @override
   Order? getOrderById(int id) {
     final rows = _store.query('SELECT * FROM orders WHERE id = ?', [id]);
     return rows.isEmpty ? null : Order.fromMap(rows.first);

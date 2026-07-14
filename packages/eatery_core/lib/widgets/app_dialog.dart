@@ -123,7 +123,7 @@ class AppDialog {
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(icon, color: iconColor, size: 28),
-                  const SizedBox(width: 8),
+                  AppSpacing.gapSm,
                   Text(title, style: AppTypography.titleMedium),
                 ],
               )

@@ -2,6 +2,7 @@ import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -38,9 +39,9 @@ class _ModifierGroupsPageState extends ConsumerState<ModifierGroupsPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Icon(Icons.tune, size: 64),
-                    const SizedBox(height: 16),
+                    AppSpacing.gapLg,
                     Text('No modifier groups', style: AppTypography.headlineSmall),
-                    const SizedBox(height: 8),
+                    AppSpacing.gapSm,
                     Text('Add groups like "Extra Toppings" or "Beverage Size"',
                         style: AppTypography.bodyMedium),
                   ],

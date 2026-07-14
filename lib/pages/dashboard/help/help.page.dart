@@ -1,6 +1,7 @@
 import "package:flutter/material.dart";
 import "package:eatery_core/theme/app_typography.dart";
 import "package:eatery_core/theme/app_colors.dart";
+import "package:eatery_core/theme/app_spacing.dart";
 import "package:eatery_core/widgets/widgets.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
 
@@ -39,7 +40,7 @@ class HelpPage extends ConsumerWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title, style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold)),
-          const SizedBox(height: 4),
+          AppSpacing.gapXs,
           Text(body, style: AppTypography.bodyMedium),
           const Divider(height: 24),
         ],

@@ -321,7 +321,7 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(height: 12),
+                          AppSpacing.gapMd,
                           Text(
                             'Add a dining table to get started',
                             style: AppTypography.bodyMedium,

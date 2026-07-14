@@ -3,6 +3,7 @@ import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -98,7 +99,7 @@ class _EditOrderPageState extends ConsumerState<EditOrderPage> {
               'Order ID: ${widget.order.id}',
               style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 10),
+            AppSpacing.gapSm,
             Row(
               children: [
                 Container(
@@ -133,27 +134,27 @@ class _EditOrderPageState extends ConsumerState<EditOrderPage> {
                 ),
               ],
             ),
-            const SizedBox(height: 10),
+            AppSpacing.gapSm,
             Text(
               'Customer: ${widget.order.customerPhone ?? 'N/A'}',
               style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 10),
+            AppSpacing.gapSm,
             Text(
               'Order Date: ${widget.order.createdAt}',
               style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 10),
+            AppSpacing.gapSm,
             Text(
               'Order Type: ${widget.order.type.name}',
               style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 20),
+            AppSpacing.gapXl,
             Text(
               'Order Items',
               style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 10),
+            AppSpacing.gapSm,
             if (_items.isEmpty)
               const Text('No items found')
             else
@@ -190,7 +191,7 @@ class _EditOrderPageState extends ConsumerState<EditOrderPage> {
                             ),
                           ),
                         ),
-                        const SizedBox(width: 12),
+                        AppSpacing.gapMd,
                         Text(
                           '${_items[i].total}',
                           style: AppTypography.titleMedium.copyWith(

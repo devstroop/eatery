@@ -1,5 +1,6 @@
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/providers/database_provider.dart';
 import 'package:eatery_core/extensions/string_ext.dart';
 import 'package:eatery_core/widgets/widgets.dart';
@@ -88,12 +89,12 @@ class _SetupPageState extends ConsumerState<SetupPage> {
                     'Just the essentials',
                     style: AppTypography.headlineSmall,
                   ),
-                  const SizedBox(height: 8),
+                  AppSpacing.gapSm,
                   Text(
                     'You can configure everything else later from the dashboard.',
                     style: AppTypography.bodyMedium.copyWith(color: AppColors.grey600),
                   ),
-                  const SizedBox(height: 32),
+                  AppSpacing.gapXxl,
                   CustomTextFromField(
                     controller: _nameCtrl,
                     label: 'Your name',
@@ -102,7 +103,7 @@ class _SetupPageState extends ConsumerState<SetupPage> {
                     validator: (v) =>
                         v == null || v.trim().isEmpty ? 'Required' : null,
                   ),
-                  const SizedBox(height: 16),
+                  AppSpacing.gapLg,
                   CustomTextFromField(
                     controller: _pinCtrl,
                     label: 'Create a PIN (4 digits)',
@@ -118,7 +119,7 @@ class _SetupPageState extends ConsumerState<SetupPage> {
                       return null;
                     },
                   ),
-                  const SizedBox(height: 16),
+                  AppSpacing.gapLg,
                   CustomTextFromField(
                     controller: _confirmCtrl,
                     label: 'Confirm PIN',
@@ -130,7 +131,7 @@ class _SetupPageState extends ConsumerState<SetupPage> {
                     validator: (v) =>
                         v != _pinCtrl.text ? 'PINs do not match' : null,
                   ),
-                  const SizedBox(height: 24),
+                  AppSpacing.gapXl,
                   AppButton.primary(
                     label: _loading ? 'Setting up...' : 'Complete Setup',
                     height: 50,

@@ -1,5 +1,6 @@
 import 'package:eatery_core/widgets/widgets.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery_core/utils/responsive.dart';
 import 'package:eatery/pages/authentication/reset-pin.dart';
@@ -82,7 +83,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     child: Row(
                       children: [
                         Icon(Icons.lock_reset, color: AppColors.grey700),
-                        const SizedBox(width: 8),
+                        AppSpacing.gapSm,
                         Text(
                           'Reset PIN',
                           style: AppTypography.bodyMedium.copyWith(color: AppColors.grey700),
@@ -95,7 +96,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     child: Row(
                       children: [
                         Icon(Icons.delete, color: AppColors.error),
-                        const SizedBox(width: 8),
+                        AppSpacing.gapSm,
                         Text(
                           'Delete Company',
                           style: AppTypography.bodyMedium.copyWith(color: AppColors.error),
@@ -181,7 +182,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.start,
             mainAxisSize: MainAxisSize.max,
             children: [
-              const SizedBox(height: 12),
+              AppSpacing.gapMd,
               Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -196,7 +197,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                       ),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  AppSpacing.gapSm,
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -213,7 +214,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+              AppSpacing.gapMd,
               Form(
                 key: _formKey,
                 child: Column(
@@ -233,7 +234,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         return null;
                       },
                     ),
-                    const SizedBox(height: 8),
+                    AppSpacing.gapSm,
                     CustomTextFromField(
                       themeColor: themeColor,
                       keyboardType: const TextInputType.numberWithOptions(

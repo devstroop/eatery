@@ -4,6 +4,7 @@ import 'package:eatery_core/data/database/native/eatery_store.dart';
 import 'package:eatery_core/providers/database_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/extensions/string_ext.dart';
 import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:eatery_core/widgets/widgets.dart';
@@ -92,12 +93,12 @@ class _ResetPinScreenState extends ConsumerState<ResetPinScreen> {
                   'Identify your account',
                   style: AppTypography.headlineSmall,
                 ),
-                const SizedBox(height: 8),
+                AppSpacing.gapSm,
                 Text(
                   'Enter your staff ID or phone number.',
                   style: AppTypography.bodyMedium,
                 ),
-                const SizedBox(height: 24),
+                AppSpacing.gapXl,
                 CustomTextFromField(
                   controller: _loginIdController,
                   label: 'Staff ID or Phone',
@@ -105,7 +106,7 @@ class _ResetPinScreenState extends ConsumerState<ResetPinScreen> {
                   validator: (v) =>
                       v == null || v.trim().isEmpty ? 'Required' : null,
                 ),
-                const SizedBox(height: 24),
+                AppSpacing.gapXl,
                 AppButton.primary(
                   label: 'Continue',
                   onPressed: _lookupStaff,
@@ -116,12 +117,12 @@ class _ResetPinScreenState extends ConsumerState<ResetPinScreen> {
                   'Set new PIN',
                   style: AppTypography.headlineSmall,
                 ),
-                const SizedBox(height: 8),
+                AppSpacing.gapSm,
                 Text(
                   'Choose a new 4-digit PIN.',
                   style: AppTypography.bodyMedium,
                 ),
-                const SizedBox(height: 24),
+                AppSpacing.gapXl,
                 CustomTextFromField(
                   controller: _newPinController,
                   label: 'New PIN',
@@ -136,7 +137,7 @@ class _ResetPinScreenState extends ConsumerState<ResetPinScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 12),
+                AppSpacing.gapMd,
                 CustomTextFromField(
                   controller: _confirmPinController,
                   label: 'Confirm PIN',
@@ -149,7 +150,7 @@ class _ResetPinScreenState extends ConsumerState<ResetPinScreen> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 24),
+                AppSpacing.gapXl,
                 AppButton.primary(
                   label: 'Reset PIN',
                   onPressed: _savePin,

@@ -56,6 +56,8 @@ import 'package:eatery/pages/dashboard/staff/edit.staff.page.dart';
 import 'package:eatery/pages/setup/setup.page.dart';
 import 'package:eatery/pages/dashboard/help/help.page.dart';
 import 'package:eatery/pages/dashboard/reports/reports.page.dart';
+import 'package:eatery/pages/dashboard/settings/discount/discounts.page.dart';
+import 'package:eatery/pages/dashboard/settings/discount/add_discount.page.dart';
 import 'package:eatery/pages/dashboard/settings/modifier/modifier_groups.page.dart';
 import 'package:eatery/pages/dashboard/settings/modifier/add_modifier_group.page.dart';
 import 'package:eatery/pages/dashboard/settings/modifier/edit_modifier_group.page.dart';
@@ -387,6 +389,24 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
         builder: (context, state) {
           final group = state.extra as ModifierGroup;
           return EditModifierGroupPage(group: group);
+        },
+      ),
+      GoRoute(
+        name: 'discounts',
+        path: '/settings/discounts',
+        builder: (context, state) => const DiscountsPage(),
+      ),
+      GoRoute(
+        name: 'addDiscount',
+        path: '/settings/discounts/add',
+        builder: (context, state) => const AddDiscountPage(),
+      ),
+      GoRoute(
+        name: 'editDiscount',
+        path: '/settings/discounts/edit',
+        builder: (context, state) {
+          final discount = state.extra as Discount;
+          return AddDiscountPage(discount: discount);
         },
       ),
       GoRoute(

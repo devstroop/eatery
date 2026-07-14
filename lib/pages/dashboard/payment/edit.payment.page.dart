@@ -2,6 +2,7 @@ import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Color _pageColor = AppColors.menuCategories;
@@ -88,7 +89,7 @@ class _EditPaymentPageState extends ConsumerState<EditPaymentPage> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
+                AppSpacing.gapXl,
                 TextFormField(
                   controller: _controllerAmount,
                   focusNode: _focusNodes[1],
@@ -105,7 +106,7 @@ class _EditPaymentPageState extends ConsumerState<EditPaymentPage> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 20),
+                AppSpacing.gapXl,
                 DropdownButtonFormField<PaymentMode>(
                   decoration: const InputDecoration(
                     labelText: 'Payment Mode',

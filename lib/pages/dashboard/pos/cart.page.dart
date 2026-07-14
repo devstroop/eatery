@@ -9,6 +9,8 @@ import 'package:eatery/pages/dashboard/utility/order_print.page.dart';
 import 'package:eatery_core/providers/cart_provider.dart';
 import 'package:eatery_core/providers/company_provider.dart';
 import 'package:eatery_core/providers/order_provider.dart';
+import 'package:eatery_core/providers/database_provider.dart';
+import 'package:eatery_core/data/repositories/discount_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery/references.dart';
 import 'package:go_router/go_router.dart';
@@ -447,10 +449,45 @@ class _CartPageState extends ConsumerState<CartPage> {
                             fontSize: 7,
                           ),
                         ),
+                  ],
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  final repo = DiscountRepository(ref.read(eateryStoreProvider));
+                  final discounts = repo.getActiveDiscounts();
+                  if (discounts.isEmpty) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('No active discounts available')),
+                    );
+                    return;
+                  }
+                  showModalBottomSheet(
+                    context: context,
+                    builder: (_) => Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Padding(
+                          padding: EdgeInsets.all(16),
+                          child: Text('Apply Discount', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                        ),
+                        ...discounts.map((d) => ListTile(
+                          title: Text(d.name),
+                          subtitle: Text(d.type == 0 ? '${d.value}% off' : d.type == 1 ? '₹${d.value} off' : 'BOGO'),
+                          onTap: () {
+                            Navigator.pop(context);
+                            ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('${d.name} applied')),
+                            );
+                          },
+                        )),
                       ],
                     ),
-                  ),
-                  AppButton.primary(
+                  );
+                },
+                child: const Text('Apply Discount'),
+              ),
+              AppButton.primary(
                     label: 'Checkout',
                     onPressed: () => placeOrder(
                       context,
@@ -521,7 +558,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                     child: const Text('Cancel'),
                   ),
                 ),
-                const SizedBox(width: 16),
+                AppSpacing.gapLg,
                 Expanded(
                   child: ElevatedButton(
                     style: ButtonStyle(

@@ -85,7 +85,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                 ],
               ),
             ),
-            const SizedBox(height: 8),
+            AppSpacing.gapSm,
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: Row(
@@ -152,7 +152,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                       style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
                     ),
                   ),
-                  const SizedBox(height: 8),
+                  AppSpacing.gapSm,
                   Container(
                     width: double.infinity,
                     padding: const EdgeInsets.all(8),
@@ -174,7 +174,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                 'Customer Details',
                 style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 8),
+              AppSpacing.gapSm,
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(
@@ -242,7 +242,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                 'Order Details',
                 style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
               ),
-              const SizedBox(height: 8),
+              AppSpacing.gapSm,
               SingleChildScrollView(
                 scrollDirection: Axis.horizontal,
                 child: Row(

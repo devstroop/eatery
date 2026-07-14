@@ -1,5 +1,6 @@
 import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'dart:ui' as ui;
 
@@ -98,9 +99,9 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                AppSpacing.gapMd,
                 kotPreview(context),
-                const SizedBox(height: 24),
+                AppSpacing.gapXl,
               ],
             ),
           if (widget.printInvoice)
@@ -146,9 +147,9 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                     ),
                   ],
                 ),
-                const SizedBox(height: 12),
+                AppSpacing.gapMd,
                 invoicePreview(context),
-                const SizedBox(height: 24),
+                AppSpacing.gapXl,
               ],
             ),
         ],
@@ -186,24 +187,15 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
               children: [
                 Text(
                   '${company?.name ?? ''} (Invoice)',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: AppTypography.titleLarge,
                 ),
                 Text(
                   company?.address ?? '',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
+                  style: AppTypography.bodyMedium,
                 ),
                 Text(
                   [company?.email ?? '', company?.phone ?? ''].join(', '),
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
+                  style: AppTypography.bodyMedium,
                 ),
               ],
             ),
@@ -213,17 +205,11 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
               children: [
                 Text(
                   'Order: #${widget.order.id}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
+                  style: AppTypography.bodyMedium,
                 ),
                 Text(
                   'Date: ${DateFormat('dd/MM/yyyy').format(widget.order.createdAt)}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
+                  style: AppTypography.bodyMedium,
                 ),
               ],
             ),
@@ -236,17 +222,11 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                   children: [
                     Text(
                       orderName,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: AppTypography.labelLarge,
                     ),
                     Text(
                       orderPhone,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: AppTypography.labelLarge,
                     ),
                   ],
                 ),
@@ -261,10 +241,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                     ),
                     Text(
                       orderAddress ?? '',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: AppTypography.labelLarge,
                     ),
                   ],
                 ),
@@ -283,20 +260,14 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                       flex: 4,
                       child: Text(
                         product.productName,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                        ),
+                        style: AppTypography.bodySmall,
                       ),
                     ),
                     Expanded(
                       flex: 1,
                       child: Text(
                         'x ${product.quantity}',
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                        ),
+                        style: AppTypography.bodySmall,
                       ),
                     ),
                     Expanded(
@@ -305,10 +276,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                         alignment: Alignment.centerRight,
                         child: Text(
                           '${product.price.toPrecision(2)}/-',
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                          ),
+                          style: AppTypography.bodySmall,
                         ),
                       ),
                     ),
@@ -318,10 +286,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                         alignment: Alignment.centerRight,
                         child: Text(
                           '${currency}${product.subTotal.toPrecision(2)}',
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                          ),
+                          style: AppTypography.bodySmall,
                         ),
                       ),
                     ),
@@ -339,10 +304,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                 ),
                 Text(
                   '${currency}${widget.order.subTotal.toPrecision(2)}',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                  ),
+                  style: AppTypography.bodySmall,
                 ),
               ],
             ),
@@ -355,10 +317,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                 ),
                 Text(
                   '${currency}${(widget.order.taxTotal ?? 0).toPrecision(2)}',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                  ),
+                  style: AppTypography.bodySmall,
                 ),
               ],
             ),
@@ -371,10 +330,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                 ),
                 Text(
                   '${currency}${widget.order.finalTotal.toPrecision(2)}',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                  ),
+                  style: AppTypography.bodySmall,
                 ),
               ],
             ),
@@ -388,10 +344,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                 ),
                 Text(
                   '${widget.order.roundOff > 0 ? '+' : '-'} ${currency}${widget.order.roundOff.toPrecision(2).abs()}',
-                  style: const TextStyle(
-                    fontSize: 12,
-                    fontWeight: FontWeight.w400,
-                  ),
+                  style: AppTypography.bodySmall,
                 ),
               ],
             ),
@@ -404,10 +357,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                 ),
                 Text(
                   '${currency}${widget.order.grandTotal.toPrecision(2)}',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
                 ),
               ],
             ),
@@ -443,17 +393,11 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
               children: [
                 Text(
                   '${company?.name ?? ''} (KOT)',
-                  style: const TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: AppTypography.titleLarge,
                 ),
                 Text(
                   company?.address ?? '',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
+                  style: AppTypography.bodyMedium,
                 ),
               ],
             ),
@@ -463,17 +407,11 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
               children: [
                 Text(
                   'Order: #${widget.order.id}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
+                  style: AppTypography.bodyMedium,
                 ),
                 Text(
                   'Date: ${DateFormat('dd/MM/yyyy').format(widget.order.createdAt)}',
-                  style: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w400,
-                  ),
+                  style: AppTypography.bodyMedium,
                 ),
               ],
             ),
@@ -486,17 +424,11 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                   children: [
                     Text(
                       orderName,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: AppTypography.labelLarge,
                     ),
                     Text(
                       orderPhone,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: AppTypography.labelLarge,
                     ),
                   ],
                 ),
@@ -511,10 +443,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                     ),
                     Text(
                       orderAddress ?? '',
-                      style: const TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
-                      ),
+                      style: AppTypography.labelLarge,
                     ),
                   ],
                 ),
@@ -541,10 +470,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                       flex: 4,
                       child: Text(
                         product.name,
-                        style: const TextStyle(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                        ),
+                        style: AppTypography.bodySmall,
                       ),
                     ),
                     Expanded(
@@ -553,10 +479,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                         alignment: Alignment.centerRight,
                         child: Text(
                           'x ${widget.currentCart.where((element) => element.id == product.id).length}',
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                          ),
+                          style: AppTypography.bodySmall,
                         ),
                       ),
                     ),
@@ -574,10 +497,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                 ),
                 Text(
                   '${widget.currentCart.length}',
-                  style: const TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
                 ),
               ],
             ),

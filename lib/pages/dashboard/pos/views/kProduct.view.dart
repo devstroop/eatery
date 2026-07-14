@@ -1,6 +1,8 @@
 import 'package:eatery_core/providers/company_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
+import 'package:eatery_core/theme/app_typography.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class KProductView extends ConsumerStatefulWidget {
@@ -53,7 +55,7 @@ class _KProductViewState extends ConsumerState<KProductView> {
             ],
           ),
         ),
-        const SizedBox(height: 12),
+        AppSpacing.gapMd,
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
           child: Row(
@@ -118,7 +120,7 @@ class _KProductViewState extends ConsumerState<KProductView> {
             ],
           ),
         ),
-        const SizedBox(height: 12),
+        AppSpacing.gapMd,
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 12.0),
           child: Column(
@@ -134,12 +136,12 @@ class _KProductViewState extends ConsumerState<KProductView> {
               ),
               Text(
                 widget.product.description ?? '',
-                style: TextStyle(color: AppColors.black500, fontSize: 12),
+                style: AppTypography.bodySmall.copyWith(color: AppColors.black500),
               ),
             ],
           ),
         ),
-        const SizedBox(height: 12),
+        AppSpacing.gapMd,
         Container(
           margin: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 12.0),
           height: 0.5,
@@ -173,7 +175,7 @@ class _KProductViewState extends ConsumerState<KProductView> {
                     ),
                   ),
                 ),
-                const SizedBox(width: 12),
+                AppSpacing.gapMd,
                 Expanded(
                   child: InkWell(
                     onTap: widget.onDelete,
@@ -201,7 +203,7 @@ class _KProductViewState extends ConsumerState<KProductView> {
             ),
           ),
         if (widget.onEdit != null || widget.onDelete != null)
-          const SizedBox(height: 12),
+          AppSpacing.gapMd,
         if (widget.onAddToCart != null)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
@@ -227,7 +229,7 @@ class _KProductViewState extends ConsumerState<KProductView> {
               ),
             ),
           ),
-        const SizedBox(height: 24),
+        AppSpacing.gapXl,
       ],
     );
   }

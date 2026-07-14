@@ -2,6 +2,7 @@ import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/widgets/widgets.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery/references.dart';
@@ -83,13 +84,13 @@ class _AddModifierGroupPageState extends ConsumerState<AddModifierGroupPage> {
                 hint: 'e.g. Extra Toppings',
                 validator: (v) => v == null || v.trim().isEmpty ? 'Required' : null,
               ),
-              const SizedBox(height: 12),
+              AppSpacing.gapMd,
               CustomTextFromField(
                 controller: _descCtrl,
                 label: 'Description (optional)',
                 hint: 'e.g. Choose your extra toppings',
               ),
-              const SizedBox(height: 16),
+              AppSpacing.gapLg,
               Row(
                 children: [
                   Expanded(
@@ -100,7 +101,7 @@ class _AddModifierGroupPageState extends ConsumerState<AddModifierGroupPage> {
                       onChanged: (v) => _minSelect = int.tryParse(v) ?? 0,
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  AppSpacing.gapMd,
                   Expanded(
                     child: TextField(
                       decoration: const InputDecoration(labelText: 'Max Select (0 = any)'),
@@ -111,7 +112,7 @@ class _AddModifierGroupPageState extends ConsumerState<AddModifierGroupPage> {
                   ),
                 ],
               ),
-              const SizedBox(height: 12),
+              AppSpacing.gapMd,
               SwitchListTile(
                 title: const Text('Required'),
                 subtitle: const Text('Customer must select at least min options'),

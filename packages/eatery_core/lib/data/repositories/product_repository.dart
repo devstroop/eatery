@@ -4,6 +4,8 @@ import 'package:eatery_core/data/models/eatery_db.dart';
 /// ([SqliteProductRepository]) implements this.
 abstract class ProductRepository {
   List<Product> getAllProducts();
+  List<Product> getProductsPage(int limit, int offset);
+  int getProductCount();
   List<Product> getProductsByType(ProductType type);
   List<Product> getProductsByCategory(int? categoryId);
   Product? getProductById(int id);

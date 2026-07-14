@@ -4,6 +4,7 @@ import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery_core/providers/company_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -67,16 +68,30 @@ class _ViewOrderPageState extends ConsumerState<ViewOrderPage> {
               'Order Date: ${DateFormat.yMMMd().add_jm().format(widget.order.createdAt)}',
             ),
             _label('Total: $currencySymbol${widget.order.grandTotal}'),
-            const SizedBox(height: 20),
+            AppSpacing.gapXl,
             Text(
               'Order Items',
               style: AppTypography.titleLarge.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 10),
+            AppSpacing.gapSm,
             if (_items.isEmpty)
-              _label('No items found')
+              Padding(
+                padding: const EdgeInsets.all(24),
+                child: Center(
+                  child: Opacity(
+                    opacity: 0.5,
+                    child: Column(
+                      children: [
+                        Icon(Icons.receipt_long, size: 48, color: Colors.grey),
+                        AppSpacing.gapSm,
+                        Text('No items', style: AppTypography.bodyMedium),
+                      ],
+                    ),
+                  ),
+                ),
+              )
             else
               ..._items.map(
                 (item) => Card(
@@ -99,7 +114,7 @@ class _ViewOrderPageState extends ConsumerState<ViewOrderPage> {
                           ),
                         ),
                         Text('${item.quantity} x $currencySymbol${item.price}'),
-                        const SizedBox(width: 12),
+                        AppSpacing.gapMd,
                         Text(
                           '$currencySymbol${item.total}',
                           style: AppTypography.titleMedium.copyWith(

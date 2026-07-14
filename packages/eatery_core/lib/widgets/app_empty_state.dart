@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
+import '../theme/app_spacing.dart';
 import '../theme/app_typography.dart';
 
 /// Empty state widget shown when no data is available.
@@ -36,7 +37,7 @@ class AppEmptyState extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, size: iconSize, color: AppColors.grey400),
-            const SizedBox(height: 16),
+            AppSpacing.gapLg,
             Text(
               title,
               style: AppTypography.headlineSmall.copyWith(
@@ -44,7 +45,7 @@ class AppEmptyState extends StatelessWidget {
               ),
             ),
             if (subtitle != null) ...[
-              const SizedBox(height: 4),
+              AppSpacing.gapXs,
               Text(
                 subtitle!,
                 style: AppTypography.bodyMedium.copyWith(
@@ -52,7 +53,7 @@ class AppEmptyState extends StatelessWidget {
                 ),
               ),
             ],
-            if (action != null) ...[const SizedBox(height: 24), action!],
+            if (action != null) ...[AppSpacing.gapXl, action!],
           ],
         ),
       ),

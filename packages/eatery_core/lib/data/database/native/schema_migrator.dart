@@ -67,6 +67,7 @@ class SchemaMigrator {
     _migrationV1,
     _migrationV2,
     _migrationV3,
+    _migrationV4,
   ];
 
   /// v1: Auth & order lifecycle fields.
@@ -167,6 +168,11 @@ class SchemaMigrator {
         quantity        INTEGER NOT NULL DEFAULT 1
       )
     ''');
+  }
+  /// v4: Discounts and promotions.
+  static void _migrationV4(EateryStore store) {
+    store.execute("CREATE TABLE IF NOT EXISTS discount (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, type INTEGER NOT NULL, value REAL NOT NULL, minOrder REAL, maxUses INTEGER, isActive INTEGER NOT NULL DEFAULT 1, startsAt INTEGER, endsAt INTEGER, createdAt INTEGER NOT NULL, updatedAt INTEGER)");
+    store.execute("CREATE TABLE IF NOT EXISTS order_discount (id INTEGER PRIMARY KEY AUTOINCREMENT, orderId INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE, discountId INTEGER REFERENCES discount(id), name TEXT NOT NULL, type INTEGER NOT NULL, value REAL NOT NULL, amount REAL NOT NULL, appliedBy INTEGER REFERENCES staff(id), createdAt INTEGER NOT NULL)");
   }
 
   /// Safely adds a column if it doesn't already exist.

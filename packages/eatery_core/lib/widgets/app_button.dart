@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
+import '../theme/app_spacing.dart';
 import '../theme/app_typography.dart';
 
 /// Consistent button widget used across the entire app.
@@ -98,7 +99,7 @@ class AppButton extends StatelessWidget {
                 children: [
                   if (icon != null) ...[
                     Icon(icon, size: 18),
-                    const SizedBox(width: 8),
+                    AppSpacing.gapSm,
                   ],
                   Text(label),
                 ],

@@ -17,9 +17,20 @@ class SqlitePaymentRepository implements PaymentRepository {
       'cardLastFour, terminalId';
 
   @override
+    @override
   List<Payment> getAllPayments() =>
       _store.query('SELECT * FROM payment LIMIT 100').map(Payment.fromMap).toList();
 
+  @override
+  List<Payment> getPaymentsPage(int limit, int offset) =>
+      _store.query('SELECT * FROM payment ORDER BY id DESC LIMIT ? OFFSET ?', [limit, offset])
+          .map(Payment.fromMap).toList();
+
+  @override
+  int getPaymentCount() =>
+      (_store.queryScalar('SELECT COUNT(*) FROM payment') as int?) ?? 0;
+
+  @override
   @override
   List<Payment> getPaymentsByOrder(int orderId) => _store
       .query('SELECT * FROM payment WHERE orderId = ?', [orderId])

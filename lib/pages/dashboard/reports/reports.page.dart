@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/providers/database_provider.dart';
 import 'package:eatery_core/providers/company_provider.dart';
 import 'package:eatery_core/providers/auth_session.dart';
@@ -85,7 +86,7 @@ class _ReportsPageState extends ConsumerState<ReportsPage> {
               onTap: _pickDateRange,
             ),
           ),
-          const SizedBox(height: 12),
+          AppSpacing.gapMd,
           Row(
             children: [
               Expanded(
@@ -94,7 +95,7 @@ class _ReportsPageState extends ConsumerState<ReportsPage> {
                   onPressed: _loading ? null : _generateXReport,
                 ),
               ),
-              const SizedBox(width: 12),
+              AppSpacing.gapMd,
               Expanded(
                 child: AppButton.primary(
                   label: 'Z-Report',
@@ -103,7 +104,7 @@ class _ReportsPageState extends ConsumerState<ReportsPage> {
               ),
             ],
           ),
-          const SizedBox(height: 20),
+          AppSpacing.gapXl,
           if (_loading)
             const Center(child: CircularProgressIndicator()),
           if (_report != null) ...[
@@ -117,12 +118,12 @@ class _ReportsPageState extends ConsumerState<ReportsPage> {
                       '${_report!.reportType == 'daily' ? 'Z' : 'X'}-Report',
                       style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
                     ),
-                    const SizedBox(height: 4),
+                    AppSpacing.gapXs,
                     Text(
                       'Report #${_report!.reportNumber}',
                       style: AppTypography.bodySmall,
                     ),
-                    const SizedBox(height: 4),
+                    AppSpacing.gapXs,
                     Text(
                       'Generated: ${DateFormat.yMMMd().add_jm().format(_report!.generatedAt)}',
                       style: AppTypography.bodySmall,
@@ -141,7 +142,7 @@ class _ReportsPageState extends ConsumerState<ReportsPage> {
                     if (_report!.paymentBreakdownJson != null) ...[
                       Text('Payment Breakdown',
                           style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold)),
-                      const SizedBox(height: 8),
+                      AppSpacing.gapSm,
                       ...() {
                         final breakdown = jsonDecode(_report!.paymentBreakdownJson!) as Map<String, dynamic>;
                         return breakdown.entries.map((e) =>

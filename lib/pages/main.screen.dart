@@ -97,7 +97,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                       height: 52, width: 200,
                       onPressed: () => GoRouter.of(this.context).pushNamed('setup'),
                     ),
-                    const SizedBox(width: 12),
+                    AppSpacing.gapMd,
                     AppButton.destructive(
                       label: _loading ? 'Loading...' : 'Try Demo',
                       height: 52, width: 160,
@@ -177,7 +177,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                   onPressed: () => GoRouter.of(this.context).pushNamed('setup'),
                 ),
               ),
-              const SizedBox(width: 12),
+              AppSpacing.gapMd,
               Expanded(
                 child: AppButton.destructive(
                   label: _loading ? '...' : 'Demo',

@@ -191,13 +191,13 @@ class _ImageLibraryPageState extends ConsumerState<ImageLibraryPage> {
                       width: MediaQuery.of(context).size.width / 3,
                       child: Image.asset('assets/images/empty-folder.png'),
                     ),
-                    const Text(
+                    Text(
                       'LIBRARY IS EMPTY',
-                      style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                      style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold),
                     ),
                     const Text(
                       'NO IMAGES FOUND IN LIBRARY',
-                      style: TextStyle(fontSize: 16),
+                      style: AppTypography.bodyLarge,
                     ),
                   ],
                 ),

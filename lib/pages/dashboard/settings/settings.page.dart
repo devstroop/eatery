@@ -3,6 +3,8 @@ import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/pages/dashboard/settings/printer/printer.setting.page.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/providers/database_provider.dart';
+import 'package:eatery/dev/seed_data.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -67,6 +69,14 @@ class _SettingPageState extends ConsumerState<SettingPage> {
             onTap: () => GoRouter.of(context).pushNamed('modifierGroups').then((_) => setState(() {})),
           ),
           MenuTile(
+            prefixIcon: Icons.local_offer,
+            title: 'Discounts',
+            subtitle: 'Promotions & discount rules',
+            postfixIcon: Icons.chevron_right,
+            color: getThemeColor(),
+            onTap: () => GoRouter.of(context).pushNamed('discounts').then((_) => setState(() {})),
+          ),
+          MenuTile(
             prefixIcon: Icons.print,
             title: 'Printer',
             subtitle: 'Manage Printing Devices',
@@ -96,11 +106,10 @@ class _SettingPageState extends ConsumerState<SettingPage> {
               postfixIcon: Icons.download,
               color: Colors.orange,
               onTap: () async {
+                await SeedData.load(ref.read(eateryStoreProvider));
                 if (this.context.mounted) {
                   ScaffoldMessenger.of(this.context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Sample data loading removed'),
-                    ),
+                    const SnackBar(content: Text('Demo data loaded')),
                   );
                 }
               },
