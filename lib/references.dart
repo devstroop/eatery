@@ -7,7 +7,6 @@ export 'package:flutter/services.dart';
 export 'package:flutter/rendering.dart';
 // External packages by devstroop
 export 'package:eatery_core/data/models/eatery_db.dart';
-export 'package:eatery_core/data/database/eatery_db_shim.dart';
 export 'package:devdart_windows_hdsn/devdart_windows_hdsn.dart';
 export 'package:devdart_windows_hdsn/drive.dart';
 // External refs by devstroop (*deprecated — moved to local equivalents)
@@ -173,7 +172,4 @@ export './pages/dashboard/settings/tax_slab/add.tax_slab.page.dart';
 export './pages/dashboard/settings/tax_slab/edit.tax_slab.page.dart';
 export './pages/dashboard/settings/tax_slab/tax_slabs.page.dart';
 export './pages/dashboard/settings/currency_region/view.currency_region.page.dart';
-// Backup Restore
-export './pages/backup_restore/backup_restore.page.dart';
-//
 export 'package:eatery/extensions/customer.extension.dart';

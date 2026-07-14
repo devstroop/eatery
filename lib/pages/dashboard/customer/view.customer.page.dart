@@ -260,21 +260,6 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
     );
   }
 
-  /*
-  double getCustomerOutstandingAmount(Customer? customer){
-    if (customer == null) {
-      return 0;
-    }
-    double outstandingAmount = 0;
-    for (var order in EateryDB.instance.orderBox!.values.where((element) => element.customer?.id == customer.id)) {
-      var payments = EateryDB.instance.paymentBox!.values.where((element) => element.order.id == order.id);
-      if(payments.isNotEmpty){
-        outstandingAmount += order.grandTotal - payments.map((e) => e.amount).reduce((value, element) => value + element);
-      }
-    }
-    return outstandingAmount;
-  }*/
-
   Widget _buildLoyaltyCard() {
     final loyalty = LoyaltyRepository(ref.read(eateryStoreProvider)).getByCustomer(widget.customer.id ?? 0);
     if (loyalty == null) return const SizedBox.shrink();
