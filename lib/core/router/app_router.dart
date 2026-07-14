@@ -56,6 +56,8 @@ import 'package:eatery/pages/dashboard/staff/edit.staff.page.dart';
 import 'package:eatery/pages/setup/setup.page.dart';
 import 'package:eatery/pages/dashboard/help/help.page.dart';
 import 'package:eatery/pages/dashboard/reports/reports.page.dart';
+import 'package:eatery/pages/dashboard/reservations/reservations.page.dart';
+import 'package:eatery/pages/dashboard/reservations/add_reservation.page.dart';
 import 'package:eatery/pages/dashboard/inventory/suppliers.page.dart';
 import 'package:eatery/pages/dashboard/inventory/add_supplier.page.dart';
 import 'package:eatery/pages/dashboard/inventory/purchase_orders.page.dart';
@@ -434,6 +436,24 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
         name: 'purchaseOrders',
         path: '/purchase-orders',
         builder: (context, state) => const PurchaseOrdersPage(),
+      ),
+      GoRoute(
+        name: 'reservations',
+        path: '/reservations',
+        builder: (context, state) => const ReservationsPage(),
+      ),
+      GoRoute(
+        name: 'addReservation',
+        path: '/reservations/add',
+        builder: (context, state) => const AddReservationPage(),
+      ),
+      GoRoute(
+        name: 'editReservation',
+        path: '/reservations/edit',
+        builder: (context, state) {
+          final reservation = state.extra as Reservation;
+          return AddReservationPage(reservation: reservation);
+        },
       ),
       GoRoute(
         name: 'staffs',

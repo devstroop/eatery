@@ -58,6 +58,8 @@ export 'modifier/modifier.dart';
 export 'modifier/product_modifier.dart';
 export 'modifier/order_product_modifier.dart';
 
+// Reservation
+export 'reservation/reservation.dart';
 // Hours
 export 'hours/business_hours.dart';
 export 'hours/holiday_hours.dart';

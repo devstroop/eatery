@@ -141,6 +141,7 @@ class SyncCoordinator {
     'currency',
     'customer',
     'business_hours',
+    'reservation',
     'expense',
     'expense_category',
     'holiday_hours',

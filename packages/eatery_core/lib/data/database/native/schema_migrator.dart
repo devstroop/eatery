@@ -71,6 +71,7 @@ class SchemaMigrator {
     _migrationV5,
     _migrationV6,
     _migrationV7,
+    _migrationV8,
   ];
 
   /// v1: Auth & order lifecycle fields.
@@ -196,6 +197,12 @@ class SchemaMigrator {
   static void _migrationV7(EateryStore store) {
     store.execute("CREATE TABLE IF NOT EXISTS expense_category (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, description TEXT, isActive INTEGER NOT NULL DEFAULT 1)");
     store.execute("CREATE TABLE IF NOT EXISTS expense (id INTEGER PRIMARY KEY AUTOINCREMENT, categoryId INTEGER REFERENCES expense_category(id), amount REAL NOT NULL, description TEXT NOT NULL, expenseDate INTEGER NOT NULL, paymentMode INTEGER NOT NULL DEFAULT 0, reference TEXT, receipt TEXT, createdBy INTEGER REFERENCES staff(id), createdAt INTEGER NOT NULL)");
+  }
+
+
+  /// v8: Table reservations.
+  static void _migrationV8(EateryStore store) {
+    store.execute("CREATE TABLE IF NOT EXISTS reservation (id INTEGER PRIMARY KEY AUTOINCREMENT, customerName TEXT NOT NULL, customerPhone TEXT, diningTableId INTEGER REFERENCES dining_table(id), partySize INTEGER NOT NULL, dateTime INTEGER NOT NULL, duration INTEGER DEFAULT 60, status INTEGER NOT NULL DEFAULT 0, note TEXT, createdBy INTEGER REFERENCES staff(id), createdAt INTEGER NOT NULL, updatedAt INTEGER)");
   }
 
   /// Safely adds a column if it doesn't already exist.
