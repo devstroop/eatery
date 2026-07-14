@@ -124,7 +124,7 @@ class CartPage extends ConsumerWidget {
       grandTotal: subTotal,
       paidTotal: null,
       type: cart.activeOrderType ?? OrderType.dine,
-      status: 'active',
+      status: OrderStatus.pending,
     );
 
     final orderId = await orderRepo.saveOrder(order);

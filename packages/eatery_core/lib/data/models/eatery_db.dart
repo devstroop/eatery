@@ -3,6 +3,8 @@ export 'dart:convert' show jsonEncode, jsonDecode;
 // Order
 export 'order/order_type.dart';
 export 'order/order_product.dart';
+export 'order/order_status.dart';
+export 'order/order_status_history.dart';
 export 'order/order.dart';
 
 // Printer

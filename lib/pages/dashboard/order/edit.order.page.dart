@@ -17,7 +17,7 @@ class EditOrderPage extends ConsumerStatefulWidget {
 class _EditOrderPageState extends ConsumerState<EditOrderPage> {
   late List<OrderProduct> _items;
   late List<TextEditingController> _qtyControllers;
-  late String _status;
+  late OrderStatus _status;
 
   @override
   void initState() {
@@ -42,7 +42,6 @@ class _EditOrderPageState extends ConsumerState<EditOrderPage> {
   Future<void> _save() async {
     final repo = ref.read(orderRepositoryProvider);
 
-    // Update quantities
     for (var i = 0; i < _items.length; i++) {
       final qty = int.tryParse(_qtyControllers[i].text) ?? _items[i].quantity;
       if (qty != _items[i].quantity) {
@@ -55,12 +54,17 @@ class _EditOrderPageState extends ConsumerState<EditOrderPage> {
       }
     }
 
-    // Update order status
     if (_status != widget.order.status) {
       final now = DateTime.now();
       await repo.saveOrder(widget.order.copyWith(
         status: _status,
         updatedAt: now,
+      ));
+      await repo.recordStatusTransition(OrderStatusHistory(
+        orderId: widget.order.id!,
+        fromStatus: widget.order.status.id,
+        toStatus: _status.id,
+        changedAt: now,
       ));
     }
 
@@ -74,6 +78,9 @@ class _EditOrderPageState extends ConsumerState<EditOrderPage> {
 
   @override
   Widget build(BuildContext context) {
+    final allowedTransitions = widget.order.status.allowedTransitions;
+    final displayStatuses = [widget.order.status, ...allowedTransitions];
+
     return AppPageShell(
       title: 'Edit Order',
       color: AppColors.menuCategories,
@@ -92,20 +99,39 @@ class _EditOrderPageState extends ConsumerState<EditOrderPage> {
               style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 10),
-            DropdownButtonFormField<String>(
-              value: _status,
-              decoration: const InputDecoration(
-                labelText: 'Order Status',
-                border: OutlineInputBorder(),
-              ),
-              items: const [
-                DropdownMenuItem(value: 'active', child: Text('Active')),
-                DropdownMenuItem(value: 'completed', child: Text('Completed')),
-                DropdownMenuItem(value: 'voided', child: Text('Voided')),
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: _status.color.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    _status.name,
+                    style: TextStyle(
+                      color: _status.color,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                const Spacer(),
+                DropdownButton<OrderStatus>(
+                  value: _status,
+                  hint: const Text('Change status'),
+                  items: displayStatuses.map((s) {
+                    return DropdownMenuItem(
+                      value: s,
+                      child: Text(s.name),
+                    );
+                  }).toList(),
+                  onChanged: (v) {
+                    if (v != null && v != widget.order.status) {
+                      setState(() => _status = v);
+                    }
+                  },
+                ),
               ],
-              onChanged: (v) {
-                if (v != null) setState(() => _status = v);
-              },
             ),
             const SizedBox(height: 10),
             Text(

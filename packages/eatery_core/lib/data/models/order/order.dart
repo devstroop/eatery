@@ -1,9 +1,17 @@
 import 'package:eatery_core/data/models/eatery_db.dart';
 import 'package:eatery_core/data/models/converters.dart';
+import 'package:eatery_core/data/models/order/order_status.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'order.freezed.dart';
 part 'order.g.dart';
+
+int _statusToJson(OrderStatus s) => s.id;
+OrderStatus _statusFromJson(Object? v) {
+  if (v is int) return OrderStatus.fromId(v);
+  if (v is String) return OrderStatus.fromString(v);
+  return OrderStatus.pending;
+}
 
 @freezed
 abstract class Order with _$Order {
@@ -23,7 +31,9 @@ abstract class Order with _$Order {
     required double grandTotal,
     double? paidTotal,
     required OrderType type,
-    @Default('active') String status,
+    @Default(OrderStatus.pending)
+    @JsonKey(fromJson: _statusFromJson, toJson: _statusToJson)
+    OrderStatus status,
     String? voidReason,
     String? voidedBy,
     @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)
@@ -36,7 +46,11 @@ abstract class Order with _$Order {
 }
 
 extension OrderX on Order {
-  Map<String, Object?> toMap() => toJson() as Map<String, Object?>;
+  Map<String, Object?> toMap() {
+    final m = toJson() as Map<String, Object?>;
+    m['status'] = status.id;
+    return m;
+  }
 
   static Order fromIterable(Iterable<dynamic> row) {
     return Order.fromMap({

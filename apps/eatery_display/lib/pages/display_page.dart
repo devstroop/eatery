@@ -6,7 +6,7 @@ import 'package:eatery_core/eatery_core.dart';
 final _liveOrdersProvider = FutureProvider.autoDispose<List<Order>>((ref) {
   final repo = ref.read(orderRepositoryProvider);
   return repo.getAllOrders()
-      .where((o) => o.status == 'active' || o.status == 'preparing')
+      .where((o) => o.status == OrderStatus.pending || o.status == OrderStatus.preparing)
       .toList();
 });
 
@@ -214,30 +214,23 @@ class _OrderStatusCard extends ConsumerWidget {
 }
 
 class _StatusBadge extends StatelessWidget {
-  final String status;
+  final OrderStatus status;
   const _StatusBadge({required this.status});
 
   @override
   Widget build(BuildContext context) {
-    final (color, label) = switch (status) {
-      'active' => (Colors.orange, 'PREPARING'),
-      'preparing' => (Colors.blue, 'COOKING'),
-      'ready' => (Colors.green, 'READY'),
-      'completed' => (Colors.grey, 'DONE'),
-      _ => (Colors.grey, status.toUpperCase()),
-    };
-
+    final c = status.color;
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.2),
+        color: c.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(12),
-        border: Border.all(color: color, width: 2),
+        border: Border.all(color: c, width: 2),
       ),
       child: Text(
-        label,
+        status.name.toUpperCase(),
         style: TextStyle(
-          color: color,
+          color: c,
           fontSize: 20,
           fontWeight: FontWeight.bold,
         ),

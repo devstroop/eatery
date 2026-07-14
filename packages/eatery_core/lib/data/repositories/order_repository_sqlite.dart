@@ -94,6 +94,36 @@ class SqliteOrderRepository implements OrderRepository {
   }
 
   // ---------------------------------------------------------------------------
+  // Order status history
+  // ---------------------------------------------------------------------------
+
+  @override
+  List<OrderStatusHistory> getStatusHistory(int orderId) => _store
+      .query(
+        'SELECT * FROM order_status_history WHERE orderId = ? ORDER BY changedAt',
+        [orderId],
+      )
+      .map(OrderStatusHistory.fromMap)
+      .toList();
+
+  @override
+  Future<void> recordStatusTransition(OrderStatusHistory transition) async {
+    final m = transition.toMap();
+    _store.execute('''
+      INSERT INTO order_status_history (orderId, fromStatus, toStatus,
+        changedByStaffId, changedAt, reason)
+      VALUES (?,?,?,?,?,?)
+    ''', [
+      m['orderId'],
+      m['fromStatus'],
+      m['toStatus'],
+      m['changedByStaffId'],
+      m['changedAt'],
+      m['reason'],
+    ]);
+  }
+
+  // ---------------------------------------------------------------------------
   // Order products (line items)
   // ---------------------------------------------------------------------------
 

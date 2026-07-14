@@ -20,7 +20,9 @@ _Order _$OrderFromJson(Map<String, dynamic> json) => _Order(
   grandTotal: (json['grandTotal'] as num).toDouble(),
   paidTotal: (json['paidTotal'] as num?)?.toDouble(),
   type: $enumDecode(_$OrderTypeEnumMap, json['type']),
-  status: json['status'] as String? ?? 'active',
+  status: json['status'] == null
+      ? OrderStatus.pending
+      : _statusFromJson(json['status']),
   voidReason: json['voidReason'] as String?,
   voidedBy: json['voidedBy'] as String?,
   voidedAt: epochFromJsonNullable((json['voidedAt'] as num?)?.toInt()),
@@ -40,7 +42,7 @@ Map<String, dynamic> _$OrderToJson(_Order instance) => <String, dynamic>{
   'grandTotal': instance.grandTotal,
   'paidTotal': instance.paidTotal,
   'type': _$OrderTypeEnumMap[instance.type]!,
-  'status': instance.status,
+  'status': _statusToJson(instance.status),
   'voidReason': instance.voidReason,
   'voidedBy': instance.voidedBy,
   'voidedAt': epochToJsonNullable(instance.voidedAt),

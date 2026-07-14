@@ -58,7 +58,7 @@ class _ViewOrderPageState extends ConsumerState<ViewOrderPage> {
             _label('Order ID: ${widget.order.id}'),
             _label('Table: ${diningTable?.name ?? 'N/A'}'),
             _label('Customer: ${customer?.name ?? 'NA'}'),
-            _label('Order Status: ${widget.order.status}'),
+            _label('Order Status: ${widget.order.status.name}'),
             _label(
               'Payment Status: ${widget.order.grandTotal > (widget.order.paidTotal ?? 0) ? 'Not Paid' : 'Paid'}',
             ),

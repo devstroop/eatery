@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Order {
 
- int? get id; String? get customerPhone;@JsonKey(fromJson: epochFromJson, toJson: epochToJson) DateTime get createdAt;@JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) DateTime? get updatedAt; int get totalQuantity; double get subTotal; double get discountTotal; double get taxTotal; double get finalTotal; double get roundOff; double get grandTotal; double? get paidTotal; OrderType get type; String get status; String? get voidReason; String? get voidedBy;@JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) DateTime? get voidedAt;
+ int? get id; String? get customerPhone;@JsonKey(fromJson: epochFromJson, toJson: epochToJson) DateTime get createdAt;@JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) DateTime? get updatedAt; int get totalQuantity; double get subTotal; double get discountTotal; double get taxTotal; double get finalTotal; double get roundOff; double get grandTotal; double? get paidTotal; OrderType get type;@JsonKey(fromJson: _statusFromJson, toJson: _statusToJson) OrderStatus get status; String? get voidReason; String? get voidedBy;@JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) DateTime? get voidedAt;
 /// Create a copy of Order
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -48,7 +48,7 @@ abstract mixin class $OrderCopyWith<$Res>  {
   factory $OrderCopyWith(Order value, $Res Function(Order) _then) = _$OrderCopyWithImpl;
 @useResult
 $Res call({
- int? id, String? customerPhone,@JsonKey(fromJson: epochFromJson, toJson: epochToJson) DateTime createdAt,@JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) DateTime? updatedAt, int totalQuantity, double subTotal, double discountTotal, double taxTotal, double finalTotal, double roundOff, double grandTotal, double? paidTotal, OrderType type, String status, String? voidReason, String? voidedBy,@JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) DateTime? voidedAt
+ int? id, String? customerPhone,@JsonKey(fromJson: epochFromJson, toJson: epochToJson) DateTime createdAt,@JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) DateTime? updatedAt, int totalQuantity, double subTotal, double discountTotal, double taxTotal, double finalTotal, double roundOff, double grandTotal, double? paidTotal, OrderType type,@JsonKey(fromJson: _statusFromJson, toJson: _statusToJson) OrderStatus status, String? voidReason, String? voidedBy,@JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) DateTime? voidedAt
 });
 
 
@@ -81,7 +81,7 @@ as double,grandTotal: null == grandTotal ? _self.grandTotal : grandTotal // igno
 as double,paidTotal: freezed == paidTotal ? _self.paidTotal : paidTotal // ignore: cast_nullable_to_non_nullable
 as double?,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as OrderType,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as String,voidReason: freezed == voidReason ? _self.voidReason : voidReason // ignore: cast_nullable_to_non_nullable
+as OrderStatus,voidReason: freezed == voidReason ? _self.voidReason : voidReason // ignore: cast_nullable_to_non_nullable
 as String?,voidedBy: freezed == voidedBy ? _self.voidedBy : voidedBy // ignore: cast_nullable_to_non_nullable
 as String?,voidedAt: freezed == voidedAt ? _self.voidedAt : voidedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,
@@ -169,7 +169,7 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String? customerPhone, @JsonKey(fromJson: epochFromJson, toJson: epochToJson)  DateTime createdAt, @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)  DateTime? updatedAt,  int totalQuantity,  double subTotal,  double discountTotal,  double taxTotal,  double finalTotal,  double roundOff,  double grandTotal,  double? paidTotal,  OrderType type,  String status,  String? voidReason,  String? voidedBy, @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)  DateTime? voidedAt)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String? customerPhone, @JsonKey(fromJson: epochFromJson, toJson: epochToJson)  DateTime createdAt, @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)  DateTime? updatedAt,  int totalQuantity,  double subTotal,  double discountTotal,  double taxTotal,  double finalTotal,  double roundOff,  double grandTotal,  double? paidTotal,  OrderType type, @JsonKey(fromJson: _statusFromJson, toJson: _statusToJson)  OrderStatus status,  String? voidReason,  String? voidedBy, @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)  DateTime? voidedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Order() when $default != null:
 return $default(_that.id,_that.customerPhone,_that.createdAt,_that.updatedAt,_that.totalQuantity,_that.subTotal,_that.discountTotal,_that.taxTotal,_that.finalTotal,_that.roundOff,_that.grandTotal,_that.paidTotal,_that.type,_that.status,_that.voidReason,_that.voidedBy,_that.voidedAt);case _:
@@ -190,7 +190,7 @@ return $default(_that.id,_that.customerPhone,_that.createdAt,_that.updatedAt,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String? customerPhone, @JsonKey(fromJson: epochFromJson, toJson: epochToJson)  DateTime createdAt, @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)  DateTime? updatedAt,  int totalQuantity,  double subTotal,  double discountTotal,  double taxTotal,  double finalTotal,  double roundOff,  double grandTotal,  double? paidTotal,  OrderType type,  String status,  String? voidReason,  String? voidedBy, @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)  DateTime? voidedAt)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String? customerPhone, @JsonKey(fromJson: epochFromJson, toJson: epochToJson)  DateTime createdAt, @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)  DateTime? updatedAt,  int totalQuantity,  double subTotal,  double discountTotal,  double taxTotal,  double finalTotal,  double roundOff,  double grandTotal,  double? paidTotal,  OrderType type, @JsonKey(fromJson: _statusFromJson, toJson: _statusToJson)  OrderStatus status,  String? voidReason,  String? voidedBy, @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)  DateTime? voidedAt)  $default,) {final _that = this;
 switch (_that) {
 case _Order():
 return $default(_that.id,_that.customerPhone,_that.createdAt,_that.updatedAt,_that.totalQuantity,_that.subTotal,_that.discountTotal,_that.taxTotal,_that.finalTotal,_that.roundOff,_that.grandTotal,_that.paidTotal,_that.type,_that.status,_that.voidReason,_that.voidedBy,_that.voidedAt);case _:
@@ -210,7 +210,7 @@ return $default(_that.id,_that.customerPhone,_that.createdAt,_that.updatedAt,_th
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String? customerPhone, @JsonKey(fromJson: epochFromJson, toJson: epochToJson)  DateTime createdAt, @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)  DateTime? updatedAt,  int totalQuantity,  double subTotal,  double discountTotal,  double taxTotal,  double finalTotal,  double roundOff,  double grandTotal,  double? paidTotal,  OrderType type,  String status,  String? voidReason,  String? voidedBy, @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)  DateTime? voidedAt)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String? customerPhone, @JsonKey(fromJson: epochFromJson, toJson: epochToJson)  DateTime createdAt, @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)  DateTime? updatedAt,  int totalQuantity,  double subTotal,  double discountTotal,  double taxTotal,  double finalTotal,  double roundOff,  double grandTotal,  double? paidTotal,  OrderType type, @JsonKey(fromJson: _statusFromJson, toJson: _statusToJson)  OrderStatus status,  String? voidReason,  String? voidedBy, @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)  DateTime? voidedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _Order() when $default != null:
 return $default(_that.id,_that.customerPhone,_that.createdAt,_that.updatedAt,_that.totalQuantity,_that.subTotal,_that.discountTotal,_that.taxTotal,_that.finalTotal,_that.roundOff,_that.grandTotal,_that.paidTotal,_that.type,_that.status,_that.voidReason,_that.voidedBy,_that.voidedAt);case _:
@@ -225,7 +225,7 @@ return $default(_that.id,_that.customerPhone,_that.createdAt,_that.updatedAt,_th
 @JsonSerializable()
 
 class _Order implements Order {
-  const _Order({this.id, this.customerPhone, @JsonKey(fromJson: epochFromJson, toJson: epochToJson) required this.createdAt, @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) this.updatedAt, required this.totalQuantity, required this.subTotal, required this.discountTotal, required this.taxTotal, required this.finalTotal, required this.roundOff, required this.grandTotal, this.paidTotal, required this.type, this.status = 'active', this.voidReason, this.voidedBy, @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) this.voidedAt});
+  const _Order({this.id, this.customerPhone, @JsonKey(fromJson: epochFromJson, toJson: epochToJson) required this.createdAt, @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) this.updatedAt, required this.totalQuantity, required this.subTotal, required this.discountTotal, required this.taxTotal, required this.finalTotal, required this.roundOff, required this.grandTotal, this.paidTotal, required this.type, @JsonKey(fromJson: _statusFromJson, toJson: _statusToJson) this.status = OrderStatus.pending, this.voidReason, this.voidedBy, @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) this.voidedAt});
   factory _Order.fromJson(Map<String, dynamic> json) => _$OrderFromJson(json);
 
 @override final  int? id;
@@ -241,7 +241,7 @@ class _Order implements Order {
 @override final  double grandTotal;
 @override final  double? paidTotal;
 @override final  OrderType type;
-@override@JsonKey() final  String status;
+@override@JsonKey(fromJson: _statusFromJson, toJson: _statusToJson) final  OrderStatus status;
 @override final  String? voidReason;
 @override final  String? voidedBy;
 @override@JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) final  DateTime? voidedAt;
@@ -279,7 +279,7 @@ abstract mixin class _$OrderCopyWith<$Res> implements $OrderCopyWith<$Res> {
   factory _$OrderCopyWith(_Order value, $Res Function(_Order) _then) = __$OrderCopyWithImpl;
 @override @useResult
 $Res call({
- int? id, String? customerPhone,@JsonKey(fromJson: epochFromJson, toJson: epochToJson) DateTime createdAt,@JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) DateTime? updatedAt, int totalQuantity, double subTotal, double discountTotal, double taxTotal, double finalTotal, double roundOff, double grandTotal, double? paidTotal, OrderType type, String status, String? voidReason, String? voidedBy,@JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) DateTime? voidedAt
+ int? id, String? customerPhone,@JsonKey(fromJson: epochFromJson, toJson: epochToJson) DateTime createdAt,@JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) DateTime? updatedAt, int totalQuantity, double subTotal, double discountTotal, double taxTotal, double finalTotal, double roundOff, double grandTotal, double? paidTotal, OrderType type,@JsonKey(fromJson: _statusFromJson, toJson: _statusToJson) OrderStatus status, String? voidReason, String? voidedBy,@JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) DateTime? voidedAt
 });
 
 
@@ -312,7 +312,7 @@ as double,grandTotal: null == grandTotal ? _self.grandTotal : grandTotal // igno
 as double,paidTotal: freezed == paidTotal ? _self.paidTotal : paidTotal // ignore: cast_nullable_to_non_nullable
 as double?,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as OrderType,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
-as String,voidReason: freezed == voidReason ? _self.voidReason : voidReason // ignore: cast_nullable_to_non_nullable
+as OrderStatus,voidReason: freezed == voidReason ? _self.voidReason : voidReason // ignore: cast_nullable_to_non_nullable
 as String?,voidedBy: freezed == voidedBy ? _self.voidedBy : voidedBy // ignore: cast_nullable_to_non_nullable
 as String?,voidedAt: freezed == voidedAt ? _self.voidedAt : voidedAt // ignore: cast_nullable_to_non_nullable
 as DateTime?,

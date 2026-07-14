@@ -5,7 +5,7 @@ import 'package:eatery_core/eatery_core.dart';
 
 final _activeOrdersProvider = FutureProvider.autoDispose<List<Order>>((ref) {
   final repo = ref.read(orderRepositoryProvider);
-  return repo.getAllOrders().where((o) => o.status == 'active').toList();
+  return repo.getAllOrders().where((o) => o.status == OrderStatus.pending || o.status == OrderStatus.preparing).toList();
 });
 
 final _orderProductsProvider =
@@ -95,16 +95,7 @@ class _TicketCard extends ConsumerWidget {
   final Order order;
   const _TicketCard({required this.order});
 
-  Color get _statusColor {
-    switch (order.status) {
-      case 'active':
-        return Colors.orange;
-      case 'completed':
-        return Colors.green;
-      default:
-        return Colors.grey;
-    }
-  }
+  Color get _statusColor => order.status.color;
 
   bool get _isNew {
     return DateTime.now().difference(order.createdAt).inMinutes < 2;
@@ -172,7 +163,7 @@ class _TicketCard extends ConsumerWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
-                          order.status.toUpperCase(),
+                          order.status.name.toUpperCase(),
                           style: const TextStyle(
                               color: Colors.white,
                               fontSize: 10,
@@ -316,7 +307,7 @@ class _TicketDetail extends ConsumerWidget {
                 onPressed: () async {
                   final repo = ref.read(orderRepositoryProvider);
                   final updated = order.copyWith(
-                    status: 'completed',
+                    status: OrderStatus.completed,
                     updatedAt: DateTime.now(),
                   );
                   await repo.saveOrder(updated);

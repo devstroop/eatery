@@ -7,4 +7,6 @@ abstract class OrderRepository {
   Future<void> saveOrderProduct(OrderProduct op);
   Future<int> addOrderProduct(OrderProduct op);
   Future<void> deleteOrder(Order order);
+  List<OrderStatusHistory> getStatusHistory(int orderId);
+  Future<void> recordStatusTransition(OrderStatusHistory transition);
 }
