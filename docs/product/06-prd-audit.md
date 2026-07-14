@@ -1,7 +1,7 @@
 # PRD Audit — Gaps & Improvements
 
-> **Auditing:** `docs/prd/01-vision.md` through `docs/prd/05-release-criteria.md`  
-> **Against:** `docs/specs/11-schema-audit.md` (schema review), `docs/specs/10-onboarding-redesign.md` (onboarding), `ISSUES.md` (codebase audit), `docs/audit/` (full audit)  
+> **Auditing:** `01-vision.md` through `05-release-criteria.md`  
+> **Against:** `../plan/schema-audit.md` (schema review), `../plan/onboarding-redesign.md` (onboarding), `../plan/issue-inventory.md` (codebase audit)
 > **Goal:** Identify missing features, underdeveloped areas, and phase reorganization opportunities
 
 ---
