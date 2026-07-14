@@ -58,6 +58,12 @@ export 'modifier/modifier.dart';
 export 'modifier/product_modifier.dart';
 export 'modifier/order_product_modifier.dart';
 
+// Hours
+export 'hours/business_hours.dart';
+export 'hours/holiday_hours.dart';
+// Expense
+export 'expense/expense_category.dart';
+export 'expense/expense.dart';
 // Shift
 export 'shift/shift.dart';
 export 'shift/time_entry.dart';

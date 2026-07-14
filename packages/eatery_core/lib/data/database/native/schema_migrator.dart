@@ -69,6 +69,8 @@ class SchemaMigrator {
     _migrationV3,
     _migrationV4,
     _migrationV5,
+    _migrationV6,
+    _migrationV7,
   ];
 
   /// v1: Auth & order lifecycle fields.
@@ -181,6 +183,19 @@ class SchemaMigrator {
   static void _migrationV5(EateryStore store) {
     store.execute("CREATE TABLE IF NOT EXISTS shift (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, startTime TEXT NOT NULL, endTime TEXT NOT NULL, isActive INTEGER NOT NULL DEFAULT 1)");
     store.execute("CREATE TABLE IF NOT EXISTS time_entry (id INTEGER PRIMARY KEY AUTOINCREMENT, staffId INTEGER NOT NULL REFERENCES staff(id), shiftId INTEGER REFERENCES shift(id), clockIn INTEGER NOT NULL, clockOut INTEGER, breakStart INTEGER, breakEnd INTEGER, note TEXT, createdAt INTEGER NOT NULL)");
+  }
+
+
+  /// v6: Business hours and holiday hours.
+  static void _migrationV6(EateryStore store) {
+    store.execute("CREATE TABLE IF NOT EXISTS business_hours (id INTEGER PRIMARY KEY AUTOINCREMENT, dayOfWeek INTEGER NOT NULL, openTime TEXT NOT NULL, closeTime TEXT NOT NULL, isClosed INTEGER NOT NULL DEFAULT 0)");
+    store.execute("CREATE TABLE IF NOT EXISTS holiday_hours (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT NOT NULL, openTime TEXT, closeTime TEXT, description TEXT)");
+  }
+
+  /// v7: Expense tracking.
+  static void _migrationV7(EateryStore store) {
+    store.execute("CREATE TABLE IF NOT EXISTS expense_category (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, description TEXT, isActive INTEGER NOT NULL DEFAULT 1)");
+    store.execute("CREATE TABLE IF NOT EXISTS expense (id INTEGER PRIMARY KEY AUTOINCREMENT, categoryId INTEGER REFERENCES expense_category(id), amount REAL NOT NULL, description TEXT NOT NULL, expenseDate INTEGER NOT NULL, paymentMode INTEGER NOT NULL DEFAULT 0, reference TEXT, receipt TEXT, createdBy INTEGER REFERENCES staff(id), createdAt INTEGER NOT NULL)");
   }
 
   /// Safely adds a column if it doesn't already exist.
