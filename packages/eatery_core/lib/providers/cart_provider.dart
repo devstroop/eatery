@@ -8,28 +8,47 @@ import 'package:eatery_core/data/repositories/tax_repository.dart';
 import 'package:eatery_core/data/repositories/dining_table_repository.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 
-/// Active POS session state — replaces Common.cart / Common.activeOrder / etc.
+/// A cart line item with quantity tracking.
+class CartItem {
+  final Product product;
+  int quantity;
+
+  CartItem({required this.product, this.quantity = 1});
+
+  double get unitPrice => product.salePrice ?? product.mrpPrice;
+  double get lineTotal => unitPrice * quantity;
+
+  CartItem copyWith({int? quantity}) =>
+      CartItem(product: product, quantity: quantity ?? this.quantity);
+}
+
+/// Active POS session state.
 class PosSession {
   final OrderType? activeOrderType;
   final DiningTable? activeDiningTable;
   final Customer? activeCustomer;
   final Order? activeOrder;
-  final List<Product> cart;
+  final Map<int, CartItem> cart;
 
   const PosSession({
     this.activeOrderType,
     this.activeDiningTable,
     this.activeCustomer,
     this.activeOrder,
-    this.cart = const [],
+    this.cart = const {},
   });
+
+  /// Flat list of products (one per CartItem entry) for backward compat.
+  List<Product> get cartProducts => cart.values.map((e) => e.product).toList();
+  int get cartTotalQuantity =>
+      cart.values.fold(0, (sum, e) => sum + e.quantity);
 
   PosSession copyWith({
     OrderType? activeOrderType,
     DiningTable? activeDiningTable,
     Customer? activeCustomer,
     Order? activeOrder,
-    List<Product>? cart,
+    Map<int, CartItem>? cart,
     bool clearOrderType = false,
     bool clearDiningTable = false,
     bool clearCustomer = false,
@@ -62,26 +81,37 @@ class CartNotifier extends Notifier<PosSession> {
   void setActiveOrder(Order o) => state = state.copyWith(activeOrder: o);
 
   void addToCart(Product product) {
-    state = state.copyWith(cart: [...state.cart, product]);
+    final updated = Map<int, CartItem>.from(state.cart);
+    final existing = updated[product.id];
+    if (existing != null) {
+      updated[product.id!] = existing.copyWith(quantity: existing.quantity + 1);
+    } else {
+      updated[product.id!] = CartItem(product: product);
+    }
+    state = state.copyWith(cart: updated);
   }
 
   void removeFromCart(Product product) {
-    final idx = state.cart.indexOf(product);
-    if (idx >= 0) {
-      final updated = [...state.cart];
-      updated.removeAt(idx);
-      state = state.copyWith(cart: updated);
+    final updated = Map<int, CartItem>.from(state.cart);
+    final existing = updated[product.id];
+    if (existing == null) return;
+    if (existing.quantity > 1) {
+      updated[product.id!] = existing.copyWith(quantity: existing.quantity - 1);
+    } else {
+      updated.remove(product.id);
     }
+    state = state.copyWith(cart: updated);
   }
 
+  /// Returns the quantity of a specific product in the cart (0 if not present).
   int cartQuantity(Product product) {
-    return state.cart.where((p) => p.id == product.id).length;
+    return state.cart[product.id]?.quantity ?? 0;
   }
 
   bool get hasCart => state.cart.isNotEmpty;
 
   void clearCart() => state = state.copyWith(
-    cart: [],
+    cart: {},
     clearOrderType: true,
     clearDiningTable: true,
     clearCustomer: true,

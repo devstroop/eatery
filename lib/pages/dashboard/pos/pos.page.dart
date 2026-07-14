@@ -571,7 +571,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                   GoRouter.of(context).pushNamed('cart');
                 },
                 themeColor: pageColor,
-                cart: session.cart,
+                cart: session.cartProducts,
               ),
           ],
         ),

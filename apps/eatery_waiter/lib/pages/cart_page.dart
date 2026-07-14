@@ -8,43 +8,42 @@ class CartPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final cart = ref.watch(cartProvider);
+    final session = ref.watch(cartProvider);
+    final items = session.cart.values.toList();
+    final total = items.fold(0.0, (sum, e) => sum + e.lineTotal);
+    final totalQty = items.fold(0, (sum, e) => sum + e.quantity);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Cart')),
-      body: cart.cart.isEmpty
+      body: session.cart.isEmpty
           ? const Center(child: Text('Cart is empty'))
           : Column(
               children: [
-                if (cart.activeDiningTable != null)
+                if (session.activeDiningTable != null)
                   Container(
                     width: double.infinity,
                     color: AppColors.primary.withValues(alpha: 0.1),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
+                      horizontal: 16, vertical: 8,
                     ),
                     child: Text(
-                      'Table: ${cart.activeDiningTable!.name}',
+                      'Table: ${session.activeDiningTable!.name}',
                       style: AppTypography.titleSmall,
                     ),
                   ),
                 Expanded(
                   child: ListView.builder(
                     padding: const EdgeInsets.all(12),
-                    itemCount: cart.cart.length,
+                    itemCount: items.length,
                     itemBuilder: (context, index) {
-                      final product = cart.cart[index];
-                      final qty = ref
-                          .read(cartProvider.notifier)
-                          .cartQuantity(product);
+                      final item = items[index];
                       return Card(
                         child: ListTile(
                           leading: Icon(Icons.restaurant,
                               color: AppColors.primary),
-                          title: Text(product.name),
+                          title: Text(item.product.name),
                           subtitle: Text(
-                            '\$${product.mrpPrice.toStringAsFixed(2)} x $qty',
+                            '\$${item.unitPrice.toStringAsFixed(2)} x ${item.quantity}',
                             style: TextStyle(color: AppColors.primary),
                           ),
                           trailing: IconButton(
@@ -52,7 +51,7 @@ class CartPage extends ConsumerWidget {
                                 color: Colors.red),
                             onPressed: () => ref
                                 .read(cartProvider.notifier)
-                                .removeFromCart(product),
+                                .removeFromCart(item.product),
                           ),
                         ),
                       );
@@ -67,10 +66,10 @@ class CartPage extends ConsumerWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text('Total Items: ${cart.cart.length}',
+                            Text('Total Items: $totalQty',
                                 style: AppTypography.titleMedium),
                             Text(
-                              '\$${cart.cart.fold(0.0, (sum, p) => sum + p.mrpPrice).toStringAsFixed(2)}',
+                              '\$${total.toStringAsFixed(2)}',
                               style: AppTypography.titleLarge.copyWith(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.bold,
@@ -96,26 +95,18 @@ class CartPage extends ConsumerWidget {
   }
 
   Future<void> _submitOrder(BuildContext context, WidgetRef ref) async {
-    final cart = ref.read(cartProvider);
-    if (cart.cart.isEmpty) return;
+    final session = ref.read(cartProvider);
+    if (session.cart.isEmpty) return;
 
     final orderRepo = ref.read(orderRepositoryProvider);
-
-    // Group products by id to get quantities.
-    final grouped = <int, int>{};
-    final seen = <int>{};
-    for (final p in cart.cart) {
-      final id = p.id ?? 0;
-      grouped[id] = (grouped[id] ?? 0) + 1;
-    }
-    final uniqueProducts =
-        cart.cart.where((p) => seen.add(p.id ?? -1)).toList();
-
-    final subTotal = cart.cart.fold(0.0, (sum, p) => sum + p.mrpPrice);
+    final items = session.cart.values.toList();
+    final cartProds = items.map((e) => e.product).toList();
+    final totalQty = items.fold(0, (sum, e) => sum + e.quantity);
+    final subTotal = cartProds.fold(0.0, (sum, p) => sum + (p.salePrice ?? p.mrpPrice));
 
     final order = Order(
       createdAt: DateTime.now(),
-      totalQuantity: cart.cart.length,
+      totalQuantity: totalQty,
       subTotal: subTotal,
       discountTotal: 0,
       taxTotal: 0,
@@ -123,7 +114,7 @@ class CartPage extends ConsumerWidget {
       roundOff: 0,
       grandTotal: subTotal,
       paidTotal: null,
-      type: cart.activeOrderType ?? OrderType.dine,
+      type: session.activeOrderType ?? OrderType.dine,
       status: OrderStatus.pending,
     );
 
@@ -139,15 +130,17 @@ class CartPage extends ConsumerWidget {
       );
     }
 
-    for (final p in uniqueProducts) {
-      final qty = grouped[p.id ?? 0] ?? 1;
-      final lineTotal = p.mrpPrice * qty;
+    for (final entry in session.cart.entries) {
+      final item = entry.value;
+      final p = item.product;
+      final qty = item.quantity;
+      final lineTotal = (p.salePrice ?? p.mrpPrice) * qty;
       final op = OrderProduct(
         orderId: orderId,
         productId: p.id,
         productName: p.name,
         quantity: qty,
-        price: p.mrpPrice,
+        price: p.salePrice ?? p.mrpPrice,
         subTotal: lineTotal,
         total: lineTotal,
         stationId: p.stationId,
