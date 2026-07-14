@@ -209,6 +209,7 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
                   context, message: 'Please select an order', type: MessageType.error);
               return;
             }
+            final o = order!;
 
             if (_formKey.currentState!.validate()) {
               final payment = Payment(
@@ -216,7 +217,7 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
                 reference: _controllerReference.text,
                 mode: paymentMode,
                 attachment: image?.filename,
-                orderId: order?.id,
+                orderId: o.id,
                 date: DateTime.now(),
               );
               ref.read(paymentRepositoryProvider).savePayment(payment)
@@ -238,11 +239,29 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
                           );
                         }
 
-                        order = order?.copyWith(
-                          paidTotal: (order?.paidTotal ?? 0) +
-                              double.parse(_controllerAmount.text),
-                        );
-                        ref.read(orderRepositoryProvider).saveOrder(order!).then((value) => Navigator.pop(context));
+                          final newPaidTotal = (o.paidTotal ?? 0) +
+                              double.parse(_controllerAmount.text);
+                          final isFullyPaid =
+                              newPaidTotal >= o.grandTotal;
+                          var updatedOrder = o.copyWith(
+                            paidTotal: newPaidTotal,
+                          );
+                          if (isFullyPaid && o.status == OrderStatus.pending) {
+                            final now = DateTime.now();
+                            updatedOrder = updatedOrder.copyWith(
+                              status: OrderStatus.completed,
+                              updatedAt: now,
+                            );
+                            ref.read(orderRepositoryProvider).recordStatusTransition(
+                              OrderStatusHistory(
+                                orderId: o.id!,
+                                fromStatus: OrderStatus.pending.id,
+                                toStatus: OrderStatus.completed.id,
+                                changedAt: now,
+                              ),
+                            );
+                          }
+                          ref.read(orderRepositoryProvider).saveOrder(updatedOrder).then((value) => Navigator.pop(context));
                       }))
                   .onError((error, stackTrace) => AppDialog.showMessage(
                       context, message: 'Error saving payment', type: MessageType.error));

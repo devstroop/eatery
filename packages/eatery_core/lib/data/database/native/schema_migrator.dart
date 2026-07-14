@@ -65,6 +65,8 @@ class SchemaMigrator {
   /// List of migration functions, indexed by version (0 = first migration).
   static const _migrations = <void Function(EateryStore)>[
     _migrationV1,
+    _migrationV2,
+    _migrationV3,
   ];
 
   /// v1: Auth & order lifecycle fields.
@@ -115,6 +117,58 @@ class SchemaMigrator {
     );
   }
 
+  /// v2: Product modifiers + staffId on orders.
+  ///
+  /// - Create `modifier_group`, `modifier`, `product_modifier`,
+  ///   `order_product_modifier` tables
+  /// - Add `orders.staffId` column
+  static void _migrationV2(EateryStore store) {
+    _addColumn(store, 'orders', 'staffId', 'INTEGER');
+    store.execute('''
+      CREATE TABLE IF NOT EXISTS modifier_group (
+        id          INTEGER PRIMARY KEY AUTOINCREMENT,
+        name        TEXT NOT NULL,
+        description TEXT,
+        minSelect   INTEGER NOT NULL DEFAULT 0,
+        maxSelect   INTEGER NOT NULL DEFAULT 1,
+        sortOrder   INTEGER DEFAULT 0,
+        isRequired  INTEGER NOT NULL DEFAULT 0,
+        createdAt   INTEGER NOT NULL,
+        updatedAt   INTEGER
+      )
+    ''');
+    store.execute('''
+      CREATE TABLE IF NOT EXISTS modifier (
+        id              INTEGER PRIMARY KEY AUTOINCREMENT,
+        modifierGroupId INTEGER NOT NULL REFERENCES modifier_group(id) ON DELETE CASCADE,
+        name            TEXT NOT NULL,
+        priceAdjust     REAL NOT NULL DEFAULT 0,
+        sortOrder       INTEGER DEFAULT 0,
+        isDefault       INTEGER NOT NULL DEFAULT 0,
+        createdAt       INTEGER NOT NULL,
+        updatedAt       INTEGER
+      )
+    ''');
+    store.execute('''
+      CREATE TABLE IF NOT EXISTS product_modifier (
+        productId       INTEGER NOT NULL REFERENCES product(id) ON DELETE CASCADE,
+        modifierGroupId INTEGER NOT NULL REFERENCES modifier_group(id) ON DELETE CASCADE,
+        PRIMARY KEY (productId, modifierGroupId)
+      )
+    ''');
+    store.execute('''
+      CREATE TABLE IF NOT EXISTS order_product_modifier (
+        id              INTEGER PRIMARY KEY AUTOINCREMENT,
+        orderProductId  INTEGER NOT NULL REFERENCES order_product(id) ON DELETE CASCADE,
+        modifierGroupId INTEGER NOT NULL REFERENCES modifier_group(id),
+        modifierId      INTEGER NOT NULL REFERENCES modifier(id),
+        modifierName    TEXT NOT NULL,
+        priceAdjust     REAL NOT NULL DEFAULT 0,
+        quantity        INTEGER NOT NULL DEFAULT 1
+      )
+    ''');
+  }
+
   /// Safely adds a column if it doesn't already exist.
   ///
   /// SQLite ignores duplicate column errors when caught, but this check
@@ -130,5 +184,49 @@ class SchemaMigrator {
     } catch (_) {
       // Column already exists — safe to ignore.
     }
+  }
+
+  /// v3: Suppliers, purchase orders, stock adjustments.
+  static void _migrationV3(EateryStore store) {
+    store.execute('''
+      CREATE TABLE IF NOT EXISTS supplier (
+        id          INTEGER PRIMARY KEY AUTOINCREMENT,
+        name        TEXT NOT NULL,
+        contactName TEXT, phone TEXT, email TEXT, address TEXT, gstin TEXT,
+        isActive    INTEGER NOT NULL DEFAULT 1,
+        createdAt   INTEGER NOT NULL, updatedAt INTEGER
+      )
+    ''');
+    store.execute('''
+      CREATE TABLE IF NOT EXISTS purchase_order (
+        id              INTEGER PRIMARY KEY AUTOINCREMENT,
+        supplierId      INTEGER REFERENCES supplier(id),
+        orderDate       INTEGER NOT NULL,
+        expectedDate    INTEGER, deliveredDate INTEGER,
+        status          INTEGER NOT NULL DEFAULT 0,
+        totalAmount     REAL NOT NULL DEFAULT 0, notes TEXT,
+        createdBy       INTEGER REFERENCES staff(id),
+        createdAt       INTEGER NOT NULL, updatedAt INTEGER
+      )
+    ''');
+    store.execute('''
+      CREATE TABLE IF NOT EXISTS purchase_order_item (
+        id              INTEGER PRIMARY KEY AUTOINCREMENT,
+        purchaseOrderId INTEGER NOT NULL REFERENCES purchase_order(id) ON DELETE CASCADE,
+        productId       INTEGER NOT NULL REFERENCES product(id),
+        quantity        REAL NOT NULL, unitPrice REAL NOT NULL,
+        totalPrice      REAL NOT NULL, receivedQty REAL DEFAULT 0
+      )
+    ''');
+    store.execute('''
+      CREATE TABLE IF NOT EXISTS stock_adjustment (
+        id          INTEGER PRIMARY KEY AUTOINCREMENT,
+        productId   INTEGER NOT NULL REFERENCES product(id),
+        quantity    REAL NOT NULL, reason TEXT NOT NULL,
+        referenceId INTEGER, notes TEXT,
+        createdBy   INTEGER REFERENCES staff(id),
+        createdAt   INTEGER NOT NULL
+      )
+    ''');
   }
 }

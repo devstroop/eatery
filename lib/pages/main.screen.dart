@@ -1,15 +1,14 @@
+import 'package:lottie/lottie.dart';
 import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery_core/utils/responsive.dart';
-import 'package:eatery_core/widgets/widgets.dart';
-import 'package:eatery_core/widgets/app_dialog.dart';
-import 'package:eatery/references.dart';
 import 'package:eatery_core/providers/database_provider.dart';
-import 'package:eatery_core/providers/company_provider.dart';
+import 'package:eatery/references.dart';
+import 'package:eatery_core/widgets/app_dialog.dart';
+import 'package:eatery/dev/seed_data.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:sn_progress_dialog/sn_progress_dialog.dart';
 
 class MainScreen extends ConsumerStatefulWidget {
   const MainScreen({super.key});
@@ -19,11 +18,33 @@ class MainScreen extends ConsumerStatefulWidget {
 }
 
 class _MainScreenState extends ConsumerState<MainScreen> {
+  bool _loading = false;
+
+  Future<void> _loadDemo() async {
+    setState(() => _loading = true);
+    try {
+      final store = ref.read(eateryStoreProvider);
+      await SeedData.load(store);
+      if (mounted) {
+        ScaffoldMessenger.of(this.context).showSnackBar(
+          const SnackBar(content: Text('Demo loaded! Log in with PIN 1234')),
+        );
+        GoRouter.of(this.context).goNamed('login');
+      }
+    } catch (e) {
+      if (mounted) {
+        AppDialog.showMessage(this.context,
+            message: 'Failed to load demo: $e', type: MessageType.error);
+      }
+    } finally {
+      if (mounted) setState(() => _loading = false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDesktop = Responsive.isDesktop(context);
     final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
       appBar: AppBar(
@@ -32,213 +53,142 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           margin: const EdgeInsets.only(top: 12),
           child: Image.asset('assets/logo.png', height: 48),
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {
-              showMenu(
-                context: context,
-                position: const RelativeRect.fromLTRB(100, 100, 0, 0),
-                items: [
-                  PopupMenuItem(
-                    value: 'demo',
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.auto_awesome,
-                          color: AppColors.primary,
-                          size: 20,
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Load Demo Company',
-                          style: AppTypography.bodyMedium.copyWith(
-                            color: AppColors.grey700,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ).then((value) {
-                if (value == 'demo') _loadDemoCompany(context);
-              });
-            },
-          ),
-        ],
       ),
       backgroundColor: AppColors.white,
-      body: isDesktop
-          ? _buildDesktopLayout(screenWidth, screenHeight)
-          : _buildMobileLayout(screenWidth, screenHeight),
+      body: Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: 900),
+          child: isDesktop
+              ? _buildDesktop(screenWidth)
+              : _buildMobile(screenWidth),
+        ),
+      ),
       bottomNavigationBar: isDesktop ? null : _buildBottomBar(),
     );
   }
 
-  // ── Desktop: 6/6 side-by-side hero layout ──────────────────────
-  Widget _buildDesktopLayout(double screenWidth, double screenHeight) {
-    return Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: 1100),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 24),
-          child: Row(
-            children: [
-              // Left 6 — Lottie animation
-              Expanded(
-                flex: 6,
-                child: Center(
-                  child: SizedBox(
-                    height: 400,
-                    width: 400,
-                    child: FittedBox(
-                      fit: BoxFit.contain,
-                      child: Lottie.asset('assets/lottie/1699652006712.json'),
+  Widget _buildDesktop(double screenWidth) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 24),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 5,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Welcome to', style: AppTypography.headlineLarge),
+                Text('Eatery', style: AppTypography.displayMedium.copyWith(
+                  color: AppColors.primary, fontWeight: FontWeight.bold,
+                )),
+                AppSpacing.gapMd,
+                Text(
+                  'Free & open restaurant POS system.\n'
+                  'Works offline, syncs locally.\n'
+                  'No monthly fees, no cloud dependency.',
+                  style: AppTypography.bodyLarge.copyWith(color: AppColors.grey600),
+                ),
+                AppSpacing.gapLg,
+                Row(
+                  children: [
+                    AppButton.primary(
+                      label: 'Set up my restaurant',
+                      height: 52, width: 200,
+                      onPressed: () => GoRouter.of(this.context).pushNamed('setup'),
                     ),
+                    const SizedBox(width: 12),
+                    AppButton.destructive(
+                      label: _loading ? 'Loading...' : 'Try Demo',
+                      height: 52, width: 160,
+      onPressed: _loading ? null : _loadDemo,
+                ),
+              ],
+            ),
+            AppSpacing.gapMd,
+            TextButton.icon(
+              icon: const Icon(Icons.restore, size: 18),
+              label: const Text('Restore from backup'),
+              onPressed: () => ScaffoldMessenger.of(this.context).showSnackBar(
+                    const SnackBar(content: Text('Restore coming soon')),
                   ),
                 ),
+              ],
+            ),
+          ),
+          Expanded(
+            flex: 5,
+            child: Center(
+              child: SizedBox(
+                height: 300, width: 300,
+                child: FittedBox(
+                  fit: BoxFit.contain,
+                  child: Lottie.asset('assets/lottie/brand.json'),
+                ),
               ),
-              const SizedBox(width: 48),
-              // Right 6 — Text + buttons
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMobile(double screenWidth) {
+    return Padding(
+      padding: const EdgeInsets.all(24),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text('Welcome to', style: AppTypography.headlineMedium),
+          Text('Eatery', style: AppTypography.headlineSmall.copyWith(
+            color: AppColors.primary, fontWeight: FontWeight.bold,
+          )),
+          AppSpacing.gapMd,
+          Text(
+            'Free & open restaurant POS.\nOffline-first, locally synced.',
+            textAlign: TextAlign.center,
+            style: AppTypography.bodyMedium.copyWith(color: AppColors.grey600),
+          ),
+          AppSpacing.gapLg,
+          SizedBox(
+            height: 180, width: 180,
+            child: FittedBox(
+              fit: BoxFit.contain,
+              child: Lottie.asset('assets/lottie/brand.json'),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildBottomBar() {
+    return BottomAppBar(
+      color: AppColors.white,
+      child: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+          child: Row(
+            children: [
               Expanded(
-                flex: 6,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'All-in-one',
-                      style: AppTypography.headlineLarge.copyWith(
-                        color: AppColors.grey800,
-                      ),
-                    ),
-                    Text(
-                      'restaurant POS System',
-                      style: AppTypography.displayMedium.copyWith(
-                        color: AppColors.grey900,
-                      ),
-                    ),
-                    AppSpacing.gapLg,
-                    Text(
-                      'Manage your restaurant with ease with Eatery',
-                      style: AppTypography.bodyLarge.copyWith(
-                        color: AppColors.grey500,
-                      ),
-                    ),
-                    const SizedBox(height: 48),
-                    // Buttons — inline, not bottom bar
-                    Row(
-                      children: [
-                        AppButton.destructive(
-                          label: 'Restore Existing',
-                          height: 52,
-                          width: 200,
-                          onPressed: () => _restoreExisting(this.context),
-                        ),
-                        const SizedBox(width: 16),
-                        AppButton.primary(
-                          label: 'Create Company',
-                          height: 52,
-                          width: 200,
-                          onPressed: () => _createNew(this.context),
-                        ),
-                      ],
-                    ),
-                  ],
+                child: AppButton.primary(
+                  label: 'Set up',
+                  height: 50,
+                  onPressed: () => GoRouter.of(this.context).pushNamed('setup'),
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: AppButton.destructive(
+                  label: _loading ? '...' : 'Demo',
+                  height: 50,
+                  onPressed: _loading ? null : _loadDemo,
                 ),
               ),
             ],
           ),
         ),
       ),
-    );
-  }
-
-  // ── Mobile: centered vertical layout with BottomAppBar ─────────
-  Widget _buildMobileLayout(double screenWidth, double screenHeight) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: screenHeight * 0.30,
-            width: screenWidth * 0.65,
-            child: FittedBox(
-              fit: BoxFit.contain,
-              child: Lottie.asset('assets/lottie/1699652006712.json'),
-            ),
-          ),
-          const SizedBox(height: 24),
-          const Text(
-            'All-in-one',
-            textAlign: TextAlign.center,
-            style: AppTypography.headlineMedium,
-          ),
-          Text(
-            'restaurant POS System',
-            textAlign: TextAlign.center,
-            style: AppTypography.headlineMedium.copyWith(
-              fontWeight: FontWeight.w700,
-            ),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            'Manage your restaurant with ease with Eatery',
-            textAlign: TextAlign.center,
-            style: AppTypography.bodyMedium.copyWith(color: AppColors.grey500),
-          ),
-        ],
-      ),
-    );
-  }
-
-  // ── Mobile: BottomAppBar with buttons ──────────────────────────
-  Widget _buildBottomBar() {
-    return BottomAppBar(
-      color: AppColors.white,
-      child: SafeArea(
-        child: Center(
-          child: ConstrainedBox(
-            constraints: const BoxConstraints(maxWidth: 480),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: AppButton.destructive(
-                      label: 'Restore Existing',
-                      height: 50,
-                      onPressed: () => _restoreExisting(this.context),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: AppButton.primary(
-                      label: 'Create Company',
-                      height: 50,
-                      onPressed: () => _createNew(this.context),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  _restoreExisting(BuildContext context) {}
-
-  _createNew(BuildContext context) {
-    GoRouter.of(context).pushNamed('createCompany');
-  }
-
-  Future<void> _loadDemoCompany(BuildContext context) async {
-    AppDialog.showMessage(
-      context,
-      message: 'Demo company loading is no longer available.',
-      type: MessageType.info,
     );
   }
 }

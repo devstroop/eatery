@@ -1,15 +1,27 @@
 {
-  "name": "Flutter Mobile Dev",
+  "name": "Eatery — Restaurant POS",
   "dockerFile": "Dockerfile",
-  "remoteUser": "vscode",
-  "forwardPorts": [5555],
-  "extensions": [
-    "dart-code.flutter",
-    "dart-code.dart"
-  ],
-  "postCreateCommand": "flutter doctor && flutter pub get && cd /workspace/eatery_components && flutter pub get && cd /workspace/eatery_db && flutter pub get && cd /workspace/eatery_services && flutter pub get && cd /workspace/bluetooth_thermal_printer && flutter pub get",
-  "settings": {
-    "dart.sdkPath": "/opt/flutter/bin/cache/dart-sdk",
-    "dart.flutterSdkPath": "/opt/flutter"
-  }
+  "remoteUser": "codespace",
+  "forwardPorts": [9876],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dart-code.flutter",
+        "dart-code.dart",
+        "bierner.markdown-mermaid",
+        "DavidAnson.vscode-markdownlint"
+      ],
+      "settings": {
+        "dart.sdkPath": "/opt/flutter/bin/cache/dart-sdk",
+        "dart.flutterSdkPath": "/opt/flutter",
+        "dart.addDartSdkToPath": false,
+        "dart.checkForSdkUpdates": false,
+        "files.associations": {
+          "*.sql": "sqlite"
+        }
+      }
+    }
+  },
+  "postCreateCommand": "dart pub global run melos get && flutter doctor --show-progress",
+  "postStartCommand": "dart pub global run melos generate 2>/dev/null || true"
 }

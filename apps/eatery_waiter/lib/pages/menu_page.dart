@@ -54,7 +54,7 @@ class MenuPage extends ConsumerWidget {
                       shape: BoxShape.circle,
                     ),
                     child: Text(
-                      '${cart.cart.length}',
+                      '${cart.cartTotalQuantity}',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 10,

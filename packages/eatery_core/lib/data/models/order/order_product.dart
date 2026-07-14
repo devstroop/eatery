@@ -20,6 +20,8 @@ abstract class OrderProduct with _$OrderProduct {
     required double total,
     int? stationId,
     String? stationName,
+    String? note,
+    @Default(0) int status,
   }) = _OrderProduct;
 
   factory OrderProduct.fromJson(Map<String, dynamic> json) =>
@@ -48,6 +50,8 @@ extension OrderProductX on OrderProduct {
       'total': row.elementAt(11),
       'stationId': row.elementAt(12),
       'stationName': row.elementAt(13),
+      'note': row.elementAt(14),
+      'status': row.elementAt(15),
     });
   }
 
@@ -68,6 +72,8 @@ extension OrderProductX on OrderProduct {
       map['total'],
       map['stationId'],
       map['stationName'],
+      map['note'],
+      map['status'],
     ];
   }
 }

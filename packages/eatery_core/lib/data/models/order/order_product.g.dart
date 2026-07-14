@@ -22,6 +22,8 @@ _OrderProduct _$OrderProductFromJson(Map<String, dynamic> json) =>
       total: (json['total'] as num).toDouble(),
       stationId: (json['stationId'] as num?)?.toInt(),
       stationName: json['stationName'] as String?,
+      note: json['note'] as String?,
+      status: (json['status'] as num?)?.toInt() ?? 0,
     );
 
 Map<String, dynamic> _$OrderProductToJson(_OrderProduct instance) =>
@@ -40,4 +42,6 @@ Map<String, dynamic> _$OrderProductToJson(_OrderProduct instance) =>
       'total': instance.total,
       'stationId': instance.stationId,
       'stationName': instance.stationName,
+      'note': instance.note,
+      'status': instance.status,
     };

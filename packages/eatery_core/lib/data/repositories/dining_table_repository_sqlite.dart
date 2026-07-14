@@ -18,7 +18,8 @@ class SqliteDiningTableRepository implements DiningTableRepository {
   final EateryStore _store;
 
   static const _tableColumns =
-      'name, categoryId, description, orderId, capacity, status, customerPhone';
+      'name, categoryId, description, orderId, capacity, status, customerPhone, '
+      'posX, posY, shape, width, height, staffId';
   static const _categoryColumns = 'name, description, isActive';
 
   // ---------------------------------------------------------------------------
@@ -66,6 +67,12 @@ class SqliteDiningTableRepository implements DiningTableRepository {
       table.capacity,
       table.status.id,
       table.customerPhone,
+      table.posX,
+      table.posY,
+      table.shape,
+      table.width,
+      table.height,
+      table.staffId,
     ];
 
     final int id;
@@ -73,12 +80,14 @@ class SqliteDiningTableRepository implements DiningTableRepository {
       id = table.id!;
       _store.execute(
         'UPDATE dining_table SET name=?, categoryId=?, description=?, '
-        'orderId=?, capacity=?, status=?, customerPhone=? WHERE id=?',
+        'orderId=?, capacity=?, status=?, customerPhone=?, '
+        'posX=?, posY=?, shape=?, width=?, height=?, staffId=? WHERE id=?',
         [...values, id],
       );
     } else {
       _store.execute(
-        'INSERT INTO dining_table ($_tableColumns) VALUES (?,?,?,?,?,?,?)',
+        'INSERT INTO dining_table ($_tableColumns) '
+        'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)',
         values,
       );
       id = _store.queryScalar('SELECT last_insert_rowid()') as int;
@@ -154,7 +163,14 @@ class SqliteDiningTableRepository implements DiningTableRepository {
       orderId: row['orderId'] as int?,
       // category is a Hive-backed object; leave null for now; the model
       // already handles nullable category and pages work without it set.
-      id: row['id'] as int);
+      id: row['id'] as int,
+      posX: (row['posX'] as num?)?.toDouble(),
+      posY: (row['posY'] as num?)?.toDouble(),
+      shape: row['shape'] as int? ?? 0,
+      width: (row['width'] as num?)?.toDouble(),
+      height: (row['height'] as num?)?.toDouble(),
+      staffId: row['staffId'] as int?,
+    );
   }
 
   bool _tableExists(int id) =>

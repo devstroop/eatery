@@ -54,7 +54,7 @@ class _CartPageState extends ConsumerState<CartPage> {
           ? ListView(
               padding: const EdgeInsets.symmetric(vertical: 8),
               children: [
-                for (var product in ref.read(cartProvider).cart.toSet())
+                for (final product in ref.read(cartProvider).cartProducts)
                   ListTile(
                     leading: Container(
                       height: 48,
@@ -93,7 +93,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                ref.read(cartProvider).cart.contains(product)
+                                ref.read(cartProvider.notifier).cartQuantity(product) > 0
                                     ? InkWell(
                                         onTap: () {
                                           setState(() {
@@ -109,7 +109,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                                         ),
                                       )
                                     : Container(),
-                                ref.read(cartProvider).cart.contains(product)
+                                ref.read(cartProvider.notifier).cartQuantity(product) > 0
                                     ? Padding(
                                         padding:
                                             const EdgeInsetsDirectional.fromSTEB(
@@ -120,13 +120,8 @@ class _CartPageState extends ConsumerState<CartPage> {
                                             ),
                                         child: Text(
                                           ref
-                                              .read(cartProvider)
-                                              .cart
-                                              .where(
-                                                (element) =>
-                                                    element.id == product.id,
-                                              )
-                                              .length
+                                              .read(cartProvider.notifier)
+                                              .cartQuantity(product)
                                               .toString(),
                                           style: const TextStyle(
                                             fontWeight: FontWeight.w600,
@@ -198,7 +193,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
-                                  '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${OrderFunction.calculateProductSubtotalInCartWithoutTax(ref.read(cartProvider).cart, product)}',
+                                  '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${(ref.read(cartProvider.notifier).cartQuantity(product) * (product.salePrice ?? product.mrpPrice)).toStringAsFixed(2)}',
                                   style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 14,
@@ -253,7 +248,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                               ),
                             ),
                             Text(
-                              '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${OrderFunction.calculateCartTotalWithoutTax(ref.read(cartProvider).cart)}',
+                              '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${OrderFunction.calculateCartTotalWithoutTax(ref.read(cartProvider).cartProducts)}',
                               style: AppTypography.titleMedium.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -277,7 +272,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                               ),
                             ),
                             Text(
-                              '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${OrderFunction.calculateTaxAmount(ref.read(cartProvider).cart)}',
+                              '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${OrderFunction.calculateTaxAmount(ref.read(cartProvider).cartProducts)}',
                               style: AppTypography.titleMedium.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -301,7 +296,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                               ),
                             ),
                             Text(
-                              '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${OrderFunction.calculateTotalWithTax(ref.read(cartProvider).cart)}',
+                              '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${OrderFunction.calculateTotalWithTax(ref.read(cartProvider).cartProducts)}',
                               style: AppTypography.titleMedium.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -325,7 +320,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                               ),
                             ),
                             Text(
-                              '${OrderFunction.calculateRoundOff(OrderFunction.calculateTotalWithTax(ref.read(cartProvider).cart)) > 0 ? '+' : '-'} ${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${OrderFunction.calculateRoundOff(OrderFunction.calculateTotalWithTax(ref.read(cartProvider).cart)).abs()}',
+                              '${OrderFunction.calculateRoundOff(OrderFunction.calculateTotalWithTax(ref.read(cartProvider).cartProducts)) > 0 ? '+' : '-'} ${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${OrderFunction.calculateRoundOff(OrderFunction.calculateTotalWithTax(ref.read(cartProvider).cartProducts)).abs()}',
                               style: AppTypography.titleMedium.copyWith(
                                 fontWeight: FontWeight.bold,
                               ),
@@ -353,7 +348,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                               ),
                             ),
                             Text(
-                              '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${OrderFunction.calculatePayable(ref.read(cartProvider).cart)}',
+                              '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${OrderFunction.calculatePayable(ref.read(cartProvider).cartProducts)}',
                               style: const TextStyle(
                                 fontWeight: FontWeight.bold,
                                 fontSize: 18,
@@ -388,7 +383,12 @@ class _CartPageState extends ConsumerState<CartPage> {
                                 ),
                               ),
                               Text(
-                                '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${ref.read(cartProvider).activeOrder?.grandTotal ?? 0}',
+                                () {
+                                  final active = ref.read(cartProvider).activeOrder;
+                                  if (active == null) return '0';
+                                  final outstanding = active.grandTotal - (active.paidTotal ?? 0);
+                                  return '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${outstanding.toStringAsFixed(2)}';
+                                }(),
                                 style: AppTypography.titleMedium.copyWith(
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.error,
@@ -434,7 +434,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                           ),
                         ),
                         Text(
-                          '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${OrderFunction.calculatePayable(ref.read(cartProvider).cart) + (ref.read(cartProvider).activeOrder?.grandTotal ?? 0)}',
+                          '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${OrderFunction.calculatePayable(ref.read(cartProvider).cartProducts) + (ref.read(cartProvider).activeOrder?.grandTotal ?? 0)}',
                           style: const TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: 18,
@@ -467,7 +467,7 @@ class _CartPageState extends ConsumerState<CartPage> {
 
   placeOrder(
     BuildContext context,
-    List<Product> cart,
+    Map<int, CartItem> cart,
     Customer? customer,
   ) async {
     if (customer == null) {
@@ -547,10 +547,13 @@ class _CartPageState extends ConsumerState<CartPage> {
       return;
     }
 
+    final cartProducts = cart.values.map((e) => e.product).toList();
+    final cartQtys = {for (final e in cart.entries) e.key: e.value.quantity};
+
     Order order;
     if (ref.read(cartProvider).activeOrder != null) {
       order = ref.read(cartProvider).activeOrder!;
-      for (var product in cart) {
+      for (var product in cartProducts) {
         var existing = ref
             .read(orderRepositoryProvider)
             .getOrderProducts(order.id!)
@@ -632,43 +635,43 @@ class _CartPageState extends ConsumerState<CartPage> {
       );
       await ref.read(orderRepositoryProvider).saveOrder(order);
     } else {
+      final cartProducts = cart.values.map((e) => e.product).toList();
+      final totalQty = cart.values.fold(0, (sum, e) => sum + e.quantity);
       order = Order(
         customerPhone: ref.read(cartProvider).activeCustomer?.phone,
         type: type,
-        subTotal: OrderFunction.calculateSubtotal(cart).toPrecision(2),
-        taxTotal: OrderFunction.calculateTaxAmount(cart).toPrecision(2),
-        finalTotal: OrderFunction.calculateTotalWithTax(cart).toPrecision(2),
+        status: OrderStatus.pending,
+        totalQuantity: totalQty,
+        subTotal: OrderFunction.calculateSubtotal(cartProducts).toPrecision(2),
+        taxTotal: OrderFunction.calculateTaxAmount(cartProducts).toPrecision(2),
+        finalTotal: OrderFunction.calculateTotalWithTax(cartProducts).toPrecision(2),
         roundOff: OrderFunction.calculateRoundOff(
-          OrderFunction.calculateTotalWithTax(cart),
+          OrderFunction.calculateTotalWithTax(cartProducts),
         ).toPrecision(2),
-        grandTotal: OrderFunction.calculatePayable(cart).toPrecision(2),
-        totalQuantity: cart.length,
+        grandTotal: OrderFunction.calculatePayable(cartProducts).toPrecision(2),
         discountTotal: 0,
         createdAt: DateTime.now(),
       );
       await ref.read(orderRepositoryProvider).saveOrder(order);
-      for (var product in cart) {
-        var orderProduct = OrderProduct(
-          orderId: order.id,
-          productId: product.id,
-          productName: product.name,
-          quantity: 1,
-          price: OrderFunction.calculateProductPriceWithoutTax(
-            product,
-          ).toPrecision(2),
-          subTotal: OrderFunction.calculateProductPriceWithoutTax(
-            product,
-          ).toPrecision(2),
-          taxRate: OrderFunction.getProductTaxRate(product)?.toPrecision(2),
-          taxAmount: OrderFunction.calculateProductTaxAmount(
-            product,
-          )?.toPrecision(2),
-          total:
-              (OrderFunction.calculateProductPriceWithoutTax(product) +
-                      (OrderFunction.calculateProductTaxAmount(product) ?? 0))
-                  .toPrecision(2),
-        );
-        await ref.read(orderRepositoryProvider).addOrderProduct(orderProduct);
+      for (final entry in cart.entries) {
+        final product = entry.value.product;
+        final qty = entry.value.quantity;
+        for (var i = 0; i < qty; i++) {
+          final orderProduct = OrderProduct(
+            orderId: order.id,
+            productId: product.id,
+            productName: product.name,
+            quantity: 1,
+            price: OrderFunction.calculateProductPriceWithoutTax(product).toPrecision(2),
+            subTotal: OrderFunction.calculateProductPriceWithoutTax(product).toPrecision(2),
+            taxRate: OrderFunction.getProductTaxRate(product)?.toPrecision(2),
+            taxAmount: OrderFunction.calculateProductTaxAmount(product)?.toPrecision(2),
+            total: (OrderFunction.calculateProductPriceWithoutTax(product) +
+                    (OrderFunction.calculateProductTaxAmount(product) ?? 0))
+                .toPrecision(2),
+          );
+          await ref.read(orderRepositoryProvider).addOrderProduct(orderProduct);
+        }
       }
     }
 
@@ -693,7 +696,7 @@ class _CartPageState extends ConsumerState<CartPage> {
       var printInvoice =
           ref.read(cartProvider).activeOrderType == OrderType.takeout ||
           ref.read(cartProvider).activeOrderType == OrderType.delivery;
-      List<Product> currentCart = List.from(ref.read(cartProvider).cart);
+      List<Product> currentCart = List.from(ref.read(cartProvider).cartProducts);
 
       ref.read(cartProvider.notifier).clearCart();
 

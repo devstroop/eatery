@@ -53,6 +53,12 @@ import 'package:eatery/pages/dashboard/settings/currency_region/view.currency_re
 import 'package:eatery/pages/dashboard/staff/staffs.page.dart';
 import 'package:eatery/pages/dashboard/staff/add.staff.page.dart';
 import 'package:eatery/pages/dashboard/staff/edit.staff.page.dart';
+import 'package:eatery/pages/setup/setup.page.dart';
+import 'package:eatery/pages/dashboard/help/help.page.dart';
+import 'package:eatery/pages/dashboard/reports/reports.page.dart';
+import 'package:eatery/pages/dashboard/settings/modifier/modifier_groups.page.dart';
+import 'package:eatery/pages/dashboard/settings/modifier/add_modifier_group.page.dart';
+import 'package:eatery/pages/dashboard/settings/modifier/edit_modifier_group.page.dart';
 import 'package:eatery/pages/dashboard/data/data_management.page.dart';
 import 'package:eatery/pages/dashboard/data/export.page.dart';
 import 'package:eatery/pages/dashboard/data/import.page.dart';
@@ -64,7 +70,7 @@ import 'package:eatery_core/data/database/native/eatery_store.dart';
 import 'package:go_router/go_router.dart';
 
 /// Routes that don't require authentication.
-const _publicRoutes = {'login', 'mainScreen', 'createCompany', 'resetPin'};
+const _publicRoutes = {'login', 'mainScreen', 'createCompany', 'resetPin', 'setup'};
 
 GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
   String? password;
@@ -79,6 +85,11 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
         ? (password != null ? '/login' : '/dashboard')
         : '/',
     routes: [
+      GoRoute(
+        name: 'setup',
+        path: '/setup',
+        builder: (context, state) => const SetupPage(),
+      ),
       GoRoute(
         name: 'login',
         path: '/login',
@@ -318,6 +329,11 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
         builder: (context, state) => const SettingPage(),
       ),
       GoRoute(
+        name: 'help',
+        path: '/help',
+        builder: (context, state) => const HelpPage(),
+      ),
+      GoRoute(
         name: 'companySettings',
         path: '/settings/company',
         builder: (context, state) => const ShowCompanyPage(),
@@ -356,6 +372,24 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
         builder: (context, state) => const ShowCurrencyRegionPage(),
       ),
       GoRoute(
+        name: 'modifierGroups',
+        path: '/settings/modifier-groups',
+        builder: (context, state) => const ModifierGroupsPage(),
+      ),
+      GoRoute(
+        name: 'addModifierGroup',
+        path: '/settings/modifier-groups/add',
+        builder: (context, state) => const AddModifierGroupPage(),
+      ),
+      GoRoute(
+        name: 'editModifierGroup',
+        path: '/settings/modifier-groups/edit',
+        builder: (context, state) {
+          final group = state.extra as ModifierGroup;
+          return EditModifierGroupPage(group: group);
+        },
+      ),
+      GoRoute(
         name: 'staffs',
         path: '/staffs',
         builder: (context, state) => const StaffsPage(),
@@ -372,6 +406,11 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
           final staff = state.extra as dynamic;
           return EditStaffPage(staff: staff);
         },
+      ),
+      GoRoute(
+        name: 'reports',
+        path: '/reports',
+        builder: (context, state) => const ReportsPage(),
       ),
       GoRoute(
         name: 'dataManagement',

@@ -19,7 +19,7 @@ class SqliteOrderRepository implements OrderRepository {
   static const _orderColumns =
       'customerPhone, createdAt, updatedAt, totalQuantity, subTotal, '
       'discountTotal, taxTotal, finalTotal, roundOff, grandTotal, paidTotal, '
-      'type, status, voidReason, voidedBy, voidedAt';
+      'type, status, voidReason, voidedBy, voidedAt, staffId';
 
   static const _orderProductColumns =
       'orderId, productId, productName, quantity, price, subTotal, '
@@ -60,6 +60,7 @@ class SqliteOrderRepository implements OrderRepository {
       m['voidReason'],
       m['voidedBy'],
       m['voidedAt'],
+      m['staffId'],
     ];
 
     final int id;
@@ -70,13 +71,13 @@ class SqliteOrderRepository implements OrderRepository {
         'customerPhone=?, createdAt=?, updatedAt=?, totalQuantity=?, '
         'subTotal=?, discountTotal=?, taxTotal=?, finalTotal=?, roundOff=?, '
         'grandTotal=?, paidTotal=?, type=?, status=?, voidReason=?, '
-        'voidedBy=?, voidedAt=? WHERE id=?',
+        'voidedBy=?, voidedAt=?, staffId=? WHERE id=?',
         [...values, id],
       );
     } else {
       _store.execute(
         'INSERT INTO orders ($_orderColumns) '
-        'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+        'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
         values,
       );
       id = _store.queryScalar('SELECT last_insert_rowid()') as int;

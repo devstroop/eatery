@@ -52,6 +52,18 @@ export 'payment/payment_mode.dart';
 // KDS
 export 'kds_station.dart';
 
+// Modifier
+export 'modifier/modifier_group.dart';
+export 'modifier/modifier.dart';
+export 'modifier/product_modifier.dart';
+export 'modifier/order_product_modifier.dart';
+
+// Inventory
+export 'inventory/supplier.dart';
+export 'inventory/purchase_order.dart';
+export 'inventory/purchase_order_item.dart';
+export 'inventory/stock_adjustment.dart';
+
 // Compliance
 export 'compliance/void_log_entry.dart';
 export 'compliance/compliance_report.dart';

@@ -80,73 +80,78 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {
-      initOrderType().then((orderType) {
-        if (orderType == null) {
-          Navigator.pop(this.context);
+    Future.delayed(Duration.zero, () => _initPos());
+  }
+
+  Future<void> _initPos() async {
+    try {
+      final orderType = await initOrderType();
+      if (orderType == null) {
+        if (mounted) Navigator.pop(this.context);
+        return;
+      }
+      setState(() {
+        ref.read(cartProvider.notifier).setOrderType(orderType);
+      });
+
+      if (ref.read(cartProvider).activeOrderType == OrderType.dine) {
+        final diningTable = await initDiningTableIfDine();
+        if (diningTable == null) {
+          if (mounted) Navigator.pop(this.context);
           return;
         }
         setState(() {
-          ref.read(cartProvider.notifier).setOrderType(orderType);
-        });
-        initDiningTableIfDine().then((diningTable) {
-          if (ref.read(cartProvider).activeOrderType == OrderType.dine &&
-              diningTable == null) {
-            Navigator.pop(this.context);
-            return;
-          }
-          setState(() {
-            if (diningTable != null) {
-              ref.read(cartProvider.notifier).setDiningTable(diningTable);
-              if (diningTable.status == DiningTableStatus.reserved) {
-                final reservedCustomer = ref
-                    .read(customerRepositoryProvider)
-                    .getCustomerByPhone(diningTable.customerPhone ?? '');
-                if (reservedCustomer != null) {
-                  ref.read(cartProvider.notifier).setCustomer(reservedCustomer);
-                }
-              } else if (diningTable.status == DiningTableStatus.occupied) {
-                final existingOrder = ref
-                    .read(orderRepositoryProvider)
-                    .getOrderById(diningTable.orderId!);
-                if (existingOrder != null) {
-                  ref.read(cartProvider.notifier).setActiveOrder(existingOrder);
-                  final occupiedCustomer = ref
-                      .read(customerRepositoryProvider)
-                      .getCustomerByPhone(existingOrder.customerPhone ?? '');
-                  if (occupiedCustomer != null) {
-                    ref
-                        .read(cartProvider.notifier)
-                        .setCustomer(occupiedCustomer);
-                  }
-                }
+          ref.read(cartProvider.notifier).setDiningTable(diningTable);
+          if (diningTable.status == DiningTableStatus.reserved) {
+            final reservedCustomer = ref
+                .read(customerRepositoryProvider)
+                .getCustomerByPhone(diningTable.customerPhone ?? '');
+            if (reservedCustomer != null) {
+              ref.read(cartProvider.notifier).setCustomer(reservedCustomer);
+            }
+          } else if (diningTable.status == DiningTableStatus.occupied) {
+            final existingOrder = ref
+                .read(orderRepositoryProvider)
+                .getOrderById(diningTable.orderId!);
+            if (existingOrder != null) {
+              ref.read(cartProvider.notifier).setActiveOrder(existingOrder);
+              final occupiedCustomer = ref
+                  .read(customerRepositoryProvider)
+                  .getCustomerByPhone(existingOrder.customerPhone ?? '');
+              if (occupiedCustomer != null) {
+                ref.read(cartProvider.notifier).setCustomer(occupiedCustomer);
               }
             }
-          });
-          initCustomerIfNull().then((customer) {
-            // if(customer == null){
-            //   Navigator.pop(this.context);
-            //   return;
-            // }
-            setState(() {
-              if (customer != null) {
-                ref.read(cartProvider.notifier).setCustomer(customer);
-              }
-            });
-          });
+          }
         });
+      }
+
+      final customer = await initCustomerIfNull();
+      setState(() {
+        if (customer != null) {
+          ref.read(cartProvider.notifier).setCustomer(customer);
+        }
       });
-    });
+    } catch (e) {
+      debugPrint('POS init error: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(this.context).showSnackBar(
+          SnackBar(content: Text('Failed to initialize POS: $e')),
+        );
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final session = ref.watch(cartProvider);
     final productsRepo = ref.read(productRepositoryProvider);
+    final allProducts = productsRepo.getAllProducts();
+    final allCategories = productsRepo.getAllCategories();
     Color pageColor = Color(
       session.activeOrderType?.color ?? AppColors.primary.value,
     );
-    List<Product> products = productsRepo.getAllProducts().where((element) {
+    List<Product> products = allProducts.where((element) {
       if (selectedProductCategory == null) {
         return true;
       }
@@ -169,7 +174,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
             onPressed: () {
               showSearch(
                 context: context,
-                delegate: SearchProductDelegate(productsRepo.getAllProducts(), (
+                delegate: SearchProductDelegate(allProducts, (
                   product,
                 ) {
                   context.pushNamed('productView', extra: product);
@@ -177,7 +182,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
               );
             },
           ),
-          // IconButton(icon: const Icon(Icons.qr_code_scanner), onPressed: () {}),  // dead button; qrscan plugin removed (abandoned)
+          
           IconButton(
             icon: const Icon(Icons.more_vert),
             onPressed: () {
@@ -517,6 +522,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
               context,
               pageColor,
               productsRepo,
+              allCategories,
               products,
               crossAxisCount,
               spacing,
@@ -525,6 +531,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
               context,
               pageColor,
               productsRepo,
+              allCategories,
               products,
               crossAxisCount,
               spacing,
@@ -564,7 +571,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                   GoRouter.of(context).pushNamed('cart');
                 },
                 themeColor: pageColor,
-                cart: session.cart,
+                cart: session.cartProducts,
               ),
           ],
         ),
@@ -575,7 +582,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
   Widget _buildCategoriesSidebar(
     BuildContext context,
     Color pageColor,
-    ProductRepository productsRepo,
+    List<ProductCategory> allCategories,
   ) {
     return ListView(
       controller: _scrollControllerCategories,
@@ -593,7 +600,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
           },
           label: 'All',
         ),
-        ...productsRepo.getAllCategories().map((each) {
+        ...allCategories.map((each) {
           return CircularCategoryPOSWidget(
             margin: const EdgeInsets.only(bottom: 6),
             image: LibraryImage(
@@ -617,14 +624,14 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
   Widget _buildCategoriesHorizontalBar(
     BuildContext context,
     Color pageColor,
-    ProductRepository productsRepo,
+    List<ProductCategory> allCategories,
   ) {
     return SizedBox(
       height: 72,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-        itemCount: productsRepo.getAllCategories().length + 1,
+        itemCount: allCategories.length + 1,
         itemBuilder: (context, index) {
           if (index == 0) {
             return CircularCategoryPOSWidget(
@@ -640,7 +647,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
               label: 'All',
             );
           }
-          final each = productsRepo.getAllCategories()[index - 1];
+          final each = allCategories[index - 1];
           return CircularCategoryPOSWidget(
             margin: const EdgeInsets.only(right: 6),
             image: LibraryImage(
@@ -736,13 +743,14 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
     BuildContext context,
     Color pageColor,
     ProductRepository productsRepo,
+    List<ProductCategory> allCategories,
     List<Product> products,
     int crossAxisCount,
     double spacing,
   ) {
     return Column(
       children: [
-        _buildCategoriesHorizontalBar(context, pageColor, productsRepo),
+        _buildCategoriesHorizontalBar(context, pageColor, allCategories),
         Expanded(
           child: _buildProductGrid(
             context,
@@ -760,6 +768,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
     BuildContext context,
     Color pageColor,
     ProductRepository productsRepo,
+    List<ProductCategory> allCategories,
     List<Product> products,
     int crossAxisCount,
     double spacing,
@@ -769,7 +778,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
       children: [
         Flexible(
           flex: 2,
-          child: _buildCategoriesSidebar(context, pageColor, productsRepo),
+          child: _buildCategoriesSidebar(context, pageColor, allCategories),
         ),
         Expanded(
           flex: 8,

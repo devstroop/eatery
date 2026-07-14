@@ -70,7 +70,8 @@ CREATE TABLE IF NOT EXISTS orders (
   status        TEXT NOT NULL DEFAULT 'active',
   voidReason    TEXT,
   voidedBy      TEXT,
-  voidedAt      INTEGER
+  voidedAt      INTEGER,
+  staffId       INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS order_product (
@@ -276,7 +277,48 @@ CREATE TABLE IF NOT EXISTS order_status_history (
 
 CREATE INDEX IF NOT EXISTS idx_osh_order ON order_status_history(orderId);
 
--- ── OpLog (sync layer) ──────────────────────────────────────────────────────
+-- ── Modifiers (product customization) ────────────────────────────────────────
+
+CREATE TABLE IF NOT EXISTS modifier_group (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  name        TEXT NOT NULL,
+  description TEXT,
+  minSelect   INTEGER NOT NULL DEFAULT 0,
+  maxSelect   INTEGER NOT NULL DEFAULT 1,
+  sortOrder   INTEGER DEFAULT 0,
+  isRequired  INTEGER NOT NULL DEFAULT 0,
+  createdAt   INTEGER NOT NULL,
+  updatedAt   INTEGER
+);
+
+CREATE TABLE IF NOT EXISTS modifier (
+  id              INTEGER PRIMARY KEY AUTOINCREMENT,
+  modifierGroupId INTEGER NOT NULL REFERENCES modifier_group(id) ON DELETE CASCADE,
+  name            TEXT NOT NULL,
+  priceAdjust     REAL NOT NULL DEFAULT 0,
+  sortOrder       INTEGER DEFAULT 0,
+  isDefault       INTEGER NOT NULL DEFAULT 0,
+  createdAt       INTEGER NOT NULL,
+  updatedAt       INTEGER
+);
+
+CREATE TABLE IF NOT EXISTS product_modifier (
+  productId       INTEGER NOT NULL REFERENCES product(id) ON DELETE CASCADE,
+  modifierGroupId INTEGER NOT NULL REFERENCES modifier_group(id) ON DELETE CASCADE,
+  PRIMARY KEY (productId, modifierGroupId)
+);
+
+CREATE TABLE IF NOT EXISTS order_product_modifier (
+  id              INTEGER PRIMARY KEY AUTOINCREMENT,
+  orderProductId  INTEGER NOT NULL REFERENCES order_product(id) ON DELETE CASCADE,
+  modifierGroupId INTEGER NOT NULL REFERENCES modifier_group(id),
+  modifierId      INTEGER NOT NULL REFERENCES modifier(id),
+  modifierName    TEXT NOT NULL,
+  priceAdjust     REAL NOT NULL DEFAULT 0,
+  quantity        INTEGER NOT NULL DEFAULT 1
+);
+
+-- ── OpLog (sync layer) ─���────────────────────────────────────────────────────
 
 CREATE TABLE IF NOT EXISTS op_log (
   clock INTEGER PRIMARY KEY,
