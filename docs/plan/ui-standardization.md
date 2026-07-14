@@ -1,4 +1,4 @@
-# UI Standardization Plan — Phase 1
+# UI Standardization Plan -- Phase 1
 
 > Audit findings + phased migration plan for standardizing all UI components to be responsive, theme-consistent, and platform-friendly across desktop, tablet, and mobile.
 
@@ -41,8 +41,8 @@
 | PointOfSalePage | Partial | Raw Scaffold | Category sidebar not collapsible on mobile |
 | CartPage | No | Raw Scaffold | 250+ lines business logic in widget |
 | LoginPage | Partial | Raw Scaffold | Uses LayoutBuilder |
-| OrdersPage | Yes | AppPageShell | ✅ Migrated |
-| CustomersPage | Yes | AppPageShell | ✅ Migrated |
+| OrdersPage | Yes | AppPageShell | Already Migrated |
+| CustomersPage | Yes | AppPageShell | Already Migrated |
 | ~20 CRUD form pages | No | Raw Scaffold | No desktop width constraint |
 | ~5 detail/view pages | No | Raw Scaffold | No desktop width constraint |
 | ~5 settings pages | No | Raw Scaffold | No desktop width constraint |
@@ -115,21 +115,21 @@
 
 | Item | What | Scope |
 |------|------|-------|
-| 1c.1 | `KColors.*` → `AppColors.*` | 24+ references — audit each for correct value mapping |
-| 1c.2 | Raw `TextStyle(fontSize:)` → `AppTypography.*` | Legacy widgets, page titles, bottom sheets |
-| 1c.3 | Raw padding/margin → `AppSpacing.*` | Legacy widgets, POS layout |
-| 1c.4 | Raw `Color(0xFF...)` in legacy widgets → `AppColors.*` | `FoodTypeBadge`, `NotificationWidget`, `LowQtyLabelWidget` |
+| 1c.1 | `KColors.*` -> `AppColors.*` | 24+ references -- audit each for correct value mapping |
+| 1c.2 | Raw `TextStyle(fontSize:)` -> `AppTypography.*` | Legacy widgets, page titles, bottom sheets |
+| 1c.3 | Raw padding/margin -> `AppSpacing.*` | Legacy widgets, POS layout |
+| 1c.4 | Raw `Color(0xFF...)` in legacy widgets -> `AppColors.*` | `FoodTypeBadge`, `NotificationWidget`, `LowQtyLabelWidget` |
 
-**KColors → AppColors mapping (divergent values to resolve):**
+**KColors -> AppColors mapping (divergent values to resolve):**
 
 | KColors | AppColors | Same? |
 |---------|-----------|-------|
-| `KColors.primary` (#30A8CF) | `AppColors.primary` (#30A8CF) | ✅ |
-| `KColors.secondary` (#4AC3A1) | `AppColors.secondary` (#4AC3A1) | ✅ |
-| `KColors.secondary2` (#5CAA4B) | `AppColors.secondary2` (#74B952) | ⚠️ Differs |
-| `KColors.green` (#5CAA4B) | `AppColors.success` (#4AC3A1) | ⚠️ Differs |
-| `KColors.yellow` (#AD8D3B) | `AppColors.warning` (#F5A142) | ⚠️ Differs |
-| `KColors.red` (#E53935) | `AppColors.error` (#EF6850) | ⚠️ Differs |
+| `KColors.primary` (#30A8CF) | `AppColors.primary` (#30A8CF) | Yes |
+| `KColors.secondary` (#4AC3A1) | `AppColors.secondary` (#4AC3A1) | Yes |
+| `KColors.secondary2` (#5CAA4B) | `AppColors.secondary2` (#74B952) | Differs |
+| `KColors.green` (#5CAA4B) | `AppColors.success` (#4AC3A1) | Differs |
+| `KColors.yellow` (#AD8D3B) | `AppColors.warning` (#F5A142) | Differs |
+| `KColors.red` (#E53935) | `AppColors.error` (#EF6850) | Differs |
 
 ### Sub-phase 1D: Responsive Hardening
 
@@ -137,12 +137,12 @@
 
 | Item | Page | Issue | Fix |
 |------|------|-------|-----|
-| 1d.1 | `pos.page.dart` | Category sidebar is fixed `Flexible(flex: 2)` — doesn't collapse | Wrap in responsive sidebar (drawer on mobile, persistent on desktop) |
+| 1d.1 | `pos.page.dart` | Category sidebar is fixed `Flexible(flex: 2)` -- doesn't collapse | Wrap in responsive sidebar (drawer on mobile, persistent on desktop) |
 | 1d.2 | `cart.page.dart` | No desktop width constraint; 250+ lines business logic in widget | Wrap in `AppPageShell`; extract `placeOrder` into controller/use-case |
 | 1d.3 | `dashboard.page.dart` | After shell migration, ensure `Wrap` grid adapts to `AppAdaptiveShell`'s sidebar | Use `LayoutBuilder` inside content area |
 | 1d.4 | List pages (x6) | Don't use `ResponsiveListView` | Apply `ResponsiveListView` to remaining `AppPageShell` list pages |
 
-### Sub-phase 1E: GoRouter Adoption (Optional — Deep First)
+### Sub-phase 1E: GoRouter Adoption (Optional -- Deep First)
 
 **Goal:** Replace 81 imperative `Navigator.push` calls with declarative routing.
 
@@ -153,7 +153,7 @@
 | 1e.3 | Replace `Navigator.push(MaterialPageRoute(...))` in all pages with `context.push()` |
 | 1e.4 | Replace `Navigator.pushAndRemoveUntil` / `Navigator.pushReplacement` with GoRouter equivalents |
 
-### Sub-phase 1F: StatefulWidget → ConsumerStatefulWidget
+### Sub-phase 1F: StatefulWidget -> ConsumerStatefulWidget
 
 **Goal:** Every stateful page uses Riverpod.
 
@@ -195,25 +195,25 @@
 ## 3. Dependency Graph
 
 ```
-1A (Shells) ───────────────────────────────────────────┐
-     │                                                   │
-     ▼                                                   ▼
-1B (Legacy replacement) ←── 1C (Theme tokens) ──→  1D (Responsive)
-     │                                                   │
-     ▼                                                   │
-1F (StatefulWidget) ──── 1E (GoRouter) ◀────────────────┘
-     │
-     ▼
+1A (Shells) --------------------------------+
+     |                                       |
+     v                                       v
+1B (Legacy replacement) <-- 1C (Theme tokens) --> 1D (Responsive)
+     |                                       |
+     v                                       |
+1F (StatefulWidget) ---- 1E (GoRouter) <-----+
+     |
+     v
 1G (Cleanup)
 ```
 
 **Ordering constraints:**
-- 1A (Shells) blocks everything — must be first
+- 1A (Shells) blocks everything -- must be first
 - 1B (Legacy replacement) and 1C (Theme tokens) can run in parallel
 - 1D (Responsive hardening) depends on 1A for shell, but can run early on pages already wrapped
 - 1E (GoRouter) depends on 1A (pages need stable shell before route restructuring)
 - 1F (StatefulWidget migration) depends on 1B (need AppButton/AppDialog available)
-- 1G (Cleanup) is last — only after all replacements are verified
+- 1G (Cleanup) is last -- only after all replacements are verified
 
 ---
 
@@ -228,13 +228,13 @@
 
 ### Per-Page Changes
 ~50 page files, each getting:
-- Import changes (old → new widget imports)
-- Constructor calls (PrimaryButton → AppButton.primary, etc.)
-- Dialog calls (showMessageDialog → AppDialog.show)
-- Shell wrapper (raw Scaffold → AppPageShell)
-- Color references (KColors → AppColors)
-- Typography (raw TextStyle → AppTypography)
-- Spacing (raw padding → AppSpacing)
+- Import changes (old -> new widget imports)
+- Constructor calls (PrimaryButton -> AppButton.primary, etc.)
+- Dialog calls (showMessageDialog -> AppDialog.show)
+- Shell wrapper (raw Scaffold -> AppPageShell)
+- Color references (KColors -> AppColors)
+- Typography (raw TextStyle -> AppTypography)
+- Spacing (raw padding -> AppSpacing)
 
 ### Deletions
 ~20 legacy files deleted after full migration.
@@ -251,7 +251,7 @@ dart analyze lib/
 
 ### Visual consistency checklist
 - [ ] All list pages use `AppPageShell` with desktop centering
-- [ ] All CRUD form pages use `AppPageShell` with desktop centering  
+- [ ] All CRUD form pages use `AppPageShell` with desktop centering
 - [ ] Dashboard uses `AppAdaptiveShell` with correct breakpoint behavior
 - [ ] POS page sidebar collapses on mobile
 - [ ] Cart page has desktop width constraint
@@ -269,5 +269,5 @@ dart analyze lib/
 - [ ] Zero `showMessageDialog`/`showConfirmationDialog` references
 - [ ] Zero `KColors.*` references
 - [ ] Zero `SpacingStyle.*` references
-- [ ] Zero `StatefulWidget` pages remaining (all → `ConsumerStatefulWidget`)
+- [ ] Zero `StatefulWidget` pages remaining (all -> `ConsumerStatefulWidget`)
 - [ ] Zero legacy widget files remaining (all old `.dart` files deleted)
