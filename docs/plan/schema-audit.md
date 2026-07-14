@@ -1,14 +1,14 @@
-# Database Schema Audit — Professional Restaurant Management System
+# Database Schema Audit -- Professional Restaurant Management System
 
-> **Current:** 19 tables, 258 lines  
-> **Target:** Full-spectrum restaurant management (POS + inventory + HR + reporting)  
+> **Current:** 19 tables, 258 lines
+> **Target:** Full-spectrum restaurant management (POS + inventory + HR + reporting)
 > **Approach:** Identify every gap between current schema and a production-grade system, then propose additions.
 
 ---
 
 ## 1. Schema Design Issues (Existing Tables)
 
-### 1.1 Orders — Missing Relationships
+### 1.1 Orders -- Missing Relationships
 
 ```sql
 -- CURRENT: limited columns, unsafe types
@@ -27,7 +27,7 @@ CREATE TABLE orders (
 | `status` is TEXT | Any string accepted, no validation | CHANGE to `INTEGER` with `OrderStatus` enum |
 | `customerPhone` as FK | Fragile; customer can change phone | CHANGE to `customerId INTEGER REFERENCES customer(id)` + keep phone as denormalized display |
 
-### 1.2 OrderProduct — Missing Item-Level Lifecycle
+### 1.2 OrderProduct -- Missing Item-Level Lifecycle
 
 ```sql
 -- Missing: modifiers, notes, item-level cancellation
@@ -44,7 +44,7 @@ CREATE TABLE order_product (
 | `status INTEGER` | Item-level status: pending/preparing/ready/served/cancelled |
 | `modifiersJson TEXT` | Snapshot of applied modifiers at time of order |
 
-### 1.3 Payment — No Split Payments
+### 1.3 Payment -- No Split Payments
 
 ```sql
 -- Single payment mode per row
@@ -58,7 +58,7 @@ CREATE TABLE payment (
 
 **Fix:** Keep the table as-is (multiple rows per order = split payments), but add `orderId` index and ensure the UI supports adding multiple payments. Add `payment.orderStatusOnCreate` to track whether the payment completed the order.
 
-### 1.4 Staff — No PIN or Auth Fields
+### 1.4 Staff -- No PIN or Auth Fields
 
 ```sql
 CREATE TABLE staff (
@@ -76,7 +76,7 @@ CREATE TABLE staff (
 | `lastLoginAt INTEGER` | Audit trail |
 | StaffType.admin | Admin role missing from enum |
 
-### 1.5 Company — Needs Modernization
+### 1.5 Company -- Needs Modernization
 
 ```sql
 CREATE TABLE company (
@@ -89,13 +89,13 @@ CREATE TABLE company (
 
 | Issue | Fix |
 |-------|-----|
-| `password` | Remove — auth via `Staff.pin` |
+| `password` | Remove -- auth via `Staff.pin` |
 | `edition` column | Rename to `taxation` to match model |
-| `subscriptionId` | Remove from setup — defer |
+| `subscriptionId` | Remove from setup -- defer |
 | Missing `timezone` | ADD `timezone TEXT` for correct date reporting |
 | Missing `businessType` | ADD `businessType TEXT` (restaurant/cafe/bar/food-truck) |
 
-### 1.6 DiningTable — Missing Floor Plan Data
+### 1.6 DiningTable -- Missing Floor Plan Data
 
 ```sql
 CREATE TABLE dining_table (
@@ -113,7 +113,7 @@ CREATE TABLE dining_table (
 | `width REAL, height REAL` | Visual dimensions on floor plan |
 | `staffId INTEGER` | Assigned waiter for the shift |
 
-### 1.7 Product — Missing Stock, Variants, Modifiers
+### 1.7 Product -- Missing Stock, Variants, Modifiers
 
 ```sql
 CREATE TABLE product (
@@ -129,7 +129,7 @@ CREATE TABLE product (
 |---------|-----|
 | `sku TEXT` | Stock keeping unit for inventory |
 | `barcode TEXT` | Barcode for scanning |
-| `stockQuantity REAL` | Current stock level (for inventoryItem type); computed from stock_adjustments or stored directly — see §Stock Model below |
+| `stockQuantity REAL` | Current stock level (for inventoryItem type); computed from stock_adjustments or stored directly -- see Stock Model below |
 | `lowStockThreshold REAL` | Alert when stock drops below this level |
 | `prepTime INTEGER` | Estimated preparation time in seconds |
 | `sortOrder INTEGER` | Display ordering within category |
@@ -137,12 +137,12 @@ CREATE TABLE product (
 | `calories INTEGER` | Nutritional info (future) |
 
 **Stock model note:** Two approaches exist:
-- **Stored model** — `product.stockQuantity` is updated directly by stock_adjustment triggers. Read is O(1). Risk: drift between adjustments and stored value.
-- **Computed model** — No `product.stockQuantity`. Current stock = `SUM(adjustments) FROM stock_adjustment WHERE productId = ?`. Always accurate. Read is O(n) over adjustments.
+- **Stored model** -- `product.stockQuantity` is updated directly by stock_adjustment triggers. Read is O(1). Risk: drift between adjustments and stored value.
+- **Computed model** -- No `product.stockQuantity`. Current stock = `SUM(adjustments) FROM stock_adjustment WHERE productId = ?`. Always accurate. Read is O(n) over adjustments.
 
 **Recommendation: Stored model** for POS use. Stock adjustments update `product.stockQuantity` atomically. The `stock_adjustment` table serves as an immutable audit log. Periodic reconciliation jobs can detect drift.
 
-### 1.8 TaxSlab — No Compound/Multiple Tax Support
+### 1.8 TaxSlab -- No Compound/Multiple Tax Support
 
 ```sql
 CREATE TABLE tax_slab (
@@ -169,7 +169,7 @@ CREATE TABLE tax_slab (
 
 ## 2. Missing Entities (Not in Current Schema)
 
-### Tier 1 — Core Operations
+### Tier 1 -- Core Operations
 
 | Entity | Purpose | Priority |
 |--------|---------|----------|
@@ -181,7 +181,7 @@ CREATE TABLE tax_slab (
 | **discount** | Reusable discount rules (%, fixed, BOGO) | P1 |
 | **order_discount** | Discounts applied to an order | P1 |
 
-### Tier 2 — Inventory & Supply Chain
+### Tier 2 -- Inventory & Supply Chain
 
 | Entity | Purpose | Priority |
 |--------|---------|----------|
@@ -193,7 +193,7 @@ CREATE TABLE tax_slab (
 | **recipe_item** | Quantity of inventory item needed per dish | P3 |
 | **unit_of_measure** | uom catalog (kg, pcs, liter, box) | P3 |
 
-### Tier 3 — HR & Operations
+### Tier 3 -- HR & Operations
 
 | Entity | Purpose | Priority |
 |--------|---------|----------|
@@ -202,7 +202,7 @@ CREATE TABLE tax_slab (
 | **expense** | Operational expenses | P7 |
 | **expense_category** | Expense categorization | P7 |
 
-### Tier 4 — Customer Engagement
+### Tier 4 -- Customer Engagement
 
 | Entity | Purpose | Priority |
 |--------|---------|----------|
@@ -211,7 +211,7 @@ CREATE TABLE tax_slab (
 | **loyalty_transaction** | Points earned/redeemed | P8 |
 | **customer_address** | Multiple addresses per customer | P8 |
 
-### Tier 5 — System & Settings
+### Tier 5 -- System & Settings
 
 | Entity | Purpose | Priority |
 |--------|---------|----------|
@@ -224,9 +224,9 @@ CREATE TABLE tax_slab (
 
 ## 3. Full Recommended Schema
 
-Below is the complete schema with all additions and fixes.  
-*New tables are marked with `-- NEW`*.  
-*Modified tables show only changed columns.*  
+Below is the complete schema with all additions and fixes.
+*New tables are marked with `-- NEW`*.
+*Modified tables show only changed columns.*
 
 ### 3.1 Staff (Extended)
 
@@ -403,7 +403,7 @@ CREATE TABLE modifier (
   updatedAt       INTEGER
 );
 
--- NEW: Junction — which modifier groups apply to which products
+-- NEW: Junction -- which modifier groups apply to which products
 CREATE TABLE product_modifier (
   productId       INTEGER NOT NULL REFERENCES product(id) ON DELETE CASCADE,
   modifierGroupId INTEGER NOT NULL REFERENCES modifier_group(id) ON DELETE CASCADE,
@@ -497,7 +497,7 @@ CREATE TABLE purchase_order_item (
   receivedQty     REAL DEFAULT 0
 );
 
--- NEW: Bill of materials — inventory items needed per dish
+-- NEW: Bill of materials -- inventory items needed per dish
 CREATE TABLE recipe (
   id          INTEGER PRIMARY KEY AUTOINCREMENT,
   productId   INTEGER NOT NULL REFERENCES product(id) ON DELETE CASCADE,
@@ -655,7 +655,7 @@ CREATE TABLE holiday_hours (
 );
 ```
 
-### 3.15 Payment — Split Payment Support
+### 3.15 Payment -- Split Payment Support
 
 ```sql
 -- MODIFIED: enable multiple payments per order
@@ -665,7 +665,7 @@ CREATE TABLE holiday_hours (
 ALTER TABLE payment ADD COLUMN completedOrder INTEGER DEFAULT 0;
 ```
 
-### 3.16 OpLog — Better ID Scheme
+### 3.16 OpLog -- Better ID Scheme
 
 ```sql
 -- MODIFIED: UUID instead of clock-based PK
@@ -679,7 +679,7 @@ CREATE INDEX idx_op_log_clock ON op_log(clock);
 ```
 
 **Migration impact:** This is a breaking change for any existing deployment with sync data.
-- Existing `op_log` table has `clock INTEGER PRIMARY KEY` — the PK type changes from int to text.
+- Existing `op_log` table has `clock INTEGER PRIMARY KEY` -- the PK type changes from int to text.
 - Migration strategy: Create new table with `id TEXT PRIMARY KEY`, copy existing rows with `id = 'migrated_$clock'`, drop old table, rename new table.
 - `OpLogService.clock` continues as the monotonic counter for ordering; `id` is the collision-safe UUID.
 - All existing sync deployments (0 at this stage) must run the migration before upgrading.
@@ -713,15 +713,15 @@ CREATE TABLE product_tax (
 | Tax | `product_tax` | 1 |
 | OpLog | (modified) | 0 |
 
-**Total new tables: 22**  
-**Current tables: 19 → 41**  
+**Total new tables: 22**
+**Current tables: 19 -> 41**
 **Columns modified: ~17 existing columns** (added stock fields, staff PIN, posX/Y, note/status, timestamps; renamed edition; removed password; changed voidedBy to staff FK)
 
 ---
 
 ## 5. Migration Strategy
 
-Migration phases map to product phases defined in `docs/prd/06-prd-audit.md`:
+Migration phases map to product phases defined in `../product/06-prd-audit.md`:
 
 | Migration Phase | Product Phase | Content | Breaking? |
 |----------------|---------------|---------|-----------|
@@ -731,7 +731,7 @@ Migration phases map to product phases defined in `docs/prd/06-prd-audit.md`:
 | 4 | P7-P8 | Customer, discounts, reservations | No (additive) |
 | 5 | P1-P3 | Column renames, type changes | Yes |
 
-### Phase 1: Foundation (P0-P1 — schema safe)
+### Phase 1: Foundation (P0-P1 -- schema safe)
 1. Add `staff.pin`, `staff.email`, `staff.pinUpdatedAt`, `staff.lastLoginAt`
 2. Add `company.adminStaffId`
 3. Add `dining_table.posX`, `dining_table.posY`, `dining_table.shape`
@@ -740,17 +740,17 @@ Migration phases map to product phases defined in `docs/prd/06-prd-audit.md`:
 6. Create `modifier_group`, `modifier`, `product_modifier` tables
 7. Add `product.stockQuantity`, `product.lowStockThreshold`
 
-### Phase 2: Inventory (P3 — schema safe)
+### Phase 2: Inventory (P3 -- schema safe)
 8. Create `supplier`, `purchase_order`, `purchase_order_item` tables
 9. Create `recipe`, `recipe_item`, `stock_adjustment` tables
 10. Create `unit_of_measure` table
 
-### Phase 3: HR & Operations (P7 — schema safe)
+### Phase 3: HR & Operations (P7 -- schema safe)
 11. Create `shift`, `time_entry` tables
 12. Create `expense_category`, `expense` tables
 13. Create `business_hours`, `holiday_hours` tables
 
-### Phase 4: Customer & Discounts (P7-P8 — schema safe)
+### Phase 4: Customer & Discounts (P7-P8 -- schema safe)
 14. Create `reservation` table
 15. Create `discount`, `order_discount` tables
 16. Create `customer_loyalty`, `loyalty_transaction` tables
