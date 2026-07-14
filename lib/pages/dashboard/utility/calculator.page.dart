@@ -57,7 +57,7 @@ class _CalculatorPageState extends ConsumerState<CalculatorPage> {
                 alignment: Alignment.bottomRight,
                 child: Text(
                   _input,
-                  style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
+                  style: AppTypography.displayMedium,
                 ),
               ),
             ),

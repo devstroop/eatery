@@ -96,7 +96,7 @@ class _UpgradePageState extends ConsumerState<UpgradePage> {
                     const Text(
                       '+91 950 100 5734',
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                          AppTypography.titleMedium,
                     )
                   ],
                 ),
@@ -116,7 +116,7 @@ class _UpgradePageState extends ConsumerState<UpgradePage> {
                     const Text(
                       'help@devstroop.com',
                       style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                          AppTypography.titleMedium,
                     )
                   ],
                 ),
