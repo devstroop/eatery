@@ -18,7 +18,6 @@ abstract class Company with _$Company {
     String? currencyCode,
     @JsonKey(name: 'foodLicNo') String? foodLicenseNo,
     @JsonKey(name: 'taxLicNo') String? salesTaxNumber,
-    int? subscriptionId,
   }) = _Company;
 
   factory Company.fromJson(Map<String, dynamic> json) => _$CompanyFromJson(json);
@@ -40,7 +39,6 @@ abstract class Company with _$Company {
       'currencyCode': list.elementAt(8),
       'foodLicNo': list.elementAt(9),
       'taxLicNo': list.elementAt(10),
-      'subscriptionId': list.elementAt(11),
     });
   }
 }
@@ -62,7 +60,6 @@ extension CompanyX on Company {
       map['currencyCode'],
       map['foodLicNo'],
       map['taxLicNo'],
-      map['subscriptionId'],
     ];
   }
 }

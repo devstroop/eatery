@@ -59,8 +59,6 @@ export 'data/repositories/product_repository_sqlite.dart';
 export 'data/repositories/sqlite_preference_store.dart';
 export 'data/repositories/staff_repository.dart';
 export 'data/repositories/staff_repository_sqlite.dart';
-export 'data/repositories/subscription_repository.dart';
-export 'data/repositories/subscription_repository_sqlite.dart';
 export 'data/repositories/tax_repository.dart';
 export 'data/repositories/tax_repository_sqlite.dart';
 

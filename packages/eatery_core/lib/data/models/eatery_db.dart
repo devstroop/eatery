@@ -17,10 +17,6 @@ export 'product/product.dart';
 export 'product/product_category.dart';
 export 'product/product_type.dart';
 
-// Subscription
-export 'subscription/subscription.dart';
-export 'subscription/subscription_type.dart';
-
 // Company
 export 'company/company.dart';
 export 'company/edition.dart';

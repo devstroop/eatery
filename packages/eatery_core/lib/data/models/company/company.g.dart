@@ -18,7 +18,6 @@ _Company _$CompanyFromJson(Map<String, dynamic> json) => _Company(
   currencyCode: json['currencyCode'] as String?,
   foodLicenseNo: json['foodLicNo'] as String?,
   salesTaxNumber: json['taxLicNo'] as String?,
-  subscriptionId: (json['subscriptionId'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$CompanyToJson(_Company instance) => <String, dynamic>{
@@ -33,7 +32,6 @@ Map<String, dynamic> _$CompanyToJson(_Company instance) => <String, dynamic>{
   'currencyCode': instance.currencyCode,
   'foodLicNo': instance.foodLicenseNo,
   'taxLicNo': instance.salesTaxNumber,
-  'subscriptionId': instance.subscriptionId,
 };
 
 const _$TaxationEnumMap = {Taxation.none: -1, Taxation.gst: 0, Taxation.vat: 1};

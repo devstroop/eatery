@@ -65,7 +65,6 @@ class MutationTracker {
     if (entity is Staff) return entity.id;
     if (entity is Payment) return entity.id;
     if (entity is TaxSlab) return entity.id;
-    if (entity is Subscription) return entity.id;
     if (entity is ProductCategory) return entity.id;
     if (entity is DiningTableCategory) return entity.id;
     try {

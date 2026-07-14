@@ -29,7 +29,7 @@ class SqliteCompanyRepository implements CompanyRepository {
     _store.execute('''
       INSERT OR REPLACE INTO company
         (id, logo, name, email, phone, address, password, edition,
-         currencyCode, salesTaxNumber, foodLicenseNo, subscriptionId)
+         currencyCode, salesTaxNumber, foodLicenseNo)
       VALUES (1,?,?,?,?,?,?,?,?,?,?,?)
     ''', [
       m['logo'],
@@ -42,7 +42,6 @@ class SqliteCompanyRepository implements CompanyRepository {
       m['currencyCode'],
       m['salesTaxNumber'],
       m['foodLicenseNo'],
-      m['subscriptionId'],
     ]);
     company = company.copyWith(id: 1);
     notifyMutation('company', 1, 'save', company.toMap());
@@ -112,7 +111,6 @@ class SqliteCompanyRepository implements CompanyRepository {
       currencyCode: row['currencyCode'] as String?,
       salesTaxNumber: row['salesTaxNumber'] as String?,
       foodLicenseNo: row['foodLicenseNo'] as String?,
-      subscriptionId: row['subscriptionId'] as int?,
       id: row['id'] as int);
   }
 
