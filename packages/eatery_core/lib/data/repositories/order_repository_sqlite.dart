@@ -134,6 +134,14 @@ class SqliteOrderRepository implements OrderRepository {
     ]);
   }
 
+  @override
+  void adjustStock(int productId, int quantity) {
+    _store.execute(
+      'UPDATE product SET stockQuantity = COALESCE(stockQuantity, 0) + ? WHERE id = ?',
+      [quantity, productId],
+    );
+  }
+
   // ---------------------------------------------------------------------------
   // Order products (line items)
   // ---------------------------------------------------------------------------

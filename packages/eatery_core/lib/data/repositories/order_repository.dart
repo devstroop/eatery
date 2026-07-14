@@ -11,4 +11,5 @@ abstract class OrderRepository {
   Future<void> deleteOrder(Order order);
   List<OrderStatusHistory> getStatusHistory(int orderId);
   Future<void> recordStatusTransition(OrderStatusHistory transition);
+  void adjustStock(int productId, int quantity);
 }
