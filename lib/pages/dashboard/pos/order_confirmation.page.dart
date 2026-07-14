@@ -3,12 +3,10 @@ import 'package:intl/intl.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:eatery_core/providers/order_provider.dart';
-import 'package:eatery_core/providers/product_provider.dart';
 import 'package:eatery_core/providers/company_provider.dart';
+import 'package:eatery_core/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-
-import '../../../functions/order.function.dart';
 
 class OrderConfirmationPage extends ConsumerStatefulWidget {
   const OrderConfirmationPage({Key? key, required this.order})
@@ -21,135 +19,25 @@ class OrderConfirmationPage extends ConsumerStatefulWidget {
 }
 
 class _OrderConfirmationPageState extends ConsumerState<OrderConfirmationPage> {
+  late List<OrderProduct> _items;
   final GlobalKey genKey = GlobalKey();
+
   @override
   void initState() {
     super.initState();
+    _items = ref
+        .read(orderRepositoryProvider)
+        .getOrderProducts(widget.order.id ?? 0);
   }
-
-  /*Future<Uint8List> _capturePng() async {
-    try {
-      RenderRepaintBoundary boundary =
-          genKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-      ByteData? byteData =
-          await image.toByteData(format: ui.ImageByteFormat.png);
-      var pngBytes = byteData!.buffer.asUint8List();
-      var bs64 = base64Encode(pngBytes);
-      debugPrint(bs64.length.toString());
-      setState(() {});
-      return pngBytes;
-    } catch (e) {
-      rethrow;
-    }
-  }*/
-
-  previewWidget(BuildContext context) => RepaintBoundary(
-    key: genKey,
-    child: Container(
-      color: AppColors.white,
-      margin: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0),
-      //height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          /*const SizedBox(
-                height: 12.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    ref.read(customerRepositoryProvider).getCustomerByPhone(widget.order.customerPhone ?? '')?.name ?? 'Unnamed',
-                    style: const TextStyle(
-                        fontSize: 24, fontWeight: FontWeight.bold),
-                  )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    ref.read(customerRepositoryProvider).getCustomerByPhone(widget.order.customerPhone ?? '')?.phone ?? 'No Phone',
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w400),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 12.0,
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    'Order #${widget.order.id}',
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w400),
-                  )
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    DateFormat('dd MMM yyyy hh:mm a')
-                        .format(widget.order.timestamp),
-                    style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w400),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 12.0,
-              ),
-              Divider(
-                color: AppColors.white900,
-              ),
-              const SizedBox(
-                height: 12.0,
-              ),
-              ListView.builder(
-                shrinkWrap: true,
-                physics: const NeverScrollableScrollPhysics(),
-                itemCount: widget.order.products.length,
-                itemBuilder: (context, index) {
-                  final product = widget.order.products[index];
-                  return Column(
-                    children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            product.name,
-                            style: TextStyle(
-                              color: AppColors.black,
-                                fontSize: 16, fontWeight: FontWeight.w400),
-                          ),
-                          Text(
-                            '${widget.order.products.where((element) => element.id == product.id).length} x ${OrderFunction.calculateProductPriceWithoutTax(product)}',
-                            style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w400),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(
-                        height: 12.0,
-                      ),
-                    ],
-                  );
-                },
-              ),*/
-        ],
-      ),
-    ),
-  );
 
   @override
   Widget build(BuildContext context) {
+    final currencySymbol =
+        ref.read(companyProvider.notifier).currency?.symbol ?? '';
+    final customer = ref
+        .read(customerRepositoryProvider)
+        .getCustomerByPhone(widget.order.customerPhone ?? '');
+
     return Scaffold(
       backgroundColor: AppColors.grey200,
       body: SingleChildScrollView(
@@ -175,7 +63,84 @@ class _OrderConfirmationPageState extends ConsumerState<OrderConfirmationPage> {
               ],
             ),
             const SizedBox(height: 24),
-            previewWidget(context),
+            RepaintBoundary(
+              key: genKey,
+              child: Container(
+                color: AppColors.white,
+                margin: const EdgeInsets.fromLTRB(12.0, 12.0, 12.0, 12.0),
+                width: MediaQuery.of(context).size.width,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 12),
+                    if (customer != null) ...[
+                      Text(
+                        customer.name ?? 'Unnamed',
+                        style: const TextStyle(
+                          fontSize: 24, fontWeight: FontWeight.bold),
+                      ),
+                      Text(
+                        customer.phone,
+                        style: const TextStyle(
+                          fontSize: 16, fontWeight: FontWeight.w400),
+                      ),
+                    ],
+                    const SizedBox(height: 8),
+                    Text(
+                      'Order #${widget.order.id}',
+                      style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w400),
+                    ),
+                    Text(
+                      DateFormat('dd MMM yyyy hh:mm a')
+                          .format(widget.order.createdAt),
+                      style: const TextStyle(
+                        fontSize: 16, fontWeight: FontWeight.w400),
+                    ),
+                    const SizedBox(height: 12),
+                    Divider(color: AppColors.white900),
+                    const SizedBox(height: 12),
+                    ..._items.map((item) => Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 4),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              item.productName,
+                              style: const TextStyle(
+                                fontSize: 16, fontWeight: FontWeight.w400),
+                            ),
+                          ),
+                          Text(
+                            '${item.quantity} x $currencySymbol${item.price}',
+                            style: const TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.w400),
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            '$currencySymbol${item.total}',
+                            style: const TextStyle(
+                              fontSize: 16, fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      ),
+                    )),
+                    const SizedBox(height: 12),
+                    Divider(color: AppColors.white900),
+                    const SizedBox(height: 8),
+                    _totalRow('Sub Total', '$currencySymbol${widget.order.subTotal}'),
+                    if (widget.order.discountTotal > 0)
+                      _totalRow('Discount', '-$currencySymbol${widget.order.discountTotal}'),
+                    _totalRow('Tax', '$currencySymbol${widget.order.taxTotal}'),
+                    if (widget.order.roundOff != 0)
+                      _totalRow('Round Off', '$currencySymbol${widget.order.roundOff}'),
+                    _totalRow('Grand Total', '$currencySymbol${widget.order.grandTotal}', bold: true),
+                    const SizedBox(height: 12),
+                  ],
+                ),
+              ),
+            ),
           ],
         ),
       ),
@@ -193,41 +158,33 @@ class _OrderConfirmationPageState extends ConsumerState<OrderConfirmationPage> {
                 label: '< Back',
               ),
             ),
-            const SizedBox(width: 6),
-            Expanded(
-              flex: 1,
-              child: AppButton.primary(
-                label: 'Print',
-                icon: Icons.print,
-                onPressed: () async {
-                  // PrintInvoice.printReceipt(
-                  //         order: widget.order, account: widget.account)
-                  //     .then((String message) {
-                  //       showMessageDialog(context, message, MessageType.info);
-                  // }).onError((error, stackTrace) {
-                  //   showMessageDialog(context, error.toString(), MessageType.error);
-                  // });
-                },
-              ),
-            ),
-            const SizedBox(width: 6),
-            Expanded(
-              flex: 1,
-              child: AppButton.primary(
-                label: 'Share',
-                icon: Icons.share,
-                onPressed: () async {
-                  // final temp = await AppFileSystem.getShareDir();
-                  // final path = '$temp/${getRandomString(8)}.png';
-                  // await File(path).writeAsBytes(await _capturePng());
-                  // await shareFile(path, 'Invoice #${widget.order['id']}',
-                  //     'Autogenerated by RestaurantPOS');
-                  // //await File(path).delete();
-                },
-              ),
-            ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _totalRow(String label, String value, {bool bold = false}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 12),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: bold ? 18 : 16,
+              fontWeight: bold ? FontWeight.bold : FontWeight.w400,
+            ),
+          ),
+          Text(
+            value,
+            style: TextStyle(
+              fontSize: bold ? 18 : 16,
+              fontWeight: bold ? FontWeight.bold : FontWeight.w400,
+            ),
+          ),
+        ],
       ),
     );
   }

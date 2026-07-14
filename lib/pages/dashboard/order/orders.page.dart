@@ -166,7 +166,9 @@ class _OrderCard extends StatelessWidget {
               ),
           ],
         ),
-        onTap: () {},
+        onTap: () {
+          GoRouter.of(context).pushNamed('viewOrder', extra: order);
+        },
       ),
     );
   }
