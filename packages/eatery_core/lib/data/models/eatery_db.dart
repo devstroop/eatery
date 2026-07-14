@@ -58,6 +58,9 @@ export 'modifier/modifier.dart';
 export 'modifier/product_modifier.dart';
 export 'modifier/order_product_modifier.dart';
 
+// Discount
+export 'discount/discount.dart';
+export 'discount/order_discount.dart';
 // Inventory
 export 'inventory/supplier.dart';
 export 'inventory/purchase_order.dart';
