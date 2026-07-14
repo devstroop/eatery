@@ -53,6 +53,7 @@ import 'package:eatery/pages/dashboard/settings/currency_region/view.currency_re
 import 'package:eatery/pages/dashboard/staff/staffs.page.dart';
 import 'package:eatery/pages/dashboard/staff/add.staff.page.dart';
 import 'package:eatery/pages/dashboard/staff/edit.staff.page.dart';
+import 'package:eatery/pages/dashboard/reports/reports.page.dart';
 import 'package:eatery/pages/dashboard/settings/modifier/modifier_groups.page.dart';
 import 'package:eatery/pages/dashboard/settings/modifier/add_modifier_group.page.dart';
 import 'package:eatery/pages/dashboard/settings/modifier/edit_modifier_group.page.dart';
@@ -393,6 +394,11 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
           final staff = state.extra as dynamic;
           return EditStaffPage(staff: staff);
         },
+      ),
+      GoRoute(
+        name: 'reports',
+        path: '/reports',
+        builder: (context, state) => const ReportsPage(),
       ),
       GoRoute(
         name: 'dataManagement',
