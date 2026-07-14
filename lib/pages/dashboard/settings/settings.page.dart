@@ -69,6 +69,14 @@ class _SettingPageState extends ConsumerState<SettingPage> {
             onTap: () => GoRouter.of(context).pushNamed('modifierGroups').then((_) => setState(() {})),
           ),
           MenuTile(
+            prefixIcon: Icons.local_offer,
+            title: 'Discounts',
+            subtitle: 'Promotions & discount rules',
+            postfixIcon: Icons.chevron_right,
+            color: getThemeColor(),
+            onTap: () => GoRouter.of(context).pushNamed('discounts').then((_) => setState(() {})),
+          ),
+          MenuTile(
             prefixIcon: Icons.print,
             title: 'Printer',
             subtitle: 'Manage Printing Devices',

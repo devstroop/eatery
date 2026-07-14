@@ -6,6 +6,11 @@ class DiscountRepository {
   final EateryStore _store;
   DiscountRepository(this._store);
 
+  List<Discount> getActiveDiscounts() {
+    final now = DateTime.now().millisecondsSinceEpoch;
+    return _store.query('SELECT * FROM discount WHERE isActive = 1 AND (startsAt IS NULL OR startsAt <= ?) AND (endsAt IS NULL OR endsAt >= ?) ORDER BY name', [now, now]).map(Discount.fromMap).toList();
+  }
+
   List<Discount> getAllDiscounts() =>
       _store.query('SELECT * FROM discount ORDER BY name').map(Discount.fromMap).toList();
 
