@@ -16,3 +16,4 @@ export 'app_table_view.dart';
 export 'app_text_field.dart';
 export 'sync_host_settings_sheet.dart';
 export 'sync_status_chip.dart';
+export 'floor_plan_widget.dart';

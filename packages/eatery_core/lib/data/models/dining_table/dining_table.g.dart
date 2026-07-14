@@ -17,6 +17,12 @@ _DiningTable _$DiningTableFromJson(Map<String, dynamic> json) => _DiningTable(
       $enumDecodeNullable(_$DiningTableStatusEnumMap, json['status']) ??
       DiningTableStatus.available,
   customerPhone: json['customerPhone'] as String?,
+  posX: (json['posX'] as num?)?.toDouble(),
+  posY: (json['posY'] as num?)?.toDouble(),
+  shape: (json['shape'] as num?)?.toInt() ?? 0,
+  width: (json['width'] as num?)?.toDouble(),
+  height: (json['height'] as num?)?.toDouble(),
+  staffId: (json['staffId'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$DiningTableToJson(_DiningTable instance) =>
@@ -29,6 +35,12 @@ Map<String, dynamic> _$DiningTableToJson(_DiningTable instance) =>
       'capacity': instance.capacity,
       'status': _$DiningTableStatusEnumMap[instance.status]!,
       'customerPhone': instance.customerPhone,
+      'posX': instance.posX,
+      'posY': instance.posY,
+      'shape': instance.shape,
+      'width': instance.width,
+      'height': instance.height,
+      'staffId': instance.staffId,
     };
 
 const _$DiningTableStatusEnumMap = {

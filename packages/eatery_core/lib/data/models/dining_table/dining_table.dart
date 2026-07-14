@@ -15,6 +15,12 @@ abstract class DiningTable with _$DiningTable {
     @Default(0) int capacity,
     @Default(DiningTableStatus.available) DiningTableStatus status,
     String? customerPhone,
+    double? posX,
+    double? posY,
+    @Default(0) int shape,
+    double? width,
+    double? height,
+    int? staffId,
   }) = _DiningTable;
 
   factory DiningTable.fromJson(Map<String, dynamic> json) =>
@@ -34,6 +40,12 @@ abstract class DiningTable with _$DiningTable {
             )
           : DiningTableStatus.available,
       'customerPhone': map['customerPhone'],
+      'posX': map['posX'],
+      'posY': map['posY'],
+      'shape': map['shape'] ?? 0,
+      'width': map['width'],
+      'height': map['height'],
+      'staffId': map['staffId'],
     });
   }
 
@@ -47,6 +59,12 @@ abstract class DiningTable with _$DiningTable {
       'capacity': row.elementAt(5),
       'status': row.elementAt(6),
       'customerPhone': row.elementAt(7),
+      'posX': row.elementAt(8),
+      'posY': row.elementAt(9),
+      'shape': row.elementAt(10),
+      'width': row.elementAt(11),
+      'height': row.elementAt(12),
+      'staffId': row.elementAt(13),
     });
   }
 }
@@ -62,10 +80,19 @@ extension DiningTableX on DiningTable {
       'capacity': capacity,
       'status': status.id,
       'customerPhone': customerPhone,
+      'posX': posX,
+      'posY': posY,
+      'shape': shape,
+      'width': width,
+      'height': height,
+      'staffId': staffId,
     };
   }
 
   List<dynamic> toIterable() {
-    return [name, categoryId, description, orderId, capacity, status.id, customerPhone];
+    return [
+      name, categoryId, description, orderId, capacity, status.id,
+      customerPhone, posX, posY, shape, width, height, staffId,
+    ];
   }
 }

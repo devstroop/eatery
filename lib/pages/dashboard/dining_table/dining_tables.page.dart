@@ -19,6 +19,7 @@ class DiningTablesPage extends ConsumerStatefulWidget {
 
 class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
   DiningTableCategory? selectedCategory;
+  bool _showFloorPlan = false;
 
   @override
   void initState() {
@@ -67,6 +68,36 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
       ),
       child: Column(
         children: [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+            child: Row(
+              children: [
+                Expanded(
+                  child: TextButton.icon(
+                    icon: Icon(_showFloorPlan ? Icons.list : Icons.map,
+                        color: _pageColor),
+                    label: Text(
+                      _showFloorPlan ? 'List View' : 'Floor Plan',
+                      style: TextStyle(color: _pageColor),
+                    ),
+                    onPressed: () => setState(() => _showFloorPlan = !_showFloorPlan),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          if (_showFloorPlan)
+            Expanded(
+              child: FloorPlanWidget(
+                tables: diningTables,
+                onTableTap: (table) {
+                  GoRouter.of(context)
+                      .pushNamed('viewDiningTable', extra: table)
+                      .then((_) => setState(() {}));
+                },
+              ),
+            )
+          else ...[
           if (ref.read(diningTableRepositoryProvider).getAllCategories().isNotEmpty)
             SizedBox(
               height: 60,
@@ -300,6 +331,7 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                     ),
                   ),
           ),
+        ],
         ],
       ),
     );
