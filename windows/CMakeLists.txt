@@ -86,6 +86,26 @@ if(PLUGIN_BUNDLED_LIBRARIES)
     COMPONENT Runtime)
 endif()
 
+# === libeaterystore (Zig + embedded SQLite) ===
+# The Dart FFI loader opens "eaterystore.dll" from the executable directory, so
+# copy it next to the runner (for dev runs from Visual Studio / `flutter run`)
+# and install it into the release bundle. Build it first with:
+#   cd ..\libeaterystore && zig build shared-lib -Dtarget=x86_64-windows-gnu
+set(EATERYSTORE_DLL
+  "${CMAKE_CURRENT_SOURCE_DIR}/../libeaterystore/zig-out/bin/eaterystore.dll")
+if(EXISTS "${EATERYSTORE_DLL}")
+  add_custom_command(TARGET ${BINARY_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+      "${EATERYSTORE_DLL}" "$<TARGET_FILE_DIR:${BINARY_NAME}>"
+    VERBATIM)
+  install(FILES "${EATERYSTORE_DLL}" DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
+    COMPONENT Runtime)
+else()
+  message(WARNING
+    "eaterystore.dll not found at ${EATERYSTORE_DLL}. Build it with: "
+    "(cd ../libeaterystore && zig build shared-lib -Dtarget=x86_64-windows-gnu)")
+endif()
+
 # Fully re-copy the assets directory on each build to avoid having stale files
 # from a previous install.
 set(FLUTTER_ASSET_DIR_NAME "flutter_assets")

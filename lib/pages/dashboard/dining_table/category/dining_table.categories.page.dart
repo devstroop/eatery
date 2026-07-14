@@ -1,9 +1,10 @@
-import 'package:eatery/core/theme/app_spacing.dart';
-import 'package:eatery/core/theme/app_typography.dart';
-import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
+import 'package:eatery_core/theme/app_typography.dart';
+import 'package:eatery_core/providers/database_provider.dart';
+import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
-import 'package:eatery/core/widgets/widgets.dart';
+import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -30,28 +31,34 @@ class _DiningTableCategoriesPageState
         foregroundColor: AppColors.white,
         icon: const Icon(Icons.add),
         onPressed: () {
-          GoRouter.of(context).pushNamed('addDiningTableCategory').then((_) => setState(() {}));
+          GoRouter.of(
+            context,
+          ).pushNamed('addDiningTableCategory').then((_) => setState(() {}));
         },
       ),
       child:
-          ref.read(appDatabaseProvider).diningTableCategoryBox.values.isNotEmpty
+          ref.read(diningTableRepositoryProvider)
+              .getAllCategories()
+              .isNotEmpty
           ? ListView(
               children: [
-                ...ref.read(appDatabaseProvider).diningTableCategoryBox.values.map((
+                ...ref.read(diningTableRepositoryProvider).getAllCategories().map((
                   each,
                 ) {
                   return ListTile(
-                    title: Text(
-                      each.name,
-                      style: AppTypography.titleMedium,
-                    ),
+                    title: Text(each.name, style: AppTypography.titleMedium),
                     trailing: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         IconButton(
                           icon: Icon(Icons.edit, color: _pageColor),
                           onPressed: () {
-                            GoRouter.of(context).pushNamed('editDiningTableCategory', extra: each).then((_) => setState(() {}));
+                            GoRouter.of(context)
+                                .pushNamed(
+                                  'editDiningTableCategory',
+                                  extra: each,
+                                )
+                                .then((_) => setState(() {}));
                           },
                         ),
                         IconButton(
@@ -62,11 +69,11 @@ class _DiningTableCategoriesPageState
                               builder: (context) {
                                 // category exists in dining table then show message and return
                                 if (ref
-                                    .read(appDatabaseProvider)
-                                    .diningTableBox
-                                    .values
+                                    .read(diningTableRepositoryProvider)
+                                    .getAllTables()
                                     .any(
-                                      (element) => element.category == each.id,
+                                      (element) =>
+                                          element.categoryId == each.id,
                                     )) {
                                   return AlertDialog(
                                     title: const Text('Delete Category'),
@@ -96,11 +103,12 @@ class _DiningTableCategoriesPageState
                                       child: const Text('Cancel'),
                                     ),
                                     TextButton(
-                                      onPressed: () {
-                                        each.delete().whenComplete(() {
-                                          Navigator.pop(context);
-                                          setState(() {});
-                                        });
+                                      onPressed: () async {
+                                        await ref
+                                            .read(diningTableRepositoryProvider)
+                                            .deleteCategory(each.id!);
+                                        Navigator.pop(context);
+                                        setState(() {});
                                       },
                                       child: const Text('Delete'),
                                     ),
@@ -123,7 +131,10 @@ class _DiningTableCategoriesPageState
                       child: Center(
                         child: Text(
                           each.name[0],
-                          style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold, color: AppColors.white),
+                          style: AppTypography.headlineSmall.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.white,
+                          ),
                         ),
                       ),
                     ),
@@ -142,7 +153,9 @@ class _DiningTableCategoriesPageState
                     AppSpacing.gapLg,
                     Text(
                       'No Table Categories Found',
-                      style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold),
+                      style: AppTypography.headlineSmall.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     Text(
                       'Add a dining table category to get started',

@@ -1,11 +1,9 @@
-import 'package:eatery/core/widgets/app_page_shell.dart';
-import 'package:eatery/core/extensions/string_ext.dart';
+import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
-import 'package:eatery/core/widgets/app_dialog.dart';
+import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:eatery/presentation/providers/database_provider.dart';
-import 'package:eatery/presentation/providers/company_provider.dart';
+import 'package:eatery_core/providers/company_provider.dart';
 
 final _pageColor = AppColors.primary;
 
@@ -27,7 +25,7 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
   }
 
   Future postInit() async {
-    company = ref.read(appDatabaseProvider).companyBox.values.first;
+    company = ref.read(companyRepositoryProvider).getCurrentCompany();
     // company = await CompanyLoader(widget.database).load(context);
     setState(() {
       selectedLogo = LibraryImage(company!.logo);
@@ -224,15 +222,18 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
               child: AppButton.primary(
                 label: 'Save',
                 onPressed: () async {
-                  company!.name = _controllerCompanyName.text;
-                  company!.email = _controllerEmail.text;
-                  company!.phone = _controllerPhone.text;
-                  company!.address = _controllerAddress.text;
-                  company!.foodLicenseNo = _controllerFoodLicNo.text;
-                  company!.salesTaxNumber = _controllerSalesTaxNo.text;
+                  final updated = company!.copyWith(
+                    name: _controllerCompanyName.text,
+                    email: _controllerEmail.text,
+                    phone: _controllerPhone.text,
+                    address: _controllerAddress.text,
+                    foodLicenseNo: _controllerFoodLicNo.text,
+                    salesTaxNumber: _controllerSalesTaxNo.text,
+                  );
 
-                  // Update the company in the Hive database
-                  company!.save().then((value) {
+                  // Update the company in the database
+                  final repo = ref.read(companyRepositoryProvider);
+                  repo.saveCompany(updated).then((value) {
                     AppDialog.showMessage(
                       context,
                       message: 'Company details successfully updated',

@@ -48,7 +48,7 @@ class OrderDto extends BaseDto<OrderDto> {
     required this.orderType,
     this.diningTableName,
     this.diningTableId,
-    this.status = 'active',
+    this.status = 'pending',
     this.voidReason,
     this.voidedBy,
     this.voidedAt,

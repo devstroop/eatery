@@ -1,0 +1,43 @@
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery_core/data/models/eatery_db.dart';
+import 'package:eatery_core/data/database/native/eatery_store.dart';
+import 'package:eatery_core/providers/database_provider.dart';
+
+/// Tracks the currently authenticated staff member.
+///
+/// null = unauthenticated.
+final authSessionProvider = StateProvider<Staff?>((ref) => null);
+
+/// Verifies a staff member's PIN against the stored hash.
+///
+/// Returns the matching [Staff] on success, null on failure.
+Staff? authenticateStaff(
+  EateryStore store,
+  String loginId,
+  String pin,
+) {
+  // Try phone match first, then name match.
+  var staff = _findByPhone(store, loginId);
+  staff ??= _findByName(store, loginId);
+  if (staff == null) return null;
+  if (staff.pin == null || staff.pin != pin) return null;
+  return staff;
+}
+
+Staff? _findByPhone(EateryStore store, String phone) {
+  final rows = store.query(
+    'SELECT * FROM staff WHERE phone = ? LIMIT 1',
+    [phone],
+  );
+  if (rows.isEmpty) return null;
+  return Staff.fromMap(rows.first);
+}
+
+Staff? _findByName(EateryStore store, String name) {
+  final rows = store.query(
+    'SELECT * FROM staff WHERE lower(trim(name)) = ? LIMIT 1',
+    [name.toLowerCase().trim()],
+  );
+  if (rows.isEmpty) return null;
+  return Staff.fromMap(rows.first);
+}

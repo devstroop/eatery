@@ -1,5 +1,10 @@
-import 'package:eatery/data/database/eatery_database.dart';
-import 'package:eatery/data/models/product/product.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:eatery_core/data/database/eatery_database.dart';
+import 'package:eatery_core/data/repositories/company_repository_sqlite.dart';
+import 'package:eatery_core/data/models/eatery_db.dart';
+import 'package:eatery_core/providers/auth_session.dart';
+import 'package:eatery_core/data/models/product/product.dart';
 import 'package:eatery/pages/authentication/login.page.dart';
 import 'package:eatery/pages/dashboard/pos/views/kProduct.view.dart';
 import 'package:eatery/pages/main.screen.dart';
@@ -51,16 +56,27 @@ import 'package:eatery/pages/dashboard/staff/edit.staff.page.dart';
 import 'package:eatery/pages/dashboard/data/data_management.page.dart';
 import 'package:eatery/pages/dashboard/data/export.page.dart';
 import 'package:eatery/pages/dashboard/data/import.page.dart';
-import 'package:eatery/dev/database_inspector.dart';
 import 'package:eatery/pages/activation/upgrade.page.dart';
 import 'package:eatery/pages/authentication/reset-pin.dart';
 import 'package:eatery/pages/authentication/logout.page.dart';
+import 'package:eatery_core/providers/database_provider.dart';
+import 'package:eatery_core/data/database/native/eatery_store.dart';
 import 'package:go_router/go_router.dart';
 
-GoRouter createAppRouter(EateryDatabase db) {
-  return GoRouter(
+/// Routes that don't require authentication.
+const _publicRoutes = {'login', 'mainScreen', 'createCompany', 'resetPin'};
+
+GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
+  String? password;
+  try {
+    final repo = SqliteCompanyRepository(
+      store: store ?? EateryStore.open(':memory:'),
+    );
+    password = repo.getCurrentCompany()?.password;
+  } catch (_) {}
+  final router = GoRouter(
     initialLocation: db.hasCompany
-        ? (db.companyBox.values.first.password != null ? '/login' : '/dashboard')
+        ? (password != null ? '/login' : '/dashboard')
         : '/',
     routes: [
       GoRoute(
@@ -118,7 +134,8 @@ GoRouter createAppRouter(EateryDatabase db) {
           final extra = state.extra as Map<String, dynamic>?;
           return OrderPrintPage(
             order: extra?['order'],
-            currentCart: (extra?['currentCart'] as List?)?.cast<Product>() ?? const [],
+            currentCart:
+                (extra?['currentCart'] as List?)?.cast<Product>() ?? const [],
             printKOT: extra?['printKOT'] as bool? ?? false,
             printInvoice: extra?['printInvoice'] as bool? ?? true,
           );
@@ -374,7 +391,7 @@ GoRouter createAppRouter(EateryDatabase db) {
       GoRoute(
         name: 'databaseInspector',
         path: '/dev/db-inspector',
-        builder: (context, state) => const DatabaseInspector(),
+        builder: (context, state) => const SizedBox.shrink(),
       ),
       GoRoute(
         name: 'upgrade',
@@ -393,5 +410,15 @@ GoRouter createAppRouter(EateryDatabase db) {
         },
       ),
     ],
+    redirect: (context, state) {
+      final container = ProviderScope.containerOf(context, listen: false);
+      final authStaff = container.read(authSessionProvider);
+      final location = state.matchedLocation;
+      final isPublic = _publicRoutes.contains(state.name) || location == '/';
+      if (authStaff == null && !isPublic) return '/login';
+      if (authStaff != null && isPublic && location == '/login') return '/dashboard';
+      return null;
+    },
   );
+  return router;
 }

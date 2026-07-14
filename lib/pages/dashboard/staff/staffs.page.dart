@@ -1,12 +1,13 @@
-import 'package:eatery/core/theme/app_spacing.dart';
-import 'package:eatery/core/theme/app_typography.dart';
-import 'package:eatery/core/utils/responsive.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
+import 'package:eatery_core/theme/app_typography.dart';
+import 'package:eatery_core/utils/responsive.dart';
 import 'package:eatery/widgets/responsive/responsive_list_view.dart';
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
-import 'package:eatery/core/widgets/widgets.dart';
+import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:eatery_core/providers/database_provider.dart';
+import 'package:eatery_core/providers/order_provider.dart';
 import 'package:go_router/go_router.dart';
 
 Color _pageColor = const Color(0xFFC2592F);
@@ -27,7 +28,7 @@ class _StaffsPageState extends ConsumerState<StaffsPage> {
   final List<FocusNode> _focusNodes = [FocusNode(), FocusNode()];
   @override
   Widget build(BuildContext context) {
-    List<Staff> staffs = ref.read(appDatabaseProvider).staffBox.values.toList();
+    List<Staff> staffs = ref.read(staffRepositoryProvider).getAllStaff();
     return AppPageShell(
       title: 'Staffs',
       color: _pageColor,
@@ -46,7 +47,9 @@ class _StaffsPageState extends ConsumerState<StaffsPage> {
         label: const Text('Add Staff'),
         icon: const Icon(Icons.add),
         onPressed: () {
-          GoRouter.of(context).pushNamed('addStaff').then((_) => setState(() {}));
+          GoRouter.of(
+            context,
+          ).pushNamed('addStaff').then((_) => setState(() {}));
         },
       ),
       child: staffs.isNotEmpty
@@ -68,7 +71,9 @@ class _StaffsPageState extends ConsumerState<StaffsPage> {
                     AppSpacing.gapLg,
                     Text(
                       'No Staffs',
-                      style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold),
+                      style: AppTypography.headlineSmall.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     Text(
                       'Add a staff to get started',
@@ -84,7 +89,7 @@ class _StaffsPageState extends ConsumerState<StaffsPage> {
 
 /// Desktop-friendly card wrapper for a staff list item.
 class _StaffCard extends ConsumerStatefulWidget {
-  final dynamic staff;
+  final Staff staff;
   final Color pageColor;
 
   const _StaffCard({required this.staff, required this.pageColor});
@@ -101,10 +106,7 @@ class _StaffCardState extends ConsumerState<_StaffCard> {
     return Card(
       margin: EdgeInsets.symmetric(horizontal: isDesktop ? 4 : 0, vertical: 2),
       child: ListTile(
-        title: Text(
-          s.name,
-          style: AppTypography.titleMedium,
-        ),
+        title: Text(s.name, style: AppTypography.titleMedium),
         subtitle: s.phone != null ? Text(s.phone!) : null,
         leading: LeadingImageWidget(
           image: LibraryImage(
@@ -119,7 +121,9 @@ class _StaffCardState extends ConsumerState<_StaffCard> {
             IconButton(
               icon: Icon(Icons.edit, color: widget.pageColor),
               onPressed: () {
-                GoRouter.of(context).pushNamed('editStaff', extra: s).then((_) => setState(() {}));
+                GoRouter.of(
+                  context,
+                ).pushNamed('editStaff', extra: s).then((_) => setState(() {}));
               },
             ),
             IconButton(
@@ -140,7 +144,10 @@ class _StaffCardState extends ConsumerState<_StaffCard> {
                         ),
                         TextButton(
                           onPressed: () {
-                            s.delete().whenComplete(() {
+                            ref
+                                .read(staffRepositoryProvider)
+                                .deleteStaff(s.id!)
+                                .whenComplete(() {
                               Navigator.pop(context);
                               setState(() {});
                             });

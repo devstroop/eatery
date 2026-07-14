@@ -1,10 +1,10 @@
-import 'package:eatery/core/widgets/app_page_shell.dart';
-import 'package:eatery/core/theme/app_typography.dart';
+import 'package:eatery_core/widgets/app_page_shell.dart';
+import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:eatery/presentation/providers/database_provider.dart';
-import 'package:eatery/core/widgets/app_dialog.dart';
+import 'package:eatery_core/providers/order_provider.dart';
+import 'package:eatery_core/widgets/app_dialog.dart';
 
 Color _pageColor = const Color(0xFFC2592F);
 
@@ -20,13 +20,11 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
   bool isActive = true;
   final TextEditingController _controllerStaffName = TextEditingController();
   final TextEditingController _controllerStaffPhone = TextEditingController();
+  final TextEditingController _controllerStaffPin = TextEditingController();
   StaffType? staffType;
   final _formKey = GlobalKey<FormState>();
 
-  final List<FocusNode> _focusNodes = [
-    FocusNode(),
-    FocusNode(),
-  ];
+  final List<FocusNode> _focusNodes = [FocusNode(), FocusNode()];
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +58,6 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                   libraryImage: image,
                   onChanged: (image) {
                     setState(() {
-
                       debugPrint('image: ${image?.absolutePath}');
                       this.image = image;
                     });
@@ -77,10 +74,12 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                     if (value == null || value.isEmpty) {
                       return 'Enter Staff Name';
                     }
-                    if(value.length < 3) {
+                    if (value.length < 3) {
                       return 'Staff Name must be at least 3 characters';
                     }
-                    if(ref.read(appDatabaseProvider).staffBox.values.where((element) => element.name == value).isNotEmpty) {
+                    if (ref
+                        .read(staffRepositoryProvider)
+                        .isStaffNameTaken(value)) {
                       return 'Staff Name already exists';
                     }
                     return null;
@@ -101,7 +100,9 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Enter Phone Number';
-                    } else if(ref.read(appDatabaseProvider).staffBox.values.where((element) => element.phone == value).isNotEmpty) {
+                    } else if (ref
+                        .read(staffRepositoryProvider)
+                        .isStaffPhoneTaken(value)) {
                       return 'Phone Number already exists';
                     }
                     return null;
@@ -109,6 +110,24 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                   focusNode: _focusNodes[1],
                   onFieldSubmitted: (v) {
                     FocusScope.of(context).unfocus();
+                  },
+                ),
+                SpacingStyle.defaultVerticalSpacing,
+                LabeledCustomTextFormField(
+                  controller: _controllerStaffPin,
+                  label: 'PIN (4 digits)',
+                  themeColor: _pageColor,
+                  foregroundColor: AppColors.black600,
+                  keyboardType: TextInputType.number,
+                  obscureText: true,
+                  hint: 'Enter PIN',
+                  validator: (value) {
+                    if (value == null || value.isEmpty) return 'Enter PIN';
+                    if (value.length < 4) return 'Minimum 4 digits';
+                    if (!RegExp(r'^\d{4,}$').hasMatch(value)) {
+                      return 'Numbers only';
+                    }
+                    return null;
                   },
                 ),
                 SpacingStyle.defaultVerticalSpacing,
@@ -122,39 +141,27 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                     ),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide(
-                        color: AppColors.black600,
-                      ),
+                      borderSide: BorderSide(color: AppColors.black600),
                     ),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide(
-                        width: 2,
-                        color: _pageColor,
-                      ),
+                      borderSide: BorderSide(width: 2, color: _pageColor),
                     ),
                     errorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide(
-                        width: 2,
-                        color: AppColors.error,
-                      ),
+                      borderSide: BorderSide(width: 2, color: AppColors.error),
                     ),
                     focusedErrorBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(8.0),
-                      borderSide: BorderSide(
-                        width: 2,
-                        color: AppColors.error,
-                      ),
+                      borderSide: BorderSide(width: 2, color: AppColors.error),
                     ),
                   ),
                   hint: const Text('Select Staff Type'),
                   value: staffType,
                   items: [
-                    ...StaffType.values.map((e) => DropdownMenuItem(
-                          value: e,
-                          child: Text(e.name),
-                        ))
+                    ...StaffType.values.map(
+                      (e) => DropdownMenuItem(value: e, child: Text(e.name)),
+                    ),
                   ],
                   onChanged: (value) {
                     setState(() {
@@ -170,25 +177,26 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Checkbox(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(4.0),
-                        ),
-                        activeColor: _pageColor,
-                        value: isActive,
-                        onChanged: (value) {
-                          setState(() {
-                            isActive = value ?? false;
-                          });
-                        }),
-                    const SizedBox(
-                      width: 6.0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(4.0),
+                      ),
+                      activeColor: _pageColor,
+                      value: isActive,
+                      onChanged: (value) {
+                        setState(() {
+                          isActive = value ?? false;
+                        });
+                      },
                     ),
+                    const SizedBox(width: 6.0),
                     Text(
                       'Active',
-                      style: AppTypography.bodyLarge.copyWith(color: AppColors.black600),
+                      style: AppTypography.bodyLarge.copyWith(
+                        color: AppColors.black600,
+                      ),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),
@@ -204,22 +212,33 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
             }
             _formKey.currentState!.save();
             final staff = Staff(
-                name: _controllerStaffName.text,
-                phone: _controllerStaffPhone.text,
-                photo: image?.filename,
-                isActive: isActive,
-                type: staffType!);
-            ref.read(appDatabaseProvider).staffBox
-                .add(staff).then((value) => AppDialog.showMessage(
-                context,
-                message: 'Staff has been added successfully',
-                type: MessageType.success,
-                onConfirm: () => Navigator.pop(context)
-            )).onError((error, stackTrace) => AppDialog.showMessage(
-                context,
-                message: 'Something went wrong',
-                type: MessageType.error
-            ));
+              name: _controllerStaffName.text,
+              phone: _controllerStaffPhone.text,
+              photo: image?.filename,
+              isActive: isActive,
+              type: staffType!,
+              pin: _controllerStaffPin.text.isNotEmpty
+                  ? _controllerStaffPin.text
+                  : null,
+            );
+            ref
+                .read(staffRepositoryProvider)
+                .saveStaff(staff)
+                .then(
+                  (value) => AppDialog.showMessage(
+                    context,
+                    message: 'Staff has been added successfully',
+                    type: MessageType.success,
+                    onConfirm: () => Navigator.pop(context),
+                  ),
+                )
+                .onError(
+                  (error, stackTrace) => AppDialog.showMessage(
+                    context,
+                    message: 'Something went wrong',
+                    type: MessageType.error,
+                  ),
+                );
           },
           label: 'Save',
         ),

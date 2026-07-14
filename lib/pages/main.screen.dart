@@ -1,13 +1,12 @@
-import 'package:eatery/core/theme/app_spacing.dart';
-import 'package:eatery/core/theme/app_colors.dart';
-import 'package:eatery/core/theme/app_typography.dart';
-import 'package:eatery/core/utils/responsive.dart';
-import 'package:eatery/core/widgets/widgets.dart';
-import 'package:eatery/core/widgets/app_dialog.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
+import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_typography.dart';
+import 'package:eatery_core/utils/responsive.dart';
+import 'package:eatery_core/widgets/widgets.dart';
+import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:eatery/references.dart';
-import 'package:eatery/data/demo/demo_company_loader.dart';
-import 'package:eatery/presentation/providers/database_provider.dart';
-import 'package:eatery/presentation/providers/company_provider.dart';
+import 'package:eatery_core/providers/database_provider.dart';
+import 'package:eatery_core/providers/company_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sn_progress_dialog/sn_progress_dialog.dart';
@@ -45,10 +44,18 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                     value: 'demo',
                     child: Row(
                       children: [
-                        Icon(Icons.auto_awesome, color: AppColors.primary, size: 20),
+                        Icon(
+                          Icons.auto_awesome,
+                          color: AppColors.primary,
+                          size: 20,
+                        ),
                         const SizedBox(width: 8),
-                        Text('Load Demo Company',
-                            style: AppTypography.bodyMedium.copyWith(color: AppColors.grey700)),
+                        Text(
+                          'Load Demo Company',
+                          style: AppTypography.bodyMedium.copyWith(
+                            color: AppColors.grey700,
+                          ),
+                        ),
                       ],
                     ),
                   ),
@@ -228,25 +235,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
   }
 
   Future<void> _loadDemoCompany(BuildContext context) async {
-    final pd = ProgressDialog(context: context);
-    pd.show(max: 100, msg: 'Setting up demo company...');
-
-    final db = ref.read(appDatabaseProvider);
-    final success = await loadDemoCompany(db: db, pd: pd);
-
-    pd.close();
-
-    if (success && mounted) {
-      ref.read(companyProvider.notifier).setCompany(
-            db.companyBox.values.firstOrNull,
-          );
-      GoRouter.of(context).goNamed('dashboard');
-    } else if (mounted) {
-      AppDialog.showMessage(
-        context,
-        message: 'Demo company setup failed. Check your internet connection.',
-        type: MessageType.error,
-      );
-    }
+    AppDialog.showMessage(
+      context,
+      message: 'Demo company loading is no longer available.',
+      type: MessageType.info,
+    );
   }
 }

@@ -1,10 +1,10 @@
-import 'package:eatery/core/theme/app_spacing.dart';
-import 'package:eatery/core/theme/app_typography.dart';
-import 'package:eatery/presentation/providers/order_provider.dart';
-import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
+import 'package:eatery_core/theme/app_typography.dart';
+import 'package:eatery_core/providers/order_provider.dart';
+import 'package:eatery_core/providers/database_provider.dart';
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
-import 'package:eatery/core/widgets/widgets.dart';
+import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -38,7 +38,7 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
         .where(
           (element) =>
               selectedCategory == null ||
-              element.category?.id == selectedCategory?.id,
+              element.categoryId == selectedCategory?.id,
         )
         .toList();
     return AppPageShell(
@@ -48,7 +48,9 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
         IconButton(
           icon: const Icon(Icons.category),
           onPressed: () {
-            GoRouter.of(context).pushNamed('diningTableCategories').then((_) => setState(() {}));
+            GoRouter.of(
+              context,
+            ).pushNamed('diningTableCategories').then((_) => setState(() {}));
           },
         ),
       ],
@@ -58,26 +60,22 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
         backgroundColor: _pageColor,
         icon: const Icon(Icons.add),
         onPressed: () async {
-          GoRouter.of(context).pushNamed('addDiningTable').then((_) => setState(() {}));
+          GoRouter.of(
+            context,
+          ).pushNamed('addDiningTable').then((_) => setState(() {}));
         },
       ),
       child: Column(
         children: [
-          if (ref
-              .read(appDatabaseProvider)
-              .diningTableCategoryBox
-              .values
-              .isNotEmpty)
+          if (ref.read(diningTableRepositoryProvider).getAllCategories().isNotEmpty)
             SizedBox(
               height: 60,
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 children: [
                   const SizedBox(width: 10),
-                  ...ref
-                      .read(appDatabaseProvider)
-                      .diningTableCategoryBox
-                      .values
+                  ...ref.read(diningTableRepositoryProvider)
+                      .getAllCategories()
                       .map((category) {
                         return Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 5),
@@ -119,24 +117,9 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                     children: [
                       ...diningTables.map((diningTable) {
                         DiningTableCategory? category =
-                            ref
-                                .read(appDatabaseProvider)
-                                .diningTableCategoryBox
-                                .values
-                                .where(
-                                  (element) =>
-                                      element.id == diningTable.category?.id,
-                                )
-                                .isNotEmpty
-                            ? ref
-                                  .read(appDatabaseProvider)
-                                  .diningTableCategoryBox
-                                  .values
-                                  .where(
-                                    (element) =>
-                                        element.id == diningTable.category?.id,
-                                  )
-                                  .first
+                            diningTable.categoryId != null
+                            ? ref.read(diningTableRepositoryProvider)
+                                  .getCategoryById(diningTable.categoryId!)
                             : null;
                         Order? order = diningTable.orderId != null
                             ? ref
@@ -171,7 +154,9 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                             child: Center(
                               child: Text(
                                 diningTable.id.toString(),
-                                style: AppTypography.titleLarge.copyWith(color: AppColors.white),
+                                style: AppTypography.titleLarge.copyWith(
+                                  color: AppColors.white,
+                                ),
                               ),
                             ),
                           ),
@@ -181,7 +166,10 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                               Text(
                                 diningTable.status.name,
                                 textAlign: TextAlign.end,
-                                style: AppTypography.titleSmall.copyWith(fontWeight: FontWeight.bold, color: diningTable.status.color),
+                                style: AppTypography.titleSmall.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  color: diningTable.status.color,
+                                ),
                               ),
                               IconButton(
                                 icon: const Icon(Icons.more_vert),
@@ -207,7 +195,12 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                                     ],
                                   ).then((value) async {
                                     if (value == 'edit') {
-                                      GoRouter.of(context).pushNamed('editDiningTable', extra: diningTable).then((_) => setState(() {}));
+                                      GoRouter.of(context)
+                                          .pushNamed(
+                                            'editDiningTable',
+                                            extra: diningTable,
+                                          )
+                                          .then((_) => setState(() {}));
                                     } else if (value == 'delete') {
                                       showDialog(
                                         context: context,
@@ -228,23 +221,13 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                                               ),
                                               TextButton(
                                                 onPressed: () async {
-                                                  ref
-                                                      .read(appDatabaseProvider)
-                                                      .diningTableBox
-                                                      .values
-                                                      .where(
-                                                        (element) =>
-                                                            element.id ==
-                                                            diningTable.id,
+                                                  await ref
+                                                      .read(
+                                                        diningTableRepositoryProvider,
                                                       )
-                                                      .firstOrNull
-                                                      ?.delete()
-                                                      .then((value) {
-                                                        Navigator.pop(
-                                                          this.context,
-                                                        );
-                                                        setState(() {});
-                                                      });
+                                                      .deleteTable(diningTable.id!);
+                                                  Navigator.pop(this.context);
+                                                  setState(() {});
                                                 },
                                                 child: const Text('Delete'),
                                               ),
@@ -268,33 +251,44 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                               if (order != null)
                                 TextButton(
                                   onPressed: () {
-                                    GoRouter.of(context).pushNamed('viewOrder', extra: order).then((_) => setState(() {}));
+                                    GoRouter.of(context)
+                                        .pushNamed('viewOrder', extra: order)
+                                        .then((_) => setState(() {}));
                                   },
                                   child: Text(
                                     'Order: ${order.id}',
-                                    style: AppTypography.titleSmall.copyWith(fontWeight: FontWeight.bold),
+                                    style: AppTypography.titleSmall.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
                                   ),
                                 ),
                             ],
                           ),
                           onTap: () {
-                            GoRouter.of(context).pushNamed('viewDiningTable', extra: diningTable).then((_) => setState(() {}));
+                            GoRouter.of(context)
+                                .pushNamed(
+                                  'viewDiningTable',
+                                  extra: diningTable,
+                                )
+                                .then((_) => setState(() {}));
                           },
                         );
                       }),
                     ],
                   )
-        : Center(
-              child: Opacity(
-                opacity: 0.5,
-                child: Column(
+                : Center(
+                    child: Opacity(
+                      opacity: 0.5,
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Icon(Icons.table_restaurant, size: 64),
                           AppSpacing.gapLg,
                           Text(
                             'No Tables Found',
-                            style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold),
+                            style: AppTypography.headlineSmall.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           SizedBox(height: 12),
                           Text(

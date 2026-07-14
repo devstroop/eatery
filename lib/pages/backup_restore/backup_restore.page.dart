@@ -1,14 +1,14 @@
-import 'package:eatery/core/widgets/app_page_shell.dart';
+import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'dart:io';
 
 import 'package:archive/archive_io.dart';
-import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:eatery_core/providers/database_provider.dart';
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
-import 'package:eatery/core/widgets/app_dialog.dart';
+import 'package:eatery_core/widgets/app_dialog.dart';
 
 Color _pageColor = AppColors.menuCategories;
 

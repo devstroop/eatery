@@ -6,14 +6,14 @@ export 'package:flutter/material.dart';
 export 'package:flutter/services.dart';
 export 'package:flutter/rendering.dart';
 // External packages by devstroop
-export 'package:eatery/data/models/eatery_db.dart';
-export 'package:eatery/data/database/eatery_db_shim.dart';
+export 'package:eatery_core/data/models/eatery_db.dart';
+export 'package:eatery_core/data/database/eatery_db_shim.dart';
 export 'package:devdart_windows_hdsn/devdart_windows_hdsn.dart';
 export 'package:devdart_windows_hdsn/drive.dart';
 // External refs by devstroop (*deprecated — moved to local equivalents)
 export './components/bottom_view_grip.dart';
 export './widgets/titles/page_title.dart';
-export './core/widgets/app_button.dart';
+export 'package:eatery_core/widgets/app_button.dart';
 // Integrated packages
 export './support/bluetooth_thermal_printer/bluetooth_thermal_printer.dart';
 // External packages
@@ -30,9 +30,13 @@ export 'package:lottie/lottie.dart';
 export 'package:number_to_words/number_to_words.dart';
 export 'package:flutter_svg/svg.dart';
 export 'package:flutter_secure_storage/flutter_secure_storage.dart';
-export 'package:flutter_bluetooth_basic/flutter_bluetooth_basic.dart';
+// flutter_bluetooth_basic removed (abandoned, v1 Registrar). The local
+// support/bluetooth_thermal_printer module now imports an adapter stub.
+// TODO: replace with esc_pos_bluetooth or flutter_blue_plus when adding a
+// real printer device.
+export './support/bluetooth_thermal_printer/flutter_bluetooth_adapter.dart';
 export 'package:permission_handler/permission_handler.dart';
-export 'package:external_path/external_path.dart';
+// external_path removed (abandoned, v1 Registrar; usage was inside block comment)
 export 'package:fluttertoast/fluttertoast.dart';
 export 'package:font_awesome_flutter/font_awesome_flutter.dart';
 export 'package:fast_cached_network_image/fast_cached_network_image.dart';
@@ -50,7 +54,6 @@ export './widgets/posWidgets/circularCategory.posWidget.dart';
 export './widgets/buttons/upload.button.dart';
 export './widgets/badges/foodType.badge.dart';
 export './widgets/switches/toggle.switch.dart';
-
 
 // Internal references
 export './components/bottom_view_grip.dart';

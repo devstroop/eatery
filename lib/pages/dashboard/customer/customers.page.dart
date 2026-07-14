@@ -1,14 +1,14 @@
-import 'package:eatery/core/theme/app_spacing.dart';
-import 'package:eatery/core/theme/app_typography.dart';
-import 'package:eatery/core/utils/responsive.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
+import 'package:eatery_core/theme/app_typography.dart';
+import 'package:eatery_core/utils/responsive.dart';
 import 'package:eatery/widgets/responsive/responsive_list_view.dart';
 import 'package:eatery/references.dart';
 import 'package:go_router/go_router.dart';
-import 'package:eatery/core/theme/app_colors.dart';
-import 'package:eatery/core/widgets/app_dialog.dart';
-import 'package:eatery/core/widgets/widgets.dart';
+import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/widgets/app_dialog.dart';
+import 'package:eatery_core/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:eatery/presentation/providers/order_provider.dart';
+import 'package:eatery_core/providers/order_provider.dart';
 
 Color _pageColor = AppColors.primary;
 
@@ -39,47 +39,48 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
           GoRouter.of(context).pushNamed('addCustomer').then((_) => setState(() {}));
         },
       ),
-      child: ref.read(customerRepositoryProvider).getAllCustomers().isNotEmpty
-          ? ResponsiveListView(
-              itemCount: ref
-                  .read(customerRepositoryProvider)
-                  .getAllCustomers()
-                  .length,
-              childAspectRatio: 3.5,
-              itemBuilder: (context, index) {
-                final customer = ref
-                    .read(customerRepositoryProvider)
-                    .getAllCustomers()[index];
-                return _CustomerCard(customer: customer, pageColor: _pageColor);
-              },
-            )
-          : Center(
-              child: Opacity(
-                opacity: 0.5,
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.person, size: 64),
-                    AppSpacing.gapLg,
-                    Text(
-                      'No Customers',
-                      style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      'Add a customer to get started',
-                      style: AppTypography.bodyLarge,
-                    ),
-                  ],
-                ),
+      child: _buildCustomerList(),
+    );
+  }
+
+  Widget _buildCustomerList() {
+    final customers = ref.read(customerRepositoryProvider).getAllCustomers();
+    if (customers.isEmpty) {
+      return Center(
+        child: Opacity(
+          opacity: 0.5,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.person, size: 64),
+              AppSpacing.gapLg,
+              Text(
+                'No Customers',
+                style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold),
               ),
-            ),
+              Text(
+                'Add a customer to get started',
+                style: AppTypography.bodyLarge,
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+    return ResponsiveListView(
+      itemCount: customers.length,
+      childAspectRatio: 3.5,
+      itemBuilder: (context, index) {
+        final customer = customers[index];
+        return _CustomerCard(customer: customer, pageColor: _pageColor);
+      },
     );
   }
 }
 
 /// Desktop-friendly card wrapper for a customer list item.
 class _CustomerCard extends ConsumerStatefulWidget {
-  final dynamic customer;
+  final Customer customer;
   final Color pageColor;
 
   const _CustomerCard({required this.customer, required this.pageColor});
@@ -163,15 +164,16 @@ class _CustomerCardState extends ConsumerState<_CustomerCard> {
                               ),
                               TextButton(
                                 onPressed: () {
-                                      c
-                                        .delete()
-                                        .then((_) {
-                                          AppDialog.showMessage(
-                                            context,
-                                            message: 'Customer deleted successfully',
-                                            type: MessageType.success,
-                                          );
-                                        Navigator.pop(ctx2);
+                                  ref
+                                      .read(customerRepositoryProvider)
+                                      .deleteCustomer(c.id!)
+                                      .then((_) {
+                                        AppDialog.showMessage(
+                                          context,
+                                          message: 'Customer deleted successfully',
+                                          type: MessageType.success,
+                                        );
+                                      Navigator.pop(ctx2);
                                       })
                                       .onError((error, _) {
                                         AppDialog.showMessage(

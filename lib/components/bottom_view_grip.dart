@@ -1,5 +1,5 @@
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_colors.dart';
 
 class BottomViewGrip extends StatelessWidget {
   const BottomViewGrip({Key? key}) : super(key: key);

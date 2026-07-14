@@ -1,10 +1,13 @@
-import 'package:eatery/core/utils/responsive.dart';
+import 'package:eatery_core/utils/responsive.dart';
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:eatery/presentation/providers/database_provider.dart';
-import 'package:eatery/core/widgets/app_dialog.dart';
-import 'package:eatery/core/theme/app_typography.dart';
+import 'package:eatery_core/data/sync/mutation_hook.dart';
+import 'package:eatery_core/providers/database_provider.dart';
+import 'package:eatery_core/providers/order_provider.dart';
+import 'package:eatery_core/providers/company_provider.dart';
+import 'package:eatery_core/widgets/app_dialog.dart';
+import 'package:eatery_core/theme/app_typography.dart';
 
 class CreateCompanyPage extends ConsumerStatefulWidget {
   const CreateCompanyPage({Key? key}) : super(key: key);
@@ -224,10 +227,7 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
               validTill: validTill,
               subscriptionType: subscriptionType,
             );
-            await ref
-                .read(appDatabaseProvider)
-                .subscriptionBox
-                .add(subscription);
+            await ref.read(subscriptionRepositoryProvider).save(subscription);
 
             KCurrency? kCurrency;
             if (currency != null) {
@@ -245,7 +245,23 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
                 decimalSeparator: currency!.decimalSeparator,
                 symbolOnLeft: currency!.symbolOnLeft,
               );
-              await ref.read(appDatabaseProvider).currencyBox.add(kCurrency);
+              ref.read(eateryStoreProvider).execute(
+                'INSERT INTO currency (code, name, symbol, flag, number, decimal_digits, name_plural, symbol_on_left, decimal_separator, thousands_separator, space_between_amount_and_symbol) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
+                [
+                  kCurrency.code,
+                  kCurrency.name,
+                  kCurrency.symbol,
+                  kCurrency.flag,
+                  kCurrency.number,
+                  kCurrency.decimalDigits,
+                  kCurrency.namePlural,
+                  kCurrency.symbolOnLeft ? 1 : 0,
+                  kCurrency.decimalSeparator,
+                  kCurrency.thousandsSeparator,
+                  kCurrency.spaceBetweenAmountAndSymbol ? 1 : 0,
+                ],
+              );
+              notifyMutation('currency', 0, 'save', kCurrency.toMap());
             }
             // COMPANY
             Company company = Company(
@@ -261,22 +277,21 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
               subscriptionId: subscription.id,
               currencyCode: kCurrency?.code,
             );
-            int? result = await ref
-                .read(appDatabaseProvider)
-                .companyBox
-                .add(company)
-                .whenComplete(
-                  () => Navigator.of(this.context).pushAndRemoveUntil(
-                    MaterialPageRoute(
-                      builder: (BuildContext context) =>
-                          const CreateCompanyResultPage(),
-                    ),
-                    (route) => false,
-                  ),
-                );
-            debugPrint('Company Added: $result');
+            ref.read(companyRepositoryProvider).saveCompany(company);
+            Navigator.of(this.context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                builder: (BuildContext context) =>
+                    const CreateCompanyResultPage(),
+              ),
+              (route) => false,
+            );
+            debugPrint('Company Added');
           } catch (e) {
-            AppDialog.showMessage(this.context, message: e.toString(), type: MessageType.error);
+            AppDialog.showMessage(
+              this.context,
+              message: e.toString(),
+              type: MessageType.error,
+            );
           }
         },
       ),

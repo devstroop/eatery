@@ -1,8 +1,8 @@
 import 'package:path/path.dart' as path;
 import 'package:http/http.dart' as http;
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
-import 'package:eatery/core/widgets/app_dialog.dart';
+import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/widgets/app_dialog.dart';
 
 class UploadImageBottomSheet extends StatefulWidget {
   final BuildContext context;

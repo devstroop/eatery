@@ -1,10 +1,10 @@
-import 'package:eatery/core/widgets/app_page_shell.dart';
-import 'package:eatery/core/theme/app_typography.dart';
-import 'package:eatery/presentation/providers/order_provider.dart';
-import 'package:eatery/presentation/providers/company_provider.dart';
+import 'package:eatery_core/widgets/app_page_shell.dart';
+import 'package:eatery_core/theme/app_typography.dart';
+import 'package:eatery_core/providers/order_provider.dart';
+import 'package:eatery_core/providers/company_provider.dart';
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
-import 'package:eatery/core/widgets/app_dialog.dart';
+import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Color _pageColor = AppColors.menuCategories;
@@ -204,9 +204,11 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
         child: AppButton.primary(
           label: 'Save Payment',
           onPressed: () {
-            if (order == null)
+            if (order == null) {
               AppDialog.showMessage(
                   context, message: 'Please select an order', type: MessageType.error);
+              return;
+            }
 
             if (_formKey.currentState!.validate()) {
               final payment = Payment(
@@ -215,6 +217,7 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
                 mode: paymentMode,
                 attachment: image?.filename,
                 orderId: order?.id,
+                date: DateTime.now(),
               );
               ref.read(paymentRepositoryProvider).savePayment(payment)
                   .then((value) => AppDialog.showMessage(
@@ -226,14 +229,19 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
                             .where((element) =>
                         element.orderId == order?.id).firstOrNull;
                         if(diningTable != null){
-                          diningTable.status = DiningTableStatus.available;
-                          diningTable.orderId = null;
-                          diningTable.customerPhone = null;
-                          await ref.read(diningTableRepositoryProvider).saveTable(diningTable);
+                          await ref.read(diningTableRepositoryProvider).saveTable(
+                            diningTable.copyWith(
+                              status: DiningTableStatus.available,
+                              orderId: null,
+                              customerPhone: null,
+                            ),
+                          );
                         }
 
-                        order?.paidTotal = (order?.paidTotal ?? 0) +
-                            double.parse(_controllerAmount.text);
+                        order = order?.copyWith(
+                          paidTotal: (order?.paidTotal ?? 0) +
+                              double.parse(_controllerAmount.text),
+                        );
                         ref.read(orderRepositoryProvider).saveOrder(order!).then((value) => Navigator.pop(context));
                       }))
                   .onError((error, stackTrace) => AppDialog.showMessage(

@@ -1,9 +1,10 @@
-import 'package:eatery/core/widgets/app_page_shell.dart';
-import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:eatery_core/widgets/app_page_shell.dart';
+import 'package:eatery_core/providers/database_provider.dart';
+import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:eatery/core/widgets/app_dialog.dart';
+import 'package:eatery_core/widgets/app_dialog.dart';
 
 Color _pageColor = AppColors.menuCategories;
 
@@ -108,29 +109,27 @@ class _EditDiningTableCategoryPageState
               return;
             }
             _formKey.currentState!.save();
-            ref
-                .read(appDatabaseProvider)
-                .diningTableCategoryBox
-                .values
-                .where((element) => element.id == widget.category.id)
-                .first
-              ..name = _controllerCategoryName.text
-              ..description = _controllerCategoryDescription.text
-              ..save()
-                  .then(
-                    (value) => AppDialog.showMessage(
-                      context,
-                      message: 'Updated successfully',
-                      type: MessageType.success,
-                    ).then((value) => Navigator.pop(this.context)),
-                  )
-                  .onError(
-                    (error, stackTrace) => AppDialog.showMessage(
-                      context,
-                      message: 'Can\'t update',
-                      type: MessageType.error,
-                    ),
-                  );
+            final updated = widget.category.copyWith(
+              name: _controllerCategoryName.text,
+              description: _controllerCategoryDescription.text,
+            );
+            final repo = ref.read(diningTableRepositoryProvider) as dynamic;
+            repo
+                .saveCategory(updated)
+                .then(
+                  (value) => AppDialog.showMessage(
+                    context,
+                    message: 'Updated successfully',
+                    type: MessageType.success,
+                  ).then((value) => Navigator.pop(this.context)),
+                )
+                .onError(
+                  (error, stackTrace) => AppDialog.showMessage(
+                    context,
+                    message: 'Can\'t update',
+                    type: MessageType.error,
+                  ),
+                );
           },
           label: 'Update',
         ),

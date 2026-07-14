@@ -1,11 +1,10 @@
-import 'package:eatery/core/widgets/app_page_shell.dart';
-import 'package:eatery/core/theme/app_typography.dart';
-import 'package:eatery/presentation/providers/order_provider.dart';
-import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:eatery_core/widgets/app_page_shell.dart';
+import 'package:eatery_core/theme/app_typography.dart';
+import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:eatery/core/widgets/app_dialog.dart';
+import 'package:eatery_core/widgets/app_dialog.dart';
 
 Color _pageColor = AppColors.menuCategories;
 
@@ -35,19 +34,9 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
     super.initState();
     Future.delayed(Duration.zero, () {
       setState(() {
-        diningTableCategory =
-            ref
-                .read(appDatabaseProvider)
-                .diningTableCategoryBox
-                .values
-                .where((elem) => elem.id == widget.diningTable.category?.id)
-                .isNotEmpty
-            ? ref
-                  .read(appDatabaseProvider)
-                  .diningTableCategoryBox
-                  .values
-                  .where((elem) => elem.id == widget.diningTable.category?.id)
-                  .first
+        diningTableCategory = widget.diningTable.categoryId != null
+            ? ref.read(diningTableRepositoryProvider)
+                  .getCategoryById(widget.diningTable.categoryId!)
             : null;
         _controllerCategoryName.text = widget.diningTable.name;
         _controllerCategoryDescription.text =
@@ -129,7 +118,9 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
                 const SizedBox(height: 12.0),
                 Text(
                   'Category',
-                  style: AppTypography.labelMedium.copyWith(color: AppColors.black600),
+                  style: AppTypography.labelMedium.copyWith(
+                    color: AppColors.black600,
+                  ),
                 ),
                 Container(
                   width: double.maxFinite,
@@ -147,10 +138,8 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
                           });
                         },
                       ),
-                      ...ref
-                          .read(appDatabaseProvider)
-                          .diningTableCategoryBox
-                          .values
+                      ...ref.read(diningTableRepositoryProvider)
+                          .getAllCategories()
                           .map((e) {
                             return PosCategoryWidget(
                               active: diningTableCategory?.id == e.id,
@@ -191,11 +180,13 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
                 .read(diningTableRepositoryProvider)
                 .getTableById(widget.diningTable.id!)!;
 
-            diningTable.name = _controllerCategoryName.text;
-            diningTable.description = _controllerCategoryDescription.text;
-            diningTable.category = diningTableCategory;
-            diningTable.status = status;
-            diningTable.capacity = int.parse(_controllerCapacity.text);
+            diningTable = diningTable.copyWith(
+              name: _controllerCategoryName.text,
+              description: _controllerCategoryDescription.text,
+              categoryId: diningTableCategory?.id,
+              status: status,
+              capacity: int.parse(_controllerCapacity.text),
+            );
 
             await ref
                 .read(diningTableRepositoryProvider)
@@ -248,7 +239,10 @@ class DiningTableStatusWidget extends StatelessWidget {
         child: Center(
           child: Text(
             status.name,
-            style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500, color: AppColors.white),
+            style: AppTypography.titleMedium.copyWith(
+              fontWeight: FontWeight.w500,
+              color: AppColors.white,
+            ),
           ),
         ),
       ),

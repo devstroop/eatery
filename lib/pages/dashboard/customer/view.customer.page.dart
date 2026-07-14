@@ -1,12 +1,12 @@
-import 'package:eatery/core/widgets/app_page_shell.dart';
-import 'package:eatery/core/theme/app_typography.dart';
+import 'package:eatery_core/widgets/app_page_shell.dart';
+import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:eatery/presentation/providers/order_provider.dart';
-import 'package:eatery/core/widgets/app_dialog.dart';
+import 'package:eatery_core/providers/order_provider.dart';
+import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:go_router/go_router.dart';
-import 'package:eatery/presentation/providers/company_provider.dart';
+import 'package:eatery_core/providers/company_provider.dart';
 
 class ViewCustomer extends ConsumerStatefulWidget {
   ViewCustomer({super.key, required this.customer});
@@ -55,7 +55,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                     });
                     break;
                   case 'activate':
-                    widget.customer.isActive = true;
+                    widget.customer = widget.customer.copyWith(isActive: true);
                     ref
                         .read(customerRepositoryProvider)
                         .saveCustomer(widget.customer)
@@ -75,12 +75,9 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                             onConfirm: () => setState(() {}),
                           ),
                         );
-                    setState(() {
-                      widget.customer.isActive = true;
-                    });
                     break;
                   case 'suspend':
-                    widget.customer.isActive = false;
+                    widget.customer = widget.customer.copyWith(isActive: false);
                     ref
                         .read(customerRepositoryProvider)
                         .saveCustomer(widget.customer)
@@ -100,9 +97,6 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                             onConfirm: () => setState(() {}),
                           ),
                         );
-                    setState(() {
-                      widget.customer.isActive = false;
-                    });
                     break;
                 }
               });

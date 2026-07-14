@@ -1,4 +1,4 @@
-import 'package:eatery/core/extensions/string_ext.dart';
+import 'package:eatery_core/extensions/string_ext.dart';
 import 'package:eatery/references.dart';
 
 class Body4 extends StatelessWidget {

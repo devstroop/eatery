@@ -1,10 +1,10 @@
-import 'package:eatery/core/widgets/app_dialog.dart';
-import 'package:eatery/core/widgets/app_page_shell.dart';
-import 'package:eatery/core/theme/app_typography.dart';
+import 'package:eatery_core/widgets/app_dialog.dart';
+import 'package:eatery_core/widgets/app_page_shell.dart';
+import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:eatery/presentation/providers/order_provider.dart';
+import 'package:eatery_core/providers/order_provider.dart';
 
 Color _pageColor = AppColors.primary;
 
@@ -176,12 +176,13 @@ class _EditCustomerPageState extends ConsumerState<EditCustomerPage> {
             }
             _formKey.currentState!.save();
 
-            final customer = widget.customer;
-            customer.name = _controllerCustomerName.text;
-            customer.phone = _controllerCustomerPhone.text;
-            customer.address = _controllerCustomerAddress.text;
-            customer.landmark = _controllerCustomerLandmark.text;
-            customer.isActive = isActive;
+            final customer = widget.customer.copyWith(
+              name: _controllerCustomerName.text,
+              phone: _controllerCustomerPhone.text,
+              address: _controllerCustomerAddress.text,
+              landmark: _controllerCustomerLandmark.text,
+              isActive: isActive,
+            );
             ref
                 .read(customerRepositoryProvider)
                 .saveCustomer(customer)

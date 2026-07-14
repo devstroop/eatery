@@ -1,7 +1,7 @@
-import 'package:eatery/core/utils/responsive.dart';
-import 'package:eatery/core/widgets/widgets.dart';
+import 'package:eatery_core/utils/responsive.dart';
+import 'package:eatery_core/widgets/widgets.dart';
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_colors.dart';
 
 class CreateCompanyBottomAppBar extends StatelessWidget {
   final Color themeColor;

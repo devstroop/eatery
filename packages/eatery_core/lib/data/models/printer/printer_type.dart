@@ -1,0 +1,38 @@
+import 'package:json_annotation/json_annotation.dart';
+
+@JsonEnum()
+enum PrinterType {
+  @JsonValue(0)
+  bluetooth,
+  @JsonValue(1)
+  usb,
+}
+
+extension PrinterTypeExtension on PrinterType {
+  int? get id {
+    switch (this) {
+      case PrinterType.bluetooth:
+        return 0;
+      case PrinterType.usb:
+        return 1;
+    }
+  }
+
+  String? get name {
+    switch (this) {
+      case PrinterType.bluetooth:
+        return "Bluetooth printer";
+      case PrinterType.usb:
+        return "USB printer";
+    }
+  }
+
+  String? get description {
+    switch (this) {
+      case PrinterType.bluetooth:
+        return 'Print via bluetooth';
+      case PrinterType.usb:
+        return 'Print via usb';
+    }
+  }
+}

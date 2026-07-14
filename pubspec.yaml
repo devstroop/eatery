@@ -1,24 +1,27 @@
 name: eatery
 description: A simple and sober restaurant management with pos application.
 
-publish_to: "none" # Remove this line if you wish to publish to pub.dev
+publish_to: "none"
 
 version: 1.0.0+1
 
 environment:
-  sdk: '>=3.8.0 <4.0.0'
+  sdk: '>=3.11.3 <4.0.0'
+
+workspace:
+  - apps/*
+  - packages/*
 
 dependencies:
   flutter:
     sdk: flutter
-  # hive database
+  eatery_core:
+    path: packages/eatery_core
   fast_cached_network_image: ^1.2.9
-  hive: ^2.2.3
-  hive_flutter: ^1.1.0
   mime: ^1.0.5
   path: ^1.9.0
   uicons: ^1.0.1
-  flutter_bluetooth_basic: ^0.1.7
+  # flutter_bluetooth_basic: ^0.1.7  # abandoned (v1 Registrar) — see support/bluetooth_thermal_printer
   flutter_native_splash: ^2.4.1
   cupertino_icons: ^1.0.6
   intl: ^0.19.0
@@ -32,8 +35,9 @@ dependencies:
   sn_progress_dialog: ^1.1.4
   excel: ^4.0.3
   flutter_file_dialog: ^3.0.2
-  qrscan: ^0.3.3
-  flutter_share: ^2.0.0
+  # qrscan: ^0.3.3  # abandoned (v1 Registrar); button was already dead (empty onPressed)
+  share_plus: ^10.1.4
+  rxdart: ^0.28.0
   number_to_words: ^1.0.0
   url_launcher: ^6.3.0
   googleapis: ^13.2.0
@@ -48,7 +52,7 @@ dependencies:
   flutter_slidable: ^3.1.1
   devdart_windows_hdsn: ^0.0.2
   hex: ^0.2.0
-  external_path: ^1.0.3
+  # external_path: ^1.0.3  # abandoned (v1 Registrar); usage was inside block comment
   fluttertoast: ^8.2.6
   gbk_codec: ^0.4.0
   # bluetooth esc printer
@@ -63,13 +67,53 @@ dependencies:
   riverpod_generator: ^2.4.0
   build_runner: ^2.4.13
   device_info_plus: ^12.4.0
+  web_socket_channel: ^3.0.3
+  shelf_web_socket: ^3.0.0
+  shelf: ^1.4.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_launcher_icons: any
-  hive_generator: ^2.0.1
-  flutter_lints: ^4.0.0
+  # flutter_launcher_icons removed (version conflicts with melos)
+  flutter_lints: ^6.0.0
+  melos: ^8.2.2
+
+melos:
+  useRootAsPackage: true
+  scripts:
+    analyze:
+      run: melos exec -c 1 -- flutter analyze --no-fatal-infos --no-fatal-warnings lib/
+      description: Analyze all packages
+    analyze:all:
+      run: melos exec -c 1 -- flutter analyze --no-fatal-infos --no-fatal-warnings
+      description: Analyze all packages with all issues
+    test:
+      run: melos exec -- flutter test
+      description: Run tests in all packages
+    format:
+      run: melos exec -- dart format .
+      description: Format all Dart code
+    get:
+      run: melos exec -- flutter pub get
+      description: Get dependencies for all packages
+    build:admin:
+      run: melos exec -c 1 --scope="eatery" -- flutter build macos --debug
+      description: Build admin app
+    build:waiter:
+      run: melos exec -c 1 --scope="eatery_waiter" -- flutter build macos --debug
+      description: Build waiter app
+    build:kds:
+      run: melos exec -c 1 --scope="eatery_kds" -- flutter build macos --debug
+      description: Build KDS app
+    build:display:
+      run: melos exec -c 1 --scope="eatery_display" -- flutter build macos --debug
+      description: Build display app
+    generate:
+      run: melos exec -c 1 --scope="eatery_core" -- dart run build_runner build --delete-conflicting-outputs
+      description: Run code generation (freezed, json_serializable)
+    generate:watch:
+      run: melos exec -c 1 --scope="eatery_core" -- dart run build_runner watch --delete-conflicting-outputs
+      description: Watch mode for code generation
 
 flutter_icons:
   android: "ic_launcher"
@@ -81,6 +125,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/db/
     - assets/icons/
     - assets/images/
     - assets/lottie/

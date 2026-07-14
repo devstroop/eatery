@@ -1,10 +1,13 @@
-import 'package:eatery/core/widgets/app_dialog.dart';
-import 'package:eatery/core/widgets/app_page_shell.dart';
-import 'package:eatery/core/theme/app_typography.dart';
+import 'package:eatery_core/widgets/app_dialog.dart';
+import 'package:eatery_core/widgets/app_page_shell.dart';
+import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:eatery_core/data/sync/mutation_hook.dart';
+import 'package:eatery_core/providers/database_provider.dart';
+import 'package:eatery_core/providers/order_provider.dart';
+import 'package:eatery_core/providers/product_provider.dart';
 import 'package:go_router/go_router.dart';
 import 'package:http/http.dart' as http;
 
@@ -14,8 +17,7 @@ class DataManagementPage extends ConsumerStatefulWidget {
   const DataManagementPage({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<DataManagementPage> createState() =>
-      _DataManagementPageState();
+  ConsumerState<DataManagementPage> createState() => _DataManagementPageState();
 }
 
 class _DataManagementPageState extends ConsumerState<DataManagementPage> {
@@ -34,14 +36,15 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           icon: const Icon(Icons.more_vert),
           onPressed: () {
             showMenu(
-                context: context,
-                position: const RelativeRect.fromLTRB(100, 100, 0, 0),
-                items: [
-                  const PopupMenuItem(
-                    value: 'demo',
-                    child: Text('Download Demo Data'),
-                  ),
-                ]).then((value) {
+              context: context,
+              position: const RelativeRect.fromLTRB(100, 100, 0, 0),
+              items: [
+                const PopupMenuItem(
+                  value: 'demo',
+                  child: Text('Download Demo Data'),
+                ),
+              ],
+            ).then((value) {
               if (value == 'demo') {
                 _downloadDemoData(context);
               }
@@ -49,150 +52,158 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           },
         ),
       ],
-      child: ListView(scrollDirection: Axis.vertical, children: [
-        Container(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: Row(
-            children: [
-              Icon(
-                FontAwesomeIcons.googleDrive,
-                color: _pageColor,
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Text(
-                'Google Drive Backup / Restore',
-                style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500, color: AppColors.grey700),
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Flexible(
-                child: Divider(color: AppColors.grey300),
-              ),
-            ],
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(8),
-            border: Border.all(color: AppColors.grey400!),
-          ),
-          child: Row(
-            children: [
-              Icon(
-                Icons.history,
-                color: AppColors.grey700,
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Text(
-                'Last Backup: ',
-                style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500, color: AppColors.grey700),
-              ),
-              Text(
-                'Never',
-                style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey700),
-              ),
-            ],
-          ),
-        ),
-        ListTile(
-            leading: Icon(
-              FontAwesomeIcons.upload,
-              color: AppColors.grey700,
+      child: ListView(
+        scrollDirection: Axis.vertical,
+        children: [
+          Container(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            child: Row(
+              children: [
+                Icon(FontAwesomeIcons.googleDrive, color: _pageColor),
+                const SizedBox(width: 8),
+                Text(
+                  'Google Drive Backup / Restore',
+                  style: AppTypography.titleMedium.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.grey700,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Flexible(child: Divider(color: AppColors.grey300)),
+              ],
             ),
+          ),
+          Container(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            padding: const EdgeInsets.all(16),
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(8),
+              border: Border.all(color: AppColors.grey400!),
+            ),
+            child: Row(
+              children: [
+                Icon(Icons.history, color: AppColors.grey700),
+                const SizedBox(width: 8),
+                Text(
+                  'Last Backup: ',
+                  style: AppTypography.titleMedium.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.grey700,
+                  ),
+                ),
+                Text(
+                  'Never',
+                  style: AppTypography.titleMedium.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.grey700,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          ListTile(
+            leading: Icon(FontAwesomeIcons.upload, color: AppColors.grey700),
             title: Text(
               'Backup ↑',
-              style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey700),
+              style: AppTypography.titleMedium.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppColors.grey700,
+              ),
             ),
             subtitle: Text(
               'Backup data to Google Drive',
-              style: AppTypography.bodyMedium.copyWith(color: AppColors.grey700),
+              style: AppTypography.bodyMedium.copyWith(
+                color: AppColors.grey700,
+              ),
             ),
             trailing: const Icon(Icons.chevron_right),
-            onTap: () => GoRouter.of(context).pushNamed('import')),
-        ListTile(
-          leading: Icon(
-            FontAwesomeIcons.download,
-            color: AppColors.grey700,
+            onTap: () => GoRouter.of(context).pushNamed('import'),
           ),
-          title: Text(
-            'Restore ↓',
-            style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey700),
+          ListTile(
+            leading: Icon(FontAwesomeIcons.download, color: AppColors.grey700),
+            title: Text(
+              'Restore ↓',
+              style: AppTypography.titleMedium.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppColors.grey700,
+              ),
+            ),
+            subtitle: Text(
+              'Restore data from Google Drive',
+              style: AppTypography.bodyMedium.copyWith(
+                color: AppColors.grey700,
+              ),
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => GoRouter.of(context).pushNamed('export'),
           ),
-          subtitle: Text(
-            'Restore data from Google Drive',
-            style: AppTypography.bodyMedium.copyWith(color: AppColors.grey700),
+          Container(
+            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+            child: Row(
+              children: [
+                Icon(FontAwesomeIcons.fileExcel, color: _pageColor),
+                const SizedBox(width: 8),
+                Text(
+                  'Import / Export',
+                  style: AppTypography.titleMedium.copyWith(
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.grey700,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Flexible(child: Divider(color: AppColors.grey300)),
+              ],
+            ),
           ),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () => GoRouter.of(context).pushNamed('export'),
-        ),
-        Container(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-          child: Row(
-            children: [
-              Icon(
-                FontAwesomeIcons.fileExcel,
-                color: _pageColor,
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Text(
-                'Import / Export',
-                style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500, color: AppColors.grey700),
-              ),
-              const SizedBox(
-                width: 8,
-              ),
-              Flexible(
-                child: Divider(color: AppColors.grey300),
-              ),
-            ],
-          ),
-        ),
-        ListTile(
+          ListTile(
             leading: Icon(
               FontAwesomeIcons.fileImport,
               color: AppColors.grey700,
             ),
             title: Text(
-            'Import',
-            style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey700),
-          ),
-          subtitle: Text(
-            'Import data from json/excel file',
-            style: AppTypography.bodyMedium.copyWith(color: AppColors.grey700),
-          ),
+              'Import',
+              style: AppTypography.titleMedium.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppColors.grey700,
+              ),
+            ),
+            subtitle: Text(
+              'Import data from json/excel file',
+              style: AppTypography.bodyMedium.copyWith(
+                color: AppColors.grey700,
+              ),
+            ),
             trailing: const Icon(Icons.chevron_right),
-            onTap: () => GoRouter.of(context).pushNamed('import')),
-        ListTile(
-          leading: Icon(
-            FontAwesomeIcons.fileExport,
-            color: AppColors.grey700,
+            onTap: () => GoRouter.of(context).pushNamed('import'),
           ),
-          title: Text(
-            'Export',
-            style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey700),
+          ListTile(
+            leading: Icon(
+              FontAwesomeIcons.fileExport,
+              color: AppColors.grey700,
+            ),
+            title: Text(
+              'Export',
+              style: AppTypography.titleMedium.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppColors.grey700,
+              ),
+            ),
+            subtitle: Text(
+              'Export data to json/excel file',
+              style: AppTypography.bodyMedium.copyWith(
+                color: AppColors.grey700,
+              ),
+            ),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => GoRouter.of(context).pushNamed('export'),
           ),
-          subtitle: Text(
-            'Export data to json/excel file',
-            style: AppTypography.bodyMedium.copyWith(color: AppColors.grey700),
-          ),
-          trailing: const Icon(Icons.chevron_right),
-          onTap: () => GoRouter.of(context).pushNamed('export'),
-        ),
-      ]),
+        ],
+      ),
     );
   }
 
-/*
+  /*
 
   Future<void> doImportProducts() async {
     await FilePicker.platform.pickFiles(
@@ -216,49 +227,49 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
         // Populate Products
         for (var row in productsTable!.rows) {
           Product product = Product.fromIterable(row.map((e) => e?.value.toString()));
-          db.productBox!.put(product.id, product);
+          ref.read(productRepositoryProvider).saveProduct(product);
         }
 
         // Populate Product Categories
         for (var row in productCategoriesTable!.rows) {
           ProductCategory productCategory = ProductCategory.fromIterable(row.map((e) => e?.value.toString()));
-          db.productCategoryBox!.put(productCategory.id, productCategory);
+          ref.read(productRepositoryProvider).saveCategory(productCategory);
         }
 
         // Populate Tax Slabs
         for (var row in taxSlabsTable!.rows) {
           TaxSlab taxSlab = TaxSlab.fromIterable(row.map((e) => e?.value));
-          db.taxSlabBox!.put(taxSlab.id, taxSlab);
+          ref.read(taxRepositoryProvider).saveTaxSlab(taxSlab);
         }
 
         // Populate Staffs
         for (var row in staffsTable!.rows) {
           Staff staff = Staff.fromIterable(row.map((e) => e?.value));
-          db.staffBox!.put(staff.id, staff);
+          await ref.read(staffRepositoryProvider).saveStaff(staff);
         }
 
         // Populate Dining Tables
         for (var row in diningTablesTable!.rows) {
           DiningTable diningTable = DiningTable.fromIterable(row.map((e) => e?.value));
-          db.diningTableBox!.put(diningTable.id, diningTable);
+          ref.read(diningTableRepositoryProvider).saveTable(diningTable);
         }
 
         // Populate Dining Table Categories
         for (var row in diningTableCategoriesTable!.rows) {
           DiningTableCategory diningTableCategory = DiningTableCategory.fromIterable(row.map((e) => e?.value));
-          db.diningTableCategoryBox!.put(diningTableCategory.id, diningTableCategory);
+          ref.read(diningTableRepositoryProvider).saveCategory(diningTableCategory);
         }
 
         // Populate Customers
         for (var row in customersTable!.rows) {
           Customer customer = Customer.fromIterable(row.map((e) => e?.value));
-          db.customerBox!.put(customer.id, customer);
+          ref.read(customerRepositoryProvider).saveCustomer(customer);
         }
 
         // Populate Orders
         for (var row in ordersTable!.rows) {
           Order order = Order.fromIterable(row.map((e) => e?.value));
-          db.orderBox!.put(order.id, order);
+          ref.read(orderRepositoryProvider).saveOrder(order);
         }
 
         AppDialog.showMessage(this.context, message: 'Imported successfully', type: MessageType.success);
@@ -293,14 +304,14 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
 
     // Populate Customers Sheet
     index = 0;
-    for (var element in db.customerBox!.values) {
+    for (var element in ref.read(customerRepositoryProvider).getAllCustomers()) {
       customersSheet.insertRowIterables(element.toMap().values.toList(), index);
       index++;
     }
 
     // Populate Dining Tables Sheet
     index = 0;
-    for (var element in db.diningTableBox!.values) {
+    for (var element in ref.read(diningTableRepositoryProvider).getAllTables()) {
       diningTablesSheet.insertRowIterables(
           element.toMap().values.toList(), index);
       index++;
@@ -308,7 +319,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
 
     // Dining Table Categories Sheet
     index = 0;
-    for (var element in db.diningTableCategoryBox!.values) {
+    for (var element in ref.read(diningTableRepositoryProvider).getAllCategories()) {
       diningTableCategoriesSheet.insertRowIterables(
           element.toMap().values.toList(), index);
       index++;
@@ -316,21 +327,21 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
 
     // Populate Orders Sheet
     index = 0;
-    for (var element in db.orderBox!.values) {
+    for (var element in ref.read(orderRepositoryProvider).getAllOrders()) {
       ordersSheet.insertRowIterables(element.toMap().values.toList(), index);
       index++;
     }
 
     // Populate Products Sheet
     index = 0;
-    for (var element in db.productBox!.values) {
+    for (var element in ref.read(productRepositoryProvider).getAllProducts()) {
       productsSheet.insertRowIterables(element.toMap().values.toList(), index);
       index++;
     }
 
     // Populate Product Categories Sheet
     index = 0;
-    for (var element in db.productCategoryBox!.values) {
+    for (var element in ref.read(productRepositoryProvider).getAllCategories()) {
       productCategoriesSheet.insertRowIterables(
           element.toMap().values.toList(), index);
       index++;
@@ -338,14 +349,14 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
 
     // Populate Tax Slabs Sheet
     index = 0;
-    for (var element in db.taxSlabBox!.values) {
+    for (var element in ref.read(taxRepositoryProvider).getAllTaxSlabs()) {
       taxSlabsSheet.insertRowIterables(element.toMap().values.toList(), index);
       index++;
     }
 
     // Populate Staffs Sheet
     index = 0;
-    for (var element in db.staffBox!.values) {
+    for (var element in ref.read(staffRepositoryProvider).getAllStaff()) {
       staffsSheet.insertRowIterables(element.toMap().values.toList(), index);
       index++;
     }
@@ -364,10 +375,23 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
   }
   */
 
+  /// Clears [table] and notifies the sync layer about every deleted row.
+  void _clearTable(String table, String entityType) {
+    final store = ref.read(eateryStoreProvider);
+    final oldIds = store
+        .query('SELECT id FROM $table')
+        .map((r) => r['id'] as int)
+        .toList();
+    store.execute('DELETE FROM $table');
+    for (final id in oldIds) {
+      notifyMutation(entityType, id, 'delete', {'id': id});
+    }
+  }
+
   Future<void> _downloadDemoData(BuildContext context) async {
     ProgressDialog pd = ProgressDialog(context: context);
     pd.show();
-    final db = ref.read(appDatabaseProvider);
+    final store = ref.read(eateryStoreProvider);
     List<String> logs = [];
 
     String baseUrl =
@@ -376,25 +400,28 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     // Customers
     try {
       pd.update(msg: '⏳ Downloading Customers');
-      Iterable<Map<String, dynamic>> list =
-          await getList('$baseUrl/customers.json');
+      Iterable<Map<String, dynamic>> list = await getList(
+        '$baseUrl/customers.json',
+      );
       pd.update(msg: '⌛️ Saving Customers');
       logs.add('🛢️ Customers');
       Iterable<Customer> custs = list.map((element) {
         try {
-          final msg = '\t👤 ${element['name']} downloaded';
+          final msg = '👤 ${element['name']} downloaded';
           logs.add(msg);
           pd.update(msg: msg);
           return Customer.fromMap(element);
         } catch (e) {
-          final msg = '\t❌ Error downloading 👤 ${element['name']}: $e';
+          final msg = '❌ Error downloading 👤 ${element['name']}: $e';
           logs.add(msg);
           pd.update(msg: msg);
           return Customer(phone: element['phone']);
         }
       });
-      await db.customerBox.clear();
-      await db.customerBox.addAll(custs);
+      _clearTable('customer', 'customer');
+      for (final c in custs) {
+        await ref.read(customerRepositoryProvider).saveCustomer(c);
+      }
       final msg = '✅ ${custs.length} Customers downloaded successfully';
       logs.add(msg);
       pd.update(msg: msg);
@@ -407,25 +434,28 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     // Dining Table Categories
     try {
       pd.update(msg: '⏳ Downloading Dining Table Categories');
-      Iterable<Map<String, dynamic>> list =
-          await getList('$baseUrl/dining_table_categories.json');
+      Iterable<Map<String, dynamic>> list = await getList(
+        '$baseUrl/dining_table_categories.json',
+      );
       pd.update(msg: '⌛️ Saving Dining Table Categories');
       logs.add('🛢️ Dining Table Categories');
       Iterable<DiningTableCategory> dtCats = list.map((element) {
         try {
-          final msg = '\t📖 ${element['name']} downloaded successfully';
+          final msg = '📖 ${element['name']} downloaded successfully';
           logs.add(msg);
           pd.update(msg: msg);
           return DiningTableCategory.fromMap(element);
         } catch (e) {
-          final msg = '\t❌ Error downloading ${element['name']}: $e';
+          final msg = '❌ Error downloading ${element['name']}: $e';
           logs.add(msg);
           pd.update(msg: msg);
           return DiningTableCategory(name: element['name']);
         }
       });
-      await db.diningTableCategoryBox.clear();
-      await db.diningTableCategoryBox.addAll(dtCats);
+      _clearTable('dining_table_category', 'dining_table_category');
+      for (final c in dtCats) {
+        (ref.read(diningTableRepositoryProvider) as dynamic).saveCategory(c);
+      }
       final msg =
           '✅ ${dtCats.length} Dining Table Categories downloaded successfully';
       logs.add(msg);
@@ -439,25 +469,28 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     // Dining Tables
     try {
       pd.update(msg: '⏳ Downloading Dining Tables');
-      Iterable<Map<String, dynamic>> list =
-          await getList('$baseUrl/dining_tables.json');
+      Iterable<Map<String, dynamic>> list = await getList(
+        '$baseUrl/dining_tables.json',
+      );
       pd.update(msg: '⌛️ Saving Dining Tables');
       logs.add('🛢️ Dining Tables');
       Iterable<DiningTable> diningTables = list.map((element) {
         try {
-          final msg = '\t🍽️ ${element['name']} downloaded successfully';
+          final msg = '🍽️ ${element['name']} downloaded successfully';
           logs.add(msg);
           pd.update(msg: msg);
           return DiningTable.fromMap(element);
         } catch (e) {
-          final msg = '\t❌ Error downloading ${element['name']}: $e';
+          final msg = '❌ Error downloading ${element['name']}: $e';
           logs.add(msg);
           pd.update(msg: msg);
           return DiningTable(name: element['name']);
         }
       });
-      await db.diningTableBox.clear();
-      await db.diningTableBox.addAll(diningTables);
+      _clearTable('dining_table', 'dining_table');
+      for (final t in diningTables) {
+        await ref.read(diningTableRepositoryProvider).saveTable(t);
+      }
       final msg =
           '✅ ${diningTables.length} Dining Tables downloaded successfully';
       logs.add(msg);
@@ -471,25 +504,28 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     // Orders
     try {
       pd.update(msg: '⏳ Downloading Orders');
-      Iterable<Map<String, dynamic>> ordersList =
-          await getList('$baseUrl/orders.json');
+      Iterable<Map<String, dynamic>> ordersList = await getList(
+        '$baseUrl/orders.json',
+      );
       pd.update(msg: '⌛️ Saving Orders');
       logs.add('🛢️ Orders');
       Iterable<Order> orders = ordersList.map((element) {
         try {
-          final msg = '\t📦 ${element['id']} downloaded successfully';
+          final msg = '📦 ${element['id']} downloaded successfully';
           logs.add(msg);
           pd.update(msg: msg);
           return Order.fromMap(element);
         } catch (e) {
-          final msg = '\t❌ Error downloading ${element['id']}: $e';
+          final msg = '❌ Error downloading ${element['id']}: $e';
           logs.add(msg);
           pd.update(msg: msg);
           rethrow;
         }
       });
-      await db.orderBox.clear();
-      await db.orderBox.addAll(orders);
+      _clearTable('"order"', 'order');
+      for (final o in orders) {
+        await ref.read(orderRepositoryProvider).saveOrder(o);
+      }
       final msg = '✅ ${orders.length} Orders downloaded successfully';
       logs.add(msg);
       pd.update(msg: msg);
@@ -502,25 +538,28 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     // Payments
     try {
       pd.update(msg: '⏳ Downloading Payments');
-      Iterable<Map<String, dynamic>> paymentsList =
-          await getList('$baseUrl/payments.json');
+      Iterable<Map<String, dynamic>> paymentsList = await getList(
+        '$baseUrl/payments.json',
+      );
       pd.update(msg: '⌛️ Saving Payments');
       logs.add('🛢️ Payments');
       Iterable<Payment> payments = paymentsList.map((element) {
         try {
-          final msg = '\t💰 ${element['id']} downloaded successfully';
+          final msg = '💰 ${element['id']} downloaded successfully';
           logs.add(msg);
           pd.update(msg: msg);
           return Payment.fromMap(element);
         } catch (e) {
-          final msg = '\t❌ Error downloading ${element['id']}: $e';
+          final msg = '❌ Error downloading ${element['id']}: $e';
           logs.add(msg);
           pd.update(msg: msg);
           rethrow;
         }
       });
-      await db.paymentBox.clear();
-      await db.paymentBox.addAll(payments);
+      _clearTable('payment', 'payment');
+      for (final p in payments) {
+        await ref.read(paymentRepositoryProvider).savePayment(p);
+      }
       final msg = '✅ ${payments.length} Payments downloaded successfully';
       logs.add(msg);
       pd.update(msg: msg);
@@ -533,26 +572,30 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     // Product Categories
     try {
       pd.update(msg: '⏳ Downloading Product Categories');
-      Iterable<Map<String, dynamic>> productCategoriesList =
-          await getList('$baseUrl/product_categories.json');
+      Iterable<Map<String, dynamic>> productCategoriesList = await getList(
+        '$baseUrl/product_categories.json',
+      );
       pd.update(msg: '⌛️ Saving Categories');
       logs.add('🛢️ Product Categories');
-      Iterable<ProductCategory> categories =
-          productCategoriesList.map((element) {
+      Iterable<ProductCategory> categories = productCategoriesList.map((
+        element,
+      ) {
         try {
-          final msg = '\t📖 ${element['name']} downloaded successfully';
+          final msg = '📖 ${element['name']} downloaded successfully';
           logs.add(msg);
           pd.update(msg: msg);
           return ProductCategory.fromMap(element);
         } catch (e) {
-          final msg = '\t❌ Error downloading ${element['name']}: $e';
+          final msg = '❌ Error downloading ${element['name']}: $e';
           logs.add(msg);
           pd.update(msg: msg);
           return ProductCategory(name: element['name']);
         }
       });
-      await db.productCategoryBox.clear();
-      await db.productCategoryBox.addAll(categories);
+      _clearTable('product_category', 'product_category');
+      for (final c in categories) {
+        await ref.read(productRepositoryProvider).saveCategory(c);
+      }
       final msg =
           '✅ ${categories.length} Product Categories downloaded successfully';
       logs.add(msg);
@@ -566,30 +609,34 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     // Products
     try {
       pd.update(msg: '⏳ Downloading Products');
-      Iterable<Map<String, dynamic>> productsList =
-          await getList('$baseUrl/products.json');
+      Iterable<Map<String, dynamic>> productsList = await getList(
+        '$baseUrl/products.json',
+      );
       pd.update(msg: '⌛️ Saving Products');
       logs.add('🛢️ Products');
       Iterable<Product> products = productsList.map((element) {
         try {
-          final msg = '\t⌗ ${element['name']} downloaded successfully';
+          final msg = '⌗ ${element['name']} downloaded successfully';
           logs.add(msg);
           pd.update(msg: msg);
           return Product.fromMap(element);
         } catch (e) {
-          final msg = '\t❌ Error downloading ${element['name']}: $e';
+          final msg = '❌ Error downloading ${element['name']}: $e';
           logs.add(msg);
           pd.update(msg: msg);
           return Product(
-              name: element['name'],
-              mrpPrice: 0.0,
-              salePrice: 0.0,
-              type: ProductType.inventoryItem,
-              isActive: false);
+            name: element['name'],
+            mrpPrice: 0.0,
+            salePrice: 0.0,
+            type: ProductType.inventoryItem,
+            isActive: false,
+          );
         }
       });
-      await db.productBox.clear();
-      await db.productBox.addAll(products);
+      _clearTable('product', 'product');
+      for (final p in products) {
+        await ref.read(productRepositoryProvider).saveProduct(p);
+      }
       final msg = '✅ ${products.length} Products downloaded successfully';
       logs.add(msg);
       pd.update(msg: msg);
@@ -602,26 +649,32 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     // Staffs
     try {
       pd.update(msg: '⏳ Downloading Staffs');
-      Iterable<Map<String, dynamic>> staffsList =
-          await getList('$baseUrl/staffs.json');
+      Iterable<Map<String, dynamic>> staffsList = await getList(
+        '$baseUrl/staffs.json',
+      );
       pd.update(msg: '⌛️ Saving Staffs');
       logs.add('🛢️ Staffs');
       Iterable<Staff> staffs = staffsList.map((element) {
         try {
-          final msg = '\t👨🏻‍🔧 ${element['name']} downloaded successfully';
+          final msg = '👨🏻‍🔧 ${element['name']} downloaded successfully';
           logs.add(msg);
           pd.update(msg: msg);
           return Staff.fromMap(element);
         } catch (e) {
-          final msg = '\t❌ Error downloading ${element['name']}: $e';
+          final msg = '❌ Error downloading ${element['name']}: $e';
           logs.add(msg);
           pd.update(msg: msg);
           return Staff(
-              name: element['name'], type: StaffType.other, isActive: false);
+            name: element['name'],
+            type: StaffType.other,
+            isActive: false,
+          );
         }
       });
-      await db.staffBox.clear();
-      await db.staffBox.addAll(staffs);
+      _clearTable('staff', 'staff');
+      for (final s in staffs) {
+        await ref.read(staffRepositoryProvider).saveStaff(s);
+      }
       final msg = '✅ ${staffs.length} Staffs downloaded successfully';
       logs.add(msg);
       pd.update(msg: msg);
@@ -634,26 +687,32 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     // Tax Slabs
     try {
       pd.update(msg: '⏳ Downloading Tax Slabs');
-      Iterable<Map<String, dynamic>> taxSlabsList =
-          await getList('$baseUrl/tax_slabs.json');
+      Iterable<Map<String, dynamic>> taxSlabsList = await getList(
+        '$baseUrl/tax_slabs.json',
+      );
       pd.update(msg: '⌛️ Saving Tax Slabs');
       logs.add('🛢️ Tax Slabs');
       Iterable<TaxSlab> taxSlabs = taxSlabsList.map((element) {
         try {
-          final msg = '\t％ ${element['name']} downloaded successfully';
+          final msg = '％ ${element['name']} downloaded successfully';
           logs.add(msg);
           pd.update(msg: msg);
           return TaxSlab.fromMap(element);
         } catch (e) {
-          final msg = '\t❌ Error downloading ${element['name']}: $e';
+          final msg = '❌ Error downloading ${element['name']}: $e';
           logs.add(msg);
           pd.update(msg: msg);
           return TaxSlab(
-              name: element['name'], rate: 0.0, type: TaxType.exclusive);
+            name: element['name'],
+            rate: 0.0,
+            type: TaxType.exclusive,
+          );
         }
       });
-      await db.taxSlabBox.clear();
-      await db.taxSlabBox.addAll(taxSlabs);
+      _clearTable('tax_slab', 'tax_slab');
+      for (final t in taxSlabs) {
+        await ref.read(taxRepositoryProvider).saveTaxSlab(t);
+      }
       final msg = '✅ ${taxSlabs.length} Tax Slabs downloaded successfully';
       logs.add(msg);
       pd.update(msg: msg);

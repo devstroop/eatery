@@ -1,15 +1,16 @@
-import 'package:eatery/core/widgets/widgets.dart';
-import 'package:eatery/core/theme/app_colors.dart';
-import 'package:eatery/core/theme/app_typography.dart';
-import 'package:eatery/core/utils/responsive.dart';
+import 'package:eatery_core/widgets/widgets.dart';
+import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_typography.dart';
+import 'package:eatery_core/utils/responsive.dart';
 import 'package:eatery/pages/authentication/reset-pin.dart';
-import 'package:eatery/core/extensions/string_ext.dart';
+import 'package:eatery_core/extensions/string_ext.dart';
 import 'package:eatery/references.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:eatery/presentation/providers/company_provider.dart';
-import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:eatery_core/providers/auth_session.dart';
+import 'package:eatery_core/providers/company_provider.dart';
+import 'package:eatery_core/providers/database_provider.dart';
 
-import 'package:eatery/core/widgets/app_dialog.dart';
+import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:go_router/go_router.dart';
 import '../main.screen.dart';
 
@@ -21,7 +22,10 @@ class LoginPage extends ConsumerStatefulWidget {
 }
 
 class _LoginPageState extends ConsumerState<LoginPage> {
-  final TextEditingController _controllerPassword = TextEditingController();
+  final TextEditingController _controllerLoginId = TextEditingController();
+  final TextEditingController _controllerPin = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  Color themeColor = AppColors.secondary2;
   Company? company;
 
   @override
@@ -36,20 +40,26 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   void _submit() async {
     final isValid = _formKey.currentState!.validate();
-    if (!isValid) {
-      return;
-    }
-    _formKey.currentState!.save();
-    if (company!.password == null || _controllerPassword.text == company!.password) {
-      ref.read(companyProvider.notifier).setCompany(company);
+    if (!isValid) return;
+
+    final store = ref.read(eateryStoreProvider);
+    final staff = authenticateStaff(
+      store,
+      _controllerLoginId.text.trim(),
+      _controllerPin.text.trim(),
+    );
+
+    if (staff != null) {
+      ref.read(authSessionProvider.notifier).state = staff;
       GoRouter.of(context as BuildContext).goNamed('dashboard');
     } else {
-      AppDialog.showMessage(this.context, message: 'Invalid secure pin', type: MessageType.error);
+      AppDialog.showMessage(
+        this.context,
+        message: 'Invalid credentials',
+        type: MessageType.error,
+      );
     }
   }
-
-  Color themeColor = AppColors.secondary2;
-  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -217,24 +227,37 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                   children: [
                     CustomTextFromField(
                       themeColor: themeColor,
+                      controller: _controllerLoginId,
+                      label: 'Staff ID or Phone',
+                      hint: 'Enter phone or name...',
+                      textInputAction: TextInputAction.next,
+                      validator: (value) {
+                        if (value == null || value.trim().isEmpty) {
+                          return 'Required';
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    CustomTextFromField(
+                      themeColor: themeColor,
                       keyboardType: const TextInputType.numberWithOptions(
                         decimal: false,
                         signed: false,
                       ),
-                      controller: _controllerPassword,
+                      controller: _controllerPin,
                       obscureText: true,
                       isPassword: true,
-                      label: 'Secure PIN',
-                      hint: 'Enter secure pin...',
+                      label: 'PIN',
+                      hint: 'Enter your PIN...',
                       textInputAction: TextInputAction.done,
                       onFieldSubmitted: (v) {
                         FocusScope.of(this.context).unfocus();
                         _submit();
                       },
                       validator: (value) {
-                        if (value!.trim().isEmpty) return 'Pin cannot be blank';
-                        if (!value.trim().isNumericOnly)
-                          return 'Invalid character';
+                        if (value == null || value.trim().isEmpty) return 'PIN cannot be blank';
+                        if (!value.trim().isNumericOnly) return 'Invalid character';
                         return null;
                       },
                     ),

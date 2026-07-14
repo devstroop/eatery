@@ -1,17 +1,27 @@
 import 'dart:async';
 
 import 'package:eatery/core/router/app_router.dart';
-import 'package:eatery/core/theme/app_theme.dart';
+import 'package:eatery_core/theme/app_theme.dart';
+import 'package:eatery_core/utils/device_id.dart';
 import 'package:eatery/constants/utils/app_file_system.dart';
-import 'package:eatery/data/database/eatery_database.dart';
-import 'package:eatery/data/database/eatery_db_shim.dart';
-import 'package:eatery/presentation/providers/database_provider.dart';
+import 'package:eatery_core/data/database/eatery_database.dart';
+import 'package:eatery_core/data/database/native/eatery_schema.dart';
+import 'package:eatery_core/data/database/native/eatery_store.dart';
+import 'package:eatery_core/data/database/native/schema_migrator.dart';
+import 'package:eatery_core/data/database/native/store_config.dart';
+import 'package:eatery_core/data/sync/mdns_service.dart';
+import 'package:eatery_core/data/sync/sync_providers.dart';
+import 'package:eatery_core/providers/database_provider.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/functions/order.function.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-/// The app's single database instance, initialized once at startup.
-late final EateryDatabase appDatabase;
+/// The native SQLite store, initialized at startup.
+EateryStore? appStore;
+
+/// Compatibility database wrapper.
+EateryDatabase? appDatabase;
 
 void main() async {
   runZonedGuarded(
@@ -48,7 +58,12 @@ void main() async {
       await setupDataAndInitDB();
       runApp(
         ProviderScope(
-          overrides: [appDatabaseProvider.overrideWithValue(appDatabase)],
+          overrides: [
+            if (appStore != null)
+              eateryStoreProvider.overrideWithValue(appStore!),
+            if (appDatabase != null)
+              appDatabaseProvider.overrideWithValue(appDatabase!),
+          ],
           child: const MyApp(),
         ),
       );
@@ -72,12 +87,18 @@ Future setupDataAndInitDB() async {
   Common.baseDirectory = basePath;
   await AppFileSystem.init(basePath);
 
-  // Initialize the injectable database
-  appDatabase = EateryDatabase(dataDir: AppFileSystem.dataDir);
-  await appDatabase.init();
-
-  // Bind legacy shim so EateryDB.instance still works
-  EateryDB.bind(appDatabase);
+  // Open the native SQLite store and initialize the schema.
+  if (kUseSqliteStore) {
+    final store = EateryStore.open(
+      '${AppFileSystem.dataDir}/$kEateryDbFileName',
+    );
+    final schema = await rootBundle.loadString(kSchemaAssetPath);
+    initEaterySchema(store, schema);
+    SchemaMigrator(store).migrate();
+    appStore = store;
+    appDatabase = EateryDatabase(dataDir: AppFileSystem.dataDir, store: store);
+    OrderFunction.init(store);
+  }
 
   await FastCachedImageConfig.init(
     subDir: '${AppFileSystem.cacheDir}/',
@@ -85,34 +106,48 @@ Future setupDataAndInitDB() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+/// Starts the sync server after the app is mounted and the DB is ready.
+Future<void> startSync(WidgetRef ref) async {
+  if (!kUseSqliteStore) return;
+
+  final deviceId = await getDeviceId() ?? 'eatery-admin';
+  ref.read(syncInitProvider(SyncConfig.host(deviceId: deviceId)));
+  debugPrint('Sync host started on port 9876');
+
+  unawaited(MdnsService.startAdvertising(
+    port: 9876,
+    deviceName: deviceId,
+  ));
+}
+
+class MyApp extends ConsumerStatefulWidget {
   const MyApp({Key? key}) : super(key: key);
+
+  @override
+  ConsumerState<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends ConsumerState<MyApp> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      startSync(ref);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     FlutterNativeSplash.remove();
-    if (appDatabase.isInitialized) {
-      return _KeyboardStateSync(
-        child: MaterialApp.router(
-          title: 'Eatery',
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.light,
-          routerConfig: createAppRouter(appDatabase),
-        ),
-      );
-    }
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: Scaffold(
-        body: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: const [
-              CircularProgressIndicator(),
-              SizedBox(height: 16),
-              Text('Initializing database...'),
-            ],
-          ),
+    return _KeyboardStateSync(
+      child: MaterialApp.router(
+        title: 'Eatery',
+        debugShowCheckedModeBanner: false,
+        theme: AppTheme.light,
+        routerConfig: createAppRouter(
+          appDatabase ??
+              EateryDatabase(dataDir: '', store: EateryStore.open(':memory:')),
+          store: appStore,
         ),
       ),
     );

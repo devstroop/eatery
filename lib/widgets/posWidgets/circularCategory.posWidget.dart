@@ -1,5 +1,5 @@
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_colors.dart';
 
 class CircularCategoryPOSWidget extends StatelessWidget {
   const CircularCategoryPOSWidget({super.key, required this.image, required this.label, this.selected = false, this.themeColor, this.onTap, this.margin});

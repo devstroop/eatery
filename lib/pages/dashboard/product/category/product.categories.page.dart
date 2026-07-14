@@ -1,13 +1,13 @@
-import 'package:eatery/core/theme/app_spacing.dart';
-import 'package:eatery/core/theme/app_typography.dart';
-import 'package:eatery/core/widgets/widgets.dart';
-import 'package:eatery/core/widgets/app_empty_state.dart';
-import 'package:eatery/data/repositories/product_repository.dart';
-import 'package:eatery/presentation/providers/product_provider.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
+import 'package:eatery_core/theme/app_typography.dart';
+import 'package:eatery_core/widgets/widgets.dart';
+import 'package:eatery_core/data/repositories/product_repository.dart';
+import 'package:eatery_core/providers/product_provider.dart';
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
-import 'package:eatery/core/widgets/app_dialog.dart';
+import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'add.product.category.page.dart';
+import 'edit.product.category.page.dart';
 import 'package:go_router/go_router.dart';
 import 'add.product.category.page.dart';
 import 'edit.product.category.page.dart';
@@ -38,7 +38,9 @@ class _ProductCategoriesPageState extends ConsumerState<ProductCategoriesPage> {
         icon: const Icon(Icons.add),
         label: const Text('Add Product Category'),
         onPressed: () {
-          GoRouter.of(context).pushNamed('addProductCategory').then((_) => setState(() {}));
+          GoRouter.of(
+            context,
+          ).pushNamed('addProductCategory').then((_) => setState(() {}));
         },
       ),
       child: categories.isEmpty
@@ -93,7 +95,9 @@ class _ProductCategoriesPageState extends ConsumerState<ProductCategoriesPage> {
                       ),
                       onSelected: (value) async {
                         if (value == 'edit') {
-                          await GoRouter.of(context).pushNamed('editProductCategory', extra: category);
+                          await GoRouter.of(
+                            context,
+                          ).pushNamed('editProductCategory', extra: category);
                           setState(() {});
                         } else if (value == 'delete') {
                           _onCategoryDelete(context, category);
@@ -118,7 +122,9 @@ class _ProductCategoriesPageState extends ConsumerState<ProductCategoriesPage> {
                             ),
                             title: Text(
                               'Delete',
-                              style: AppTypography.bodyMedium.copyWith(color: Colors.red),
+                              style: AppTypography.bodyMedium.copyWith(
+                                color: Colors.red,
+                              ),
                             ),
                             contentPadding: EdgeInsets.zero,
                           ),

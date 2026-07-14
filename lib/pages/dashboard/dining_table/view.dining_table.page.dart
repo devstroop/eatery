@@ -1,9 +1,9 @@
-import 'package:eatery/core/widgets/app_page_shell.dart';
-import 'package:eatery/core/theme/app_spacing.dart';
-import 'package:eatery/core/theme/app_typography.dart';
-import 'package:eatery/presentation/providers/order_provider.dart';
+import 'package:eatery_core/widgets/app_page_shell.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
+import 'package:eatery_core/theme/app_typography.dart';
+import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -47,8 +47,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
               if (value == 'edit') {
                 GoRouter.of(context).pushNamed('editDiningTable', extra: widget.diningTable);
               } else if (value == 'unlink') {
-                widget.diningTable.orderId = null;
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(widget.diningTable.copyWith(orderId: null));
               }
             });
           },
@@ -127,7 +126,11 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                           style: AppTypography.labelSmall,
                         ),
                         Text(
-                          widget.diningTable.category?.name ?? 'None',
+                          widget.diningTable.categoryId != null
+                              ? ref.read(diningTableRepositoryProvider)
+                                      .getCategoryById(widget.diningTable.categoryId!)
+                                      ?.name ?? 'None'
+                              : 'None',
                           style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ],

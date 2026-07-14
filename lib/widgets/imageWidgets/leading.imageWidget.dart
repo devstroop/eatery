@@ -1,5 +1,5 @@
 import 'package:eatery/references.dart';
-import 'package:eatery/core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_colors.dart';
 
 class LeadingImageWidget extends StatelessWidget {
   const LeadingImageWidget({super.key, required this.image, this.size = 48, this.elevation = 0, this.borderRadius, this.backgroundCo0lor, this.border});
