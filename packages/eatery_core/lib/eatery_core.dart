@@ -4,7 +4,6 @@ library eatery_core;
 export 'data/models/eatery_db.dart';
 
 /// Database
-export 'data/database/eatery_db_shim.dart';
 export 'data/database/eatery_database.dart';
 export 'data/database/native/eatery_store.dart';
 export 'data/database/native/eatery_store_interface.dart';

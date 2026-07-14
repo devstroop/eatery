@@ -301,13 +301,9 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
                 return;
               }
 
-              /*EateryDB.instance.flush().then((value) {
-                showMessageDialog(
-                    context, 'Company deleted successfully', MessageType.success).then((value) => Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(builder: (context) => const CreateCompanyPage()),
-                        (route) => false));
-              });*/
+              if (this.context.mounted) {
+                Navigator.pop(this.context);
+              }
             },
             child: const Text('Delete'),
           ),
