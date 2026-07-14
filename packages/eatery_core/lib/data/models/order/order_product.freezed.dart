@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$OrderProduct {
 
- int? get id; int? get orderId; int? get productId; String get productName; int get quantity; double get price; double get subTotal; double? get discountRate; double? get discountAmount; double? get taxRate; double? get taxAmount; double get total; int? get stationId; String? get stationName;
+ int? get id; int? get orderId; int? get productId; String get productName; int get quantity; double get price; double get subTotal; double? get discountRate; double? get discountAmount; double? get taxRate; double? get taxAmount; double get total; int? get stationId; String? get stationName; String? get note; int get status;
 /// Create a copy of OrderProduct
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $OrderProductCopyWith<OrderProduct> get copyWith => _$OrderProductCopyWithImpl<O
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderProduct&&(identical(other.id, id) || other.id == id)&&(identical(other.orderId, orderId) || other.orderId == orderId)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.productName, productName) || other.productName == productName)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.price, price) || other.price == price)&&(identical(other.subTotal, subTotal) || other.subTotal == subTotal)&&(identical(other.discountRate, discountRate) || other.discountRate == discountRate)&&(identical(other.discountAmount, discountAmount) || other.discountAmount == discountAmount)&&(identical(other.taxRate, taxRate) || other.taxRate == taxRate)&&(identical(other.taxAmount, taxAmount) || other.taxAmount == taxAmount)&&(identical(other.total, total) || other.total == total)&&(identical(other.stationId, stationId) || other.stationId == stationId)&&(identical(other.stationName, stationName) || other.stationName == stationName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is OrderProduct&&(identical(other.id, id) || other.id == id)&&(identical(other.orderId, orderId) || other.orderId == orderId)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.productName, productName) || other.productName == productName)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.price, price) || other.price == price)&&(identical(other.subTotal, subTotal) || other.subTotal == subTotal)&&(identical(other.discountRate, discountRate) || other.discountRate == discountRate)&&(identical(other.discountAmount, discountAmount) || other.discountAmount == discountAmount)&&(identical(other.taxRate, taxRate) || other.taxRate == taxRate)&&(identical(other.taxAmount, taxAmount) || other.taxAmount == taxAmount)&&(identical(other.total, total) || other.total == total)&&(identical(other.stationId, stationId) || other.stationId == stationId)&&(identical(other.stationName, stationName) || other.stationName == stationName)&&(identical(other.note, note) || other.note == note)&&(identical(other.status, status) || other.status == status));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,orderId,productId,productName,quantity,price,subTotal,discountRate,discountAmount,taxRate,taxAmount,total,stationId,stationName);
+int get hashCode => Object.hash(runtimeType,id,orderId,productId,productName,quantity,price,subTotal,discountRate,discountAmount,taxRate,taxAmount,total,stationId,stationName,note,status);
 
 @override
 String toString() {
-  return 'OrderProduct(id: $id, orderId: $orderId, productId: $productId, productName: $productName, quantity: $quantity, price: $price, subTotal: $subTotal, discountRate: $discountRate, discountAmount: $discountAmount, taxRate: $taxRate, taxAmount: $taxAmount, total: $total, stationId: $stationId, stationName: $stationName)';
+  return 'OrderProduct(id: $id, orderId: $orderId, productId: $productId, productName: $productName, quantity: $quantity, price: $price, subTotal: $subTotal, discountRate: $discountRate, discountAmount: $discountAmount, taxRate: $taxRate, taxAmount: $taxAmount, total: $total, stationId: $stationId, stationName: $stationName, note: $note, status: $status)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $OrderProductCopyWith<$Res>  {
   factory $OrderProductCopyWith(OrderProduct value, $Res Function(OrderProduct) _then) = _$OrderProductCopyWithImpl;
 @useResult
 $Res call({
- int? id, int? orderId, int? productId, String productName, int quantity, double price, double subTotal, double? discountRate, double? discountAmount, double? taxRate, double? taxAmount, double total, int? stationId, String? stationName
+ int? id, int? orderId, int? productId, String productName, int quantity, double price, double subTotal, double? discountRate, double? discountAmount, double? taxRate, double? taxAmount, double total, int? stationId, String? stationName, String? note, int status
 });
 
 
@@ -65,7 +65,7 @@ class _$OrderProductCopyWithImpl<$Res>
 
 /// Create a copy of OrderProduct
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? orderId = freezed,Object? productId = freezed,Object? productName = null,Object? quantity = null,Object? price = null,Object? subTotal = null,Object? discountRate = freezed,Object? discountAmount = freezed,Object? taxRate = freezed,Object? taxAmount = freezed,Object? total = null,Object? stationId = freezed,Object? stationName = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? orderId = freezed,Object? productId = freezed,Object? productName = null,Object? quantity = null,Object? price = null,Object? subTotal = null,Object? discountRate = freezed,Object? discountAmount = freezed,Object? taxRate = freezed,Object? taxAmount = freezed,Object? total = null,Object? stationId = freezed,Object? stationName = freezed,Object? note = freezed,Object? status = null,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,orderId: freezed == orderId ? _self.orderId : orderId // ignore: cast_nullable_to_non_nullable
@@ -81,7 +81,9 @@ as double?,taxAmount: freezed == taxAmount ? _self.taxAmount : taxAmount // igno
 as double?,total: null == total ? _self.total : total // ignore: cast_nullable_to_non_nullable
 as double,stationId: freezed == stationId ? _self.stationId : stationId // ignore: cast_nullable_to_non_nullable
 as int?,stationName: freezed == stationName ? _self.stationName : stationName // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,note: freezed == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
+as String?,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 
@@ -166,10 +168,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  int? orderId,  int? productId,  String productName,  int quantity,  double price,  double subTotal,  double? discountRate,  double? discountAmount,  double? taxRate,  double? taxAmount,  double total,  int? stationId,  String? stationName)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  int? orderId,  int? productId,  String productName,  int quantity,  double price,  double subTotal,  double? discountRate,  double? discountAmount,  double? taxRate,  double? taxAmount,  double total,  int? stationId,  String? stationName,  String? note,  int status)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _OrderProduct() when $default != null:
-return $default(_that.id,_that.orderId,_that.productId,_that.productName,_that.quantity,_that.price,_that.subTotal,_that.discountRate,_that.discountAmount,_that.taxRate,_that.taxAmount,_that.total,_that.stationId,_that.stationName);case _:
+return $default(_that.id,_that.orderId,_that.productId,_that.productName,_that.quantity,_that.price,_that.subTotal,_that.discountRate,_that.discountAmount,_that.taxRate,_that.taxAmount,_that.total,_that.stationId,_that.stationName,_that.note,_that.status);case _:
   return orElse();
 
 }
@@ -187,10 +189,10 @@ return $default(_that.id,_that.orderId,_that.productId,_that.productName,_that.q
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  int? orderId,  int? productId,  String productName,  int quantity,  double price,  double subTotal,  double? discountRate,  double? discountAmount,  double? taxRate,  double? taxAmount,  double total,  int? stationId,  String? stationName)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  int? orderId,  int? productId,  String productName,  int quantity,  double price,  double subTotal,  double? discountRate,  double? discountAmount,  double? taxRate,  double? taxAmount,  double total,  int? stationId,  String? stationName,  String? note,  int status)  $default,) {final _that = this;
 switch (_that) {
 case _OrderProduct():
-return $default(_that.id,_that.orderId,_that.productId,_that.productName,_that.quantity,_that.price,_that.subTotal,_that.discountRate,_that.discountAmount,_that.taxRate,_that.taxAmount,_that.total,_that.stationId,_that.stationName);case _:
+return $default(_that.id,_that.orderId,_that.productId,_that.productName,_that.quantity,_that.price,_that.subTotal,_that.discountRate,_that.discountAmount,_that.taxRate,_that.taxAmount,_that.total,_that.stationId,_that.stationName,_that.note,_that.status);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -207,10 +209,10 @@ return $default(_that.id,_that.orderId,_that.productId,_that.productName,_that.q
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  int? orderId,  int? productId,  String productName,  int quantity,  double price,  double subTotal,  double? discountRate,  double? discountAmount,  double? taxRate,  double? taxAmount,  double total,  int? stationId,  String? stationName)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  int? orderId,  int? productId,  String productName,  int quantity,  double price,  double subTotal,  double? discountRate,  double? discountAmount,  double? taxRate,  double? taxAmount,  double total,  int? stationId,  String? stationName,  String? note,  int status)?  $default,) {final _that = this;
 switch (_that) {
 case _OrderProduct() when $default != null:
-return $default(_that.id,_that.orderId,_that.productId,_that.productName,_that.quantity,_that.price,_that.subTotal,_that.discountRate,_that.discountAmount,_that.taxRate,_that.taxAmount,_that.total,_that.stationId,_that.stationName);case _:
+return $default(_that.id,_that.orderId,_that.productId,_that.productName,_that.quantity,_that.price,_that.subTotal,_that.discountRate,_that.discountAmount,_that.taxRate,_that.taxAmount,_that.total,_that.stationId,_that.stationName,_that.note,_that.status);case _:
   return null;
 
 }
@@ -222,7 +224,7 @@ return $default(_that.id,_that.orderId,_that.productId,_that.productName,_that.q
 @JsonSerializable()
 
 class _OrderProduct implements OrderProduct {
-  const _OrderProduct({this.id, required this.orderId, required this.productId, required this.productName, required this.quantity, required this.price, required this.subTotal, this.discountRate, this.discountAmount, this.taxRate, this.taxAmount, required this.total, this.stationId, this.stationName});
+  const _OrderProduct({this.id, required this.orderId, required this.productId, required this.productName, required this.quantity, required this.price, required this.subTotal, this.discountRate, this.discountAmount, this.taxRate, this.taxAmount, required this.total, this.stationId, this.stationName, this.note, this.status = 0});
   factory _OrderProduct.fromJson(Map<String, dynamic> json) => _$OrderProductFromJson(json);
 
 @override final  int? id;
@@ -239,6 +241,8 @@ class _OrderProduct implements OrderProduct {
 @override final  double total;
 @override final  int? stationId;
 @override final  String? stationName;
+@override final  String? note;
+@override@JsonKey() final  int status;
 
 /// Create a copy of OrderProduct
 /// with the given fields replaced by the non-null parameter values.
@@ -253,16 +257,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderProduct&&(identical(other.id, id) || other.id == id)&&(identical(other.orderId, orderId) || other.orderId == orderId)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.productName, productName) || other.productName == productName)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.price, price) || other.price == price)&&(identical(other.subTotal, subTotal) || other.subTotal == subTotal)&&(identical(other.discountRate, discountRate) || other.discountRate == discountRate)&&(identical(other.discountAmount, discountAmount) || other.discountAmount == discountAmount)&&(identical(other.taxRate, taxRate) || other.taxRate == taxRate)&&(identical(other.taxAmount, taxAmount) || other.taxAmount == taxAmount)&&(identical(other.total, total) || other.total == total)&&(identical(other.stationId, stationId) || other.stationId == stationId)&&(identical(other.stationName, stationName) || other.stationName == stationName));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _OrderProduct&&(identical(other.id, id) || other.id == id)&&(identical(other.orderId, orderId) || other.orderId == orderId)&&(identical(other.productId, productId) || other.productId == productId)&&(identical(other.productName, productName) || other.productName == productName)&&(identical(other.quantity, quantity) || other.quantity == quantity)&&(identical(other.price, price) || other.price == price)&&(identical(other.subTotal, subTotal) || other.subTotal == subTotal)&&(identical(other.discountRate, discountRate) || other.discountRate == discountRate)&&(identical(other.discountAmount, discountAmount) || other.discountAmount == discountAmount)&&(identical(other.taxRate, taxRate) || other.taxRate == taxRate)&&(identical(other.taxAmount, taxAmount) || other.taxAmount == taxAmount)&&(identical(other.total, total) || other.total == total)&&(identical(other.stationId, stationId) || other.stationId == stationId)&&(identical(other.stationName, stationName) || other.stationName == stationName)&&(identical(other.note, note) || other.note == note)&&(identical(other.status, status) || other.status == status));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,orderId,productId,productName,quantity,price,subTotal,discountRate,discountAmount,taxRate,taxAmount,total,stationId,stationName);
+int get hashCode => Object.hash(runtimeType,id,orderId,productId,productName,quantity,price,subTotal,discountRate,discountAmount,taxRate,taxAmount,total,stationId,stationName,note,status);
 
 @override
 String toString() {
-  return 'OrderProduct(id: $id, orderId: $orderId, productId: $productId, productName: $productName, quantity: $quantity, price: $price, subTotal: $subTotal, discountRate: $discountRate, discountAmount: $discountAmount, taxRate: $taxRate, taxAmount: $taxAmount, total: $total, stationId: $stationId, stationName: $stationName)';
+  return 'OrderProduct(id: $id, orderId: $orderId, productId: $productId, productName: $productName, quantity: $quantity, price: $price, subTotal: $subTotal, discountRate: $discountRate, discountAmount: $discountAmount, taxRate: $taxRate, taxAmount: $taxAmount, total: $total, stationId: $stationId, stationName: $stationName, note: $note, status: $status)';
 }
 
 
@@ -273,7 +277,7 @@ abstract mixin class _$OrderProductCopyWith<$Res> implements $OrderProductCopyWi
   factory _$OrderProductCopyWith(_OrderProduct value, $Res Function(_OrderProduct) _then) = __$OrderProductCopyWithImpl;
 @override @useResult
 $Res call({
- int? id, int? orderId, int? productId, String productName, int quantity, double price, double subTotal, double? discountRate, double? discountAmount, double? taxRate, double? taxAmount, double total, int? stationId, String? stationName
+ int? id, int? orderId, int? productId, String productName, int quantity, double price, double subTotal, double? discountRate, double? discountAmount, double? taxRate, double? taxAmount, double total, int? stationId, String? stationName, String? note, int status
 });
 
 
@@ -290,7 +294,7 @@ class __$OrderProductCopyWithImpl<$Res>
 
 /// Create a copy of OrderProduct
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? orderId = freezed,Object? productId = freezed,Object? productName = null,Object? quantity = null,Object? price = null,Object? subTotal = null,Object? discountRate = freezed,Object? discountAmount = freezed,Object? taxRate = freezed,Object? taxAmount = freezed,Object? total = null,Object? stationId = freezed,Object? stationName = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? orderId = freezed,Object? productId = freezed,Object? productName = null,Object? quantity = null,Object? price = null,Object? subTotal = null,Object? discountRate = freezed,Object? discountAmount = freezed,Object? taxRate = freezed,Object? taxAmount = freezed,Object? total = null,Object? stationId = freezed,Object? stationName = freezed,Object? note = freezed,Object? status = null,}) {
   return _then(_OrderProduct(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,orderId: freezed == orderId ? _self.orderId : orderId // ignore: cast_nullable_to_non_nullable
@@ -306,7 +310,9 @@ as double?,taxAmount: freezed == taxAmount ? _self.taxAmount : taxAmount // igno
 as double?,total: null == total ? _self.total : total // ignore: cast_nullable_to_non_nullable
 as double,stationId: freezed == stationId ? _self.stationId : stationId // ignore: cast_nullable_to_non_nullable
 as int?,stationName: freezed == stationName ? _self.stationName : stationName // ignore: cast_nullable_to_non_nullable
-as String?,
+as String?,note: freezed == note ? _self.note : note // ignore: cast_nullable_to_non_nullable
+as String?,status: null == status ? _self.status : status // ignore: cast_nullable_to_non_nullable
+as int,
   ));
 }
 

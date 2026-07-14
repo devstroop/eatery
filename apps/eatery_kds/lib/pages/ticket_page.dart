@@ -3,9 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/eatery_core.dart';
 
+final _stationsProvider = FutureProvider<List<KdsStation>>((ref) {
+  final store = ref.read(eateryStoreProvider);
+  return SqlitePreferenceStore(store: store).getAllKdsStations();
+});
+
 final _activeOrdersProvider = FutureProvider.autoDispose<List<Order>>((ref) {
   final repo = ref.read(orderRepositoryProvider);
-  return repo.getAllOrders().where((o) => o.status == OrderStatus.pending || o.status == OrderStatus.preparing).toList();
+  return repo.getAllOrders()
+      .where((o) => o.status == OrderStatus.pending || o.status == OrderStatus.preparing)
+      .toList();
 });
 
 final _orderProductsProvider =
@@ -23,6 +30,7 @@ class TicketPage extends ConsumerStatefulWidget {
 
 class _TicketPageState extends ConsumerState<TicketPage> {
   Timer? _refreshTimer;
+  int? _selectedStationId;
 
   @override
   void initState() {
@@ -41,6 +49,7 @@ class _TicketPageState extends ConsumerState<TicketPage> {
   @override
   Widget build(BuildContext context) {
     final orders = ref.watch(_activeOrdersProvider);
+    final stations = ref.watch(_stationsProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -52,40 +61,82 @@ class _TicketPageState extends ConsumerState<TicketPage> {
           ),
         ],
       ),
-      body: orders.when(
-        data: (list) {
-          if (list.isEmpty) {
-            return const Center(
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(Icons.check_circle, size: 64, color: Colors.green),
-                  SizedBox(height: 16),
-                  Text('All caught up!',
-                      style: TextStyle(fontSize: 20, color: Colors.green)),
-                ],
-              ),
-            );
-          }
-          return LayoutBuilder(
-            builder: (context, constraints) {
-              final crossAxisCount = (constraints.maxWidth / 260).floor().clamp(2, 6);
-              return GridView.builder(
-                padding: const EdgeInsets.all(12),
-                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: crossAxisCount,
-                  mainAxisSpacing: 12,
-                  crossAxisSpacing: 12,
-                  childAspectRatio: 0.75,
-                ),
-                itemCount: list.length,
-                itemBuilder: (_, i) => _TicketCard(order: list[i]),
-              );
-            },
-          );
-        },
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Error: $e')),
+      body: Column(
+        children: [
+          stations.when(
+            data: (list) => list.isEmpty
+                ? const SizedBox.shrink()
+                : SizedBox(
+                    height: 48,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                      children: [
+                        ChoiceChip(
+                          label: const Text('All'),
+                          selected: _selectedStationId == null,
+                          onSelected: (_) => setState(() => _selectedStationId = null),
+                        ),
+                        const SizedBox(width: 8),
+                        ...list.map((s) => Padding(
+                          padding: const EdgeInsets.only(right: 8),
+                          child: ChoiceChip(
+                            label: Text(s.name),
+                            selected: _selectedStationId == s.id,
+                            onSelected: (_) => setState(() => _selectedStationId = s.id),
+                          ),
+                        )),
+                      ],
+                    ),
+                  ),
+            loading: () => const SizedBox(height: 48),
+            error: (_, _) => const SizedBox(height: 48),
+          ),
+          Expanded(
+            child: orders.when(
+              data: (list) {
+                var filtered = list;
+                if (_selectedStationId != null) {
+                  filtered = list.where((o) {
+                    final items = ref.read(orderRepositoryProvider).getOrderProducts(o.id ?? 0);
+                    return items.any((i) => i.stationId == _selectedStationId);
+                  }).toList();
+                }
+                if (filtered.isEmpty) {
+                  return const Center(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(Icons.check_circle, size: 64, color: Colors.green),
+                        SizedBox(height: 16),
+                        Text('All caught up!',
+                            style: TextStyle(fontSize: 20, color: Colors.green)),
+                      ],
+                    ),
+                  );
+                }
+                return LayoutBuilder(
+                  builder: (context, constraints) {
+                    final crossAxisCount = (constraints.maxWidth / 260).floor().clamp(2, 6);
+                    return GridView.builder(
+                      padding: const EdgeInsets.all(12),
+                      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: crossAxisCount,
+                        mainAxisSpacing: 12,
+                        crossAxisSpacing: 12,
+                        childAspectRatio: 0.75,
+                      ),
+                      itemCount: filtered.length,
+                      itemBuilder: (_, i) => _TicketCard(order: filtered[i]),
+                    );
+                  },
+                );
+              },
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, _) => Center(child: Text('Error: $e')),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -111,6 +162,7 @@ class _TicketCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final items = ref.watch(_orderProductsProvider(order.id ?? 0));
+    final doneCount = items.whenOrNull(data: (list) => list.where((i) => i.status == 2 || i.status == 3).length) ?? 0;
 
     return Material(
       color: Colors.white,
@@ -120,22 +172,15 @@ class _TicketCard extends ConsumerWidget {
         children: [
           if (_isNew)
             Positioned(
-              top: -4,
-              right: -4,
+              top: -4, right: -4,
               child: Container(
                 padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                 decoration: BoxDecoration(
-                  color: Colors.red,
-                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.red, borderRadius: BorderRadius.circular(8),
                 ),
-                child: const Text(
-                  'NEW',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 10,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+                child: const Text('NEW', style: TextStyle(
+                  color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold,
+                )),
               ),
             ),
           InkWell(
@@ -149,55 +194,37 @@ class _TicketCard extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(_elapsed,
-                          style: TextStyle(
-                            color: _statusColor,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 13,
-                          )),
+                      Text(_elapsed, style: TextStyle(
+                        color: _statusColor, fontWeight: FontWeight.bold, fontSize: 13,
+                      )),
                       Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 8, vertical: 2),
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
-                          color: _statusColor,
-                          borderRadius: BorderRadius.circular(8),
+                          color: _statusColor, borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
                           order.status.name.toUpperCase(),
                           style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold),
+                            color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ],
                   ),
                   AppSpacing.gapSm,
-                  Text(
-                    '#${order.id ?? '-'}',
-                    style: AppTypography.titleLarge,
-                  ),
-                  if (order.customerPhone != null &&
-                      order.customerPhone!.isNotEmpty)
-                    Text(
-                      order.customerPhone!,
-                      style: AppTypography.bodySmall,
-                    ),
+                  Text('#${order.id ?? '-'}', style: AppTypography.titleLarge),
+                  if (order.customerPhone?.isNotEmpty == true)
+                    Text(order.customerPhone!, style: AppTypography.bodySmall),
                   AppSpacing.gapXs,
-                  Text(
-                    (order.type.name ?? '').toUpperCase(),
-                    style: AppTypography.bodySmall,
-                  ),
+                  Text((order.type.name ?? '').toUpperCase(), style: AppTypography.bodySmall),
                   const Spacer(),
                   items.when(
                     data: (list) => Text(
-                      '${list.length} items',
+                      '${list.length} items ($doneCount done)',
                       style: AppTypography.bodyMedium,
                     ),
-                    loading: () =>
-                        const Text('...', style: AppTypography.bodyMedium),
-                    error: (_, _) =>
-                        const Text('?', style: AppTypography.bodyMedium),
+                    loading: () => const Text('...'),
+                    error: (_, _) => const Text('?'),
                   ),
                 ],
               ),
@@ -227,6 +254,20 @@ class _TicketDetail extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final items = ref.watch(_orderProductsProvider(order.id ?? 0));
+    final repo = ref.read(orderRepositoryProvider);
+
+    Future<void> _transitionStatus(OrderStatus next) async {
+      final now = DateTime.now();
+      await repo.saveOrder(order.copyWith(status: next, updatedAt: now));
+      await repo.recordStatusTransition(OrderStatusHistory(
+        orderId: order.id!,
+        fromStatus: order.status.id,
+        toStatus: next.id,
+        changedAt: now,
+      ));
+      ref.invalidate(_activeOrdersProvider);
+      if (context.mounted) Navigator.pop(context);
+    }
 
     return DraggableScrollableSheet(
       initialChildSize: 0.6,
@@ -240,11 +281,9 @@ class _TicketDetail extends ConsumerWidget {
           children: [
             Center(
               child: Container(
-                width: 40,
-                height: 4,
+                width: 40, height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
-                  borderRadius: BorderRadius.circular(2),
+                  color: Colors.grey[300], borderRadius: BorderRadius.circular(2),
                 ),
               ),
             ),
@@ -252,19 +291,24 @@ class _TicketDetail extends ConsumerWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text('Order #${order.id ?? '-'}',
-                    style: AppTypography.headlineSmall),
-                Text(
-                  order.type.name ?? '',
-                  style: AppTypography.bodyMedium,
+                Text('Order #${order.id ?? '-'}', style: AppTypography.headlineSmall),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: order.status.color.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: Text(
+                    order.status.name,
+                    style: TextStyle(
+                      color: order.status.color, fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
               ],
             ),
             AppSpacing.gapSm,
-            Text(
-              'Placed ${order.createdAt.toString()}',
-              style: AppTypography.bodySmall,
-            ),
+            Text('Placed ${order.createdAt.toString()}', style: AppTypography.bodySmall),
             AppSpacing.gapMd,
             Expanded(
               child: items.when(
@@ -273,24 +317,36 @@ class _TicketDetail extends ConsumerWidget {
                   itemCount: list.length,
                   itemBuilder: (_, i) {
                     final item = list[i];
+                    final isDone = item.status == 2 || item.status == 3;
                     return Card(
+                      color: isDone ? Colors.green.withValues(alpha: 0.05) : null,
                       child: ListTile(
                         leading: CircleAvatar(
-                          backgroundColor: AppColors.primary,
+                          backgroundColor: isDone ? Colors.green : AppColors.primary,
                           child: Text('${item.quantity}',
                               style: const TextStyle(color: Colors.white)),
                         ),
                         title: Text(item.productName),
-                        subtitle: item.stationName != null
-                            ? Text('Station: ${item.stationName}')
-                            : null,
-                        trailing: Text(
-                          '\$${item.total.toStringAsFixed(2)}',
-                          style: TextStyle(
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.bold,
-                          ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            if (item.stationName != null)
+                              Text('Station: ${item.stationName}'),
+                            if (item.note != null && item.note!.isNotEmpty)
+                              Text('Note: ${item.note}',
+                                  style: TextStyle(color: Colors.orange[800])),
+                          ],
                         ),
+                        trailing: isDone
+                            ? const Icon(Icons.check_circle, color: Colors.green)
+                            : TextButton(
+                                onPressed: () async {
+                                  final updated = item.copyWith(status: 2);
+                                  await repo.saveOrderProduct(updated);
+                                  ref.invalidate(_orderProductsProvider(order.id ?? 0));
+                                },
+                                child: const Text('Done'),
+                              ),
                       ),
                     );
                   },
@@ -300,30 +356,23 @@ class _TicketDetail extends ConsumerWidget {
               ),
             ),
             AppSpacing.gapMd,
-            SizedBox(
-              width: double.infinity,
-              child: AppButton.primary(
-                label: 'Mark Complete',
-                onPressed: () async {
-                  final repo = ref.read(orderRepositoryProvider);
-                  final updated = order.copyWith(
-                    status: OrderStatus.completed,
-                    updatedAt: DateTime.now(),
-                  );
-                  await repo.saveOrder(updated);
-                  final coordinator = ref.read(syncCoordinatorProvider);
-                  if (coordinator != null) {
-                    MutationTracker.trackSave(
-                      coordinator: coordinator,
-                      entityType: 'order',
-                      entity: updated,
-                    );
-                  }
-                  if (!context.mounted) return;
-                  Navigator.pop(context);
-                  ref.invalidate(_activeOrdersProvider);
-                },
-              ),
+            Row(
+              children: [
+                if (order.status.canTransitionTo(OrderStatus.preparing))
+                  Expanded(
+                    child: AppButton.primary(
+                      label: 'Acknowledge',
+                      onPressed: () => _transitionStatus(OrderStatus.preparing),
+                    ),
+                  ),
+                if (order.status.canTransitionTo(OrderStatus.ready))
+                  Expanded(
+                    child: AppButton.primary(
+                      label: 'Mark Ready',
+                      onPressed: () => _transitionStatus(OrderStatus.ready),
+                    ),
+                  ),
+              ],
             ),
           ],
         ),
