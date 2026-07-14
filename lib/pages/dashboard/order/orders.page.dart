@@ -21,14 +21,43 @@ class OrdersPage extends ConsumerStatefulWidget {
 
 class _OrdersPageState extends ConsumerState<OrdersPage> {
   final GlobalKey genKey = GlobalKey();
-  late List<Map<String, dynamic>> orders = [];
+  final ScrollController _scrollCtrl = ScrollController();
+  final List<Order> _orders = [];
+  static const int _pageSize = 50;
+  int _page = 0;
+  bool _loading = false;
+  bool _hasMore = true;
   DateTime? filterFrom;
   DateTime? filterTill;
 
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, () {});
+    _loadNextPage();
+    _scrollCtrl.addListener(() {
+      if (_scrollCtrl.position.pixels >= _scrollCtrl.position.maxScrollExtent - 200) {
+        _loadNextPage();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollCtrl.dispose();
+    super.dispose();
+  }
+
+  Future<void> _loadNextPage() async {
+    if (_loading || !_hasMore) return;
+    setState(() => _loading = true);
+    final repo = ref.read(orderRepositoryProvider);
+    final newOrders = repo.getOrdersPage(_pageSize, _page * _pageSize);
+    setState(() {
+      _orders.addAll(newOrders);
+      _page++;
+      _hasMore = newOrders.length >= _pageSize;
+      _loading = false;
+    });
   }
 
   Future<Uint8List> _capturePng() async {
@@ -51,7 +80,7 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
 
   @override
   Widget build(BuildContext context) {
-    List<Order> orders = ref.read(orderRepositoryProvider).getAllOrders();
+    final orders = _orders;
     final currencySymbol =
         ref.read(companyProvider.notifier).currency?.symbol ?? '';
     return AppPageShell(
@@ -77,12 +106,23 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
       ],
       child: orders.isNotEmpty
           ? ListView(
+              controller: _scrollCtrl,
               padding: const EdgeInsets.symmetric(vertical: 8),
               children: [
                 ...orders.map(
                   (order) =>
                       _OrderCard(order: order, currencySymbol: currencySymbol),
                 ),
+                if (_loading)
+                  const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Center(child: CircularProgressIndicator()),
+                  ),
+                if (!_hasMore && orders.isNotEmpty)
+                  const Padding(
+                    padding: EdgeInsets.all(16),
+                    child: Center(child: Text('No more orders')),
+                  ),
               ],
             )
           : Center(

@@ -1,6 +1,8 @@
 import 'package:eatery_core/data/models/eatery_db.dart';
 abstract class OrderRepository {
   List<Order> getAllOrders();
+  List<Order> getOrdersPage(int limit, int offset);
+  int getOrderCount();
   Order? getOrderById(int id);
   List<OrderProduct> getOrderProducts(int orderId);
   Future<int> saveOrder(Order order);

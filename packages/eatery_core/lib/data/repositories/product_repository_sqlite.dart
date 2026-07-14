@@ -29,9 +29,20 @@ class SqliteProductRepository implements ProductRepository {
   // ---------------------------------------------------------------------------
 
   @override
+    @override
   List<Product> getAllProducts() =>
       _store.query('SELECT * FROM product').map(_toProduct).toList();
 
+  @override
+  List<Product> getProductsPage(int limit, int offset) =>
+      _store.query('SELECT * FROM product ORDER BY name LIMIT ? OFFSET ?', [limit, offset])
+          .map(_toProduct).toList();
+
+  @override
+  int getProductCount() =>
+      (_store.queryScalar('SELECT COUNT(*) FROM product') as int?) ?? 0;
+
+  @override
   @override
   List<Product> getProductsByType(ProductType type) => _store
       .query('SELECT * FROM product WHERE type = ?', [type.index])
