@@ -30,3 +30,21 @@ target_include_directories(${BINARY_NAME} PRIVATE "${CMAKE_SOURCE_DIR}")
 
 # Run the Flutter tool portions of the build. This must not be removed.
 add_dependencies(${BINARY_NAME} flutter_assemble)
+
+# === libeaterystore (Zig + embedded SQLite) ===
+# The Dart FFI loader opens "eaterystore.dll" from the executable directory, so
+# copy it next to the runner (for dev runs from Visual Studio / `flutter run`
+# and CI builds). Build it first with:
+#   cd ..\..\libeaterystore && zig build shared-lib -Dtarget=x86_64-windows-gnu
+set(EATERYSTORE_DLL
+  "${CMAKE_CURRENT_SOURCE_DIR}/../../libeaterystore/zig-out/bin/eaterystore.dll")
+if(EXISTS "${EATERYSTORE_DLL}")
+  add_custom_command(TARGET ${BINARY_NAME} POST_BUILD
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+      "${EATERYSTORE_DLL}" "$<TARGET_FILE_DIR:${BINARY_NAME}>"
+    VERBATIM)
+else()
+  message(WARNING
+    "eaterystore.dll not found at ${EATERYSTORE_DLL}. Build it with: "
+    "(cd ../../libeaterystore && zig build shared-lib -Dtarget=x86_64-windows-gnu)")
+endif()
