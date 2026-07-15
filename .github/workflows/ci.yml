@@ -82,6 +82,16 @@ jobs:
           flutter-version: '3.41.x'
           channel: 'stable'
 
+      - name: Install Linux dependencies
+        if: ${{ matrix.target == 'linux' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libgtk-3-dev \
+            liblzma-dev \
+            libsecret-1-dev \
+            ninja-build
+
       - name: Get dependencies
         run: flutter pub get
 
