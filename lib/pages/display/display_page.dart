@@ -24,6 +24,8 @@ final _orderProductsProvider = FutureProvider.family<List<OrderProduct>, int>((
   return repo.getOrderProducts(orderId);
 });
 
+enum _SectionMode { none, station }
+
 class DisplayPage extends ConsumerStatefulWidget {
   const DisplayPage({super.key});
 
@@ -34,8 +36,12 @@ class DisplayPage extends ConsumerStatefulWidget {
 class _DisplayPageState extends ConsumerState<DisplayPage>
     with SingleTickerProviderStateMixin {
   Timer? _refreshTimer;
+  Timer? _scrollTimer;
   late AnimationController _pulseController;
   late Animation<double> _pulseAnimation;
+  final ScrollController _scrollController = ScrollController();
+  _SectionMode _sectionMode = _SectionMode.none;
+  int _scrollPage = 0;
 
   @override
   void initState() {
@@ -56,11 +62,43 @@ class _DisplayPageState extends ConsumerState<DisplayPage>
     _refreshTimer = Timer.periodic(const Duration(seconds: 15), (_) {
       ref.invalidate(_liveOrdersProvider);
     });
+    _startAutoScroll();
+  }
+
+  void _startAutoScroll() {
+    _scrollTimer?.cancel();
+    _scrollTimer = Timer.periodic(const Duration(seconds: 8), (_) {
+      _scrollToNextPage();
+    });
+  }
+
+  void _scrollToNextPage() {
+    if (!_scrollController.hasClients) return;
+    final maxScroll = _scrollController.position.maxScrollExtent;
+    if (maxScroll <= 0) return;
+    final target = (_scrollPage + 1) * _scrollController.position.viewportDimension;
+    if (target >= maxScroll) {
+      _scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+      _scrollPage = 0;
+    } else {
+      _scrollController.animateTo(
+        target,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+      _scrollPage++;
+    }
   }
 
   @override
   void dispose() {
     _refreshTimer?.cancel();
+    _scrollTimer?.cancel();
+    _scrollController.dispose();
     _pulseController.dispose();
     super.dispose();
   }
@@ -83,19 +121,32 @@ class _DisplayPageState extends ConsumerState<DisplayPage>
         actions: [
           const SyncStatusChip(),
           IconButton(
+            icon: Icon(
+              _sectionMode == _SectionMode.none
+                  ? Icons.view_agenda
+                  : Icons.dns,
+            ),
+            tooltip: _sectionMode == _SectionMode.none
+                ? 'Group by station'
+                : 'No grouping',
+            onPressed: () {
+              setState(() {
+                _sectionMode = _sectionMode == _SectionMode.none
+                    ? _SectionMode.station
+                    : _SectionMode.none;
+              });
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () => SyncHostSettingsSheet.show(context),
           ),
         ],
       ),
-      body: Stack(
-        children: [
-          orders.when(
-            data: (list) => _buildDisplay(list, crossAxisCount),
-            loading: () => const Center(child: CircularProgressIndicator()),
-            error: (e, _) => Center(child: Text('Error: $e')),
-          ),
-        ],
+      body: orders.when(
+        data: (list) => _buildDisplay(list, crossAxisCount),
+        loading: () => const Center(child: CircularProgressIndicator()),
+        error: (e, _) => Center(child: Text('Error: $e')),
       ),
     );
   }
@@ -119,7 +170,12 @@ class _DisplayPageState extends ConsumerState<DisplayPage>
       );
     }
 
+    if (_sectionMode == _SectionMode.station) {
+      return _buildStationSections(orders, crossAxisCount);
+    }
+
     return GridView.builder(
+      controller: _scrollController,
       padding: const EdgeInsets.all(24),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: crossAxisCount,
@@ -130,6 +186,64 @@ class _DisplayPageState extends ConsumerState<DisplayPage>
       itemCount: orders.length,
       itemBuilder: (context, index) =>
           _OrderStatusCard(order: orders[index], pulseAnimation: _pulseAnimation),
+    );
+  }
+
+  Widget _buildStationSections(List<Order> orders, int crossAxisCount) {
+    final stationMap = <String, List<Order>>{};
+    for (final order in orders) {
+      final products = ref.watch(_orderProductsProvider(order.id!));
+      final stationName = products.when(
+        data: (items) {
+          final names = items
+              .where((p) => p.stationName != null && p.stationName!.isNotEmpty)
+              .map((p) => p.stationName!)
+              .toSet()
+              .toList();
+          return names.isNotEmpty ? names.join(', ') : 'General';
+        },
+        loading: () => 'General',
+        error: (_, __) => 'General',
+      );
+      stationMap.putIfAbsent(stationName, () => []);
+      stationMap[stationName]!.add(order);
+    }
+
+    return ListView(
+      controller: _scrollController,
+      padding: const EdgeInsets.all(24),
+      children: stationMap.entries.map((entry) {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12, top: 8),
+              child: Text(
+                entry.key,
+                style: AppTypography.titleMedium.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            GridView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: crossAxisCount,
+                mainAxisSpacing: 16,
+                crossAxisSpacing: 16,
+                childAspectRatio: 1.6,
+              ),
+              itemCount: entry.value.length,
+              itemBuilder: (context, index) => _OrderStatusCard(
+                order: entry.value[index],
+                pulseAnimation: _pulseAnimation,
+              ),
+            ),
+            const SizedBox(height: 24),
+          ],
+        );
+      }).toList(),
     );
   }
 }
