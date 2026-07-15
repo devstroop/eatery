@@ -62,18 +62,23 @@ jobs:
           - target: android
             os: ubuntu-latest
             build-cmd: flutter build apk --debug
+            build-native: true
           - target: linux
             os: ubuntu-latest
             build-cmd: flutter build linux --debug
-          - target: ios
-            os: macos-15
-            build-cmd: flutter build ios --no-codesign
+            build-native: true
           - target: macos
             os: macos-15
             build-cmd: flutter build macos --debug
+            build-native: true
           - target: windows
             os: windows-latest
             build-cmd: flutter build windows --debug
+            build-native: true
+          - target: ios
+            os: macos-latest
+            build-cmd: flutter build ios --no-codesign
+            build-native: false
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -95,11 +100,14 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
-      - uses: ./.github/actions/setup-zig
+      - name: Setup Zig
+        if: ${{ matrix.build-native }}
+        uses: ./.github/actions/setup-zig
         with:
           version: ${{ env.ZIG_VERSION }}
 
       - name: Build native library
+        if: ${{ matrix.build-native }}
         shell: bash
         run: cd libeaterystore && zig build shared-lib && cd ..
 
