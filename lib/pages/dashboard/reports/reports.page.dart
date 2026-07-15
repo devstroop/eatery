@@ -23,6 +23,7 @@ class _ReportsPageState extends ConsumerState<ReportsPage> {
   DateTime _end = DateTime.now();
   ComplianceReport? _report;
   bool _loading = false;
+  bool _generating = false;
 
   Future<void> _pickDateRange() async {
     final picked = await showDateRangePicker(
@@ -42,27 +43,38 @@ class _ReportsPageState extends ConsumerState<ReportsPage> {
   void _generateXReport() => _generateReport('x');
   void _generateZReport() => _generateReport('z');
 
-  void _generateReport(String type) {
-    setState(() => _loading = true);
+  Future<void> _generateReport(String type) async {
+    if (_generating) return;
+    setState(() {
+      _generating = true;
+      _loading = true;
+    });
     try {
-      final store = ref.read(eateryStoreProvider);
+      final isolate = await ref.read(eateryStoreIsolateProvider.future);
+      if (isolate == null) {
+        throw Exception('Store isolate not available');
+      }
       final staff = ref.read(authSessionProvider);
-      final service = ReportService(store);
-      final report = service.generateReport(
+      final service = ReportService(isolate);
+      final report = await service.generateReport(
         reportType: type == 'z' ? 'daily' : 'midday',
         periodStart: _start,
         periodEnd: _end,
         generatedBy: staff?.name ?? 'Unknown',
       );
+      if (!mounted) return;
       setState(() {
         _report = report;
         _loading = false;
       });
     } catch (e) {
+      if (!mounted) return;
       setState(() => _loading = false);
       ScaffoldMessenger.of(
         this.context,
       ).showSnackBar(SnackBar(content: Text('Report failed: $e')));
+    } finally {
+      if (mounted) setState(() => _generating = false);
     }
   }
 
