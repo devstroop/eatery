@@ -32,7 +32,6 @@ class DisplayPage extends ConsumerStatefulWidget {
 
 class _DisplayPageState extends ConsumerState<DisplayPage> {
   Timer? _refreshTimer;
-  int _prevCount = 0;
 
   @override
   void initState() {
@@ -51,8 +50,16 @@ class _DisplayPageState extends ConsumerState<DisplayPage> {
   @override
   Widget build(BuildContext context) {
     final orders = ref.watch(_liveOrdersProvider);
+    final size = MediaQuery.of(context).size;
+    // Determine column count based on screen width (kiosk-friendly).
+    final crossAxisCount = size.width >= 1200
+        ? 4
+        : size.width >= 800
+        ? 3
+        : 2;
 
     return Scaffold(
+      backgroundColor: AppColors.background,
       appBar: AppBar(
         title: const Text('Order Status'),
         automaticallyImplyLeading: false,
@@ -65,14 +72,14 @@ class _DisplayPageState extends ConsumerState<DisplayPage> {
         ],
       ),
       body: orders.when(
-        data: (list) => _buildDisplay(list),
+        data: (list) => _buildDisplay(list, crossAxisCount),
         loading: () => const Center(child: CircularProgressIndicator()),
         error: (e, _) => Center(child: Text('Error: $e')),
       ),
     );
   }
 
-  Widget _buildDisplay(List<Order> orders) {
+  Widget _buildDisplay(List<Order> orders, int crossAxisCount) {
     if (orders.isEmpty) {
       return Center(
         child: Column(
@@ -86,8 +93,14 @@ class _DisplayPageState extends ConsumerState<DisplayPage> {
       );
     }
 
-    return ListView.builder(
+    return GridView.builder(
       padding: const EdgeInsets.all(24),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: crossAxisCount,
+        mainAxisSpacing: 16,
+        crossAxisSpacing: 16,
+        childAspectRatio: 1.6,
+      ),
       itemCount: orders.length,
       itemBuilder: (context, index) => _OrderStatusCard(order: orders[index]),
     );
@@ -102,54 +115,91 @@ class _OrderStatusCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final products = ref.watch(_orderProductsProvider(order.id!));
+    final elapsed = DateTime.now().difference(order.createdAt);
 
     return Card(
-      margin: const EdgeInsets.only(bottom: 16),
+      elevation: 2,
       child: Padding(
         padding: const EdgeInsets.all(20),
-        child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Status indicator
-            Container(
-              width: 12,
-              height: 12,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: order.status == OrderStatus.preparing
-                    ? AppColors.warning
-                    : AppColors.info,
-              ),
-            ),
-            const SizedBox(width: 16),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Order #${order.id}', style: AppTypography.titleLarge),
-                  const SizedBox(height: 4),
-                  products.when(
-                    data: (items) => Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: items
-                          .map(
-                            (p) => Text(
-                              '${p.productName} x${p.quantity}',
-                              style: AppTypography.bodyLarge,
-                            ),
-                          )
-                          .toList(),
-                    ),
-                    loading: () => const SizedBox.shrink(),
-                    error: (_, __) => const SizedBox.shrink(),
+            // Header row: order ID + status + timer
+            Row(
+              children: [
+                Container(
+                  width: 14,
+                  height: 14,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: order.status == OrderStatus.preparing
+                        ? AppColors.warning
+                        : AppColors.info,
                   ),
-                ],
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Text(
+                    'Order #${order.id}',
+                    style: AppTypography.titleLarge.copyWith(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.grey100,
+                    borderRadius: BorderRadius.circular(4),
+                  ),
+                  child: Text(
+                    _formatDuration(elapsed),
+                    style: AppTypography.bodySmall.copyWith(
+                      color: AppColors.grey600,
+                      fontFamily: 'monospace',
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Expanded(
+              child: products.when(
+                data: (items) => Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: items
+                      .map(
+                        (p) => Padding(
+                          padding: const EdgeInsets.only(bottom: 4),
+                          child: Text(
+                            '${p.productName} x${p.quantity}',
+                            style: AppTypography.bodyLarge,
+                          ),
+                        ),
+                      )
+                      .toList(),
+                ),
+                loading: () => const SizedBox.shrink(),
+                error: (_, __) => const SizedBox.shrink(),
               ),
             ),
-            _StatusBadge(status: order.status),
+            Align(
+              alignment: Alignment.centerRight,
+              child: _StatusBadge(status: order.status),
+            ),
           ],
         ),
       ),
     );
+  }
+
+  String _formatDuration(Duration d) {
+    final min = d.inMinutes;
+    final sec = d.inSeconds % 60;
+    return '${min.toString().padLeft(2, '0')}:${sec.toString().padLeft(2, '0')}';
   }
 }
 
@@ -174,7 +224,11 @@ class _StatusBadge extends StatelessWidget {
       ),
       child: Text(
         label,
-        style: TextStyle(color: color, fontWeight: FontWeight.bold),
+        style: TextStyle(
+          color: color,
+          fontWeight: FontWeight.bold,
+          fontSize: 16,
+        ),
       ),
     );
   }
