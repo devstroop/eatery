@@ -138,7 +138,10 @@ CREATE TABLE IF NOT EXISTS dining_table (
   customerPhone TEXT,
   posX          REAL,
   posY          REAL,
-  shape         INTEGER DEFAULT 0
+  shape         INTEGER DEFAULT 0,
+  width         REAL,
+  height        REAL,
+  staffId       INTEGER
 );
 
 CREATE INDEX IF NOT EXISTS idx_dining_table_category ON dining_table(categoryId);
