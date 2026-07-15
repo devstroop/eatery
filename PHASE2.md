@@ -51,7 +51,7 @@ None. All 15 issues completed. 🎉
 | S2 | Waiter views past orders | Waiter → navigate to Orders | ✅ filtered by staff |
 | S3 | KDS status transition | KDS → tap Start/Done | ✅ persisted via repo |
 | S4 | KDS station filter | KDS → select station tab | ✅ FilterChip bar |
-| S5 | Display live update | Admin creates order ��� Display updates | ✅ reactive listener + 15s fallback |
+| S5 | Display live update | Admin creates order → Display updates | ✅ reactive listener + 15s fallback |
 | S6 | Display grid layout | Run on 1920×1080 | ✅ 4-column grid |
 | S7 | DB inspector | Admin → Settings → Developer → DB Inspector | ✅ row counts |
 | S8 | macOS build | `flutter build macos --debug` | ✅ |
