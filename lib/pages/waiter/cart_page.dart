@@ -104,10 +104,94 @@ class CartPage extends ConsumerWidget {
   Future<void> _submitOrder(BuildContext context, WidgetRef ref) async {
     final session = ref.read(cartProvider);
     if (session.cart.isEmpty) return;
-    // TODO: implement actual order submission once the waiter order flow is built
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(const SnackBar(content: Text('Order submitted! (stub)')));
-    ref.read(cartProvider.notifier).clearCart();
+
+    final store = ref.read(eateryStoreProvider);
+    final staff = ref.read(authSessionProvider);
+    final repo = ref.read(orderRepositoryProvider);
+    final tableRepo = ref.read(diningTableRepositoryProvider);
+
+    // Build order from cart
+    final now = DateTime.now();
+    final items = session.cart.values.toList();
+    final total = items.fold(0.0, (sum, e) => sum + e.lineTotal);
+    final totalQty = items.fold(0, (sum, e) => sum + e.quantity);
+
+    final order = Order(
+      customerPhone: session.activeCustomer?.phone,
+      createdAt: now,
+      updatedAt: now,
+      totalQuantity: totalQty,
+      subTotal: total,
+      discountTotal: 0,
+      taxTotal: 0,
+      finalTotal: total,
+      roundOff: 0,
+      grandTotal: total,
+      paidTotal: 0,
+      type: session.activeOrderType ?? OrderType.dine,
+      status: OrderStatus.pending,
+      staffId: staff?.id,
+    );
+
+    try {
+      final orderId = await repo.saveOrder(order);
+
+      // Save line items
+      for (final item in items) {
+        await repo.saveOrderProduct(
+          OrderProduct(
+            orderId: orderId,
+            productId: item.product.id,
+            productName: item.product.name,
+            quantity: item.quantity,
+            price: item.unitPrice,
+            subTotal: item.lineTotal,
+            total: item.lineTotal,
+            stationId: item.product.stationId,
+            stationName: item.product.stationName,
+          ),
+        );
+      }
+
+      // Mark table as occupied
+      if (session.activeDiningTable != null) {
+        await tableRepo.saveTable(
+          session.activeDiningTable!.copyWith(
+            status: DiningTableStatus.occupied,
+            orderId: orderId,
+          ),
+        );
+      }
+
+      // Record status transition
+      await repo.recordStatusTransition(
+        OrderStatusHistory(
+          orderId: orderId,
+          fromStatus: OrderStatus.pending.id,
+          toStatus: OrderStatus.pending.id,
+          changedByStaffId: staff?.id,
+          changedAt: now,
+        ),
+      );
+
+      if (!context.mounted) return;
+      ref.read(cartProvider.notifier).clearCart();
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Order submitted!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      GoRouter.of(context).goNamed('tables');
+    } catch (e) {
+      debugPrint('Order submission failed: $e');
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Failed to submit order: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    }
   }
 }

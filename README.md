@@ -72,19 +72,17 @@ See [docs/guides/getting-started.md](docs/guides/getting-started.md) for full se
 
 ```
 eatery/
-��── apps/                    # Companion apps (waiter, kds, display)
-├── packages/
-│   └── eatery_core/         # Shared core: models, DB, sync, widgets, providers
-├── lib/                     # Admin app entry & pages (migrating into apps/eatery_admin)
-├── libeaterystore/          # Native Zig/SQLite library
-├── docs/                    # Documentation
-│   ├── guides/              # Developer guides & architecture overview
-│   ├── product/             # Product requirements
-│   ├── architecture/        # Technical specs
-│   ├── development/         # Dev procedures
-│   ├── plan/                # Roadmaps, audits, plans
-│   ���── decisions/           # Architecture Decision Records
-└── specs/                   # (deprecated — content moved to docs/)
+|-- packages/
+|   +-- eatery_core/         # Shared core: models, DB, sync, widgets, providers
+|-- lib/                     # Unified app entry & pages (admin, waiter, kds, display)
+|-- libeaterystore/          # Native Zig/SQLite library
+|-- docs/                    # Documentation
+|   |-- guides/              # Developer guides & architecture overview
+|   |-- product/             # Product requirements
+|   |-- architecture/        # Technical specs
+|   |-- development/         # Dev procedures
+|   |-- plan/                # Roadmaps, audits, plans
+|   +-- decisions/           # Architecture Decision Records
 ```
 
 ---

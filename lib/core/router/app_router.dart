@@ -72,6 +72,7 @@ import 'package:eatery/pages/dashboard/data/import.page.dart';
 import 'package:eatery/pages/activation/upgrade.page.dart';
 import 'package:eatery/pages/authentication/reset-pin.dart';
 import 'package:eatery/pages/authentication/logout.page.dart';
+import 'package:eatery/pages/waiter/orders_page.dart' as waiter_orders;
 import 'package:eatery/pages/waiter/table_page.dart';
 import 'package:eatery/pages/waiter/menu_page.dart';
 import 'package:eatery/pages/waiter/cart_page.dart' as waiter_cart;
@@ -79,6 +80,7 @@ import 'package:eatery/pages/dashboard/pos/cart.page.dart' as admin_cart;
 import 'package:eatery/pages/kds/ticket_page.dart';
 import 'package:eatery/pages/display/display_page.dart';
 import 'package:eatery/pages/role_picker.page.dart';
+import 'package:eatery/dev/database_inspector.dart';
 import 'package:eatery_core/providers/database_provider.dart';
 import 'package:eatery_core/data/database/native/eatery_store.dart';
 import 'package:go_router/go_router.dart';
@@ -91,6 +93,7 @@ const _rolePermissions = <String, Set<String>>{
     'tables',
     'menu',
     'cart',
+    'waiterOrders',
     'orders',
     'viewOrder',
     'orderConfirmation',
@@ -179,6 +182,11 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
         name: 'tables',
         path: '/tables',
         builder: (context, state) => const TablePage(),
+      ),
+      GoRoute(
+        name: 'waiterOrders',
+        path: '/waiter-orders',
+        builder: (context, state) => const waiter_orders.WaiterOrdersPage(),
       ),
       GoRoute(
         name: 'menu',
@@ -566,7 +574,7 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
       GoRoute(
         name: 'databaseInspector',
         path: '/dev/db-inspector',
-        builder: (context, state) => const SizedBox.shrink(),
+        builder: (context, state) => const DatabaseInspectorPage(),
       ),
       GoRoute(
         name: 'upgrade',
