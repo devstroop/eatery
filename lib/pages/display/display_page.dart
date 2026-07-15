@@ -36,6 +36,13 @@ class _DisplayPageState extends ConsumerState<DisplayPage> {
   @override
   void initState() {
     super.initState();
+    // Reactive: invalidate on sync status changes.
+    ref.listenManual(syncStatusProvider, (_, status) {
+      if (status != null && status.pendingEntryCount >= 0) {
+        ref.invalidate(_liveOrdersProvider);
+      }
+    });
+    // Fallback: poll every 15s in case sync isn't active.
     _refreshTimer = Timer.periodic(const Duration(seconds: 15), (_) {
       ref.invalidate(_liveOrdersProvider);
     });
