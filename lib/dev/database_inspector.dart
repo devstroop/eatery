@@ -1,8 +1,11 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/eatery_core.dart';
+import 'package:share_plus/share_plus.dart';
+import 'package:path_provider/path_provider.dart';
+import 'dart:io';
 
-/// Debug widget showing SQLite table row counts with a "Clear All Data" button.
 class DatabaseInspectorPage extends ConsumerWidget {
   const DatabaseInspectorPage({super.key});
 
@@ -57,7 +60,7 @@ class DatabaseInspectorPage extends ConsumerWidget {
         final count = store.queryScalar('SELECT COUNT(*) FROM $table');
         rowCounts[table] = (count as int?) ?? 0;
       } catch (_) {
-        rowCounts[table] = -1; // table doesn't exist
+        rowCounts[table] = -1;
       }
     }
 
@@ -70,6 +73,11 @@ class DatabaseInspectorPage extends ConsumerWidget {
         title: const Text('Database Inspector'),
         actions: [
           IconButton(
+            icon: const Icon(Icons.file_download),
+            onPressed: () => _exportJson(context, store, tables),
+            tooltip: 'Export as JSON',
+          ),
+          IconButton(
             icon: const Icon(Icons.delete_forever, color: Colors.red),
             onPressed: () => _confirmClearAll(context, ref),
             tooltip: 'Clear All Data',
@@ -79,7 +87,6 @@ class DatabaseInspectorPage extends ConsumerWidget {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          // Summary card
           Card(
             color: AppColors.primary.withValues(alpha: 0.08),
             child: Padding(
@@ -111,7 +118,6 @@ class DatabaseInspectorPage extends ConsumerWidget {
             ),
           ),
           const SizedBox(height: 16),
-          // Table list
           for (final table in tables) ...[
             _TableRowTile(tableName: table, count: rowCounts[table] ?? 0),
             const Divider(height: 1),
@@ -119,6 +125,41 @@ class DatabaseInspectorPage extends ConsumerWidget {
         ],
       ),
     );
+  }
+
+  Future<void> _exportJson(
+    BuildContext context,
+    EateryStore store,
+    List<String> tables,
+  ) async {
+    try {
+      final data = <String, dynamic>{};
+      for (final table in tables) {
+        try {
+          final rows = store.query('SELECT * FROM $table');
+          data[table] = rows;
+        } catch (_) {
+          data[table] = [];
+        }
+      }
+      final json = const JsonEncoder.withIndent('  ').convert(data);
+      final dir = await getApplicationDocumentsDirectory();
+      final file = File(
+        '${dir.path}/eatery_export_${DateTime.now().millisecondsSinceEpoch}.json',
+      );
+      await file.writeAsString(json);
+
+      if (!context.mounted) return;
+      await Share.shareXFiles(
+        [XFile(file.path)],
+        subject: 'Eatery DB Export',
+      );
+    } catch (e) {
+      if (!context.mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Export failed: $e'), backgroundColor: Colors.red),
+      );
+    }
   }
 
   Future<void> _confirmClearAll(BuildContext context, WidgetRef ref) async {
@@ -151,7 +192,6 @@ class DatabaseInspectorPage extends ConsumerWidget {
   }
 
   void _clearAllData(EateryStore store, BuildContext context) {
-    // Order matters: child tables before parent tables to avoid FK violations.
     final tables = [
       'op_log',
       'order_product_modifier',
