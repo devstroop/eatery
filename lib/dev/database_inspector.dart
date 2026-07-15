@@ -88,9 +88,23 @@ class DatabaseInspectorPage extends ConsumerWidget {
                 children: [
                   const Icon(Icons.storage, color: AppColors.primary),
                   const SizedBox(width: 12),
-                  Text(
-                    'Total rows: $totalRows across ${tables.length} tables',
-                    style: AppTypography.titleMedium,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Total rows: $totalRows across ${tables.length} tables',
+                          style: AppTypography.titleMedium,
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          'Store: ${store.version}',
+                          style: AppTypography.bodySmall.copyWith(
+                            color: AppColors.grey500,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
