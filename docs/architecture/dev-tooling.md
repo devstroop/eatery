@@ -65,7 +65,7 @@ Called from the Settings > Developer menu. Populates all entity tables with sequ
 | `mutation_hook_test.dart` | — | Unit (hook pattern) |
 | `mutation_tracker_test.dart` | — | Unit (tracker helpers) |
 | `mdns_service_test.dart` | — | Unit (discovery) |
-| `eatery_core_test.dart` | �� | Placeholder |
+| `eatery_core_test.dart` | — | Placeholder |
 | `fake_eatery_store.dart` | — | Test helper |
 
 Root `test/` directory (legacy):
@@ -82,7 +82,7 @@ flutter test --coverage
 
 ### Coverage Target
 
-Target: >40% line coverage after full test suite is implemented. Current coverage is low ��� only extension methods and pure calculation functions are tested. Repository unit tests (using `FakeEateryStore` from `packages/eatery_core/test/fake_eatery_store.dart`) and widget smoke tests are planned.
+Target: >40% line coverage after full test suite is implemented. Current coverage is low  only extension methods and pure calculation functions are tested. Repository unit tests (using `FakeEateryStore` from `packages/eatery_core/test/fake_eatery_store.dart`) and widget smoke tests are planned.
 
 ## Debug Image Loading
 

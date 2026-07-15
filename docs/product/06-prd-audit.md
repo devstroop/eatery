@@ -137,7 +137,7 @@ The current 25 user stories (US01-US25) omit important scenarios. Below are addi
 | US38 | As a waiter, I want to see customer notes (allergies, preferences) when I select them. | P2 |
 | US39 | As a waiter, I want to clock in/out from the app. | P2 |
 
-### Chef (Hassan) �� Additions
+### Chef (Hassan)  Additions
 
 | ID | Story | Priority |
 |----|-------|---------|

@@ -150,7 +150,7 @@ AppSpacing.fieldPadding = EdgeInsets.symmetric(horizontal: 12, vertical: 4)
 
 ```dart
 AppShadows.sm  // (0, 1), blur 4, 8% black  — cards
-AppShadows.md  // (0, 2), blur 8, 13% black  �� raised cards, dialogs
+AppShadows.md  // (0, 2), blur 8, 13% black   raised cards, dialogs
 AppShadows.lg  // (0, 4), blur 16, 20% black — floating elements, modals
 AppShadows.none
 ```

@@ -18,9 +18,9 @@ CartPage / PosPage reads ref.watch(cartProvider)   ← Reactive rebuild
   │
   ▼
 OrderRepository.saveOrder(order)   ← Repository (SQLite)
-  ��
+  
   ├─ SQLite path: SqliteOrderRepository
-  │     ��─ _store.execute('INSERT INTO orders ...')
+  │     ─ _store.execute('INSERT INTO orders ...')
   │     ├─ _opLog.commit("order", "create", data, prevData)
   │     └─ Returns id
   │
@@ -104,12 +104,12 @@ for (final entry in batch) {
 ┌──────────────┐     ┌──────────────┐     ┌──────────────┐
 │  DB Model    │────▶│    DTO       │────▶│   JSON wire  │
 │ (toMap)      │     │ (toJson)     │     │ (WebSocket)  │
-└���─────────────┘     └──────────────┘     └──────────────┘
+└─────────────┘     └──────────────┘     └──────────────┘
         ▲                                        │
         │                                        ▼
-│  DB Model    │◀───│    DTO       │◀─���─│   JSON wire  │
+│  DB Model    │◀───│    DTO       │◀──│   JSON wire  │
 │ (fromMap)    │     │ (fromJson)   │     │ (WebSocket)  │
-└──────────────┘     └──────────────┘     └──────────────��
+└──────────────┘     └──────────────┘     └──────────────
 ```
 
 DTOs live in `packages/eatery_core/lib/data/dtos/`. They are:
