@@ -57,6 +57,7 @@ jobs:
   build:
     needs: [analyze, test]
     strategy:
+      fail-fast: false
       matrix:
         include:
           - target: android
