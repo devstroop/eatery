@@ -136,15 +136,17 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
     } catch (e) {
       debugPrint('POS init error: $e');
       if (mounted) {
-        ScaffoldMessenger.of(this.context).showSnackBar(
-          SnackBar(content: Text('Failed to initialize POS: $e')),
-        );
+        ScaffoldMessenger.of(
+          this.context,
+        ).showSnackBar(SnackBar(content: Text('Failed to initialize POS: $e')));
       }
     }
   }
 
   void _addWithModifiers(Product product) {
-    final modGroups = ref.read(modifierRepositoryProvider).getGroupsForProduct(product.id ?? 0);
+    final modGroups = ref
+        .read(modifierRepositoryProvider)
+        .getGroupsForProduct(product.id ?? 0);
     if (modGroups.isEmpty) {
       ref.read(cartProvider.notifier).addToCart(product);
     } else {
@@ -198,15 +200,13 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
             onPressed: () {
               showSearch(
                 context: context,
-                delegate: SearchProductDelegate(allProducts, (
-                  product,
-                ) {
+                delegate: SearchProductDelegate(allProducts, (product) {
                   context.pushNamed('productView', extra: product);
                 }),
               );
             },
           ),
-          
+
           IconButton(
             icon: const Icon(Icons.more_vert),
             onPressed: () {
@@ -592,7 +592,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
             if (session.activeCustomer != null)
               PosCartInformation(
                 onTap: () {
-                  GoRouter.of(context).pushNamed('cart');
+                  GoRouter.of(context).pushNamed('adminCart');
                 },
                 themeColor: pageColor,
                 cart: session.cartProducts,

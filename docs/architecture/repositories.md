@@ -129,7 +129,7 @@ class PrinterRepository {
 
 ## Dual Implementation Status
 
-All repositories use SQLite exclusively (all `kUseSqlite*` flags default to `true`). The Hive-backed implementations have been fully migrated.
+All repositories use SQLite exclusively. The Hive-backed implementations have been removed.
 
 ## OpLog Integration Pattern
 

@@ -1,30 +1,72 @@
 # Routing
 
-## GoRouter Setup
+## GoRouter Setup (Target: Single-App with RBAC)
 
-Defined in `lib/core/router/app_router.dart`:
+> **Status:** The current router in `lib/core/router/app_router.dart` is admin-only with simple auth redirect. The RBAC guard and merged routes are planned — see [ISSUES.md](../../ISSUES.md).
+
+A single unified `GoRouter` handles all four roles. The router is created by `createAppRouter()` in `lib/core/router/app_router.dart` and includes:
+
+- ~50 routes covering Admin, Waiter, KDS, and Display UIs
+- Role-based access control via `_rolePermissions` map
+- First-launch redirect to `RolePicker` when no `device_role` is set
+- Auth bypass for kiosk roles (`kds`, `display`)
+
+### RBAC Redirect Guard
 
 ```dart
-GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
-  // Determine initial route based on company existence and password
-  final router = GoRouter(
-    initialLocation: db.hasCompany
-        ? (password != null ? '/login' : '/dashboard')
-        : '/',
-    routes: [...],
-    redirect: (context, state) {
-      final authStaff = container.read(authSessionProvider);
-      final isPublic = _publicRoutes.contains(state.name) || location == '/';
-      if (authStaff == null && !isPublic) return '/login';
-      if (authStaff != null && isPublic && location == '/login') return '/dashboard';
-      return null;
-    },
-  );
-  return router;
-}
+const _rolePermissions = {
+  'admin':   {'*'},
+  'waiter':  {'tables', 'menu', 'cart', 'orders', 'viewOrder',
+              'orderConfirmation', 'orderPrint', 'customers', 'viewCustomer'},
+  'kds':     {'kds', 'viewOrder', 'orderConfirmation'},
+  'display': {'display', 'viewOrder'},
+};
+
+GoRouter(
+  routes: [...],
+  redirect: (context, state) {
+    final role = container.read(roleProvider);
+    final authStaff = container.read(authSessionProvider);
+    final routeName = state.name;
+
+    // 1. No role set → picker
+    if (role == null) return '/role-picker';
+
+    // 2. Kiosk roles (display/kds) — no auth, permission check only
+    if (role == 'kds' || role == 'display') {
+      if (!_rolePermissions[role]!.contains(routeName)) return '/$role';
+      return null; // allow
+    }
+
+    // 3. Staff roles — must be authenticated
+    if (authStaff == null) return '/login';
+
+    // 4. Admin wildcard — allow all
+    if (_rolePermissions[role]!.contains('*')) return null;
+
+    // 5. Check specific permissions
+    if (!_rolePermissions[role]!.contains(routeName)) {
+      // Show toast & redirect to role home
+      return _roleHome[role];
+    }
+    return null; // allow
+  },
+);
 ```
 
-## Route Table
+### Role Home Routes
+
+| Role | Home Route |
+|------|-----------|
+| `admin` | `/dashboard` (`/login` if unauthenticated) |
+| `waiter` | `/tables` |
+| `kds` | `/kds` |
+| `display` | `/display` |
+| `null` | `/role-picker` |
+
+### Current Route Table (Admin)
+
+The existing admin router has the following routes. In the unified router, routes from waiter/KDS/display sub-apps are absorbed (see [ISSUES.md](../../ISSUES.md) issues 07-09).
 
 | Name | Path | Page |
 |------|------|------|

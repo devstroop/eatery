@@ -174,7 +174,9 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
               ? LibraryImage(company.logo!).image
               : null,
           cartCount: cart.length,
-          onCartTap: () => GoRouter.of(context).pushNamed('cart').then((_) => setState(() {})),
+          onCartTap: () => GoRouter.of(
+            context,
+          ).pushNamed('adminCart').then((_) => setState(() {})),
           onLogout: () => _showLogoutDialog(context),
         ),
         destinations: [
@@ -309,10 +311,7 @@ class _DashboardGrid extends StatelessWidget {
   final List<_MenuItem> items;
   final void Function(String route) onItemTap;
 
-  const _DashboardGrid({
-    required this.items,
-    required this.onItemTap,
-  });
+  const _DashboardGrid({required this.items, required this.onItemTap});
 
   @override
   Widget build(BuildContext context) {

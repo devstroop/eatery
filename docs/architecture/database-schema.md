@@ -1,10 +1,10 @@
 # Database Schema
 
-Eatery uses a dual database strategy: Hive (legacy, being phased out) and SQLite (new, via Zig FFI `libeaterystore`).
+Eatery uses a single SQLite database via Zig FFI (`libeaterystore`).
 
-## Hive Legacy (24 boxes)
+## Legacy (Hive, Removed)
 
-The original persistence layer uses Hive with 24 type-annotated boxes. The `EateryDatabase` class (`packages/eatery_core/lib/data/database/eatery_database.dart`) provides typed getters for all boxes, but currently wraps the native SQLite store via EateryStore.
+The original persistence layer used Hive with 24 type-annotated boxes. The Hive backend has been fully replaced by SQLite. The `EateryDatabase` compatibility wrapper in `packages/eatery_core/lib/data/database/eatery_database.dart` now delegates to the native `EateryStore` exclusively.
 
 ### TypeIndex (immutable — renumbering breaks user data)
 
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS op_log (
 
 ## Migration Feature Flags
 
-Defined in `packages/eatery_core/lib/data/database/native/store_config.dart`. Each flag routes a repository to either SQLite or Hive:
+Defined in `packages/eatery_core/lib/data/database/native/store_config.dart`. All flags are `true` — SQLite is used for all entities:
 
 | Flag | Default | Scope |
 |------|---------|-------|
@@ -120,6 +120,6 @@ When `kUseSqliteStore` is true, `main.dart` opens the native EateryStore and ove
 ## Migration Path (Hive to SQLite)
 
 1. All flags currently default to `true` — all entities use SQLite
-2. The Hive shim (`EateryDB` singleton in `packages/eatery_core/lib/data/database/eatery_db_shim.dart`) still exists for backward compat
+2. (The legacy shim `eatery_db_shim.dart` has been removed)
 3. The `EateryDatabase` class wraps the native store, providing `hasCompany` and `deleteAll`
-4. Hive boxes are no longer opened at startup — only the SQLite store is initialized
+4. (The Hive shim `eatery_db_shim.dart` has been fully removed)

@@ -8,7 +8,7 @@ The project is mid-migration from legacy patterns to modern, maintainable archit
 
 | Legacy | Target | Status |
 |--------|--------|--------|
-| Hive (NoSQL) | SQLite via Zig FFI | Phase B (most entities migrated) |
+| Hive (NoSQL) | SQLite via Zig FFI | Complete — all entities migrated |
 | `setState` / `StatefulWidget` | Riverpod (`ConsumerStatefulWidget`) | Phase 3 (features migrated) |
 | `Navigator.push(MaterialPageRoute)` | GoRouter declarative routing | Phase 1F (in progress) |
 | `KColors.*`, raw `Color(0x...)` | `AppColors.*` | Phase 1C (in progress) |
@@ -34,7 +34,7 @@ const bool kUseSqlitePrinterStore = true;
 // ... etc.
 ```
 
-Set a flag to `false` to instantly fall back to the Hive-backed repository with zero code changes elsewhere.
+(Flags still exist in `store_config.dart` but all default to `true` and there is no Hive fallback code remaining.)
 
 ## How to Add a New Repository
 
@@ -74,7 +74,7 @@ final myEntityRepositoryProvider = Provider<MyEntityRepository>((ref) {
   if (kUseSqliteMyEntityStore) {
     return SqliteMyEntityRepository(ref.watch(eateryStoreProvider), ref.watch(opLogServiceProvider));
   }
-  return HiveMyEntityRepository(ref.watch(appDatabaseProvider));
+  (removed — all repositories use SQLite)
 });
 ```
 

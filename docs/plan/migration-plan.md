@@ -45,7 +45,7 @@ Files that stay in `apps/eatery_admin/lib/`:
 | `pages/` | All UI pages (Admin-specific) |
 | `components/` | UI components |
 | `data/database/eatery_database.dart` | Legacy compatibility wrapper |
-| `data/database/eatery_db_shim.dart` | Hive stub |
+| `data/database/schema_migrator.dart` | Schema versioning & migration |
 | `services/` | Printing, cloud, utility (may migrate later) |
 | `support/bluetooth_thermal_printer/` | Printer driver |
 | `widgets/` | Admin-specific widgets |
