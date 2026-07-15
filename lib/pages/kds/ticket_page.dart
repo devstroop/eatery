@@ -231,6 +231,8 @@ class _TicketCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final products = ref.watch(_orderProductsProvider(order.id!));
+    final currencySymbol =
+        ref.read(companyProvider.notifier).currency?.symbol ?? '';
 
     return Card(
       child: Padding(
@@ -251,23 +253,13 @@ class _TicketCard extends ConsumerWidget {
               ],
             ),
             const SizedBox(height: 8),
-            products.when(
-              data: (items) => Expanded(
-                child: ListView.builder(
-                  itemCount: items.length,
-                  itemBuilder: (_, i) =>
-                      Text('• ${items[i].productName} x${items[i].quantity}'),
-                ),
-              ),
-              loading: () => const SizedBox.shrink(),
-              error: (_, __) => const SizedBox.shrink(),
-            ),
+            _buildProductList(products, ref),
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  '\$${order.grandTotal.toStringAsFixed(2)}',
+                  '$currencySymbol${order.grandTotal.toStringAsFixed(2)}',
                   style: AppTypography.titleMedium.copyWith(
                     color: AppColors.primary,
                   ),
@@ -278,6 +270,56 @@ class _TicketCard extends ConsumerWidget {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildProductList(AsyncValue<List<OrderProduct>> products, WidgetRef ref) {
+    return products.when(
+      data: (items) => Expanded(
+        child: ListView.builder(
+          itemCount: items.length,
+          itemBuilder: (_, i) {
+            final op = items[i];
+            final isDone = op.status == 1;
+            return InkWell(
+              onTap: () async {
+                final repo = ref.read(orderRepositoryProvider);
+                final updated = op.copyWith(status: isDone ? 0 : 1);
+                await repo.saveOrderProduct(updated);
+                ref.invalidate(_orderProductsProvider(order.id!));
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 2),
+                child: Row(
+                  children: [
+                    Icon(
+                      isDone
+                          ? Icons.check_circle
+                          : Icons.radio_button_unchecked,
+                      size: 16,
+                      color:
+                          isDone ? AppColors.success : AppColors.grey500,
+                    ),
+                    const SizedBox(width: 6),
+                    Expanded(
+                      child: Text(
+                        '${op.productName} x${op.quantity}',
+                        style: TextStyle(
+                          decoration:
+                              isDone ? TextDecoration.lineThrough : null,
+                          color: isDone ? AppColors.grey500 : null,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          },
+        ),
+      ),
+      loading: () => const SizedBox.shrink(),
+      error: (_, __) => const SizedBox.shrink(),
     );
   }
 }

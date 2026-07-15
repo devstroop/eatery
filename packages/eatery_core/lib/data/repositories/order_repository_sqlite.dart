@@ -24,7 +24,7 @@ class SqliteOrderRepository implements OrderRepository {
   static const _orderProductColumns =
       'orderId, productId, productName, quantity, price, subTotal, '
       'discountRate, discountAmount, taxRate, taxAmount, total, stationId, '
-      'stationName';
+      'stationName, note, status';
 
   // ---------------------------------------------------------------------------
   // Orders
@@ -179,7 +179,7 @@ class SqliteOrderRepository implements OrderRepository {
         'UPDATE order_product SET '
         'orderId=?, productId=?, productName=?, quantity=?, price=?, '
         'subTotal=?, discountRate=?, discountAmount=?, taxRate=?, taxAmount=?, '
-        'total=?, stationId=?, stationName=? WHERE id=?',
+        'total=?, stationId=?, stationName=?, note=?, status=? WHERE id=?',
         [...v, id],
       );
     } else {
@@ -195,7 +195,7 @@ class SqliteOrderRepository implements OrderRepository {
   int _insertOrderProduct(OrderProduct op) {
     _store.execute(
       'INSERT INTO order_product ($_orderProductColumns) '
-      'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)',
+      'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
       _orderProductValues(op),
     );
     return _store.queryScalar('SELECT last_insert_rowid()') as int;
@@ -217,6 +217,8 @@ class SqliteOrderRepository implements OrderRepository {
       m['total'],
       m['stationId'],
       m['stationName'],
+      m['note'],
+      m['status'],
     ];
   }
 
