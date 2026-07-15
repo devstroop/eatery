@@ -80,7 +80,8 @@ jobs:
           - target: ios
             os: macos-latest
             build-cmd: flutter build ios --no-codesign
-            build-native: false
+            build-native: true
+            native-lib-type: static-lib
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -113,7 +114,81 @@ jobs:
       - name: Build native library
         if: ${{ matrix.build-native }}
         shell: bash
-        run: cd libeaterystore && zig build shared-lib && cd ..
+        run: |
+          cd libeaterystore
+          LIB_TYPE="${{ matrix.native-lib-type || 'shared-lib' }}"
+
+          if [ "${{ matrix.target }}" = "ios" ]; then
+            # iOS: cross-compile static library for aarch64
+            zig build "$LIB_TYPE" -Dtarget=aarch64-ios
+
+          elif [ "${{ matrix.target }}" = "android" ] || [ "${{ matrix.target }}" = "android-appbundle" ]; then
+            # Android: build shared lib for all 4 ABIs and place in jniLibs
+            resolve_ndk() {
+              if [ -n "${ANDROID_NDK_HOME:-}" ] && [ -d "$ANDROID_NDK_HOME" ]; then
+                return
+              fi
+              local sdk_root="${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}"
+              shopt -s nullglob
+              local ndk_dirs=("$sdk_root/ndk/"*)
+              shopt -u nullglob
+              for candidate in "${ndk_dirs[@]}"; do
+                if [ -d "$candidate" ]; then
+                  export ANDROID_NDK_HOME="$candidate"
+                  echo "::debug::Resolved ANDROID_NDK_HOME=$candidate"
+                  return
+                fi
+              done
+              echo "::warning::ANDROID_NDK_HOME not set and no NDK found under $sdk_root/ndk/"
+            }
+            resolve_ndk
+
+            ANDROID_ABIS=(
+              "aarch64-linux-android:arm64-v8a"
+              "arm-linux-androideabi:armeabi-v7a"
+              "x86_64-linux-android:x86_64"
+              "i386-linux-android:x86"
+            )
+            BUILD_TMP="$(mktemp -d)"
+            for entry in "${ANDROID_ABIS[@]}"; do
+              ZIG_TARGET="${entry%%:*}"
+              JNI_ABI="${entry#*:}"
+              echo "::group::Building native lib for $ZIG_TARGET ($JNI_ABI)"
+              # Use scripts/build.sh from repo root if available
+              if [ -x "../scripts/build.sh" ]; then
+                if ! "../scripts/build.sh" "$LIB_TYPE" "$ZIG_TARGET"; then
+                  echo "::error::Build failed for $ZIG_TARGET"
+                  exit 1
+                fi
+              else
+                if ! zig build "$LIB_TYPE" -Dtarget="$ZIG_TARGET" --prefix "$BUILD_TMP/$JNI_ABI"; then
+                  echo "::error::zig build failed for $ZIG_TARGET"
+                  exit 1
+                fi
+              fi
+              JNI_DIR="../android/app/src/main/jniLibs/$JNI_ABI"
+              mkdir -p "$JNI_DIR"
+              SOURCE="$BUILD_TMP/$JNI_ABI/libeaterystore.so"
+              if [ ! -f "$SOURCE" ]; then
+                # Shared lib may be at lib/ subdir
+                SOURCE="$BUILD_TMP/$JNI_ABI/lib/libeaterystore.so"
+              fi
+              if [ -f "$SOURCE" ]; then
+                cp -f "$SOURCE" "$JNI_DIR/"
+                echo "::debug::Copied $SOURCE → $JNI_DIR/"
+              else
+                echo "::error::libeaterystore.so not found for $ZIG_TARGET"
+                exit 1
+              fi
+              echo "::endgroup::"
+            done
+            rm -rf "$BUILD_TMP"
+
+          else
+            # Desktop: build shared lib for native host
+            zig build "$LIB_TYPE"
+          fi
+          cd ..
 
       - name: Build ${{ matrix.target }}
         run: ${{ matrix.build-cmd }}
