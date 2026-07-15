@@ -80,6 +80,7 @@ import 'package:eatery/pages/dashboard/pos/cart.page.dart' as admin_cart;
 import 'package:eatery/pages/kds/ticket_page.dart';
 import 'package:eatery/pages/display/display_page.dart';
 import 'package:eatery/pages/role_picker.page.dart';
+import 'package:eatery/dev/database_inspector.dart';
 import 'package:eatery_core/providers/database_provider.dart';
 import 'package:eatery_core/data/database/native/eatery_store.dart';
 import 'package:go_router/go_router.dart';
@@ -573,7 +574,7 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
       GoRoute(
         name: 'databaseInspector',
         path: '/dev/db-inspector',
-        builder: (context, state) => const SizedBox.shrink(),
+        builder: (context, state) => const DatabaseInspectorPage(),
       ),
       GoRoute(
         name: 'upgrade',
