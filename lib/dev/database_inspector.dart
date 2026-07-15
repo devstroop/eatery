@@ -184,14 +184,14 @@ class DatabaseInspectorPage extends ConsumerWidget {
           store.execute('DELETE FROM $table');
         }
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('All data cleared')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('All data cleared')));
     } catch (e) {
       debugPrint('Clear all data failed: $e');
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Clear failed: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Clear failed: $e')));
     }
   }
 }
