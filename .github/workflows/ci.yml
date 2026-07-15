@@ -66,10 +66,10 @@ jobs:
             os: ubuntu-latest
             build-cmd: flutter build linux --debug
           - target: ios
-            os: macos-latest
+            os: macos-15
             build-cmd: flutter build ios --no-codesign
           - target: macos
-            os: macos-latest
+            os: macos-15
             build-cmd: flutter build macos --debug
           - target: windows
             os: windows-latest
