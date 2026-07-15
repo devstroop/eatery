@@ -4,6 +4,7 @@ import 'package:eatery_core/data/database/eatery_database.dart';
 import 'package:eatery_core/data/repositories/company_repository_sqlite.dart';
 import 'package:eatery_core/data/models/eatery_db.dart';
 import 'package:eatery_core/providers/auth_session.dart';
+import 'package:eatery_core/providers/role_provider.dart';
 import 'package:eatery_core/data/models/product/product.dart';
 import 'package:eatery/pages/authentication/login.page.dart';
 import 'package:eatery/pages/dashboard/pos/views/kProduct.view.dart';
@@ -11,7 +12,6 @@ import 'package:eatery/pages/main.screen.dart';
 import 'package:eatery/pages/create_company/create_company.page.dart';
 import 'package:eatery/pages/dashboard/dashboard.page.dart';
 import 'package:eatery/pages/dashboard/pos/pos.page.dart';
-import 'package:eatery/pages/dashboard/pos/cart.page.dart';
 import 'package:eatery/pages/dashboard/pos/order_confirmation.page.dart';
 import 'package:eatery/pages/dashboard/utility/order_print.page.dart';
 import 'package:eatery/pages/dashboard/order/orders.page.dart';
@@ -72,12 +72,47 @@ import 'package:eatery/pages/dashboard/data/import.page.dart';
 import 'package:eatery/pages/activation/upgrade.page.dart';
 import 'package:eatery/pages/authentication/reset-pin.dart';
 import 'package:eatery/pages/authentication/logout.page.dart';
+import 'package:eatery/pages/waiter/table_page.dart';
+import 'package:eatery/pages/waiter/menu_page.dart';
+import 'package:eatery/pages/waiter/cart_page.dart' as waiter_cart;
+import 'package:eatery/pages/dashboard/pos/cart.page.dart' as admin_cart;
+import 'package:eatery/pages/kds/ticket_page.dart';
+import 'package:eatery/pages/display/display_page.dart';
+import 'package:eatery/pages/role_picker.page.dart';
 import 'package:eatery_core/providers/database_provider.dart';
 import 'package:eatery_core/data/database/native/eatery_store.dart';
 import 'package:go_router/go_router.dart';
 
-/// Routes that don't require authentication.
-const _publicRoutes = {'login', 'mainScreen', 'createCompany', 'resetPin', 'setup'};
+// ── RBAC permission map ──────────────────────────────────────────
+/// Maps each device role to the set of route names it may access.
+const _rolePermissions = <String, Set<String>>{
+  'admin': {'*'},
+  'waiter': {
+    'tables',
+    'menu',
+    'cart',
+    'orders',
+    'viewOrder',
+    'orderConfirmation',
+    'orderPrint',
+    'customers',
+    'viewCustomer',
+    'login',
+    'logout',
+    'resetPin',
+    'mainScreen',
+  },
+  'kds': {'kds', 'viewOrder', 'orderConfirmation'},
+  'display': {'display', 'viewOrder'},
+};
+
+/// The home route for each role (used as redirect target on unauthorized).
+const _roleHome = <String, String>{
+  'admin': '/dashboard',
+  'waiter': '/tables',
+  'kds': '/kds',
+  'display': '/display',
+};
 
 GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
   String? password;
@@ -92,6 +127,12 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
         ? (password != null ? '/login' : '/dashboard')
         : '/',
     routes: [
+      // ── Public / onboarding routes ──────────────────────────────
+      GoRoute(
+        name: 'rolePicker',
+        path: '/role-picker',
+        builder: (context, state) => const RolePickerPage(),
+      ),
       GoRoute(
         name: 'setup',
         path: '/setup',
@@ -122,6 +163,35 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
         path: '/logout',
         builder: (context, state) => const LogoutPage(),
       ),
+
+      // ── Role-specific routes ────────────────────────────────────
+      GoRoute(
+        name: 'kds',
+        path: '/kds',
+        builder: (context, state) => const TicketPage(),
+      ),
+      GoRoute(
+        name: 'display',
+        path: '/display',
+        builder: (context, state) => const DisplayPage(),
+      ),
+      GoRoute(
+        name: 'tables',
+        path: '/tables',
+        builder: (context, state) => const TablePage(),
+      ),
+      GoRoute(
+        name: 'menu',
+        path: '/menu',
+        builder: (context, state) => const MenuPage(),
+      ),
+      GoRoute(
+        name: 'cart',
+        path: '/cart',
+        builder: (context, state) => const waiter_cart.CartPage(),
+      ),
+
+      // ── Admin routes ────────────────────────────────────────────
       GoRoute(
         name: 'dashboard',
         path: '/dashboard',
@@ -133,9 +203,9 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
         builder: (context, state) => const PointOfSalePage(),
       ),
       GoRoute(
-        name: 'cart',
-        path: '/cart',
-        builder: (context, state) => const CartPage(),
+        name: 'adminCart',
+        path: '/admin-cart',
+        builder: (context, state) => const admin_cart.CartPage(),
       ),
       GoRoute(
         name: 'orderConfirmation',
@@ -515,15 +585,68 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
         },
       ),
     ],
-    redirect: (context, state) {
-      final container = ProviderScope.containerOf(context, listen: false);
-      final authStaff = container.read(authSessionProvider);
-      final location = state.matchedLocation;
-      final isPublic = _publicRoutes.contains(state.name) || location == '/';
-      if (authStaff == null && !isPublic) return '/login';
-      if (authStaff != null && isPublic && location == '/login') return '/dashboard';
-      return null;
-    },
+    redirect: _rbacRedirect,
   );
   return router;
+}
+
+/// Role-based access control redirect guard.
+///
+/// Checks (1) role is set, (2) auth for staff roles, (3) route permissions.
+String? _rbacRedirect(BuildContext context, GoRouterState state) {
+  final container = ProviderScope.containerOf(context, listen: false);
+  final role = container.read(roleProvider);
+  final authStaff = container.read(authSessionProvider);
+  final routeName = state.name;
+  final location = state.matchedLocation;
+
+  // 1. No role set → show role picker, but allow setup/creation routes too.
+  if (role == null) {
+    if (routeName == 'rolePicker' ||
+        routeName == 'login' ||
+        routeName == 'mainScreen' ||
+        routeName == 'setup' ||
+        routeName == 'createCompany' ||
+        routeName == 'resetPin') {
+      return null;
+    }
+    return '/role-picker';
+  }
+
+  // 2. Root "/" redirects to role home.
+  if (location == '/') {
+    return _roleHome[role] ?? '/dashboard';
+  }
+
+  // 3. Kiosk roles (kds, display) — no auth, block unpermitted routes.
+  if (role == 'kds' || role == 'display') {
+    final permitted = _rolePermissions[role]!;
+    // Deny unnamed routes or unpermitted named routes.
+    if (routeName == null || !permitted.contains(routeName)) {
+      return _roleHome[role] ?? '/$role';
+    }
+    return null; // allow
+  }
+
+  // 4. Staff roles (admin, waiter) — must be authenticated.
+  if (authStaff == null) {
+    if (routeName == 'login' || routeName == 'mainScreen') return null;
+    return '/login';
+  }
+
+  // 5. If already authenticated on login, go home.
+  if (routeName == 'login') {
+    return _roleHome[role] ?? '/dashboard';
+  }
+
+  // 6. Admin wildcard — allow everything.
+  if (_rolePermissions[role]?.contains('*') ?? false) return null;
+
+  // 7. Check specific permissions — deny unnamed routes.
+  if (routeName == null ||
+      !(_rolePermissions[role]?.contains(routeName) ?? false)) {
+    return _roleHome[role] ?? '/dashboard';
+  }
+
+  return null; // allow
 }
