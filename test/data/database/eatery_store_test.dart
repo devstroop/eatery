@@ -107,4 +107,16 @@ void main() {
       throwsA(isA<EateryStoreException>()),
     );
   });
+
+  test('setKey is callable (no-op on plain SQLite)', () {
+    // Encryption (SQLCipher) is an optional build-time feature.
+    // With plain SQLite the call is a no-op — we verify it doesn't throw.
+    expect(() => store.setKey('test-key-12345'), returnsNormally);
+  });
+
+  test('vacuum and optimize are callable', () {
+    // Maintenance operations on an in-memory database: verify they don't throw.
+    expect(() => store.vacuum(), returnsNormally);
+    expect(() => store.optimize(), returnsNormally);
+  });
 }
