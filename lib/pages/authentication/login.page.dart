@@ -8,6 +8,7 @@ import 'package:eatery_core/extensions/string_ext.dart';
 import 'package:eatery/references.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/auth_session.dart';
+import 'package:eatery_core/providers/role_provider.dart';
 import 'package:eatery_core/providers/company_provider.dart';
 import 'package:eatery_core/providers/database_provider.dart';
 
@@ -52,7 +53,31 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
     if (staff != null) {
       ref.read(authSessionProvider.notifier).state = staff;
-      GoRouter.of(context as BuildContext).goNamed('dashboard');
+      // Sync device role to match the logged-in staff type so RBAC
+      // permissions align with what the user is allowed to do.
+      final roleNotifier = ref.read(roleProvider.notifier);
+      switch (staff.type) {
+        case StaffType.admin:
+          roleNotifier.setRole('admin');
+        case StaffType.waiter:
+          roleNotifier.setRole('waiter');
+        case StaffType.chef:
+          roleNotifier.setRole('kds');
+        default:
+          roleNotifier.setRole('admin');
+      }
+      // Navigate to the role-appropriate home.
+      final ctx = context as BuildContext;
+      switch (staff.type) {
+        case StaffType.admin:
+          GoRouter.of(ctx).goNamed('dashboard');
+        case StaffType.waiter:
+          GoRouter.of(ctx).goNamed('tables');
+        case StaffType.chef:
+          GoRouter.of(ctx).goNamed('kds');
+        default:
+          GoRouter.of(ctx).goNamed('dashboard');
+      }
     } else {
       AppDialog.showMessage(
         this.context,
@@ -86,7 +111,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         AppSpacing.gapSm,
                         Text(
                           'Reset PIN',
-                          style: AppTypography.bodyMedium.copyWith(color: AppColors.grey700),
+                          style: AppTypography.bodyMedium.copyWith(
+                            color: AppColors.grey700,
+                          ),
                         ),
                       ],
                     ),
@@ -99,7 +126,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         AppSpacing.gapSm,
                         Text(
                           'Delete Company',
-                          style: AppTypography.bodyMedium.copyWith(color: AppColors.error),
+                          style: AppTypography.bodyMedium.copyWith(
+                            color: AppColors.error,
+                          ),
                         ),
                       ],
                     ),
@@ -123,10 +152,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     },
                   );
                 }
-
-
               });
-              
             },
           ),
         ],
@@ -252,8 +278,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         _submit();
                       },
                       validator: (value) {
-                        if (value == null || value.trim().isEmpty) return 'PIN cannot be blank';
-                        if (!value.trim().isNumericOnly) return 'Invalid character';
+                        if (value == null || value.trim().isEmpty)
+                          return 'PIN cannot be blank';
+                        if (!value.trim().isNumericOnly)
+                          return 'Invalid character';
                         return null;
                       },
                     ),
