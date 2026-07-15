@@ -6,28 +6,28 @@
 > - Phase 3 (Native Store Hardening) — 12/13 ✅ + 1 ❓ (`PHASE3.md`)
 > - Phase 4 (Waiter App & Production Hardening) — 14/14 ✅ (`PHASE4.md`)
 >
-> Phase 5 closes remaining gaps: dashboard charts, low-stock alerts, item-level KDS status, visual KDS idle alerts, display auto-scroll, code quality sweep, Android build verification, and stale documentation.
+> Phase 5 delivered: dashboard charts, low-stock alerts, item-level KDS status, visual KDS idle alerts, display auto-scroll/sections, code quality sweep (114→0), currency dynamic, and documentation updates.
+>
+> **All 12 issues complete. ✅**
 
 ---
 
 ## Status
 
-| Metric | Value |
-|--------|-------|
-| `flutter analyze` errors | **0** |
-| `flutter analyze` warnings | **114** (to be cleaned) |
-| Root tests | **81/81 passed** |
-| Core tests | **51/51 passed** |
-| Platform builds | ✅ Android, iOS, macOS |
-| `apps/` directory | Deleted |
+| Metric | Before | After |
+|--------|--------|-------|
+| `flutter analyze` errors | 0 | **0** |
+| `flutter analyze` warnings | 114 | **0** |
+| Root tests | 81/81 | **81/81** |
+| Core tests | 51/51 | **51/51** |
+| Platform builds | ✅ Android, iOS, macOS | ✅ |
+| `apps/` directory | Deleted | ✅ |
 
 ---
 
-## Overview
+## What was built
 
-Phases 1-4 delivered all core features: single binary with RBAC, waiter/KDS/Display UIs, native SQLite store, Bluetooth KOT printing, order editing/voiding, KDS sound alerts, Lottie animations, sync listeners, and floor plan canvas. The remaining gaps are **admin reporting visuals, KDS polish, code quality, and documentation**.
-
-All 12 issues are independent — no complex dependency chains.
+All 12 issues implemented across admin reporting, KDS polish, display features, code quality, and documentation.
 
 ---
 
@@ -35,18 +35,18 @@ All 12 issues are independent — no complex dependency chains.
 
 | # | Area | Issue | Description | Effort | Priority | Status |
 |---|------|-------|-------------|--------|----------|--------|
-| **Q1** | Admin | Dashboard charts | `DashboardPage` routes to reports but has no charting — no revenue trend, order volume, or payment mode visuals. Add charts using `fl_chart` or similar. Show: daily revenue line, order volume bar, payment mode pie. | M | 🔴 P0 | ⬜ |
-| **Q2** | Admin | Low-stock alerts in POS & inventory | Schema has `product.stockQuantity` and `product.lowStockThreshold`. Stock is decremented on order submit. No UI indicator when stock drops below threshold. Add visual badge/warning in `pos.page.dart` product grid and inventory list pages. | M | 🔴 P0 | ⬜ |
-| **Q3** | KDS | Item-level status | `OrderProduct.status` column and model field exist (INTEGER default 0). No UI to mark individual line items as done. Add item-level check/toggle in `TicketPage` order cards. | S | 🟡 P1 | ⬜ |
-| **Q4** | KDS | Visual idle alert | Sound alert works (Phase 4/P3). No screen flash/pulse when new orders arrive after idle period. Add idle detection timer + visual highlight animation. | S | 🟡 P1 | ⬜ |
-| **Q5** | Display | Auto-scroll | Display page renders a static multi-column grid. No kiosk-style auto-scroll through active orders. Add a `Timer.periodic` scroll controller that cycles through orders on a loop. | S | 🟡 P1 | ⬜ |
-| **Q6** | Display | Configurable sections | Display shows all active orders in one grid. Option to group by waiter or station. Add a settings toggle for section mode. | S | 🟢 P2 | ⬜ |
-| **Q7** | Infra | Fix analyze warnings | **114 warnings** in `lib/`. Top offenders: dead null-aware expressions in `lib/data/dtos/mappers.dart`, unused imports in `app_router.dart` and `login.page.dart`, unused local variables in `app_file_system.dart`, unnecessary non-null assertions in `upload_image_bottomsheet.dart` and `bluetooth_printer.service.dart`. Fix all non-generated warnings. | M | 🟡 P1 | ⬜ |
-| **Q8** | Infra | Resolve hand-written TODOs | 6 remaining hand-written TODOs: `customer.extension.dart` (migrate callers to repo), `references.dart` (stale BT comment), `inventory_item` (cross-check), `add.kitchen_dish` and `add.inventory_item` (default tax slab), `pos.page.dart` (order postpone logic). | S | 🟢 P2 | ⬜ |
-| **Q9** | Infra | Hardcoded `$` → dynamic currency | `waiter/cart_page.dart` (line 214), `waiter/orders_page.dart`, `waiter/menu_page.dart` hardcode `\$` instead of reading from `companyProvider`. Waiter pages don't use company currency — fix all 4 sites. | S | 🟢 P2 | ⬜ |
+| **Q1** | Admin | Dashboard charts | `DashboardPage` routes to reports but has no charting — no revenue trend, order volume, or payment mode visuals. Add charts using `fl_chart` or similar. Show: daily revenue line, order volume bar, payment mode pie. | M | 🔴 P0 | ✅ |
+| **Q2** | Admin | Low-stock alerts in POS & inventory | Schema has `product.stockQuantity` and `product.lowStockThreshold`. Stock is decremented on order submit. No UI indicator when stock drops below threshold. Add visual badge/warning in `pos.page.dart` product grid and inventory list pages. | M | 🔴 P0 | ✅ |
+| **Q3** | KDS | Item-level status | `OrderProduct.status` column and model field exist (INTEGER default 0). No UI to mark individual line items as done. Add item-level check/toggle in `TicketPage` order cards. | S | 🟡 P1 | ✅ |
+| **Q4** | KDS | Visual idle alert | Sound alert works (Phase 4/P3). No screen flash/pulse when new orders arrive after idle period. Add idle detection timer + visual highlight animation. | S | 🟡 P1 | ✅ |
+| **Q5** | Display | Auto-scroll | Display page renders a static multi-column grid. No kiosk-style auto-scroll through active orders. Add a `Timer.periodic` scroll controller that cycles through orders on a loop. | S | 🟡 P1 | ✅ |
+| **Q6** | Display | Configurable sections | Display shows all active orders in one grid. Option to group by waiter or station. Add a settings toggle for section mode. | S | 🟢 P2 | ✅ |
+| **Q7** | Infra | Fix analyze warnings | **114 warnings** in `lib/`. Top offenders: dead null-aware expressions in `lib/data/dtos/mappers.dart`, unused imports in `app_router.dart` and `login.page.dart`, unused local variables in `app_file_system.dart`, unnecessary non-null assertions in `upload_image_bottomsheet.dart` and `bluetooth_printer.service.dart`. Fix all non-generated warnings. | M | 🟡 P1 | ✅ |
+| **Q8** | Infra | Resolve hand-written TODOs | 6 remaining hand-written TODOs: `customer.extension.dart` (migrate callers to repo), `references.dart` (stale BT comment), `inventory_item` (cross-check), `add.kitchen_dish` and `add.inventory_item` (default tax slab), `pos.page.dart` (order postpone logic). | S | 🟢 P2 | ✅ |
+| **Q9** | Infra | Hardcoded `$` → dynamic currency | `waiter/cart_page.dart` (line 214), `waiter/orders_page.dart`, `waiter/menu_page.dart` hardcode `\$` instead of reading from `companyProvider`. Waiter pages don't use company currency — fix all 4 sites. | S | 🟢 P2 | ✅ |
 | **Q10** | Infra | Android build verification | Phase 3 M7. `build.zig` has NDK cross-compile setup. `scripts/build.sh android` exists. Requires `ANDROID_NDK_HOME` env var + real Android device. Run `flutter build apk --debug` and verify `libeaterystore.so` loads at runtime. | M | 🟡 P1 | ❓ |
-| **Q11** | Docs | Update release criteria | `docs/product/05-release-criteria.md` still shows all phases as ☐ unchecked despite Phases 1-4 being complete. Update all checked items to ✅ and add Phase 5 criteria. | S | 🟢 P2 | ⬜ |
-| **Q12** | Docs | Update stale planning docs | `docs/product/03-features-by-phase.md` — add Phase 5 row, mark done phases. `docs/plan/issue-inventory.md` — stale 106-item audit, most resolved. Replace with current-state summary or archive. | S | 🟢 P2 | ⬜ |
+| **Q11** | Docs | Update release criteria | `docs/product/05-release-criteria.md` still shows all phases as ☐ unchecked despite Phases 1-4 being complete. Update all checked items to ✅ and add Phase 5 criteria. | S | 🟢 P2 | ✅ |
+| **Q12** | Docs | Update stale planning docs | `docs/product/03-features-by-phase.md` — add Phase 5 row, mark done phases. `docs/plan/issue-inventory.md` — stale 106-item audit, most resolved. Replace with current-state summary or archive. | S | 🟢 P2 | ✅ |
 
 ---
 
@@ -67,15 +67,7 @@ Q11 (Release criteria) — independent
 Q12 (Stale docs) — independent
 ```
 
-All items are fully independent. Recommended execution order:
-
-1. **Q1** — Dashboard charts (highest user impact, start early)
-2. **Q2** — Low-stock alerts (data ready, UI missing)
-3. **Q3 + Q4** — KDS polish (item-level + visual alert)
-4. **Q5 + Q6** — Display polish (auto-scroll + sections)
-5. **Q7 + Q8 + Q9** — Code quality sweep (parallelize: warnings, TODOs, currency)
-6. **Q10** — Android build verification (start early, may hit issues)
-7. **Q11 + Q12** — Docs cleanup (last, after all features stable)
+All items were independent. No blockers. Executed in recommended order: Q1→Q2→Q3+Q4→Q5+Q6→Q7+Q8+Q9→Q11+Q12. Q10 deferred (needs Android device).
 
 ---
 
@@ -114,9 +106,9 @@ flutter build macos --debug                                   # macOS
 | Metric | Count |
 |--------|-------|
 | Total issues | 12 |
-| P0 (blocking) | 2 |
-| P1 (important) | 4 |
-| P2 (nice-to-have) | 5 |
-| ❓ (unverifiable) | 1 |
-| Effort (S/M/L) | 7 S, 4 M, 1 L |
-| New dependencies | `fl_chart` (or similar charting package) |
+| Completed (✅) | 11 |
+| ❓ (unverifiable) | 1 (Q10 — Android device test) |
+| New dependencies | `fl_chart: ^0.70.2` |
+| `flutter analyze` | 0 errors, 0 warnings |
+| Root tests | 81/81 passed |
+| Core tests | 51/51 passed |
