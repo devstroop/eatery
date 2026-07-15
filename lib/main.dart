@@ -11,7 +11,9 @@ import 'package:eatery_core/data/database/native/schema_migrator.dart';
 import 'package:eatery_core/data/database/native/store_config.dart';
 import 'package:eatery_core/data/sync/mdns_service.dart';
 import 'package:eatery_core/data/sync/sync_providers.dart';
+import 'package:eatery_core/data/sync/sync_host_config.dart';
 import 'package:eatery_core/providers/database_provider.dart';
+import 'package:eatery_core/providers/role_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/functions/order.function.dart';
 import 'package:flutter/services.dart';
@@ -64,7 +66,7 @@ void main() async {
             if (appDatabase != null)
               appDatabaseProvider.overrideWithValue(appDatabase!),
           ],
-          child: const MyApp(),
+          child: const RoleShell(),
         ),
       );
     },
@@ -106,33 +108,72 @@ Future setupDataAndInitDB() async {
   );
 }
 
-/// Starts the sync server after the app is mounted and the DB is ready.
+/// Starts the sync host (admin) or client (leaf) based on the device role.
 Future<void> startSync(WidgetRef ref) async {
   if (!kUseSqliteStore) return;
 
-  final deviceId = await getDeviceId() ?? 'eatery-admin';
-  ref.read(syncInitProvider(SyncConfig.host(deviceId: deviceId)));
-  debugPrint('Sync host started on port 9876');
+  final role = ref.read(roleProvider);
+  if (role == null) return; // no role chosen yet — sync will init lazily
 
-  unawaited(MdnsService.startAdvertising(
-    port: 9876,
-    deviceName: deviceId,
-  ));
+  final deviceId = await getDeviceId() ?? 'eatery-device';
+
+  if (role == 'admin') {
+    ref.read(syncInitProvider(SyncConfig.host(deviceId: deviceId)));
+    debugPrint('Sync host started on port 9876 (device: $deviceId)');
+
+    unawaited(MdnsService.startAdvertising(port: 9876, deviceName: deviceId));
+  } else {
+    // Leaf role — discover host via mDNS, fallback to localhost.
+    var hostAddress = kDefaultHostAddress;
+    try {
+      final hosts = await MdnsService.discoverHosts(
+        timeout: const Duration(seconds: 3),
+      );
+      if (hosts.isNotEmpty) {
+        hostAddress = hosts.first.ip;
+      }
+    } catch (e) {
+      debugPrint(
+        'mDNS discovery failed: $e — falling back to $kDefaultHostAddress',
+      );
+    }
+    ref.read(
+      syncInitProvider(
+        SyncConfig.leaf(deviceId: deviceId, hostAddress: hostAddress),
+      ),
+    );
+    debugPrint('Sync client started — connecting to $hostAddress');
+  }
 }
 
-class MyApp extends ConsumerStatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
+/// Role-aware entry widget that reads the device role and renders
+/// the appropriate shell.
+class RoleShell extends ConsumerStatefulWidget {
+  const RoleShell({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<MyApp> createState() => _MyAppState();
+  ConsumerState<RoleShell> createState() => _RoleShellState();
 }
 
-class _MyAppState extends ConsumerState<MyApp> {
+class _RoleShellState extends ConsumerState<RoleShell> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    _initSync();
+  }
+
+  void _initSync() {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       startSync(ref);
+    });
+
+    // Retry sync when the device role changes (e.g. after login or picker).
+    ref.listenManual(roleProvider, (_, role) {
+      if (role != null) {
+        WidgetsBinding.instance.addPostFrameCallback((_) async {
+          startSync(ref);
+        });
+      }
     });
   }
 
