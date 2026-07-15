@@ -72,6 +72,7 @@ import 'package:eatery/pages/dashboard/data/import.page.dart';
 import 'package:eatery/pages/activation/upgrade.page.dart';
 import 'package:eatery/pages/authentication/reset-pin.dart';
 import 'package:eatery/pages/authentication/logout.page.dart';
+import 'package:eatery/pages/waiter/orders_page.dart' as waiter_orders;
 import 'package:eatery/pages/waiter/table_page.dart';
 import 'package:eatery/pages/waiter/menu_page.dart';
 import 'package:eatery/pages/waiter/cart_page.dart' as waiter_cart;
@@ -91,6 +92,7 @@ const _rolePermissions = <String, Set<String>>{
     'tables',
     'menu',
     'cart',
+    'waiterOrders',
     'orders',
     'viewOrder',
     'orderConfirmation',
@@ -179,6 +181,11 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
         name: 'tables',
         path: '/tables',
         builder: (context, state) => const TablePage(),
+      ),
+      GoRoute(
+        name: 'waiterOrders',
+        path: '/waiter-orders',
+        builder: (context, state) => const waiter_orders.WaiterOrdersPage(),
       ),
       GoRoute(
         name: 'menu',
