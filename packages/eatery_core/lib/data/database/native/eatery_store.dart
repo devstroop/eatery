@@ -93,9 +93,23 @@ class EateryStore implements EateryStoreInterface {
   }
 
   /// Runs a SELECT and returns the decoded rows.
+  ///
+  /// If [maxResults] is provided, a `LIMIT` clause is appended to the SQL.
+  /// If the SQL already contains a `LIMIT` clause, it is replaced rather than
+  /// duplicated, preventing invalid syntax. Callers can also omit [maxResults]
+  /// and control the row count directly in the SQL string.
+  /// Callers that expect large result sets (100K+ rows) should paginate with
+  /// SQL `LIMIT` / `OFFSET` or pass [maxResults] to cap the result.
   @override
-  List<Map<String, Object?>> query(String sql, [List<Object?>? params]) {
+  List<Map<String, Object?>> query(
+    String sql, [
+    List<Object?>? params,
+    int? maxResults,
+  ]) {
     _ensureOpen();
+    if (maxResults != null && maxResults > 0) {
+      sql = _replaceLimit(sql, maxResults);
+    }
     final sqlPtr = sql.toNativeUtf8();
     final paramsPtr = _encodeParams(params);
     Pointer<Utf8> resultPtr = nullptr;
@@ -165,6 +179,28 @@ class EateryStore implements EateryStoreInterface {
     }
   }
 
+  /// Reclaims unused space by running `VACUUM;`.
+  /// Best called during low-activity periods (e.g. after end-of-day batch).
+  @override
+  void vacuum() {
+    _ensureOpen();
+    final rc = _bindings.esVacuum(_handle);
+    if (rc != 0) {
+      throw EateryStoreException(_lastError(), sql: 'VACUUM');
+    }
+  }
+
+  /// Runs `PRAGMA optimize` to let SQLite tune internal heuristics.
+  /// Safe to call periodically (idle timer, lifecycle pause, after batch ops).
+  @override
+  void optimize() {
+    _ensureOpen();
+    final rc = _bindings.esOptimize(_handle);
+    if (rc != 0) {
+      throw EateryStoreException(_lastError(), sql: 'PRAGMA optimize');
+    }
+  }
+
   /// Closes the underlying database. Safe to call multiple times.
   @override
   void close() {
@@ -174,6 +210,45 @@ class EateryStore implements EateryStoreInterface {
   }
 
   // -------------------------------------------------------------------------
+
+  /// Appends or replaces a trailing `LIMIT` clause in [sql] with [limit].
+  /// Handles literal values (`LIMIT 5`), parameterized placeholders
+  /// (`LIMIT ?`, `LIMIT :param`), `LIMIT … OFFSET …`, trailing comments,
+  /// semicolons, and preceding whitespace.
+  /// Only matches the top-level end of the SQL string so subqueries are
+  /// never affected.
+  /// Appends or replaces a trailing LIMIT clause in [sql] with [limit].
+  /// Rules to avoid producing invalid SQL or mismatched bind parameters:
+  ///   - Literal `LIMIT \d+`: replaced with `LIMIT $limit`.
+  ///   - Parameterized `LIMIT ?` / `LIMIT :param`: left untouched, no
+  ///     new LIMIT appended (caller controls their own bound limit).
+  ///   - No LIMIT: `LIMIT $limit` is appended.
+  /// Also handles `LIMIT … OFFSET …`, trailing `-- comments`, and `;`.
+  /// Only matches the top-level end of the SQL string (subqueries ignored).
+  String _replaceLimit(String sql, int limit) {
+    // Only strip a trailing inline SQL comment (last line only) so that
+    // `SELECT ... LIMIT 5 -- comment` can be matched. Do NOT strip -- from
+    // every line — that would corrupt string literals containing '--'.
+    sql = sql.replaceFirst(RegExp(r'\s*--[^\n]*$'), '').trim();
+    // 1. Try to replace a literal LIMIT <int> (�� OFFSET <int>).
+    final literal = RegExp(
+      r'\s+LIMIT\s+\d+(\s+OFFSET\s+\d+)?\s*;?\s*$',
+      caseSensitive: false,
+    );
+    if (sql.contains(literal)) {
+      return sql.replaceFirstMapped(literal, (_) => '') + ' LIMIT $limit';
+    }
+    // 2. Leave parameterized LIMIT alone to avoid bind-param mismatch.
+    final paramLimit = RegExp(
+      r'\s+LIMIT\s+[?$:]\w*\s*;?\s*$',
+      caseSensitive: false,
+    );
+    if (sql.contains(paramLimit)) {
+      return sql;
+    }
+    // 3. No existing LIMIT — append one.
+    return '$sql LIMIT $limit';
+  }
 
   Pointer<Utf8> _encodeParams(List<Object?>? params) {
     if (params == null || params.isEmpty) return nullptr;
