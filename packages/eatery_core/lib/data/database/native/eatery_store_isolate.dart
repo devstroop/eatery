@@ -56,6 +56,22 @@ void _storeIsolateEntryPoint(dynamic message) {
         case 'version':
           ok(store.version);
           break;
+        case 'setKey':
+          try {
+            store.setKey(args![0] as String);
+            ok('ok');
+          } catch (e) {
+            err('setKey failed: $e');
+          }
+          break;
+        case 'backup':
+          try {
+            store.backup(args![0] as String);
+            ok('ok');
+          } catch (e) {
+            err('backup failed: $e');
+          }
+          break;
         case 'transaction':
           _txn(store, args![0] as List<Map<String, Object?>>, ok, err);
           return;
