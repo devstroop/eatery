@@ -32,6 +32,7 @@ class SyncServer {
 
   final List<WebSocketChannel> _clients = [];
   HttpServer? _server;
+  bool _stopped = false;
 
   /// Starts the WebSocket server on all interfaces.
   Future<void> start() async {
@@ -59,8 +60,8 @@ class SyncServer {
   void _startBroadcastLoop() {
     Future.doWhile(() async {
       await Future.delayed(const Duration(seconds: 5));
-      if (_server == null) return false;
-
+      if (_stopped || _server == null) return false;
+      // ... broadcast logic ...
       final heartbeat = SyncMessage.hostAnnounce(
         deviceId: syncService.deviceId,
         clock: opLogService.clock,
@@ -104,6 +105,8 @@ class SyncServer {
               msg.entries?.map((e) => OpLogEntry.fromJson(e)).toList() ?? [];
           opLogService.applyBatch(entries);
           syncService.receiveAck(opLogService.clock);
+          // Apply incoming entries to the host's own store.
+          syncService.receiveEntries(entries);
           // Ack the sender so it can advance its lastSyncedClock.
           sender.sink.add(
             SyncMessage.ack(
@@ -147,6 +150,7 @@ class SyncServer {
   }
 
   Future<void> stop() async {
+    _stopped = true;
     final clients = _clients.toList();
     for (final client in clients) {
       try {
