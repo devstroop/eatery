@@ -100,7 +100,9 @@ jobs:
           version: ${{ env.ZIG_VERSION }}
 
       - name: Build native library
-        run: cd libeaterystore && zig build shared-lib && cd ..
+        run: |
+          unset SDKROOT
+          cd libeaterystore && zig build shared-lib && cd ..
 
       - name: Build ${{ matrix.target }}
         run: |
