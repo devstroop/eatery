@@ -4,12 +4,13 @@
 /// [entityId] is the primary-key value of the affected row.
 /// [operation] is "save" or "delete".
 /// [data] is the full entity map (or just the id for deletes).
-typedef MutationHookCallback = void Function(
-  String entityType,
-  int entityId,
-  String operation,
-  Map<String, dynamic> data,
-);
+typedef MutationHookCallback =
+    void Function(
+      String entityType,
+      int entityId,
+      String operation,
+      Map<String, dynamic> data,
+    );
 
 /// A scoped, non‑global mutation hook that repositories call after writes.
 ///
@@ -88,8 +89,7 @@ void notifyMutation(
   int entityId,
   String operation,
   Map<String, dynamic> data,
-) =>
-    MutationHook.notifyMutation(entityType, entityId, operation, data);
+) => MutationHook.notifyMutation(entityType, entityId, operation, data);
 
 /// Registers the global mutation hook.
 @Deprecated('Use MutationHook.instance.set(...) instead')

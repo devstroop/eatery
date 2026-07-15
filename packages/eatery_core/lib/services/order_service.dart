@@ -67,17 +67,19 @@ class OrderService {
       final item = entry.value;
       final p = item.product;
       for (var i = 0; i < item.quantity; i++) {
-        await orderRepo.addOrderProduct(OrderProduct(
-          orderId: orderId,
-          productId: p.id,
-          productName: p.name,
-          quantity: 1,
-          price: p.salePrice ?? p.mrpPrice,
-          subTotal: p.salePrice ?? p.mrpPrice,
-          total: p.salePrice ?? p.mrpPrice,
-          stationId: p.stationId,
-          stationName: p.stationName,
-        ));
+        await orderRepo.addOrderProduct(
+          OrderProduct(
+            orderId: orderId,
+            productId: p.id,
+            productName: p.name,
+            quantity: 1,
+            price: p.salePrice ?? p.mrpPrice,
+            subTotal: p.salePrice ?? p.mrpPrice,
+            total: p.salePrice ?? p.mrpPrice,
+            stationId: p.stationId,
+            stationName: p.stationName,
+          ),
+        );
       }
       // Auto-adjust inventory stock for inventory items
       if (p.type == ProductType.inventoryItem && p.id != null) {
@@ -87,11 +89,13 @@ class OrderService {
 
     // Mark dining table as occupied
     if (type == OrderType.dine && diningTable != null) {
-      await tableRepo.saveTable(diningTable.copyWith(
-        status: DiningTableStatus.occupied,
-        orderId: orderId,
-        customerPhone: customer.phone,
-      ));
+      await tableRepo.saveTable(
+        diningTable.copyWith(
+          status: DiningTableStatus.occupied,
+          orderId: orderId,
+          customerPhone: customer.phone,
+        ),
+      );
     }
 
     return order.copyWith(id: orderId);
@@ -115,39 +119,47 @@ class OrderService {
         // Update quantity of existing line item
         final newQty = existing.quantity + item.quantity;
         final unitPrice = p.salePrice ?? p.mrpPrice;
-        await orderRepo.saveOrderProduct(existing.copyWith(
-          quantity: newQty,
-          price: unitPrice,
-          subTotal: unitPrice * newQty,
-          total: unitPrice * newQty,
-        ));
+        await orderRepo.saveOrderProduct(
+          existing.copyWith(
+            quantity: newQty,
+            price: unitPrice,
+            subTotal: unitPrice * newQty,
+            total: unitPrice * newQty,
+          ),
+        );
       } else {
         // Add new line item
         for (var i = 0; i < item.quantity; i++) {
-          await orderRepo.addOrderProduct(OrderProduct(
-            orderId: existingOrder.id!,
-            productId: p.id,
-            productName: p.name,
-            quantity: 1,
-            price: p.salePrice ?? p.mrpPrice,
-            subTotal: p.salePrice ?? p.mrpPrice,
-            total: p.salePrice ?? p.mrpPrice,
-            stationId: p.stationId,
-            stationName: p.stationName,
-          ));
+          await orderRepo.addOrderProduct(
+            OrderProduct(
+              orderId: existingOrder.id!,
+              productId: p.id,
+              productName: p.name,
+              quantity: 1,
+              price: p.salePrice ?? p.mrpPrice,
+              subTotal: p.salePrice ?? p.mrpPrice,
+              total: p.salePrice ?? p.mrpPrice,
+              stationId: p.stationId,
+              stationName: p.stationName,
+            ),
+          );
         }
       }
     }
 
     // Recalculate totals
     final allItems = orderRepo.getOrderProducts(existingOrder.id!);
-    final products = allItems.map((op) => Product(
-      name: op.productName,
-      mrpPrice: op.price,
-      type: ProductType.kitchenDish,
-      isActive: true,
-      id: op.productId,
-    )).toList();
+    final products = allItems
+        .map(
+          (op) => Product(
+            name: op.productName,
+            mrpPrice: op.price,
+            type: ProductType.kitchenDish,
+            isActive: true,
+            id: op.productId,
+          ),
+        )
+        .toList();
 
     final totalQty = allItems.fold(0, (s, op) => s + op.quantity);
     final updated = existingOrder.copyWith(
@@ -175,6 +187,5 @@ class OrderService {
   double _roundOff(List<Product> cart) =>
       (_finalTotal(cart).round() - _finalTotal(cart));
 
-  double _grandTotal(List<Product> cart) =>
-      _finalTotal(cart) + _roundOff(cart);
+  double _grandTotal(List<Product> cart) => _finalTotal(cart) + _roundOff(cart);
 }

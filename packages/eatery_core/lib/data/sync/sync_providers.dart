@@ -53,19 +53,13 @@ class SyncConfig {
   });
 
   /// Config for the admin app (sync host).
-  factory SyncConfig.host({String? deviceId}) => SyncConfig(
-    deviceId: deviceId ?? kHostDeviceId,
-    isHost: true,
-  );
+  factory SyncConfig.host({String? deviceId}) =>
+      SyncConfig(deviceId: deviceId ?? kHostDeviceId, isHost: true);
 
   /// Config for a leaf device (waiter, KDS, display).
   factory SyncConfig.leaf({
     required String deviceId,
     required String hostAddress,
     int port = 9876,
-  }) => SyncConfig(
-    deviceId: deviceId,
-    hostAddress: hostAddress,
-    port: port,
-  );
+  }) => SyncConfig(deviceId: deviceId, hostAddress: hostAddress, port: port);
 }

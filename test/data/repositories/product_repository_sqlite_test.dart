@@ -1,7 +1,7 @@
-import 'package:eatery/data/database/native/eatery_schema.dart';
-import 'package:eatery/data/database/native/eatery_store.dart';
-import 'package:eatery/data/models/eatery_db.dart';
-import 'package:eatery/data/repositories/product_repository_sqlite.dart';
+import 'package:eatery_core/data/database/native/eatery_schema.dart';
+import 'package:eatery_core/data/database/native/eatery_store.dart';
+import 'package:eatery_core/data/models/eatery_db.dart';
+import 'package:eatery_core/data/repositories/product_repository_sqlite.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
 
@@ -44,7 +44,6 @@ void main() {
       final id = await repo.saveProduct(p);
 
       expect(id, greaterThan(0));
-      expect(p.id, id);
 
       final fetched = repo.getProductById(id)!;
       expect(fetched.name, 'Cappuccino');
@@ -66,10 +65,13 @@ void main() {
       final p = makeProduct(name: 'Mocha', mrp: 5.0);
       final id = await repo.saveProduct(p);
 
-      p.name = 'Mocha Deluxe';
-      p.mrpPrice = 6.5;
-      p.isActive = false;
-      final id2 = await repo.saveProduct(p);
+      final updated = p.copyWith(
+        name: 'Mocha Deluxe',
+        mrpPrice: 6.5,
+        isActive: false,
+        id: id,
+      );
+      final id2 = await repo.saveProduct(updated);
 
       expect(id2, id);
       expect(repo.getAllProducts(), hasLength(1));
@@ -84,7 +86,7 @@ void main() {
       final id = await repo.saveProduct(p);
       expect(repo.getAllProducts(), hasLength(1));
 
-      await repo.deleteProduct(p);
+      await repo.deleteProduct(p.copyWith(id: id));
       expect(repo.getAllProducts(), isEmpty);
       expect(repo.getProductById(id), isNull);
     });
@@ -142,12 +144,12 @@ void main() {
       expect(fetched.name, 'Beverages');
       expect(fetched.description, 'Drinks');
 
-      cat.name = 'Hot Beverages';
-      await repo.saveCategory(cat);
+      final updated = cat.copyWith(name: 'Hot Beverages', id: id);
+      await repo.saveCategory(updated);
       expect(repo.getAllCategories(), hasLength(1));
       expect(repo.getCategoryById(id)!.name, 'Hot Beverages');
 
-      await repo.deleteCategory(cat);
+      await repo.deleteCategory(updated);
       expect(repo.getAllCategories(), isEmpty);
     });
   });

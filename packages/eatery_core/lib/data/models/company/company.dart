@@ -21,7 +21,8 @@ abstract class Company with _$Company {
     int? subscriptionId,
   }) = _Company;
 
-  factory Company.fromJson(Map<String, dynamic> json) => _$CompanyFromJson(json);
+  factory Company.fromJson(Map<String, dynamic> json) =>
+      _$CompanyFromJson(json);
 
   static Company fromMap(Map<String, dynamic> map) => Company.fromJson(map);
 
@@ -46,7 +47,16 @@ abstract class Company with _$Company {
 }
 
 extension CompanyX on Company {
-  Map<String, Object?> toMap() => toJson() as Map<String, Object?>;
+  Map<String, Object?> toMap() {
+    final m = toJson() as Map<String, Object?>;
+    // The SQL column is 'edition' but the Dart field is 'taxation'.
+    // Only rename when there's no collision to avoid silently overwriting
+    // an existing 'edition' key.
+    if (m.containsKey('taxation') && !m.containsKey('edition')) {
+      m['edition'] = m.remove('taxation');
+    }
+    return m;
+  }
 
   Iterable<dynamic> toIterable() {
     var map = toMap();

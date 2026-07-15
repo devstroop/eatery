@@ -12,7 +12,8 @@ class CreateCompanyResultPage extends ConsumerStatefulWidget {
       _CreateCompanyResultPageState();
 }
 
-class _CreateCompanyResultPageState extends ConsumerState<CreateCompanyResultPage> {
+class _CreateCompanyResultPageState
+    extends ConsumerState<CreateCompanyResultPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,10 +22,7 @@ class _CreateCompanyResultPageState extends ConsumerState<CreateCompanyResultPag
         backgroundColor: AppColors.grey200,
         title: Padding(
           padding: const EdgeInsets.only(top: 16.0),
-          child: Image.asset(
-            'assets/logo.png',
-            height: 48,
-          ),
+          child: Image.asset('assets/logo.png', height: 48),
         ),
         centerTitle: true,
       ),
@@ -41,8 +39,7 @@ class _CreateCompanyResultPageState extends ConsumerState<CreateCompanyResultPag
               Spacer(),
               Container(
                 margin: const EdgeInsets.only(top: 16.0),
-                child: Lottie.asset(
-                    'assets/lottie/animation_llie4lzc.json'),
+                child: Lottie.asset('assets/lottie/animation_llie4lzc.json'),
               ),
               Column(
                 mainAxisSize: MainAxisSize.min,
@@ -50,9 +47,10 @@ class _CreateCompanyResultPageState extends ConsumerState<CreateCompanyResultPag
                   Text(
                     'Congrats!',
                     style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.secondary2),
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.secondary2,
+                    ),
                   ),
                   Text(
                     'Your company has been created successfully.\nLogin to get started!',

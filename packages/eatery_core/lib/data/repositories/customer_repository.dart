@@ -1,4 +1,5 @@
 import 'package:eatery_core/data/models/eatery_db.dart';
+
 abstract class CustomerRepository {
   List<Customer> getAllCustomers();
   List<Customer> getCustomersPage(int limit, int offset);

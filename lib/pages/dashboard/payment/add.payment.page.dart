@@ -25,10 +25,7 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
 
   LibraryImage? image;
   PaymentMode paymentMode = PaymentMode.cash;
-  final List<FocusNode> _focusNodes = [
-    FocusNode(),
-    FocusNode(),
-  ];
+  final List<FocusNode> _focusNodes = [FocusNode(), FocusNode()];
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -68,41 +65,45 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
               children: [
                 // Order selection dropdown
                 ListTile(
-                    title: Text(
-                      '${order?.id ?? 'Select Order'}',
-                      style: AppTypography.titleMedium.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  title: Text(
+                    '${order?.id ?? 'Select Order'}',
+                    style: AppTypography.titleMedium.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
-                    subtitle: widget.order != null
-                        ? Text(
-                            widget.order!.type.name!,
-                            style: AppTypography.titleMedium.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          )
-                        : null,
-                    trailing: Text(
-                      (widget.order?.grandTotal ?? '').toString(),
-                      style: AppTypography.titleMedium.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
+                  ),
+                  subtitle: widget.order != null
+                      ? Text(
+                          widget.order!.type.name!,
+                          style: AppTypography.titleMedium.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )
+                      : null,
+                  trailing: Text(
+                    (widget.order?.grandTotal ?? '').toString(),
+                    style: AppTypography.titleMedium.copyWith(
+                      fontWeight: FontWeight.bold,
                     ),
-                    onTap: () async {
-                      showSearch(
-                          context: context,
-                          delegate: SearchOrderDelegate(
-                            orders: ref.read(orderRepositoryProvider).getAllOrders(),
-                            callback: (order) {
-                              setState(() {
-                                this.order = order;
-                                _controllerAmount.text =
-                                    order.grandTotal.toString();
-                              });
-                            },
-                            currencySymbol: '',
-                          ));
-                    }),
+                  ),
+                  onTap: () async {
+                    showSearch(
+                      context: context,
+                      delegate: SearchOrderDelegate(
+                        orders: ref
+                            .read(orderRepositoryProvider)
+                            .getAllOrders(),
+                        callback: (order) {
+                          setState(() {
+                            this.order = order;
+                            _controllerAmount.text = order.grandTotal
+                                .toString();
+                          });
+                        },
+                        currencySymbol: '',
+                      ),
+                    );
+                  },
+                ),
                 // Payment mode
                 ListTile(
                   title: const Text('Payment Mode'),
@@ -122,17 +123,21 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
                             ),
                           ),
                           ...PaymentMode.values
-                              .map((e) => ListTile(
-                                    leading: Visibility(
-                                      visible: paymentMode == e,
-                                      child: const Icon(Icons.check_circle,
-                                          color: Colors.green),
+                              .map(
+                                (e) => ListTile(
+                                  leading: Visibility(
+                                    visible: paymentMode == e,
+                                    child: const Icon(
+                                      Icons.check_circle,
+                                      color: Colors.green,
                                     ),
-                                    title: Text(e.name),
-                                    onTap: () {
-                                      Navigator.pop(context, e);
-                                    },
-                                  ))
+                                  ),
+                                  title: Text(e.name),
+                                  onTap: () {
+                                    Navigator.pop(context, e);
+                                  },
+                                ),
+                              )
                               .toList(),
                         ],
                       ),
@@ -155,7 +160,9 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
                   decoration: InputDecoration(
                     labelText: 'Amount',
                     hintText: 'Enter Payment Amount',
-                    prefix: Text('${ref.read(companyProvider.notifier).currency?.symbol ?? ''}  '),
+                    prefix: Text(
+                      '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}  ',
+                    ),
                     border: const OutlineInputBorder(),
                   ),
                   validator: (value) {
@@ -207,7 +214,10 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
           onPressed: () {
             if (order == null) {
               AppDialog.showMessage(
-                  context, message: 'Please select an order', type: MessageType.error);
+                context,
+                message: 'Please select an order',
+                type: MessageType.error,
+              );
               return;
             }
             final o = order!;
@@ -221,51 +231,68 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
                 orderId: o.id,
                 date: DateTime.now(),
               );
-              ref.read(paymentRepositoryProvider).savePayment(payment)
-                  .then((value) => AppDialog.showMessage(
-                          context,
-                          message: 'Payment saved successfully',
-                          type: MessageType.success, onConfirm: () async {
-
-                        var diningTable = ref.read(diningTableRepositoryProvider).getAllTables()
-                            .where((element) =>
-                        element.orderId == order?.id).firstOrNull;
-                        if(diningTable != null){
-                          await ref.read(diningTableRepositoryProvider).saveTable(
-                            diningTable.copyWith(
-                              status: DiningTableStatus.available,
-                              orderId: null,
-                              customerPhone: null,
-                            ),
-                          );
+              ref
+                  .read(paymentRepositoryProvider)
+                  .savePayment(payment)
+                  .then(
+                    (value) => AppDialog.showMessage(
+                      context,
+                      message: 'Payment saved successfully',
+                      type: MessageType.success,
+                      onConfirm: () async {
+                        var diningTable = ref
+                            .read(diningTableRepositoryProvider)
+                            .getAllTables()
+                            .where((element) => element.orderId == order?.id)
+                            .firstOrNull;
+                        if (diningTable != null) {
+                          await ref
+                              .read(diningTableRepositoryProvider)
+                              .saveTable(
+                                diningTable.copyWith(
+                                  status: DiningTableStatus.available,
+                                  orderId: null,
+                                  customerPhone: null,
+                                ),
+                              );
                         }
 
-                          final newPaidTotal = (o.paidTotal ?? 0) +
-                              double.parse(_controllerAmount.text);
-                          final isFullyPaid =
-                              newPaidTotal >= o.grandTotal;
-                          var updatedOrder = o.copyWith(
-                            paidTotal: newPaidTotal,
+                        final newPaidTotal =
+                            (o.paidTotal ?? 0) +
+                            double.parse(_controllerAmount.text);
+                        final isFullyPaid = newPaidTotal >= o.grandTotal;
+                        var updatedOrder = o.copyWith(paidTotal: newPaidTotal);
+                        if (isFullyPaid && o.status == OrderStatus.pending) {
+                          final now = DateTime.now();
+                          updatedOrder = updatedOrder.copyWith(
+                            status: OrderStatus.completed,
+                            updatedAt: now,
                           );
-                          if (isFullyPaid && o.status == OrderStatus.pending) {
-                            final now = DateTime.now();
-                            updatedOrder = updatedOrder.copyWith(
-                              status: OrderStatus.completed,
-                              updatedAt: now,
-                            );
-                            ref.read(orderRepositoryProvider).recordStatusTransition(
-                              OrderStatusHistory(
-                                orderId: o.id!,
-                                fromStatus: OrderStatus.pending.id,
-                                toStatus: OrderStatus.completed.id,
-                                changedAt: now,
-                              ),
-                            );
-                          }
-                          ref.read(orderRepositoryProvider).saveOrder(updatedOrder).then((value) => Navigator.pop(context));
-                      }))
-                  .onError((error, stackTrace) => AppDialog.showMessage(
-                      context, message: 'Error saving payment', type: MessageType.error));
+                          ref
+                              .read(orderRepositoryProvider)
+                              .recordStatusTransition(
+                                OrderStatusHistory(
+                                  orderId: o.id!,
+                                  fromStatus: OrderStatus.pending.id,
+                                  toStatus: OrderStatus.completed.id,
+                                  changedAt: now,
+                                ),
+                              );
+                        }
+                        ref
+                            .read(orderRepositoryProvider)
+                            .saveOrder(updatedOrder)
+                            .then((value) => Navigator.pop(context));
+                      },
+                    ),
+                  )
+                  .onError(
+                    (error, stackTrace) => AppDialog.showMessage(
+                      context,
+                      message: 'Error saving payment',
+                      type: MessageType.error,
+                    ),
+                  );
             }
           },
         ),

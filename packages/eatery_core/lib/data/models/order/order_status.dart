@@ -18,8 +18,10 @@ enum OrderStatus {
 
   const OrderStatus(this.id, this.name, this.color);
 
-  static OrderStatus fromId(int id) =>
-      OrderStatus.values.firstWhere((e) => e.id == id, orElse: () => OrderStatus.pending);
+  static OrderStatus fromId(int id) => OrderStatus.values.firstWhere(
+    (e) => e.id == id,
+    orElse: () => OrderStatus.pending,
+  );
 
   static OrderStatus fromString(String value) {
     final i = int.tryParse(value);

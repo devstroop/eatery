@@ -5,6 +5,11 @@
  * side binds these symbols via dart:ffi. The surface is intentionally minimal
  * (a generic SQL gateway) so it scales to every entity without new native code.
  *
+ * Library loading (macOS):
+ *   Flutter resolves @rpath/libeaterystore.dylib from the app bundle's
+ *   Frameworks directory. During development the Dart FFI loader falls back
+ *   to libeaterystore/zig-out/lib/libeaterystore.dylib.
+ *
  * Conventions:
  *   - All strings are NUL-terminated UTF-8.
  *   - `params_json` is a JSON array of positional bind values for `?`

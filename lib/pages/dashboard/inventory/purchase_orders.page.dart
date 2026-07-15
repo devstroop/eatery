@@ -24,21 +24,53 @@ class _PurchaseOrdersPageState extends ConsumerState<PurchaseOrdersPage> {
       title: "Purchase Orders",
       color: AppColors.menuInventory,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: AppColors.menuInventory, foregroundColor: AppColors.white,
-        label: const Text("New PO"), icon: const Icon(Icons.add),
-        onPressed: () => GoRouter.of(context).pushNamed("addPurchaseOrder").then((_) => setState(() {})),
+        backgroundColor: AppColors.menuInventory,
+        foregroundColor: AppColors.white,
+        label: const Text("New PO"),
+        icon: const Icon(Icons.add),
+        onPressed: () => GoRouter.of(
+          context,
+        ).pushNamed("addPurchaseOrder").then((_) => setState(() {})),
       ),
       child: list.isEmpty
-          ? const Center(child: Opacity(opacity: 0.5, child: Column(mainAxisAlignment: MainAxisAlignment.center,
-              children: [Icon(Icons.receipt, size: 64), SizedBox(height: 16), Text("No purchase orders")])))
-          : ListView(children: list.map((po) {
-        final statuses = ["Ordered", "Partial", "Received", "Cancelled"];
-        return Card(margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          child: ListTile(
-            title: Text("PO #${po.id}", style: AppTypography.titleMedium),
-            subtitle: Text("${DateFormat.yMMMd().format(po.orderDate)}  |  \$${po.totalAmount}  |  ${statuses[po.status.clamp(0, 3)]}"),
-          ));
-      }).toList()),
+          ? const Center(
+              child: Opacity(
+                opacity: 0.5,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.receipt, size: 64),
+                    SizedBox(height: 16),
+                    Text("No purchase orders"),
+                  ],
+                ),
+              ),
+            )
+          : ListView(
+              children: list.map((po) {
+                final statuses = [
+                  "Ordered",
+                  "Partial",
+                  "Received",
+                  "Cancelled",
+                ];
+                return Card(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  child: ListTile(
+                    title: Text(
+                      "PO #${po.id}",
+                      style: AppTypography.titleMedium,
+                    ),
+                    subtitle: Text(
+                      "${DateFormat.yMMMd().format(po.orderDate)}  |  \$${po.totalAmount}  |  ${statuses[po.status.clamp(0, 3)]}",
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
     );
   }
 }

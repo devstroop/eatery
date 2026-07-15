@@ -158,7 +158,9 @@ class _EditCustomerPageState extends ConsumerState<EditCustomerPage> {
                     const SizedBox(width: 6.0),
                     Text(
                       'Active',
-                      style: AppTypography.bodyLarge.copyWith(color: AppColors.black600),
+                      style: AppTypography.bodyLarge.copyWith(
+                        color: AppColors.black600,
+                      ),
                     ),
                   ],
                 ),

@@ -48,20 +48,12 @@ class _OrderConfirmationPageState extends ConsumerState<OrderConfirmationPage> {
             const Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
-                  'Receipt Preview',
-                  style: AppTypography.headlineSmall,
-                ),
+                Text('Receipt Preview', style: AppTypography.headlineSmall),
               ],
             ),
             const Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Customer copy',
-                  style: AppTypography.bodyLarge,
-                ),
-              ],
+              children: [Text('Customer copy', style: AppTypography.bodyLarge)],
             ),
             AppSpacing.gapXl,
             RepaintBoundary(
@@ -78,65 +70,95 @@ class _OrderConfirmationPageState extends ConsumerState<OrderConfirmationPage> {
                       Text(
                         customer.name ?? 'Unnamed',
                         style: const TextStyle(
-                          fontSize: 24, fontWeight: FontWeight.bold),
+                          fontSize: 24,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                       Text(
                         customer.phone,
                         style: const TextStyle(
-                          fontSize: 16, fontWeight: FontWeight.w400),
+                          fontSize: 16,
+                          fontWeight: FontWeight.w400,
+                        ),
                       ),
                     ],
                     AppSpacing.gapSm,
                     Text(
                       'Order #${widget.order.id}',
                       style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w400),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                     Text(
-                      DateFormat('dd MMM yyyy hh:mm a')
-                          .format(widget.order.createdAt),
+                      DateFormat(
+                        'dd MMM yyyy hh:mm a',
+                      ).format(widget.order.createdAt),
                       style: const TextStyle(
-                        fontSize: 16, fontWeight: FontWeight.w400),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
                     AppSpacing.gapMd,
                     Divider(color: AppColors.white900),
                     AppSpacing.gapMd,
-                    ..._items.map((item) => Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Expanded(
-                            child: Text(
-                              item.productName,
-                              style: const TextStyle(
-                                fontSize: 16, fontWeight: FontWeight.w400),
+                    ..._items.map(
+                      (item) => Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Expanded(
+                              child: Text(
+                                item.productName,
+                                style: const TextStyle(
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
                             ),
-                          ),
-                          Text(
-                            '${item.quantity} x $currencySymbol${item.price}',
-                            style: const TextStyle(
-                              fontSize: 14, fontWeight: FontWeight.w400),
-                          ),
-                          AppSpacing.gapSm,
-                          Text(
-                            '$currencySymbol${item.total}',
-                            style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
-                          ),
-                        ],
+                            Text(
+                              '${item.quantity} x $currencySymbol${item.price}',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                            AppSpacing.gapSm,
+                            Text(
+                              '$currencySymbol${item.total}',
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
-                    )),
+                    ),
                     AppSpacing.gapMd,
                     Divider(color: AppColors.white900),
                     AppSpacing.gapSm,
-                    _totalRow('Sub Total', '$currencySymbol${widget.order.subTotal}'),
+                    _totalRow(
+                      'Sub Total',
+                      '$currencySymbol${widget.order.subTotal}',
+                    ),
                     if (widget.order.discountTotal > 0)
-                      _totalRow('Discount', '-$currencySymbol${widget.order.discountTotal}'),
+                      _totalRow(
+                        'Discount',
+                        '-$currencySymbol${widget.order.discountTotal}',
+                      ),
                     _totalRow('Tax', '$currencySymbol${widget.order.taxTotal}'),
                     if (widget.order.roundOff != 0)
-                      _totalRow('Round Off', '$currencySymbol${widget.order.roundOff}'),
-                    _totalRow('Grand Total', '$currencySymbol${widget.order.grandTotal}', bold: true),
+                      _totalRow(
+                        'Round Off',
+                        '$currencySymbol${widget.order.roundOff}',
+                      ),
+                    _totalRow(
+                      'Grand Total',
+                      '$currencySymbol${widget.order.grandTotal}',
+                      bold: true,
+                    ),
                     AppSpacing.gapMd,
                   ],
                 ),

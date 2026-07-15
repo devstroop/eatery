@@ -39,7 +39,8 @@ class SqlitePreferenceStore {
     kotPrintEnabled: (row['kotPrint'] as int?) == 1,
     invoicePrinterId: row['invoicePrinterId'] as int?,
     kotPrinterId: row['kotPrinterId'] as int?,
-      id: row['id'] as int);
+    id: row['id'] as int,
+  );
 
   // ── KdsStation ─────────────────────────────────────────────────────────
 
@@ -51,7 +52,8 @@ class SqlitePreferenceStore {
     description: row['description'] as String?,
     sortOrder: (row['sortOrder'] as int?) ?? 0,
     isActive: (row['isActive'] as int) == 1,
-      id: row['id'] as int);
+    id: row['id'] as int,
+  );
 
   // ── ComplianceReport ───────────────────────────────────────────────────
 
@@ -110,7 +112,9 @@ class SqlitePreferenceStore {
           cashVariance, paymentBreakdownJson, taxBreakdownJson)
         VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
       ''', values);
-      cr = cr.copyWith(id: _store.queryScalar('SELECT last_insert_rowid()') as int?);
+      cr = cr.copyWith(
+        id: _store.queryScalar('SELECT last_insert_rowid()') as int?,
+      );
     }
   }
 

@@ -124,7 +124,9 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
                     if (value != null && value.isNotEmpty && value.length < 4) {
                       return 'Minimum 4 digits';
                     }
-                    if (value != null && value.isNotEmpty && !RegExp(r'^\d{4,}$').hasMatch(value)) {
+                    if (value != null &&
+                        value.isNotEmpty &&
+                        !RegExp(r'^\d{4,}$').hasMatch(value)) {
                       return 'Numbers only';
                     }
                     return null;
@@ -222,9 +224,7 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
                   : null,
             );
             try {
-              ref.read(staffRepositoryProvider).saveStaff(updated).then((
-                id,
-              ) {
+              ref.read(staffRepositoryProvider).saveStaff(updated).then((id) {
                 AppDialog.showMessage(
                   context,
                   message: 'Staff updated successfully',

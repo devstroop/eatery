@@ -23,24 +23,64 @@ class _SuppliersPageState extends ConsumerState<SuppliersPage> {
       title: "Suppliers",
       color: AppColors.menuInventory,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: AppColors.menuInventory, foregroundColor: AppColors.white,
-        label: const Text("Add Supplier"), icon: const Icon(Icons.add),
-        onPressed: () => GoRouter.of(context).pushNamed("addSupplier").then((_) => setState(() {})),
+        backgroundColor: AppColors.menuInventory,
+        foregroundColor: AppColors.white,
+        label: const Text("Add Supplier"),
+        icon: const Icon(Icons.add),
+        onPressed: () => GoRouter.of(
+          context,
+        ).pushNamed("addSupplier").then((_) => setState(() {})),
       ),
       child: list.isEmpty
-          ? const Center(child: Opacity(opacity: 0.5, child: Column(mainAxisAlignment: MainAxisAlignment.center,
-              children: [Icon(Icons.business, size: 64), SizedBox(height: 16), Text("No suppliers")])))
-          : ListView(children: list.map((s) => Card(margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              child: ListTile(
-                title: Text(s.name, style: AppTypography.titleMedium),
-                subtitle: Text("${s.contactName ?? ""}  ${s.phone ?? ""}"),
-                trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                  IconButton(icon: const Icon(Icons.edit, size: 20),
-                    onPressed: () => GoRouter.of(context).pushNamed("editSupplier", extra: s).then((_) => setState(() {}))),
-                  IconButton(icon: const Icon(Icons.delete, size: 20),
-                    onPressed: () { repo.deleteSupplier(s.id!); setState(() {}); }),
-                ]),
-              ))).toList()),
+          ? const Center(
+              child: Opacity(
+                opacity: 0.5,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.business, size: 64),
+                    SizedBox(height: 16),
+                    Text("No suppliers"),
+                  ],
+                ),
+              ),
+            )
+          : ListView(
+              children: list
+                  .map(
+                    (s) => Card(
+                      margin: const EdgeInsets.symmetric(
+                        horizontal: 8,
+                        vertical: 4,
+                      ),
+                      child: ListTile(
+                        title: Text(s.name, style: AppTypography.titleMedium),
+                        subtitle: Text(
+                          "${s.contactName ?? ""}  ${s.phone ?? ""}",
+                        ),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: const Icon(Icons.edit, size: 20),
+                              onPressed: () => GoRouter.of(context)
+                                  .pushNamed("editSupplier", extra: s)
+                                  .then((_) => setState(() {})),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete, size: 20),
+                              onPressed: () {
+                                repo.deleteSupplier(s.id!);
+                                setState(() {});
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
     );
   }
 }

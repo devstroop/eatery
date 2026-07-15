@@ -26,24 +26,27 @@ class SqliteCompanyRepository implements CompanyRepository {
   @override
   Future<void> saveCompany(Company company) async {
     final m = company.toMap();
-    _store.execute('''
+    _store.execute(
+      '''
       INSERT OR REPLACE INTO company
         (id, logo, name, email, phone, address, password, edition,
          currencyCode, salesTaxNumber, foodLicenseNo, subscriptionId)
       VALUES (1,?,?,?,?,?,?,?,?,?,?,?)
-    ''', [
-      m['logo'],
-      m['name'],
-      m['email'],
-      m['phone'],
-      m['address'],
-      m['password'],
-      m['edition'],
-      m['currencyCode'],
-      m['salesTaxNumber'],
-      m['foodLicenseNo'],
-      m['subscriptionId'],
-    ]);
+    ''',
+      [
+        m['logo'],
+        m['name'],
+        m['email'],
+        m['phone'],
+        m['address'],
+        m['password'],
+        m['edition'],
+        m['currencyCode'],
+        m['salesTaxNumber'],
+        m['foodLicenseNo'],
+        m['subscriptionId'],
+      ],
+    );
     company = company.copyWith(id: 1);
     notifyMutation('company', 1, 'save', company.toMap());
   }
@@ -52,10 +55,7 @@ class SqliteCompanyRepository implements CompanyRepository {
 
   @override
   KCurrency? getCurrencyByCode(String code) {
-    final rows = _store.query(
-      'SELECT * FROM currency WHERE code = ?',
-      [code],
-    );
+    final rows = _store.query('SELECT * FROM currency WHERE code = ?', [code]);
     return rows.isEmpty ? null : _toCurrency(rows.first);
   }
 
@@ -68,25 +68,28 @@ class SqliteCompanyRepository implements CompanyRepository {
   void seedCurrencies(Iterable<KCurrency> currencies) {
     if (_store.queryScalar('SELECT COUNT(*) FROM currency') != 0) return;
     for (final c in currencies) {
-      _store.execute('''
+      _store.execute(
+        '''
         INSERT OR IGNORE INTO currency
           (code, name, symbol, flag, number, decimal_digits, name_plural,
            symbol_on_left, decimal_separator, thousands_separator,
            space_between_amount_and_symbol)
         VALUES (?,?,?,?,?,?,?,?,?,?,?)
-      ''', [
-        c.code,
-        c.name,
-        c.symbol,
-        c.flag,
-        c.number,
-        c.decimalDigits,
-        c.namePlural,
-        c.symbolOnLeft ? 1 : 0,
-        c.decimalSeparator,
-        c.thousandsSeparator,
-        c.spaceBetweenAmountAndSymbol ? 1 : 0,
-      ]);
+      ''',
+        [
+          c.code,
+          c.name,
+          c.symbol,
+          c.flag,
+          c.number,
+          c.decimalDigits,
+          c.namePlural,
+          c.symbolOnLeft ? 1 : 0,
+          c.decimalSeparator,
+          c.thousandsSeparator,
+          c.spaceBetweenAmountAndSymbol ? 1 : 0,
+        ],
+      );
     }
   }
 
@@ -113,7 +116,8 @@ class SqliteCompanyRepository implements CompanyRepository {
       salesTaxNumber: row['salesTaxNumber'] as String?,
       foodLicenseNo: row['foodLicenseNo'] as String?,
       subscriptionId: row['subscriptionId'] as int?,
-      id: row['id'] as int);
+      id: row['id'] as int,
+    );
   }
 
   KCurrency _toCurrency(Map<String, Object?> row) => KCurrency(
@@ -127,6 +131,7 @@ class SqliteCompanyRepository implements CompanyRepository {
     symbolOnLeft: (row['symbol_on_left'] as int) == 1,
     decimalSeparator: row['decimal_separator'] as String,
     thousandsSeparator: row['thousands_separator'] as String,
-    spaceBetweenAmountAndSymbol: (row['space_between_amount_and_symbol'] as int) == 1,
+    spaceBetweenAmountAndSymbol:
+        (row['space_between_amount_and_symbol'] as int) == 1,
   );
 }

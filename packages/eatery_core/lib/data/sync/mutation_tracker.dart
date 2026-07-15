@@ -14,7 +14,9 @@ class MutationTracker {
     Object? previousEntity,
   }) {
     final data = _entityToMap(entity);
-    final prevData = previousEntity != null ? _entityToMap(previousEntity) : null;
+    final prevData = previousEntity != null
+        ? _entityToMap(previousEntity)
+        : null;
     final id = _entityId(entity);
     if (id == null) return;
 

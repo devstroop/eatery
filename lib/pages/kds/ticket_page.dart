@@ -297,7 +297,10 @@ class _StatusActionButton extends ConsumerWidget {
             debugPrint('Status transition failed: $e');
             if (!context.mounted) return;
             ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Failed: $e'), backgroundColor: Colors.red),
+              SnackBar(
+                content: Text('Failed: $e'),
+                backgroundColor: Colors.red,
+              ),
             );
           }
         },

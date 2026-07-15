@@ -35,11 +35,15 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
           children: [
             Icon(Icons.person_add),
             SizedBox(width: 6),
-            Text('New', style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.w500),)
+            Text(
+              'New',
+              style: AppTypography.titleLarge.copyWith(
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ],
         ),
-
-      )
+      ),
     ];
   }
 
@@ -96,14 +100,16 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
 
   Widget _buildSearchResults(BuildContext context, String query) {
     List<Customer> searchResults = customers
-        .where((element) =>
-    (element.name ?? '').toLowerCase().contains(query.toLowerCase()) ||
-            (element.phone ?? '').toLowerCase().contains(query.toLowerCase()))
+        .where(
+          (element) =>
+              (element.name ?? '').toLowerCase().contains(
+                query.toLowerCase(),
+              ) ||
+              (element.phone ?? '').toLowerCase().contains(query.toLowerCase()),
+        )
         .toList();
     if (searchResults.isEmpty) {
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+      return const Center(child: CircularProgressIndicator());
     }
     return Column(
       children: [
@@ -143,14 +149,19 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
         child: Center(
           child: Text(
             (customer.name ?? 'NA')[0],
-            style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey600),
+            style: AppTypography.titleLarge.copyWith(
+              fontWeight: FontWeight.bold,
+              color: AppColors.grey600,
+            ),
           ),
         ),
-
       ),
       title: Text(
         customer.name ?? 'NA',
-        style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.black600),
+        style: AppTypography.titleLarge.copyWith(
+          fontWeight: FontWeight.bold,
+          color: AppColors.black600,
+        ),
       ),
       subtitle: Text(
         customer.phone ?? '',
@@ -158,10 +169,14 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
       ),
       trailing: Text(
         timeAgo(customer.lastOrderAt),
-        style: AppTypography.labelMedium.copyWith(fontWeight: FontWeight.bold, color: AppColors.black600),
+        style: AppTypography.labelMedium.copyWith(
+          fontWeight: FontWeight.bold,
+          color: AppColors.black600,
+        ),
       ),
     );
   }
+
   String timeAgo(DateTime? lastOrderTime) {
     if (lastOrderTime == null) {
       return 'Never ordered';
@@ -169,7 +184,9 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
 
     Duration difference = DateTime.now().difference(lastOrderTime);
     if (difference.inDays > 0) {
-      return DateFormat.yMMMd().format(lastOrderTime); // Display date if more than a day
+      return DateFormat.yMMMd().format(
+        lastOrderTime,
+      ); // Display date if more than a day
     } else if (difference.inHours > 0) {
       return '${difference.inHours}h ago';
     } else if (difference.inMinutes > 0) {

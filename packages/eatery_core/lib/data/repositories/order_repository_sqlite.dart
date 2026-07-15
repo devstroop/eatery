@@ -31,13 +31,19 @@ class SqliteOrderRepository implements OrderRepository {
   // ---------------------------------------------------------------------------
 
   @override
-  List<Order> getAllOrders() =>
-      _store.query('SELECT * FROM orders LIMIT 100').map(Order.fromMap).toList();
+  List<Order> getAllOrders() => _store
+      .query('SELECT * FROM orders LIMIT 100')
+      .map(Order.fromMap)
+      .toList();
 
   @override
-  List<Order> getOrdersPage(int limit, int offset) =>
-      _store.query('SELECT * FROM orders ORDER BY id DESC LIMIT ? OFFSET ?', [limit, offset])
-          .map(Order.fromMap).toList();
+  List<Order> getOrdersPage(int limit, int offset) => _store
+      .query('SELECT * FROM orders ORDER BY id DESC LIMIT ? OFFSET ?', [
+        limit,
+        offset,
+      ])
+      .map(Order.fromMap)
+      .toList();
 
   @override
   int getOrderCount() =>
@@ -120,18 +126,21 @@ class SqliteOrderRepository implements OrderRepository {
   @override
   Future<void> recordStatusTransition(OrderStatusHistory transition) async {
     final m = transition.toMap();
-    _store.execute('''
+    _store.execute(
+      '''
       INSERT INTO order_status_history (orderId, fromStatus, toStatus,
         changedByStaffId, changedAt, reason)
       VALUES (?,?,?,?,?,?)
-    ''', [
-      m['orderId'],
-      m['fromStatus'],
-      m['toStatus'],
-      m['changedByStaffId'],
-      m['changedAt'],
-      m['reason'],
-    ]);
+    ''',
+      [
+        m['orderId'],
+        m['fromStatus'],
+        m['toStatus'],
+        m['changedByStaffId'],
+        m['changedAt'],
+        m['reason'],
+      ],
+    );
   }
 
   @override

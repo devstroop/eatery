@@ -1,6 +1,6 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:eatery/functions/order.function.dart';
-import 'package:eatery/data/models/eatery_db.dart';
+import 'package:eatery_core/data/models/eatery_db.dart';
 
 void main() {
   group('OrderFunction calculations (no DB dependency)', () {

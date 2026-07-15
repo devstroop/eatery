@@ -120,11 +120,7 @@ void main() {
     });
 
     test('maps order entityType to orders table', () {
-      final e = anEntry(
-        entityType: 'order',
-        entityId: 1,
-        data: {'status': 1},
-      );
+      final e = anEntry(entityType: 'order', entityId: 1, data: {'status': 1});
       coordinator.syncService.receiveEntries([e]);
 
       final rows = store.query('SELECT * FROM orders WHERE id = ?', [1]);
@@ -154,11 +150,7 @@ void main() {
         [1, 'Void Me', 1.0, 0, 1],
       );
 
-      final e = anEntry(
-        entityType: 'product',
-        entityId: 1,
-        operation: 'void',
-      );
+      final e = anEntry(entityType: 'product', entityId: 1, operation: 'void');
       coordinator.syncService.receiveEntries([e]);
 
       final rows = store.query('SELECT * FROM product WHERE id = ?', [1]);

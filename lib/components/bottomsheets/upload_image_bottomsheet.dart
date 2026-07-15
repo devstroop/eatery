@@ -62,7 +62,11 @@ class _UploadImageBottomSheetState extends State<UploadImageBottomSheet> {
       });
     } catch (e) {
       Navigator.pop(widget.context);
-      AppDialog.showMessage(widget.context, message: e.toString(), type: MessageType.error);
+      AppDialog.showMessage(
+        widget.context,
+        message: e.toString(),
+        type: MessageType.error,
+      );
     }
   }
 

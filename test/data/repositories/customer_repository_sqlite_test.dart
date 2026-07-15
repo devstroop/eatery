@@ -1,8 +1,8 @@
-import 'package:eatery/data/database/eatery_database.dart';
-import 'package:eatery/data/database/native/eatery_schema.dart';
-import 'package:eatery/data/database/native/eatery_store.dart';
-import 'package:eatery/data/models/eatery_db.dart';
-import 'package:eatery/data/repositories/customer_repository_sqlite.dart';
+import 'package:eatery_core/data/database/eatery_database.dart';
+import 'package:eatery_core/data/database/native/eatery_schema.dart';
+import 'package:eatery_core/data/database/native/eatery_store.dart';
+import 'package:eatery_core/data/models/eatery_db.dart';
+import 'package:eatery_core/data/repositories/customer_repository_sqlite.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
 
@@ -42,7 +42,6 @@ void main() {
 
       final id = await repo.saveCustomer(c);
       expect(id, greaterThan(0));
-      expect(c.id, id);
 
       final fetched = repo.getCustomerByPhone('555-0100')!;
       expect(fetched.name, 'Ada Lovelace');
@@ -72,9 +71,8 @@ void main() {
       final c = Customer(name: 'Grace', phone: '555-0200');
       final id = await repo.saveCustomer(c);
 
-      c.name = 'Grace Hopper';
-      c.isActive = false;
-      final id2 = await repo.saveCustomer(c);
+      final updated = c.copyWith(name: 'Grace Hopper', isActive: false, id: id);
+      final id2 = await repo.saveCustomer(updated);
 
       expect(id2, id);
       expect(repo.getAllCustomers(), hasLength(1));

@@ -85,14 +85,14 @@ class OrderDto extends BaseDto<OrderDto> {
       voidedAt: json['voidedAt'] != null
           ? DateTime.fromMillisecondsSinceEpoch(json['voidedAt'] as int)
           : null,
-      products: (json['products'] as List<dynamic>?)
-              ?.map((e) =>
-                  OrderProductDto.fromJson(e as Map<String, dynamic>))
+      products:
+          (json['products'] as List<dynamic>?)
+              ?.map((e) => OrderProductDto.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
-      payments: (json['payments'] as List<dynamic>?)
-              ?.map(
-                  (e) => PaymentDto.fromJson(e as Map<String, dynamic>))
+      payments:
+          (json['payments'] as List<dynamic>?)
+              ?.map((e) => PaymentDto.fromJson(e as Map<String, dynamic>))
               .toList() ??
           [],
     );

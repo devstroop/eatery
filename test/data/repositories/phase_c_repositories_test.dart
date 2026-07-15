@@ -1,8 +1,8 @@
-import 'package:eatery/data/database/native/eatery_schema.dart';
-import 'package:eatery/data/database/native/eatery_store.dart';
-import 'package:eatery/data/models/eatery_db.dart';
-import 'package:eatery/data/repositories/staff_repository_sqlite.dart';
-import 'package:eatery/data/repositories/subscription_repository_sqlite.dart';
+import 'package:eatery_core/data/database/native/eatery_schema.dart';
+import 'package:eatery_core/data/database/native/eatery_store.dart';
+import 'package:eatery_core/data/models/eatery_db.dart';
+import 'package:eatery_core/data/repositories/staff_repository_sqlite.dart';
+import 'package:eatery_core/data/repositories/subscription_repository_sqlite.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
 
@@ -120,11 +120,15 @@ void main() {
 
     test('save replaces existing when id set', () async {
       final sub = Subscription(subscriptionType: SubscriptionType.individual);
-      await repo.save(sub);
+      final id = await repo.save(sub);
 
-      sub.subscriptionType = SubscriptionType.business;
-      await repo.save(sub);
+      final updated = sub.copyWith(
+        subscriptionType: SubscriptionType.business,
+        id: id,
+      );
+      final id2 = await repo.save(updated);
 
+      expect(id2, id);
       final fetched = repo.getFirst()!;
       expect(fetched.subscriptionType, SubscriptionType.business);
     });

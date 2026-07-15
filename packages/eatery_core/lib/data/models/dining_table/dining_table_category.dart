@@ -16,6 +16,13 @@ abstract class DiningTableCategory with _$DiningTableCategory {
       _$DiningTableCategoryFromJson(json);
 
   static DiningTableCategory fromMap(Map<String, dynamic> map) {
+    if (map['isActive'] is int) {
+      map = Map<String, dynamic>.from(map);
+      map['isActive'] = (map['isActive'] as int) != 0;
+    } else if (map['isActive'] == null) {
+      map = Map<String, dynamic>.from(map);
+      map['isActive'] = false;
+    }
     return DiningTableCategory.fromJson(map);
   }
 

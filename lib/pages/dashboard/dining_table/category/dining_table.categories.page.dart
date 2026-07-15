@@ -37,9 +37,7 @@ class _DiningTableCategoriesPageState
         },
       ),
       child:
-          ref.read(diningTableRepositoryProvider)
-              .getAllCategories()
-              .isNotEmpty
+          ref.read(diningTableRepositoryProvider).getAllCategories().isNotEmpty
           ? ListView(
               children: [
                 ...ref.read(diningTableRepositoryProvider).getAllCategories().map((

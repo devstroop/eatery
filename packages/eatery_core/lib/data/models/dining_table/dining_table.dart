@@ -91,8 +91,19 @@ extension DiningTableX on DiningTable {
 
   List<dynamic> toIterable() {
     return [
-      name, categoryId, description, orderId, capacity, status.id,
-      customerPhone, posX, posY, shape, width, height, staffId,
+      name,
+      categoryId,
+      description,
+      orderId,
+      capacity,
+      status.id,
+      customerPhone,
+      posX,
+      posY,
+      shape,
+      width,
+      height,
+      staffId,
     ];
   }
 }

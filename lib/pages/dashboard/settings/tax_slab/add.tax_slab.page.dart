@@ -16,7 +16,8 @@ class AddTaxSlabSettingsPage extends ConsumerStatefulWidget {
       _AddTaxSlabSettingsPageState();
 }
 
-class _AddTaxSlabSettingsPageState extends ConsumerState<AddTaxSlabSettingsPage> {
+class _AddTaxSlabSettingsPageState
+    extends ConsumerState<AddTaxSlabSettingsPage> {
   final TextEditingController controllerSlabName = TextEditingController();
   final TextEditingController controllerTaxRate = TextEditingController();
   final focus1 = FocusNode();
@@ -33,16 +34,26 @@ class _AddTaxSlabSettingsPageState extends ConsumerState<AddTaxSlabSettingsPage>
 
     try {
       TaxSlab taxSlab = TaxSlab(
-          name: controllerSlabName.text,
-          rate: double.parse(controllerTaxRate.text),
-          type: selectedTaxType);
-      await ref.read(taxRepositoryProvider).saveTaxSlab(taxSlab).whenComplete(() {
-        AppDialog.showMessage(this.context, message: 'Tax slab created successfully!',
-            type: MessageType.success, onConfirm: () => Navigator.pop(this.context));
-      });
+        name: controllerSlabName.text,
+        rate: double.parse(controllerTaxRate.text),
+        type: selectedTaxType,
+      );
+      await ref.read(taxRepositoryProvider).saveTaxSlab(taxSlab).whenComplete(
+        () {
+          AppDialog.showMessage(
+            this.context,
+            message: 'Tax slab created successfully!',
+            type: MessageType.success,
+            onConfirm: () => Navigator.pop(this.context),
+          );
+        },
+      );
     } catch (_) {
       AppDialog.showMessage(
-          this.context, message: 'Something went wrong!', type: MessageType.error);
+        this.context,
+        message: 'Something went wrong!',
+        type: MessageType.error,
+      );
     }
   }
 
@@ -85,14 +96,13 @@ class _AddTaxSlabSettingsPageState extends ConsumerState<AddTaxSlabSettingsPage>
                   hint: 'Enter tax rate',
                   themeColor: _pageColor,
                   focusNode: focus2,
-                  suffix: Icon(
-                    Icons.percent,
-                    color: AppColors.white600,
+                  suffix: Icon(Icons.percent, color: AppColors.white600),
+                  keyboardType: const TextInputType.numberWithOptions(
+                    decimal: true,
                   ),
-                  keyboardType:
-                      const TextInputType.numberWithOptions(decimal: true),
                   validator: (value) {
-                    if (value!.trim().isEmpty) return 'Tax rate cannot be blank';
+                    if (value!.trim().isEmpty)
+                      return 'Tax rate cannot be blank';
                     return null;
                   },
                   onFieldSubmitted: (v) {
@@ -103,19 +113,17 @@ class _AddTaxSlabSettingsPageState extends ConsumerState<AddTaxSlabSettingsPage>
                 SpacingStyle.defaultVerticalSpacing,
                 Text(
                   'Select Tax Type',
-                  style: AppTypography.labelMedium.copyWith(color: AppColors.black600),
+                  style: AppTypography.labelMedium.copyWith(
+                    color: AppColors.black600,
+                  ),
                 ),
-                const SizedBox(
-                  height: 3.0,
-                ),
+                const SizedBox(height: 3.0),
                 ToggleSwitch(
                   highlightColor: _pageColor,
                   backgroundColor: const Color(0xFFE5E5E5),
                   foregroundColor: AppColors.white,
                   inactiveForegroundColor: AppColors.black600,
-                  children: [
-                    ...TaxType.values.map((e) => e.name!)
-                  ],
+                  children: [...TaxType.values.map((e) => e.name!)],
                   selectedIndex: selectedTaxType.index,
                   onChange: (int? index) {
                     if (index != null) {

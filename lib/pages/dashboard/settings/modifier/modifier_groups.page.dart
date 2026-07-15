@@ -28,7 +28,9 @@ class _ModifierGroupsPageState extends ConsumerState<ModifierGroupsPage> {
         label: const Text('Add Group'),
         icon: const Icon(Icons.add),
         onPressed: () {
-          GoRouter.of(context).pushNamed('addModifierGroup').then((_) => setState(() {}));
+          GoRouter.of(
+            context,
+          ).pushNamed('addModifierGroup').then((_) => setState(() {}));
         },
       ),
       child: groups.isEmpty
@@ -40,19 +42,29 @@ class _ModifierGroupsPageState extends ConsumerState<ModifierGroupsPage> {
                   children: [
                     const Icon(Icons.tune, size: 64),
                     AppSpacing.gapLg,
-                    Text('No modifier groups', style: AppTypography.headlineSmall),
+                    Text(
+                      'No modifier groups',
+                      style: AppTypography.headlineSmall,
+                    ),
                     AppSpacing.gapSm,
-                    Text('Add groups like "Extra Toppings" or "Beverage Size"',
-                        style: AppTypography.bodyMedium),
+                    Text(
+                      'Add groups like "Extra Toppings" or "Beverage Size"',
+                      style: AppTypography.bodyMedium,
+                    ),
                   ],
                 ),
               ),
             )
           : ListView(
               children: groups.map((g) {
-                final modifiers = ref.read(modifierRepositoryProvider).getModifiers(g.id!);
+                final modifiers = ref
+                    .read(modifierRepositoryProvider)
+                    .getModifiers(g.id!);
                 return Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   child: ListTile(
                     title: Text(g.name, style: AppTypography.titleMedium),
                     subtitle: Column(
@@ -72,17 +84,21 @@ class _ModifierGroupsPageState extends ConsumerState<ModifierGroupsPage> {
                         AppDialog.show(
                           context,
                           title: 'Delete ${g.name}',
-                          content: 'Delete this modifier group and all its options?',
+                          content:
+                              'Delete this modifier group and all its options?',
                           destructive: true,
                           onConfirm: () {
-                            ref.read(modifierRepositoryProvider).deleteGroup(g.id!);
+                            ref
+                                .read(modifierRepositoryProvider)
+                                .deleteGroup(g.id!);
                             setState(() {});
                           },
                         );
                       },
                     ),
                     onTap: () {
-                      GoRouter.of(context).pushNamed('editModifierGroup', extra: g)
+                      GoRouter.of(context)
+                          .pushNamed('editModifierGroup', extra: g)
                           .then((_) => setState(() {}));
                     },
                   ),

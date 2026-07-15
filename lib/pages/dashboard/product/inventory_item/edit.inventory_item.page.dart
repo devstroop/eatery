@@ -50,7 +50,9 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
             : '';
         selectedFoodType = widget.product.foodType;
         selectedTaxSlab = widget.product.taxSlabId != null
-            ? ref.read(taxRepositoryProvider).getTaxSlabById(widget.product.taxSlabId!)
+            ? ref
+                  .read(taxRepositoryProvider)
+                  .getTaxSlabById(widget.product.taxSlabId!)
             : null;
         selectedCategory = widget.product.categoryId != null
             ? ref
@@ -242,7 +244,7 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
                   padding: const EdgeInsets.all(12.0),
                   child: Text(
                     '${selectedTaxSlab?.rate}% (${selectedTaxSlab?.type.name})',
-                      style: AppTypography.labelLarge.copyWith(color: _pageColor),
+                    style: AppTypography.labelLarge.copyWith(color: _pageColor),
                   ),
                 ),
               const SizedBox(height: 6.0),

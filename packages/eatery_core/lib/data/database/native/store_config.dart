@@ -47,11 +47,20 @@ const bool kUseSqlitePrinterStore = true;
 
 /// All Phase A+B flags aggregated — used in main.dart to open the store
 /// when any entity is routed through SQLite.
-const bool kUseSqliteStore = kUseSqliteProductStore || kUseSqliteCustomerStore ||
-    kUseSqliteOrderStore || kUseSqlitePaymentStore || kUseSqliteTaxStore ||
-    kUseSqliteDiningTableStore || kUseSqliteCompanyStore || kUseSqliteStaffStore ||
-    kUseSqliteSubscriptionStore || kUseSqliteAutoPrintStore ||
-    kUseSqliteKdsStationStore || kUseSqliteComplianceStore || kUseSqliteVoidLogStore ||
+const bool kUseSqliteStore =
+    kUseSqliteProductStore ||
+    kUseSqliteCustomerStore ||
+    kUseSqliteOrderStore ||
+    kUseSqlitePaymentStore ||
+    kUseSqliteTaxStore ||
+    kUseSqliteDiningTableStore ||
+    kUseSqliteCompanyStore ||
+    kUseSqliteStaffStore ||
+    kUseSqliteSubscriptionStore ||
+    kUseSqliteAutoPrintStore ||
+    kUseSqliteKdsStationStore ||
+    kUseSqliteComplianceStore ||
+    kUseSqliteVoidLogStore ||
     kUseSqlitePrinterStore;
 
 /// Filename of the SQLite database inside the app data directory.

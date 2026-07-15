@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class TakeAwayDrawing extends StatelessWidget {
-    final Color? color;
+  final Color? color;
 
   const TakeAwayDrawing({super.key, this.color});
   @override
@@ -14,7 +14,7 @@ class TakeAwayDrawing extends StatelessWidget {
 }
 
 class TakeAwayDrawingPainter extends CustomPainter {
-    final Color? color;
+  final Color? color;
 
   const TakeAwayDrawingPainter({this.color});
   @override

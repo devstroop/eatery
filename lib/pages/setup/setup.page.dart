@@ -52,14 +52,19 @@ class _SetupPageState extends ConsumerState<SetupPage> {
 
       if (mounted) {
         ScaffoldMessenger.of(this.context).showSnackBar(
-          const SnackBar(content: Text('Restaurant set up! Log in with your PIN')),
+          const SnackBar(
+            content: Text('Restaurant set up! Log in with your PIN'),
+          ),
         );
         GoRouter.of(this.context).goNamed('login');
       }
     } catch (e) {
       if (mounted) {
-        AppDialog.showMessage(this.context,
-            message: 'Setup failed: $e', type: MessageType.error);
+        AppDialog.showMessage(
+          this.context,
+          message: 'Setup failed: $e',
+          type: MessageType.error,
+        );
       }
     } finally {
       if (mounted) setState(() => _loading = false);
@@ -92,7 +97,9 @@ class _SetupPageState extends ConsumerState<SetupPage> {
                   AppSpacing.gapSm,
                   Text(
                     'You can configure everything else later from the dashboard.',
-                    style: AppTypography.bodyMedium.copyWith(color: AppColors.grey600),
+                    style: AppTypography.bodyMedium.copyWith(
+                      color: AppColors.grey600,
+                    ),
                   ),
                   AppSpacing.gapXxl,
                   CustomTextFromField(

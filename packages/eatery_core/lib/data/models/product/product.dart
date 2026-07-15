@@ -23,7 +23,8 @@ abstract class Product with _$Product {
     String? stationName,
   }) = _Product;
 
-  factory Product.fromJson(Map<String, dynamic> json) => _$ProductFromJson(json);
+  factory Product.fromJson(Map<String, dynamic> json) =>
+      _$ProductFromJson(json);
 
   static Product fromMap(Map<String, dynamic> map) => Product.fromJson(map);
 

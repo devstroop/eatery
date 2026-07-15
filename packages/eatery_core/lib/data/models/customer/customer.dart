@@ -35,8 +35,9 @@ abstract class Customer with _$Customer {
       'longitude': map['longitude'] != null
           ? double.parse(map['longitude'].toString())
           : null,
-      'isActive':
-          map['isActive'] is int ? map['isActive'] == 1 : (map['isActive'] ?? false),
+      'isActive': map['isActive'] is int
+          ? map['isActive'] == 1
+          : (map['isActive'] ?? false),
       'lastOrderAt': map['lastOrderAt'],
     });
   }

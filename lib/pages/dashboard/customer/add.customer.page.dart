@@ -161,7 +161,9 @@ class _AddCustomerPageState extends ConsumerState<AddCustomerPage> {
                     const SizedBox(width: 6.0),
                     Text(
                       'Active',
-                      style: AppTypography.bodyLarge.copyWith(color: AppColors.black600),
+                      style: AppTypography.bodyLarge.copyWith(
+                        color: AppColors.black600,
+                      ),
                     ),
                   ],
                 ),

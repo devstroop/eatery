@@ -13,7 +13,8 @@ class EditModifierGroupPage extends ConsumerStatefulWidget {
   final ModifierGroup group;
 
   @override
-  ConsumerState<EditModifierGroupPage> createState() => _EditModifierGroupPageState();
+  ConsumerState<EditModifierGroupPage> createState() =>
+      _EditModifierGroupPageState();
 }
 
 class _EditModifierGroupPageState extends ConsumerState<EditModifierGroupPage> {
@@ -25,7 +26,9 @@ class _EditModifierGroupPageState extends ConsumerState<EditModifierGroupPage> {
   @override
   void initState() {
     super.initState();
-    _modifiers = ref.read(modifierRepositoryProvider).getModifiers(widget.group.id!);
+    _modifiers = ref
+        .read(modifierRepositoryProvider)
+        .getModifiers(widget.group.id!);
   }
 
   @override
@@ -39,18 +42,22 @@ class _EditModifierGroupPageState extends ConsumerState<EditModifierGroupPage> {
     final name = _nameCtrl.text.trim();
     if (name.isEmpty) return;
     final price = double.tryParse(_priceCtrl.text) ?? 0;
-    await ref.read(modifierRepositoryProvider).saveModifier(
-      Modifier(
-        modifierGroupId: widget.group.id!,
-        name: name,
-        priceAdjust: price,
-        createdAt: DateTime.now(),
-      ),
-    );
+    await ref
+        .read(modifierRepositoryProvider)
+        .saveModifier(
+          Modifier(
+            modifierGroupId: widget.group.id!,
+            name: name,
+            priceAdjust: price,
+            createdAt: DateTime.now(),
+          ),
+        );
     _nameCtrl.clear();
     _priceCtrl.clear();
     setState(() {
-      _modifiers = ref.read(modifierRepositoryProvider).getModifiers(widget.group.id!);
+      _modifiers = ref
+          .read(modifierRepositoryProvider)
+          .getModifiers(widget.group.id!);
       _showAddForm = false;
     });
   }
@@ -69,7 +76,12 @@ class _EditModifierGroupPageState extends ConsumerState<EditModifierGroupPage> {
       child: ListView(
         padding: const EdgeInsets.all(12),
         children: [
-          Text('Options', style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold)),
+          Text(
+            'Options',
+            style: AppTypography.titleLarge.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           AppSpacing.gapSm,
           if (_showAddForm)
             Card(
@@ -85,7 +97,9 @@ class _EditModifierGroupPageState extends ConsumerState<EditModifierGroupPage> {
                     AppSpacing.gapSm,
                     TextField(
                       controller: _priceCtrl,
-                      decoration: const InputDecoration(labelText: 'Price Adjustment'),
+                      decoration: const InputDecoration(
+                        labelText: 'Price Adjustment',
+                      ),
                       keyboardType: TextInputType.number,
                     ),
                     AppSpacing.gapSm,
@@ -100,37 +114,45 @@ class _EditModifierGroupPageState extends ConsumerState<EditModifierGroupPage> {
               child: Center(child: Text('No options yet')),
             )
           else
-            ..._modifiers.map((m) => Card(
-              margin: const EdgeInsets.symmetric(vertical: 2),
-              child: ListTile(
-                title: Text(m.name),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text('+${m.priceAdjust}', style: AppTypography.bodyMedium),
-                    AppSpacing.gapSm,
-                    IconButton(
-                      icon: const Icon(Icons.delete, size: 20),
-                      onPressed: () {
-                        AppDialog.show(
-                          context,
-                          title: 'Delete ${m.name}',
-                          content: 'Remove this option?',
-                          destructive: true,
-                          onConfirm: () {
-                            ref.read(modifierRepositoryProvider).deleteModifier(m.id!);
-                            setState(() {
-                              _modifiers = ref.read(modifierRepositoryProvider)
-                                  .getModifiers(widget.group.id!);
-                            });
-                          },
-                        );
-                      },
-                    ),
-                  ],
+            ..._modifiers.map(
+              (m) => Card(
+                margin: const EdgeInsets.symmetric(vertical: 2),
+                child: ListTile(
+                  title: Text(m.name),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        '+${m.priceAdjust}',
+                        style: AppTypography.bodyMedium,
+                      ),
+                      AppSpacing.gapSm,
+                      IconButton(
+                        icon: const Icon(Icons.delete, size: 20),
+                        onPressed: () {
+                          AppDialog.show(
+                            context,
+                            title: 'Delete ${m.name}',
+                            content: 'Remove this option?',
+                            destructive: true,
+                            onConfirm: () {
+                              ref
+                                  .read(modifierRepositoryProvider)
+                                  .deleteModifier(m.id!);
+                              setState(() {
+                                _modifiers = ref
+                                    .read(modifierRepositoryProvider)
+                                    .getModifiers(widget.group.id!);
+                              });
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
                 ),
               ),
-            )),
+            ),
         ],
       ),
     );

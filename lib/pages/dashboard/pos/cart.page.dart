@@ -33,27 +33,27 @@ class _CartPageState extends ConsumerState<CartPage> {
       title: 'Cart',
       color: themeColor,
       actions: [
-          IconButton(
-            icon: const Icon(Icons.more_vert),
-            onPressed: () {
-              showMenu(
-                context: context,
-                position: const RelativeRect.fromLTRB(100, 100, 0, 100),
-                items: [
-                  PopupMenuItem(
-                    child: const Text('Clear Cart'),
-                    onTap: () {
-                      setState(() {
-      ref.read(cartProvider.notifier).clearCart();
-      _activeDiscount = null;
-                      });
-                    },
-                  ),
-                ],
-              );
-            },
-          ),
-        ],
+        IconButton(
+          icon: const Icon(Icons.more_vert),
+          onPressed: () {
+            showMenu(
+              context: context,
+              position: const RelativeRect.fromLTRB(100, 100, 0, 100),
+              items: [
+                PopupMenuItem(
+                  child: const Text('Clear Cart'),
+                  onTap: () {
+                    setState(() {
+                      ref.read(cartProvider.notifier).clearCart();
+                      _activeDiscount = null;
+                    });
+                  },
+                ),
+              ],
+            );
+          },
+        ),
+      ],
       child: ref.read(cartProvider).cart.isNotEmpty
           ? ListView(
               padding: const EdgeInsets.symmetric(vertical: 8),
@@ -79,7 +79,9 @@ class _CartPageState extends ConsumerState<CartPage> {
                         Expanded(
                           child: Text(
                             product.name,
-                            style: AppTypography.bodyMedium.copyWith(fontWeight: FontWeight.w500),
+                            style: AppTypography.bodyMedium.copyWith(
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
                         Container(
@@ -97,7 +99,10 @@ class _CartPageState extends ConsumerState<CartPage> {
                             child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                ref.read(cartProvider.notifier).cartQuantity(product) > 0
+                                ref
+                                            .read(cartProvider.notifier)
+                                            .cartQuantity(product) >
+                                        0
                                     ? InkWell(
                                         onTap: () {
                                           setState(() {
@@ -113,7 +118,10 @@ class _CartPageState extends ConsumerState<CartPage> {
                                         ),
                                       )
                                     : Container(),
-                                ref.read(cartProvider.notifier).cartQuantity(product) > 0
+                                ref
+                                            .read(cartProvider.notifier)
+                                            .cartQuantity(product) >
+                                        0
                                     ? Padding(
                                         padding:
                                             const EdgeInsetsDirectional.fromSTEB(
@@ -248,7 +256,9 @@ class _CartPageState extends ConsumerState<CartPage> {
                             Expanded(
                               child: Text(
                                 'Subtotal',
-                                style: AppTypography.bodyMedium.copyWith(fontWeight: FontWeight.w500),
+                                style: AppTypography.bodyMedium.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
                             Text(
@@ -272,7 +282,9 @@ class _CartPageState extends ConsumerState<CartPage> {
                             Expanded(
                               child: Text(
                                 'Tax (Incl./Excl.)',
-                                style: AppTypography.bodyMedium.copyWith(fontWeight: FontWeight.w500),
+                                style: AppTypography.bodyMedium.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
                             Text(
@@ -296,7 +308,9 @@ class _CartPageState extends ConsumerState<CartPage> {
                             Expanded(
                               child: Text(
                                 'Total',
-                                style: AppTypography.bodyMedium.copyWith(fontWeight: FontWeight.w500),
+                                style: AppTypography.bodyMedium.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
                             Text(
@@ -320,7 +334,9 @@ class _CartPageState extends ConsumerState<CartPage> {
                             Expanded(
                               child: Text(
                                 'Round off (+/-)',
-                                style: AppTypography.bodyMedium.copyWith(fontWeight: FontWeight.w500),
+                                style: AppTypography.bodyMedium.copyWith(
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
                             Text(
@@ -388,15 +404,19 @@ class _CartPageState extends ConsumerState<CartPage> {
                               ),
                               Text(
                                 () {
-                                  final active = ref.read(cartProvider).activeOrder;
+                                  final active = ref
+                                      .read(cartProvider)
+                                      .activeOrder;
                                   if (active == null) return '0';
-                                  final outstanding = active.grandTotal - (active.paidTotal ?? 0);
+                                  final outstanding =
+                                      active.grandTotal -
+                                      (active.paidTotal ?? 0);
                                   return '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${outstanding.toStringAsFixed(2)}';
                                 }(),
                                 style: AppTypography.titleMedium.copyWith(
-                                    fontWeight: FontWeight.bold,
-                                    color: AppColors.error,
-                                  ),
+                                  fontWeight: FontWeight.bold,
+                                  color: AppColors.error,
+                                ),
                               ),
                             ],
                           ),
@@ -451,73 +471,109 @@ class _CartPageState extends ConsumerState<CartPage> {
                             fontSize: 7,
                           ),
                         ),
-                  ],
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  final repo = DiscountRepository(ref.read(eateryStoreProvider));
-                  final discounts = repo.getActiveDiscounts();
-                  if (discounts.isEmpty) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('No active discounts available')),
-                    );
-                    return;
-                  }
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (_) => Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        const Padding(
-                          padding: EdgeInsets.all(16),
-                          child: Text('Apply Discount', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
-                        ),
-                        ...discounts.map((d) => ListTile(
-                          title: Text(d.name),
-                          subtitle: Text(d.type == 0 ? '${d.value}% off' : d.type == 1 ? '\$${d.value} off' : 'BOGO'),
-                          trailing: _activeDiscount?.id == d.id
-                              ? const Icon(Icons.check_circle, color: Colors.green)
-                              : null,
-                          onTap: () {
-                            Navigator.pop(context);
-                            setState(() => _activeDiscount = d);
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(content: Text('${d.name} applied')),
-                            );
-                          },
-                        )),
                       ],
                     ),
-                  );
-                },
-                child: Text(_activeDiscount != null ? 'Remove Discount' : 'Apply Discount'),
-              ),
-              if (_activeDiscount != null)
-                Padding(
-                  padding: const EdgeInsets.only(right: 8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(_activeDiscount!.name,
-                          style: const TextStyle(fontSize: 9, color: Colors.green)),
-                      Text(
-                        _activeDiscount!.type == 0
-                            ? '-${_activeDiscount!.value}%'
-                            : '-\$${_activeDiscount!.value}',
-                        style: const TextStyle(fontSize: 11, fontWeight: FontWeight.bold, color: Colors.green),
-                      ),
-                    ],
                   ),
-                ),
-              AppButton.primary(
-                label: 'Checkout',
-                onPressed: () => placeOrder(
-                  context,
-                  ref.read(cartProvider).cart,
-                  ref.read(cartProvider).activeCustomer,
-                  _activeDiscount,
-                ),
+                  TextButton(
+                    onPressed: () {
+                      final repo = DiscountRepository(
+                        ref.read(eateryStoreProvider),
+                      );
+                      final discounts = repo.getActiveDiscounts();
+                      if (discounts.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('No active discounts available'),
+                          ),
+                        );
+                        return;
+                      }
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (_) => Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(16),
+                              child: Text(
+                                'Apply Discount',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            ...discounts.map(
+                              (d) => ListTile(
+                                title: Text(d.name),
+                                subtitle: Text(
+                                  d.type == 0
+                                      ? '${d.value}% off'
+                                      : d.type == 1
+                                      ? '\$${d.value} off'
+                                      : 'BOGO',
+                                ),
+                                trailing: _activeDiscount?.id == d.id
+                                    ? const Icon(
+                                        Icons.check_circle,
+                                        color: Colors.green,
+                                      )
+                                    : null,
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  setState(() => _activeDiscount = d);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('${d.name} applied'),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    child: Text(
+                      _activeDiscount != null
+                          ? 'Remove Discount'
+                          : 'Apply Discount',
+                    ),
+                  ),
+                  if (_activeDiscount != null)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _activeDiscount!.name,
+                            style: const TextStyle(
+                              fontSize: 9,
+                              color: Colors.green,
+                            ),
+                          ),
+                          Text(
+                            _activeDiscount!.type == 0
+                                ? '-${_activeDiscount!.value}%'
+                                : '-\$${_activeDiscount!.value}',
+                            style: const TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  AppButton.primary(
+                    label: 'Checkout',
+                    onPressed: () => placeOrder(
+                      context,
+                      ref.read(cartProvider).cart,
+                      ref.read(cartProvider).activeCustomer,
+                      _activeDiscount,
+                    ),
                   ),
                 ],
               ),
@@ -551,7 +607,11 @@ class _CartPageState extends ConsumerState<CartPage> {
     }
     var diningTable = ref.read(cartProvider).activeDiningTable;
     if (type == OrderType.dine && diningTable == null) {
-      AppDialog.showMessage(context, message: 'Please select a table', type: MessageType.warning);
+      AppDialog.showMessage(
+        context,
+        message: 'Please select a table',
+        type: MessageType.warning,
+      );
       return;
     }
 
@@ -590,7 +650,9 @@ class _CartPageState extends ConsumerState<CartPage> {
                       backgroundColor: MaterialStateProperty.all(
                         AppColors.secondary2,
                       ),
-                      foregroundColor: MaterialStateProperty.all(AppColors.white),
+                      foregroundColor: MaterialStateProperty.all(
+                        AppColors.white,
+                      ),
                     ),
                     onPressed: () {
                       Navigator.pop(context, true);
@@ -636,8 +698,7 @@ class _CartPageState extends ConsumerState<CartPage> {
           final newTaxAmount = OrderFunction.calculateProductTaxAmount(
             product,
           )?.toPrecision(2);
-          final newTotal = (newSubTotal + (newTaxAmount ?? 0))
-              .toPrecision(2);
+          final newTotal = (newSubTotal + (newTaxAmount ?? 0)).toPrecision(2);
           existing = existing.copyWith(
             quantity: newQuantity,
             price: newPrice,
@@ -677,13 +738,21 @@ class _CartPageState extends ConsumerState<CartPage> {
           .where((element) => element.orderId == order.id)
           .toList();
       final newTotalQuantity = orderProducts.fold(
-          0, (previousValue, element) => previousValue + element.quantity);
+        0,
+        (previousValue, element) => previousValue + element.quantity,
+      );
       final newSubTotal = orderProducts.fold(
-          0.0, (previousValue, element) => previousValue + element.subTotal);
+        0.0,
+        (previousValue, element) => previousValue + element.subTotal,
+      );
       final newTaxTotal = orderProducts.fold(
-          0.0, (previousValue, element) => previousValue + (element.taxAmount ?? 0));
+        0.0,
+        (previousValue, element) => previousValue + (element.taxAmount ?? 0),
+      );
       final newFinalTotal = orderProducts.fold(
-          0.0, (previousValue, element) => previousValue + element.total);
+        0.0,
+        (previousValue, element) => previousValue + element.total,
+      );
       final newRoundOff = OrderFunction.calculateRoundOff(newFinalTotal);
       final newGrandTotal = (newFinalTotal + newRoundOff).toPrecision(2);
       order = order.copyWith(
@@ -704,7 +773,9 @@ class _CartPageState extends ConsumerState<CartPage> {
       final baseTotal = subtotal + taxTotal;
       final roundOff = OrderFunction.calculateRoundOff(baseTotal);
       final discountAmount = discount != null
-          ? (discount.type == 0 ? baseTotal * discount.value / 100 : discount.value)
+          ? (discount.type == 0
+                ? baseTotal * discount.value / 100
+                : discount.value)
           : 0.0;
       final grandTotal = (baseTotal + roundOff - discountAmount).toPrecision(2);
       order = Order(
@@ -722,15 +793,17 @@ class _CartPageState extends ConsumerState<CartPage> {
       );
       await ref.read(orderRepositoryProvider).saveOrder(order);
       if (discount != null) {
-        DiscountRepository(ref.read(eateryStoreProvider)).applyDiscount(OrderDiscount(
-          orderId: order.id!,
-          discountId: discount.id,
-          name: discount.name,
-          type: discount.type,
-          value: discount.value,
-          amount: discountAmount.toPrecision(2),
-          createdAt: DateTime.now(),
-        ));
+        DiscountRepository(ref.read(eateryStoreProvider)).applyDiscount(
+          OrderDiscount(
+            orderId: order.id!,
+            discountId: discount.id,
+            name: discount.name,
+            type: discount.type,
+            value: discount.value,
+            amount: discountAmount.toPrecision(2),
+            createdAt: DateTime.now(),
+          ),
+        );
       }
       for (final entry in cart.entries) {
         final product = entry.value.product;
@@ -741,13 +814,20 @@ class _CartPageState extends ConsumerState<CartPage> {
             productId: product.id,
             productName: product.name,
             quantity: 1,
-            price: OrderFunction.calculateProductPriceWithoutTax(product).toPrecision(2),
-            subTotal: OrderFunction.calculateProductPriceWithoutTax(product).toPrecision(2),
+            price: OrderFunction.calculateProductPriceWithoutTax(
+              product,
+            ).toPrecision(2),
+            subTotal: OrderFunction.calculateProductPriceWithoutTax(
+              product,
+            ).toPrecision(2),
             taxRate: OrderFunction.getProductTaxRate(product)?.toPrecision(2),
-            taxAmount: OrderFunction.calculateProductTaxAmount(product)?.toPrecision(2),
-            total: (OrderFunction.calculateProductPriceWithoutTax(product) +
-                    (OrderFunction.calculateProductTaxAmount(product) ?? 0))
-                .toPrecision(2),
+            taxAmount: OrderFunction.calculateProductTaxAmount(
+              product,
+            )?.toPrecision(2),
+            total:
+                (OrderFunction.calculateProductPriceWithoutTax(product) +
+                        (OrderFunction.calculateProductTaxAmount(product) ?? 0))
+                    .toPrecision(2),
           );
           await ref.read(orderRepositoryProvider).addOrderProduct(orderProduct);
         }
@@ -759,12 +839,14 @@ class _CartPageState extends ConsumerState<CartPage> {
           .read(diningTableRepositoryProvider)
           .getTableById(ref.read(cartProvider).activeDiningTable?.id ?? 0);
       if (existingTable != null) {
-        await ref.read(diningTableRepositoryProvider).saveTable(
-          existingTable.copyWith(
-            status: DiningTableStatus.occupied,
-            orderId: order.id,
-          ),
-        );
+        await ref
+            .read(diningTableRepositoryProvider)
+            .saveTable(
+              existingTable.copyWith(
+                status: DiningTableStatus.occupied,
+                orderId: order.id,
+              ),
+            );
       }
     }
 
@@ -775,7 +857,9 @@ class _CartPageState extends ConsumerState<CartPage> {
       var printInvoice =
           ref.read(cartProvider).activeOrderType == OrderType.takeout ||
           ref.read(cartProvider).activeOrderType == OrderType.delivery;
-      List<Product> currentCart = List.from(ref.read(cartProvider).cartProducts);
+      List<Product> currentCart = List.from(
+        ref.read(cartProvider).cartProducts,
+      );
 
       ref.read(cartProvider.notifier).clearCart();
 
@@ -785,15 +869,22 @@ class _CartPageState extends ConsumerState<CartPage> {
         type: MessageType.success,
       );
       if (context.mounted) {
-        GoRouter.of(context).goNamed('orderPrint', extra: {
-          'order': order,
-          'currentCart': currentCart,
-          'printKOT': printKOT,
-          'printInvoice': printInvoice,
-        });
+        GoRouter.of(context).goNamed(
+          'orderPrint',
+          extra: {
+            'order': order,
+            'currentCart': currentCart,
+            'printKOT': printKOT,
+            'printInvoice': printInvoice,
+          },
+        );
       }
     } catch (e) {
-      AppDialog.showMessage(context, message: 'Failed to place order', type: MessageType.error);
+      AppDialog.showMessage(
+        context,
+        message: 'Failed to place order',
+        type: MessageType.error,
+      );
     }
   }
 }

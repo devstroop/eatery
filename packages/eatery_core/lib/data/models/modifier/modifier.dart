@@ -22,8 +22,7 @@ abstract class Modifier with _$Modifier {
   factory Modifier.fromJson(Map<String, dynamic> json) =>
       _$ModifierFromJson(json);
 
-  static Modifier fromMap(Map<String, dynamic> map) =>
-      Modifier.fromJson(map);
+  static Modifier fromMap(Map<String, dynamic> map) => Modifier.fromJson(map);
 }
 
 extension ModifierX on Modifier {

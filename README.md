@@ -73,7 +73,7 @@ See [docs/guides/getting-started.md](docs/guides/getting-started.md) for full se
 
 ```
 eatery/
-├��─ lib/                     # Unified app entry & all role pages
+├── lib/                     # Unified app entry & all role pages
 │   ├── main.dart            # Single entry point, role-aware init
 │   ├── core/router/         # Unified GoRouter + RBAC guard
 │   └── pages/
@@ -83,12 +83,12 @@ eatery/
 │       ├── kds/             # Kitchen ticket grid
 │       ├── display/         # Customer order status
 │       └── role_picker.page.dart  # First-launch role selector
-��── packages/
+├─── packages/
 │   └── eatery_core/         # Shared models, DB, sync, widgets, theme
 ├── libeaterystore/          # Native Zig/SQLite library
 ├── docs/                    # Documentation
 │   ├── architecture/        # ADRs, specs, data models, sync protocol
-��   ├── guides/              # Getting started, architecture overview
+│   ├── guides/              # Getting started, architecture overview
 │   ├── product/             # Product requirements
 │   ├── plan/                # Roadmaps, audits
 │   └── decisions/           # Architecture Decision Records

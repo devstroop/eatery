@@ -31,25 +31,66 @@ class _DiscountsPageState extends ConsumerState<DiscountsPage> {
         foregroundColor: AppColors.white,
         label: const Text("Add Discount"),
         icon: const Icon(Icons.add),
-        onPressed: () => GoRouter.of(context).pushNamed("addDiscount").then((_) => setState(() {})),
+        onPressed: () => GoRouter.of(
+          context,
+        ).pushNamed("addDiscount").then((_) => setState(() {})),
       ),
       child: discounts.isEmpty
-          ? const Center(child: Opacity(opacity: 0.5, child: Column(mainAxisAlignment: MainAxisAlignment.center,
-              children: [Icon(Icons.local_offer, size: 64), SizedBox(height: 16),
-                Text("No discounts configured", style: TextStyle(fontSize: 18))])))
-          : ListView(children: discounts.map((d) {
-        final typeName = d.type == 0 ? "%" : d.type == 1 ? "Fixed" : "BOGO";
-        return Card(margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-          child: ListTile(
-            title: Text(d.name, style: AppTypography.titleMedium),
-            subtitle: Text("$typeName ${d.value}  |  Active: ${d.isActive ? "Yes" : "No"}"
-                "${d.startsAt != null ? "  ·  From ${DateFormat.yMMMd().format(d.startsAt!)}" : ""}"),
-            trailing: IconButton(icon: const Icon(Icons.delete),
-              onPressed: () { AppDialog.show(this.context, title: "Delete ${d.name}", destructive: true,
-                onConfirm: () { repo.deleteDiscount(d.id!); setState(() {}); }); }),
-            onTap: () => GoRouter.of(context).pushNamed("editDiscount", extra: d).then((_) => setState(() {})),
-          ));
-      }).toList()),
+          ? const Center(
+              child: Opacity(
+                opacity: 0.5,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.local_offer, size: 64),
+                    SizedBox(height: 16),
+                    Text(
+                      "No discounts configured",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  ],
+                ),
+              ),
+            )
+          : ListView(
+              children: discounts.map((d) {
+                final typeName = d.type == 0
+                    ? "%"
+                    : d.type == 1
+                    ? "Fixed"
+                    : "BOGO";
+                return Card(
+                  margin: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  child: ListTile(
+                    title: Text(d.name, style: AppTypography.titleMedium),
+                    subtitle: Text(
+                      "$typeName ${d.value}  |  Active: ${d.isActive ? "Yes" : "No"}"
+                      "${d.startsAt != null ? "  ·  From ${DateFormat.yMMMd().format(d.startsAt!)}" : ""}",
+                    ),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () {
+                        AppDialog.show(
+                          this.context,
+                          title: "Delete ${d.name}",
+                          destructive: true,
+                          onConfirm: () {
+                            repo.deleteDiscount(d.id!);
+                            setState(() {});
+                          },
+                        );
+                      },
+                    ),
+                    onTap: () => GoRouter.of(context)
+                        .pushNamed("editDiscount", extra: d)
+                        .then((_) => setState(() {})),
+                  ),
+                );
+              }).toList(),
+            ),
     );
   }
 }

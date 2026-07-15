@@ -17,14 +17,20 @@ class SqlitePaymentRepository implements PaymentRepository {
       'cardLastFour, terminalId';
 
   @override
-    @override
-  List<Payment> getAllPayments() =>
-      _store.query('SELECT * FROM payment LIMIT 100').map(Payment.fromMap).toList();
+  @override
+  List<Payment> getAllPayments() => _store
+      .query('SELECT * FROM payment LIMIT 100')
+      .map(Payment.fromMap)
+      .toList();
 
   @override
-  List<Payment> getPaymentsPage(int limit, int offset) =>
-      _store.query('SELECT * FROM payment ORDER BY id DESC LIMIT ? OFFSET ?', [limit, offset])
-          .map(Payment.fromMap).toList();
+  List<Payment> getPaymentsPage(int limit, int offset) => _store
+      .query('SELECT * FROM payment ORDER BY id DESC LIMIT ? OFFSET ?', [
+        limit,
+        offset,
+      ])
+      .map(Payment.fromMap)
+      .toList();
 
   @override
   int getPaymentCount() =>

@@ -151,51 +151,49 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
                       ),
                       trailing: Text(
                         company!.name,
-                        style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500),
+                        style: AppTypography.titleMedium.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                     ListTile(
-                      leading: Text(
-                        'Address',
-                        style: AppTypography.bodyLarge,
-                      ),
+                      leading: Text('Address', style: AppTypography.bodyLarge),
                       trailing: Text(
                         company.address,
-                        style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500),
+                        style: AppTypography.titleMedium.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                     ListTile(
-                      leading: Text(
-                        'Email',
-                        style: AppTypography.bodyLarge,
-                      ),
+                      leading: Text('Email', style: AppTypography.bodyLarge),
                       trailing: Text(
                         company.email,
-                        style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500),
+                        style: AppTypography.titleMedium.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                     ListTile(
-                      leading: Text(
-                        'Phone',
-                        style: AppTypography.bodyLarge,
-                      ),
+                      leading: Text('Phone', style: AppTypography.bodyLarge),
                       trailing: Text(
                         company.phone,
-                        style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500),
+                        style: AppTypography.titleMedium.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                     ListTile(
-                      leading: Text(
-                        'Taxation',
-                        style: AppTypography.bodyLarge,
-                      ),
+                      leading: Text('Taxation', style: AppTypography.bodyLarge),
                       trailing: Text(
                         Taxation.values
                             .singleWhere(
                               (element) => element.id == company.taxation.id,
                             )
                             .name,
-                        style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500),
+                        style: AppTypography.titleMedium.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                     ListTile(
@@ -208,7 +206,9 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
                                 company.salesTaxNumber?.trim() != "")
                             ? company.salesTaxNumber!
                             : 'Not Available',
-                        style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500),
+                        style: AppTypography.titleMedium.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                     ListTile(
@@ -221,7 +221,9 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
                                 company.foodLicenseNo?.trim() != "")
                             ? company.foodLicenseNo!
                             : 'Not Available',
-                        style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500),
+                        style: AppTypography.titleMedium.copyWith(
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ],

@@ -43,7 +43,10 @@ class SearchOrderDelegate extends SearchDelegate<Order?> {
         hintStyle: TextStyle(color: AppColors.white),
       ),
       textTheme: TextTheme(
-        headlineMedium: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.w400, color: AppColors.white),
+        headlineMedium: AppTypography.titleLarge.copyWith(
+          fontWeight: FontWeight.w400,
+          color: AppColors.white,
+        ),
       ),
     );
   }
@@ -72,7 +75,10 @@ class SearchOrderDelegate extends SearchDelegate<Order?> {
           alignment: Alignment.center,
           child: Text(
             'Recent orders',
-            style: AppTypography.bodyMedium.copyWith(fontStyle: FontStyle.italic, color: AppColors.grey600),
+            style: AppTypography.bodyMedium.copyWith(
+              fontStyle: FontStyle.italic,
+              color: AppColors.grey600,
+            ),
           ),
         ),
         for (final order in orders)
@@ -99,7 +105,10 @@ class SearchOrderDelegate extends SearchDelegate<Order?> {
           alignment: Alignment.center,
           child: Text(
             'Search results',
-            style: AppTypography.bodyMedium.copyWith(fontStyle: FontStyle.italic, color: AppColors.grey600),
+            style: AppTypography.bodyMedium.copyWith(
+              fontStyle: FontStyle.italic,
+              color: AppColors.grey600,
+            ),
           ),
         ),
         for (final order in searchResults)

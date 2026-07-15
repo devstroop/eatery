@@ -21,8 +21,12 @@ class FloorPlanWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final positioned = tables.where((t) => t.posX != null && t.posY != null).toList();
-    final unpositioned = tables.where((t) => t.posX == null || t.posY == null).toList();
+    final positioned = tables
+        .where((t) => t.posX != null && t.posY != null)
+        .toList();
+    final unpositioned = tables
+        .where((t) => t.posX == null || t.posY == null)
+        .toList();
 
     return Column(
       children: [
@@ -42,23 +46,26 @@ class FloorPlanWidget extends StatelessWidget {
                         painter: _GridPainter(),
                       ),
                       // Tables
-                      ...positioned.map((t) => Positioned(
-                        left: t.posX!,
-                        top: t.posY!,
-                        child: onTableMoved != null
-                            ? _DraggableTable(
-                                table: t,
-                                tableSize: _tableSize,
-                                onTableTap: onTableTap,
-                                onMoved: (offset) => onTableMoved!(t, offset),
-                              )
-                            : _TableWidget(
-                                table: t,
-                                size: _tableSize,
-                                onTap: onTableTap != null
-                                    ? () => onTableTap!(t) : null,
-                              ),
-                      )),
+                      ...positioned.map(
+                        (t) => Positioned(
+                          left: t.posX!,
+                          top: t.posY!,
+                          child: onTableMoved != null
+                              ? _DraggableTable(
+                                  table: t,
+                                  tableSize: _tableSize,
+                                  onTableTap: onTableTap,
+                                  onMoved: (offset) => onTableMoved!(t, offset),
+                                )
+                              : _TableWidget(
+                                  table: t,
+                                  size: _tableSize,
+                                  onTap: onTableTap != null
+                                      ? () => onTableTap!(t)
+                                      : null,
+                                ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -73,11 +80,15 @@ class FloorPlanWidget extends StatelessWidget {
                 children: [
                   Icon(Icons.map, size: 64, color: Colors.grey[400]),
                   AppSpacing.gapLg,
-                  Text('No tables positioned yet',
-                      style: TextStyle(color: Colors.grey[600], fontSize: 16)),
+                  Text(
+                    'No tables positioned yet',
+                    style: TextStyle(color: Colors.grey[600], fontSize: 16),
+                  ),
                   AppSpacing.gapSm,
-                  Text('Edit a table to set its position on the floor plan',
-                      style: TextStyle(color: Colors.grey[500])),
+                  Text(
+                    'Edit a table to set its position on the floor plan',
+                    style: TextStyle(color: Colors.grey[500]),
+                  ),
                 ],
               ),
             ),
@@ -89,15 +100,16 @@ class FloorPlanWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Unplaced tables (${unpositioned.length})',
-                    style: const TextStyle(fontWeight: FontWeight.bold)),
+                Text(
+                  'Unplaced tables (${unpositioned.length})',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                ),
                 AppSpacing.gapXs,
                 Wrap(
                   spacing: 8,
-                  children: unpositioned.map((t) => Chip(
-                    label: Text(t.name),
-                    onDeleted: () {},
-                  )).toList(),
+                  children: unpositioned
+                      .map((t) => Chip(label: Text(t.name), onDeleted: () {}))
+                      .toList(),
                 ),
               ],
             ),
@@ -112,11 +124,7 @@ class _TableWidget extends StatelessWidget {
   final double size;
   final VoidCallback? onTap;
 
-  const _TableWidget({
-    required this.table,
-    required this.size,
-    this.onTap,
-  });
+  const _TableWidget({required this.table, required this.size, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -171,8 +179,11 @@ class _DraggableTable extends StatelessWidget {
           onMoved!(localPos);
         }
       },
-      child: _TableWidget(table: table, size: tableSize,
-                          onTap: onTableTap != null ? () => onTableTap!(table) : null),
+      child: _TableWidget(
+        table: table,
+        size: tableSize,
+        onTap: onTableTap != null ? () => onTableTap!(table) : null,
+      ),
     );
   }
 }

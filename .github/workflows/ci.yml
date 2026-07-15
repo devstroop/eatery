@@ -2,26 +2,26 @@ name: Eatery CI
 
 on:
   push:
-    branches: [main, develop]
+    branches: [master, dev]
   pull_request:
-    branches: [main]
+    branches: [master]
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  ZIG_VERSION: "0.15.2"
+
 jobs:
   analyze:
-    runs-on: macos-latest
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
         with:
           flutter-version: '3.41.x'
           channel: 'stable'
-      - uses: goto-bus-stop/setup-zig@v2
-        with:
-          version: '0.15.0'
 
       - name: Get dependencies
         run: flutter pub get
@@ -30,24 +30,6 @@ jobs:
         run: flutter analyze --no-fatal-infos --no-fatal-warnings lib/
 
   test:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.41.x'
-          channel: 'stable'
-
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Run root tests
-        run: flutter test
-
-      - name: Run core tests
-        run: flutter test packages/eatery_core/test/
-
-  build-android:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -55,21 +37,44 @@ jobs:
         with:
           flutter-version: '3.41.x'
           channel: 'stable'
-      - uses: goto-bus-stop/setup-zig@v2
-        with:
-          version: '0.15.0'
 
       - name: Get dependencies
         run: flutter pub get
 
+      - uses: ./.github/actions/setup-zig
+        with:
+          version: ${{ env.ZIG_VERSION }}
+
       - name: Build native library
         run: cd libeaterystore && zig build shared-lib && cd ..
 
-      - name: Build APK
-        run: flutter build apk --debug
+      - name: Run all tests
+        run: flutter test
 
-  build-ios:
-    runs-on: macos-latest
+      - name: Run core package tests
+        run: flutter test packages/eatery_core/test/
+
+  build:
+    needs: [analyze, test]
+    strategy:
+      matrix:
+        include:
+          - target: android
+            os: ubuntu-latest
+            build-cmd: flutter build apk --debug
+          - target: linux
+            os: ubuntu-latest
+            build-cmd: flutter build linux --debug
+          - target: ios
+            os: macos-latest
+            build-cmd: flutter build ios --no-codesign
+          - target: macos
+            os: macos-latest
+            build-cmd: flutter build macos --debug
+          - target: windows
+            os: windows-latest
+            build-cmd: flutter build windows --debug
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
@@ -80,5 +85,12 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Build iOS
-        run: flutter build ios --no-codesign
+      - uses: ./.github/actions/setup-zig
+        with:
+          version: ${{ env.ZIG_VERSION }}
+
+      - name: Build native library
+        run: cd libeaterystore && zig build shared-lib && cd ..
+
+      - name: Build ${{ matrix.target }}
+        run: ${{ matrix.build-cmd }}

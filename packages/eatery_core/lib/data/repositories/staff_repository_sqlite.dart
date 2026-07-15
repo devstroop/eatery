@@ -25,10 +25,9 @@ class SqliteStaffRepository implements StaffRepository {
 
   @override
   Staff? getStaffByPhone(String phone) {
-    final rows = _store.query(
-      'SELECT * FROM staff WHERE phone = ? LIMIT 1',
-      [phone],
-    );
+    final rows = _store.query('SELECT * FROM staff WHERE phone = ? LIMIT 1', [
+      phone,
+    ]);
     return rows.isEmpty ? null : _toStaff(rows.first);
   }
 
@@ -51,7 +50,10 @@ class SqliteStaffRepository implements StaffRepository {
         [...values, id],
       );
     } else {
-      _store.execute('INSERT INTO staff ($_columns) VALUES (?,?,?,?,?,?)', values);
+      _store.execute(
+        'INSERT INTO staff ($_columns) VALUES (?,?,?,?,?,?)',
+        values,
+      );
       id = _store.queryScalar('SELECT last_insert_rowid()') as int;
       staff = staff.copyWith(id: id);
     }
@@ -116,6 +118,7 @@ class SqliteStaffRepository implements StaffRepository {
       pin: row['pin'] as String?,
       type: type,
       isActive: (row['isActive'] as int) == 1,
-      id: row['id'] as int);
+      id: row['id'] as int,
+    );
   }
 }

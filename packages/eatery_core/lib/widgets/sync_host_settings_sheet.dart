@@ -19,8 +19,7 @@ class SyncHostSettingsSheet extends ConsumerStatefulWidget {
       _SyncHostSettingsSheetState();
 }
 
-class _SyncHostSettingsSheetState
-    extends ConsumerState<SyncHostSettingsSheet> {
+class _SyncHostSettingsSheetState extends ConsumerState<SyncHostSettingsSheet> {
   late final TextEditingController _controller;
   bool _discovering = false;
 
@@ -53,7 +52,9 @@ class _SyncHostSettingsSheetState
   Future<void> _discover() async {
     setState(() => _discovering = true);
     try {
-      final hosts = await MdnsService.discoverHosts(timeout: const Duration(seconds: 4));
+      final hosts = await MdnsService.discoverHosts(
+        timeout: const Duration(seconds: 4),
+      );
       if (!mounted) return;
       if (hosts.isEmpty) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -62,14 +63,18 @@ class _SyncHostSettingsSheetState
       } else {
         _controller.text = hosts.first.ip;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Found host "${hosts.first.name}" at ${hosts.first.ip}')),
+          SnackBar(
+            content: Text(
+              'Found host "${hosts.first.name}" at ${hosts.first.ip}',
+            ),
+          ),
         );
       }
     } catch (e) {
       if (!mounted) return;
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Discovery failed: $e')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Discovery failed: $e')));
     } finally {
       if (mounted) setState(() => _discovering = false);
     }
@@ -125,7 +130,10 @@ class _SyncHostSettingsSheetState
               ),
               AppSpacing.gapSm,
               Expanded(
-                child: ElevatedButton(onPressed: _save, child: const Text('Save')),
+                child: ElevatedButton(
+                  onPressed: _save,
+                  child: const Text('Save'),
+                ),
               ),
             ],
           ),

@@ -107,16 +107,10 @@ class _ResetPinScreenState extends ConsumerState<ResetPinScreen> {
                       v == null || v.trim().isEmpty ? 'Required' : null,
                 ),
                 AppSpacing.gapXl,
-                AppButton.primary(
-                  label: 'Continue',
-                  onPressed: _lookupStaff,
-                ),
+                AppButton.primary(label: 'Continue', onPressed: _lookupStaff),
               ],
               if (_showPinForm) ...[
-                Text(
-                  'Set new PIN',
-                  style: AppTypography.headlineSmall,
-                ),
+                Text('Set new PIN', style: AppTypography.headlineSmall),
                 AppSpacing.gapSm,
                 Text(
                   'Choose a new 4-digit PIN.',
@@ -151,10 +145,7 @@ class _ResetPinScreenState extends ConsumerState<ResetPinScreen> {
                   },
                 ),
                 AppSpacing.gapXl,
-                AppButton.primary(
-                  label: 'Reset PIN',
-                  onPressed: _savePin,
-                ),
+                AppButton.primary(label: 'Reset PIN', onPressed: _savePin),
               ],
             ],
           ),
@@ -164,10 +155,9 @@ class _ResetPinScreenState extends ConsumerState<ResetPinScreen> {
   }
 
   Staff? _findByPhone(EateryStore store, String phone) {
-    final rows = store.query(
-      'SELECT * FROM staff WHERE phone = ? LIMIT 1',
-      [phone],
-    );
+    final rows = store.query('SELECT * FROM staff WHERE phone = ? LIMIT 1', [
+      phone,
+    ]);
     return rows.isEmpty ? null : Staff.fromMap(rows.first);
   }
 

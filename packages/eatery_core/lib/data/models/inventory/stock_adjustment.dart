@@ -14,11 +14,14 @@ abstract class StockAdjustment with _$StockAdjustment {
     int? referenceId,
     String? notes,
     int? createdBy,
-    @JsonKey(fromJson: epochFromJson, toJson: epochToJson) required DateTime createdAt,
+    @JsonKey(fromJson: epochFromJson, toJson: epochToJson)
+    required DateTime createdAt,
   }) = _StockAdjustment;
 
-  factory StockAdjustment.fromJson(Map<String, dynamic> json) => _$StockAdjustmentFromJson(json);
-  static StockAdjustment fromMap(Map<String, dynamic> map) => StockAdjustment.fromJson(map);
+  factory StockAdjustment.fromJson(Map<String, dynamic> json) =>
+      _$StockAdjustmentFromJson(json);
+  static StockAdjustment fromMap(Map<String, dynamic> map) =>
+      StockAdjustment.fromJson(map);
 }
 
 extension StockAdjustmentX on StockAdjustment {

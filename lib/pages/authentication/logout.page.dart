@@ -24,27 +24,27 @@ class _LogoutPageState extends ConsumerState<LogoutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColors.grey200,
-        body: Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      mainAxisSize: MainAxisSize.max,
-      children: [
-        const SizedBox(
-          height: 60,
-          width: 60,
-          child: CircularProgressIndicator(
-            color: AppColors.error,
+      backgroundColor: AppColors.grey200,
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.max,
+        children: [
+          const SizedBox(
+            height: 60,
+            width: 60,
+            child: CircularProgressIndicator(color: AppColors.error),
           ),
-        ),
-        Text(
-          'Logging out...',
-          style: TextStyle(
+          Text(
+            'Logging out...',
+            style: TextStyle(
               color: AppColors.secondary2,
               fontSize: 20,
-              fontWeight: FontWeight.bold),
-        ),
-      ],
-    ));
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

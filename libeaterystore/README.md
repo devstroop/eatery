@@ -44,6 +44,8 @@ Requires Zig 0.15.x.
 | `es_last_error`  | Last error message                                         |
 | `es_free`        | Free a buffer returned by `es_query`                       |
 | `es_version`     | Version string                                             |
+| `es_backup`      | Full database backup to a file path (0 on success)         |
+| `es_key`         | Set SQLCipher encryption key (no-op with plain SQLite)     |
 
 Values cross the boundary as JSON:
 * **params** — a JSON array bound positionally to `?` placeholders,
@@ -53,6 +55,19 @@ Values cross the boundary as JSON:
 Type mapping: `null`↔NULL, `int`↔INTEGER, `double`↔REAL, `bool`→INTEGER (0/1),
 `String`↔TEXT. Whole-number REAL values are emitted with a trailing `.0` so
 they round-trip as Dart `double`.
+
+### Query limits
+
+`es_query` allocates the full JSON result set in memory. For very large result
+sets (100K+ rows), callers should paginate with `LIMIT / OFFSET` in the SQL
+query to avoid out-of-memory crashes. See PHASE3-M10 for details.
+
+### Encryption
+
+SQLCipher AES-256 at-rest encryption is supported via the `-Denable-encryption`
+build flag (`brew install sqlcipher` on macOS). At runtime, call
+`EateryStore.setKey(key)` immediately after `open()`. This path is currently
+untested in CI. See PHASE3-M8 for details.
 
 ## Dart side
 

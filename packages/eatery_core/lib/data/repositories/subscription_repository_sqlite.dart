@@ -68,7 +68,8 @@ class SqliteSubscriptionRepository implements SubscriptionRepository {
           ? DateTime.fromMillisecondsSinceEpoch(row['validTill'] as int)
           : null,
       subscriptionType: st,
-      id: row['id'] as int);
+      id: row['id'] as int,
+    );
   }
 
   bool _exists(int id) =>

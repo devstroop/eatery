@@ -15,8 +15,10 @@ abstract class PurchaseOrderItem with _$PurchaseOrderItem {
     @Default(0.0) double receivedQty,
   }) = _PurchaseOrderItem;
 
-  factory PurchaseOrderItem.fromJson(Map<String, dynamic> json) => _$PurchaseOrderItemFromJson(json);
-  static PurchaseOrderItem fromMap(Map<String, dynamic> map) => PurchaseOrderItem.fromJson(map);
+  factory PurchaseOrderItem.fromJson(Map<String, dynamic> json) =>
+      _$PurchaseOrderItemFromJson(json);
+  static PurchaseOrderItem fromMap(Map<String, dynamic> map) =>
+      PurchaseOrderItem.fromJson(map);
 }
 
 extension PurchaseOrderItemX on PurchaseOrderItem {

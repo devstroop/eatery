@@ -46,34 +46,43 @@ abstract class MdnsService {
 
     final hosts = <MdnsDiscoveredHost>[];
     try {
-      await for (final ptr in client
-          .lookup<PtrResourceRecord>(
-            ResourceRecordQuery.serverPointer(kServiceDomain),
-            timeout: timeout,
-          )
-          .take(1)
-          .timeout(timeout)) {
-        await for (final srv in client
-            .lookup<SrvResourceRecord>(
-              ResourceRecordQuery.service(ptr.domainName),
-              timeout: timeout,
-            )
-            .take(1)
-            .timeout(timeout)) {
-          debugPrint('MdnsService: found SRV target=${srv.target} port=${srv.port}');
-          await for (final ip in client
-              .lookup<IPAddressResourceRecord>(
-                ResourceRecordQuery.addressIPv4(srv.target),
+      await for (final ptr
+          in client
+              .lookup<PtrResourceRecord>(
+                ResourceRecordQuery.serverPointer(kServiceDomain),
                 timeout: timeout,
               )
               .take(1)
               .timeout(timeout)) {
-            debugPrint('MdnsService: resolved IP ${ip.address} for ${srv.target}');
-            hosts.add(MdnsDiscoveredHost(
-              name: ptr.domainName,
-              address: ip.address,
-              port: srv.port,
-            ));
+        await for (final srv
+            in client
+                .lookup<SrvResourceRecord>(
+                  ResourceRecordQuery.service(ptr.domainName),
+                  timeout: timeout,
+                )
+                .take(1)
+                .timeout(timeout)) {
+          debugPrint(
+            'MdnsService: found SRV target=${srv.target} port=${srv.port}',
+          );
+          await for (final ip
+              in client
+                  .lookup<IPAddressResourceRecord>(
+                    ResourceRecordQuery.addressIPv4(srv.target),
+                    timeout: timeout,
+                  )
+                  .take(1)
+                  .timeout(timeout)) {
+            debugPrint(
+              'MdnsService: resolved IP ${ip.address} for ${srv.target}',
+            );
+            hosts.add(
+              MdnsDiscoveredHost(
+                name: ptr.domainName,
+                address: ip.address,
+                port: srv.port,
+              ),
+            );
           }
         }
       }

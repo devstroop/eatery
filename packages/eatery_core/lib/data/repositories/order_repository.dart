@@ -1,4 +1,5 @@
 import 'package:eatery_core/data/models/eatery_db.dart';
+
 abstract class OrderRepository {
   List<Order> getAllOrders();
   List<Order> getOrdersPage(int limit, int offset);

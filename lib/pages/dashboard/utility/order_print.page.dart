@@ -189,10 +189,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                   '${company?.name ?? ''} (Invoice)',
                   style: AppTypography.titleLarge,
                 ),
-                Text(
-                  company?.address ?? '',
-                  style: AppTypography.bodyMedium,
-                ),
+                Text(company?.address ?? '', style: AppTypography.bodyMedium),
                 Text(
                   [company?.email ?? '', company?.phone ?? ''].join(', '),
                   style: AppTypography.bodyMedium,
@@ -220,14 +217,8 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      orderName,
-                      style: AppTypography.labelLarge,
-                    ),
-                    Text(
-                      orderPhone,
-                      style: AppTypography.labelLarge,
-                    ),
+                    Text(orderName, style: AppTypography.labelLarge),
+                    Text(orderPhone, style: AppTypography.labelLarge),
                   ],
                 ),
                 Row(
@@ -239,10 +230,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    Text(
-                      orderAddress ?? '',
-                      style: AppTypography.labelLarge,
-                    ),
+                    Text(orderAddress ?? '', style: AppTypography.labelLarge),
                   ],
                 ),
               ],
@@ -357,7 +345,9 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                 ),
                 Text(
                   '${currency}${widget.order.grandTotal.toPrecision(2)}',
-                  style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
+                  style: AppTypography.titleMedium.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),
@@ -395,10 +385,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                   '${company?.name ?? ''} (KOT)',
                   style: AppTypography.titleLarge,
                 ),
-                Text(
-                  company?.address ?? '',
-                  style: AppTypography.bodyMedium,
-                ),
+                Text(company?.address ?? '', style: AppTypography.bodyMedium),
               ],
             ),
             const SizedBox(height: 12.0, child: Divider()),
@@ -422,14 +409,8 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      orderName,
-                      style: AppTypography.labelLarge,
-                    ),
-                    Text(
-                      orderPhone,
-                      style: AppTypography.labelLarge,
-                    ),
+                    Text(orderName, style: AppTypography.labelLarge),
+                    Text(orderPhone, style: AppTypography.labelLarge),
                   ],
                 ),
                 Row(
@@ -441,10 +422,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    Text(
-                      orderAddress ?? '',
-                      style: AppTypography.labelLarge,
-                    ),
+                    Text(orderAddress ?? '', style: AppTypography.labelLarge),
                   ],
                 ),
               ],
@@ -468,10 +446,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                   children: [
                     Expanded(
                       flex: 4,
-                      child: Text(
-                        product.name,
-                        style: AppTypography.bodySmall,
-                      ),
+                      child: Text(product.name, style: AppTypography.bodySmall),
                     ),
                     Expanded(
                       flex: 1,
@@ -497,7 +472,9 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                 ),
                 Text(
                   '${widget.currentCart.length}',
-                  style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
+                  style: AppTypography.titleMedium.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ],
             ),

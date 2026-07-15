@@ -18,17 +18,22 @@ class SeedData {
     store.execute(
       'INSERT INTO company (name, email, phone, address, edition, currencyCode) '
       'VALUES (?,?,?,?,?,?)',
-      ['Demo Restaurant', 'demo@eatery.app', '555-0100',
-       '123 Main St, City', -1, 'USD'],
+      [
+        'Demo Restaurant',
+        'demo@eatery.app',
+        '555-0100',
+        '123 Main St, City',
+        -1,
+        'USD',
+      ],
     );
 
     // Product categories
     final catNames = ['Beverages', 'Starters', 'Main Course', 'Desserts'];
     for (var i = 0; i < catNames.length; i++) {
-      store.execute(
-        'INSERT INTO product_category (name) VALUES (?)',
-        [catNames[i]],
-      );
+      store.execute('INSERT INTO product_category (name) VALUES (?)', [
+        catNames[i],
+      ]);
     }
 
     // Products
@@ -72,14 +77,16 @@ class SeedData {
     }
 
     // Tax slabs
-    store.execute(
-      'INSERT INTO tax_slab (name, rate, type) VALUES (?,?,?)',
-      ['GST 5%', 5.0, 0],
-    );
-    store.execute(
-      'INSERT INTO tax_slab (name, rate, type) VALUES (?,?,?)',
-      ['GST 12%', 12.0, 0],
-    );
+    store.execute('INSERT INTO tax_slab (name, rate, type) VALUES (?,?,?)', [
+      'GST 5%',
+      5.0,
+      0,
+    ]);
+    store.execute('INSERT INTO tax_slab (name, rate, type) VALUES (?,?,?)', [
+      'GST 12%',
+      12.0,
+      0,
+    ]);
 
     // Staff
     store.execute(

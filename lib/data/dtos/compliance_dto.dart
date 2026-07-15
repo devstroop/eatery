@@ -75,9 +75,13 @@ class ZReportDto extends BaseDto<ZReportDto> {
   factory ZReportDto.fromJson(Map<String, dynamic> json) {
     return ZReportDto(
       id: json['id'] as String,
-      generatedAt: DateTime.fromMillisecondsSinceEpoch(json['generatedAt'] as int),
+      generatedAt: DateTime.fromMillisecondsSinceEpoch(
+        json['generatedAt'] as int,
+      ),
       generatedBy: json['generatedBy'] as String,
-      periodStart: DateTime.fromMillisecondsSinceEpoch(json['periodStart'] as int),
+      periodStart: DateTime.fromMillisecondsSinceEpoch(
+        json['periodStart'] as int,
+      ),
       periodEnd: DateTime.fromMillisecondsSinceEpoch(json['periodEnd'] as int),
       reportNumber: json['reportNumber'] as String,
       grossSales: (json['grossSales'] as num).toDouble(),
@@ -265,9 +269,13 @@ class XReportDto extends BaseDto<XReportDto> {
   factory XReportDto.fromJson(Map<String, dynamic> json) {
     return XReportDto(
       id: json['id'] as String,
-      generatedAt: DateTime.fromMillisecondsSinceEpoch(json['generatedAt'] as int),
+      generatedAt: DateTime.fromMillisecondsSinceEpoch(
+        json['generatedAt'] as int,
+      ),
       generatedBy: json['generatedBy'] as String,
-      periodStart: DateTime.fromMillisecondsSinceEpoch(json['periodStart'] as int),
+      periodStart: DateTime.fromMillisecondsSinceEpoch(
+        json['periodStart'] as int,
+      ),
       grossSales: (json['grossSales'] as num).toDouble(),
       netSales: (json['netSales'] as num).toDouble(),
       taxCollected: (json['taxCollected'] as num).toDouble(),

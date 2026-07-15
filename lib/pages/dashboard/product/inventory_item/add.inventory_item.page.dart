@@ -314,7 +314,7 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
       children: [
         Text(
           label,
-        style: AppTypography.labelMedium.copyWith(color: AppColors.black600),
+          style: AppTypography.labelMedium.copyWith(color: AppColors.black600),
         ),
         const SizedBox(height: 3.0),
         ToggleSwitch(

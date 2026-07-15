@@ -99,14 +99,19 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                     children: [
                       Text(
                         e.name.split(' ').last[0].toUpperCase(),
-                        style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey600),
+                        style: AppTypography.titleLarge.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.grey600,
+                        ),
                       ),
                     ],
                   ),
                 ),
                 title: Text(
                   e.name,
-                  style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold),
+                  style: AppTypography.titleMedium.copyWith(
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 subtitle: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -118,7 +123,10 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                       Text(e.description!.trim()),
                     Text(
                       '${e.capacity} seats',
-                        style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey600),
+                      style: AppTypography.titleLarge.copyWith(
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.grey600,
+                      ),
                     ),
                   ],
                 ),
@@ -140,18 +148,27 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                       ),
                       child: Text(
                         e.status.name,
-                        style: AppTypography.labelSmall.copyWith(fontWeight: FontWeight.bold, color: AppColors.white),
+                        style: AppTypography.labelSmall.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.white,
+                        ),
                       ),
                     ),
                     if (e.orderId != null)
                       Text(
                         'Order #${e.orderId}',
-                        style: AppTypography.labelSmall.copyWith(fontWeight: FontWeight.bold, color: AppColors.black800),
+                        style: AppTypography.labelSmall.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.black800,
+                        ),
                       ),
                     if (e.orderId != null)
                       Text(
                         'Due $currencySymbol${orders.where((element) => element.id == e.orderId).firstOrNull?.grandTotal.toPrecision(2)}',
-                        style: AppTypography.labelSmall.copyWith(fontWeight: FontWeight.bold, color: AppColors.error),
+                        style: AppTypography.labelSmall.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.error,
+                        ),
                       ),
                   ],
                 ),
@@ -195,7 +212,10 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                     children: [
                       Text(
                         e.name.split(' ').last.toUpperCase()[0],
-                        style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey600),
+                        style: AppTypography.titleLarge.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: AppColors.grey600,
+                        ),
                       ),
                     ],
                   ),

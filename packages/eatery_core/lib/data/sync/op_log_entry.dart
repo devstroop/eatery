@@ -86,10 +86,7 @@ class OpLogEntry {
 
   String toJsonString() => jsonEncode(toJson());
 
-  OpLogEntry copyWith({
-    String? hostId,
-    Map<String, dynamic>? metadata,
-  }) {
+  OpLogEntry copyWith({String? hostId, Map<String, dynamic>? metadata}) {
     return OpLogEntry(
       id: id,
       entityType: entityType,
