@@ -2,7 +2,7 @@
 
 ## Directory Layout (Target)
 
-> **Status:** Planned — the `apps/` directory will be deleted after pages are migrated into `lib/pages/{waiter,kds,display}/`. See [ISSUES.md](../../ISSUES.md).
+> **Status:** The single-app architecture migration is complete. The `apps/` directory has been deleted. Role-specific pages live in `lib/pages/{waiter,kds,display}/`. See [ISSUES.md](../../ISSUES.md).
 
 ```
 eatery/
