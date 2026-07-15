@@ -1,4 +1,4 @@
-import 'package:eatery/data/database/native/eatery_store.dart';
+import 'package:eatery_core/data/database/native/eatery_store.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 /// Validates the libeaterystore native library end-to-end through the Dart
