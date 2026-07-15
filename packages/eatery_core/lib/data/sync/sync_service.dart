@@ -15,12 +15,7 @@ enum SyncRole {
 }
 
 /// Connection state with the sync host.
-enum HostConnectionState {
-  disconnected,
-  connecting,
-  connected,
-  reconnecting,
-}
+enum HostConnectionState { disconnected, connecting, connected, reconnecting }
 
 /// Status of the sync service.
 class SyncStatus {
@@ -80,15 +75,15 @@ class SyncService {
   SyncRole get role => _role;
   HostConnectionState get connectionState => _connectionState;
   SyncStatus get status => SyncStatus(
-        role: _role,
-        connectionState: _connectionState,
-        connectedHostId: _connectedHostId,
-        connectedHostName: _connectedHostName,
-        localClock: _opLogService.clock,
-        lastSyncedClock: _lastSyncedClock,
-        pendingEntryCount: _opLogService.clock - _lastSyncedClock,
-        lastHeartbeat: _lastHeartbeat,
-      );
+    role: _role,
+    connectionState: _connectionState,
+    connectedHostId: _connectedHostId,
+    connectedHostName: _connectedHostName,
+    localClock: _opLogService.clock,
+    lastSyncedClock: _lastSyncedClock,
+    pendingEntryCount: _opLogService.clock - _lastSyncedClock,
+    lastHeartbeat: _lastHeartbeat,
+  );
 
   // ── Role management ──
 

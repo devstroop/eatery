@@ -16,7 +16,8 @@ abstract class KdsStation with _$KdsStation {
   factory KdsStation.fromJson(Map<String, dynamic> json) =>
       _$KdsStationFromJson(json);
 
-  static KdsStation fromMap(Map<String, dynamic> map) => KdsStation.fromJson(map);
+  static KdsStation fromMap(Map<String, dynamic> map) =>
+      KdsStation.fromJson(map);
 }
 
 extension KdsStationX on KdsStation {

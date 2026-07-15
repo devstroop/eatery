@@ -13,7 +13,8 @@ class CapabilityProfile {
   /// Public factory
   static Future<CapabilityProfile> load({String name = 'default'}) async {
     final content = await rootBundle.loadString(
-        'packages/bluetooth_thermal_printer/resources/capabilities.json');
+      'packages/bluetooth_thermal_printer/resources/capabilities.json',
+    );
     Map capabilities = json.decode(content);
 
     var profile = capabilities['profiles'][name];
@@ -36,15 +37,19 @@ class CapabilityProfile {
 
   int? getCodePageId(String? codePage) {
     return codePages
-        .firstWhere((cp) => cp.name == codePage,
-            orElse: () => throw Exception(
-                "Code Page '$codePage' isn't defined for this profile"))
+        .firstWhere(
+          (cp) => cp.name == codePage,
+          orElse: () => throw Exception(
+            "Code Page '$codePage' isn't defined for this profile",
+          ),
+        )
         .id;
   }
 
   static Future<List<dynamic>> getAvailableProfiles() async {
     final content = await rootBundle.loadString(
-        'packages/bluetooth_thermal_printer/resources/capabilities.json');
+      'packages/bluetooth_thermal_printer/resources/capabilities.json',
+    );
     Map capabilities = json.decode(content);
 
     var profiles = capabilities['profiles'];

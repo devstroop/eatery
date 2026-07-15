@@ -1,7 +1,13 @@
 import 'package:eatery/references.dart';
 
 class PosOrderTypeSelectionButton extends StatelessWidget {
-  const PosOrderTypeSelectionButton({Key? key, required this.icon, required this.text, this.onTap, required this.themeColor}) : super(key: key);
+  const PosOrderTypeSelectionButton({
+    Key? key,
+    required this.icon,
+    required this.text,
+    this.onTap,
+    required this.themeColor,
+  }) : super(key: key);
   final Widget icon;
   final Color themeColor;
   final String text;
@@ -25,11 +31,7 @@ class PosOrderTypeSelectionButton extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 3.0),
-          Icon(
-            Icons.arrow_drop_up,
-            color: themeColor,
-            size: 24,
-          ),
+          Icon(Icons.arrow_drop_up, color: themeColor, size: 24),
         ],
       ),
     );

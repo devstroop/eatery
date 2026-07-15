@@ -148,9 +148,9 @@ class _StaffCardState extends ConsumerState<_StaffCard> {
                                 .read(staffRepositoryProvider)
                                 .deleteStaff(s.id!)
                                 .whenComplete(() {
-                              Navigator.pop(context);
-                              setState(() {});
-                            });
+                                  Navigator.pop(context);
+                                  setState(() {});
+                                });
                           },
                           child: const Text('Delete'),
                         ),

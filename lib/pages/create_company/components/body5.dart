@@ -28,8 +28,8 @@ class _Body5State extends ConsumerState<Body5> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, (){
-      setState((){
+    Future.delayed(Duration.zero, () {
+      setState(() {
         selectedCurrency = widget.currency;
       });
     });
@@ -64,7 +64,7 @@ class _Body5State extends ConsumerState<Body5> {
                 useRootNavigator: true,
                 // currencyFilter: const ['INR', 'AED'],
                 theme: CurrencyPickerThemeData(
-                    bottomSheetHeight: MediaQuery.of(context).size.height * 4/5
+                  bottomSheetHeight: MediaQuery.of(context).size.height * 4 / 5,
                 ),
                 onSelect: (Currency currency) {
                   setState(() {
@@ -79,10 +79,7 @@ class _Body5State extends ConsumerState<Body5> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(6),
-                  border: Border.all(
-                    color: AppColors.secondary2,
-                    width: 2,
-                  ),
+                  border: Border.all(color: AppColors.secondary2, width: 2),
                 ),
                 child: ListTile(
                   leading: selectedCurrency != null
@@ -92,9 +89,7 @@ class _Body5State extends ConsumerState<Body5> {
                           children: [
                             Text(
                               CurrencyUtils.currencyToEmoji(selectedCurrency!),
-                              style: const TextStyle(
-                                fontSize: 32,
-                              ),
+                              style: const TextStyle(fontSize: 32),
                             ),
                           ],
                         )
@@ -102,9 +97,7 @@ class _Body5State extends ConsumerState<Body5> {
                   trailing: selectedCurrency != null
                       ? Text(
                           selectedCurrency!.symbol,
-                          style: const TextStyle(
-                            fontSize: 18,
-                          ),
+                          style: const TextStyle(fontSize: 18),
                         )
                       : null,
                   title: Text(

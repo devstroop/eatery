@@ -14,14 +14,20 @@ abstract class Discount with _$Discount {
     double? minOrder,
     int? maxUses,
     @Default(true) bool isActive,
-    @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) DateTime? startsAt,
-    @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) DateTime? endsAt,
-    @JsonKey(fromJson: epochFromJson, toJson: epochToJson) required DateTime createdAt,
-    @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) DateTime? updatedAt,
+    @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)
+    DateTime? startsAt,
+    @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)
+    DateTime? endsAt,
+    @JsonKey(fromJson: epochFromJson, toJson: epochToJson)
+    required DateTime createdAt,
+    @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)
+    DateTime? updatedAt,
   }) = _Discount;
-  factory Discount.fromJson(Map<String, dynamic> json) => _$DiscountFromJson(json);
+  factory Discount.fromJson(Map<String, dynamic> json) =>
+      _$DiscountFromJson(json);
   static Discount fromMap(Map<String, dynamic> map) => Discount.fromJson(map);
 }
+
 extension DiscountX on Discount {
   Map<String, Object?> toMap() => toJson() as Map<String, Object?>;
 }

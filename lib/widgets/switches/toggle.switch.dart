@@ -1,7 +1,19 @@
 import 'package:eatery/references.dart';
 
 class ToggleSwitch extends StatelessWidget {
-  const ToggleSwitch({super.key, this.padding, this.margin, this.borderRadius, required this.children, this.onChange, this.selectedIndex, this.highlightColor, this.backgroundColor, this.foregroundColor, this.inactiveForegroundColor});
+  const ToggleSwitch({
+    super.key,
+    this.padding,
+    this.margin,
+    this.borderRadius,
+    required this.children,
+    this.onChange,
+    this.selectedIndex,
+    this.highlightColor,
+    this.backgroundColor,
+    this.foregroundColor,
+    this.inactiveForegroundColor,
+  });
   final EdgeInsets? padding;
   final EdgeInsets? margin;
   final BorderRadius? borderRadius;
@@ -14,16 +26,16 @@ class ToggleSwitch extends StatelessWidget {
   final Color? inactiveForegroundColor;
   @override
   Widget build(BuildContext context) {
-    BorderRadius borderRadius = this.borderRadius ?? const BorderRadius.all(
-      Radius.circular(12.0),
-    );
+    BorderRadius borderRadius =
+        this.borderRadius ?? const BorderRadius.all(Radius.circular(12.0));
     return Container(
       padding: padding ?? const EdgeInsets.all(6.0),
       height: 60,
       margin: margin,
       decoration: BoxDecoration(
-          color: backgroundColor,
-          borderRadius: borderRadius),
+        color: backgroundColor,
+        borderRadius: borderRadius,
+      ),
       child: ListView(
         scrollDirection: Axis.horizontal,
         children: [
@@ -39,26 +51,33 @@ class ToggleSwitch extends StatelessWidget {
                     height: 60,
                     width: 100,
                     decoration: BoxDecoration(
-                        color: selectedIndex == i ? highlightColor : backgroundColor,
-                        borderRadius: borderRadius),
+                      color: selectedIndex == i
+                          ? highlightColor
+                          : backgroundColor,
+                      borderRadius: borderRadius,
+                    ),
                     duration: const Duration(milliseconds: 200),
                     curve: Curves.decelerate,
                     child: Container(
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.all(6.0),
-                        child: Text(
-                          children[i],
-                          style: TextStyle(
-                              fontWeight: FontWeight.w500,
-                              color: selectedIndex == i ? foregroundColor : inactiveForegroundColor,
-                              fontSize: 16),
-                        )),
+                      alignment: Alignment.center,
+                      padding: const EdgeInsets.all(6.0),
+                      child: Text(
+                        children[i],
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: selectedIndex == i
+                              ? foregroundColor
+                              : inactiveForegroundColor,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
         ],
-      )
+      ),
     );
   }
 }

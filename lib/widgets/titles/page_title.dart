@@ -6,7 +6,7 @@ class PageTitle extends StatelessWidget {
   final String title;
   final String? subtitle;
   const PageTitle({Key? key, required this.title, this.subtitle})
-      : super(key: key);
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -17,18 +17,15 @@ class PageTitle extends StatelessWidget {
       children: [
         Text(
           title,
-          style: const TextStyle(
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-          ),
+          style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
         ),
         if (subtitle != null)
           Text(
             subtitle!,
-          style: AppTypography.bodySmall.copyWith(
-            fontWeight: FontWeight.normal,
+            style: AppTypography.bodySmall.copyWith(
+              fontWeight: FontWeight.normal,
+            ),
           ),
-          )
       ],
     );
   }

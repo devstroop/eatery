@@ -99,10 +99,7 @@ void main() {
     });
 
     test('heartbeat roundtrips', () {
-      final msg = SyncMessage.heartbeat(
-        deviceId: 'leaf-1',
-        clock: 7,
-      );
+      final msg = SyncMessage.heartbeat(deviceId: 'leaf-1', clock: 7);
       final json = msg.toJsonString();
       final restored = SyncMessage.fromJsonString(json);
       expect(restored.type, 'heartbeat');

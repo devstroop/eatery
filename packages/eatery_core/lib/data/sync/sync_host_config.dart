@@ -24,10 +24,9 @@ class SyncHostConfig {
   /// Returns the persisted host address, or [kDefaultHostAddress] if unset.
   String getHostAddress() {
     _ensureTable();
-    final rows = _store.query(
-      'SELECT value FROM app_config WHERE key = ?',
-      [_kHostAddressKey],
-    );
+    final rows = _store.query('SELECT value FROM app_config WHERE key = ?', [
+      _kHostAddressKey,
+    ]);
     if (rows.isEmpty) return kDefaultHostAddress;
     return rows.first['value'] as String? ?? kDefaultHostAddress;
   }

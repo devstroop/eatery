@@ -52,7 +52,9 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
             : '';
         selectedFoodType = widget.product.foodType;
         selectedTaxSlab = widget.product.taxSlabId != null
-            ? ref.read(taxRepositoryProvider).getTaxSlabById(widget.product.taxSlabId!)
+            ? ref
+                  .read(taxRepositoryProvider)
+                  .getTaxSlabById(widget.product.taxSlabId!)
             : null;
         selectedCategory = widget.product.categoryId != null
             ? ref
@@ -72,18 +74,18 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
       title: 'Edit Kitchen Dish',
       color: _pageColor,
       actions: [
-          if (_focusNodes[0].hasFocus ||
-              _focusNodes[1].hasFocus ||
-              _focusNodes[2].hasFocus ||
-              _focusNodes[3].hasFocus ||
-              _focusNodes[4].hasFocus)
-            IconButton(
-              icon: const Icon(Icons.done),
-              onPressed: () {
-                FocusScope.of(context).unfocus();
-              },
-            ),
-        ],
+        if (_focusNodes[0].hasFocus ||
+            _focusNodes[1].hasFocus ||
+            _focusNodes[2].hasFocus ||
+            _focusNodes[3].hasFocus ||
+            _focusNodes[4].hasFocus)
+          IconButton(
+            icon: const Icon(Icons.done),
+            onPressed: () {
+              FocusScope.of(context).unfocus();
+            },
+          ),
+      ],
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Form(
@@ -226,7 +228,8 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
                     : AppColors.black600,
                 children: [
                   'None',
-                  for (var each in ref.read(taxRepositoryProvider).getAllTaxSlabs())
+                  for (var each
+                      in ref.read(taxRepositoryProvider).getAllTaxSlabs())
                     each.name,
                 ],
                 selectedIndex: (selectedTaxSlab?.id == null)
@@ -248,7 +251,7 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
                   padding: const EdgeInsets.all(12.0),
                   child: Text(
                     '${selectedTaxSlab?.rate}% (${selectedTaxSlab?.type.name})',
-                      style: AppTypography.labelLarge.copyWith(color: _pageColor),
+                    style: AppTypography.labelLarge.copyWith(color: _pageColor),
                   ),
                 ),
               const SizedBox(height: 6.0),

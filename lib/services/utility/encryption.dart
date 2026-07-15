@@ -20,7 +20,10 @@ class Encryption {
       final key = Key.fromUtf8(Encryption.aesKey);
       final iv = IV.fromLength(16);
       final encryptor = Encrypter(AES(key));
-      final decrypted = encryptor.decrypt(Encrypted.fromBase16(encrypted), iv: iv);
+      final decrypted = encryptor.decrypt(
+        Encrypted.fromBase16(encrypted),
+        iv: iv,
+      );
       return decrypted;
     } catch (exception) {
       return null;

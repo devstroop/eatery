@@ -2,7 +2,9 @@ import 'package:eatery_core/utils/device_id.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 final _pageColor = AppColors.secondary2;
+
 class UpgradePage extends ConsumerStatefulWidget {
   const UpgradePage({Key? key, required this.company}) : super(key: key);
   final Company? company;
@@ -19,7 +21,7 @@ class _UpgradePageState extends ConsumerState<UpgradePage> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, (){
+    Future.delayed(Duration.zero, () {
       fetchDeviceInfo();
     });
   }
@@ -30,11 +32,11 @@ class _UpgradePageState extends ConsumerState<UpgradePage> {
       this.deviceSerial = deviceSerial;
     });
   }
+
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
-
     final appBar = AppBar(
       foregroundColor: AppColors.white,
       backgroundColor: _pageColor,
@@ -170,9 +172,7 @@ class _UpgradePageState extends ConsumerState<UpgradePage> {
         color: AppColors.white,
         child: AppButton.primary(
           height: 50.0,
-          onPressed: () async {
-
-          },
+          onPressed: () async {},
           label: 'Continue',
         ),
       ),

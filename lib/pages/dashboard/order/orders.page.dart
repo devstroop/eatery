@@ -35,7 +35,8 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
     super.initState();
     _loadNextPage();
     _scrollCtrl.addListener(() {
-      if (_scrollCtrl.position.pixels >= _scrollCtrl.position.maxScrollExtent - 200) {
+      if (_scrollCtrl.position.pixels >=
+          _scrollCtrl.position.maxScrollExtent - 200) {
         _loadNextPage();
       }
     });
@@ -95,7 +96,8 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
               delegate: SearchOrderDelegate(
                 orders: orders,
                 callback: (order) {
-                  GoRouter.of(context).pushNamed('viewOrder', extra: order)
+                  GoRouter.of(context)
+                      .pushNamed('viewOrder', extra: order)
                       .then((_) => setState(() {}));
                 },
                 currencySymbol: currencySymbol,
@@ -135,7 +137,9 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
                     AppSpacing.gapLg,
                     Text(
                       'No orders received yet',
-                      style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold),
+                      style: AppTypography.headlineSmall.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     Text(
                       'Create a new sale to get started',
@@ -176,7 +180,9 @@ class _OrderCard extends StatelessWidget {
               ),
               child: Text(
                 order.type.description!,
-                style: AppTypography.labelLarge.copyWith(color: Color(order.type.color!)),
+                style: AppTypography.labelLarge.copyWith(
+                  color: Color(order.type.color!),
+                ),
               ),
             ),
           ],

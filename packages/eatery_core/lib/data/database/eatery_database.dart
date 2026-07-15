@@ -6,7 +6,7 @@ import 'package:eatery_core/data/database/native/eatery_store.dart';
 /// pages that still read `appDatabaseProvider`.
 class EateryDatabase {
   EateryDatabase({required this.dataDir, required EateryStore store})
-      : _store = store;
+    : _store = store;
 
   final String dataDir;
   final EateryStore _store;

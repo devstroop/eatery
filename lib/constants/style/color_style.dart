@@ -1,6 +1,6 @@
 import 'package:eatery/references.dart';
 
-class KColors{
+class KColors {
   static Color primary = const Color(0xFF30A8CF);
   static Color tertiary = const Color(0xFFD98049);
   static Color tertiary2 = const Color(0xFFF5A142);
@@ -26,5 +26,4 @@ class KColors{
   static Color black800 = const Color(0xFF2F2F2F);
   static Color black600 = const Color(0xFF454545);
   static Color black500 = const Color(0xFF666666);
-
 }

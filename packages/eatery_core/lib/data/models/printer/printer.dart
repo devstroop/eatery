@@ -15,7 +15,8 @@ abstract class Printer with _$Printer {
     @Default(PrinterType.bluetooth) PrinterType type,
   }) = _Printer;
 
-  factory Printer.fromJson(Map<String, dynamic> json) => _$PrinterFromJson(json);
+  factory Printer.fromJson(Map<String, dynamic> json) =>
+      _$PrinterFromJson(json);
 
   static Printer fromMap(Map<String, dynamic> map) => Printer.fromJson(map);
 }

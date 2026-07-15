@@ -21,7 +21,8 @@ abstract class Company with _$Company {
     int? subscriptionId,
   }) = _Company;
 
-  factory Company.fromJson(Map<String, dynamic> json) => _$CompanyFromJson(json);
+  factory Company.fromJson(Map<String, dynamic> json) =>
+      _$CompanyFromJson(json);
 
   static Company fromMap(Map<String, dynamic> map) => Company.fromJson(map);
 

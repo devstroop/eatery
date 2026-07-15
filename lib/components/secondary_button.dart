@@ -30,15 +30,15 @@ class SecondaryButton extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: borderColor,
-            width: 1,
-          ),
+          border: Border.all(color: borderColor, width: 1),
         ),
         child: Text(
           text,
           style: TextStyle(
-              color: color, fontSize: 16, fontWeight: FontWeight.w500),
+            color: color,
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+          ),
         ),
       ),
     );

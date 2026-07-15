@@ -36,7 +36,9 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
         label: const Text('Add Customer'),
         icon: const Icon(Icons.add),
         onPressed: () {
-          GoRouter.of(context).pushNamed('addCustomer').then((_) => setState(() {}));
+          GoRouter.of(
+            context,
+          ).pushNamed('addCustomer').then((_) => setState(() {}));
         },
       ),
       child: _buildCustomerList(),
@@ -56,7 +58,9 @@ class _CustomersPageState extends ConsumerState<CustomersPage> {
               AppSpacing.gapLg,
               Text(
                 'No Customers',
-                style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold),
+                style: AppTypography.headlineSmall.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               Text(
                 'Add a customer to get started',
@@ -110,13 +114,13 @@ class _CustomerCardState extends ConsumerState<_CustomerCard> {
           ),
           child: Text(
             c.name![0],
-            style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold, color: AppColors.white),
+            style: AppTypography.headlineSmall.copyWith(
+              fontWeight: FontWeight.bold,
+              color: AppColors.white,
+            ),
           ),
         ),
-        title: Text(
-          c.name ?? 'NA',
-          style: AppTypography.titleMedium,
-        ),
+        title: Text(c.name ?? 'NA', style: AppTypography.titleMedium),
         subtitle: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
@@ -141,7 +145,9 @@ class _CustomerCardState extends ConsumerState<_CustomerCard> {
                       onTap: () {
                         Navigator.pop(ctx);
                         if (c.id != null) {
-                          GoRouter.of(context).pushNamed('editCustomer', extra: c).then((_) => setState(() {}));
+                          GoRouter.of(context)
+                              .pushNamed('editCustomer', extra: c)
+                              .then((_) => setState(() {}));
                         }
                       },
                     ),
@@ -170,10 +176,11 @@ class _CustomerCardState extends ConsumerState<_CustomerCard> {
                                       .then((_) {
                                         AppDialog.showMessage(
                                           context,
-                                          message: 'Customer deleted successfully',
+                                          message:
+                                              'Customer deleted successfully',
                                           type: MessageType.success,
                                         );
-                                      Navigator.pop(ctx2);
+                                        Navigator.pop(ctx2);
                                       })
                                       .onError((error, _) {
                                         AppDialog.showMessage(

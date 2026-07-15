@@ -33,8 +33,11 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       }
     } catch (e) {
       if (mounted) {
-        AppDialog.showMessage(this.context,
-            message: 'Failed to load demo: $e', type: MessageType.error);
+        AppDialog.showMessage(
+          this.context,
+          message: 'Failed to load demo: $e',
+          type: MessageType.error,
+        );
       }
     } finally {
       if (mounted) setState(() => _loading = false);
@@ -79,39 +82,49 @@ class _MainScreenState extends ConsumerState<MainScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text('Welcome to', style: AppTypography.headlineLarge),
-                Text('Eatery', style: AppTypography.displayMedium.copyWith(
-                  color: AppColors.primary, fontWeight: FontWeight.bold,
-                )),
+                Text(
+                  'Eatery',
+                  style: AppTypography.displayMedium.copyWith(
+                    color: AppColors.primary,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
                 AppSpacing.gapMd,
                 Text(
                   'Free & open restaurant POS system.\n'
                   'Works offline, syncs locally.\n'
                   'No monthly fees, no cloud dependency.',
-                  style: AppTypography.bodyLarge.copyWith(color: AppColors.grey600),
+                  style: AppTypography.bodyLarge.copyWith(
+                    color: AppColors.grey600,
+                  ),
                 ),
                 AppSpacing.gapLg,
                 Row(
                   children: [
                     AppButton.primary(
                       label: 'Set up my restaurant',
-                      height: 52, width: 200,
-                      onPressed: () => GoRouter.of(this.context).pushNamed('setup'),
+                      height: 52,
+                      width: 200,
+                      onPressed: () =>
+                          GoRouter.of(this.context).pushNamed('setup'),
                     ),
                     AppSpacing.gapMd,
                     AppButton.destructive(
                       label: _loading ? 'Loading...' : 'Try Demo',
-                      height: 52, width: 160,
-      onPressed: _loading ? null : _loadDemo,
+                      height: 52,
+                      width: 160,
+                      onPressed: _loading ? null : _loadDemo,
+                    ),
+                  ],
                 ),
-              ],
-            ),
-            AppSpacing.gapMd,
-            TextButton.icon(
-              icon: const Icon(Icons.restore, size: 18),
-              label: const Text('Restore from backup'),
-              onPressed: () => ScaffoldMessenger.of(this.context).showSnackBar(
-                    const SnackBar(content: Text('Restore coming soon')),
-                  ),
+                AppSpacing.gapMd,
+                TextButton.icon(
+                  icon: const Icon(Icons.restore, size: 18),
+                  label: const Text('Restore from backup'),
+                  onPressed: () =>
+                      ScaffoldMessenger.of(this.context).showSnackBar(
+                        const SnackBar(content: Text('Restore coming soon')),
+                      ),
                 ),
               ],
             ),
@@ -120,7 +133,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
             flex: 5,
             child: Center(
               child: SizedBox(
-                height: 300, width: 300,
+                height: 300,
+                width: 300,
                 child: FittedBox(
                   fit: BoxFit.contain,
                   child: Lottie.asset('assets/lottie/brand.json'),
@@ -140,9 +154,13 @@ class _MainScreenState extends ConsumerState<MainScreen> {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text('Welcome to', style: AppTypography.headlineMedium),
-          Text('Eatery', style: AppTypography.headlineSmall.copyWith(
-            color: AppColors.primary, fontWeight: FontWeight.bold,
-          )),
+          Text(
+            'Eatery',
+            style: AppTypography.headlineSmall.copyWith(
+              color: AppColors.primary,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
           AppSpacing.gapMd,
           Text(
             'Free & open restaurant POS.\nOffline-first, locally synced.',
@@ -151,7 +169,8 @@ class _MainScreenState extends ConsumerState<MainScreen> {
           ),
           AppSpacing.gapLg,
           SizedBox(
-            height: 180, width: 180,
+            height: 180,
+            width: 180,
             child: FittedBox(
               fit: BoxFit.contain,
               child: Lottie.asset('assets/lottie/brand.json'),

@@ -15,11 +15,14 @@ abstract class Supplier with _$Supplier {
     String? address,
     String? gstin,
     @Default(true) bool isActive,
-    @JsonKey(fromJson: epochFromJson, toJson: epochToJson) required DateTime createdAt,
-    @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) DateTime? updatedAt,
+    @JsonKey(fromJson: epochFromJson, toJson: epochToJson)
+    required DateTime createdAt,
+    @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)
+    DateTime? updatedAt,
   }) = _Supplier;
 
-  factory Supplier.fromJson(Map<String, dynamic> json) => _$SupplierFromJson(json);
+  factory Supplier.fromJson(Map<String, dynamic> json) =>
+      _$SupplierFromJson(json);
   static Supplier fromMap(Map<String, dynamic> map) => Supplier.fromJson(map);
 }
 

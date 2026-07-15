@@ -3,7 +3,14 @@ import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 
 class NotificationWidget extends StatelessWidget {
-  const NotificationWidget({Key? key, required this.message, this.timestamp, this.header, this.leading, this.onTap}) : super(key: key);
+  const NotificationWidget({
+    Key? key,
+    required this.message,
+    this.timestamp,
+    this.header,
+    this.leading,
+    this.onTap,
+  }) : super(key: key);
 
   final String message;
   final bool? timestamp;
@@ -24,16 +31,19 @@ class NotificationWidget extends StatelessWidget {
               blurRadius: 4,
               color: Color(0x43000000),
               offset: Offset(0, 2),
-            )
+            ),
           ],
           borderRadius: BorderRadius.circular(8),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.max,
           children: [
-            leading != null ? Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
-                child: leading) : Container(),
+            leading != null
+                ? Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(12, 0, 0, 0),
+                    child: leading,
+                  )
+                : Container(),
             Expanded(
               child: Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(12, 0, 16, 0),
@@ -53,15 +63,16 @@ class NotificationWidget extends StatelessWidget {
                             fontSize: 12,
                           ),
                         ),
-                        timestamp ?? false ?
-                        Text(
-                          DateFormat.jm().format(DateTime.now()),
-                          textAlign: TextAlign.end,
-                          style: const TextStyle(
-                            color: Color(0xB3FFFFFF),
-                            fontSize: 12,
-                          ),
-                        ) : Container(),
+                        timestamp ?? false
+                            ? Text(
+                                DateFormat.jm().format(DateTime.now()),
+                                textAlign: TextAlign.end,
+                                style: const TextStyle(
+                                  color: Color(0xB3FFFFFF),
+                                  fontSize: 12,
+                                ),
+                              )
+                            : Container(),
                       ],
                     ),
                     Padding(
@@ -79,12 +90,11 @@ class NotificationWidget extends StatelessWidget {
                           ),
                         ],
                       ),
-                    )
-
+                    ),
                   ],
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),

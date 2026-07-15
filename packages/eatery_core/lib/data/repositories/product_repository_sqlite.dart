@@ -29,14 +29,18 @@ class SqliteProductRepository implements ProductRepository {
   // ---------------------------------------------------------------------------
 
   @override
-    @override
+  @override
   List<Product> getAllProducts() =>
       _store.query('SELECT * FROM product').map(_toProduct).toList();
 
   @override
-  List<Product> getProductsPage(int limit, int offset) =>
-      _store.query('SELECT * FROM product ORDER BY name LIMIT ? OFFSET ?', [limit, offset])
-          .map(_toProduct).toList();
+  List<Product> getProductsPage(int limit, int offset) => _store
+      .query('SELECT * FROM product ORDER BY name LIMIT ? OFFSET ?', [
+        limit,
+        offset,
+      ])
+      .map(_toProduct)
+      .toList();
 
   @override
   int getProductCount() =>
@@ -176,7 +180,9 @@ class SqliteProductRepository implements ProductRepository {
   Future<void> deleteCategory(ProductCategory category) async {
     if (category.id == null) return;
     _store.execute('DELETE FROM product_category WHERE id = ?', [category.id]);
-    notifyMutation('product_category', category.id!, 'delete', {'id': category.id});
+    notifyMutation('product_category', category.id!, 'delete', {
+      'id': category.id,
+    });
   }
 
   // ---------------------------------------------------------------------------

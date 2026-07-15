@@ -3,17 +3,17 @@ import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 
 class SelectableCard extends StatelessWidget {
-  const SelectableCard(
-      {Key? key,
-      required this.header,
-      required this.title,
-      this.highlights,
-      required this.footer,
-      required this.selected,
-      this.highlightColor,
-      this.child,
-      this.onTap})
-      : super(key: key);
+  const SelectableCard({
+    Key? key,
+    required this.header,
+    required this.title,
+    this.highlights,
+    required this.footer,
+    required this.selected,
+    this.highlightColor,
+    this.child,
+    this.onTap,
+  }) : super(key: key);
 
   final String header;
   final String title;
@@ -33,7 +33,9 @@ class SelectableCard extends StatelessWidget {
           color: AppColors.white,
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
-            color: selected ? (highlightColor ?? AppColors.secondary2) : AppColors.white600,
+            color: selected
+                ? (highlightColor ?? AppColors.secondary2)
+                : AppColors.white600,
             width: selected ? 2 : 1,
           ),
         ),
@@ -50,36 +52,49 @@ class SelectableCard extends StatelessWidget {
                   Text(
                     header,
                     style: AppTypography.bodyMedium.copyWith(
-                        fontWeight: FontWeight.w500, color: AppColors.black500),
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.black500,
+                    ),
                   ),
                   selected
                       ? SizedBox(
                           width: 24,
                           height: 24,
-                          child: Stack(children: <Widget>[
-                            Positioned(
+                          child: Stack(
+                            children: <Widget>[
+                              Positioned(
                                 top: 0,
                                 left: 0,
                                 child: Container(
-                                    width: 24,
-                                    height: 24,
-                                    decoration: BoxDecoration(
-                                      color: (highlightColor ?? AppColors.secondary2),
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.elliptical(24, 24)),
-                                    ))),
-                            Positioned(
+                                  width: 24,
+                                  height: 24,
+                                  decoration: BoxDecoration(
+                                    color:
+                                        (highlightColor ??
+                                        AppColors.secondary2),
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.elliptical(24, 24),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Positioned(
                                 top: 7,
                                 left: 7,
                                 child: Container(
-                                    width: 10,
-                                    height: 10,
-                                    decoration: BoxDecoration(
-                                      color: AppColors.white,
-                                      borderRadius: const BorderRadius.all(
-                                          Radius.elliptical(10, 10)),
-                                    ))),
-                          ]))
+                                  width: 10,
+                                  height: 10,
+                                  decoration: BoxDecoration(
+                                    color: AppColors.white,
+                                    borderRadius: const BorderRadius.all(
+                                      Radius.elliptical(10, 10),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
                       : Container(
                           width: 24,
                           height: 24,
@@ -89,13 +104,13 @@ class SelectableCard extends StatelessWidget {
                               width: 2,
                             ),
                             borderRadius: const BorderRadius.all(
-                                Radius.elliptical(24, 24)),
-                          ))
+                              Radius.elliptical(24, 24),
+                            ),
+                          ),
+                        ),
                 ],
               ),
-              const SizedBox(
-                height: 8.0,
-              ),
+              const SizedBox(height: 8.0),
               Text(
                 title,
                 textAlign: TextAlign.center,
@@ -105,9 +120,7 @@ class SelectableCard extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              const SizedBox(
-                height: 8.0,
-              ),
+              const SizedBox(height: 8.0),
               if (highlights != null)
                 Wrap(
                   spacing: 6.0,
@@ -119,31 +132,31 @@ class SelectableCard extends StatelessWidget {
                         decoration: BoxDecoration(
                           color: (highlightColor ?? AppColors.secondary2)
                               .withOpacity(0.2),
-                          borderRadius:
-                              const BorderRadius.all(Radius.elliptical(4, 4)),
+                          borderRadius: const BorderRadius.all(
+                            Radius.elliptical(4, 4),
+                          ),
                         ),
                         child: Text(
                           highlight,
                           style: AppTypography.bodySmall.copyWith(
-                              color: highlightColor,
-                              fontWeight: FontWeight.w500),
+                            color: highlightColor,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                   ],
                 ),
-              const SizedBox(
-                height: 8.0,
-              ),
+              const SizedBox(height: 8.0),
               child != null && selected ? child! : Container(),
               child != null && selected
-                  ? const SizedBox(
-                      height: 8.0,
-                    )
+                  ? const SizedBox(height: 8.0)
                   : Container(),
               Text(
                 footer,
-                style: AppTypography.bodyMedium.copyWith(color: AppColors.black500),
-              )
+                style: AppTypography.bodyMedium.copyWith(
+                  color: AppColors.black500,
+                ),
+              ),
             ],
           ),
         ),

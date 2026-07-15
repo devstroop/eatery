@@ -31,7 +31,9 @@ class DineInPainter extends CustomPainter {
       ..close();
 
     final circlePath = Path()
-      ..addOval(Rect.fromCircle(center: const Offset(20, 13.983), radius: 3.343));
+      ..addOval(
+        Rect.fromCircle(center: const Offset(20, 13.983), radius: 3.343),
+      );
 
     canvas.drawPath(path, paint);
     canvas.clipPath(circlePath);

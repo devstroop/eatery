@@ -9,19 +9,26 @@ abstract class PurchaseOrder with _$PurchaseOrder {
   const factory PurchaseOrder({
     int? id,
     int? supplierId,
-    @JsonKey(fromJson: epochFromJson, toJson: epochToJson) required DateTime orderDate,
-    @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) DateTime? expectedDate,
-    @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) DateTime? deliveredDate,
+    @JsonKey(fromJson: epochFromJson, toJson: epochToJson)
+    required DateTime orderDate,
+    @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)
+    DateTime? expectedDate,
+    @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)
+    DateTime? deliveredDate,
     @Default(0) int status,
     @Default(0.0) double totalAmount,
     String? notes,
     int? createdBy,
-    @JsonKey(fromJson: epochFromJson, toJson: epochToJson) required DateTime createdAt,
-    @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) DateTime? updatedAt,
+    @JsonKey(fromJson: epochFromJson, toJson: epochToJson)
+    required DateTime createdAt,
+    @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)
+    DateTime? updatedAt,
   }) = _PurchaseOrder;
 
-  factory PurchaseOrder.fromJson(Map<String, dynamic> json) => _$PurchaseOrderFromJson(json);
-  static PurchaseOrder fromMap(Map<String, dynamic> map) => PurchaseOrder.fromJson(map);
+  factory PurchaseOrder.fromJson(Map<String, dynamic> json) =>
+      _$PurchaseOrderFromJson(json);
+  static PurchaseOrder fromMap(Map<String, dynamic> map) =>
+      PurchaseOrder.fromJson(map);
 }
 
 extension PurchaseOrderX on PurchaseOrder {

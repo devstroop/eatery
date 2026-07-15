@@ -136,7 +136,9 @@ class _KProductViewState extends ConsumerState<KProductView> {
               ),
               Text(
                 widget.product.description ?? '',
-                style: AppTypography.bodySmall.copyWith(color: AppColors.black500),
+                style: AppTypography.bodySmall.copyWith(
+                  color: AppColors.black500,
+                ),
               ),
             ],
           ),
@@ -202,8 +204,7 @@ class _KProductViewState extends ConsumerState<KProductView> {
               ],
             ),
           ),
-        if (widget.onEdit != null || widget.onDelete != null)
-          AppSpacing.gapMd,
+        if (widget.onEdit != null || widget.onDelete != null) AppSpacing.gapMd,
         if (widget.onAddToCart != null)
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 12.0),

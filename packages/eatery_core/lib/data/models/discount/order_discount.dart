@@ -15,11 +15,15 @@ abstract class OrderDiscount with _$OrderDiscount {
     required double value,
     required double amount,
     int? appliedBy,
-    @JsonKey(fromJson: epochFromJson, toJson: epochToJson) required DateTime createdAt,
+    @JsonKey(fromJson: epochFromJson, toJson: epochToJson)
+    required DateTime createdAt,
   }) = _OrderDiscount;
-  factory OrderDiscount.fromJson(Map<String, dynamic> json) => _$OrderDiscountFromJson(json);
-  static OrderDiscount fromMap(Map<String, dynamic> map) => OrderDiscount.fromJson(map);
+  factory OrderDiscount.fromJson(Map<String, dynamic> json) =>
+      _$OrderDiscountFromJson(json);
+  static OrderDiscount fromMap(Map<String, dynamic> map) =>
+      OrderDiscount.fromJson(map);
 }
+
 extension OrderDiscountX on OrderDiscount {
   Map<String, Object?> toMap() => toJson() as Map<String, Object?>;
 }

@@ -13,7 +13,8 @@ abstract class TaxSlab with _$TaxSlab {
     @Default(TaxType.inclusive) TaxType type,
   }) = _TaxSlab;
 
-  factory TaxSlab.fromJson(Map<String, dynamic> json) => _$TaxSlabFromJson(json);
+  factory TaxSlab.fromJson(Map<String, dynamic> json) =>
+      _$TaxSlabFromJson(json);
 
   static TaxSlab fromMap(Map<String, dynamic> map) => TaxSlab.fromJson(map);
 

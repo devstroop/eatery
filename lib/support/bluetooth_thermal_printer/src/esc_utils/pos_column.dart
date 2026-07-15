@@ -17,7 +17,8 @@ class PosColumn {
     }
     if (text.isNotEmpty && textEncoded != null && textEncoded!.isNotEmpty) {
       throw Exception(
-          'Only one parameter - text or textEncoded - should be passed');
+        'Only one parameter - text or textEncoded - should be passed',
+      );
     }
   }
 

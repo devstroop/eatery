@@ -58,12 +58,12 @@ class _TaxSlabsSettingsPageState extends ConsumerState<TaxSlabsSettingsPage> {
                     },
                     leading: Text(
                       '${e.rate}%',
-                      style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.w500, color: AppColors.black600),
+                      style: AppTypography.titleLarge.copyWith(
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.black600,
+                      ),
                     ),
-                    title: Text(
-                      e.name,
-                      style: AppTypography.titleMedium,
-                    ),
+                    title: Text(e.name, style: AppTypography.titleMedium),
                     subtitle: Text(e.type.name ?? 'None'),
                     trailing: const Icon(Icons.chevron_right),
                   );
@@ -80,7 +80,9 @@ class _TaxSlabsSettingsPageState extends ConsumerState<TaxSlabsSettingsPage> {
                     SpacingStyle.defaultVerticalSpacing,
                     Text(
                       'No Tax Slabs Found',
-                      style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold),
+                      style: AppTypography.headlineSmall.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     Text(
                       'Add a tax slab to get started',
@@ -91,7 +93,9 @@ class _TaxSlabsSettingsPageState extends ConsumerState<TaxSlabsSettingsPage> {
               ),
             ),
       floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => GoRouter.of(context).pushNamed('addTaxSlab').then((_) => setState(() {})),
+        onPressed: () => GoRouter.of(
+          context,
+        ).pushNamed('addTaxSlab').then((_) => setState(() {})),
         backgroundColor: _pageColor,
         foregroundColor: AppColors.white,
         icon: const Icon(Icons.add),

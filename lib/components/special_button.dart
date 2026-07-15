@@ -2,14 +2,14 @@ import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 
 class SpecialButton extends StatelessWidget {
-  const SpecialButton(
-      {Key? key,
-      this.onTap,
-      required this.icon,
-      required this.text,
-      required this.color,
-      required this.foreColor})
-      : super(key: key);
+  const SpecialButton({
+    Key? key,
+    this.onTap,
+    required this.icon,
+    required this.text,
+    required this.color,
+    required this.foreColor,
+  }) : super(key: key);
   final Function()? onTap;
   final Widget icon;
   final String text;
@@ -38,25 +38,19 @@ class SpecialButton extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  SizedBox(
-                    height: 24,
-                    width: 24,
-                    child: icon,
-                  ),
+                  SizedBox(height: 24, width: 24, child: icon),
                   const SizedBox(width: 8.0),
                   Text(
                     text,
                     style: TextStyle(
-                        color: foreColor,
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16.0),
+                      color: foreColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 16.0,
+                    ),
                   ),
                 ],
               ),
-              Icon(
-                Icons.chevron_right,
-                color: foreColor,
-              ),
+              Icon(Icons.chevron_right, color: foreColor),
             ],
           ),
         ),

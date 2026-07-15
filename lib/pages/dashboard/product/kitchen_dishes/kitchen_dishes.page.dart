@@ -89,7 +89,9 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                         );
                       },
                       onEdit: () {
-                        GoRouter.of(context).pushNamed('editKitchenDish', extra: product).then((_) => setState(() {}));
+                        GoRouter.of(context)
+                            .pushNamed('editKitchenDish', extra: product)
+                            .then((_) => setState(() {}));
                       },
                     ),
                   );
@@ -173,11 +175,16 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                         AppSpacing.gapLg,
                         Text(
                           'Oops!',
-                          style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey500),
+                          style: AppTypography.headlineSmall.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.grey500,
+                          ),
                         ),
                         Text(
                           'No dishes found in kitchen',
-                          style: AppTypography.bodyLarge.copyWith(color: AppColors.grey500),
+                          style: AppTypography.bodyLarge.copyWith(
+                            color: AppColors.grey500,
+                          ),
                         ),
                       ],
                     ),
@@ -191,184 +198,218 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                               : true),
                         )
                         .map((each) {
-                      return InkWell(
-                        onTap: () {
-                          // Show detailed bottom sheet
-                          showModalBottomSheet(
-                            shape: const RoundedRectangleBorder(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(24),
-                                topRight: Radius.circular(24),
-                                bottomLeft: Radius.circular(0),
-                                bottomRight: Radius.circular(0),
-                              ),
-                            ),
-                            context: this.context,
-                            showDragHandle: true,
-                            builder: (context) => KProductView(
-                              product: each,
-                              onDelete: () {
-                                Navigator.pop(context);
-                                AppDialog.show(
-                                  context,
-                                  title: 'Are you sure?',
-                                  content: 'Do you want to delete this dish?',
-                                  onConfirm: () {
-                                    repo.deleteProduct(each);
-                                    AppDialog.showMessage(
+                          return InkWell(
+                            onTap: () {
+                              // Show detailed bottom sheet
+                              showModalBottomSheet(
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(24),
+                                    topRight: Radius.circular(24),
+                                    bottomLeft: Radius.circular(0),
+                                    bottomRight: Radius.circular(0),
+                                  ),
+                                ),
+                                context: this.context,
+                                showDragHandle: true,
+                                builder: (context) => KProductView(
+                                  product: each,
+                                  onDelete: () {
+                                    Navigator.pop(context);
+                                    AppDialog.show(
                                       context,
-                                      message: 'Dish has been deleted successfully',
-                                      type: MessageType.success,
+                                      title: 'Are you sure?',
+                                      content:
+                                          'Do you want to delete this dish?',
                                       onConfirm: () {
-                                        setState(() {});
+                                        repo.deleteProduct(each);
+                                        AppDialog.showMessage(
+                                          context,
+                                          message:
+                                              'Dish has been deleted successfully',
+                                          type: MessageType.success,
+                                          onConfirm: () {
+                                            setState(() {});
+                                          },
+                                        );
+                                      },
+                                      onCancel: () {
+                                        // Do nothing
                                       },
                                     );
                                   },
-                                  onCancel: () {
-                                    // Do nothing
+                                  onEdit: () {
+                                    GoRouter.of(context)
+                                        .pushNamed(
+                                          'editKitchenDish',
+                                          extra: each,
+                                        )
+                                        .then((_) => setState(() {}));
                                   },
-                                );
-                              },
-                              onEdit: () {
-                                GoRouter.of(context).pushNamed('editKitchenDish', extra: each).then((_) => setState(() {}));
-                              },
-                            ),
-                          );
-                        },
-                        child: ListTile(
-                          leading: Image(
-                            image: LibraryImage(each.image).image,
-                            fit: BoxFit.contain,
-                            height: 48,
-                            width: 48,
-                          ),
-                          title: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Text(
-                                each.name,
-                                style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500),
+                                ),
+                              );
+                            },
+                            child: ListTile(
+                              leading: Image(
+                                image: LibraryImage(each.image).image,
+                                fit: BoxFit.contain,
+                                height: 48,
+                                width: 48,
                               ),
-                              AppSpacing.gapSm,
-                              if (each.foodType != null)
-                                FoodTypeBadge(
-                                  size: 16,
-                                  foodType: each.foodType,
-                                  backgroundColor: AppColors.white,
-                                ),
-                            ],
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              if (each.description != null)
-                                Text(
-                                each.description!,
-                                style: AppTypography.bodySmall.copyWith(color: AppColors.grey700),
-                                ),
-                              Row(
+                              title: Row(
                                 mainAxisSize: MainAxisSize.min,
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
                                   Text(
-                                    'MRP',
-                                    style: AppTypography.labelMedium.copyWith(color: AppColors.grey700),
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    '${currency?.symbol ?? ''}${each.mrpPrice}',
-                                    style: AppTypography.labelMedium.copyWith(fontWeight: FontWeight.w600, color: Color(0xFF2F2F2F)),
+                                    each.name,
+                                    style: AppTypography.titleMedium.copyWith(
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
                                   AppSpacing.gapSm,
-                                  Text(
-                                    'Sale Price',
-                                    style: AppTypography.labelMedium.copyWith(color: AppColors.grey700),
-                                  ),
-                                  const SizedBox(width: 4),
-                                  Text(
-                                    '${currency?.symbol ?? ''}${each.salePrice}',
-                                    style: AppTypography.labelMedium.copyWith(fontWeight: FontWeight.w600, color: Colors.green),
+                                  if (each.foodType != null)
+                                    FoodTypeBadge(
+                                      size: 16,
+                                      foodType: each.foodType,
+                                      backgroundColor: AppColors.white,
+                                    ),
+                                ],
+                              ),
+                              subtitle: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  if (each.description != null)
+                                    Text(
+                                      each.description!,
+                                      style: AppTypography.bodySmall.copyWith(
+                                        color: AppColors.grey700,
+                                      ),
+                                    ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'MRP',
+                                        style: AppTypography.labelMedium
+                                            .copyWith(color: AppColors.grey700),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        '${currency?.symbol ?? ''}${each.mrpPrice}',
+                                        style: AppTypography.labelMedium
+                                            .copyWith(
+                                              fontWeight: FontWeight.w600,
+                                              color: Color(0xFF2F2F2F),
+                                            ),
+                                      ),
+                                      AppSpacing.gapSm,
+                                      Text(
+                                        'Sale Price',
+                                        style: AppTypography.labelMedium
+                                            .copyWith(color: AppColors.grey700),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        '${currency?.symbol ?? ''}${each.salePrice}',
+                                        style: AppTypography.labelMedium
+                                            .copyWith(
+                                              fontWeight: FontWeight.w600,
+                                              color: Colors.green,
+                                            ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
-                            ],
-                          ),
-                          trailing: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              IconButton(
-                                icon: const Icon(Icons.more_vert),
-                                onPressed: () {
-                                  // Show the menu
-                                  showMenu(
-                                    context: context,
-                                    color: const Color(0xEFEFEFEF),
-                                    position: const RelativeRect.fromLTRB(
-                                      100,
-                                      100,
-                                      0,
-                                      100,
-                                    ),
-                                    items: [
-                                      PopupMenuItem(
-                                        child: ListTile(
-                                          leading: const Icon(Icons.edit),
-                                          title: const Text('Edit'),
-                                          onTap: () {
-                                            Navigator.pop(context);
-                                            GoRouter.of(context).pushNamed('editKitchenDish', extra: each).then((_) => setState(() {}));
-                                          },
+                              trailing: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  IconButton(
+                                    icon: const Icon(Icons.more_vert),
+                                    onPressed: () {
+                                      // Show the menu
+                                      showMenu(
+                                        context: context,
+                                        color: const Color(0xEFEFEFEF),
+                                        position: const RelativeRect.fromLTRB(
+                                          100,
+                                          100,
+                                          0,
+                                          100,
                                         ),
-                                      ),
-                                      PopupMenuItem(
-                                        child: ListTile(
-                                          leading: const Icon(Icons.delete),
-                                          title: const Text('Delete'),
-                                          onTap: () {
-                                            Navigator.pop(context);
-                                            AppDialog.show(
-                                              context,
-                                              title: 'Are you sure?',
-                                              content: 'Do you want to delete this item?',
-                                              onConfirm: () {
-                                                repo.deleteProduct(each);
-                                                AppDialog.showMessage(
+                                        items: [
+                                          PopupMenuItem(
+                                            child: ListTile(
+                                              leading: const Icon(Icons.edit),
+                                              title: const Text('Edit'),
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                                GoRouter.of(context)
+                                                    .pushNamed(
+                                                      'editKitchenDish',
+                                                      extra: each,
+                                                    )
+                                                    .then(
+                                                      (_) => setState(() {}),
+                                                    );
+                                              },
+                                            ),
+                                          ),
+                                          PopupMenuItem(
+                                            child: ListTile(
+                                              leading: const Icon(Icons.delete),
+                                              title: const Text('Delete'),
+                                              onTap: () {
+                                                Navigator.pop(context);
+                                                AppDialog.show(
                                                   context,
-                                                  message: 'Item has been deleted successfully',
-                                                  type: MessageType.success,
+                                                  title: 'Are you sure?',
+                                                  content:
+                                                      'Do you want to delete this item?',
                                                   onConfirm: () {
-                                                    setState(() {});
+                                                    repo.deleteProduct(each);
+                                                    AppDialog.showMessage(
+                                                      context,
+                                                      message:
+                                                          'Item has been deleted successfully',
+                                                      type: MessageType.success,
+                                                      onConfirm: () {
+                                                        setState(() {});
+                                                      },
+                                                    );
+                                                  },
+                                                  onCancel: () {
+                                                    // Do nothing
                                                   },
                                                 );
                                               },
-                                              onCancel: () {
-                                                // Do nothing
-                                              },
-                                            );
-                                          },
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                },
+                                            ),
+                                          ),
+                                        ],
+                                      );
+                                    },
+                                  ),
+                                ],
                               ),
-                            ],
-                          ),
-                        ),
-                      );
-                    }).toList(),
+                            ),
+                          );
+                        })
+                        .toList(),
                   ),
-                ),
-              ],
-            ),
+          ),
+        ],
+      ),
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: _pageColor,
         foregroundColor: AppColors.white,
         icon: const Icon(Icons.add),
         label: const Text('Add Kitchen Dish'),
         onPressed: () async {
-          GoRouter.of(context).pushNamed('addKitchenDish').then((_) => setState(() {}));
+          GoRouter.of(
+            context,
+          ).pushNamed('addKitchenDish').then((_) => setState(() {}));
         },
       ),
     );

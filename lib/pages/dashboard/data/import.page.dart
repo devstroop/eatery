@@ -78,11 +78,15 @@ class ImportPage extends StatelessWidget {
                   title: Text(
                     'Import from Excel',
                     style: AppTypography.titleMedium.copyWith(
-                        color: AppColors.menuPayments, fontWeight: FontWeight.bold),
+                      color: AppColors.menuPayments,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   subtitle: Text(
                     'Select the excel file to import',
-                    style: AppTypography.bodySmall.copyWith(color: AppColors.grey700),
+                    style: AppTypography.bodySmall.copyWith(
+                      color: AppColors.grey700,
+                    ),
                   ),
                   trailing: Icon(
                     Icons.attachment,
@@ -115,16 +119,17 @@ class ImportPage extends StatelessWidget {
                   title: Text(
                     'Import from JSON',
                     style: AppTypography.titleMedium.copyWith(
-                        color: AppColors.yellow, fontWeight: FontWeight.bold),
+                      color: AppColors.yellow,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   subtitle: Text(
                     'Select the json file to import',
-                    style: AppTypography.bodySmall.copyWith(color: AppColors.grey700),
+                    style: AppTypography.bodySmall.copyWith(
+                      color: AppColors.grey700,
+                    ),
                   ),
-                  trailing: Icon(
-                    Icons.code,
-                    color: AppColors.yellow,
-                  ),
+                  trailing: Icon(Icons.code, color: AppColors.yellow),
                 ),
               ],
             ),
@@ -133,5 +138,4 @@ class ImportPage extends StatelessWidget {
       ),
     );
   }
-
 }

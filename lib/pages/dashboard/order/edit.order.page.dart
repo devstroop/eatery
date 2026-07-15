@@ -57,22 +57,23 @@ class _EditOrderPageState extends ConsumerState<EditOrderPage> {
 
     if (_status != widget.order.status) {
       final now = DateTime.now();
-      await repo.saveOrder(widget.order.copyWith(
-        status: _status,
-        updatedAt: now,
-      ));
-      await repo.recordStatusTransition(OrderStatusHistory(
-        orderId: widget.order.id!,
-        fromStatus: widget.order.status.id,
-        toStatus: _status.id,
-        changedAt: now,
-      ));
+      await repo.saveOrder(
+        widget.order.copyWith(status: _status, updatedAt: now),
+      );
+      await repo.recordStatusTransition(
+        OrderStatusHistory(
+          orderId: widget.order.id!,
+          fromStatus: widget.order.status.id,
+          toStatus: _status.id,
+          changedAt: now,
+        ),
+      );
     }
 
     if (mounted) {
-      ScaffoldMessenger.of(this.context).showSnackBar(
-        const SnackBar(content: Text('Order updated')),
-      );
+      ScaffoldMessenger.of(
+        this.context,
+      ).showSnackBar(const SnackBar(content: Text('Order updated')));
       Navigator.pop(this.context);
     }
   }
@@ -85,25 +86,25 @@ class _EditOrderPageState extends ConsumerState<EditOrderPage> {
     return AppPageShell(
       title: 'Edit Order',
       color: AppColors.menuCategories,
-      actions: [
-        IconButton(
-          icon: const Icon(Icons.save),
-          onPressed: _save,
-        ),
-      ],
+      actions: [IconButton(icon: const Icon(Icons.save), onPressed: _save)],
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: ListView(
           children: [
             Text(
               'Order ID: ${widget.order.id}',
-              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
+              style: AppTypography.titleLarge.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
             AppSpacing.gapSm,
             Row(
               children: [
                 Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: _status.color.withValues(alpha: 0.15),
                     borderRadius: BorderRadius.circular(12),
@@ -121,10 +122,7 @@ class _EditOrderPageState extends ConsumerState<EditOrderPage> {
                   value: _status,
                   hint: const Text('Change status'),
                   items: displayStatuses.map((s) {
-                    return DropdownMenuItem(
-                      value: s,
-                      child: Text(s.name),
-                    );
+                    return DropdownMenuItem(value: s, child: Text(s.name));
                   }).toList(),
                   onChanged: (v) {
                     if (v != null && v != widget.order.status) {
@@ -137,22 +135,30 @@ class _EditOrderPageState extends ConsumerState<EditOrderPage> {
             AppSpacing.gapSm,
             Text(
               'Customer: ${widget.order.customerPhone ?? 'N/A'}',
-              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
+              style: AppTypography.titleLarge.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
             AppSpacing.gapSm,
             Text(
               'Order Date: ${widget.order.createdAt}',
-              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
+              style: AppTypography.titleLarge.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
             AppSpacing.gapSm,
             Text(
               'Order Type: ${widget.order.type.name}',
-              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
+              style: AppTypography.titleLarge.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
             AppSpacing.gapXl,
             Text(
               'Order Items',
-              style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
+              style: AppTypography.titleLarge.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
             ),
             AppSpacing.gapSm,
             if (_items.isEmpty)

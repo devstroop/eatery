@@ -32,14 +32,20 @@ class SqliteCustomerRepository implements CustomerRepository {
       'lastOrderAt';
 
   @override
-    @override
-  List<Customer> getAllCustomers() =>
-      _store.query('SELECT * FROM customer LIMIT 100').map(Customer.fromMap).toList();
+  @override
+  List<Customer> getAllCustomers() => _store
+      .query('SELECT * FROM customer LIMIT 100')
+      .map(Customer.fromMap)
+      .toList();
 
   @override
-  List<Customer> getCustomersPage(int limit, int offset) =>
-      _store.query('SELECT * FROM customer ORDER BY name LIMIT ? OFFSET ?', [limit, offset])
-          .map(Customer.fromMap).toList();
+  List<Customer> getCustomersPage(int limit, int offset) => _store
+      .query('SELECT * FROM customer ORDER BY name LIMIT ? OFFSET ?', [
+        limit,
+        offset,
+      ])
+      .map(Customer.fromMap)
+      .toList();
 
   @override
   int getCustomerCount() =>

@@ -66,7 +66,9 @@ class _SettingPageState extends ConsumerState<SettingPage> {
             subtitle: 'Product customization options',
             postfixIcon: Icons.chevron_right,
             color: getThemeColor(),
-            onTap: () => GoRouter.of(context).pushNamed('modifierGroups').then((_) => setState(() {})),
+            onTap: () => GoRouter.of(
+              context,
+            ).pushNamed('modifierGroups').then((_) => setState(() {})),
           ),
           MenuTile(
             prefixIcon: Icons.business,
@@ -74,7 +76,9 @@ class _SettingPageState extends ConsumerState<SettingPage> {
             subtitle: 'Manage vendors',
             postfixIcon: Icons.chevron_right,
             color: getThemeColor(),
-            onTap: () => GoRouter.of(context).pushNamed('suppliers').then((_) => setState(() {})),
+            onTap: () => GoRouter.of(
+              context,
+            ).pushNamed('suppliers').then((_) => setState(() {})),
           ),
           MenuTile(
             prefixIcon: Icons.receipt_long,
@@ -82,7 +86,9 @@ class _SettingPageState extends ConsumerState<SettingPage> {
             subtitle: 'Inventory procurement',
             postfixIcon: Icons.chevron_right,
             color: getThemeColor(),
-            onTap: () => GoRouter.of(context).pushNamed('purchaseOrders').then((_) => setState(() {})),
+            onTap: () => GoRouter.of(
+              context,
+            ).pushNamed('purchaseOrders').then((_) => setState(() {})),
           ),
           MenuTile(
             prefixIcon: Icons.local_offer,
@@ -90,7 +96,9 @@ class _SettingPageState extends ConsumerState<SettingPage> {
             subtitle: 'Promotions & discount rules',
             postfixIcon: Icons.chevron_right,
             color: getThemeColor(),
-            onTap: () => GoRouter.of(context).pushNamed('discounts').then((_) => setState(() {})),
+            onTap: () => GoRouter.of(
+              context,
+            ).pushNamed('discounts').then((_) => setState(() {})),
           ),
           MenuTile(
             prefixIcon: Icons.print,

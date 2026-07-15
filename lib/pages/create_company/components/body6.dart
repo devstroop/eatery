@@ -6,19 +6,24 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Body6 extends ConsumerStatefulWidget {
   final Color themeColor;
-  final Function(SubscriptionType subscriptionType, String? purchaseCde,
-      DateTime? validFrom, DateTime? validTill) callback;
+  final Function(
+    SubscriptionType subscriptionType,
+    String? purchaseCde,
+    DateTime? validFrom,
+    DateTime? validTill,
+  )
+  callback;
   SubscriptionType? subscriptionType;
   final GlobalKey<FormState> formKey;
   final Function(GlobalKey<FormState> formKey)? callbackFormKey;
-  Body6(
-      {Key? key,
-      required this.themeColor,
-      required this.callback,
-      required this.subscriptionType,
-      required this.formKey,
-      this.callbackFormKey})
-      : super(key: key);
+  Body6({
+    Key? key,
+    required this.themeColor,
+    required this.callback,
+    required this.subscriptionType,
+    required this.formKey,
+    this.callbackFormKey,
+  }) : super(key: key);
 
   @override
   ConsumerState<Body6> createState() => _Body6State();
@@ -59,7 +64,7 @@ class _Body6State extends ConsumerState<Body6> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, (){
+    Future.delayed(Duration.zero, () {
       fetchDeviceInfo();
     });
   }
@@ -94,7 +99,12 @@ class _Body6State extends ConsumerState<Body6> {
                     highlightColor: e.color,
                     onTap: () {
                       // Callback
-                      widget.callback(e, _controllerPurchaseCode.text, validFrom, validTill);
+                      widget.callback(
+                        e,
+                        _controllerPurchaseCode.text,
+                        validFrom,
+                        validTill,
+                      );
                     },
                   ),
                   SpacingStyle.defaultVerticalSpacing,
@@ -112,7 +122,11 @@ class _Body6State extends ConsumerState<Body6> {
     String? deviceSerial = this.deviceSerial;
     deviceSerial ??= 'Undefined';
     Clipboard.setData(ClipboardData(text: deviceSerial)).whenComplete(() {
-      AppDialog.showMessage(this.context, message: 'Device ID copied to clipboard', type: MessageType.success);
+      AppDialog.showMessage(
+        this.context,
+        message: 'Device ID copied to clipboard',
+        type: MessageType.success,
+      );
     });
   }
 }

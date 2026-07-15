@@ -14,7 +14,8 @@ class AddModifierGroupPage extends ConsumerStatefulWidget {
   final ModifierGroup? group;
 
   @override
-  ConsumerState<AddModifierGroupPage> createState() => _AddModifierGroupPageState();
+  ConsumerState<AddModifierGroupPage> createState() =>
+      _AddModifierGroupPageState();
 }
 
 class _AddModifierGroupPageState extends ConsumerState<AddModifierGroupPage> {
@@ -69,9 +70,7 @@ class _AddModifierGroupPageState extends ConsumerState<AddModifierGroupPage> {
     return AppPageShell(
       title: isEdit ? 'Edit Modifier Group' : 'Add Modifier Group',
       color: AppColors.warning,
-      actions: [
-        IconButton(icon: const Icon(Icons.save), onPressed: _save),
-      ],
+      actions: [IconButton(icon: const Icon(Icons.save), onPressed: _save)],
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Form(
@@ -82,7 +81,8 @@ class _AddModifierGroupPageState extends ConsumerState<AddModifierGroupPage> {
                 controller: _nameCtrl,
                 label: 'Group Name',
                 hint: 'e.g. Extra Toppings',
-                validator: (v) => v == null || v.trim().isEmpty ? 'Required' : null,
+                validator: (v) =>
+                    v == null || v.trim().isEmpty ? 'Required' : null,
               ),
               AppSpacing.gapMd,
               CustomTextFromField(
@@ -95,18 +95,26 @@ class _AddModifierGroupPageState extends ConsumerState<AddModifierGroupPage> {
                 children: [
                   Expanded(
                     child: TextField(
-                      decoration: const InputDecoration(labelText: 'Min Select'),
+                      decoration: const InputDecoration(
+                        labelText: 'Min Select',
+                      ),
                       keyboardType: TextInputType.number,
-                      controller: TextEditingController(text: _minSelect.toString()),
+                      controller: TextEditingController(
+                        text: _minSelect.toString(),
+                      ),
                       onChanged: (v) => _minSelect = int.tryParse(v) ?? 0,
                     ),
                   ),
                   AppSpacing.gapMd,
                   Expanded(
                     child: TextField(
-                      decoration: const InputDecoration(labelText: 'Max Select (0 = any)'),
+                      decoration: const InputDecoration(
+                        labelText: 'Max Select (0 = any)',
+                      ),
                       keyboardType: TextInputType.number,
-                      controller: TextEditingController(text: _maxSelect.toString()),
+                      controller: TextEditingController(
+                        text: _maxSelect.toString(),
+                      ),
                       onChanged: (v) => _maxSelect = int.tryParse(v) ?? 1,
                     ),
                   ),
@@ -115,7 +123,9 @@ class _AddModifierGroupPageState extends ConsumerState<AddModifierGroupPage> {
               AppSpacing.gapMd,
               SwitchListTile(
                 title: const Text('Required'),
-                subtitle: const Text('Customer must select at least min options'),
+                subtitle: const Text(
+                  'Customer must select at least min options',
+                ),
                 value: _isRequired,
                 onChanged: (v) => setState(() => _isRequired = v),
               ),

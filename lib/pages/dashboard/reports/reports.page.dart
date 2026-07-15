@@ -60,9 +60,9 @@ class _ReportsPageState extends ConsumerState<ReportsPage> {
       });
     } catch (e) {
       setState(() => _loading = false);
-      ScaffoldMessenger.of(this.context).showSnackBar(
-        SnackBar(content: Text('Report failed: $e')),
-      );
+      ScaffoldMessenger.of(
+        this.context,
+      ).showSnackBar(SnackBar(content: Text('Report failed: $e')));
     }
   }
 
@@ -105,8 +105,7 @@ class _ReportsPageState extends ConsumerState<ReportsPage> {
             ],
           ),
           AppSpacing.gapXl,
-          if (_loading)
-            const Center(child: CircularProgressIndicator()),
+          if (_loading) const Center(child: CircularProgressIndicator()),
           if (_report != null) ...[
             Card(
               child: Padding(
@@ -116,7 +115,9 @@ class _ReportsPageState extends ConsumerState<ReportsPage> {
                   children: [
                     Text(
                       '${_report!.reportType == 'daily' ? 'Z' : 'X'}-Report',
-                      style: AppTypography.titleLarge.copyWith(fontWeight: FontWeight.bold),
+                      style: AppTypography.titleLarge.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     AppSpacing.gapXs,
                     Text(
@@ -129,24 +130,51 @@ class _ReportsPageState extends ConsumerState<ReportsPage> {
                       style: AppTypography.bodySmall,
                     ),
                     const Divider(height: 24),
-                    _row('Gross Sales', '$currency${_report!.grossSales.toStringAsFixed(2)}'),
-                    _row('Net Sales', '$currency${_report!.netSales.toStringAsFixed(2)}'),
-                    _row('Tax Collected', '$currency${_report!.taxCollected.toStringAsFixed(2)}'),
+                    _row(
+                      'Gross Sales',
+                      '$currency${_report!.grossSales.toStringAsFixed(2)}',
+                    ),
+                    _row(
+                      'Net Sales',
+                      '$currency${_report!.netSales.toStringAsFixed(2)}',
+                    ),
+                    _row(
+                      'Tax Collected',
+                      '$currency${_report!.taxCollected.toStringAsFixed(2)}',
+                    ),
                     _row('Transactions', '${_report!.transactionCount}'),
-                    _row('Avg Ticket', '$currency${_report!.averageTicket.toStringAsFixed(2)}'),
-                    _row('Discounts', '-$currency${_report!.totalDiscounts.toStringAsFixed(2)}'),
+                    _row(
+                      'Avg Ticket',
+                      '$currency${_report!.averageTicket.toStringAsFixed(2)}',
+                    ),
+                    _row(
+                      'Discounts',
+                      '-$currency${_report!.totalDiscounts.toStringAsFixed(2)}',
+                    ),
                     if (_report!.voidCount > 0) ...[
-                      _row('Voids', '${_report!.voidCount} (-$currency${_report!.voidAmount.toStringAsFixed(2)})'),
+                      _row(
+                        'Voids',
+                        '${_report!.voidCount} (-$currency${_report!.voidAmount.toStringAsFixed(2)})',
+                      ),
                     ],
                     const Divider(height: 24),
                     if (_report!.paymentBreakdownJson != null) ...[
-                      Text('Payment Breakdown',
-                          style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold)),
+                      Text(
+                        'Payment Breakdown',
+                        style: AppTypography.titleMedium.copyWith(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
                       AppSpacing.gapSm,
                       ...() {
-                        final breakdown = jsonDecode(_report!.paymentBreakdownJson!) as Map<String, dynamic>;
-                        return breakdown.entries.map((e) =>
-                          _row(e.key, '$currency${(e.value as num).toStringAsFixed(2)}'),
+                        final breakdown =
+                            jsonDecode(_report!.paymentBreakdownJson!)
+                                as Map<String, dynamic>;
+                        return breakdown.entries.map(
+                          (e) => _row(
+                            e.key,
+                            '$currency${(e.value as num).toStringAsFixed(2)}',
+                          ),
                         );
                       }(),
                     ],
@@ -167,7 +195,12 @@ class _ReportsPageState extends ConsumerState<ReportsPage> {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(label, style: AppTypography.bodyMedium),
-          Text(value, style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.bold)),
+          Text(
+            value,
+            style: AppTypography.titleMedium.copyWith(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
         ],
       ),
     );

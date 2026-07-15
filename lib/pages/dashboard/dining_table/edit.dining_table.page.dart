@@ -35,7 +35,8 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
     Future.delayed(Duration.zero, () {
       setState(() {
         diningTableCategory = widget.diningTable.categoryId != null
-            ? ref.read(diningTableRepositoryProvider)
+            ? ref
+                  .read(diningTableRepositoryProvider)
                   .getCategoryById(widget.diningTable.categoryId!)
             : null;
         _controllerCategoryName.text = widget.diningTable.name;
@@ -138,7 +139,8 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
                           });
                         },
                       ),
-                      ...ref.read(diningTableRepositoryProvider)
+                      ...ref
+                          .read(diningTableRepositoryProvider)
                           .getAllCategories()
                           .map((e) {
                             return PosCategoryWidget(

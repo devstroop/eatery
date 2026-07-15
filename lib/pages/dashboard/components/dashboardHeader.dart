@@ -7,13 +7,14 @@ class DashboardHeader extends StatelessWidget {
   final double? width;
   final EdgeInsets? margin;
   final List<Widget>? suffix;
-  const DashboardHeader(
-      {super.key,
-      required this.companyName,
-      this.image,
-      this.width,
-      this.margin,
-      this.suffix});
+  const DashboardHeader({
+    super.key,
+    required this.companyName,
+    this.image,
+    this.width,
+    this.margin,
+    this.suffix,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -29,16 +30,10 @@ class DashboardHeader extends StatelessWidget {
               width: 54,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(16),
-                image: DecorationImage(
-                  fit: BoxFit.cover,
-                  image: image!,
-                ),
+                image: DecorationImage(fit: BoxFit.cover, image: image!),
               ),
             ),
-          if (image != null)
-            const SizedBox(
-              width: 12,
-            ),
+          if (image != null) const SizedBox(width: 12),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
@@ -73,9 +68,7 @@ class DashboardHeader extends StatelessWidget {
           ),
           const Spacer(),
           ...suffix ?? [],
-          const SizedBox(
-            width: 8,
-          ),
+          const SizedBox(width: 8),
         ],
       ),
     );

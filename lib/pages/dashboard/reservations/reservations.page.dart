@@ -17,7 +17,13 @@ class ReservationsPage extends ConsumerStatefulWidget {
 
 class _ReservationsPageState extends ConsumerState<ReservationsPage> {
   DateTime _selectedDate = DateTime.now();
-  final _statusNames = ["Pending", "Confirmed", "Seated", "Completed", "Cancelled"];
+  final _statusNames = [
+    "Pending",
+    "Confirmed",
+    "Seated",
+    "Completed",
+    "Cancelled",
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -28,9 +34,13 @@ class _ReservationsPageState extends ConsumerState<ReservationsPage> {
       title: "Reservations",
       color: AppColors.primary,
       floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: AppColors.primary, foregroundColor: AppColors.white,
-        label: const Text("Add Reservation"), icon: const Icon(Icons.add),
-        onPressed: () => GoRouter.of(context).pushNamed("addReservation").then((_) => setState(() {})),
+        backgroundColor: AppColors.primary,
+        foregroundColor: AppColors.white,
+        label: const Text("Add Reservation"),
+        icon: const Icon(Icons.add),
+        onPressed: () => GoRouter.of(
+          context,
+        ).pushNamed("addReservation").then((_) => setState(() {})),
       ),
       child: Column(
         children: [
@@ -53,28 +63,73 @@ class _ReservationsPageState extends ConsumerState<ReservationsPage> {
           ),
           Expanded(
             child: reservations.isEmpty
-                ? const Center(child: Opacity(opacity: 0.5, child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [Icon(Icons.event_busy, size: 64), SizedBox(height: 16),
-                      Text("No reservations for this date")])))
+                ? const Center(
+                    child: Opacity(
+                      opacity: 0.5,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(Icons.event_busy, size: 64),
+                          SizedBox(height: 16),
+                          Text("No reservations for this date"),
+                        ],
+                      ),
+                    ),
+                  )
                 : ListView(
                     children: reservations.map((r) {
-                      final statusColor = switch (r.status) { 0 => Colors.orange, 1 => Colors.blue, 2 => Colors.green, 3 => Colors.grey, _ => Colors.red };
+                      final statusColor = switch (r.status) {
+                        0 => Colors.orange,
+                        1 => Colors.blue,
+                        2 => Colors.green,
+                        3 => Colors.grey,
+                        _ => Colors.red,
+                      };
                       return Card(
-                        margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        margin: const EdgeInsets.symmetric(
+                          horizontal: 8,
+                          vertical: 4,
+                        ),
                         child: ListTile(
-                          title: Text("${r.customerName} (${r.partySize})", style: AppTypography.titleMedium),
-                          subtitle: Text("${DateFormat('hh:mm a').format(r.dateTime)}  |  ${_statusNames[r.status.clamp(0, 4)]}"),
-                          trailing: Row(mainAxisSize: MainAxisSize.min, children: [
-                            Container(
-                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                              decoration: BoxDecoration(color: statusColor, borderRadius: BorderRadius.circular(8)),
-                              child: Text(_statusNames[r.status.clamp(0, 4)], style: const TextStyle(color: Colors.white, fontSize: 10)),
-                            ),
-                            IconButton(icon: const Icon(Icons.delete, size: 20),
-                              onPressed: () { repo.deleteReservation(r.id!); setState(() {}); }),
-                          ]),
-                          onTap: () => GoRouter.of(context).pushNamed("editReservation", extra: r).then((_) => setState(() {})),
+                          title: Text(
+                            "${r.customerName} (${r.partySize})",
+                            style: AppTypography.titleMedium,
+                          ),
+                          subtitle: Text(
+                            "${DateFormat('hh:mm a').format(r.dateTime)}  |  ${_statusNames[r.status.clamp(0, 4)]}",
+                          ),
+                          trailing: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 8,
+                                  vertical: 4,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: statusColor,
+                                  borderRadius: BorderRadius.circular(8),
+                                ),
+                                child: Text(
+                                  _statusNames[r.status.clamp(0, 4)],
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                icon: const Icon(Icons.delete, size: 20),
+                                onPressed: () {
+                                  repo.deleteReservation(r.id!);
+                                  setState(() {});
+                                },
+                              ),
+                            ],
+                          ),
+                          onTap: () => GoRouter.of(context)
+                              .pushNamed("editReservation", extra: r)
+                              .then((_) => setState(() {})),
                         ),
                       );
                     }).toList(),

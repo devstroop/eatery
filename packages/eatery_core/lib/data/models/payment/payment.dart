@@ -23,7 +23,8 @@ abstract class Payment with _$Payment {
     String? terminalId,
   }) = _Payment;
 
-  factory Payment.fromJson(Map<String, dynamic> json) => _$PaymentFromJson(json);
+  factory Payment.fromJson(Map<String, dynamic> json) =>
+      _$PaymentFromJson(json);
 
   static Payment fromMap(Map<String, dynamic> map) => Payment.fromJson(map);
 

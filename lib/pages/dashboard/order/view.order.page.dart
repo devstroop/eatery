@@ -35,8 +35,9 @@ class _ViewOrderPageState extends ConsumerState<ViewOrderPage> {
         .read(customerRepositoryProvider)
         .getCustomerByPhone(widget.order.customerPhone ?? '');
     final diningTable = widget.order.id != null
-        ? ref.read(diningTableRepositoryProvider)
-            .getTableByOrderId(widget.order.id!)
+        ? ref
+              .read(diningTableRepositoryProvider)
+              .getTableByOrderId(widget.order.id!)
         : null;
     final currencySymbol =
         ref.read(companyProvider.notifier).currency?.symbol ?? '';

@@ -11,11 +11,7 @@ final authSessionProvider = StateProvider<Staff?>((ref) => null);
 /// Verifies a staff member's PIN against the stored hash.
 ///
 /// Returns the matching [Staff] on success, null on failure.
-Staff? authenticateStaff(
-  EateryStore store,
-  String loginId,
-  String pin,
-) {
+Staff? authenticateStaff(EateryStore store, String loginId, String pin) {
   // Try phone match first, then name match.
   var staff = _findByPhone(store, loginId);
   staff ??= _findByName(store, loginId);
@@ -25,10 +21,9 @@ Staff? authenticateStaff(
 }
 
 Staff? _findByPhone(EateryStore store, String phone) {
-  final rows = store.query(
-    'SELECT * FROM staff WHERE phone = ? LIMIT 1',
-    [phone],
-  );
+  final rows = store.query('SELECT * FROM staff WHERE phone = ? LIMIT 1', [
+    phone,
+  ]);
   if (rows.isEmpty) return null;
   return Staff.fromMap(rows.first);
 }

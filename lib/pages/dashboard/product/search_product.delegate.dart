@@ -31,8 +31,8 @@ class SearchProductDelegate extends SearchDelegate<Product?> {
   Widget buildResults(BuildContext context) {
     if (query.isNotEmpty) {
       List<Product> products = this.products
-              .where((element) => element.name.toLowerCase().contains(query))
-              .toList();
+          .where((element) => element.name.toLowerCase().contains(query))
+          .toList();
       return ListView.builder(
         itemCount: products.length,
         itemBuilder: (context, index) {
@@ -54,8 +54,8 @@ class SearchProductDelegate extends SearchDelegate<Product?> {
   Widget buildSuggestions(BuildContext context) {
     if (query.isNotEmpty) {
       List<Product> products = this.products
-              .where((element) => element.name.toLowerCase().contains(query))
-              .toList();
+          .where((element) => element.name.toLowerCase().contains(query))
+          .toList();
       return ListView.builder(
         itemCount: products.length,
         itemBuilder: (context, index) {

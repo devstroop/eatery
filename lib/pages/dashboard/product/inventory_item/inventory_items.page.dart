@@ -47,7 +47,9 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
               delegate: SearchProductDelegate(
                 repo.getProductsByType(ProductType.inventoryItem),
                 (product) {
-                  GoRouter.of(context).pushNamed('editInventoryItem', extra: product).then((_) => setState(() {}));
+                  GoRouter.of(context)
+                      .pushNamed('editInventoryItem', extra: product)
+                      .then((_) => setState(() {}));
                 },
               ),
             );
@@ -136,11 +138,16 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                         AppSpacing.gapLg,
                         Text(
                           'Oops!',
-                          style: AppTypography.headlineSmall.copyWith(fontWeight: FontWeight.bold, color: AppColors.grey500),
+                          style: AppTypography.headlineSmall.copyWith(
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.grey500,
+                          ),
                         ),
                         Text(
                           'No items found in inventory',
-                          style: AppTypography.bodyLarge.copyWith(color: AppColors.grey500),
+                          style: AppTypography.bodyLarge.copyWith(
+                            color: AppColors.grey500,
+                          ),
                         ),
                       ],
                     ),
@@ -193,7 +200,12 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                                   );
                                 },
                                 onEdit: () {
-                                  GoRouter.of(context).pushNamed('editInventoryItem', extra: each).then((_) => setState(() {}));
+                                  GoRouter.of(context)
+                                      .pushNamed(
+                                        'editInventoryItem',
+                                        extra: each,
+                                      )
+                                      .then((_) => setState(() {}));
                                 },
                               ),
                             );
@@ -210,7 +222,9 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                           children: [
                             Text(
                               each.name,
-                              style: AppTypography.titleMedium.copyWith(fontWeight: FontWeight.w500),
+                              style: AppTypography.titleMedium.copyWith(
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                             AppSpacing.gapSm,
                             if (each.foodType != null)
@@ -227,7 +241,9 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                             if (each.description != null)
                               Text(
                                 each.description!,
-                                style: AppTypography.bodySmall.copyWith(color: AppColors.grey700),
+                                style: AppTypography.bodySmall.copyWith(
+                                  color: AppColors.grey700,
+                                ),
                               ),
                             Row(
                               mainAxisSize: MainAxisSize.min,
@@ -236,22 +252,32 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                               children: [
                                 Text(
                                   'MRP',
-                                  style: AppTypography.labelMedium.copyWith(color: AppColors.grey700),
+                                  style: AppTypography.labelMedium.copyWith(
+                                    color: AppColors.grey700,
+                                  ),
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
                                   '${currency?.symbol ?? ''}${each.mrpPrice}',
-                                  style: AppTypography.labelMedium.copyWith(fontWeight: FontWeight.w600, color: Color(0xFF2F2F2F)),
+                                  style: AppTypography.labelMedium.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    color: Color(0xFF2F2F2F),
+                                  ),
                                 ),
                                 AppSpacing.gapSm,
                                 Text(
                                   'Sale Price',
-                                  style: AppTypography.labelMedium.copyWith(color: AppColors.grey700),
+                                  style: AppTypography.labelMedium.copyWith(
+                                    color: AppColors.grey700,
+                                  ),
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
                                   '${currency?.symbol ?? ''}${each.salePrice}',
-                                  style: AppTypography.labelMedium.copyWith(fontWeight: FontWeight.w600, color: Colors.green),
+                                  style: AppTypography.labelMedium.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.green,
+                                  ),
                                 ),
                               ],
                             ),
@@ -280,7 +306,12 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                                         title: const Text('Edit'),
                                         onTap: () {
                                           Navigator.pop(context);
-                                          GoRouter.of(context).pushNamed('editInventoryItem', extra: each).then((_) => setState(() {}));
+                                          GoRouter.of(context)
+                                              .pushNamed(
+                                                'editInventoryItem',
+                                                extra: each,
+                                              )
+                                              .then((_) => setState(() {}));
                                         },
                                       ),
                                     ),
@@ -293,12 +324,14 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                                           AppDialog.show(
                                             context,
                                             title: 'Are you sure?',
-                                            content: 'Do you want to delete this item?',
+                                            content:
+                                                'Do you want to delete this item?',
                                             onConfirm: () async {
                                               await repo.deleteProduct(each);
                                               AppDialog.showMessage(
                                                 context,
-                                                message: 'Item has been deleted',
+                                                message:
+                                                    'Item has been deleted',
                                                 type: MessageType.success,
                                                 onConfirm: () {
                                                   Navigator.pop(context);
@@ -332,7 +365,9 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
         icon: const Icon(Icons.add),
         label: const Text('Add Inventory Item'),
         onPressed: () async {
-          GoRouter.of(context).pushNamed('addInventoryItem').then((_) => setState(() {}));
+          GoRouter.of(
+            context,
+          ).pushNamed('addInventoryItem').then((_) => setState(() {}));
         },
       ),
     );

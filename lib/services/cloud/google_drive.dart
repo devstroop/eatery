@@ -3,7 +3,8 @@ import 'package:http/http.dart' as http;
 import 'package:path/path.dart' as path;
 import 'package:eatery/references.dart';
 
-const _clientId = "43263799198-3k39t047lg9rabjbefeepl045mihsdlg.apps.googleusercontent.com";
+const _clientId =
+    "43263799198-3k39t047lg9rabjbefeepl045mihsdlg.apps.googleusercontent.com";
 const _clientSecret = "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";
 const _scopes = [ga.DriveApi.driveFileScope];
 
@@ -16,23 +17,33 @@ class GoogleDrive {
     if (credentials == null) {
       //Needs user authentication
       var authClient = await clientViaUserConsent(
-          ClientId(_clientId, _clientSecret), _scopes, (url) async {
-        //Open Url in Browser
-        await launchUrl(Uri.parse(url));
-      });
+        ClientId(_clientId, _clientSecret),
+        _scopes,
+        (url) async {
+          //Open Url in Browser
+          await launchUrl(Uri.parse(url));
+        },
+      );
       //Save Credentials
-      await storage.saveCredentials(authClient.credentials.accessToken,
-          authClient.credentials.refreshToken!);
+      await storage.saveCredentials(
+        authClient.credentials.accessToken,
+        authClient.credentials.refreshToken!,
+      );
       return authClient;
     } else {
       //Already authenticated
       return authenticatedClient(
-          http.Client(),
-          AccessCredentials(
-              AccessToken(credentials["type"], credentials["data"],
-                  DateTime.tryParse(credentials["expiry"])!),
-              credentials["refreshToken"],
-              _scopes));
+        http.Client(),
+        AccessCredentials(
+          AccessToken(
+            credentials["type"],
+            credentials["data"],
+            DateTime.tryParse(credentials["expiry"])!,
+          ),
+          credentials["refreshToken"],
+          _scopes,
+        ),
+      );
     }
   }
 
@@ -42,8 +53,9 @@ class GoogleDrive {
       var client = await getHttpClient();
       var drive = ga.DriveApi(client);
       var response = await drive.files.create(
-          ga.File()..name = path.basename(file.absolute.path),
-          uploadMedia: ga.Media(file.openRead(), file.lengthSync()));
+        ga.File()..name = path.basename(file.absolute.path),
+        uploadMedia: ga.Media(file.openRead(), file.lengthSync()),
+      );
       return response;
     } catch (_) {
       await storage.clear();
@@ -75,8 +87,10 @@ class GoogleDrive {
       var drive = ga.DriveApi(client);
       for (String id in ids) {
         //await drive.files.export(id, mimeType);
-        var file = await drive.files
-            .get(id, downloadOptions: ga.DownloadOptions.fullMedia);
+        var file = await drive.files.get(
+          id,
+          downloadOptions: ga.DownloadOptions.fullMedia,
+        );
         files.add(file as ga.File);
       }
       return files;

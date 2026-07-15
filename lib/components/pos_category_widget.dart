@@ -30,20 +30,13 @@ class PosCategoryWidget extends StatelessWidget {
           ),
           child: Container(
             decoration: BoxDecoration(
-              color:
-                  active ? AppColors.black600 : AppColors.white,
+              color: active ? AppColors.black600 : AppColors.white,
               boxShadow: [
-                BoxShadow(
-                  color: active
-                      ? AppColors.black600
-                      : AppColors.white,
-                ),
+                BoxShadow(color: active ? AppColors.black600 : AppColors.white),
               ],
               borderRadius: BorderRadius.circular(12),
               border: Border.all(
-                color: active
-                    ? AppColors.black600
-                    : AppColors.white,
+                color: active ? AppColors.black600 : AppColors.white,
                 width: 1,
               ),
             ),
@@ -57,21 +50,19 @@ class PosCategoryWidget extends StatelessWidget {
                   if (image != null)
                     Padding(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 6, horizontal: 6),
+                        vertical: 6,
+                        horizontal: 6,
+                      ),
                       child: image,
                     )
                   else
-                    const Padding(
-                      padding: EdgeInsets.only(right: 3),
-                    ),
-                  const SizedBox(width: 2,),
+                    const Padding(padding: EdgeInsets.only(right: 3)),
+                  const SizedBox(width: 2),
                   Text(
                     label,
                     style: AppTypography.labelLarge.copyWith(
                       fontWeight: FontWeight.w500,
-                      color: active
-                          ? AppColors.white
-                          : AppColors.black600,
+                      color: active ? AppColors.white : AppColors.black600,
                     ),
                   ),
                 ],

@@ -56,7 +56,7 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
   @override
   void initState() {
     super.initState();
-    Future.delayed(Duration.zero, (){
+    Future.delayed(Duration.zero, () {
       setState(() {
         obscureText = widget.obscureText;
       });
@@ -78,10 +78,7 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
               fontWeight: FontWeight.w500,
             ),
           ),
-        if (widget.label != null)
-          const SizedBox(
-            height: 3.0,
-          ),
+        if (widget.label != null) const SizedBox(height: 3.0),
         TextFormField(
           enabled: widget.enabled,
           autovalidateMode: AutovalidateMode.onUserInteraction,
@@ -102,16 +99,16 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
             suffixIcon: widget.suffix != null
                 ? widget.suffix!
                 : widget.isPassword
-                    ? IconButton(
-                        onPressed: () => setState(() {
-                          obscureText = !(obscureText ?? false);
-                        }),
-                        icon: obscureText ?? false
-                            ? const Icon(Icons.remove_red_eye)
-                            : const Icon(Icons.visibility_off),
-                        color: AppColors.white600,
-                      )
-                    : null,
+                ? IconButton(
+                    onPressed: () => setState(() {
+                      obscureText = !(obscureText ?? false);
+                    }),
+                    icon: obscureText ?? false
+                        ? const Icon(Icons.remove_red_eye)
+                        : const Icon(Icons.visibility_off),
+                    color: AppColors.white600,
+                  )
+                : null,
             hintText: widget.hint,
             hintStyle: TextStyle(
               color: AppColors.white600,
@@ -119,31 +116,19 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
               fontWeight: FontWeight.normal,
             ),
             enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: AppColors.white600,
-                width: 1,
-              ),
+              borderSide: BorderSide(color: AppColors.white600, width: 1),
               borderRadius: BorderRadius.circular(8),
             ),
             errorBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: AppColors.error,
-                width: 1,
-              ),
+              borderSide: BorderSide(color: AppColors.error, width: 1),
               borderRadius: BorderRadius.circular(8),
             ),
             focusedErrorBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: AppColors.error,
-                width: 2,
-              ),
+              borderSide: BorderSide(color: AppColors.error, width: 2),
               borderRadius: BorderRadius.circular(8),
             ),
             disabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(
-                color: AppColors.white600,
-                width: 1,
-              ),
+              borderSide: BorderSide(color: AppColors.white600, width: 1),
               borderRadius: BorderRadius.circular(8),
             ),
             focusedBorder: OutlineInputBorder(
@@ -156,11 +141,15 @@ class _CustomTextFromFieldState extends State<CustomTextFromField> {
             filled: true,
             fillColor: widget.enabled != null
                 ? (widget.enabled!
-                    ? AppColors.white
-                    : const Color.fromRGBO(240, 240, 240, 1))
+                      ? AppColors.white
+                      : const Color.fromRGBO(240, 240, 240, 1))
                 : AppColors.white,
-            contentPadding:
-                const EdgeInsetsDirectional.fromSTEB(24, 24, 20, 24),
+            contentPadding: const EdgeInsetsDirectional.fromSTEB(
+              24,
+              24,
+              20,
+              24,
+            ),
           ),
           style: TextStyle(
             color: AppColors.black600,
