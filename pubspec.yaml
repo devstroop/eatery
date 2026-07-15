@@ -69,6 +69,8 @@ dependencies:
   web_socket_channel: ^3.0.3
   shelf_web_socket: ^3.0.0
   shelf: ^1.4.2
+  flutter_blue_plus: ^1.33.2
+  audioplayers: ^6.1.0
 
 dev_dependencies:
   flutter_test:
@@ -113,3 +115,4 @@ flutter:
     - assets/icons/
     - assets/images/
     - assets/lottie/
+    - assets/sounds/
