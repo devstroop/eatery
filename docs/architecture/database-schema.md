@@ -33,7 +33,7 @@ The original persistence layer used Hive with 24 type-annotated boxes. The Hive 
 
 ## SQLite (New)
 
-The canonical SQLite schema file is at `assets/db/schema.sql` (and copied to each companion app under `apps/*/assets/db/schema.sql`).
+The canonical SQLite schema file is at `assets/db/schema.sql` (also copied to each role page directory during development).
 
 ### Current Tables (from schema.sql)
 

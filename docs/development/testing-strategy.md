@@ -20,7 +20,7 @@ The project has **7 tests** across 4 test files:
        ╱ E2E ╲          2-3 critical paths per app (future)
       ╱────────╲
      ╱Integration╲      Full flows: auth, POS, sync (in progress)
-    ╱──────────────��
+    ╱──────────────
    ╱   Widget Tests  ╲    Key pages with mock data
   ╱────────────────────╲
  ╱    Unit Tests        ╲   Models, repositories, services, extensions
@@ -107,7 +107,7 @@ Test real user flows through multiple screens.
 | Full POS flow | Select dine-in → Pick table → Add 3 items → Checkout |
 | Auth flow | Create staff → Login → Navigate → Logout |
 | Order edit | Create order → Add items → Update quantities |
-| Payment flow | Create order ��� Add payment → Verify paid |
+| Payment flow | Create order → Add payment → Verify paid |
 | Customer CRUD | Add → View → Edit → Delete |
 
 ## E2E Tests (Future Goal)

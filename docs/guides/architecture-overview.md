@@ -36,7 +36,7 @@ All four share `packages/eatery_core` for models, database, sync, theme, widgets
 │                  Presentation                     │
 │  Pages / Widgets / Shells (AppPageShell, etc.)   │
 │  Riverpod: ref.watch / ref.read                  │
-├��────────��────────────────────────────────────────┤
+├────────────────────────────────────────────────┤
 │                   Domain                         │
 │  Business logic (OrderFunction, validation)       │
 │  Repository interfaces (ProductRepository, etc.) │
@@ -46,7 +46,7 @@ All four share `packages/eatery_core` for models, database, sync, theme, widgets
 │  Database (EateryStore FFI — SQLite)              │
 │  Sync (OpLogService, SyncService, WebSocket)     │
 │  DTOs (sync serialization)                       │
-��──────────────────────────────────────────────────┘
+──────────────────────────────────────────────────┘
 ```
 
 ## Key Patterns
@@ -141,7 +141,7 @@ All shared design tokens live in `packages/eatery_core/lib/theme/`:
 | `app_colors.dart` | `AppColors` — brand, semantic, neutral, menu tile colors |
 | `app_typography.dart` | `AppTypography` — text style presets |
 | `app_spacing.dart` | `AppSpacing` — padding/margin constants |
-| `app_shadows.dart` | `AppShadows` �� elevation presets |
+| `app_shadows.dart` | `AppShadows`  elevation presets |
 | `app_theme.dart` | `AppTheme.light` — Material theme |
 
 Core widgets in `packages/eatery_core/lib/widgets/`:

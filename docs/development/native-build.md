@@ -58,7 +58,7 @@ The library embeds the **SQLite amalgamation** (v3.47.0) with these features ena
 - WAL mode (default synchronous = 1)
 - Thread-safe mode
 
-It exposes a **generic SQL gateway** via stable C ABI �� not typed per-entity calls:
+It exposes a **generic SQL gateway** via stable C ABI  not typed per-entity calls:
 
 | Symbol | Purpose |
 |--------|---------|

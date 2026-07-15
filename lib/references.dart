@@ -10,7 +10,6 @@ export 'package:eatery_core/data/models/eatery_db.dart';
 export 'package:devdart_windows_hdsn/devdart_windows_hdsn.dart';
 export 'package:devdart_windows_hdsn/drive.dart';
 // External refs by devstroop (*deprecated — moved to local equivalents)
-export './components/bottom_view_grip.dart';
 export './widgets/titles/page_title.dart';
 export 'package:eatery_core/widgets/app_button.dart';
 // Integrated packages

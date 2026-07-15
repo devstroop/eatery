@@ -141,7 +141,7 @@ _store.execute('INSERT OR REPLACE INTO product ...');
 notifyMutation('product', product.id!, 'save', product.toMap());
 ```
 
-The `MutationHook` (`packages/eatery_core/lib/data/sync/mutation_hook.dart`) is installed by the `SyncCoordinator` during app startup. When no coordinator is active, calls to `notifyMutation` are no-ops �� zero coupling between repositories and the sync layer.
+The `MutationHook` (`packages/eatery_core/lib/data/sync/mutation_hook.dart`) is installed by the `SyncCoordinator` during app startup. When no coordinator is active, calls to `notifyMutation` are no-ops  zero coupling between repositories and the sync layer.
 
 ### OpLog Commit Checklist
 

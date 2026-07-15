@@ -21,35 +21,30 @@ Two tools:
 
 ### SeedData (`lib/dev/seed_data.dart`)
 
-```dart
-const SeedData.defaultData = SeedData(
-  productCategories: [...],     // 5 categories
-  products: [...],               // 6 products
-  customers: [...],              // 2 customers
-  diningTableCategories: [...],  // 2 categories
-  diningTables: [...],           // 4 tables
-  staffs: [...],                 // 2 staff
-  taxSlabs: [...],               // 4 slabs (0%, 5%, 12%, 18%)
-);
-```
+Static `load(EateryStore)` method that populates all SQLite tables with demo data:
 
-### SeedLoader (`lib/dev/seed_loader.dart`)
+- **Staff:** Admin (PIN `1234`), Waiter 1 (PIN `1111`), Chef 1 (PIN `2222`)
+- **Company:** "Demo Restaurant" (USD, no tax)
+- **Product categories:** Beverages, Starters, Main Course, Desserts
+- **Products:** 10 items across all categories (coffee, tea, soda, nachos, spring rolls, burger, pizza, pasta, ice cream, cheesecake)
+- **Dining tables:** 8 tables across 3 categories (Window, Patio, Bar)
+- **Tax slabs:** GST 5%, GST 12%
+- **Customers:** John Doe, Jane Smith
+- **KDS stations:** 2 stations
 
-```dart
-Future<void> loadSeedData(WidgetRef ref) async {
-  final db = ref.read(appDatabaseProvider);
-  // Populates: TaxSlab, ProductCategory, Product, DiningTableCategory,
-  //            DiningTable, Staff, Customer boxes
-}
-```
+Called from the **Settings > Developer** menu. Idempotent — safe to call multiple times (checks `SELECT COUNT(*) FROM product` first).
 
-Called from the Settings > Developer menu. Populates all entity tables with sequential IDs.
+### SeedLoader (legacy — removed)
+
+The Hive-based `SeedLoader` class (`lib/dev/seed_loader.dart`) was removed during the SQLite migration. Its functionality was replaced by `SeedData.load()` above.
 
 ## Database Inspector
 
 `lib/dev/database_inspector.dart` — a `ConsumerWidget` that shows:
 - Count of items in each SQLite table
 - A "Clear All Data" button (with confirmation dialog)
+
+→ *Note: this route is registered as `databaseInspector` at `/dev/db-inspector` in the GoRouter.*
 
 ## Test Suite
 
@@ -65,24 +60,34 @@ Called from the Settings > Developer menu. Populates all entity tables with sequ
 | `mutation_hook_test.dart` | — | Unit (hook pattern) |
 | `mutation_tracker_test.dart` | — | Unit (tracker helpers) |
 | `mdns_service_test.dart` | — | Unit (discovery) |
-| `eatery_core_test.dart` | �� | Placeholder |
+| `eatery_core_test.dart` | — | Placeholder |
 | `fake_eatery_store.dart` | — | Test helper |
 
-Root `test/` directory (legacy):
-- `extensions_test.dart` — 3 tests (toPrecision, isNumericOnly)
-- `order_calculations_test.dart` — 3 tests (calculateRoundOff, calculateSubtotal)
-- `widget_test.dart` — 1 test (placeholder)
+Root `test/` directory:
+| File | Tests | Notes |
+|------|-------|-------|
+| `extensions_test.dart` | 3 | `toPrecision`, `isNumericOnly` |
+| `order_calculations_test.dart` | 3 | `calculateRoundOff`, `calculateSubtotal` |
+| `widget_test.dart` | 1 | Placeholder / smoke |
 
 ### Running Tests
 
 ```bash
+# Root package tests (admin app logic)
 flutter test
+
+# Core library tests (models, sync, repositories, database)
+flutter test packages/eatery_core/test/
+
+# Coverage (root only)
 flutter test --coverage
 ```
 
+> ℹ️ Core tests are run separately because `packages/eatery_core` is a `path:` dependency.
+
 ### Coverage Target
 
-Target: >40% line coverage after full test suite is implemented. Current coverage is low ��� only extension methods and pure calculation functions are tested. Repository unit tests (using `FakeEateryStore` from `packages/eatery_core/test/fake_eatery_store.dart`) and widget smoke tests are planned.
+Target: >40% line coverage after full test suite is implemented. Current coverage is low — only extension methods and pure calculation functions are tested. Repository unit tests (using `FakeEateryStore` from `packages/eatery_core/test/fake_eatery_store.dart`) and widget smoke tests are planned.
 
 ## Debug Image Loading
 

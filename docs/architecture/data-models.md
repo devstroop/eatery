@@ -11,18 +11,18 @@ models/
 ├── converters.dart             # Epoch timestamp JSON converters
 ├── company/
 │   ├── company.dart            # Restaurant entity / tenant
-│   ├��─ edition.dart            # Taxation enum
+│   ├── edition.dart            # Taxation enum
 │   └── k_currency.dart         # Currency config
 ├── compliance/
-│   ��── compliance_report.dart  # Z/X reports
+│   ├── compliance_report.dart  # Z/X reports
 │   └── void_log_entry.dart     # Voided order audit trail
 ├── config/
 │   └── auto_print.dart         # Auto-print settings
 ├── customer/
-��   └── customer.dart           # Customer profile
+│   └── customer.dart           # Customer profile
 ├── dining_table/
 │   ├── dining_table.dart       # Dining table entity
-│   ├���─ dining_table_category.dart
+│   ├── dining_table_category.dart
 │   └── dining_table_status.dart
 ├── discount/
 │   ├── discount.dart           # Discount rules
@@ -38,7 +38,7 @@ models/
 ├── inventory/
 │   ├── supplier.dart
 │   ├── purchase_order.dart
-���   ├── purchase_order_item.dart
+│   ├── purchase_order_item.dart
 │   └── stock_adjustment.dart
 ├── kds_station.dart            # Kitchen Display Station
 ├── loyalty/
@@ -66,9 +66,9 @@ models/
 │   ├── product_category.dart
 │   ├── product_type.dart       # kitchenDish / inventoryItem
 │   └── food_type.dart          # veg / nonVeg
-├���─ reservation/
+├── reservation/
 │   └── reservation.dart
-├��─ shift/
+├── shift/
 │   ├── shift.dart              # Staff shift definition
 │   └── time_entry.dart         # Clock in/out records
 ├── staff/
