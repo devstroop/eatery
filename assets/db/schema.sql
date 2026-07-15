@@ -318,7 +318,7 @@ CREATE TABLE IF NOT EXISTS order_product_modifier (
   quantity        INTEGER NOT NULL DEFAULT 1
 );
 
--- ── OpLog (sync layer) ─���────────────────────────────────────────────────────
+-- ── OpLog (sync layer) ────────────────────────────────────────────────────────
 
 CREATE TABLE IF NOT EXISTS op_log (
   clock INTEGER PRIMARY KEY,
