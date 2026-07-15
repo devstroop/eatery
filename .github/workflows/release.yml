@@ -1,0 +1,208 @@
+name: Eatery Release
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g. 1.0.0)"
+        required: true
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  ZIG_VERSION: "0.15.2"
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - target: android
+            os: ubuntu-latest
+            build-cmd: flutter build apk --release
+            artifact: build/app/outputs/flutter-apk/app-release.apk
+            artifact-name: eatery-android
+            build-native: true
+          - target: android-appbundle
+            os: ubuntu-latest
+            build-cmd: flutter build appbundle --release
+            artifact: build/app/outputs/bundle/release/app-release.aab
+            artifact-name: eatery-android-aab
+            build-native: true
+          - target: linux
+            os: ubuntu-latest
+            build-cmd: flutter build linux --release
+            artifact: build/linux/x64/release/bundle/
+            artifact-name: eatery-linux
+            build-native: true
+          - target: macos
+            os: macos-15
+            build-cmd: flutter build macos --release
+            artifact: build/macos/Build/Products/Release/
+            artifact-name: eatery-macos
+            build-native: true
+          - target: windows
+            os: windows-latest
+            build-cmd: flutter build windows --release
+            artifact: build/windows/x64/runner/Release/
+            artifact-name: eatery-windows
+            build-native: true
+          - target: ios
+            os: macos-latest
+            build-cmd: flutter build ios --release --no-codesign
+            artifact: build/ios/iphoneos/
+            artifact-name: eatery-ios
+            build-native: true
+            native-lib-type: static-lib
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.x'
+          channel: 'stable'
+
+      - name: Install Linux dependencies
+        if: ${{ matrix.target == 'linux' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libgtk-3-dev \
+            liblzma-dev \
+            libsecret-1-dev \
+            ninja-build \
+            libgstreamer1.0-dev \
+            libgstreamer-plugins-base1.0-dev
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Setup Zig
+        if: ${{ matrix.build-native }}
+        uses: ./.github/actions/setup-zig
+        with:
+          version: ${{ env.ZIG_VERSION }}
+
+      - name: Build native library
+        if: ${{ matrix.build-native }}
+        shell: bash
+        run: |
+          cd libeaterystore
+          LIB_TYPE="${{ matrix.native-lib-type || 'shared-lib' }}"
+
+          if [ "${{ matrix.target }}" = "ios" ]; then
+            # iOS: cross-compile static library for aarch64
+            zig build "$LIB_TYPE" -Dtarget=aarch64-ios
+
+          elif [ "${{ matrix.target }}" = "android" ] || [ "${{ matrix.target }}" = "android-appbundle" ]; then
+            # Android: build shared lib for all 4 ABIs and place in jniLibs
+            resolve_ndk() {
+              if [ -n "${ANDROID_NDK_HOME:-}" ] && [ -d "$ANDROID_NDK_HOME" ]; then
+                return
+              fi
+              local sdk_root="${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}"
+              shopt -s nullglob
+              local ndk_dirs=("$sdk_root/ndk/"*)
+              shopt -u nullglob
+              for candidate in "${ndk_dirs[@]}"; do
+                if [ -d "$candidate" ]; then
+                  export ANDROID_NDK_HOME="$candidate"
+                  echo "::debug::Resolved ANDROID_NDK_HOME=$candidate"
+                  return
+                fi
+              done
+              echo "::warning::ANDROID_NDK_HOME not set and no NDK found under $sdk_root/ndk/"
+            }
+            resolve_ndk
+
+            ANDROID_ABIS=(
+              "aarch64-linux-android:arm64-v8a"
+              "arm-linux-androideabi:armeabi-v7a"
+              "x86_64-linux-android:x86_64"
+              "i386-linux-android:x86"
+            )
+            BUILD_TMP="$(mktemp -d)"
+            for entry in "${ANDROID_ABIS[@]}"; do
+              ZIG_TARGET="${entry%%:*}"
+              JNI_ABI="${entry#*:}"
+              echo "::group::Building native lib for $ZIG_TARGET ($JNI_ABI)"
+              # Use scripts/build.sh from repo root if available
+              if [ -x "../scripts/build.sh" ]; then
+                if ! "../scripts/build.sh" "$LIB_TYPE" "$ZIG_TARGET"; then
+                  echo "::error::Build failed for $ZIG_TARGET"
+                  exit 1
+                fi
+              else
+                if ! zig build "$LIB_TYPE" -Dtarget="$ZIG_TARGET" --prefix "$BUILD_TMP/$JNI_ABI"; then
+                  echo "::error::zig build failed for $ZIG_TARGET"
+                  exit 1
+                fi
+              fi
+              JNI_DIR="../android/app/src/main/jniLibs/$JNI_ABI"
+              mkdir -p "$JNI_DIR"
+              SOURCE="$BUILD_TMP/$JNI_ABI/libeaterystore.so"
+              if [ ! -f "$SOURCE" ]; then
+                # Shared lib may be at lib/ subdir
+                SOURCE="$BUILD_TMP/$JNI_ABI/lib/libeaterystore.so"
+              fi
+              if [ -f "$SOURCE" ]; then
+                cp -f "$SOURCE" "$JNI_DIR/"
+                echo "::debug::Copied $SOURCE → $JNI_DIR/"
+              else
+                echo "::error::libeaterystore.so not found for $ZIG_TARGET"
+                exit 1
+              fi
+              echo "::endgroup::"
+            done
+            rm -rf "$BUILD_TMP"
+
+          else
+            # Desktop: build shared lib for native host
+            zig build "$LIB_TYPE"
+          fi
+          cd ..
+
+      - name: Build ${{ matrix.target }}
+        run: ${{ matrix.build-cmd }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: ${{ matrix.artifact }}
+
+  release:
+    needs: [build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Generate release body
+        run: |
+          {
+            echo "## Release ${{ github.ref_name }}"
+            echo ""
+            echo "### Downloads"
+            echo ""
+            for dir in artifacts/*/; do
+              name=$(basename "$dir")
+              echo "- \`$name\`"
+            done
+          } > body.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: body.md
+          files: artifacts/**/*
