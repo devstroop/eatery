@@ -44,6 +44,13 @@ class _TicketPageState extends ConsumerState<TicketPage> {
   @override
   void initState() {
     super.initState();
+    // Reactive: invalidate on sync status changes (new entries received).
+    ref.listenManual(syncStatusProvider, (_, status) {
+      if (status != null && status.pendingEntryCount >= 0) {
+        ref.invalidate(_activeOrdersProvider);
+      }
+    });
+    // Fallback: poll every 10s in case sync isn't active.
     _refreshTimer = Timer.periodic(const Duration(seconds: 10), (_) {
       ref.invalidate(_activeOrdersProvider);
     });

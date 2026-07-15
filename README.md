@@ -5,7 +5,7 @@
 <h1 align="center">Eatery — Restaurant Operating System</h1>
 
 <p align="center">
-  <strong>Offline-first, multi-app restaurant POS & management system.</strong>
+  <strong>Offline-first restaurant POS & management system — single binary with role dispatch.</strong>
   Free & open-source alternative to Toast, Square for Restaurants, and Lightspeed.
 </p>
 
@@ -21,18 +21,19 @@
 
 ## Overview
 
-Eatery is a family of four applications forming a complete restaurant management system:
+Eatery is a **single Flutter binary** that presents four role-specific UIs from one codebase. The device's role is selected on first launch (or via `--dart-define=role` for dev) and persisted in SQLite:
 
-| App | Purpose | Users |
-|-----|---------|-------|
-| **Admin** | Full management, POS, config, reports | Owner, manager |
-| **Waiter** | Order taking, table management | Waitstaff |
-| **Kitchen (KDS)** | Real-time order feed, KOT display | Chefs |
-| **Display** | Customer-facing order status | Customers |
+| Role | Login | Purpose | Users |
+|------|-------|---------|-------|
+| **Admin** | PIN (StaffType.admin) | Full POS, management, config, reports | Owner, manager |
+| **Waiter** | PIN (StaffType.waiter) | Order taking, table management | Waitstaff |
+| **KDS** | None (kiosk) | Real-time order feed, KOT display | Chefs |
+| **Display** | None (kiosk) | Customer-facing order status | Customers |
 
 **Key differentiators:**
 - Full offline resilience — POS works without internet
 - Local-network sync via OpLog over WebSockets (no cloud dependency)
+- Role-based access control — each role sees only its permitted routes
 - Cross-platform: Android, iOS, macOS, Windows, Linux
 - Zero monthly fees — free open core
 
@@ -44,24 +45,24 @@ Eatery is a family of four applications forming a complete restaurant management
 |----------|--------|
 | **Language** | Dart 3.11+ / Flutter 3.41+ |
 | **State Management** | Riverpod (NotifierProvider / AsyncNotifierProvider) |
-| **Navigation** | GoRouter 17.x (migrating) |
+| **Navigation** | GoRouter 17.x (~76 routes, RBAC guard) |
 | **Database** | SQLite via native Zig FFI (`libeaterystore`) |
 | **Native Store** | Zig 0.15+ / `libeaterystore` (embedded SQLite via `dart:ffi`) |
 | **Sync** | WebSocket + OpLog (operation log) + mDNS discovery |
 | **Code Gen** | freezed, json_serializable, riverpod_generator, build_runner |
-| **Architecture** | Pragmatic "lite" Clean Architecture (repositories + providers) |
-| **Monorepo** | Melos 8.x workspace |
 
 ---
 
 ## Getting Started
 
 ```bash
-# Prerequisites: Flutter 3.41+, Zig 0.15+, Melos
-melos bootstrap
-melos run generate
-melos run analyze
-melos run test
+# Prerequisites: Flutter 3.41+, Zig 0.15+
+flutter pub get
+cd libeaterystore && ./scripts/build.sh && cd ..
+dart run build_runner build --delete-conflicting-outputs
+flutter analyze --no-fatal-infos --no-fatal-warnings lib/
+flutter test
+flutter test packages/eatery_core/test/
 ```
 
 See [docs/guides/getting-started.md](docs/guides/getting-started.md) for full setup instructions.
@@ -72,17 +73,28 @@ See [docs/guides/getting-started.md](docs/guides/getting-started.md) for full se
 
 ```
 eatery/
-|-- packages/
-|   +-- eatery_core/         # Shared core: models, DB, sync, widgets, providers
-|-- lib/                     # Unified app entry & pages (admin, waiter, kds, display)
-|-- libeaterystore/          # Native Zig/SQLite library
-|-- docs/                    # Documentation
-|   |-- guides/              # Developer guides & architecture overview
-|   |-- product/             # Product requirements
-|   |-- architecture/        # Technical specs
-|   |-- development/         # Dev procedures
-|   |-- plan/                # Roadmaps, audits, plans
-|   +-- decisions/           # Architecture Decision Records
+├��─ lib/                     # Unified app entry & all role pages
+│   ├── main.dart            # Single entry point, role-aware init
+│   ├── core/router/         # Unified GoRouter + RBAC guard
+│   └── pages/
+│       ├── authentication/  # Login, reset PIN
+│       ├── dashboard/       # Admin POS & management
+│       ├── waiter/          # Table view, menu, cart
+│       ├── kds/             # Kitchen ticket grid
+│       ├── display/         # Customer order status
+│       └── role_picker.page.dart  # First-launch role selector
+��── packages/
+│   └── eatery_core/         # Shared models, DB, sync, widgets, theme
+├── libeaterystore/          # Native Zig/SQLite library
+├── docs/                    # Documentation
+│   ├── architecture/        # ADRs, specs, data models, sync protocol
+��   ├── guides/              # Getting started, architecture overview
+│   ├── product/             # Product requirements
+│   ├── plan/                # Roadmaps, audits
+│   └── decisions/           # Architecture Decision Records
+├── assets/                  # Images, Lottie, icons, SQLite schema
+├── ISSUES.md                # Phase 1 migration tracker (completed)
+└── PHASE2.md                # Phase 2 feature tracker (in progress)
 ```
 
 ---
@@ -92,11 +104,12 @@ eatery/
 | Link | Audience |
 |------|----------|
 | [Architecture Overview](docs/guides/architecture-overview.md) | Developers starting out |
+| [Single-App Architecture](docs/architecture/single-app-architecture.md) | Technical deep-dive |
 | [Getting Started](docs/guides/getting-started.md) | New contributors |
 | [Product Requirements](docs/product/index.md) | Product / stakeholders |
 | [Technical Specs](docs/architecture/index.md) | Engineering team |
 | [Development Guide](docs/development/setup.md) | Contributors |
-| [Issue Inventory](docs/plan/issue-inventory.md) | Project management |
+| [Phase 2 Roadmap](PHASE2.md) | Current work tracker |
 
 ---
 
