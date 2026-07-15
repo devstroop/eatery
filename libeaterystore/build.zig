@@ -140,11 +140,18 @@ fn configure(
 
     if (is_android) setupAndroidNdk(b, lib, arch);
     if (target_os == .ios) {
-        lib.addSystemIncludePath(.{
-            .cwd_relative = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include",
-        });
+        setupIosSdk(b, lib);
     }
     lib.linkLibC();
+}
+
+/// Resolve the iOS SDK path. Checks `IOS_SDK_PATH` env var first (set by
+/// CI workflows), then falls back to the standard Xcode location.
+fn setupIosSdk(b: *std.Build, lib: *std.Build.Step.Compile) void {
+    const env_path = std.process.getEnvVarOwned(b.allocator, "IOS_SDK_PATH") catch null;
+    const sdk_path = env_path orelse
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include";
+    lib.addSystemIncludePath(.{ .cwd_relative = sdk_path });
 }
 
 /// Configure the Android NDK sysroot (bionic libc headers, arch libs and CRT
