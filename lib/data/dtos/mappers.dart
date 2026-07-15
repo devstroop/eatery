@@ -125,7 +125,7 @@ extension OrderDtoX on OrderDto {
     grandTotal: grandTotal,
     paidTotal: paidTotal,
     type: OrderType.values.firstWhere(
-      (e) => e.name.toLowerCase() == orderType.toLowerCase(),
+      (e) => (e.name ?? '').toLowerCase() == orderType.toLowerCase(),
       orElse: () => OrderType.dine,
     ),
     createdAt: DateTime.now(),
@@ -155,7 +155,7 @@ extension OrderX on Order {
     roundOff: roundOff,
     grandTotal: grandTotal,
     paidTotal: paidTotal,
-    orderType: type.name,
+    orderType: type.name ?? '',
     diningTableName: diningTableName,
     diningTableId: diningTableId,
     products: products.map((p) => p.toDto()).toList(),
