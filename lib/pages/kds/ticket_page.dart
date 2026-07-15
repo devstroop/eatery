@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/eatery_core.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 final _stationsProvider = FutureProvider<List<KdsStation>>((ref) {
   final store = ref.read(eateryStoreProvider);
@@ -40,6 +41,9 @@ class TicketPage extends ConsumerStatefulWidget {
 
 class _TicketPageState extends ConsumerState<TicketPage> {
   Timer? _refreshTimer;
+  int _previousOrderCount = 0;
+  bool _hasInitialData = false;
+  final AudioPlayer _audioPlayer = AudioPlayer();
 
   @override
   void initState() {
@@ -54,11 +58,34 @@ class _TicketPageState extends ConsumerState<TicketPage> {
     _refreshTimer = Timer.periodic(const Duration(seconds: 10), (_) {
       ref.invalidate(_activeOrdersProvider);
     });
+    // Detect new orders and play chime
+    ref.listenManual(_activeOrdersProvider, (prev, next) {
+      next.whenData((orders) {
+        final count = orders.length;
+        if (_hasInitialData && count > _previousOrderCount) {
+          _playChime();
+        }
+        _hasInitialData = true;
+        _previousOrderCount = count;
+      });
+    });
+  }
+
+  Future<void> _playChime() async {
+    try {
+      await _audioPlayer.play(
+        AssetSource('sounds/chime.mp3'),
+        volume: 0.5,
+      );
+    } catch (e) {
+      debugPrint('Audio chime failed: $e');
+    }
   }
 
   @override
   void dispose() {
     _refreshTimer?.cancel();
+    _audioPlayer.dispose();
     super.dispose();
   }
 
