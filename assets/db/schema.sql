@@ -324,3 +324,172 @@ CREATE TABLE IF NOT EXISTS op_log (
   clock INTEGER PRIMARY KEY,
   value TEXT NOT NULL
 );
+
+-- ── Phase C: Migrations v3-v9 ────────────────────────────────────────────────
+
+CREATE TABLE IF NOT EXISTS discount (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  name        TEXT NOT NULL,
+  type        INTEGER NOT NULL,
+  value       REAL NOT NULL,
+  minOrder    REAL,
+  maxUses     INTEGER,
+  isActive    INTEGER NOT NULL DEFAULT 1,
+  startsAt    INTEGER,
+  endsAt      INTEGER,
+  createdAt   INTEGER NOT NULL,
+  updatedAt   INTEGER
+);
+
+CREATE TABLE IF NOT EXISTS order_discount (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  orderId     INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
+  discountId  INTEGER REFERENCES discount(id),
+  name        TEXT NOT NULL,
+  type        INTEGER NOT NULL,
+  value       REAL NOT NULL,
+  amount      REAL NOT NULL,
+  appliedBy   INTEGER REFERENCES staff(id),
+  createdAt   INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS shift (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  name        TEXT NOT NULL,
+  startTime   TEXT NOT NULL,
+  endTime     TEXT NOT NULL,
+  isActive    INTEGER NOT NULL DEFAULT 1
+);
+
+CREATE TABLE IF NOT EXISTS time_entry (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  staffId     INTEGER NOT NULL REFERENCES staff(id),
+  shiftId     INTEGER REFERENCES shift(id),
+  clockIn     INTEGER NOT NULL,
+  clockOut    INTEGER,
+  breakStart  INTEGER,
+  breakEnd    INTEGER,
+  note        TEXT,
+  createdAt   INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS business_hours (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  dayOfWeek   INTEGER NOT NULL,
+  openTime    TEXT NOT NULL,
+  closeTime   TEXT NOT NULL,
+  isClosed    INTEGER NOT NULL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS holiday_hours (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  date        TEXT NOT NULL,
+  openTime    TEXT,
+  closeTime   TEXT,
+  description TEXT
+);
+
+CREATE TABLE IF NOT EXISTS expense_category (
+  id          INTEGER PRIMARY KEY AUTOINCREMENT,
+  name        TEXT NOT NULL,
+  description TEXT,
+  isActive    INTEGER NOT NULL DEFAULT 1
+);
+
+CREATE TABLE IF NOT EXISTS expense (
+  id            INTEGER PRIMARY KEY AUTOINCREMENT,
+  categoryId    INTEGER REFERENCES expense_category(id),
+  amount        REAL NOT NULL,
+  description   TEXT NOT NULL,
+  expenseDate   INTEGER NOT NULL,
+  paymentMode   INTEGER NOT NULL DEFAULT 0,
+  reference     TEXT,
+  receipt       TEXT,
+  createdBy     INTEGER REFERENCES staff(id),
+  createdAt     INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS reservation (
+  id              INTEGER PRIMARY KEY AUTOINCREMENT,
+  customerName    TEXT NOT NULL,
+  customerPhone   TEXT,
+  diningTableId   INTEGER REFERENCES dining_table(id),
+  partySize       INTEGER NOT NULL,
+  dateTime        INTEGER NOT NULL,
+  duration        INTEGER DEFAULT 60,
+  status          INTEGER NOT NULL DEFAULT 0,
+  note            TEXT,
+  createdBy       INTEGER REFERENCES staff(id),
+  createdAt       INTEGER NOT NULL,
+  updatedAt       INTEGER
+);
+
+CREATE TABLE IF NOT EXISTS customer_loyalty (
+  id            INTEGER PRIMARY KEY AUTOINCREMENT,
+  customerId    INTEGER NOT NULL REFERENCES customer(id),
+  points        REAL NOT NULL DEFAULT 0,
+  totalVisits   INTEGER NOT NULL DEFAULT 0,
+  totalSpent    REAL NOT NULL DEFAULT 0,
+  lastVisitAt   INTEGER,
+  tier          INTEGER NOT NULL DEFAULT 0,
+  createdAt     INTEGER NOT NULL,
+  updatedAt     INTEGER
+);
+
+CREATE TABLE IF NOT EXISTS loyalty_transaction (
+  id            INTEGER PRIMARY KEY AUTOINCREMENT,
+  customerId    INTEGER NOT NULL REFERENCES customer(id),
+  points        REAL NOT NULL,
+  type          INTEGER NOT NULL,
+  referenceId   INTEGER,
+  description   TEXT,
+  createdAt     INTEGER NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS supplier (
+  id            INTEGER PRIMARY KEY AUTOINCREMENT,
+  name          TEXT NOT NULL,
+  contactName   TEXT,
+  phone         TEXT,
+  email         TEXT,
+  address       TEXT,
+  gstin         TEXT,
+  isActive      INTEGER NOT NULL DEFAULT 1,
+  createdAt     INTEGER NOT NULL,
+  updatedAt     INTEGER
+);
+
+CREATE TABLE IF NOT EXISTS purchase_order (
+  id              INTEGER PRIMARY KEY AUTOINCREMENT,
+  supplierId      INTEGER REFERENCES supplier(id),
+  orderDate       INTEGER NOT NULL,
+  expectedDate    INTEGER,
+  deliveredDate   INTEGER,
+  status          INTEGER NOT NULL DEFAULT 0,
+  totalAmount     REAL NOT NULL DEFAULT 0,
+  notes           TEXT,
+  createdBy       INTEGER REFERENCES staff(id),
+  createdAt       INTEGER NOT NULL,
+  updatedAt       INTEGER
+);
+
+CREATE TABLE IF NOT EXISTS purchase_order_item (
+  id                INTEGER PRIMARY KEY AUTOINCREMENT,
+  purchaseOrderId   INTEGER NOT NULL REFERENCES purchase_order(id) ON DELETE CASCADE,
+  productId         INTEGER NOT NULL REFERENCES product(id),
+  quantity          REAL NOT NULL,
+  unitPrice         REAL NOT NULL,
+  totalPrice        REAL NOT NULL,
+  receivedQty       REAL DEFAULT 0
+);
+
+CREATE TABLE IF NOT EXISTS stock_adjustment (
+  id            INTEGER PRIMARY KEY AUTOINCREMENT,
+  productId     INTEGER NOT NULL REFERENCES product(id),
+  quantity      REAL NOT NULL,
+  reason        TEXT NOT NULL,
+  referenceId   INTEGER,
+  notes         TEXT,
+  createdBy     INTEGER REFERENCES staff(id),
+  createdAt     INTEGER NOT NULL
+);

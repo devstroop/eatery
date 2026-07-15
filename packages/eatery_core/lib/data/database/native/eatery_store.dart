@@ -150,6 +150,21 @@ class EateryStore implements EateryStoreInterface {
     }
   }
 
+  /// Creates a full backup of the database to [targetPath].
+  @override
+  void backup(String targetPath) {
+    _ensureOpen();
+    final pathPtr = targetPath.toNativeUtf8();
+    try {
+      final rc = _bindings.esBackup(_handle, pathPtr);
+      if (rc != 0) {
+        throw EateryStoreException(_lastError(), sql: 'backup to $targetPath');
+      }
+    } finally {
+      malloc.free(pathPtr);
+    }
+  }
+
   /// Closes the underlying database. Safe to call multiple times.
   @override
   void close() {

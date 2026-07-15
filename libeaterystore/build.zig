@@ -40,6 +40,10 @@ pub fn build(b: *std.Build) void {
         "-DSQLITE_OMIT_SHARED_CACHE=1",
         "-DSQLITE_USE_ALLOCA=1",
         "-DSQLITE_ENABLE_COLUMN_METADATA=1",
+        // Compile-time FK enforcement — replaces runtime PRAGMA foreign_keys=ON.
+        // Ensures FK constraints survive connection loss. Existing databases
+        // with orphaned rows will fail on INSERT/UPDATE after upgrading.
+        "-DSQLITE_DEFAULT_FOREIGN_KEYS=1",
     };
 
     // ------------------------------------------------------------------

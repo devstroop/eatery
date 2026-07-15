@@ -49,17 +49,13 @@ class FakeEateryStore implements EateryStoreInterface {
       final since = params?[0] as int;
       final entries = _data.entries.where((e) => e.key > since).toList();
       entries.sort((a, b) => a.key.compareTo(b.key));
-      return entries
-          .map((e) => <String, Object?>{'value': e.value})
-          .toList();
+      return entries.map((e) => <String, Object?>{'value': e.value}).toList();
     }
 
     if (lower.contains('order by clock')) {
       final entries = _data.entries.toList();
       entries.sort((a, b) => a.key.compareTo(b.key));
-      return entries
-          .map((e) => <String, Object?>{'value': e.value})
-          .toList();
+      return entries.map((e) => <String, Object?>{'value': e.value}).toList();
     }
 
     throw UnsupportedError('FakeEateryStore cannot query: $sql');
@@ -83,6 +79,11 @@ class FakeEateryStore implements EateryStoreInterface {
 
   @override
   T transaction<T>(T Function() action) => action();
+
+  @override
+  void backup(String targetPath) {
+    // No-op in-memory — cannot back up a fake.
+  }
 
   @override
   void close() => _data.clear();

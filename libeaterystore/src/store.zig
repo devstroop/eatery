@@ -66,8 +66,57 @@ export fn es_key(store: ?*Store, key: [*c]const u8, key_len: c_int) void {
 
 export fn es_close(store: ?*Store) void {
     const s = store orelse return;
+    // WAL checkpoint: shrink the .db-wal file on clean shutdown.
+    _ = c.sqlite3_exec(
+        s.db,
+        "PRAGMA wal_checkpoint(TRUNCATE);",
+        null,
+        null,
+        null,
+    );
     _ = c.sqlite3_close(s.db);
     alloc.destroy(s);
+}
+
+// ============================================================================
+// Backup
+// ============================================================================
+
+/// Creates a complete backup of the database to [target_path].
+/// Returns 0 on success, or a negative error code on failure.
+export fn es_backup(store: ?*Store, target_path: [*:0]const u8) c_int {
+    const s = store orelse return -1;
+
+    var dest_db: ?*c.sqlite3 = null;
+    const flags = c.SQLITE_OPEN_READWRITE | c.SQLITE_OPEN_CREATE | c.SQLITE_OPEN_FULLMUTEX;
+    if (c.sqlite3_open_v2(target_path, &dest_db, flags, null) != c.SQLITE_OK) {
+        // Error is on the destination handle, not the source.
+        const err = c.sqlite3_errmsg(dest_db);
+        if (dest_db != null) _ = c.sqlite3_close(dest_db);
+        if (err) |msg| {
+            setError(s, std.mem.span(msg));
+        } else {
+            setError(s, "failed to open destination database");
+        }
+        return -1;
+    }
+    defer _ = c.sqlite3_close(dest_db);
+
+    const backup = c.sqlite3_backup_init(dest_db, "main", s.db, "main") orelse {
+        setErrorFromDb(s);
+        return -1;
+    };
+    // Copy all pages in a single step.
+    const step_rc = c.sqlite3_backup_step(backup, -1);
+    const finish_rc = c.sqlite3_backup_finish(backup);
+
+    // Surface whichever error is more informative.
+    const rc = if (step_rc != c.SQLITE_DONE) step_rc else finish_rc;
+    if (rc != c.SQLITE_OK and rc != c.SQLITE_DONE) {
+        setErrorFromDb(s);
+        return -1;
+    }
+    return 0;
 }
 
 // ============================================================================
