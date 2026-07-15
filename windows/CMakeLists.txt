@@ -32,6 +32,12 @@ set(CMAKE_CXX_FLAGS_PROFILE "${CMAKE_CXX_FLAGS_RELEASE}")
 # Use Unicode for all projects.
 add_definitions(-DUNICODE -D_UNICODE)
 
+# Suppress MSVC STL1011 error from plugin code that still uses the deprecated
+# <experimental/coroutine> header. Newer MSVC toolchains (VS 18 / MSVC 14.51+)
+# emit a hard error instead of a warning. This can be removed once all plugins
+# have migrated to C++20 <coroutine>.
+add_compile_definitions(_SILENCE_EXPERIMENTAL_COROUTINE_DEPRECATION_WARNINGS)
+
 # Compilation settings that should be applied to most targets.
 #
 # Be cautious about adding new options here, as plugins use this function by
@@ -87,23 +93,17 @@ if(PLUGIN_BUNDLED_LIBRARIES)
 endif()
 
 # === libeaterystore (Zig + embedded SQLite) ===
-# The Dart FFI loader opens "eaterystore.dll" from the executable directory, so
-# copy it next to the runner (for dev runs from Visual Studio / `flutter run`)
-# and install it into the release bundle. Build it first with:
+# The Dart FFI loader opens "eaterystore.dll" from the executable directory.
+# Build it first with:
 #   cd ..\libeaterystore && zig build shared-lib -Dtarget=x86_64-windows-gnu
+# The POST_BUILD copy command lives in runner/CMakeLists.txt (where the target
+# is created), because CMake requires TARGET references to be in the same
+# directory scope.
 set(EATERYSTORE_DLL
   "${CMAKE_CURRENT_SOURCE_DIR}/../libeaterystore/zig-out/bin/eaterystore.dll")
 if(EXISTS "${EATERYSTORE_DLL}")
-  add_custom_command(TARGET ${BINARY_NAME} POST_BUILD
-    COMMAND ${CMAKE_COMMAND} -E copy_if_different
-      "${EATERYSTORE_DLL}" "$<TARGET_FILE_DIR:${BINARY_NAME}>"
-    VERBATIM)
   install(FILES "${EATERYSTORE_DLL}" DESTINATION "${INSTALL_BUNDLE_LIB_DIR}"
     COMPONENT Runtime)
-else()
-  message(WARNING
-    "eaterystore.dll not found at ${EATERYSTORE_DLL}. Build it with: "
-    "(cd ../libeaterystore && zig build shared-lib -Dtarget=x86_64-windows-gnu)")
 endif()
 
 # Fully re-copy the assets directory on each build to avoid having stale files

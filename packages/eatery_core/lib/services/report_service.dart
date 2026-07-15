@@ -1,88 +1,37 @@
+import 'dart:async';
 import 'dart:convert';
-import 'package:eatery_core/data/database/native/eatery_store.dart';
+import 'package:eatery_core/data/database/native/eatery_store_isolate.dart';
 import 'package:eatery_core/data/models/eatery_db.dart';
 
 /// Aggregates sales data for Z (end-of-day) and X (mid-day) reports.
+///
+/// Uses [EateryStoreIsolate] so heavy aggregate queries run off the
+/// main (UI) thread — no jank during report generation.
 class ReportService {
-  final EateryStore _store;
+  final EateryStoreIsolate _store;
 
   ReportService(this._store);
 
   /// Generates a compliance report for the given period.
-  ComplianceReport generateReport({
+  Future<ComplianceReport> generateReport({
     required String reportType,
     required DateTime periodStart,
     required DateTime periodEnd,
     required String generatedBy,
     double? expectedCash,
     double? actualCash,
-  }) {
+  }) async {
     final startMs = periodStart.millisecondsSinceEpoch;
     final endMs = periodEnd.millisecondsSinceEpoch;
 
-    // Total gross sales (sum of completed/active orders)
-    final grossResult = _store.queryScalar(
-      '''
-      SELECT COALESCE(SUM(grandTotal), 0) FROM orders
-      WHERE createdAt >= ? AND createdAt <= ?
-      AND status IN (0, 1, 2, 3, 4)
-    ''',
-      [startMs, endMs],
-    );
-    final grossSales = (grossResult as num).toDouble();
-
-    // Net sales (gross - voided - refunded)
-    final voidResult = _store.queryScalar(
-      '''
-      SELECT COALESCE(SUM(grandTotal), 0) FROM orders
-      WHERE createdAt >= ? AND createdAt <= ? AND status = 5
-    ''',
-      [startMs, endMs],
-    );
-    final voidAmount = (voidResult as num).toDouble();
-
-    // Tax collected
-    final taxResult = _store.queryScalar(
-      '''
-      SELECT COALESCE(SUM(taxTotal), 0) FROM orders
-      WHERE createdAt >= ? AND createdAt <= ?
-    ''',
-      [startMs, endMs],
-    );
-    final taxCollected = (taxResult as num).toDouble();
-
-    // Transaction count
-    final txnResult = _store.queryScalar(
-      '''
-      SELECT COUNT(*) FROM orders
-      WHERE createdAt >= ? AND createdAt <= ?
-    ''',
-      [startMs, endMs],
-    );
-    final transactionCount = (txnResult as int);
-
-    // Total discounts
-    final discResult = _store.queryScalar(
-      '''
-      SELECT COALESCE(SUM(discountTotal), 0) FROM orders
-      WHERE createdAt >= ? AND createdAt <= ?
-    ''',
-      [startMs, endMs],
-    );
-    final totalDiscounts = (discResult as num).toDouble();
-
-    // Void count
-    final voidCountResult = _store.queryScalar(
-      '''
-      SELECT COUNT(*) FROM orders
-      WHERE createdAt >= ? AND createdAt <= ? AND status = 5
-    ''',
-      [startMs, endMs],
-    );
-    final voidCount = (voidCountResult as int);
-
-    // Payment breakdown by mode
-    final paymentRows = _store.query(
+    final grossSales = await _queryGrossSum(startMs, endMs, [0, 1, 2, 3, 4]);
+    final voidAmount = await _queryGrossSum(startMs, endMs, [5]);
+    final taxCollected = await _queryTaxSum(startMs, endMs);
+    final transactionCount = await _queryCount(startMs, endMs);
+    final totalDiscounts = await _queryDiscountSum(startMs, endMs);
+    final voidCount = await _queryCount(startMs, endMs, status: 5);
+    final discountCount = await _queryDiscountCount(startMs, endMs);
+    final paymentRows = await _store.query(
       '''
       SELECT mode, COALESCE(SUM(amount), 0) as total
       FROM payment
@@ -91,6 +40,14 @@ class ReportService {
     ''',
       [startMs, endMs],
     );
+    final openingBalance = await _openingBalance(startMs);
+
+    final netSales = grossSales - voidAmount;
+    final avgTicket = transactionCount > 0
+        ? grossSales / transactionCount
+        : 0.0;
+    final closingBalance = openingBalance + grossSales;
+
     final paymentBreakdown = {
       for (final row in paymentRows)
         PaymentMode.values
@@ -101,13 +58,6 @@ class ReportService {
             .name: (row['total'] as num)
             .toDouble(),
     };
-
-    final netSales = grossSales - voidAmount;
-    final avgTicket = transactionCount > 0
-        ? grossSales / transactionCount
-        : 0.0;
-    final openingBalance = _openingBalance(startMs);
-    final closingBalance = openingBalance + grossSales;
 
     final report = ComplianceReport(
       reportType: reportType,
@@ -123,6 +73,7 @@ class ReportService {
       transactionCount: transactionCount,
       averageTicket: avgTicket,
       totalDiscounts: totalDiscounts,
+      discountCount: discountCount,
       voidCount: voidCount,
       voidAmount: voidAmount,
       openingBalance: openingBalance,
@@ -135,8 +86,7 @@ class ReportService {
       paymentBreakdownJson: jsonEncode(paymentBreakdown),
     );
 
-    // Persist the report
-    _store.execute(
+    await _store.execute(
       '''
       INSERT INTO compliance_report
       (reportType, generatedAt, generatedBy, periodStart, periodEnd,
@@ -144,7 +94,7 @@ class ReportService {
        averageTicket, totalDiscounts, discountCount, voidCount, voidAmount,
        refundCount, refundAmount, openingBalance, closingBalance,
        expectedCash, actualCash, cashVariance, paymentBreakdownJson, taxBreakdownJson)
-      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,0,?,?,0,0,?,?,?,?,?,?,NULL)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
     ''',
       [
         report.reportType,
@@ -159,34 +109,96 @@ class ReportService {
         report.transactionCount,
         report.averageTicket,
         report.totalDiscounts,
+        report.discountCount,
         report.voidCount,
         report.voidAmount,
+        report.refundCount,
+        report.refundAmount,
         report.openingBalance,
         report.closingBalance,
         report.expectedCash,
         report.actualCash,
         report.cashVariance,
         report.paymentBreakdownJson,
+        report.taxBreakdownJson,
       ],
     );
 
     return report;
   }
 
-  double _openingBalance(int periodStartMs) {
-    final result = _store.queryScalar(
-      '''
-      SELECT COALESCE(SUM(grandTotal), 0) FROM orders
-      WHERE createdAt < ?
-    ''',
+  Future<double> _queryGrossSum(
+    int startMs,
+    int endMs,
+    List<int> statuses,
+  ) async {
+    if (statuses.isEmpty) {
+      throw ArgumentError('statuses must not be empty �� produces invalid SQL');
+    }
+    final placeholders = statuses.map((_) => '?').join(', ');
+    final result = await _store.queryScalar(
+      'SELECT COALESCE(SUM(grandTotal), 0) FROM orders '
+      'WHERE createdAt >= ? AND createdAt <= ? AND status IN ($placeholders)',
+      [startMs, endMs, ...statuses],
+    );
+    return (result as num).toDouble();
+  }
+
+  Future<double> _queryTaxSum(int startMs, int endMs) async {
+    final result = await _store.queryScalar(
+      'SELECT COALESCE(SUM(taxTotal), 0) FROM orders '
+      'WHERE createdAt >= ? AND createdAt <= ?',
+      [startMs, endMs],
+    );
+    return (result as num).toDouble();
+  }
+
+  Future<int> _queryCount(int startMs, int endMs, {int? status}) async {
+    if (status != null) {
+      final result = await _store.queryScalar(
+        'SELECT COUNT(*) FROM orders WHERE createdAt >= ? AND createdAt <= ? AND status = ?',
+        [startMs, endMs, status],
+      );
+      return result as int;
+    }
+    final result = await _store.queryScalar(
+      'SELECT COUNT(*) FROM orders WHERE createdAt >= ? AND createdAt <= ?',
+      [startMs, endMs],
+    );
+    return result as int;
+  }
+
+  Future<double> _queryDiscountSum(int startMs, int endMs) async {
+    final result = await _store.queryScalar(
+      'SELECT COALESCE(SUM(discountTotal), 0) FROM orders '
+      'WHERE createdAt >= ? AND createdAt <= ?',
+      [startMs, endMs],
+    );
+    return (result as num).toDouble();
+  }
+
+  Future<int> _queryDiscountCount(int startMs, int endMs) async {
+    final result = await _store.queryScalar(
+      'SELECT COUNT(*) FROM orders WHERE discountTotal > 0 '
+      'AND createdAt >= ? AND createdAt <= ?',
+      [startMs, endMs],
+    );
+    return (result as int);
+  }
+
+  Future<double> _openingBalance(int periodStartMs) async {
+    final result = await _store.queryScalar(
+      'SELECT COALESCE(SUM(grandTotal), 0) FROM orders WHERE createdAt < ?',
       [periodStartMs],
     );
     return (result as num).toDouble();
   }
 
   /// Returns all previously generated reports.
-  List<ComplianceReport> getReports() => _store
-      .query('SELECT * FROM compliance_report ORDER BY generatedAt DESC')
-      .map(ComplianceReport.fromMap)
-      .toList();
+  Future<List<ComplianceReport>> getReports() async {
+    final rows = await _store.query(
+      'SELECT * FROM compliance_report ORDER BY generatedAt DESC',
+    );
+    return rows.map(ComplianceReport.fromMap).toList();
+  }
 }

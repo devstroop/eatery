@@ -99,7 +99,6 @@ export fn es_backup(store: ?*Store, target_path: [*:0]const u8) c_int {
     var dest_db: ?*c.sqlite3 = null;
     const flags = c.SQLITE_OPEN_READWRITE | c.SQLITE_OPEN_CREATE | c.SQLITE_OPEN_FULLMUTEX;
     if (c.sqlite3_open_v2(target_path, &dest_db, flags, null) != c.SQLITE_OK) {
-        // Error is on the destination handle, not the source.
         const err = c.sqlite3_errmsg(dest_db);
         if (dest_db != null) _ = c.sqlite3_close(dest_db);
         if (err) |msg| {
@@ -115,13 +114,40 @@ export fn es_backup(store: ?*Store, target_path: [*:0]const u8) c_int {
         setErrorFromDb(s);
         return -1;
     };
-    // Copy all pages in a single step.
     const step_rc = c.sqlite3_backup_step(backup, -1);
     const finish_rc = c.sqlite3_backup_finish(backup);
 
-    // Surface whichever error is more informative.
     const rc = if (step_rc != c.SQLITE_DONE) step_rc else finish_rc;
     if (rc != c.SQLITE_OK and rc != c.SQLITE_DONE) {
+        setErrorFromDb(s);
+        return -1;
+    }
+    return 0;
+}
+
+// ============================================================================
+// Maintenance (VACUUM / optimize)
+// ============================================================================
+
+/// Reclaims unused space and defragments the database file.
+/// Returns 0 on success, or a negative error code on failure.
+/// Must be called outside an active transaction (VACUUM will fail otherwise).
+export fn es_vacuum(store: ?*Store) c_int {
+    const s = store orelse return -1;
+    const rc = c.sqlite3_exec(s.db, "VACUUM;", null, null, null);
+    if (rc != c.SQLITE_OK) {
+        setErrorFromDb(s);
+        return -1;
+    }
+    return 0;
+}
+
+/// Runs PRAGMA optimize to let SQLite tune itself. Safe to call periodically
+/// (e.g. on app lifecycle pause or after batch writes).
+export fn es_optimize(store: ?*Store) c_int {
+    const s = store orelse return -1;
+    const rc = c.sqlite3_exec(s.db, "PRAGMA optimize;", null, null, null);
+    if (rc != c.SQLITE_OK) {
         setErrorFromDb(s);
         return -1;
     }

@@ -3,9 +3,9 @@
 > **Prerequisites:**
 > - Phase 1 (Single-App Unification) — 28/28 ✅ (`ISSUES.md`)
 > - Phase 2 (Feature Completion) - 15/15 ✅ (`PHASE2.md`)
-> - Phase 3 (Native Store Hardening) — 9/13 ✅ + 2 🟡 + 2 ⬜ (`PHASE3.md`)
+> - Phase 3 (Native Store Hardening) — 12/13 ✅ + 1 ❓ (`PHASE3.md`)
 >
-> ⚠️ **Phase 3 audit:** 9 items verified complete, 2 partial (`wal_checkpoint` done, `optimize`/`VACUUM` pending; encryption code exists but no smoke test), 2 not started (isolate not wired into reports, no OOM protection). See `PHASE3.md` for details.
+> **Phase 3 audit:** 12 items complete (M2 isolate wired into ReportsPage with async offloaded queries, M3 VACUUM/optimize, M8 encryption smoke test, M10 OOM protection all done). 1 unverified (M7 Android cross-build — requires manual `flutter build apk --debug`). See `PHASE3.md` for details.
 
 ---
 

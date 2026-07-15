@@ -42,23 +42,31 @@ class FakeEateryStore implements EateryStoreInterface {
   }
 
   @override
-  List<Map<String, Object?>> query(String sql, [List<Object?>? params]) {
+  List<Map<String, Object?>> query(
+    String sql, [
+    List<Object?>? params,
+    int? maxResults,
+  ]) {
     final lower = sql.toLowerCase();
 
+    List<Map<String, Object?>> result;
     if (lower.contains('clock > ?')) {
       final since = params?[0] as int;
       final entries = _data.entries.where((e) => e.key > since).toList();
       entries.sort((a, b) => a.key.compareTo(b.key));
-      return entries.map((e) => <String, Object?>{'value': e.value}).toList();
-    }
-
-    if (lower.contains('order by clock')) {
+      result = entries.map((e) => <String, Object?>{'value': e.value}).toList();
+    } else if (lower.contains('order by clock')) {
       final entries = _data.entries.toList();
       entries.sort((a, b) => a.key.compareTo(b.key));
-      return entries.map((e) => <String, Object?>{'value': e.value}).toList();
+      result = entries.map((e) => <String, Object?>{'value': e.value}).toList();
+    } else {
+      throw UnsupportedError('FakeEateryStore cannot query: $sql');
     }
 
-    throw UnsupportedError('FakeEateryStore cannot query: $sql');
+    if (maxResults != null && maxResults > 0 && result.length > maxResults) {
+      result = result.sublist(0, maxResults);
+    }
+    return result;
   }
 
   @override
@@ -83,6 +91,16 @@ class FakeEateryStore implements EateryStoreInterface {
   @override
   void backup(String targetPath) {
     // No-op in-memory — cannot back up a fake.
+  }
+
+  @override
+  void vacuum() {
+    // No-op in-memory.
+  }
+
+  @override
+  void optimize() {
+    // No-op in-memory.
   }
 
   @override
