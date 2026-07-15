@@ -1,21 +1,18 @@
 import 'package:eatery_core/theme/app_spacing.dart';
-import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:eatery_core/utils/responsive.dart';
 import 'package:eatery_core/extensions/double_ext.dart';
 import 'package:eatery_core/widgets/modifier_sheet.dart';
 import 'package:eatery_core/widgets/app_dialog.dart';
-import 'package:eatery/pages/dashboard/customer/view.customer.page.dart';
 import 'package:eatery_core/providers/product_provider.dart';
 import 'package:eatery_core/providers/company_provider.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery_core/providers/cart_provider.dart';
+import 'package:eatery_core/providers/stock_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/data/repositories/product_repository.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import '../utility/order_print.page.dart';
-import 'cart.page.dart';
 
 class PointOfSalePage extends ConsumerStatefulWidget {
   const PointOfSalePage({Key? key}) : super(key: key);
@@ -729,6 +726,8 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
         ),
       );
     }
+    final stockMap =
+        ref.watch(productStockProvider).valueOrNull ?? <int, StockInfo>{};
     return SingleChildScrollView(
       scrollDirection: Axis.vertical,
       controller: _scrollControllerProducts,
@@ -741,6 +740,8 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                     (crossAxisCount + 1) * spacing) /
                 crossAxisCount;
             final height = width * 4 / 3;
+            final stock =
+                product.id != null ? stockMap[product.id] : null;
             return ProductCard(
               product: product,
               width: width,
@@ -748,6 +749,8 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
               themeColor: pageColor,
               currencySymbol:
                   ref.read(companyProvider.notifier).currency?.symbol ?? '',
+              lowStockWarning: stock?.isLowStock ?? false,
+              stockQuantity: stock?.quantity,
               onAdd: () {
                 setState(() {
                   _addWithModifiers(product);
