@@ -32,6 +32,12 @@ set(CMAKE_CXX_FLAGS_PROFILE "${CMAKE_CXX_FLAGS_RELEASE}")
 # Use Unicode for all projects.
 add_definitions(-DUNICODE -D_UNICODE)
 
+# Suppress MSVC STL1011 error from plugin code that still uses the deprecated
+# <experimental/coroutine> header. Newer MSVC toolchains (VS 18 / MSVC 14.51+)
+# emit a hard error instead of a warning. This can be removed once all plugins
+# have migrated to C++20 <coroutine>.
+add_compile_definitions(_SILENCE_EXPERIMENTAL_COROUTINE_DEPRECATION_WARNINGS)
+
 # Compilation settings that should be applied to most targets.
 #
 # Be cautious about adding new options here, as plugins use this function by
