@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/eatery_core.dart';
+import 'package:lottie/lottie.dart';
 
 final _liveOrdersProvider = FutureProvider.autoDispose<List<Order>>((ref) {
   final repo = ref.read(orderRepositoryProvider);
@@ -30,19 +31,28 @@ class DisplayPage extends ConsumerStatefulWidget {
   ConsumerState<DisplayPage> createState() => _DisplayPageState();
 }
 
-class _DisplayPageState extends ConsumerState<DisplayPage> {
+class _DisplayPageState extends ConsumerState<DisplayPage>
+    with SingleTickerProviderStateMixin {
   Timer? _refreshTimer;
+  late AnimationController _pulseController;
+  late Animation<double> _pulseAnimation;
 
   @override
   void initState() {
     super.initState();
-    // Reactive: invalidate on sync status changes.
+    _pulseController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1500),
+    )..repeat(reverse: true);
+    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.05).animate(
+      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
+    );
+
     ref.listenManual(syncStatusProvider, (_, status) {
       if (status != null && status.pendingEntryCount >= 0) {
         ref.invalidate(_liveOrdersProvider);
       }
     });
-    // Fallback: poll every 15s in case sync isn't active.
     _refreshTimer = Timer.periodic(const Duration(seconds: 15), (_) {
       ref.invalidate(_liveOrdersProvider);
     });
@@ -51,6 +61,7 @@ class _DisplayPageState extends ConsumerState<DisplayPage> {
   @override
   void dispose() {
     _refreshTimer?.cancel();
+    _pulseController.dispose();
     super.dispose();
   }
 
@@ -58,7 +69,6 @@ class _DisplayPageState extends ConsumerState<DisplayPage> {
   Widget build(BuildContext context) {
     final orders = ref.watch(_liveOrdersProvider);
     final size = MediaQuery.of(context).size;
-    // Determine column count based on screen width (kiosk-friendly).
     final crossAxisCount = size.width >= 1200
         ? 4
         : size.width >= 800
@@ -78,10 +88,14 @@ class _DisplayPageState extends ConsumerState<DisplayPage> {
           ),
         ],
       ),
-      body: orders.when(
-        data: (list) => _buildDisplay(list, crossAxisCount),
-        loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, _) => Center(child: Text('Error: $e')),
+      body: Stack(
+        children: [
+          orders.when(
+            data: (list) => _buildDisplay(list, crossAxisCount),
+            loading: () => const Center(child: CircularProgressIndicator()),
+            error: (e, _) => Center(child: Text('Error: $e')),
+          ),
+        ],
       ),
     );
   }
@@ -92,7 +106,12 @@ class _DisplayPageState extends ConsumerState<DisplayPage> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.check_circle, size: 80, color: AppColors.success),
+            Lottie.asset(
+              'assets/lottie/hurray.json',
+              width: 200,
+              height: 200,
+              repeat: false,
+            ),
             const SizedBox(height: 16),
             Text('All orders ready!', style: AppTypography.headlineMedium),
           ],
@@ -109,95 +128,116 @@ class _DisplayPageState extends ConsumerState<DisplayPage> {
         childAspectRatio: 1.6,
       ),
       itemCount: orders.length,
-      itemBuilder: (context, index) => _OrderStatusCard(order: orders[index]),
+      itemBuilder: (context, index) =>
+          _OrderStatusCard(order: orders[index], pulseAnimation: _pulseAnimation),
     );
   }
 }
 
 class _OrderStatusCard extends ConsumerWidget {
   final Order order;
+  final Animation<double> pulseAnimation;
 
-  const _OrderStatusCard({required this.order});
+  const _OrderStatusCard({required this.order, required this.pulseAnimation});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final products = ref.watch(_orderProductsProvider(order.id!));
     final elapsed = DateTime.now().difference(order.createdAt);
 
-    return Card(
-      elevation: 2,
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            // Header row: order ID + status + timer
-            Row(
-              children: [
-                Container(
-                  width: 14,
-                  height: 14,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: order.status == OrderStatus.preparing
-                        ? AppColors.warning
-                        : AppColors.info,
-                  ),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    'Order #${order.id}',
-                    style: AppTypography.titleLarge.copyWith(
-                      fontWeight: FontWeight.bold,
+    final isPreparing = order.status == OrderStatus.preparing;
+
+    return AnimatedBuilder(
+      animation: pulseAnimation,
+      builder: (context, child) => Transform.scale(
+        scale: isPreparing ? pulseAnimation.value : 1.0,
+        child: child,
+      ),
+      child: Card(
+        elevation: 2,
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  if (order.status == OrderStatus.pending)
+                    SizedBox(
+                      width: 24,
+                      height: 24,
+                      child: Lottie.asset(
+                        'assets/lottie/105511-fireworks.json',
+                        width: 24,
+                        height: 24,
+                      ),
+                    )
+                  else
+                    Container(
+                      width: 14,
+                      height: 14,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: order.status == OrderStatus.preparing
+                            ? AppColors.warning
+                            : AppColors.info,
+                      ),
+                    ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: Text(
+                      'Order #${order.id}',
+                      style: AppTypography.titleLarge.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-                Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 4,
-                  ),
-                  decoration: BoxDecoration(
-                    color: AppColors.grey100,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                  child: Text(
-                    _formatDuration(elapsed),
-                    style: AppTypography.bodySmall.copyWith(
-                      color: AppColors.grey600,
-                      fontFamily: 'monospace',
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 8,
+                      vertical: 4,
+                    ),
+                    decoration: BoxDecoration(
+                      color: AppColors.grey100,
+                      borderRadius: BorderRadius.circular(4),
+                    ),
+                    child: Text(
+                      _formatDuration(elapsed),
+                      style: AppTypography.bodySmall.copyWith(
+                        color: AppColors.grey600,
+                        fontFamily: 'monospace',
+                      ),
                     ),
                   ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 12),
-            Expanded(
-              child: products.when(
-                data: (items) => Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: items
-                      .map(
-                        (p) => Padding(
-                          padding: const EdgeInsets.only(bottom: 4),
-                          child: Text(
-                            '${p.productName} x${p.quantity}',
-                            style: AppTypography.bodyLarge,
-                          ),
-                        ),
-                      )
-                      .toList(),
-                ),
-                loading: () => const SizedBox.shrink(),
-                error: (_, __) => const SizedBox.shrink(),
+                ],
               ),
-            ),
-            Align(
-              alignment: Alignment.centerRight,
-              child: _StatusBadge(status: order.status),
-            ),
-          ],
+              const SizedBox(height: 12),
+              Expanded(
+                child: products.when(
+                  data: (items) => Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: items
+                        .map(
+                          (p) => Padding(
+                            padding: const EdgeInsets.only(bottom: 4),
+                            child: Text(
+                              '${p.productName} x${p.quantity}',
+                              style: AppTypography.bodyLarge,
+                            ),
+                          ),
+                        )
+                        .toList(),
+                  ),
+                  loading: () => const SizedBox.shrink(),
+                  error: (_, __) => const SizedBox.shrink(),
+                ),
+              ),
+              Align(
+                alignment: Alignment.centerRight,
+                child: _StatusBadge(status: order.status),
+              ),
+            ],
+          ),
         ),
       ),
     );
