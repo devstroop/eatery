@@ -113,11 +113,13 @@ git clone https://github.com/anomalyco/eatery.git
 cd eatery
 ```
 
-### 2. Bootstrap
+### 2. Get Dependencies
 
 ```bash
-melos bootstrap
+flutter pub get
 ```
+
+> ℹ️ `packages/eatery_core` is a `path:` dependency so its dependencies are resolved at the root level.
 
 ### 3. Build Native Library
 
@@ -140,25 +142,31 @@ For cross-compilation:
 ### 4. Code Generation
 
 ```bash
-melos run generate
+dart run build_runner build --delete-conflicting-outputs
 ```
 
 ### 5. Analyze
 
 ```bash
-melos run analyze
+flutter analyze --no-fatal-infos --no-fatal-warnings lib/
 ```
 
 ### 6. Test
 
 ```bash
-melos run test
+# Root package tests (admin app logic)
+flutter test
+
+# Core library tests (models, sync, repositories, database)
+flutter test packages/eatery_core/test/
 ```
+
+The core tests are run separately because `packages/eatery_core` is a path dependency, not a workspace member.
 
 ### 7. Run
 
 ```bash
-cd apps/eatery_admin && flutter run
+flutter run
 ```
 
 ## Debug vs Release Builds
