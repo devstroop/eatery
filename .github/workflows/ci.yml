@@ -102,11 +102,19 @@ jobs:
       - name: Build native library
         run: |
           unset SDKROOT
+          if [ "$RUNNER_OS" = "macOS" ]; then
+            if SDKROOT=$(xcrun --sdk macosx --show-sdk-path 2>/dev/null); then
+              export SDKROOT
+            fi
+          fi
           cd libeaterystore && zig build shared-lib && cd ..
 
       - name: Build ${{ matrix.target }}
         run: |
+          unset SDKROOT
           if [ "$RUNNER_OS" = "macOS" ]; then
-            export SDKROOT=$(xcrun --sdk macosx --show-sdk-path)
+            if SDKROOT=$(xcrun --sdk macosx --show-sdk-path 2>/dev/null); then
+              export SDKROOT
+            fi
           fi
           ${{ matrix.build-cmd }}
