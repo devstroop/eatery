@@ -15,7 +15,7 @@
 |--------|-------|
 | `flutter analyze` errors | **0** |
 | Core tests | **51/51 passed** |
-| Root tests | **24/33 passed** — 9 compilation failures (freezed immutable models) |
+| Root tests | **74/74 passed** — P5 fixed (commit `9273edb` switched to `copyWith`) |
 | Platform builds | ✅ Android APK, iOS, macOS |
 | `apps/` directory | Deleted |
 
@@ -23,9 +23,9 @@
 
 ## Overview
 
-The infrastructure is solid. The gaps are in **user-facing features** (printing, editing, sound, occupancy toggles) and **test coverage** (9 root tests fail to compile because `Order`/`Customer` models are now `@freezed` — tests use setters like `o.grandTotal = 12.0` instead of `copyWith`).
+The infrastructure is solid: all tests pass, the isolate runs report queries off the UI thread, seed staff data is in place. The remaining gaps are **user-facing features**: Bluetooth KOT printing, waiter order edit/void, KDS sound alerts, table occupancy toggle, sync listener, and several polish items.
 
-All 14 issues are fully independent — no complex dependency chains.
+11 remaining issues — all independent, no dependency chains.
 
 ---
 
@@ -37,8 +37,8 @@ All 14 issues are fully independent — no complex dependency chains.
 | **P2** | Waiter | Order editing & voiding | Waiters can submit orders but cannot edit line items or void. The `editOrder` route exists for all authenticated staff with no role guard. Add role-gated order editing for waiters (modify items before "preparing" status, void with reason). | M | 🔴 P0 | ⬜ |
 | **P3** | KDS | Sound alert on new order | No audio feedback when new orders arrive. Chefs must poll/pull to detect new tickets. Add a chime/alert via `AudioPlayer` or platform channel, triggered by the existing `syncStatusProvider` listener or `Timer.periodic` poll. | S | 🟡 P1 | ⬜ |
 | **P4** | Waiter | Table occupancy toggle | Waiters can mark tables available/occupied from the table grid. Currently tables are only marked `occupied` on order submit — no way to free a table without admin. Add a long-press or swipe action on table cards to toggle `DiningTableStatus.available` / `DiningTableStatus.occupied`. | S | 🟡 P1 | ⬜ |
-| **P5** | Infra | Fix broken root tests | 9 root tests fail to compile. The root cause is **not** import paths — zero test files use `package:eatery/data/...` imports. Instead, `Order` and `Customer` are now `@freezed` (immutable) — tests use setters (`o.grandTotal = 12.0`, `c.name = 'Grace Hopper'`, `line.quantity = 3`) that no longer exist. Fix: replace setters with `copyWith(...)`. Affected files: `customer_repository_sqlite_test.dart`, `order_repository_sqlite_test.dart`. `router_regression_test.dart` and `order_calculations_test.dart` compile fine. | M | 🔴 P0 | ⬜ |
-| **P6** | Infra | Adopt `EateryStoreIsolate` in reports | `eateryStoreIsolateProvider` exists (`database_provider.dart`) but is imported by zero files — dead code. Wire it into the Reports page (`lib/pages/dashboard/reports/reports.page.dart`) for heavy aggregate X/Z report queries so they don't jank the UI. | M | 🟡 P1 | ⬜ |
+| **P5** | Infra | Fix broken root tests | ✅ **Done.** Tests were failing because `Order`/`Customer` models became `@freezed` (immutable). All setter calls in `customer_repository_sqlite_test.dart`, `order_repository_sqlite_test.dart` replaced with `copyWith(...)` in commit `9273edb`. `flutter test` now passes **74/74**. | M | 🔴 P0 | ✅ |
+| **P6** | Infra | Adopt `EateryStoreIsolate` in reports | ✅ **Done.** `eateryStoreIsolateProvider` imported in `reports.page.dart`. `_generateReport()` reads isolate via `eateryStoreIsolateProvider.future` and passes it to `ReportService(isolate)`. All 7 aggregate queries run off the UI thread via `EateryStoreIsolate`. No jank. | M | 🟡 P1 | ✅ |
 | **P7** | Display | Lottie progress animations | Six Lottie animation files in `assets/lottie/` are unused (`fireworks.json`, `congratulation-success-batch.json`, `hurray.json`, etc.). Only `brand.json` and one success animation are referenced. Add progress animations to the Display page when order status changes (e.g., burst animation on new order, subtle pulse while preparing). | S | 🟢 P2 | ⬜ |
 | **P8** | Waiter | Empty-state guidance | `/tables` and `/waiter-orders` show empty lists with no guidance. Add helpful empty-state messaging with instructions (e.g., "No tables yet — ask your manager to set up tables" and "No orders yet — tap Tables to start taking orders"). | S | 🟢 P2 | ⬜ |
 | **P9** | Infra | DB inspector JSON export | `DatabaseInspectorPage` shows row counts + store version + a "Clear All Data" button. No export functionality. Add a share/export button that dumps all table row counts and optionally full table data as JSON to a file or clipboard. | S | 🟢 P2 | ⬜ |
@@ -57,8 +57,8 @@ P1 (Bluetooth) — independent (new package dep)
 P2 (Waiter edit/void) — independent
 P3 (KDS sound) — independent
 P4 (Table toggle) — independent
-P5 (Fix test imports) — independent, blocks all test work
-P6 (Adopt isolate) — independent
+P5 (Fix tests) — ✅ already fixed
+P6 (Adopt isolate) — ✅ already done
 P7 (Display Lottie) — independent
 P8 (Empty states) — independent
 P9 (DB export) — independent
@@ -71,14 +71,12 @@ P14 (Tests) — after P5 (test infra) + P1-P13 implementations
 
 All items are fully independent — no blocking chains. Recommended execution order:
 
-1. **P5** — fix test foundation (prerequisite for confidence)
+1. **P1** — Bluetooth printing (largest effort, start early)
 2. **P4 + P2** — waiter feature gaps (table toggle, edit/void)
 3. **P12** — live sync for waiter pages
-4. **P1** — Bluetooth printing (largest effort, start early)
-5. **P6** — isolate wiring into Reports page
-6. **P3 + P7 + P8 + P9 + P10** — polish items (can parallelize)
-7. **P13** — floor plan canvas (L effort)
-8. **P14** — test suite (after features are stable)
+4. **P3 + P7 + P8 + P9 + P10** — polish items (can parallelize)
+5. **P13** — floor plan canvas (L effort)
+6. **P14** — test suite (after features are stable)
 
 ---
 
@@ -118,8 +116,9 @@ flutter build macos --debug                                   # macOS
 
 | Metric | Count |
 |--------|-------|
-| Total issues | 14 (1 already done: P11) |
-| P0 (blocking) | 3 |
-| P1 (important) | 5 |
+| Total issues | 14 (3 already done: P5, P6, P11) |
+| Remaining | 11 |
+| P0 (blocking) | 2 |
+| P1 (important) | 4 |
 | P2 (nice-to-have) | 5 |
-| Effort (S/M/L) | 6 S, 5 M, 2 L |
+| Effort (S/M/L) | 4 S, 5 M, 2 L |
