@@ -71,6 +71,7 @@ dependencies:
   shelf: ^1.4.2
   flutter_blue_plus: ^1.33.2
   audioplayers: ^6.1.0
+  fl_chart: ^0.70.2
 
 dev_dependencies:
   flutter_test:
