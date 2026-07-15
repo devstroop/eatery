@@ -10,31 +10,40 @@ runs:
   steps:
     - shell: bash
       run: |
+        # ── Detect architecture ───────────────────────────────────
         ARCH="$(uname -m)"
         case "$ARCH" in
           x86_64)  ZIG_ARCH="x86_64" ;;
           aarch64|arm64) ZIG_ARCH="aarch64" ;;
-          *) echo "Unknown arch: $ARCH"; exit 1 ;;
+          *) echo "::error ::Unsupported arch: $ARCH"; exit 1 ;;
         esac
 
-        OS="${{ runner.os }}"
-        case "$OS" in
-          Linux)  OS_TRIPLE="linux-${ZIG_ARCH}" ;;
-          macOS)  OS_TRIPLE="macos-${ZIG_ARCH}" ;;
-          Windows) OS_TRIPLE="windows-x86_64" ;;
-          *) echo "Unknown OS: $OS"; exit 1 ;;
+        # ── Detect OS ─────────────────────────────────────────────
+        # Use uname instead of ${{ runner.os }} for portability.
+        UNAME_S="$(uname -s)"
+        case "$UNAME_S" in
+          Linux)  ZIG_OS="linux" ;;
+          Darwin) ZIG_OS="macos" ;;
+          MINGW*|MSYS*|CYGWIN*) ZIG_OS="windows" ;;
+          *) echo "::error ::Unsupported OS: $UNAME_S"; exit 1 ;;
         esac
 
+        # Windows builds are only published for x86_64.
+        if [ "$ZIG_OS" = "windows" ]; then
+          ZIG_ARCH="x86_64"
+        fi
+
+        # ── Download & extract ────────────────────────────────────
         VERSION="${{ inputs.version }}"
-        BASE_URL="https://ziglang.org/download/$VERSION/zig-${OS_TRIPLE}-$VERSION"
+        BASE_URL="https://ziglang.org/download/$VERSION/zig-${ZIG_ARCH}-${ZIG_OS}-$VERSION"
 
-        if [ "$OS" = "Windows" ]; then
+        if [ "$ZIG_OS" = "windows" ]; then
           URL="${BASE_URL}.zip"
           curl -fsSL "$URL" -o zig.zip
           unzip -q zig.zip
-          echo "$PWD/zig-${OS_TRIPLE}-$VERSION" >> $GITHUB_PATH
+          echo "$PWD/zig-${ZIG_ARCH}-${ZIG_OS}-$VERSION" >> $GITHUB_PATH
         else
           URL="${BASE_URL}.tar.xz"
           curl -fsSL "$URL" | tar -xJ
-          echo "$PWD/zig-${OS_TRIPLE}-$VERSION" >> $GITHUB_PATH
+          echo "$PWD/zig-${ZIG_ARCH}-${ZIG_OS}-$VERSION" >> $GITHUB_PATH
         fi
