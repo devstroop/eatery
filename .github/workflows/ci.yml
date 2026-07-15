@@ -100,6 +100,7 @@ jobs:
           version: ${{ env.ZIG_VERSION }}
 
       - name: Build native library
+        shell: bash
         run: cd libeaterystore && zig build shared-lib && cd ..
 
       - name: Build ${{ matrix.target }}
