@@ -39,15 +39,28 @@ class TicketPage extends ConsumerStatefulWidget {
   ConsumerState<TicketPage> createState() => _TicketPageState();
 }
 
-class _TicketPageState extends ConsumerState<TicketPage> {
+class _TicketPageState extends ConsumerState<TicketPage>
+    with SingleTickerProviderStateMixin {
   Timer? _refreshTimer;
+  Timer? _idleTimer;
   int _previousOrderCount = 0;
   bool _hasInitialData = false;
+  bool _isIdle = false;
+  late AnimationController _idleAlertController;
+  late Animation<double> _idleAlertAnimation;
   final AudioPlayer _audioPlayer = AudioPlayer();
 
   @override
   void initState() {
     super.initState();
+    _idleAlertController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 600),
+    );
+    _idleAlertAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _idleAlertController, curve: Curves.easeOut),
+    );
+
     // Reactive: invalidate on sync status changes (new entries received).
     ref.listenManual(syncStatusProvider, (_, status) {
       if (status != null && status.pendingEntryCount >= 0) {
@@ -58,12 +71,24 @@ class _TicketPageState extends ConsumerState<TicketPage> {
     _refreshTimer = Timer.periodic(const Duration(seconds: 10), (_) {
       ref.invalidate(_activeOrdersProvider);
     });
-    // Detect new orders and play chime
+    // Idle timer: marks idle after 30s of no new orders
+    _idleTimer = Timer.periodic(const Duration(seconds: 30), (_) {
+      if (!_isIdle) {
+        setState(() => _isIdle = true);
+      }
+    });
+    // Detect new orders and play chime + idle alert
     ref.listenManual(_activeOrdersProvider, (prev, next) {
       next.whenData((orders) {
         final count = orders.length;
         if (_hasInitialData && count > _previousOrderCount) {
           _playChime();
+          if (_isIdle) {
+            _idleAlertController.forward().then((_) {
+              _idleAlertController.reverse();
+            });
+            setState(() => _isIdle = false);
+          }
         }
         _hasInitialData = true;
         _previousOrderCount = count;
@@ -73,10 +98,7 @@ class _TicketPageState extends ConsumerState<TicketPage> {
 
   Future<void> _playChime() async {
     try {
-      await _audioPlayer.play(
-        AssetSource('sounds/chime.mp3'),
-        volume: 0.5,
-      );
+      await _audioPlayer.play(AssetSource('sounds/chime.mp3'), volume: 0.5);
     } catch (e) {
       debugPrint('Audio chime failed: $e');
     }
@@ -85,6 +107,8 @@ class _TicketPageState extends ConsumerState<TicketPage> {
   @override
   void dispose() {
     _refreshTimer?.cancel();
+    _idleTimer?.cancel();
+    _idleAlertController.dispose();
     _audioPlayer.dispose();
     super.dispose();
   }
@@ -95,53 +119,64 @@ class _TicketPageState extends ConsumerState<TicketPage> {
     final stations = ref.watch(_stationsProvider);
     final selectedStation = ref.watch(_selectedStationProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Kitchen Display'),
-        actions: [
-          const SyncStatusChip(),
-          IconButton(
-            icon: const Icon(Icons.settings),
-            onPressed: () => SyncHostSettingsSheet.show(context),
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          // Station filter tabs
-          stations.when(
-            data: (list) => _StationFilter(
-              stations: list,
-              selected: selectedStation,
-              onSelected: (id) =>
-                  ref.read(_selectedStationProvider.notifier).state = id,
+    return AnimatedBuilder(
+      animation: _idleAlertAnimation,
+      builder: (context, child) {
+        final flashColor = _idleAlertAnimation.value > 0
+            ? AppColors.warning.withValues(
+                alpha: _idleAlertAnimation.value * 0.15,
+              )
+            : Colors.transparent;
+        return Container(color: flashColor, child: child);
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: const Text('Kitchen Display'),
+          actions: [
+            const SyncStatusChip(),
+            IconButton(
+              icon: const Icon(Icons.settings),
+              onPressed: () => SyncHostSettingsSheet.show(context),
             ),
-            loading: () => const SizedBox(height: 48),
-            error: (_, __) => const SizedBox(height: 48),
-          ),
-          // Order grid
-          Expanded(
-            child: orders.when(
-              data: (orderList) {
-                var filtered = orderList;
-                if (selectedStation != null) {
-                  filtered = orderList.where((o) {
-                    final products = ref.watch(_orderProductsProvider(o.id!));
-                    return products.when(
-                      data: (items) =>
-                          items.any((p) => p.stationId == selectedStation),
-                      loading: () => false,
-                      error: (_, __) => false,
-                    );
-                  }).toList();
-                }
-                return _buildTicketGrid(filtered);
-              },
-              loading: () => const Center(child: CircularProgressIndicator()),
-              error: (e, _) => Center(child: Text('Error: $e')),
+          ],
+        ),
+        body: Column(
+          children: [
+            // Station filter tabs
+            stations.when(
+              data: (list) => _StationFilter(
+                stations: list,
+                selected: selectedStation,
+                onSelected: (id) =>
+                    ref.read(_selectedStationProvider.notifier).state = id,
+              ),
+              loading: () => const SizedBox(height: 48),
+              error: (_, __) => const SizedBox(height: 48),
             ),
-          ),
-        ],
+            // Order grid
+            Expanded(
+              child: orders.when(
+                data: (orderList) {
+                  var filtered = orderList;
+                  if (selectedStation != null) {
+                    filtered = orderList.where((o) {
+                      final products = ref.watch(_orderProductsProvider(o.id!));
+                      return products.when(
+                        data: (items) =>
+                            items.any((p) => p.stationId == selectedStation),
+                        loading: () => false,
+                        error: (_, __) => false,
+                      );
+                    }).toList();
+                  }
+                  return _buildTicketGrid(filtered);
+                },
+                loading: () => const Center(child: CircularProgressIndicator()),
+                error: (e, _) => Center(child: Text('Error: $e')),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
