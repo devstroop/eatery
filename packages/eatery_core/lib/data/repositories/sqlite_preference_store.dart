@@ -130,4 +130,24 @@ class SqlitePreferenceStore {
 
   VoidLogEntry _toVoidLog(Map<String, Object?> row) =>
       VoidLogEntry.fromMap(row);
+
+  void saveVoidLogEntry(VoidLogEntry entry) {
+    final m = entry.toMap();
+    _store.execute(
+      '''
+      INSERT INTO void_log_entry
+        (orderId, voidedAt, voidedBy, reasonCode, reasonDescription, amount, orderReference)
+      VALUES (?,?,?,?,?,?,?)
+    ''',
+      [
+        m['orderId'],
+        m['voidedAt'],
+        m['voidedBy'],
+        m['reasonCode'],
+        m['reasonDescription'],
+        m['amount'],
+        m['orderReference'],
+      ],
+    );
+  }
 }
