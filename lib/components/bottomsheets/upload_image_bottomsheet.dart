@@ -81,7 +81,7 @@ class _UploadImageBottomSheetState extends State<UploadImageBottomSheet> {
         await Directory(imagesDir).create(recursive: true);
       }
       path = '$imagesDir/${getRandomString(32)}.${photo.name.split('.').last}';
-      await photo.saveTo(path!);
+      await photo.saveTo(path);
     }
     widget.action(path);
     Future.delayed(Duration.zero, () {
@@ -100,7 +100,7 @@ class _UploadImageBottomSheetState extends State<UploadImageBottomSheet> {
         await Directory(imagesDir).create(recursive: true);
       }
       path = '$imagesDir/${getRandomString(32)}.${photo.name.split('.').last}';
-      await photo.saveTo(path!);
+      await photo.saveTo(path);
     }
     widget.action(path);
     Future.delayed(Duration.zero, () {

@@ -5,7 +5,6 @@ import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
 
 class EditOrderPage extends ConsumerStatefulWidget {
   const EditOrderPage({super.key, required this.order});

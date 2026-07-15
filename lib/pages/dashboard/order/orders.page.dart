@@ -2,7 +2,6 @@ import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:eatery_core/widgets/widgets.dart';
-import 'dart:ui' as ui;
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery_core/providers/company_provider.dart';
 import 'package:intl/intl.dart';
@@ -61,23 +60,7 @@ class _OrdersPageState extends ConsumerState<OrdersPage> {
     });
   }
 
-  Future<Uint8List> _capturePng() async {
-    try {
-      RenderRepaintBoundary boundary =
-          genKey.currentContext!.findRenderObject() as RenderRepaintBoundary;
-      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-      ByteData? byteData = await image.toByteData(
-        format: ui.ImageByteFormat.png,
-      );
-      var pngBytes = byteData!.buffer.asUint8List();
-      var bs64 = base64Encode(pngBytes);
-      debugPrint(bs64.length.toString());
-      setState(() {});
-      return pngBytes;
-    } catch (e) {
-      rethrow;
-    }
-  }
+
 
   @override
   Widget build(BuildContext context) {

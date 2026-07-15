@@ -1,4 +1,3 @@
-import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery_core/providers/auth_session.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';

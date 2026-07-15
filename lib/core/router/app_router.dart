@@ -17,7 +17,6 @@ import 'package:eatery/pages/dashboard/utility/order_print.page.dart';
 import 'package:eatery/pages/dashboard/order/orders.page.dart';
 import 'package:eatery/pages/dashboard/order/view.order.page.dart';
 import 'package:eatery/pages/dashboard/order/edit.order.page.dart';
-import 'package:eatery/pages/dashboard/order/search.order.delegate.dart';
 import 'package:eatery/pages/dashboard/payment/payments.page.dart';
 import 'package:eatery/pages/dashboard/payment/add.payment.page.dart';
 import 'package:eatery/pages/dashboard/payment/view.payment.page.dart';
@@ -81,7 +80,6 @@ import 'package:eatery/pages/kds/ticket_page.dart';
 import 'package:eatery/pages/display/display_page.dart';
 import 'package:eatery/pages/role_picker.page.dart';
 import 'package:eatery/dev/database_inspector.dart';
-import 'package:eatery_core/providers/database_provider.dart';
 import 'package:eatery_core/data/database/native/eatery_store.dart';
 import 'package:go_router/go_router.dart';
 

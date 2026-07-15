@@ -1,4 +1,3 @@
-import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 
 class DashboardHeader extends StatelessWidget {

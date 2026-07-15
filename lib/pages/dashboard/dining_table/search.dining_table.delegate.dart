@@ -32,7 +32,7 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
           GoRouter.of(context).pushNamed('addDiningTable').then((diningTable) {
             if (diningTable != null) {
               callback(diningTable as DiningTable);
-              close(context, diningTable as DiningTable);
+              close(context, diningTable);
             }
           });
         },

@@ -211,19 +211,10 @@ class AppFileSystem {
   }) async {
     final dataDir = Directory(dataDirPath);
     try {
-      final zipFile = File(zipFilePath);
-      // ZipFile.createFromDirectory(
-      //     sourceDir: dataDir, zipFile: zipFile, recurseSubDirs: true);
-
-      // Instead of flutter_archive, use archive package
-      final encoder = ZipEncoder();
       final archive = Archive();
       for (final file in dataDir.listSync(recursive: true)) {
         if (file is File) {
-          final filename = file.path
-              .split(dataDir.path)
-              .last
-              .replaceAll(RegExp(r'^[/\\]'), '');
+
           archive.addFile(
             ArchiveFile(file.path, file.lengthSync(), file.readAsBytesSync()),
           );

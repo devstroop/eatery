@@ -111,7 +111,7 @@ class _ViewDiningTablePageState extends ConsumerState<ViewDiningTablePage> {
                       children: [
                         const Text('Capacity', style: AppTypography.labelSmall),
                         Text(
-                          (widget.diningTable.capacity ?? 0).toString(),
+                          widget.diningTable.capacity.toString(),
                           style: AppTypography.titleLarge.copyWith(
                             fontWeight: FontWeight.bold,
                           ),

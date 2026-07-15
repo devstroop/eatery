@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 import 'package:eatery_core/utils/device_id.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/widgets/app_dialog.dart';
@@ -13,7 +12,7 @@ class Body6 extends ConsumerStatefulWidget {
     DateTime? validTill,
   )
   callback;
-  SubscriptionType? subscriptionType;
+  final SubscriptionType? subscriptionType;
   final GlobalKey<FormState> formKey;
   final Function(GlobalKey<FormState> formKey)? callbackFormKey;
   Body6({

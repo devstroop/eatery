@@ -1,5 +1,4 @@
 import 'base_dto.dart';
-import 'product_dto.dart';
 import 'payment_dto.dart';
 
 class OrderDto extends BaseDto<OrderDto> {

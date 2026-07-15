@@ -16,14 +16,14 @@ extension ProductDtoX on ProductDto {
     taxSlabId: int.tryParse(taxSlabId ?? ''),
     foodType: foodType != null
         ? FoodType.values.firstWhere(
-            (e) => (e.name ?? "").toLowerCase() == foodType!.toLowerCase(),
+            (e) => e.name.toLowerCase() == foodType!.toLowerCase(),
             orElse: () => FoodType.veg,
           )
         : null,
     type: ProductType.values.firstWhere(
       (e) =>
-          (e.name ?? "").toLowerCase() ==
-          (productType ?? "inventoryItem").toLowerCase(),
+        e.name.toLowerCase() ==
+        productType.toLowerCase(),
       orElse: () => ProductType.inventoryItem,
     ),
     isActive: isActive,
@@ -41,7 +41,7 @@ extension ProductX on Product {
     salePrice: salePrice,
     taxSlabId: taxSlabId?.toString(),
     foodType: foodType?.name,
-    productType: type.name ?? "",
+    productType: type.name,
     isActive: isActive,
   );
 }
@@ -67,7 +67,7 @@ extension PaymentDtoX on PaymentDto {
     orderId: int.tryParse(orderId ?? '') ?? 0,
     amount: amount,
     mode: PaymentMode.values.firstWhere(
-      (e) => (e.name ?? "").toLowerCase() == (mode ?? "cash").toLowerCase(),
+      (e) => e.name.toLowerCase() == mode.toLowerCase(),
       orElse: () => PaymentMode.cash,
     ),
     reference: reference,
@@ -128,7 +128,7 @@ extension OrderDtoX on OrderDto {
     paidTotal: paidTotal,
     type: OrderType.values.firstWhere(
       (e) =>
-          (e.name ?? "").toLowerCase() == (orderType ?? "dine").toLowerCase(),
+          e.name.toLowerCase() == orderType.toLowerCase(),
       orElse: () => OrderType.dine,
     ),
     createdAt: DateTime.now(),
@@ -158,7 +158,7 @@ extension OrderX on Order {
     roundOff: roundOff,
     grandTotal: grandTotal,
     paidTotal: paidTotal,
-    orderType: type.name ?? "" ?? 'dine',
+    orderType: type.name,
     diningTableName: diningTableName,
     diningTableId: diningTableId,
     products: products.map((p) => p.toDto()).toList(),
@@ -172,7 +172,7 @@ extension DiningTableDtoX on DiningTableDto {
     name: name,
     capacity: capacity,
     status: DiningTableStatus.values.firstWhere(
-      (e) => (e.name ?? "").toLowerCase() == status.toLowerCase(),
+      (e) => e.name.toLowerCase() == status.toLowerCase(),
       orElse: () => DiningTableStatus.available,
     ),
   );
@@ -182,9 +182,9 @@ extension DiningTableX on DiningTable {
   DiningTableDto toDto() => DiningTableDto(
     id: id?.toString(),
     name: name,
-    capacity: capacity ?? 0,
+    capacity: capacity,
     categoryId: categoryId?.toString(),
-    status: status.name ?? "",
+    status: status.name,
     orderId: orderId,
     customerPhone: customerPhone,
   );

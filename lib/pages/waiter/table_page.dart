@@ -392,7 +392,7 @@ class _TableSection extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(table.name, style: AppTypography.titleMedium),
-                        if (table.capacity != null && table.capacity! > 0)
+                        if (table.capacity > 0)
                           Text(
                             'Cap: ${table.capacity}',
                             style: AppTypography.bodySmall,

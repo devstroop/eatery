@@ -950,7 +950,7 @@ class PosCartInformation extends StatelessWidget {
               decoration: BoxDecoration(
                 color: AppColors.white,
                 // Border Animation on set state
-                border: Border.all(color: AppColors.grey200!, width: 2),
+                border: Border.all(color: AppColors.grey200, width: 2),
                 borderRadius: BorderRadius.circular(16),
               ),
               child: Center(

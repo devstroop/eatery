@@ -85,7 +85,7 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                         border: Border.all(
                           color: selectedCategory?.id == e.id
                               ? _pageColor
-                              : AppColors.grey300!,
+                              : AppColors.grey300,
                           width: 1,
                         ),
                       ),
@@ -110,7 +110,7 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                             style: AppTypography.labelLarge.copyWith(
                               color: selectedCategory?.id == e.id
                                   ? const Color(0xFFF5F5F5)
-                                  : AppColors.grey700!,
+                                  : AppColors.grey700,
                             ),
                           ),
                         ],

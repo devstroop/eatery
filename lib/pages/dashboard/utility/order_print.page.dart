@@ -1,11 +1,9 @@
 import 'package:eatery_core/widgets/app_page_shell.dart';
-import 'package:eatery_core/theme/app_colors.dart';
 import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'dart:ui' as ui;
 
 import 'package:eatery_core/extensions/double_ext.dart';
-import 'package:eatery/functions/order.function.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery_core/providers/company_provider.dart';
 import 'package:eatery/references.dart';
@@ -230,7 +228,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    Text(orderAddress ?? '', style: AppTypography.labelLarge),
+                    Text(orderAddress, style: AppTypography.labelLarge),
                   ],
                 ),
               ],
@@ -304,7 +302,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                 ),
                 Text(
-                  '${currency}${(widget.order.taxTotal ?? 0).toPrecision(2)}',
+                  '${currency}${widget.order.taxTotal.toPrecision(2)}',
                   style: AppTypography.bodySmall,
                 ),
               ],
@@ -422,7 +420,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    Text(orderAddress ?? '', style: AppTypography.labelLarge),
+                    Text(orderAddress, style: AppTypography.labelLarge),
                   ],
                 ),
               ],

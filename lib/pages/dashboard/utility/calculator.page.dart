@@ -15,34 +15,6 @@ class CalculatorPage extends ConsumerStatefulWidget {
 class _CalculatorPageState extends ConsumerState<CalculatorPage> {
   String _input = '';
 
-  void _calculate() {
-    try {
-      final result = _evaluateSimple(_input.replaceAll('x', '*'));
-      setState(() => _input = result.toStringAsFixed(2));
-    } catch (_) {
-      setState(() => _input = 'Error');
-    }
-  }
-
-  double _evaluateSimple(String expr) {
-    // Handle + and - operators left to right
-    final parts = expr.split(RegExp(r'(?=[+-])'));
-    double total = 0;
-    for (final p in parts) {
-      final trimmed = p.trim();
-      if (trimmed.isEmpty) continue;
-      double val;
-      if (trimmed.startsWith('+'))
-        val = double.parse(trimmed.substring(1));
-      else if (trimmed.startsWith('-'))
-        val = -double.parse(trimmed.substring(1));
-      else
-        val = double.parse(trimmed);
-      total += val;
-    }
-    return total;
-  }
-
   @override
   Widget build(BuildContext context) {
     return AppPageShell(
