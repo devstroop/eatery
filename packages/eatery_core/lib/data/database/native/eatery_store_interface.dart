@@ -15,5 +15,8 @@ abstract class EateryStoreInterface {
 
   T transaction<T>(T Function() action);
 
+  /// Creates a backup of the database at [targetPath].
+  void backup(String targetPath);
+
   void close();
 }

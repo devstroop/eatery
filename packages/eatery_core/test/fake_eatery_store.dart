@@ -85,5 +85,10 @@ class FakeEateryStore implements EateryStoreInterface {
   T transaction<T>(T Function() action) => action();
 
   @override
+  void backup(String targetPath) {
+    // No-op in-memory — cannot back up a fake.
+  }
+
+  @override
   void close() => _data.clear();
 }

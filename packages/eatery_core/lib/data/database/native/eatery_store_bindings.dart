@@ -56,6 +56,11 @@ typedef EsFreeDart = void Function(Pointer<Utf8> ptr);
 typedef _EsVersionNative = Pointer<Utf8> Function();
 typedef EsVersionDart = Pointer<Utf8> Function();
 
+typedef _EsBackupNative =
+    Int32 Function(Pointer<EsStore> store, Pointer<Utf8> targetPath);
+typedef EsBackupDart =
+    int Function(Pointer<EsStore> store, Pointer<Utf8> targetPath);
+
 /// Low-level `dart:ffi` bindings for libeaterystore.
 ///
 /// This is intentionally thin — the higher-level [EateryStore] wrapper adds
@@ -67,6 +72,7 @@ class EateryStoreBindings {
       esKey = lib.lookupFunction<_EsKeyNative, EsKeyDart>('es_key'),
       esExec = lib.lookupFunction<_EsExecNative, EsExecDart>('es_exec'),
       esQuery = lib.lookupFunction<_EsQueryNative, EsQueryDart>('es_query'),
+      esBackup = lib.lookupFunction<_EsBackupNative, EsBackupDart>('es_backup'),
       esLastError = lib.lookupFunction<_EsLastErrorNative, EsLastErrorDart>(
         'es_last_error',
       ),
@@ -80,6 +86,7 @@ class EateryStoreBindings {
   final EsKeyDart esKey;
   final EsExecDart esExec;
   final EsQueryDart esQuery;
+  final EsBackupDart esBackup;
   final EsLastErrorDart esLastError;
   final EsFreeDart esFree;
   final EsVersionDart esVersion;
