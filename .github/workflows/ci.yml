@@ -55,6 +55,7 @@ jobs:
         run: flutter test packages/eatery_core/test/
 
   build:
+    name: ${{ matrix.target }}
     needs: [analyze, test]
     strategy:
       fail-fast: false
