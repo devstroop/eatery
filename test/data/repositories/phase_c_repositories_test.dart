@@ -120,11 +120,15 @@ void main() {
 
     test('save replaces existing when id set', () async {
       final sub = Subscription(subscriptionType: SubscriptionType.individual);
-      await repo.save(sub);
+      final id = await repo.save(sub);
 
-      sub.subscriptionType = SubscriptionType.business;
-      await repo.save(sub);
+      final updated = sub.copyWith(
+        subscriptionType: SubscriptionType.business,
+        id: id,
+      );
+      final id2 = await repo.save(updated);
 
+      expect(id2, id);
       final fetched = repo.getFirst()!;
       expect(fetched.subscriptionType, SubscriptionType.business);
     });

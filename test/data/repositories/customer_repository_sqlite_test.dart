@@ -42,7 +42,6 @@ void main() {
 
       final id = await repo.saveCustomer(c);
       expect(id, greaterThan(0));
-      expect(c.id, id);
 
       final fetched = repo.getCustomerByPhone('555-0100')!;
       expect(fetched.name, 'Ada Lovelace');
@@ -72,9 +71,8 @@ void main() {
       final c = Customer(name: 'Grace', phone: '555-0200');
       final id = await repo.saveCustomer(c);
 
-      c.name = 'Grace Hopper';
-      c.isActive = false;
-      final id2 = await repo.saveCustomer(c);
+      final updated = c.copyWith(name: 'Grace Hopper', isActive: false, id: id);
+      final id2 = await repo.saveCustomer(updated);
 
       expect(id2, id);
       expect(repo.getAllCustomers(), hasLength(1));

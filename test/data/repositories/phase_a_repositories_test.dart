@@ -35,6 +35,7 @@ void main() {
       test('insert assigns id and round-trips all fields', () async {
         final p = Payment(
           orderId: 1,
+          date: DateTime.now(),
           amount: 49.99,
           mode: PaymentMode.upi,
           reference: 'ref-001',
@@ -46,7 +47,6 @@ void main() {
         );
         final id = await repo.savePayment(p);
         expect(id, greaterThan(0));
-        expect(p.id, id);
 
         final payments = repo.getAllPayments();
         expect(payments, hasLength(1));
@@ -59,14 +59,15 @@ void main() {
       });
 
       test('getPaymentsByOrder filters correctly', () async {
+        final now = DateTime.now();
         await repo.savePayment(
-          Payment(orderId: 1, amount: 10, mode: PaymentMode.cash),
+          Payment(orderId: 1, amount: 10, mode: PaymentMode.cash, date: now),
         );
         await repo.savePayment(
-          Payment(orderId: 2, amount: 20, mode: PaymentMode.card),
+          Payment(orderId: 2, amount: 20, mode: PaymentMode.card, date: now),
         );
         await repo.savePayment(
-          Payment(orderId: 1, amount: 30, mode: PaymentMode.cash),
+          Payment(orderId: 1, amount: 30, mode: PaymentMode.cash, date: now),
         );
 
         expect(repo.getPaymentsByOrder(1), hasLength(2));
@@ -75,12 +76,16 @@ void main() {
       });
 
       test('update mutates existing row (no duplicate)', () async {
-        final p = Payment(orderId: 1, amount: 50, mode: PaymentMode.cash);
+        final p = Payment(
+          orderId: 1,
+          amount: 50,
+          mode: PaymentMode.cash,
+          date: DateTime.now(),
+        );
         final id = await repo.savePayment(p);
 
-        p.amount = 75;
-        p.mode = PaymentMode.card;
-        await repo.savePayment(p);
+        final updated = p.copyWith(amount: 75, mode: PaymentMode.card, id: id);
+        await repo.savePayment(updated);
 
         expect(repo.getAllPayments(), hasLength(1));
         expect(repo.getAllPayments().first.amount, 75);
@@ -129,9 +134,8 @@ void main() {
         final s = TaxSlab(name: 'Old', rate: 10, type: TaxType.inclusive);
         final id = await repo.saveTaxSlab(s);
 
-        s.name = 'Updated';
-        s.rate = 12.0;
-        await repo.saveTaxSlab(s);
+        final updated = s.copyWith(name: 'Updated', rate: 12.0, id: id);
+        await repo.saveTaxSlab(updated);
 
         expect(repo.getAllTaxSlabs(), hasLength(1));
         expect(repo.getTaxSlabById(id)!.name, 'Updated');
@@ -165,13 +169,13 @@ void main() {
 
       test('category update', () async {
         final c = DiningTableCategory(name: 'X', isActive: false);
-        await repo.saveCategory(c);
-        c.name = 'Y';
-        c.isActive = true;
-        await repo.saveCategory(c);
+        final catId = await repo.saveCategory(c);
+
+        final updated = c.copyWith(name: 'Y', isActive: true, id: catId);
+        await repo.saveCategory(updated);
 
         expect(repo.getAllCategories().map((c) => c.name), ['Y']);
-        expect(repo.getCategoryById(c.id!)!.isActive, isTrue);
+        expect(repo.getCategoryById(catId)!.isActive, isTrue);
       });
 
       // --- Tables ---
@@ -183,7 +187,6 @@ void main() {
         );
         final id = await repo.saveTable(t);
         expect(id, greaterThan(0));
-        expect(t.id, id);
       });
 
       test(
@@ -194,7 +197,7 @@ void main() {
 
           final t = DiningTable(
             name: 'T3',
-            category: cat,
+            categoryId: cat.id,
             capacity: 4,
             status: DiningTableStatus.reserved,
             customerPhone: '555-0100',
@@ -206,7 +209,6 @@ void main() {
           expect(fetched.capacity, 4);
           expect(fetched.status, DiningTableStatus.reserved);
           expect(fetched.customerPhone, '555-0100');
-          // categoryId stored correctly in SQLite (verified via raw query).
           expect(
             store.queryScalar(
               'SELECT categoryId FROM dining_table WHERE id = ?',
@@ -227,10 +229,13 @@ void main() {
         final t = DiningTable(name: 'Initial', capacity: 2);
         final id = await repo.saveTable(t);
 
-        t.name = 'Changed';
-        t.capacity = 6;
-        t.status = DiningTableStatus.occupied;
-        await repo.saveTable(t);
+        final updated = t.copyWith(
+          name: 'Changed',
+          capacity: 6,
+          status: DiningTableStatus.occupied,
+          id: id,
+        );
+        await repo.saveTable(updated);
 
         expect(repo.getAllTables(), hasLength(1));
         final fetched = repo.getTableById(id)!;

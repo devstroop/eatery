@@ -29,6 +29,7 @@ void main() {
     }) => Order(
       customerPhone: phone,
       type: type,
+      createdAt: DateTime.now(),
       totalQuantity: qty,
       subTotal: grand,
       discountTotal: 0,
@@ -58,14 +59,13 @@ void main() {
       final id = await repo.saveOrder(o);
 
       expect(id, greaterThan(0));
-      expect(o.id, id);
 
       final fetched = repo.getOrderById(id)!;
       expect(fetched.customerPhone, '555-1');
       expect(fetched.type, OrderType.delivery);
       expect(fetched.grandTotal, 42.5);
       expect(fetched.grandTotal, isA<double>());
-      expect(fetched.status, 'active');
+      expect(fetched.status, OrderStatus.pending);
       expect(fetched.createdAt, isNotNull);
     });
 
@@ -85,14 +85,17 @@ void main() {
       final o = makeOrder(grand: 10);
       final id = await repo.saveOrder(o);
 
-      o.status = 'completed';
-      o.grandTotal = 12.0;
-      final id2 = await repo.saveOrder(o);
+      final updated = o.copyWith(
+        status: OrderStatus.completed,
+        grandTotal: 12.0,
+        id: id,
+      );
+      final id2 = await repo.saveOrder(updated);
 
       expect(id2, id);
       expect(repo.getAllOrders(), hasLength(1));
       final fetched = repo.getOrderById(id)!;
-      expect(fetched.status, 'completed');
+      expect(fetched.status, OrderStatus.completed);
       expect(fetched.grandTotal, 12.0);
     });
 
@@ -113,17 +116,15 @@ void main() {
       final line = makeLine(o);
       final id = await repo.addOrderProduct(line);
       expect(id, greaterThan(0));
-      expect(line.id, id);
     });
 
     test('saveOrderProduct updates an existing line', () async {
       final o = await repo.saveOrder(makeOrder());
       final line = makeLine(o, name: 'Tea', qty: 1);
-      await repo.addOrderProduct(line);
+      final lineId = await repo.addOrderProduct(line);
 
-      line.quantity = 3;
-      line.total = 15.0;
-      await repo.saveOrderProduct(line);
+      final updated = line.copyWith(quantity: 3, total: 15.0, id: lineId);
+      await repo.saveOrderProduct(updated);
 
       final lines = repo.getOrderProducts(o);
       expect(lines, hasLength(1));
@@ -140,11 +141,10 @@ void main() {
         await repo.addOrderProduct(makeLine(id, name: 'Y'));
         expect(repo.getOrderProducts(id), hasLength(2));
 
-        await repo.deleteOrder(o);
+        await repo.deleteOrder(o.copyWith(id: id));
 
         expect(repo.getOrderById(id), isNull);
         expect(repo.getOrderProducts(id), isEmpty);
-        // Confirm at the storage level too.
         expect(store.queryScalar('SELECT COUNT(*) FROM order_product'), 0);
       },
     );
