@@ -44,13 +44,22 @@ export fn es_open(path: [*:0]const u8) ?*Store {
     store.err_buf[0] = 0;
 
     // Sensible defaults for a local, single-process app database.
+    var check_result: [*c]u8 = null;
     _ = c.sqlite3_exec(
         store.db,
-        "PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON; PRAGMA busy_timeout=5000;",
+        "PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON; PRAGMA busy_timeout=5000;"
+        ++ " PRAGMA quick_check;",
         null,
         null,
-        null,
+        &check_result,
     );
+    if (check_result) |msg| {
+        if (!std.mem.eql(u8, std.mem.span(msg), "ok")) {
+            std.debug.print("es_open: quick_check warning — {s}\n", .{msg});
+        }
+        c.sqlite3_free(check_result);
+    }
+
     return store;
 }
 
