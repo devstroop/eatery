@@ -13,6 +13,7 @@ class CartPage extends ConsumerWidget {
     final items = session.cart.values.toList();
     final total = items.fold(0.0, (sum, e) => sum + e.lineTotal);
     final totalQty = items.fold(0, (sum, e) => sum + e.quantity);
+    final currencySymbol = ref.read(companyProvider.notifier).currency?.symbol ?? '';
 
     return Scaffold(
       appBar: AppBar(title: const Text('Cart')),
@@ -47,7 +48,7 @@ class CartPage extends ConsumerWidget {
                           ),
                           title: Text(item.product.name),
                           subtitle: Text(
-                            '\$${item.unitPrice.toStringAsFixed(2)} x ${item.quantity}',
+                            '$currencySymbol${item.unitPrice.toStringAsFixed(2)} x ${item.quantity}',
                             style: TextStyle(color: AppColors.primary),
                           ),
                           trailing: IconButton(
@@ -77,7 +78,7 @@ class CartPage extends ConsumerWidget {
                               style: AppTypography.titleMedium,
                             ),
                             Text(
-                              '\$${total.toStringAsFixed(2)}',
+                              '$currencySymbol${total.toStringAsFixed(2)}',
                               style: AppTypography.titleLarge.copyWith(
                                 color: AppColors.primary,
                                 fontWeight: FontWeight.bold,
@@ -223,7 +224,7 @@ class CartPage extends ConsumerWidget {
               'taxName': 'Tax',
               'foodLicenseNo': company?.foodLicenseNo ?? '',
               'printerSize': '58mm',
-              'currencySymbol': '\$',
+              'currencySymbol': ref.read(companyProvider.notifier).currency?.symbol ?? '',
             },
           );
         }

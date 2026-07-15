@@ -100,6 +100,7 @@ class _OrderCard extends ConsumerWidget {
     final products = ref.watch(_waiterOrderProductsProvider(order.id!));
     final staff = ref.watch(authSessionProvider);
     final isWaiter = staff?.type == StaffType.waiter;
+    final currencySymbol = ref.read(companyProvider.notifier).currency?.symbol ?? '';
     final canEdit = isWaiter &&
         (order.status == OrderStatus.pending ||
             order.status == OrderStatus.preparing);
@@ -144,7 +145,7 @@ class _OrderCard extends ConsumerWidget {
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      '\$${order.grandTotal.toStringAsFixed(2)}',
+                      '$currencySymbol${order.grandTotal.toStringAsFixed(2)}',
                       style: AppTypography.titleSmall.copyWith(
                         color: AppColors.primary,
                         fontWeight: FontWeight.bold,
