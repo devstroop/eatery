@@ -16,10 +16,9 @@ class SchemaMigrator {
   /// Returns the current schema version from app_config, or 0 if unset.
   int getCurrentVersion() {
     _ensureConfigTable();
-    final rows = _store.query(
-      'SELECT value FROM app_config WHERE key = ?',
-      ['schema_version'],
-    );
+    final rows = _store.query('SELECT value FROM app_config WHERE key = ?', [
+      'schema_version',
+    ]);
     if (rows.isEmpty) return 0;
     final v = rows.first['value'] as String?;
     return v != null ? int.tryParse(v) ?? 0 : 0;
@@ -39,13 +38,37 @@ class SchemaMigrator {
     );
   }
 
+  /// Reads the device role from [app_config]. Returns null if not set.
+  ///
+  /// Possible values: `admin`, `waiter`, `kds`, `display`.
+  String? getDeviceRole() {
+    _ensureConfigTable();
+    final rows = _store.query('SELECT value FROM app_config WHERE key = ?', [
+      'device_role',
+    ]);
+    return rows.isNotEmpty ? rows.first['value'] as String? : null;
+  }
+
+  /// Persists the device role in [app_config].
+  ///
+  /// Valid values: `admin`, `waiter`, `kds`, `display`.
+  void setDeviceRole(String role) {
+    _ensureConfigTable();
+    _store.execute(
+      'INSERT OR REPLACE INTO app_config (key, value) VALUES (?, ?)',
+      ['device_role', role],
+    );
+  }
+
   /// Runs all pending migrations in order.
   void migrate() {
     final current = getCurrentVersion();
     final latest = _migrations.length;
 
     if (current >= latest) {
-      debugPrint('SchemaMigrator: already at version $latest (current=$current)');
+      debugPrint(
+        'SchemaMigrator: already at version $latest (current=$current)',
+      );
       return;
     }
 
@@ -174,43 +197,62 @@ class SchemaMigrator {
       )
     ''');
   }
+
   /// v4: Discounts and promotions.
   static void _migrationV4(EateryStore store) {
-    store.execute("CREATE TABLE IF NOT EXISTS discount (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, type INTEGER NOT NULL, value REAL NOT NULL, minOrder REAL, maxUses INTEGER, isActive INTEGER NOT NULL DEFAULT 1, startsAt INTEGER, endsAt INTEGER, createdAt INTEGER NOT NULL, updatedAt INTEGER)");
-    store.execute("CREATE TABLE IF NOT EXISTS order_discount (id INTEGER PRIMARY KEY AUTOINCREMENT, orderId INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE, discountId INTEGER REFERENCES discount(id), name TEXT NOT NULL, type INTEGER NOT NULL, value REAL NOT NULL, amount REAL NOT NULL, appliedBy INTEGER REFERENCES staff(id), createdAt INTEGER NOT NULL)");
+    store.execute(
+      "CREATE TABLE IF NOT EXISTS discount (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, type INTEGER NOT NULL, value REAL NOT NULL, minOrder REAL, maxUses INTEGER, isActive INTEGER NOT NULL DEFAULT 1, startsAt INTEGER, endsAt INTEGER, createdAt INTEGER NOT NULL, updatedAt INTEGER)",
+    );
+    store.execute(
+      "CREATE TABLE IF NOT EXISTS order_discount (id INTEGER PRIMARY KEY AUTOINCREMENT, orderId INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE, discountId INTEGER REFERENCES discount(id), name TEXT NOT NULL, type INTEGER NOT NULL, value REAL NOT NULL, amount REAL NOT NULL, appliedBy INTEGER REFERENCES staff(id), createdAt INTEGER NOT NULL)",
+    );
   }
-
 
   /// v5: Staff shifts and time tracking.
   static void _migrationV5(EateryStore store) {
-    store.execute("CREATE TABLE IF NOT EXISTS shift (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, startTime TEXT NOT NULL, endTime TEXT NOT NULL, isActive INTEGER NOT NULL DEFAULT 1)");
-    store.execute("CREATE TABLE IF NOT EXISTS time_entry (id INTEGER PRIMARY KEY AUTOINCREMENT, staffId INTEGER NOT NULL REFERENCES staff(id), shiftId INTEGER REFERENCES shift(id), clockIn INTEGER NOT NULL, clockOut INTEGER, breakStart INTEGER, breakEnd INTEGER, note TEXT, createdAt INTEGER NOT NULL)");
+    store.execute(
+      "CREATE TABLE IF NOT EXISTS shift (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, startTime TEXT NOT NULL, endTime TEXT NOT NULL, isActive INTEGER NOT NULL DEFAULT 1)",
+    );
+    store.execute(
+      "CREATE TABLE IF NOT EXISTS time_entry (id INTEGER PRIMARY KEY AUTOINCREMENT, staffId INTEGER NOT NULL REFERENCES staff(id), shiftId INTEGER REFERENCES shift(id), clockIn INTEGER NOT NULL, clockOut INTEGER, breakStart INTEGER, breakEnd INTEGER, note TEXT, createdAt INTEGER NOT NULL)",
+    );
   }
-
 
   /// v6: Business hours and holiday hours.
   static void _migrationV6(EateryStore store) {
-    store.execute("CREATE TABLE IF NOT EXISTS business_hours (id INTEGER PRIMARY KEY AUTOINCREMENT, dayOfWeek INTEGER NOT NULL, openTime TEXT NOT NULL, closeTime TEXT NOT NULL, isClosed INTEGER NOT NULL DEFAULT 0)");
-    store.execute("CREATE TABLE IF NOT EXISTS holiday_hours (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT NOT NULL, openTime TEXT, closeTime TEXT, description TEXT)");
+    store.execute(
+      "CREATE TABLE IF NOT EXISTS business_hours (id INTEGER PRIMARY KEY AUTOINCREMENT, dayOfWeek INTEGER NOT NULL, openTime TEXT NOT NULL, closeTime TEXT NOT NULL, isClosed INTEGER NOT NULL DEFAULT 0)",
+    );
+    store.execute(
+      "CREATE TABLE IF NOT EXISTS holiday_hours (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT NOT NULL, openTime TEXT, closeTime TEXT, description TEXT)",
+    );
   }
 
   /// v7: Expense tracking.
   static void _migrationV7(EateryStore store) {
-    store.execute("CREATE TABLE IF NOT EXISTS expense_category (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, description TEXT, isActive INTEGER NOT NULL DEFAULT 1)");
-    store.execute("CREATE TABLE IF NOT EXISTS expense (id INTEGER PRIMARY KEY AUTOINCREMENT, categoryId INTEGER REFERENCES expense_category(id), amount REAL NOT NULL, description TEXT NOT NULL, expenseDate INTEGER NOT NULL, paymentMode INTEGER NOT NULL DEFAULT 0, reference TEXT, receipt TEXT, createdBy INTEGER REFERENCES staff(id), createdAt INTEGER NOT NULL)");
+    store.execute(
+      "CREATE TABLE IF NOT EXISTS expense_category (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT NOT NULL, description TEXT, isActive INTEGER NOT NULL DEFAULT 1)",
+    );
+    store.execute(
+      "CREATE TABLE IF NOT EXISTS expense (id INTEGER PRIMARY KEY AUTOINCREMENT, categoryId INTEGER REFERENCES expense_category(id), amount REAL NOT NULL, description TEXT NOT NULL, expenseDate INTEGER NOT NULL, paymentMode INTEGER NOT NULL DEFAULT 0, reference TEXT, receipt TEXT, createdBy INTEGER REFERENCES staff(id), createdAt INTEGER NOT NULL)",
+    );
   }
-
 
   /// v8: Table reservations.
   static void _migrationV8(EateryStore store) {
-    store.execute("CREATE TABLE IF NOT EXISTS reservation (id INTEGER PRIMARY KEY AUTOINCREMENT, customerName TEXT NOT NULL, customerPhone TEXT, diningTableId INTEGER REFERENCES dining_table(id), partySize INTEGER NOT NULL, dateTime INTEGER NOT NULL, duration INTEGER DEFAULT 60, status INTEGER NOT NULL DEFAULT 0, note TEXT, createdBy INTEGER REFERENCES staff(id), createdAt INTEGER NOT NULL, updatedAt INTEGER)");
+    store.execute(
+      "CREATE TABLE IF NOT EXISTS reservation (id INTEGER PRIMARY KEY AUTOINCREMENT, customerName TEXT NOT NULL, customerPhone TEXT, diningTableId INTEGER REFERENCES dining_table(id), partySize INTEGER NOT NULL, dateTime INTEGER NOT NULL, duration INTEGER DEFAULT 60, status INTEGER NOT NULL DEFAULT 0, note TEXT, createdBy INTEGER REFERENCES staff(id), createdAt INTEGER NOT NULL, updatedAt INTEGER)",
+    );
   }
-
 
   /// v9: Customer loyalty.
   static void _migrationV9(EateryStore store) {
-    store.execute("CREATE TABLE IF NOT EXISTS customer_loyalty (id INTEGER PRIMARY KEY AUTOINCREMENT, customerId INTEGER NOT NULL REFERENCES customer(id), points REAL NOT NULL DEFAULT 0, totalVisits INTEGER NOT NULL DEFAULT 0, totalSpent REAL NOT NULL DEFAULT 0, lastVisitAt INTEGER, tier INTEGER NOT NULL DEFAULT 0, createdAt INTEGER NOT NULL, updatedAt INTEGER)");
-    store.execute("CREATE TABLE IF NOT EXISTS loyalty_transaction (id INTEGER PRIMARY KEY AUTOINCREMENT, customerId INTEGER NOT NULL REFERENCES customer(id), points REAL NOT NULL, type INTEGER NOT NULL, referenceId INTEGER, description TEXT, createdAt INTEGER NOT NULL)");
+    store.execute(
+      "CREATE TABLE IF NOT EXISTS customer_loyalty (id INTEGER PRIMARY KEY AUTOINCREMENT, customerId INTEGER NOT NULL REFERENCES customer(id), points REAL NOT NULL DEFAULT 0, totalVisits INTEGER NOT NULL DEFAULT 0, totalSpent REAL NOT NULL DEFAULT 0, lastVisitAt INTEGER, tier INTEGER NOT NULL DEFAULT 0, createdAt INTEGER NOT NULL, updatedAt INTEGER)",
+    );
+    store.execute(
+      "CREATE TABLE IF NOT EXISTS loyalty_transaction (id INTEGER PRIMARY KEY AUTOINCREMENT, customerId INTEGER NOT NULL REFERENCES customer(id), points REAL NOT NULL, type INTEGER NOT NULL, referenceId INTEGER, description TEXT, createdAt INTEGER NOT NULL)",
+    );
   }
 
   /// Safely adds a column if it doesn't already exist.
