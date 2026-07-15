@@ -113,6 +113,7 @@ class SyncCoordinator {
     );
     if (entries.isEmpty) return;
 
+    final batch = opLogService.batchForPush(entries);
     final msg = SyncMessage.opLogPush(
       deviceId: deviceId,
       clock: opLogService.clock,
@@ -191,15 +192,22 @@ class SyncCoordinator {
     final table = _tableName(entry.entityType);
 
     if (entry.operation == 'delete' || entry.operation == 'void') {
-      _store.execute(
-        'DELETE FROM $table WHERE id = ?',
-        [entry.entityId],
-      );
+      _store.execute('DELETE FROM $table WHERE id = ?', [entry.entityId]);
       return;
     }
 
-    final data = entry.data;
-    if (data.isEmpty) return;
+    final data = Map<String, Object?>.from(entry.data);
+    // Ensure id is NOT duplicated — data may already contain it.
+    data.remove('id');
+    if (data.isEmpty) {
+      // Only id was provided — cannot upsert without at least one mutable
+      // column (NOT NULL constraints would fail). Skip gracefully.
+      debugPrint(
+        'SyncCoordinator: skipping entry for $table id=${entry.entityId} '
+        '— no data columns',
+      );
+      return;
+    }
 
     final columns = data.keys.join(', ');
     final placeholders = data.keys.map((_) => '?').join(', ');
