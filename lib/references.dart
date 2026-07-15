@@ -87,6 +87,7 @@ export './services/utility/share.dart';
 export './services/cloud/secure_storage.dart';
 // Internal references
 export './pages/activation/upgrade.page.dart';
+export './pages/role_picker.page.dart';
 // Internal references
 export './pages/dashboard/dashboard.page.dart';
 // Components
