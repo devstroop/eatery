@@ -1,7 +1,7 @@
-import 'package:eatery/data/database/native/eatery_schema.dart';
-import 'package:eatery/data/database/native/eatery_store.dart';
-import 'package:eatery/data/models/eatery_db.dart';
-import 'package:eatery/data/repositories/order_repository_sqlite.dart';
+import 'package:eatery_core/data/database/native/eatery_schema.dart';
+import 'package:eatery_core/data/database/native/eatery_store.dart';
+import 'package:eatery_core/data/models/eatery_db.dart';
+import 'package:eatery_core/data/repositories/order_repository_sqlite.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:go_router/go_router.dart';
 import 'package:eatery/core/router/app_router.dart';
-import 'package:eatery/data/database/eatery_database.dart';
-import 'package:eatery/data/database/native/eatery_store.dart';
+import 'package:eatery_core/data/database/eatery_database.dart';
+import 'package:eatery_core/data/database/native/eatery_store.dart';
 
 void main() {
   group('GoRouter regression tests', () {

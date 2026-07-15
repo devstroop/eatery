@@ -1,5 +1,5 @@
-import 'package:eatery/data/database/native/eatery_store.dart';
-import 'package:eatery/data/database/native/eatery_store_isolate.dart';
+import 'package:eatery_core/data/database/native/eatery_store.dart';
+import 'package:eatery_core/data/database/native/eatery_store_isolate.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
 

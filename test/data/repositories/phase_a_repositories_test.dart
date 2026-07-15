@@ -1,9 +1,9 @@
-import 'package:eatery/data/database/native/eatery_schema.dart';
-import 'package:eatery/data/database/native/eatery_store.dart';
-import 'package:eatery/data/models/eatery_db.dart';
-import 'package:eatery/data/repositories/payment_repository_sqlite.dart';
-import 'package:eatery/data/repositories/tax_repository_sqlite.dart';
-import 'package:eatery/data/repositories/dining_table_repository_sqlite.dart';
+import 'package:eatery_core/data/database/native/eatery_schema.dart';
+import 'package:eatery_core/data/database/native/eatery_store.dart';
+import 'package:eatery_core/data/models/eatery_db.dart';
+import 'package:eatery_core/data/repositories/payment_repository_sqlite.dart';
+import 'package:eatery_core/data/repositories/tax_repository_sqlite.dart';
+import 'package:eatery_core/data/repositories/dining_table_repository_sqlite.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
 
