@@ -163,9 +163,7 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                           : true,
                     )
                     .map((each) {
-                      final stock = each.id != null
-                          ? stockData[each.id]
-                          : null;
+                      final stock = each.id != null ? stockData[each.id] : null;
                       final lowStock = stock?.isLowStock ?? false;
                       return ListTile(
                         leading: InkWell(

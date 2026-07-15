@@ -36,15 +36,15 @@ class _ViewPaymentPageState extends ConsumerState<ViewPaymentPage> {
             ).then((value) {
               switch (value) {
                 case 'edit':
-                  GoRouter.of(context)
-                      .pushNamed('editPayment', extra: _payment)
-                      .then((value) {
-                        if (value != null) {
-                          setState(() {
-                            _payment = value as Payment;
-                          });
-                        }
+                  GoRouter.of(
+                    context,
+                  ).pushNamed('editPayment', extra: _payment).then((value) {
+                    if (value != null) {
+                      setState(() {
+                        _payment = value as Payment;
                       });
+                    }
+                  });
                   break;
               }
             });

@@ -740,8 +740,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                     (crossAxisCount + 1) * spacing) /
                 crossAxisCount;
             final height = width * 4 / 3;
-            final stock =
-                product.id != null ? stockMap[product.id] : null;
+            final stock = product.id != null ? stockMap[product.id] : null;
             return ProductCard(
               product: product,
               width: width,

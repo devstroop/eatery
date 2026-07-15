@@ -150,14 +150,14 @@ class DatabaseInspectorPage extends ConsumerWidget {
       await file.writeAsString(json);
 
       if (!context.mounted) return;
-      await Share.shareXFiles(
-        [XFile(file.path)],
-        subject: 'Eatery DB Export',
-      );
+      await Share.shareXFiles([XFile(file.path)], subject: 'Eatery DB Export');
     } catch (e) {
       if (!context.mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Export failed: $e'), backgroundColor: Colors.red),
+        SnackBar(
+          content: Text('Export failed: $e'),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   }

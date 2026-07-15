@@ -34,9 +34,7 @@ class _TablePageState extends ConsumerState<TablePage> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          staff != null ? "${staff.name}'s Tables" : 'Eatery Waiter',
-        ),
+        title: Text(staff != null ? "${staff.name}'s Tables" : 'Eatery Waiter'),
         actions: [
           const SyncStatusChip(),
           Stack(
@@ -76,7 +74,11 @@ class _TablePageState extends ConsumerState<TablePage> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.table_restaurant, size: 64, color: AppColors.grey400),
+                  Icon(
+                    Icons.table_restaurant,
+                    size: 64,
+                    color: AppColors.grey400,
+                  ),
                   const SizedBox(height: 16),
                   Text(
                     'No tables configured',
@@ -171,10 +173,9 @@ class _TableGridState extends ConsumerState<_TableGrid> {
                 ),
               const Spacer(),
               IconButton(
-                icon: Icon(
-                  _showFloorPlan ? Icons.grid_view : Icons.map,
-                ),
-                onPressed: () => setState(() => _showFloorPlan = !_showFloorPlan),
+                icon: Icon(_showFloorPlan ? Icons.grid_view : Icons.map),
+                onPressed: () =>
+                    setState(() => _showFloorPlan = !_showFloorPlan),
                 tooltip: _showFloorPlan ? 'Grid view' : 'Floor plan',
               ),
             ],
@@ -346,8 +347,7 @@ class _FloorPlanPainter extends CustomPainter {
   }
 
   @override
-  bool shouldRepaint(covariant _FloorPlanPainter old) =>
-      old.tables != tables;
+  bool shouldRepaint(covariant _FloorPlanPainter old) => old.tables != tables;
 }
 
 class _TableSection extends StatelessWidget {

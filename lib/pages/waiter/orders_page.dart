@@ -79,8 +79,7 @@ class _WaiterOrdersPageState extends ConsumerState<WaiterOrdersPage> {
           return ListView.builder(
             padding: const EdgeInsets.all(16),
             itemCount: list.length,
-            itemBuilder: (context, index) =>
-                _OrderCard(order: list[index]),
+            itemBuilder: (context, index) => _OrderCard(order: list[index]),
           );
         },
         loading: () => const Center(child: CircularProgressIndicator()),
@@ -100,8 +99,10 @@ class _OrderCard extends ConsumerWidget {
     final products = ref.watch(_waiterOrderProductsProvider(order.id!));
     final staff = ref.watch(authSessionProvider);
     final isWaiter = staff?.type == StaffType.waiter;
-    final currencySymbol = ref.read(companyProvider.notifier).currency?.symbol ?? '';
-    final canEdit = isWaiter &&
+    final currencySymbol =
+        ref.read(companyProvider.notifier).currency?.symbol ?? '';
+    final canEdit =
+        isWaiter &&
         (order.status == OrderStatus.pending ||
             order.status == OrderStatus.preparing);
 
@@ -158,9 +159,8 @@ class _OrderCard extends ConsumerWidget {
               if (canEdit) ...[
                 const SizedBox(width: 4),
                 PopupMenuButton<String>(
-                  onSelected: (value) => _handleAction(
-                    context, ref, value, order, staff,
-                  ),
+                  onSelected: (value) =>
+                      _handleAction(context, ref, value, order, staff),
                   itemBuilder: (_) => [
                     if (order.status == OrderStatus.pending)
                       const PopupMenuItem(
@@ -177,8 +177,15 @@ class _OrderCard extends ConsumerWidget {
                       const PopupMenuItem(
                         value: 'void',
                         child: ListTile(
-                          leading: Icon(Icons.cancel, size: 20, color: Colors.red),
-                          title: Text('Void', style: TextStyle(color: Colors.red)),
+                          leading: Icon(
+                            Icons.cancel,
+                            size: 20,
+                            color: Colors.red,
+                          ),
+                          title: Text(
+                            'Void',
+                            style: TextStyle(color: Colors.red),
+                          ),
                           dense: true,
                           contentPadding: EdgeInsets.zero,
                         ),

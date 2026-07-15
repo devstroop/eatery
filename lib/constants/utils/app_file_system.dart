@@ -214,7 +214,6 @@ class AppFileSystem {
       final archive = Archive();
       for (final file in dataDir.listSync(recursive: true)) {
         if (file is File) {
-
           archive.addFile(
             ArchiveFile(file.path, file.lengthSync(), file.readAsBytesSync()),
           );

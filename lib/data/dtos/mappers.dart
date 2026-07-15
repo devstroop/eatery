@@ -21,9 +21,7 @@ extension ProductDtoX on ProductDto {
           )
         : null,
     type: ProductType.values.firstWhere(
-      (e) =>
-        e.name.toLowerCase() ==
-        productType.toLowerCase(),
+      (e) => e.name.toLowerCase() == productType.toLowerCase(),
       orElse: () => ProductType.inventoryItem,
     ),
     isActive: isActive,
@@ -127,8 +125,7 @@ extension OrderDtoX on OrderDto {
     grandTotal: grandTotal,
     paidTotal: paidTotal,
     type: OrderType.values.firstWhere(
-      (e) =>
-          e.name.toLowerCase() == orderType.toLowerCase(),
+      (e) => e.name.toLowerCase() == orderType.toLowerCase(),
       orElse: () => OrderType.dine,
     ),
     createdAt: DateTime.now(),

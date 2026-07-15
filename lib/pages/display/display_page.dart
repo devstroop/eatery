@@ -76,7 +76,8 @@ class _DisplayPageState extends ConsumerState<DisplayPage>
     if (!_scrollController.hasClients) return;
     final maxScroll = _scrollController.position.maxScrollExtent;
     if (maxScroll <= 0) return;
-    final target = (_scrollPage + 1) * _scrollController.position.viewportDimension;
+    final target =
+        (_scrollPage + 1) * _scrollController.position.viewportDimension;
     if (target >= maxScroll) {
       _scrollController.animateTo(
         0,
@@ -122,9 +123,7 @@ class _DisplayPageState extends ConsumerState<DisplayPage>
           const SyncStatusChip(),
           IconButton(
             icon: Icon(
-              _sectionMode == _SectionMode.none
-                  ? Icons.view_agenda
-                  : Icons.dns,
+              _sectionMode == _SectionMode.none ? Icons.view_agenda : Icons.dns,
             ),
             tooltip: _sectionMode == _SectionMode.none
                 ? 'Group by station'
@@ -184,8 +183,10 @@ class _DisplayPageState extends ConsumerState<DisplayPage>
         childAspectRatio: 1.6,
       ),
       itemCount: orders.length,
-      itemBuilder: (context, index) =>
-          _OrderStatusCard(order: orders[index], pulseAnimation: _pulseAnimation),
+      itemBuilder: (context, index) => _OrderStatusCard(
+        order: orders[index],
+        pulseAnimation: _pulseAnimation,
+      ),
     );
   }
 

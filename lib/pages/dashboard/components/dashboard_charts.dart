@@ -5,26 +5,28 @@ import 'package:eatery_core/eatery_core.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:eatery_core/services/chart_service.dart';
 
-final _chartDataProvider = FutureProvider.autoDispose<
-    (
-      List<ChartDataPoint> revenue,
-      List<ChartDataPoint> orderCount,
-      Map<String, double> payments,
-    )>((ref) async {
-  final isolate = await ref.watch(eateryStoreIsolateProvider.future);
-  if (isolate == null) throw Exception('Store not available');
-  final svc = ChartService(isolate);
-  final results = await Future.wait([
-    svc.dailyRevenue(7),
-    svc.dailyOrderCount(7),
-    svc.paymentBreakdown(7),
-  ]);
-  return (
-    results[0] as List<ChartDataPoint>,
-    results[1] as List<ChartDataPoint>,
-    results[2] as Map<String, double>,
-  );
-});
+final _chartDataProvider =
+    FutureProvider.autoDispose<
+      (
+        List<ChartDataPoint> revenue,
+        List<ChartDataPoint> orderCount,
+        Map<String, double> payments,
+      )
+    >((ref) async {
+      final isolate = await ref.watch(eateryStoreIsolateProvider.future);
+      if (isolate == null) throw Exception('Store not available');
+      final svc = ChartService(isolate);
+      final results = await Future.wait([
+        svc.dailyRevenue(7),
+        svc.dailyOrderCount(7),
+        svc.paymentBreakdown(7),
+      ]);
+      return (
+        results[0] as List<ChartDataPoint>,
+        results[1] as List<ChartDataPoint>,
+        results[2] as Map<String, double>,
+      );
+    });
 
 class DashboardCharts extends ConsumerWidget {
   const DashboardCharts({super.key});
@@ -61,9 +63,11 @@ class _RevenueLineChart extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final maxY = data.fold(0.0, (a, b) => a > b.value ? a : b.value);
-    final spots = data.asMap().entries.map((e) =>
-      FlSpot(e.key.toDouble(), e.value.value)
-    ).toList();
+    final spots = data
+        .asMap()
+        .entries
+        .map((e) => FlSpot(e.key.toDouble(), e.value.value))
+        .toList();
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -81,10 +85,8 @@ class _RevenueLineChart extends StatelessWidget {
                   gridData: FlGridData(
                     show: true,
                     drawVerticalLine: false,
-                    getDrawingHorizontalLine: (_) => FlLine(
-                      color: AppColors.grey200,
-                      strokeWidth: 1,
-                    ),
+                    getDrawingHorizontalLine: (_) =>
+                        FlLine(color: AppColors.grey200, strokeWidth: 1),
                   ),
                   titlesData: FlTitlesData(
                     leftTitles: AxisTitles(
@@ -127,13 +129,12 @@ class _RevenueLineChart extends StatelessWidget {
                       isStrokeCapRound: true,
                       dotData: FlDotData(
                         show: true,
-                        getDotPainter: (_, __, ___, ____) =>
-                          FlDotCirclePainter(
-                            radius: 4,
-                            color: AppColors.primary,
-                            strokeWidth: 2,
-                            strokeColor: Colors.white,
-                          ),
+                        getDotPainter: (_, __, ___, ____) => FlDotCirclePainter(
+                          radius: 4,
+                          color: AppColors.primary,
+                          strokeWidth: 2,
+                          strokeColor: Colors.white,
+                        ),
                       ),
                       belowBarData: BarAreaData(
                         show: true,
@@ -159,7 +160,10 @@ class _OrderVolumeBarChart extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final maxY = data.fold<int>(0, (a, b) => a > b.value.toInt() ? a : b.value.toInt());
+    final maxY = data.fold<int>(
+      0,
+      (a, b) => a > b.value.toInt() ? a : b.value.toInt(),
+    );
 
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 16),
@@ -212,26 +216,28 @@ class _OrderVolumeBarChart extends StatelessWidget {
                   gridData: FlGridData(
                     show: true,
                     drawVerticalLine: false,
-                    getDrawingHorizontalLine: (_) => FlLine(
-                      color: AppColors.grey200,
-                      strokeWidth: 1,
-                    ),
+                    getDrawingHorizontalLine: (_) =>
+                        FlLine(color: AppColors.grey200, strokeWidth: 1),
                   ),
-                  barGroups: data.asMap().entries.map((e) =>
-                    BarChartGroupData(
-                      x: e.key,
-                      barRods: [
-                        BarChartRodData(
-                          toY: e.value.value,
-                          color: AppColors.info,
-                          width: 20,
-                          borderRadius: const BorderRadius.vertical(
-                            top: Radius.circular(4),
-                          ),
+                  barGroups: data
+                      .asMap()
+                      .entries
+                      .map(
+                        (e) => BarChartGroupData(
+                          x: e.key,
+                          barRods: [
+                            BarChartRodData(
+                              toY: e.value.value,
+                              color: AppColors.info,
+                              width: 20,
+                              borderRadius: const BorderRadius.vertical(
+                                top: Radius.circular(4),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  ).toList(),
+                      )
+                      .toList(),
                 ),
               ),
             ),
@@ -339,8 +345,7 @@ class _PaymentPieChart extends StatelessWidget {
                             const SizedBox(width: 8),
                             Text(
                               '${_modeLabels[e.key] ?? e.key}: '
-                              '\$${e.value.toStringAsFixed(0)} (${
-                                pct.toStringAsFixed(1)}%)',
+                              '\$${e.value.toStringAsFixed(0)} (${pct.toStringAsFixed(1)}%)',
                               style: AppTypography.bodySmall,
                             ),
                           ],

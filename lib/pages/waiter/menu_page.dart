@@ -114,7 +114,8 @@ class MenuPage extends ConsumerWidget {
                 itemCount: list.length,
                 itemBuilder: (context, index) {
                   final product = list[index];
-                  final currencySymbol = ref.read(companyProvider.notifier).currency?.symbol ?? '';
+                  final currencySymbol =
+                      ref.read(companyProvider.notifier).currency?.symbol ?? '';
                   return _ProductCard(
                     product: product,
                     currencySymbol: currencySymbol,

@@ -308,7 +308,10 @@ class _TicketCard extends ConsumerWidget {
     );
   }
 
-  Widget _buildProductList(AsyncValue<List<OrderProduct>> products, WidgetRef ref) {
+  Widget _buildProductList(
+    AsyncValue<List<OrderProduct>> products,
+    WidgetRef ref,
+  ) {
     return products.when(
       data: (items) => Expanded(
         child: ListView.builder(
@@ -332,16 +335,16 @@ class _TicketCard extends ConsumerWidget {
                           ? Icons.check_circle
                           : Icons.radio_button_unchecked,
                       size: 16,
-                      color:
-                          isDone ? AppColors.success : AppColors.grey500,
+                      color: isDone ? AppColors.success : AppColors.grey500,
                     ),
                     const SizedBox(width: 6),
                     Expanded(
                       child: Text(
                         '${op.productName} x${op.quantity}',
                         style: TextStyle(
-                          decoration:
-                              isDone ? TextDecoration.lineThrough : null,
+                          decoration: isDone
+                              ? TextDecoration.lineThrough
+                              : null,
                           color: isDone ? AppColors.grey500 : null,
                         ),
                       ),

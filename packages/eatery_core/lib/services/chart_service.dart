@@ -41,9 +41,7 @@ class ChartService {
     return _toChartDataPoints(rows, days);
   }
 
-  Future<Map<String, double>> paymentBreakdown(
-    int days,
-  ) async {
+  Future<Map<String, double>> paymentBreakdown(int days) async {
     final startMs = DateTime.now()
         .subtract(Duration(days: days - 1))
         .millisecondsSinceEpoch;

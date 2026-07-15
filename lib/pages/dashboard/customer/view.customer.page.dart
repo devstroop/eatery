@@ -54,15 +54,15 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
             ).then((value) {
               switch (value) {
                 case 'edit':
-                  GoRouter.of(context)
-                      .pushNamed('editCustomer', extra: _customer)
-                      .then((value) {
-                        if (value != null) {
-                          setState(() {
-                            _customer = value as Customer;
-                          });
-                        }
+                  GoRouter.of(
+                    context,
+                  ).pushNamed('editCustomer', extra: _customer).then((value) {
+                    if (value != null) {
+                      setState(() {
+                        _customer = value as Customer;
                       });
+                    }
+                  });
                   break;
                 case 'activate':
                   _customer = _customer.copyWith(isActive: true);

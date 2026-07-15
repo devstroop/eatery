@@ -19,12 +19,7 @@ import 'package:flutter_blue_plus/flutter_blue_plus.dart' as fbp;
 // ---------------------------------------------------------------------------
 
 class BluetoothDevice {
-  BluetoothDevice({
-    this.name,
-    this.address,
-    this.type,
-    this.remoteId,
-  });
+  BluetoothDevice({this.name, this.address, this.type, this.remoteId});
 
   factory BluetoothDevice.fromJson(Map<String, dynamic> json) =>
       BluetoothDevice(
@@ -56,7 +51,9 @@ class BluetoothDevice {
   static BluetoothDevice fromScanResult(fbp.ScanResult r) {
     final device = r.device;
     return BluetoothDevice(
-      name: device.platformName.isEmpty ? r.advertisementData.advName : device.platformName,
+      name: device.platformName.isEmpty
+          ? r.advertisementData.advName
+          : device.platformName,
       address: device.remoteId.str,
       remoteId: device.remoteId.str,
     );
@@ -101,10 +98,7 @@ class BluetoothManager {
         _scanController.add(devices);
       });
 
-      await fbp.FlutterBluePlus.startScan(
-        timeout: timeout,
-        withServices: [],
-      );
+      await fbp.FlutterBluePlus.startScan(timeout: timeout, withServices: []);
 
       await Future.delayed(timeout);
     } catch (e) {

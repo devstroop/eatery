@@ -13,7 +13,8 @@ class CartPage extends ConsumerWidget {
     final items = session.cart.values.toList();
     final total = items.fold(0.0, (sum, e) => sum + e.lineTotal);
     final totalQty = items.fold(0, (sum, e) => sum + e.quantity);
-    final currencySymbol = ref.read(companyProvider.notifier).currency?.symbol ?? '';
+    final currencySymbol =
+        ref.read(companyProvider.notifier).currency?.symbol ?? '';
 
     return Scaffold(
       appBar: AppBar(title: const Text('Cart')),
@@ -196,7 +197,9 @@ class CartPage extends ConsumerWidget {
               'quantity': item.quantity,
               'price': item.unitPrice,
               'tax_slab': taxRate,
-              'taxType': slab?.type == TaxType.inclusive ? 'inclusive' : 'exclusive',
+              'taxType': slab?.type == TaxType.inclusive
+                  ? 'inclusive'
+                  : 'exclusive',
             };
           }
           final taxableTotal = total;
@@ -224,7 +227,8 @@ class CartPage extends ConsumerWidget {
               'taxName': 'Tax',
               'foodLicenseNo': company?.foodLicenseNo ?? '',
               'printerSize': '58mm',
-              'currencySymbol': ref.read(companyProvider.notifier).currency?.symbol ?? '',
+              'currencySymbol':
+                  ref.read(companyProvider.notifier).currency?.symbol ?? '',
             },
           );
         }

@@ -38,40 +38,46 @@ void main() {
       status: status,
     );
 
-    test('saveOrder with voided status persists voidReason and voidedBy', () async {
-      final o = makeOrder();
-      final id = await repo.saveOrder(o);
+    test(
+      'saveOrder with voided status persists voidReason and voidedBy',
+      () async {
+        final o = makeOrder();
+        final id = await repo.saveOrder(o);
 
-      final now = DateTime.now();
-      final voided = o.copyWith(
-        status: OrderStatus.voided,
-        voidReason: 'Customer cancelled',
-        voidedBy: 'Waiter Alice',
-        voidedAt: now,
-        updatedAt: now,
-        id: id,
-      );
-      final id2 = await repo.saveOrder(voided);
-      expect(id2, id);
+        final now = DateTime.now();
+        final voided = o.copyWith(
+          status: OrderStatus.voided,
+          voidReason: 'Customer cancelled',
+          voidedBy: 'Waiter Alice',
+          voidedAt: now,
+          updatedAt: now,
+          id: id,
+        );
+        final id2 = await repo.saveOrder(voided);
+        expect(id2, id);
 
-      final fetched = repo.getOrderById(id)!;
-      expect(fetched.status, OrderStatus.voided);
-      expect(fetched.voidReason, 'Customer cancelled');
-      expect(fetched.voidedBy, 'Waiter Alice');
-      expect(fetched.voidedAt, isNotNull);
-    });
+        final fetched = repo.getOrderById(id)!;
+        expect(fetched.status, OrderStatus.voided);
+        expect(fetched.voidReason, 'Customer cancelled');
+        expect(fetched.voidedBy, 'Waiter Alice');
+        expect(fetched.voidedAt, isNotNull);
+      },
+    );
 
-    test('voided orders are excluded from getAllOrders when filtered', () async {
-      await repo.saveOrder(makeOrder(status: OrderStatus.pending));
-      await repo.saveOrder(makeOrder(status: OrderStatus.voided));
-      await repo.saveOrder(makeOrder(status: OrderStatus.preparing));
+    test(
+      'voided orders are excluded from getAllOrders when filtered',
+      () async {
+        await repo.saveOrder(makeOrder(status: OrderStatus.pending));
+        await repo.saveOrder(makeOrder(status: OrderStatus.voided));
+        await repo.saveOrder(makeOrder(status: OrderStatus.preparing));
 
-      final active = repo
-          .getAllOrders()
-          .where((o) => o.status != OrderStatus.voided)
-          .toList();
-      expect(active, hasLength(2));
-    });
+        final active = repo
+            .getAllOrders()
+            .where((o) => o.status != OrderStatus.voided)
+            .toList();
+        expect(active, hasLength(2));
+      },
+    );
 
     test('status transition records for void flow', () async {
       final o = makeOrder();
@@ -110,18 +116,11 @@ void main() {
     tearDown(() => store.close());
 
     test('toggle available to occupied', () async {
-      final t = DiningTable(
-        name: 'T1',
-        status: DiningTableStatus.available,
-      );
+      final t = DiningTable(name: 'T1', status: DiningTableStatus.available);
       final id = await repo.saveTable(t);
 
       await repo.saveTable(
-        t.copyWith(
-          status: DiningTableStatus.occupied,
-          orderId: 42,
-          id: id,
-        ),
+        t.copyWith(status: DiningTableStatus.occupied, orderId: 42, id: id),
       );
 
       final fetched = repo.getTableById(id)!;
@@ -198,7 +197,12 @@ void main() {
       );
       final lineId = await repo.addOrderProduct(line);
 
-      final updated = line.copyWith(quantity: 4, subTotal: 20.0, total: 20.0, id: lineId);
+      final updated = line.copyWith(
+        quantity: 4,
+        subTotal: 20.0,
+        total: 20.0,
+        id: lineId,
+      );
       await repo.saveOrderProduct(updated);
 
       final lines = repo.getOrderProducts(oid);

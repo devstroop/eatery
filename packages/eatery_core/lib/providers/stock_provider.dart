@@ -11,8 +11,9 @@ class StockInfo {
   bool get isLowStock => threshold != null && quantity <= threshold!;
 }
 
-final productStockProvider =
-    FutureProvider.autoDispose<Map<int, StockInfo>>((ref) async {
+final productStockProvider = FutureProvider.autoDispose<Map<int, StockInfo>>((
+  ref,
+) async {
   final store = ref.read(eateryStoreProvider);
   final rows = store.query(
     'SELECT id, stockQuantity, lowStockThreshold FROM product',
