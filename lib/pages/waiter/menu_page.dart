@@ -114,8 +114,11 @@ class MenuPage extends ConsumerWidget {
                 itemCount: list.length,
                 itemBuilder: (context, index) {
                   final product = list[index];
+                  final currencySymbol =
+                      ref.read(companyProvider.notifier).currency?.symbol ?? '';
                   return _ProductCard(
                     product: product,
+                    currencySymbol: currencySymbol,
                     onTap: () {
                       if (cart.cart.containsKey(product.id)) {
                         ref.read(cartProvider.notifier).removeFromCart(product);
@@ -163,11 +166,13 @@ class _CategoryChip extends StatelessWidget {
 
 class _ProductCard extends StatelessWidget {
   final Product product;
+  final String currencySymbol;
   final VoidCallback onTap;
   final bool inCart;
 
   const _ProductCard({
     required this.product,
+    required this.currencySymbol,
     required this.onTap,
     required this.inCart,
   });
@@ -221,7 +226,7 @@ class _ProductCard extends StatelessWidget {
               ),
               const SizedBox(height: 2),
               Text(
-                '\$${product.mrpPrice.toStringAsFixed(2)}',
+                '$currencySymbol${product.mrpPrice.toStringAsFixed(2)}',
                 style: AppTypography.titleSmall.copyWith(
                   color: AppColors.primary,
                 ),

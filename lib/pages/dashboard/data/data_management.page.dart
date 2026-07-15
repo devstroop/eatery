@@ -1,4 +1,3 @@
-import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
@@ -80,7 +79,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
             decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: AppColors.grey400!),
+              border: Border.all(color: AppColors.grey400),
             ),
             child: Row(
               children: [
@@ -392,7 +391,6 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
   Future<void> _downloadDemoData(BuildContext context) async {
     ProgressDialog pd = ProgressDialog(context: context);
     pd.show();
-    final store = ref.read(eateryStoreProvider);
     List<String> logs = [];
 
     String baseUrl =

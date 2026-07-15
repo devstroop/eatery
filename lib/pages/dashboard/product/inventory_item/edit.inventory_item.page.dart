@@ -219,7 +219,6 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
                 ),
               ),
               const SizedBox(height: 3.0),
-              // TODO: Do cross check
               ToggleSwitch(
                 highlightColor: _pageColor,
                 backgroundColor: const Color(0xFFE5E5E5),
@@ -229,12 +228,12 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
                 children: ['None', ...slabs.map((e) => e.name)],
                 selectedIndex: (selectedTaxSlab == null)
                     ? 0
-                    : slabs.indexOf(selectedTaxSlab!),
+                    : slabs.indexOf(selectedTaxSlab!) + 1,
                 onChange: (int? index) {
                   if (index == 0 || index == null) {
                     selectedTaxSlab = null;
                   } else {
-                    selectedTaxSlab = slabs[index];
+                    selectedTaxSlab = slabs[index - 1];
                   }
                   setState(() {});
                 },

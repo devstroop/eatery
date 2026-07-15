@@ -5,7 +5,6 @@ import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/order_provider.dart';
-import 'package:eatery_core/providers/database_provider.dart';
 
 final _pageColor = AppColors.primary;
 

@@ -1,4 +1,5 @@
 import 'package:eatery_core/theme/app_spacing.dart';
+import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery_core/utils/responsive.dart';
 import 'package:eatery_core/widgets/widgets.dart';
 import 'package:eatery/references.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/company_provider.dart';
 import 'package:eatery_core/providers/cart_provider.dart';
 import 'package:go_router/go_router.dart';
+import 'components/dashboard_charts.dart';
 
 // ── Dashboard navigation destinations ──────────────────────────
 abstract final class DashboardRoutes {
@@ -183,9 +185,24 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
           AppNavDestination(
             icon: Icons.dashboard,
             label: 'Sales',
-            page: _DashboardGrid(
-              items: _salesItems,
-              onItemTap: (route) => _onTap(context, route),
+            page: ListView(
+              padding: EdgeInsets.only(bottom: 32),
+              children: [
+                const DashboardCharts(),
+                const SizedBox(height: 8),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Text(
+                    'Quick Actions',
+                    style: AppTypography.titleMedium,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                _DashboardGrid(
+                  items: _salesItems,
+                  onItemTap: (route) => _onTap(context, route),
+                ),
+              ],
             ),
           ),
           AppNavDestination(
@@ -325,26 +342,23 @@ class _DashboardGrid extends StatelessWidget {
         final cardWidth = ((availableWidth - (cols - 1) * spacing) / cols)
             .clamp(120, 220)
             .toDouble();
-        final cardHeight = cardWidth * 1.1;
 
-        return ListView(
+        return Padding(
           padding: EdgeInsets.all(spacing),
-          children: [
-            Wrap(
-              spacing: spacing,
-              runSpacing: spacing,
-              children: items
-                  .map(
-                    (item) => _DashboardTile(
-                      item: item,
-                      width: cardWidth,
-                      height: cardHeight,
-                      onTap: () => onItemTap(item.route),
-                    ),
-                  )
-                  .toList(),
-            ),
-          ],
+          child: Wrap(
+            spacing: spacing,
+            runSpacing: spacing,
+            children: items
+                .map(
+                  (item) => _DashboardTile(
+                    item: item,
+                    width: cardWidth,
+                    height: cardWidth * 1.1,
+                    onTap: () => onItemTap(item.route),
+                  ),
+                )
+                .toList(),
+          ),
         );
       },
     );

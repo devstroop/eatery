@@ -11,7 +11,6 @@ import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../support/bluetooth_thermal_printer/flutter_bluetooth_adapter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:eatery_core/theme/app_colors.dart';
 
 /// Printer configuration page.
 /// Mobile: discovers Bluetooth ESC/POS printers and saves them.

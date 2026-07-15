@@ -2,10 +2,10 @@ import '../references.dart';
 
 extension CustomerExtension on Customer {
   double get getOutstandingAmount {
-    // Hive fully eliminated. Outstanding amount now computed via
-    // SqliteCustomerRepository.getOutstandingAmount() which reads
-    // from the SQLite store through the legacy appDatabaseProvider shim.
-    // TODO: migrate callers to use the repository provider directly.
+    // DEPRECATED: All callers now read directly from
+    // `ref.read(customerRepositoryProvider).getOutstandingAmount(phone)`.
+    // This extension is unused and kept only to avoid breaking existing imports.
+    // Remove once all dangling references are verified.
     return 0.0;
   }
 }

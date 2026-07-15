@@ -2,19 +2,24 @@ import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery/references.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:go_router/go_router.dart';
-
-import 'edit.payment.page.dart';
 
 class ViewPaymentPage extends ConsumerStatefulWidget {
-  ViewPaymentPage({super.key, required this.payment});
-  late Payment payment;
+  const ViewPaymentPage({super.key, required this.payment});
+  final Payment payment;
 
   @override
   ConsumerState<ViewPaymentPage> createState() => _ViewPaymentPageState();
 }
 
 class _ViewPaymentPageState extends ConsumerState<ViewPaymentPage> {
+  late Payment _payment;
+
+  @override
+  void initState() {
+    super.initState();
+    _payment = widget.payment;
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppPageShell(
@@ -31,15 +36,15 @@ class _ViewPaymentPageState extends ConsumerState<ViewPaymentPage> {
             ).then((value) {
               switch (value) {
                 case 'edit':
-                  GoRouter.of(context)
-                      .pushNamed('editPayment', extra: widget.payment)
-                      .then((value) {
-                        if (value != null) {
-                          setState(() {
-                            widget.payment = value as Payment;
-                          });
-                        }
+                  GoRouter.of(
+                    context,
+                  ).pushNamed('editPayment', extra: _payment).then((value) {
+                    if (value != null) {
+                      setState(() {
+                        _payment = value as Payment;
                       });
+                    }
+                  });
                   break;
               }
             });
@@ -52,19 +57,19 @@ class _ViewPaymentPageState extends ConsumerState<ViewPaymentPage> {
           children: [
             ListTile(
               title: const Text('Transaction ID'),
-              subtitle: Text(widget.payment.id.toString()),
+              subtitle: Text(_payment.id.toString()),
             ),
             ListTile(
               title: const Text('Amount'),
-              subtitle: Text(widget.payment.amount.toString()),
+              subtitle: Text(_payment.amount.toString()),
             ),
             ListTile(
               title: const Text('Payment Mode'),
-              subtitle: Text(widget.payment.mode.name),
+              subtitle: Text(_payment.mode.name),
             ),
             ListTile(
               title: const Text('Payment Date'),
-              subtitle: Text(widget.payment.date.toString()),
+              subtitle: Text(_payment.date.toString()),
             ),
           ],
         ),

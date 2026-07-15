@@ -5,7 +5,6 @@ import 'package:eatery_core/extensions/double_ext.dart';
 import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery/functions/order.function.dart';
-import 'package:eatery/pages/dashboard/utility/order_print.page.dart';
 import 'package:eatery_core/providers/cart_provider.dart';
 import 'package:eatery_core/providers/company_provider.dart';
 import 'package:eatery_core/providers/order_provider.dart';
@@ -672,7 +671,6 @@ class _CartPageState extends ConsumerState<CartPage> {
     }
 
     final cartProducts = cart.values.map((e) => e.product).toList();
-    final cartQtys = {for (final e in cart.entries) e.key: e.value.quantity};
 
     Order order;
     if (ref.read(cartProvider).activeOrder != null) {

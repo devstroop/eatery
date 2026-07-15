@@ -8,8 +8,6 @@ import 'package:eatery_core/providers/company_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:go_router/go_router.dart';
-
-import 'package:eatery_core/widgets/app_dialog.dart';
 import '../search_product.delegate.dart';
 
 Color _pageColor = AppColors.secondary;
@@ -23,7 +21,6 @@ class KitchenPage extends ConsumerStatefulWidget {
 
 class _KitchenPageState extends ConsumerState<KitchenPage> {
   ProductCategory? selectedCategory;
-  final TextEditingController _controllerSearch = TextEditingController();
 
   @override
   void initState() {
@@ -129,7 +126,7 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                         border: Border.all(
                           color: selectedCategory?.id == e.id
                               ? _pageColor
-                              : AppColors.grey300!,
+                              : AppColors.grey300,
                           width: 1,
                         ),
                       ),
@@ -150,7 +147,7 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                             style: AppTypography.labelLarge.copyWith(
                               color: selectedCategory?.id == e.id
                                   ? const Color(0xFFF5F5F5)
-                                  : AppColors.grey700!,
+                                  : AppColors.grey700,
                             ),
                           ),
                         ],

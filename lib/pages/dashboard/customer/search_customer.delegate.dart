@@ -105,7 +105,7 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
               (element.name ?? '').toLowerCase().contains(
                 query.toLowerCase(),
               ) ||
-              (element.phone ?? '').toLowerCase().contains(query.toLowerCase()),
+              element.phone.toLowerCase().contains(query.toLowerCase()),
         )
         .toList();
     if (searchResults.isEmpty) {
@@ -164,7 +164,7 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
         ),
       ),
       subtitle: Text(
-        customer.phone ?? '',
+        customer.phone,
         style: AppTypography.bodyMedium.copyWith(color: AppColors.black500),
       ),
       trailing: Text(

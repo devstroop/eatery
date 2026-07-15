@@ -14,13 +14,21 @@ import 'package:eatery_core/providers/database_provider.dart';
 class ViewCustomer extends ConsumerStatefulWidget {
   ViewCustomer({super.key, required this.customer});
 
-  Customer customer;
+  final Customer customer;
 
   @override
   ConsumerState<ViewCustomer> createState() => _ViewCustomerState();
 }
 
 class _ViewCustomerState extends ConsumerState<ViewCustomer> {
+  late Customer _customer;
+
+  @override
+  void initState() {
+    super.initState();
+    _customer = widget.customer;
+  }
+
   @override
   Widget build(BuildContext context) {
     return AppPageShell(
@@ -35,32 +43,32 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
               position: const RelativeRect.fromLTRB(100, 100, 0, 100),
               items: [
                 const PopupMenuItem(value: 'edit', child: Text('Edit')),
-                if (!widget.customer.isActive)
+                if (!_customer.isActive)
                   const PopupMenuItem(
                     value: 'activate',
                     child: Text('Activate'),
                   ),
-                if (widget.customer.isActive)
+                if (_customer.isActive)
                   const PopupMenuItem(value: 'suspend', child: Text('Suspend')),
               ],
             ).then((value) {
               switch (value) {
                 case 'edit':
-                  GoRouter.of(context)
-                      .pushNamed('editCustomer', extra: widget.customer)
-                      .then((value) {
-                        if (value != null) {
-                          setState(() {
-                            widget.customer = value as Customer;
-                          });
-                        }
+                  GoRouter.of(
+                    context,
+                  ).pushNamed('editCustomer', extra: _customer).then((value) {
+                    if (value != null) {
+                      setState(() {
+                        _customer = value as Customer;
                       });
+                    }
+                  });
                   break;
                 case 'activate':
-                  widget.customer = widget.customer.copyWith(isActive: true);
+                  _customer = _customer.copyWith(isActive: true);
                   ref
                       .read(customerRepositoryProvider)
-                      .saveCustomer(widget.customer)
+                      .saveCustomer(_customer)
                       .then(
                         (value) => AppDialog.showMessage(
                           context,
@@ -79,10 +87,10 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                       );
                   break;
                 case 'suspend':
-                  widget.customer = widget.customer.copyWith(isActive: false);
+                  _customer = _customer.copyWith(isActive: false);
                   ref
                       .read(customerRepositoryProvider)
-                      .saveCustomer(widget.customer)
+                      .saveCustomer(_customer)
                       .then(
                         (value) => AppDialog.showMessage(
                           context,
@@ -122,7 +130,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                   children: [
                     const Text('Outstanding\nAmount'),
                     Text(
-                      '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${ref.read(customerRepositoryProvider).getOutstandingAmount(widget.customer.phone).toStringAsFixed(2)}',
+                      '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${ref.read(customerRepositoryProvider).getOutstandingAmount(_customer.phone).toStringAsFixed(2)}',
                       style: AppTypography.displayMedium.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -135,7 +143,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                   children: [
                     const Text('Name'),
                     Text(
-                      widget.customer.name ?? '',
+                      _customer.name ?? '',
                       style: AppTypography.titleMedium.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -148,7 +156,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                   children: [
                     const Text('Phone'),
                     Text(
-                      widget.customer.phone,
+                      _customer.phone,
                       style: AppTypography.titleMedium.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
@@ -161,8 +169,8 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                   children: [
                     const Text('Address'),
                     Text(
-                      (widget.customer.address ?? '').isNotEmpty
-                          ? widget.customer.address!
+                      (_customer.address ?? '').isNotEmpty
+                          ? _customer.address!
                           : 'NA',
                       style: AppTypography.titleMedium.copyWith(
                         fontWeight: FontWeight.bold,
@@ -177,8 +185,8 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                   children: [
                     const Text('Landmark'),
                     Text(
-                      (widget.customer.landmark ?? '').isNotEmpty
-                          ? widget.customer.landmark!
+                      (_customer.landmark ?? '').isNotEmpty
+                          ? _customer.landmark!
                           : 'NA',
                       style: AppTypography.titleMedium.copyWith(
                         fontWeight: FontWeight.bold,
@@ -193,8 +201,8 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                   children: [
                     const Text('Last Order At'),
                     Text(
-                      widget.customer.lastOrderAt != null
-                          ? widget.customer.lastOrderAt!.toIso8601String()
+                      _customer.lastOrderAt != null
+                          ? _customer.lastOrderAt!.toIso8601String()
                           : 'NA',
                       style: AppTypography.titleMedium.copyWith(
                         fontWeight: FontWeight.bold,
@@ -209,9 +217,9 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     const Text('Status'),
-                    if (widget.customer.isActive)
+                    if (_customer.isActive)
                       const Icon(Icons.check_circle, color: Colors.green),
-                    if (!widget.customer.isActive)
+                    if (!_customer.isActive)
                       const Icon(Icons.cancel, color: AppColors.error),
                   ],
                 ),
@@ -285,7 +293,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
   Widget _buildLoyaltyCard() {
     final loyalty = LoyaltyRepository(
       ref.read(eateryStoreProvider),
-    ).getByCustomer(widget.customer.id ?? 0);
+    ).getByCustomer(_customer.id ?? 0);
     if (loyalty == null) return const SizedBox.shrink();
     final tierNames = ['Regular', 'Silver', 'Gold', 'Platinum'];
     return Card(

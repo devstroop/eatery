@@ -14,9 +14,13 @@ class ProductCard extends StatelessWidget {
     required this.height,
     this.currencySymbol = '',
     this.cartQuantity = 0,
+    this.lowStockWarning = false,
+    this.stockQuantity,
   }) : super(key: key);
   final Product product;
   final int cartQuantity;
+  final bool lowStockWarning;
+  final double? stockQuantity;
 
   final Color themeColor;
   final Function()? onRemove;
@@ -95,6 +99,31 @@ class ProductCard extends StatelessWidget {
                             backgroundColor: AppColors.white,
                           ),
                         ),
+                        if (lowStockWarning)
+                          Positioned(
+                            top: 12.0,
+                            left: 12.0,
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.error,
+                                borderRadius: BorderRadius.circular(4),
+                              ),
+                              child: Text(
+                                stockQuantity != null
+                                    ? 'Stock: ${stockQuantity!.toStringAsFixed(0)}'
+                                    : 'Low',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ),

@@ -3,6 +3,7 @@ import 'package:eatery_core/theme/app_typography.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/product_provider.dart';
 import 'package:eatery_core/providers/company_provider.dart';
+import 'package:eatery_core/providers/stock_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:eatery_core/widgets/app_dialog.dart';
@@ -35,6 +36,8 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
     final repo = ref.read(productRepositoryProvider);
     final companyNotifier = ref.read(companyProvider.notifier);
     final currency = companyNotifier.currency;
+    final stockData =
+        ref.watch(productStockProvider).valueOrNull ?? <int, StockInfo>{};
     return AppPageShell(
       title: 'Inventory',
       color: _pageColor,
@@ -85,7 +88,7 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                         border: Border.all(
                           color: selectedCategory?.id == e.id
                               ? _pageColor
-                              : AppColors.grey300!,
+                              : AppColors.grey300,
                           width: 1,
                         ),
                       ),
@@ -110,7 +113,7 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                             style: AppTypography.labelLarge.copyWith(
                               color: selectedCategory?.id == e.id
                                   ? const Color(0xFFF5F5F5)
-                                  : AppColors.grey700!,
+                                  : AppColors.grey700,
                             ),
                           ),
                         ],
@@ -160,6 +163,8 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                           : true,
                     )
                     .map((each) {
+                      final stock = each.id != null ? stockData[each.id] : null;
+                      final lowStock = stock?.isLowStock ?? false;
                       return ListTile(
                         leading: InkWell(
                           onTap: () {
@@ -233,6 +238,28 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                                 foodType: each.foodType,
                                 backgroundColor: AppColors.white,
                               ),
+                            if (lowStock)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 8),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 6,
+                                    vertical: 2,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.error,
+                                    borderRadius: BorderRadius.circular(4),
+                                  ),
+                                  child: const Text(
+                                    'Low Stock',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
                           ],
                         ),
                         subtitle: Column(
@@ -281,6 +308,22 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                                 ),
                               ],
                             ),
+                            if (stock != null)
+                              Padding(
+                                padding: const EdgeInsets.only(top: 4),
+                                child: Text(
+                                  'Stock: ${stock.quantity.toStringAsFixed(0)}'
+                                  '${stock.threshold != null ? ' (Min: ${stock.threshold!.toStringAsFixed(0)})' : ''}',
+                                  style: AppTypography.bodySmall.copyWith(
+                                    color: lowStock
+                                        ? AppColors.error
+                                        : AppColors.grey600,
+                                    fontWeight: lowStock
+                                        ? FontWeight.bold
+                                        : FontWeight.normal,
+                                  ),
+                                ),
+                              ),
                           ],
                         ),
                         trailing: Row(

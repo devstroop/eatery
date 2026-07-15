@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:io';
 
 import '../../flutter_bluetooth_adapter.dart';
-import 'package:rxdart/streams.dart';
 import 'package:rxdart/subjects.dart';
 import '../../bluetooth_thermal_printer.dart';
 
@@ -38,7 +37,7 @@ class BluetoothPrinterService {
       isScanningCurrent,
     ) async {
       // If isScanning value changed (scan just stopped)
-      if (_isScanning.value! && !isScanningCurrent) {
+      if (_isScanning.value && !isScanningCurrent) {
         _scanResultsSubscription!.cancel();
         _isScanningSubscription!.cancel();
       }
@@ -64,7 +63,7 @@ class BluetoothPrinterService {
     const int timeout = 5;
     if (_selectedPrinter == null) {
       return Future<PrintResult>.value(PrintResult.printerNotSelected);
-    } else if (_isScanning.value!) {
+    } else if (_isScanning.value) {
       return Future<PrintResult>.value(PrintResult.scanInProgress);
     } else if (_isPrinting) {
       return Future<PrintResult>.value(PrintResult.printInProgress);

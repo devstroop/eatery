@@ -1,16 +1,18 @@
 # PRD 03 — Feature Requirements by Phase
 
-## Phase 0 — Foundation: Core Extraction
+> ✅ = Complete  |  ➡️ = In Progress  |  ☐ = Not Started
+
+## Phase 0 — Foundation: Core Extraction ✅
 
 | Feature | Description | Acceptance Criteria |
 |---------|-------------|-------------------|
-| Monorepo structure | Create `apps/` and `packages/` dirs. Move existing code into `apps/eatery_admin/` | `apps/eatery_admin` builds and runs |
+| Single-binary unification | Merged all apps into one Flutter binary with role-based gating | Single `flutter build` produces all UIs |
 | `packages/eatery_core` | Shared package with all models, repos, sync, theme, providers | `pubspec.yaml` points to path dep |
-| Import migration | All Admin app imports use `package:eatery_core/` | No broken imports |
-| Schema extraction | DB schema lives in `packages/eatery_core/assets/` | Both apps use same schema |
-| Verification | Existing app functions identically | All existing flows work |
+| Import migration | All app imports use `package:eatery_core/` | No broken imports |
+| Schema extraction | DB schema lives in `packages/eatery_core/assets/` | All apps use same schema |
+| Native SQLite store | Zig-compiled libeaterystore via dart:ffi | Replaces Hive for product/order storage |
 
-## Phase 1 — Role-Based Auth
+## Phase 1 — Role-Based Auth ✅
 
 | Feature | Description |
 |---------|-------------|
@@ -22,7 +24,7 @@
 | Route permission map | Each route maps to allowed `StaffType` values |
 | Waiter assignment | `Order.staffId` set automatically; table can have assigned waiter |
 
-## Phase 2 — Order Status Lifecycle
+## Phase 2 — Order Status Lifecycle ✅
 
 | Feature | Description |
 |---------|-------------|
@@ -34,7 +36,7 @@
 | Station-based filtering | KDS shows only orders for its station |
 | Status display in UI | ViewOrder page shows current status + history timeline |
 
-## Phase 3 — Local Network Sync
+## Phase 3 — Local Network Sync ✅
 
 | Feature | Description |
 |---------|-------------|
@@ -47,7 +49,7 @@
 | Host election | 3 missed heartbeats triggers re-election (highest uptime wins) |
 | Sync status indicator | Dashboard shows connected devices, last sync time |
 
-## Phase 4 — Waiter App
+## Phase 4 — Waiter App ✅
 
 | Feature | Description |
 |---------|-------------|
@@ -56,9 +58,10 @@
 | KOT printing | Send KOT to configured Bluetooth/USB printer |
 | My tables filter | Show only tables assigned to logged-in waiter |
 | Order status view | See if kitchen has acknowledged/prepared the order |
+| Order editing/voiding | Edit pending line items, void with reason logging |
 | Sync integration | Orders pushed to Admin and KDS via WebSocket in real-time |
 
-## Phase 5 — Kitchen Display App
+## Phase 5 — Kitchen Display App ✅
 
 | Feature | Description |
 |---------|-------------|
@@ -66,20 +69,21 @@
 | Station filter | Tabs/sections for each KDS station |
 | Acknowledge button | Tap → `pending` → `preparing`, order highlighted |
 | Ready button | Tap → `preparing` → `ready`, order moves to ready section |
-| Sound alert | Audible notification on new order |
-| Visual alert | Screen flash/pulse for new orders after idle |
-| Item-level status | Mark individual `OrderProduct` items as done |
+| Sound alert | Audible notification on new order (chime) |
+| Visual alert | Screen flash/pulse for new orders after idle period |
+| Item-level status | Mark individual `OrderProduct` items as done via tap |
 
-## Phase 6 — Display App
+## Phase 6 — Display App ✅
 
 | Feature | Description |
 |---------|-------------|
-| Order number display | Large-format list of order numbers with status |
-| Color coding | Preparing (yellow), Ready (green) |
-| Auto-scroll | Scrolls through active orders on a loop |
-| Configurable sections | Optionally show by waiter or station |
+| Order number display | Large-format list of orders with status colors |
+| Color coding | Pending (fireworks), Preparing (pulse animation), badges |
+| Lottie animations | Fireworks burst for new orders, pulse for preparing |
+| Auto-scroll | Timer-driven scrolling through orders on a loop |
+| Configurable sections | Toggle grouping by station |
 
-## Phase 7 — Admin Gaps (Reporting & Inventory)
+## Phase 7 — Admin Gaps ➡️
 
 | Feature | Description |
 |---------|-------------|
@@ -87,11 +91,12 @@
 | X-Report | Mid-day sales snapshot |
 | Daily summary | Date range picker, show total sales, orders, average ticket |
 | Dashboard charts | Revenue trend line, order volume bar, payment mode pie |
-| Stock counts | `Product.stockQuantity`, manual adjustment UI |
-| Low-stock alerts | Visual indicator when stock < threshold, notification in POS |
+| Stock counts | `Product.stockQuantity` (schema exists, UI in progress) |
+| Low-stock alerts | Visual indicator when stock < threshold in POS & inventory |
+| Dynamic currency | Currency symbol reads from company config (not hardcoded) |
 | Purchase orders | Create PO, receive stock, adjust inventory |
 
-## Phase 8 — Cloud Sync (Stretch)
+## Phase 8 — Cloud Sync ☐
 
 | Feature | Description |
 |---------|-------------|

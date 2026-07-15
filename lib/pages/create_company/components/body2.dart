@@ -17,7 +17,7 @@ class Body2 extends StatelessWidget {
     this.callbackFormKey,
   }) : super(key: key);
 
-  List<FocusNode> focusNodes = [FocusNode(), FocusNode()];
+  final List<FocusNode> focusNodes = [FocusNode(), FocusNode()];
 
   @override
   Widget build(BuildContext context) {

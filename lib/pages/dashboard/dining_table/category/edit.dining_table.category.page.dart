@@ -1,5 +1,4 @@
 import 'package:eatery_core/widgets/app_page_shell.dart';
-import 'package:eatery_core/providers/database_provider.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';

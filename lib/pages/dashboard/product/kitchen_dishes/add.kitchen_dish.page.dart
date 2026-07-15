@@ -40,7 +40,12 @@ class _AddKitchenDishState extends ConsumerState<AddKitchenDish> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () {
-      // TODO: If company has default tax slab then set it as selected
+      final slabs = ref.read(taxRepositoryProvider).getAllTaxSlabs();
+      if (slabs.isNotEmpty) {
+        setState(() {
+          selectedTaxSlab = slabs.first;
+        });
+      }
     });
     _focusNodes[0].requestFocus();
   }

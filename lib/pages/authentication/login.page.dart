@@ -3,7 +3,6 @@ import 'package:eatery_core/theme/app_colors.dart';
 import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery_core/utils/responsive.dart';
-import 'package:eatery/pages/authentication/reset-pin.dart';
 import 'package:eatery_core/extensions/string_ext.dart';
 import 'package:eatery/references.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,7 +13,6 @@ import 'package:eatery_core/providers/database_provider.dart';
 
 import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:go_router/go_router.dart';
-import '../main.screen.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({Key? key}) : super(key: key);

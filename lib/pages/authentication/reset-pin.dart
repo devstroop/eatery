@@ -1,5 +1,4 @@
 import 'package:eatery_core/theme/app_typography.dart';
-import 'package:eatery_core/providers/auth_session.dart';
 import 'package:eatery_core/data/database/native/eatery_store.dart';
 import 'package:eatery_core/providers/database_provider.dart';
 import 'package:eatery/references.dart';

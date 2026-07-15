@@ -12,8 +12,7 @@
 
 | Status | Count | Items |
 |--------|-------|-------|
-| ✅ Completed | 11 | M1, M3, M4, M5, M6, M8, M9, M10, M11, M12, M13 |
-| 🟡 Partial | 1 | M2 (isolate wired into UI widget tree, shows isolate version — but `ReportService.generateReport` still runs on main store `eateryStoreProvider` synchronously) |
+| ✅ Completed | 12 | M1, M2, M3, M4, M5, M6, M8, M9, M10, M11, M12, M13 |
 | ❓ Unverified | 1 | M7 (Android NDK cross-build setup exists in `build.zig`, needs real device test) |
 
 All completed items were verified against the actual codebase.
