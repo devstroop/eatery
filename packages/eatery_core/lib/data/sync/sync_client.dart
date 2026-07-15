@@ -31,6 +31,7 @@ class SyncClient {
   Timer? _reconnectTimer;
   bool _connected = false;
   int _reconnectAttempt = 0;
+  bool _stopped = false;
 
   /// Maximum reconnect delay in seconds.
   static const _maxReconnectDelay = 30;
@@ -86,10 +87,13 @@ class SyncClient {
     );
     if (pending.isEmpty) return;
 
+    // Limit batch size to avoid overwhelming the host.
+    final batch = opLogService.batchForPush(pending);
+
     final pushMsg = SyncMessage.opLogPush(
       deviceId: syncService.deviceId,
       clock: opLogService.clock,
-      entries: pending.map((e) => e.toJson()).toList(),
+      entries: batch.map((e) => e.toJson()).toList(),
     );
     _send(pushMsg);
   }
@@ -144,6 +148,7 @@ class SyncClient {
   }
 
   void _scheduleReconnect() {
+    if (_stopped) return;
     _reconnectAttempt++;
     final delay = Duration(
       seconds: (1 << (_reconnectAttempt - 1)).clamp(1, _maxReconnectDelay),
@@ -153,11 +158,12 @@ class SyncClient {
     );
     _reconnectTimer?.cancel();
     _reconnectTimer = Timer(delay, () {
-      if (!_connected) connect();
+      if (!_connected && !_stopped) connect();
     });
   }
 
   Future<void> disconnect() async {
+    _stopped = true;
     _pushTimer?.cancel();
     _pushTimer = null;
     _reconnectTimer?.cancel();
