@@ -10,6 +10,9 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  ZIG_VERSION: "0.15.2"
+
 jobs:
   analyze:
     runs-on: ubuntu-latest
@@ -38,18 +41,40 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Run tests (root)
-        run: |
-          flutter test test/order_calculations_test.dart \
-                    test/router_regression_test.dart \
-                    test/data/database/eatery_store_test.dart \
-                    test/data/database/eatery_store_isolate_test.dart
+      - uses: ./.github/actions/setup-zig
+        with:
+          version: ${{ env.ZIG_VERSION }}
 
-      - name: Run core tests
+      - name: Build native library
+        run: cd libeaterystore && zig build shared-lib && cd ..
+
+      - name: Run all tests
+        run: flutter test
+
+      - name: Run core package tests
         run: flutter test packages/eatery_core/test/
 
-  build-android:
-    runs-on: ubuntu-latest
+  build:
+    needs: [analyze, test]
+    strategy:
+      matrix:
+        include:
+          - target: android
+            os: ubuntu-latest
+            build-cmd: flutter build apk --debug
+          - target: linux
+            os: ubuntu-latest
+            build-cmd: flutter build linux --debug
+          - target: ios
+            os: macos-latest
+            build-cmd: flutter build ios --no-codesign
+          - target: macos
+            os: macos-latest
+            build-cmd: flutter build macos --debug
+          - target: windows
+            os: windows-latest
+            build-cmd: flutter build windows --debug
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
@@ -60,96 +85,12 @@ jobs:
       - name: Get dependencies
         run: flutter pub get
 
-      - name: Build APK
-        # Native lib is cross-compiled by Gradle's buildEateryStore task
-        run: flutter build apk --debug
-
-  build-ios:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
+      - uses: ./.github/actions/setup-zig
         with:
-          flutter-version: '3.41.x'
-          channel: 'stable'
-
-      - name: Install Zig
-        run: brew install zig
-
-      - name: Get dependencies
-        run: flutter pub get
+          version: ${{ env.ZIG_VERSION }}
 
       - name: Build native library
         run: cd libeaterystore && zig build shared-lib && cd ..
 
-      - name: Build iOS
-        run: flutter build ios --no-codesign
-
-  build-macos:
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.41.x'
-          channel: 'stable'
-
-      - name: Install Zig
-        run: brew install zig
-
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Build native library
-        run: cd libeaterystore && zig build shared-lib && cd ..
-
-      - name: Build macOS
-        run: flutter build macos --debug
-
-  build-linux:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.41.x'
-          channel: 'stable'
-
-      - name: Install Zig
-        run: |
-          wget -q https://ziglang.org/download/0.15.0/zig-linux-x86_64-0.15.0.tar.xz
-          tar -xf zig-linux-x86_64-0.15.0.tar.xz
-          echo "$PWD/zig-linux-x86_64-0.15.0" >> $GITHUB_PATH
-
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Build native library
-        run: cd libeaterystore && zig build shared-lib && cd ..
-
-      - name: Build Linux
-        run: flutter build linux --debug
-
-  build-windows:
-    runs-on: windows-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.41.x'
-          channel: 'stable'
-
-      - name: Install Zig
-        run: |
-          Invoke-WebRequest -Uri https://ziglang.org/download/0.15.0/zig-windows-x86_64-0.15.0.zip -OutFile zig.zip
-          Expand-Archive zig.zip -DestinationPath .
-          echo "$pwd/zig-windows-x86_64-0.15.0" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Build native library
-        run: cd libeaterystore && zig build shared-lib && cd ..
-
-      - name: Build Windows
-        run: flutter build windows --debug
+      - name: Build ${{ matrix.target }}
+        run: ${{ matrix.build-cmd }}
