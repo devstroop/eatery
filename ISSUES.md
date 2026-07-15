@@ -3,6 +3,8 @@
 > **Epic:** Merge 4 Melos sub-apps (Admin, Waiter, KDS, Display) into one Flutter binary with role-based UI dispatch, RBAC-protected routing, and unified sync initialization. Delete `apps/` entirely.
 >
 > ✅ **All 28 issues are completed.** See the [Smoke Test Checklist](#smoke-test-checklist) below for manual verification scenarios.
+>
+> This file replaced the original ~106-item codebase tracker. The original content is preserved in git history (`git show <pre-unification-commit>:ISSUES.md`).
 
 ---
 
