@@ -100,11 +100,11 @@ jobs:
           version: ${{ env.ZIG_VERSION }}
 
       - name: Build native library
+        run: cd libeaterystore && zig build shared-lib && cd ..
+
+      - name: Build ${{ matrix.target }}
         run: |
           if [ "$RUNNER_OS" = "macOS" ]; then
             export SDKROOT=$(xcrun --sdk macosx --show-sdk-path)
           fi
-          cd libeaterystore && zig build shared-lib && cd ..
-
-      - name: Build ${{ matrix.target }}
-        run: ${{ matrix.build-cmd }}
+          ${{ matrix.build-cmd }}
