@@ -40,7 +40,12 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
   void initState() {
     super.initState();
     Future.delayed(Duration.zero, () async {
-      // TODO: If company has default tax slab then set it as selected
+      final slabs = ref.read(taxRepositoryProvider).getAllTaxSlabs();
+      if (slabs.isNotEmpty) {
+        setState(() {
+          selectedTaxSlab = slabs.first;
+        });
+      }
     });
   }
 

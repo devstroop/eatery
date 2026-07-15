@@ -567,7 +567,10 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
             PosOrderTypeSelectionButton(
               onTap: () {
                 _showOrderTypeSelection().then((value) {
-                  // TODO: When only new order, else postpone
+                  // TODO: Postpone logic not yet implemented. This is a known
+                  // feature gap — when the active order is not new,
+                  // the UI should offer postpone instead of a fresh
+                  // order-type selection.
                   if (value != null) {
                     setState(
                       () => ref.read(cartProvider.notifier).setOrderType(value),
