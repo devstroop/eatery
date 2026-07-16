@@ -88,7 +88,7 @@ void main() {
           orderId: id,
           fromStatus: OrderStatus.pending.id,
           toStatus: OrderStatus.voided.id,
-          changedByStaffId: 1,
+          changedByEmployeeId: 1,
           changedAt: DateTime.now(),
         ),
       );

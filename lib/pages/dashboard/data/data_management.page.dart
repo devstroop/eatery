@@ -218,7 +218,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
         var productsTable = excel.tables['Products'];
         var productCategoriesTable = excel.tables['Product Categories'];
         var taxSlabsTable = excel.tables['Tax Slabs'];
-        var staffsTable = excel.tables['Staffs'];
+        var employeesTable = excel.tables['Employees'];
         var diningTablesTable = excel.tables['Dining Tables'];
         var diningTableCategoriesTable = excel.tables['Dining Table Categories'];
         var customersTable = excel.tables['Customers'];
@@ -242,10 +242,10 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           ref.read(taxRepositoryProvider).saveTaxSlab(taxSlab);
         }
 
-        // Populate Staffs
-        for (var row in staffsTable!.rows) {
-          Staff staff = Staff.fromIterable(row.map((e) => e?.value));
-          await ref.read(staffRepositoryProvider).saveStaff(staff);
+        // Populate Employees
+        for (var row in employeesTable!.rows) {
+          Employee employee = Employee.fromIterable(row.map((e) => e?.value));
+          await ref.read(employeeRepositoryProvider).saveEmployee(employee);
         }
 
         // Populate Dining Tables
@@ -297,7 +297,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
     var productsSheet = excel['Products'];
     var productCategoriesSheet = excel['Product Categories'];
     var taxSlabsSheet = excel['Tax Slabs'];
-    var staffsSheet = excel['Staffs'];
+    var employeesSheet = excel['Employees'];
 
     // Initialize index
     int index = 0;
@@ -354,10 +354,10 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
       index++;
     }
 
-    // Populate Staffs Sheet
+    // Populate Employees Sheet
     index = 0;
-    for (var element in ref.read(staffRepositoryProvider).getAllStaff()) {
-      staffsSheet.insertRowIterables(element.toMap().values.toList(), index);
+    for (var element in ref.read(employeeRepositoryProvider).getAllEmployees()) {
+      employeesSheet.insertRowIterables(element.toMap().values.toList(), index);
       index++;
     }
 
@@ -448,7 +448,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           final msg = '❌ Error downloading ${element['name']}: $e';
           logs.add(msg);
           pd.update(msg: msg);
-          return DiningTableCategory(name: element['name']);
+          return DiningTableCategory(name: element['name'], isActive: true);
         }
       });
       _clearTable('dining_table_category', 'dining_table_category');
@@ -645,40 +645,40 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
       pd.update(msg: msg);
     }
 
-    // Staffs
+    // Employees
     try {
-      pd.update(msg: '⏳ Downloading Staffs');
-      Iterable<Map<String, dynamic>> staffsList = await getList(
-        '$baseUrl/staffs.json',
+      pd.update(msg: '⏳ Downloading Employees');
+      Iterable<Map<String, dynamic>> employeesList = await getList(
+        '$baseUrl/employees.json',
       );
-      pd.update(msg: '⌛️ Saving Staffs');
-      logs.add('🛢️ Staffs');
-      Iterable<Staff> staffs = staffsList.map((element) {
+      pd.update(msg: '⌛️ Saving Employees');
+      logs.add('🛢️ Employees');
+      Iterable<Employee> employees = employeesList.map((element) {
         try {
           final msg = '👨🏻‍🔧 ${element['name']} downloaded successfully';
           logs.add(msg);
           pd.update(msg: msg);
-          return Staff.fromMap(element);
+          return Employee.fromMap(element);
         } catch (e) {
           final msg = '❌ Error downloading ${element['name']}: $e';
           logs.add(msg);
           pd.update(msg: msg);
-          return Staff(
+          return Employee(
             name: element['name'],
-            type: StaffType.other,
+            type: EmployeeRole.other,
             isActive: false,
           );
         }
       });
-      _clearTable('staff', 'staff');
-      for (final s in staffs) {
-        await ref.read(staffRepositoryProvider).saveStaff(s);
+      _clearTable('employee', 'employee');
+      for (final s in employees) {
+        await ref.read(employeeRepositoryProvider).saveEmployee(s);
       }
-      final msg = '✅ ${staffs.length} Staffs downloaded successfully';
+      final msg = '✅ ${employees.length} Employees downloaded successfully';
       logs.add(msg);
       pd.update(msg: msg);
     } catch (e) {
-      final msg = '❌ Error downloading Staffs: $e';
+      final msg = '❌ Error downloading Employees: $e';
       logs.add(msg);
       pd.update(msg: msg);
     }

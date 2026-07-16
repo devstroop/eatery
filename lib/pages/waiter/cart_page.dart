@@ -108,7 +108,7 @@ class CartPage extends ConsumerWidget {
     final session = ref.read(cartProvider);
     if (session.cart.isEmpty) return;
 
-    final staff = ref.read(authSessionProvider);
+    final employee = ref.read(authSessionProvider);
     final repo = ref.read(orderRepositoryProvider);
     final tableRepo = ref.read(diningTableRepositoryProvider);
 
@@ -132,7 +132,7 @@ class CartPage extends ConsumerWidget {
       paidTotal: 0,
       type: session.activeOrderType ?? OrderType.dine,
       status: OrderStatus.pending,
-      staffId: staff?.id,
+      employeeId: employee?.id,
     );
 
     try {
@@ -171,7 +171,7 @@ class CartPage extends ConsumerWidget {
           orderId: orderId,
           fromStatus: OrderStatus.pending.id,
           toStatus: OrderStatus.pending.id,
-          changedByStaffId: staff?.id,
+          changedByEmployeeId: employee?.id,
           changedAt: now,
         ),
       );

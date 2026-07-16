@@ -18,7 +18,7 @@ abstract final class DashboardRoutes {
   static const kitchen = 'kitchen';
   static const inventory = 'inventory';
   static const customers = 'customers';
-  static const staffs = 'staffs';
+  static const employees = 'employees';
   static const tables = 'tables';
   static const library = 'library';
   static const data = 'data';
@@ -100,10 +100,10 @@ final _peopleItems = <_MenuItem>[
   ),
   _MenuItem(
     icon: Icons.badge,
-    label: 'Staff',
-    subtitle: 'Manage staff',
+    label: 'Employees',
+    subtitle: 'Manage employees',
     color: const Color(0xFF2980B9),
-    route: DashboardRoutes.staffs,
+    route: DashboardRoutes.employees,
   ),
   _MenuItem(
     icon: Icons.table_restaurant,
@@ -255,8 +255,8 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
       case 'customers':
         GoRouter.of(context).pushNamed('customers');
         break;
-      case 'staffs':
-        GoRouter.of(context).pushNamed('staffs');
+      case 'employees':
+        GoRouter.of(context).pushNamed('employees');
         break;
       case 'tables':
         GoRouter.of(context).pushNamed('diningTables');

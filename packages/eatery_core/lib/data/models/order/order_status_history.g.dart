@@ -12,7 +12,7 @@ _OrderStatusHistory _$OrderStatusHistoryFromJson(Map<String, dynamic> json) =>
       orderId: (json['orderId'] as num).toInt(),
       fromStatus: (json['fromStatus'] as num).toInt(),
       toStatus: (json['toStatus'] as num).toInt(),
-      changedByStaffId: (json['changedByStaffId'] as num?)?.toInt(),
+      changedByEmployeeId: (json['changedByEmployeeId'] as num?)?.toInt(),
       changedAt: epochFromJson((json['changedAt'] as num).toInt()),
       reason: json['reason'] as String?,
     );
@@ -23,7 +23,7 @@ Map<String, dynamic> _$OrderStatusHistoryToJson(_OrderStatusHistory instance) =>
       'orderId': instance.orderId,
       'fromStatus': instance.fromStatus,
       'toStatus': instance.toStatus,
-      'changedByStaffId': instance.changedByStaffId,
+      'changedByEmployeeId': instance.changedByEmployeeId,
       'changedAt': epochToJson(instance.changedAt),
       'reason': instance.reason,
     };

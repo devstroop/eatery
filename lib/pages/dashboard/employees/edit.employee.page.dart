@@ -9,21 +9,22 @@ import 'package:eatery_core/widgets/app_dialog.dart';
 
 Color _pageColor = const Color(0xFFC2592F);
 
-class EditStaffPage extends ConsumerStatefulWidget {
-  const EditStaffPage({super.key, required this.staff});
-  final Staff staff;
+class EditEmployeePage extends ConsumerStatefulWidget {
+  const EditEmployeePage({super.key, required this.employee});
+  final Employee employee;
 
   @override
-  ConsumerState<EditStaffPage> createState() => _EditStaffPageState();
+  ConsumerState<EditEmployeePage> createState() => _EditEmployeePageState();
 }
 
-class _EditStaffPageState extends ConsumerState<EditStaffPage> {
+class _EditEmployeePageState extends ConsumerState<EditEmployeePage> {
   LibraryImage? image;
   bool isActive = true;
-  final TextEditingController _controllerStaffName = TextEditingController();
-  final TextEditingController _controllerStaffPhone = TextEditingController();
-  final TextEditingController _controllerStaffPin = TextEditingController();
-  StaffType? staffType;
+  final TextEditingController _controllerEmployeeName = TextEditingController();
+  final TextEditingController _controllerEmployeePhone =
+      TextEditingController();
+  final TextEditingController _controllerEmployeePin = TextEditingController();
+  EmployeeRole? employeeType;
   final _formKey = GlobalKey<FormState>();
 
   final List<FocusNode> _focusNodes = [FocusNode(), FocusNode()];
@@ -33,12 +34,12 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
     super.initState();
     Future.delayed(Duration.zero, () {
       setState(() {
-        _controllerStaffName.text = widget.staff.name;
-        _controllerStaffPhone.text = widget.staff.phone ?? '';
-        _controllerStaffPin.text = widget.staff.pin ?? '';
-        staffType = widget.staff.type;
-        isActive = widget.staff.isActive;
-        image = LibraryImage(widget.staff.photo ?? '');
+        _controllerEmployeeName.text = widget.employee.name;
+        _controllerEmployeePhone.text = widget.employee.phone ?? '';
+        _controllerEmployeePin.text = widget.employee.pin ?? '';
+        employeeType = widget.employee.type;
+        isActive = widget.employee.isActive;
+        image = LibraryImage(widget.employee.photo ?? '');
 
         debugPrint('image: ${image?.filename}');
       });
@@ -48,7 +49,7 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
   @override
   Widget build(BuildContext context) {
     return AppPageShell(
-      title: 'Edit Staff',
+      title: 'Edit Employee',
       color: _pageColor,
       actions: [
         if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
@@ -69,21 +70,23 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
             }
             _formKey.currentState!.save();
 
-            final updated = widget.staff.copyWith(
-              name: _controllerStaffName.text,
-              phone: _controllerStaffPhone.text,
+            final updated = widget.employee.copyWith(
+              name: _controllerEmployeeName.text,
+              phone: _controllerEmployeePhone.text,
               photo: image?.filename,
-              type: staffType!,
+              type: employeeType!,
               isActive: isActive,
-              pin: _controllerStaffPin.text.isNotEmpty
-                  ? _controllerStaffPin.text
+              pin: _controllerEmployeePin.text.isNotEmpty
+                  ? _controllerEmployeePin.text
                   : null,
             );
             try {
-              ref.read(staffRepositoryProvider).saveStaff(updated).then((id) {
+              ref.read(employeeRepositoryProvider).saveEmployee(updated).then((
+                id,
+              ) {
                 AppDialog.showMessage(
                   context,
-                  message: 'Staff updated successfully',
+                  message: 'Employee updated successfully',
                   type: MessageType.success,
                   onConfirm: () => Navigator.pop(context),
                 );
@@ -91,7 +94,7 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
             } catch (_) {
               AppDialog.showMessage(
                 context,
-                message: 'Failed to add staff',
+                message: 'Failed to add employee',
                 type: MessageType.error,
               );
             }
@@ -110,7 +113,7 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
             child: ListView(
               children: [
                 UploadButton(
-                  label: 'Staff Photo',
+                  label: 'Employee Photo',
                   primaryColor: _pageColor,
                   secondaryColor: AppColors.black600,
                   libraryImage: image,
@@ -123,17 +126,17 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
                 ),
                 AppSpacing.gapMd,
                 AppFormField(
-                  controller: _controllerStaffName,
-                  label: 'Staff Name',
-                  hint: 'Enter Staff Name',
+                  controller: _controllerEmployeeName,
+                  label: 'Employee Name',
+                  hint: 'Enter Employee Name',
                   validator: (value) => value == null || value.isEmpty
-                      ? 'Please enter staff name'
+                      ? 'Please enter employee name'
                       : null,
                   focusNode: _focusNodes[0],
                   focusNext: _focusNodes[1],
                 ),
                 AppFormField(
-                  controller: _controllerStaffPhone,
+                  controller: _controllerEmployeePhone,
                   label: 'Phone Number',
                   keyboardType: TextInputType.phone,
                   hint: 'Enter Phone Number',
@@ -146,7 +149,7 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
                   },
                 ),
                 AppFormField(
-                  controller: _controllerStaffPin,
+                  controller: _controllerEmployeePin,
                   label: 'PIN (4 digits)',
                   keyboardType: TextInputType.number,
                   obscureText: true,
@@ -163,10 +166,10 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
                     return null;
                   },
                 ),
-                // Drop down for staff type
+                // Drop down for employee role
                 DropdownButtonFormField(
                   decoration: InputDecoration(
-                    labelText: 'Staff Type',
+                    labelText: 'Employee Role',
                     labelStyle: AppTypography.bodyMedium.copyWith(
                       color: AppColors.black600,
                     ),
@@ -187,20 +190,20 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
                       borderSide: BorderSide(width: 2, color: AppColors.error),
                     ),
                   ),
-                  hint: const Text('Select Staff Type'),
-                  value: staffType,
+                  hint: const Text('Select Employee Role'),
+                  value: employeeType,
                   items: [
-                    ...StaffType.values.map(
+                    ...EmployeeRole.values.map(
                       (e) => DropdownMenuItem(value: e, child: Text(e.name)),
                     ),
                   ],
                   onChanged: (value) {
                     setState(() {
-                      staffType = value;
+                      employeeType = value;
                     });
                   },
                   validator: (value) =>
-                      value == null ? 'Please select staff type' : null,
+                      value == null ? 'Please select employee role' : null,
                 ),
 
                 AppSpacing.gapMd,

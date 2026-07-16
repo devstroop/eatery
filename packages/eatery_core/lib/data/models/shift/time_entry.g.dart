@@ -8,7 +8,7 @@ part of 'time_entry.dart';
 
 _TimeEntry _$TimeEntryFromJson(Map<String, dynamic> json) => _TimeEntry(
   id: (json['id'] as num?)?.toInt(),
-  staffId: (json['staffId'] as num).toInt(),
+  employeeId: (json['employeeId'] as num).toInt(),
   shiftId: (json['shiftId'] as num?)?.toInt(),
   clockIn: epochFromJson((json['clockIn'] as num).toInt()),
   clockOut: epochFromJsonNullable((json['clockOut'] as num?)?.toInt()),
@@ -21,7 +21,7 @@ _TimeEntry _$TimeEntryFromJson(Map<String, dynamic> json) => _TimeEntry(
 Map<String, dynamic> _$TimeEntryToJson(_TimeEntry instance) =>
     <String, dynamic>{
       'id': instance.id,
-      'staffId': instance.staffId,
+      'employeeId': instance.employeeId,
       'shiftId': instance.shiftId,
       'clockIn': epochToJson(instance.clockIn),
       'clockOut': epochToJsonNullable(instance.clockOut),

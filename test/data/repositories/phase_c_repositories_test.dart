@@ -1,7 +1,7 @@
 import 'package:eatery_core/data/database/native/eatery_schema.dart';
 import 'package:eatery_core/data/database/native/eatery_store.dart';
 import 'package:eatery_core/data/models/eatery_db.dart';
-import 'package:eatery_core/data/repositories/staff_repository_sqlite.dart';
+import 'package:eatery_core/data/repositories/employee_repository_sqlite.dart';
 import 'package:eatery_core/data/repositories/subscription_repository_sqlite.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter_test/flutter_test.dart';
@@ -19,70 +19,74 @@ void main() {
   tearDown(() => store.close());
 
   // ==========================================================================
-  // Staff
+  // Employee
   // ==========================================================================
 
-  group('SqliteStaffRepository', () {
-    late SqliteStaffRepository repo;
+  group('SqliteEmployeeRepository', () {
+    late SqliteEmployeeRepository repo;
 
     setUp(() {
-      repo = SqliteStaffRepository(store: store);
+      repo = SqliteEmployeeRepository(store: store);
     });
 
     test('insert assigns id and round-trips fields', () async {
-      final s = Staff(name: 'Alice', type: StaffType.waiter, isActive: true);
-      final id = await repo.saveStaff(s);
+      final s = Employee(
+        name: 'Alice',
+        type: EmployeeRole.waiter,
+        isActive: true,
+      );
+      final id = await repo.saveEmployee(s);
       expect(id, greaterThan(0));
 
-      final all = repo.getAllStaff();
+      final all = repo.getAllEmployees();
       expect(all, hasLength(1));
       expect(all.first.name, 'Alice');
-      expect(all.first.type, StaffType.waiter);
+      expect(all.first.type, EmployeeRole.waiter);
       expect(all.first.isActive, isTrue);
     });
 
-    test('getStaffById works', () async {
-      final s = Staff(name: 'Bob', type: StaffType.chef, isActive: true);
-      final id = await repo.saveStaff(s);
-      expect(repo.getStaffById(id)!.name, 'Bob');
-      expect(repo.getStaffById(999), isNull);
+    test('getEmployeeById works', () async {
+      final s = Employee(name: 'Bob', type: EmployeeRole.chef, isActive: true);
+      final id = await repo.saveEmployee(s);
+      expect(repo.getEmployeeById(id)!.name, 'Bob');
+      expect(repo.getEmployeeById(999), isNull);
     });
 
     test('name and phone taken checks', () async {
-      await repo.saveStaff(
-        Staff(
+      await repo.saveEmployee(
+        Employee(
           name: 'Alice',
           phone: '555-0001',
-          type: StaffType.waiter,
+          type: EmployeeRole.waiter,
           isActive: true,
         ),
       );
 
-      expect(repo.isStaffNameTaken('Alice'), isTrue);
-      expect(repo.isStaffNameTaken('alice'), isTrue);
-      expect(repo.isStaffNameTaken('Bob'), isFalse);
+      expect(repo.isEmployeeNameTaken('Alice'), isTrue);
+      expect(repo.isEmployeeNameTaken('alice'), isTrue);
+      expect(repo.isEmployeeNameTaken('Bob'), isFalse);
 
-      expect(repo.isStaffPhoneTaken('555-0001'), isTrue);
-      expect(repo.isStaffPhoneTaken('0000'), isFalse);
+      expect(repo.isEmployeePhoneTaken('555-0001'), isTrue);
+      expect(repo.isEmployeePhoneTaken('0000'), isFalse);
     });
 
     test('clearAll and addAll round-trip', () async {
-      await repo.saveStaff(
-        Staff(name: 'A', type: StaffType.waiter, isActive: true),
+      await repo.saveEmployee(
+        Employee(name: 'A', type: EmployeeRole.waiter, isActive: true),
       );
-      await repo.saveStaff(
-        Staff(name: 'B', type: StaffType.chef, isActive: false),
+      await repo.saveEmployee(
+        Employee(name: 'B', type: EmployeeRole.chef, isActive: false),
       );
-      expect(repo.getAllStaff(), hasLength(2));
+      expect(repo.getAllEmployees(), hasLength(2));
 
       await repo.clearAll();
-      expect(repo.getAllStaff(), isEmpty);
+      expect(repo.getAllEmployees(), isEmpty);
 
       await repo.addAll([
-        Staff(name: 'X', type: StaffType.driver, isActive: true),
-        Staff(name: 'Y', type: StaffType.other, isActive: true),
+        Employee(name: 'X', type: EmployeeRole.driver, isActive: true),
+        Employee(name: 'Y', type: EmployeeRole.other, isActive: true),
       ]);
-      expect(repo.getAllStaff(), hasLength(2));
+      expect(repo.getAllEmployees(), hasLength(2));
     });
   });
 

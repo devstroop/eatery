@@ -26,29 +26,35 @@ class SqliteCompanyRepository implements CompanyRepository {
   @override
   Future<void> saveCompany(Company company) async {
     final m = company.toMap();
+    final id =
+        company.id ??
+        (_store.queryScalar('SELECT COALESCE(MAX(id), 0) + 1 FROM company')
+            as int);
     _store.execute(
       '''
       INSERT OR REPLACE INTO company
-        (id, logo, name, email, phone, address, password, edition,
-         currencyCode, salesTaxNumber, foodLicenseNo, subscriptionId)
-      VALUES (1,?,?,?,?,?,?,?,?,?,?,?)
+        (id, logo, name, email, phone, address, taxation,
+         currencyCode, salesTaxNumber, foodLicenseNo, subscriptionId,
+         adminEmployeeId)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
     ''',
       [
+        id,
         m['logo'],
         m['name'],
         m['email'],
         m['phone'],
         m['address'],
-        m['password'],
-        m['edition'],
+        m['taxation'],
         m['currencyCode'],
         m['salesTaxNumber'],
         m['foodLicenseNo'],
         m['subscriptionId'],
+        m['adminEmployeeId'],
       ],
     );
-    company = company.copyWith(id: 1);
-    notifyMutation('company', 1, 'save', company.toMap());
+    company = company.copyWith(id: id);
+    notifyMutation('company', id, 'save', company.toMap());
   }
 
   // ── Currencies ───────────────────────────────────────────────────────────
@@ -96,11 +102,11 @@ class SqliteCompanyRepository implements CompanyRepository {
   // ── Mappers ──────────────────────────────────────────────────────────────
 
   Company _toCompany(Map<String, Object?> row) {
-    final editionIdx = row['edition'] as int;
+    final taxationIdx = row['taxation'] as int;
     // Taxation enum: none=-1, gst=0, vat=1. Map via id, with fallback.
     Taxation taxation;
     try {
-      taxation = Taxation.values.firstWhere((e) => e.id == editionIdx);
+      taxation = Taxation.values.firstWhere((e) => e.id == taxationIdx);
     } catch (_) {
       taxation = Taxation.none;
     }
@@ -110,12 +116,12 @@ class SqliteCompanyRepository implements CompanyRepository {
       email: row['email'] as String,
       phone: row['phone'] as String,
       address: row['address'] as String,
-      password: row['password'] as String?,
       taxation: taxation,
       currencyCode: row['currencyCode'] as String?,
       salesTaxNumber: row['salesTaxNumber'] as String?,
       foodLicenseNo: row['foodLicenseNo'] as String?,
       subscriptionId: row['subscriptionId'] as int?,
+      adminEmployeeId: row['adminEmployeeId'] as int?,
       id: row['id'] as int,
     );
   }

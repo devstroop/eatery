@@ -9,20 +9,21 @@ import 'package:eatery_core/widgets/app_dialog.dart';
 
 Color _pageColor = const Color(0xFFC2592F);
 
-class AddStaffPage extends ConsumerStatefulWidget {
-  const AddStaffPage({super.key});
+class AddEmployeePage extends ConsumerStatefulWidget {
+  const AddEmployeePage({super.key});
 
   @override
-  ConsumerState<AddStaffPage> createState() => _AddStaffPageState();
+  ConsumerState<AddEmployeePage> createState() => _AddEmployeePageState();
 }
 
-class _AddStaffPageState extends ConsumerState<AddStaffPage> {
+class _AddEmployeePageState extends ConsumerState<AddEmployeePage> {
   LibraryImage? image;
   bool isActive = true;
-  final TextEditingController _controllerStaffName = TextEditingController();
-  final TextEditingController _controllerStaffPhone = TextEditingController();
-  final TextEditingController _controllerStaffPin = TextEditingController();
-  StaffType? staffType;
+  final TextEditingController _controllerEmployeeName = TextEditingController();
+  final TextEditingController _controllerEmployeePhone =
+      TextEditingController();
+  final TextEditingController _controllerEmployeePin = TextEditingController();
+  EmployeeRole? employeeType;
   final _formKey = GlobalKey<FormState>();
 
   final List<FocusNode> _focusNodes = [FocusNode(), FocusNode()];
@@ -31,7 +32,7 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
   Widget build(BuildContext context) {
     debugPrint('image: ${image?.absolutePath}');
     return AppPageShell(
-      title: 'Add Staff',
+      title: 'Add Employee',
       color: _pageColor,
       actions: [
         if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
@@ -51,23 +52,23 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
               return;
             }
             _formKey.currentState!.save();
-            final staff = Staff(
-              name: _controllerStaffName.text,
-              phone: _controllerStaffPhone.text,
+            final employee = Employee(
+              name: _controllerEmployeeName.text,
+              phone: _controllerEmployeePhone.text,
               photo: image?.filename,
               isActive: isActive,
-              type: staffType!,
-              pin: _controllerStaffPin.text.isNotEmpty
-                  ? _controllerStaffPin.text
+              type: employeeType!,
+              pin: _controllerEmployeePin.text.isNotEmpty
+                  ? _controllerEmployeePin.text
                   : null,
             );
             ref
-                .read(staffRepositoryProvider)
-                .saveStaff(staff)
+                .read(employeeRepositoryProvider)
+                .saveEmployee(employee)
                 .then(
                   (value) => AppDialog.showMessage(
                     context,
-                    message: 'Staff has been added successfully',
+                    message: 'Employee has been added successfully',
                     type: MessageType.success,
                     onConfirm: () => Navigator.pop(context),
                   ),
@@ -94,7 +95,7 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
             child: ListView(
               children: [
                 UploadButton(
-                  label: 'Staff Photo',
+                  label: 'Employee Photo',
                   primaryColor: _pageColor,
                   secondaryColor: AppColors.black600,
                   libraryImage: image,
@@ -107,20 +108,20 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                 ),
                 AppSpacing.gapMd,
                 AppFormField(
-                  controller: _controllerStaffName,
-                  label: 'Staff Name',
-                  hint: 'Enter Staff Name',
+                  controller: _controllerEmployeeName,
+                  label: 'Employee Name',
+                  hint: 'Enter Employee Name',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'Enter Staff Name';
+                      return 'Enter Employee Name';
                     }
                     if (value.length < 3) {
-                      return 'Staff Name must be at least 3 characters';
+                      return 'Employee Name must be at least 3 characters';
                     }
                     if (ref
-                        .read(staffRepositoryProvider)
-                        .isStaffNameTaken(value)) {
-                      return 'Staff Name already exists';
+                        .read(employeeRepositoryProvider)
+                        .isEmployeeNameTaken(value)) {
+                      return 'Employee Name already exists';
                     }
                     return null;
                   },
@@ -128,7 +129,7 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                   focusNext: _focusNodes[1],
                 ),
                 AppFormField(
-                  controller: _controllerStaffPhone,
+                  controller: _controllerEmployeePhone,
                   label: 'Phone Number',
                   keyboardType: TextInputType.phone,
                   hint: 'Enter Phone Number',
@@ -136,8 +137,8 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                     if (value == null || value.isEmpty) {
                       return 'Enter Phone Number';
                     } else if (ref
-                        .read(staffRepositoryProvider)
-                        .isStaffPhoneTaken(value)) {
+                        .read(employeeRepositoryProvider)
+                        .isEmployeePhoneTaken(value)) {
                       return 'Phone Number already exists';
                     }
                     return null;
@@ -148,7 +149,7 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                   },
                 ),
                 AppFormField(
-                  controller: _controllerStaffPin,
+                  controller: _controllerEmployeePin,
                   label: 'PIN (4 digits)',
                   keyboardType: TextInputType.number,
                   obscureText: true,
@@ -163,10 +164,10 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                   },
                 ),
                 AppSpacing.gapMd,
-                // Drop down for staff type
+                // Drop down for employee role
                 DropdownButtonFormField(
                   decoration: InputDecoration(
-                    labelText: 'Staff Type',
+                    labelText: 'Employee Role',
                     labelStyle: AppTypography.bodyMedium.copyWith(
                       color: AppColors.black600,
                     ),
@@ -187,20 +188,20 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                       borderSide: BorderSide(width: 2, color: AppColors.error),
                     ),
                   ),
-                  hint: const Text('Select Staff Type'),
-                  value: staffType,
+                    hint: const Text('Select Employee Role'),
+                  value: employeeType,
                   items: [
-                    ...StaffType.values.map(
+                    ...EmployeeRole.values.map(
                       (e) => DropdownMenuItem(value: e, child: Text(e.name)),
                     ),
                   ],
                   onChanged: (value) {
                     setState(() {
-                      staffType = value;
+                      employeeType = value;
                     });
                   },
                   validator: (value) =>
-                      value == null ? 'Please select staff type' : null,
+                      value == null ? 'Please select employee role' : null,
                 ),
 
                 AppSpacing.gapMd,

@@ -6,6 +6,8 @@ import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/company_provider.dart';
+import 'package:eatery_core/providers/database_provider.dart';
+import 'package:eatery_core/data/database/native/eatery_store.dart';
 import 'package:go_router/go_router.dart';
 
 final _pageColor = AppColors.primary;
@@ -294,8 +296,16 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
             onPressed: () {
               Navigator.pop(context);
 
-              if (securePinController.text !=
-                  ref.read(companyProvider)?.password) {
+              final company = ref.read(companyProvider);
+              final store = ref.read(eateryStoreProvider);
+              final adminPin = company?.adminEmployeeId != null
+                  ? store.queryScalar('SELECT pin FROM employee WHERE id = ?', [
+                          company!.adminEmployeeId,
+                        ])
+                        as String?
+                  : null;
+              if (adminPin == null ||
+                  !verifyPin(securePinController.text, adminPin)) {
                 AppDialog.showMessage(
                   context,
                   message: 'Invalid secure pin',

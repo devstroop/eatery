@@ -9,7 +9,7 @@ enum FoodType {
   nonVeg,
 }
 
-extension EditionExtension on FoodType {
+extension FoodTypeExtension on FoodType {
   int get id {
     switch (this) {
       case FoodType.veg:

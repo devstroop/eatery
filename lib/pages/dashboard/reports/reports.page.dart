@@ -52,13 +52,13 @@ class _ReportsPageState extends ConsumerState<ReportsPage> {
       if (isolate == null) {
         throw Exception('Store isolate not available');
       }
-      final staff = ref.read(authSessionProvider);
+      final employee = ref.read(authSessionProvider);
       final service = ReportService(isolate);
       final report = await service.generateReport(
         reportType: type == 'z' ? 'daily' : 'midday',
         periodStart: _start,
         periodEnd: _end,
-        generatedBy: staff?.name ?? 'Unknown',
+        generatedBy: employee?.name ?? 'Unknown',
       );
       if (!mounted) return;
       setState(() {

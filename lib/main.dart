@@ -95,7 +95,11 @@ Future setupDataAndInitDB() async {
       '${AppFileSystem.dataDir}/$kEateryDbFileName',
     );
     final schema = await rootBundle.loadString(kSchemaAssetPath);
-    initEaterySchema(store, schema);
+    initEaterySchema(
+      store,
+      schema,
+      latestVersion: SchemaMigrator.latestVersion,
+    );
     SchemaMigrator(store).migrate();
     appStore = store;
     appDatabase = EateryDatabase(dataDir: AppFileSystem.dataDir, store: store);

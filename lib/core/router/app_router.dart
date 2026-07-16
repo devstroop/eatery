@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/data/database/eatery_database.dart';
-import 'package:eatery_core/data/repositories/company_repository_sqlite.dart';
 import 'package:eatery_core/data/models/eatery_db.dart';
 import 'package:eatery_core/providers/auth_session.dart';
 import 'package:eatery_core/providers/role_provider.dart';
@@ -48,9 +47,9 @@ import 'package:eatery/pages/dashboard/settings/tax_slab/tax_slabs.page.dart';
 import 'package:eatery/pages/dashboard/settings/tax_slab/add.tax_slab.page.dart';
 import 'package:eatery/pages/dashboard/settings/tax_slab/edit.tax_slab.page.dart';
 import 'package:eatery/pages/dashboard/settings/currency_region/view.currency_region.page.dart';
-import 'package:eatery/pages/dashboard/staff/staffs.page.dart';
-import 'package:eatery/pages/dashboard/staff/add.staff.page.dart';
-import 'package:eatery/pages/dashboard/staff/edit.staff.page.dart';
+import 'package:eatery/pages/dashboard/employees/employees.page.dart';
+import 'package:eatery/pages/dashboard/employees/add.employee.page.dart';
+import 'package:eatery/pages/dashboard/employees/edit.employee.page.dart';
 import 'package:eatery/pages/setup/setup.page.dart';
 import 'package:eatery/pages/dashboard/help/help.page.dart';
 import 'package:eatery/pages/dashboard/reports/reports.page.dart';
@@ -115,17 +114,8 @@ const _roleHome = <String, String>{
 };
 
 GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
-  String? password;
-  try {
-    final repo = SqliteCompanyRepository(
-      store: store ?? EateryStore.open(':memory:'),
-    );
-    password = repo.getCurrentCompany()?.password;
-  } catch (_) {}
   final router = GoRouter(
-    initialLocation: db.hasCompany
-        ? (password != null ? '/login' : '/dashboard')
-        : '/',
+    initialLocation: db.hasCompany ? '/login' : '/',
     routes: [
       // ── Public / onboarding routes ──────────────────────────────
       GoRoute(
@@ -531,21 +521,21 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
         },
       ),
       GoRoute(
-        name: 'staffs',
-        path: '/staffs',
-        builder: (context, state) => const StaffsPage(),
+        name: 'employees',
+        path: '/employees',
+        builder: (context, state) => const EmployeesPage(),
       ),
       GoRoute(
-        name: 'addStaff',
-        path: '/staffs/add',
-        builder: (context, state) => const AddStaffPage(),
+        name: 'addEmployee',
+        path: '/employees/add',
+        builder: (context, state) => const AddEmployeePage(),
       ),
       GoRoute(
-        name: 'editStaff',
-        path: '/staffs/edit',
+        name: 'editEmployee',
+        path: '/employees/edit',
         builder: (context, state) {
-          final staff = state.extra as dynamic;
-          return EditStaffPage(staff: staff);
+          final employee = state.extra as dynamic;
+          return EditEmployeePage(employee: employee);
         },
       ),
       GoRoute(
@@ -597,11 +587,11 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
 
 /// Role-based access control redirect guard.
 ///
-/// Checks (1) role is set, (2) auth for staff roles, (3) route permissions.
+/// Checks (1) role is set, (2) auth for employee roles, (3) route permissions.
 String? _rbacRedirect(BuildContext context, GoRouterState state) {
   final container = ProviderScope.containerOf(context, listen: false);
   final role = container.read(roleProvider);
-  final authStaff = container.read(authSessionProvider);
+  final authEmployee = container.read(authSessionProvider);
   final routeName = state.name;
   final location = state.matchedLocation;
 
@@ -633,8 +623,8 @@ String? _rbacRedirect(BuildContext context, GoRouterState state) {
     return null; // allow
   }
 
-  // 4. Staff roles (admin, waiter) — must be authenticated.
-  if (authStaff == null) {
+  // 4. Employee roles (admin, waiter) — must be authenticated.
+  if (authEmployee == null) {
     if (routeName == 'login' || routeName == 'mainScreen') return null;
     return '/login';
   }

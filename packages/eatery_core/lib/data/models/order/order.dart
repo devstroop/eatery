@@ -17,7 +17,7 @@ abstract class Order with _$Order {
   const factory Order({
     int? id,
     String? customerPhone,
-    int? staffId,
+    int? employeeId,
     @JsonKey(fromJson: epochFromJson, toJson: epochToJson)
     required DateTime createdAt,
     @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)
@@ -71,7 +71,7 @@ extension OrderX on Order {
       'voidReason': row.elementAt(14),
       'voidedBy': row.elementAt(15),
       'voidedAt': row.elementAt(16),
-      'staffId': row.elementAt(17),
+      'employeeId': row.elementAt(17),
     });
   }
 
@@ -95,7 +95,7 @@ extension OrderX on Order {
       map['voidReason'],
       map['voidedBy'],
       map['voidedAt'],
-      map['staffId'],
+      map['employeeId'],
     ];
   }
 }

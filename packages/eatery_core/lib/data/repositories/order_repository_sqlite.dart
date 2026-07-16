@@ -19,7 +19,7 @@ class SqliteOrderRepository implements OrderRepository {
   static const _orderColumns =
       'customerPhone, createdAt, updatedAt, totalQuantity, subTotal, '
       'discountTotal, taxTotal, finalTotal, roundOff, grandTotal, paidTotal, '
-      'type, status, voidReason, voidedBy, voidedAt, staffId';
+      'type, status, voidReason, voidedBy, voidedAt, employeeId';
 
   static const _orderProductColumns =
       'orderId, productId, productName, quantity, price, subTotal, '
@@ -75,7 +75,7 @@ class SqliteOrderRepository implements OrderRepository {
       m['voidReason'],
       m['voidedBy'],
       m['voidedAt'],
-      m['staffId'],
+      m['employeeId'],
     ];
 
     final int id;
@@ -86,7 +86,7 @@ class SqliteOrderRepository implements OrderRepository {
         'customerPhone=?, createdAt=?, updatedAt=?, totalQuantity=?, '
         'subTotal=?, discountTotal=?, taxTotal=?, finalTotal=?, roundOff=?, '
         'grandTotal=?, paidTotal=?, type=?, status=?, voidReason=?, '
-        'voidedBy=?, voidedAt=?, staffId=? WHERE id=?',
+        'voidedBy=?, voidedAt=?, employeeId=? WHERE id=?',
         [...values, id],
       );
     } else {
@@ -128,14 +128,14 @@ class SqliteOrderRepository implements OrderRepository {
     _store.execute(
       '''
       INSERT INTO order_status_history (orderId, fromStatus, toStatus,
-        changedByStaffId, changedAt, reason)
+        changedByEmployeeId, changedAt, reason)
       VALUES (?,?,?,?,?,?)
     ''',
       [
         m['orderId'],
         m['fromStatus'],
         m['toStatus'],
-        m['changedByStaffId'],
+        m['changedByEmployeeId'],
         m['changedAt'],
         m['reason'],
       ],

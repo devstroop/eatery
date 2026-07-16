@@ -11,7 +11,7 @@ abstract class OrderStatusHistory with _$OrderStatusHistory {
     required int orderId,
     required int fromStatus,
     required int toStatus,
-    int? changedByStaffId,
+    int? changedByEmployeeId,
     @JsonKey(fromJson: epochFromJson, toJson: epochToJson)
     required DateTime changedAt,
     String? reason,

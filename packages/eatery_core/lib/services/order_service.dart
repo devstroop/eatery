@@ -6,17 +6,17 @@ import 'package:eatery_core/data/models/cart_item.dart' as cart;
 /// Handles order creation and editing business logic.
 ///
 /// Extracted from the cart page to be testable and reusable
-/// across admin POS and waiter app. Assigns [currentStaffId] to
+/// across admin POS and waiter app. Assigns [currentEmployeeId] to
 /// new orders when provided.
 class OrderService {
   final OrderRepository orderRepo;
   final DiningTableRepository tableRepo;
-  final int? currentStaffId;
+  final int? currentEmployeeId;
 
   OrderService({
     required this.orderRepo,
     required this.tableRepo,
-    this.currentStaffId,
+    this.currentEmployeeId,
   });
 
   /// Places a new order from the cart.
@@ -47,7 +47,7 @@ class OrderService {
 
     final order = Order(
       customerPhone: customer.phone,
-      staffId: currentStaffId,
+      employeeId: currentEmployeeId,
       type: type,
       status: OrderStatus.pending,
       totalQuantity: totalQty,

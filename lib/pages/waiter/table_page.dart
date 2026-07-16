@@ -30,11 +30,13 @@ class _TablePageState extends ConsumerState<TablePage> {
   Widget build(BuildContext context) {
     final tables = ref.watch(_tablesProvider);
     final cart = ref.watch(cartProvider);
-    final staff = ref.watch(authSessionProvider);
+    final employee = ref.watch(authSessionProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(staff != null ? "${staff.name}'s Tables" : 'Eatery Waiter'),
+        title: Text(
+          employee != null ? "${employee.name}'s Tables" : 'Eatery Waiter',
+        ),
         actions: [
           const SyncStatusChip(),
           Stack(
@@ -99,7 +101,7 @@ class _TablePageState extends ConsumerState<TablePage> {
           }
           return _TableGrid(
             tables: list,
-            staffId: staff?.id,
+            employeeId: employee?.id,
             onTableTap: (table) {
               ref.read(cartProvider.notifier).setOrderType(OrderType.dine);
               ref.read(cartProvider.notifier).setDiningTable(table);
@@ -116,11 +118,11 @@ class _TablePageState extends ConsumerState<TablePage> {
 
 class _TableGrid extends ConsumerStatefulWidget {
   final List<DiningTable> tables;
-  final int? staffId;
+  final int? employeeId;
   final void Function(DiningTable) onTableTap;
   const _TableGrid({
     required this.tables,
-    this.staffId,
+    this.employeeId,
     required this.onTableTap,
   });
 
@@ -135,8 +137,10 @@ class _TableGridState extends ConsumerState<_TableGrid> {
   @override
   Widget build(BuildContext context) {
     var filtered = widget.tables;
-    if (_showMyTables && widget.staffId != null) {
-      filtered = filtered.where((t) => t.staffId == widget.staffId).toList();
+    if (_showMyTables && widget.employeeId != null) {
+      filtered = filtered
+          .where((t) => t.employeeId == widget.employeeId)
+          .toList();
     }
     final available = filtered
         .where((t) => t.status == DiningTableStatus.available)
@@ -165,7 +169,7 @@ class _TableGridState extends ConsumerState<_TableGrid> {
                 onSelected: (_) => setState(() => _showMyTables = false),
               ),
               const SizedBox(width: 8),
-              if (widget.staffId != null)
+              if (widget.employeeId != null)
                 FilterChip(
                   label: const Text('My Tables'),
                   selected: _showMyTables,

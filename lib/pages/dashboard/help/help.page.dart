@@ -29,8 +29,8 @@ class HelpPage extends ConsumerWidget {
             "Add kitchen dishes and inventory items. Group them into categories for easy browsing.",
           ),
           _section(
-            "Staff & Access",
-            "Each staff member logs in with their own PIN. Admins can manage staff from Settings.",
+            "Employees & Access",
+            "Each employee logs in with their own PIN. Admins can manage employees from Settings.",
           ),
           _section(
             "Reports",

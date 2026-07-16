@@ -1,7 +1,7 @@
 import 'package:json_annotation/json_annotation.dart';
 
 @JsonEnum()
-enum StaffType {
+enum EmployeeRole {
   @JsonValue(0)
   waiter,
   @JsonValue(1)
@@ -14,33 +14,33 @@ enum StaffType {
   admin,
 }
 
-extension StaffTypeExtension on StaffType {
+extension EmployeeRoleExtension on EmployeeRole {
   int get id {
     switch (this) {
-      case StaffType.waiter:
+      case EmployeeRole.waiter:
         return 0;
-      case StaffType.chef:
+      case EmployeeRole.chef:
         return 1;
-      case StaffType.driver:
+      case EmployeeRole.driver:
         return 2;
-      case StaffType.other:
+      case EmployeeRole.other:
         return 3;
-      case StaffType.admin:
+      case EmployeeRole.admin:
         return 4;
     }
   }
 
   String get name {
     switch (this) {
-      case StaffType.waiter:
+      case EmployeeRole.waiter:
         return 'Waiter';
-      case StaffType.chef:
+      case EmployeeRole.chef:
         return 'Chef';
-      case StaffType.driver:
+      case EmployeeRole.driver:
         return 'Driver';
-      case StaffType.other:
+      case EmployeeRole.other:
         return 'Other';
-      case StaffType.admin:
+      case EmployeeRole.admin:
         return 'Admin';
     }
   }

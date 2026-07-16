@@ -85,6 +85,9 @@ class SchemaMigrator {
     debugPrint('SchemaMigrator: migrated to version $latest');
   }
 
+  /// The total number of migrations (latest schema version).
+  static int get latestVersion => _migrations.length;
+
   /// List of migration functions, indexed by version (0 = first migration).
   static const _migrations = <void Function(EateryStore)>[
     _migrationV1,
@@ -96,6 +99,9 @@ class SchemaMigrator {
     _migrationV7,
     _migrationV8,
     _migrationV9,
+    _migrationV10,
+    _migrationV11,
+    _migrationV12,
   ];
 
   /// v1: Auth & order lifecycle fields.
@@ -253,6 +259,157 @@ class SchemaMigrator {
     store.execute(
       "CREATE TABLE IF NOT EXISTS loyalty_transaction (id INTEGER PRIMARY KEY AUTOINCREMENT, customerId INTEGER NOT NULL REFERENCES customer(id), points REAL NOT NULL, type INTEGER NOT NULL, referenceId INTEGER, description TEXT, createdAt INTEGER NOT NULL)",
     );
+  }
+
+  /// v10: Schema Hardening — missing indices fixing S02-S09, S17.
+  ///
+  /// S01 default change (0→1) is applied in schema.sql for fresh DBs only.
+  /// Existing DBs retain the old DEFAULT 0, but all Dart code paths that
+  /// insert into `dining_table_category` explicitly set `isActive` — verified
+  /// at runtime by `dining_table_repository_sqlite.dart:saveCategory()` which
+  /// always writes `category.isActive ? 1 : 0`. No UPDATE needed for existing
+  /// rows.
+  static void _migrationV10(EateryStore store) {
+    store.transaction(() {
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_orders_staff ON orders(staffId)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_orders_created ON orders(createdAt)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_reservation_datetime ON reservation(dateTime)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_reservation_table ON reservation(diningTableId)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_time_entry_staff ON time_entry(staffId)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_expense_date ON expense(expenseDate)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_stock_adj_product ON stock_adjustment(productId)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_order_discount_order ON order_discount(orderId)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_customer_loyalty_customer ON customer_loyalty(customerId)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_loyalty_transaction_customer ON loyalty_transaction(customerId)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_supplier_phone ON supplier(phone)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_purchase_order_supplier ON purchase_order(supplierId)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_purchase_order_status ON purchase_order(status)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_purchase_order_item_po ON purchase_order_item(purchaseOrderId)",
+      );
+    });
+  }
+
+  /// v11: Staff → Employee rename.
+  ///
+  /// Renames the `staff` table to `employee` — SQLite auto-updates all FK
+  /// references (`REFERENCES staff(id)` → `REFERENCES employee(id)`) in the
+  /// `sqlite_master` schema during the rename, including columns whose names
+  /// were unchanged (e.g. `createdBy`, `appliedBy`).
+  ///
+  /// Column renames use `_addColumn` + data copy instead of `RENAME COLUMN`
+  /// for compatibility with SQLite < 3.25.0.
+  static void _migrationV11(EateryStore store) {
+    store.transaction(() {
+      // Rename the table. SQLite rewrites all FK REFERENCES in other tables'
+      // CREATE statements to point to `employee`.
+      store.execute('ALTER TABLE staff RENAME TO employee');
+
+      // Rename FK columns by adding the new column and copying data.
+      // Old columns remain (unused) — no DROP COLUMN needed, which would
+      // require SQLite 3.35.0+.
+
+      // orders.staffId → employeeId (v2)
+      _addColumn(store, 'orders', 'employeeId', 'INTEGER');
+      _execOrIgnore(store, 'UPDATE orders SET employeeId = staffId');
+
+      // dining_table.staffId → employeeId
+      _addColumn(store, 'dining_table', 'employeeId', 'INTEGER');
+      _execOrIgnore(store, 'UPDATE dining_table SET employeeId = staffId');
+
+      // time_entry.staffId → employeeId (v5)
+      _addColumn(store, 'time_entry', 'employeeId', 'INTEGER');
+      _execOrIgnore(store, 'UPDATE time_entry SET employeeId = staffId');
+
+      // company.adminStaffId → adminEmployeeId (v1)
+      _addColumn(store, 'company', 'adminEmployeeId', 'INTEGER');
+      _execOrIgnore(store, 'UPDATE company SET adminEmployeeId = adminStaffId');
+
+      // order_status_history.changedByStaffId → changedByEmployeeId (v1)
+      _addColumn(
+        store,
+        'order_status_history',
+        'changedByEmployeeId',
+        'INTEGER',
+      );
+      _execOrIgnore(
+        store,
+        'UPDATE order_status_history SET changedByEmployeeId = changedByStaffId',
+      );
+
+      // Recreate indexes with new names (SQLite cannot rename indexes).
+      store.execute('DROP INDEX IF EXISTS idx_orders_staff');
+      store.execute(
+        'CREATE INDEX IF NOT EXISTS idx_orders_employee ON orders(employeeId)',
+      );
+      store.execute('DROP INDEX IF EXISTS idx_time_entry_staff');
+      store.execute(
+        'CREATE INDEX IF NOT EXISTS idx_time_entry_employee ON time_entry(employeeId)',
+      );
+    });
+  }
+
+  /// v12: Rename `company.edition` → `company.taxation`.
+  ///
+  /// Aligns the SQL column name with the Dart `Taxation` enum, completing the
+  /// Edition→Taxation rename (N01-N04). Uses `_addColumn` + data copy for
+  /// compatibility with SQLite < 3.25.0.
+  ///
+  /// Also defensively ensures `employee.email`, `pinUpdatedAt` and `lastLoginAt`
+  /// exist — they were added by v1 (on the `staff` table) and carried over by
+  /// the v11 `ALTER TABLE RENAME TO employee`. In practice every migrated DB
+  /// already has them; this catch-all handles any schema that somehow bypassed
+  /// v1 (e.g. a fresh schema.sql that predated those columns but had
+  /// `eatery_schema.dart` already setting latestVersion).
+  static void _migrationV12(EateryStore store) {
+    // Company: edition → taxation (old column intentionally left in place;
+    // DROP COLUMN requires SQLite 3.35.0+).
+    _addColumn(store, 'company', 'taxation', 'INTEGER NOT NULL DEFAULT 0');
+    _execOrIgnore(store, 'UPDATE company SET taxation = edition');
+
+    // Employee audit fields (defensive — already present via v1 + v11 chain).
+    _addColumn(store, 'employee', 'email', 'TEXT');
+    _addColumn(store, 'employee', 'pinUpdatedAt', 'INTEGER');
+    _addColumn(store, 'employee', 'lastLoginAt', 'INTEGER');
+  }
+
+  /// Runs [sql] and ignores "no such column" errors that occur when the old
+  /// column doesn't exist (e.g. on re-run or in test schemas).
+  static void _execOrIgnore(EateryStore store, String sql) {
+    try {
+      store.execute(sql);
+    } catch (_) {
+      // Column may not exist — safe to ignore.
+    }
   }
 
   /// Safely adds a column if it doesn't already exist.

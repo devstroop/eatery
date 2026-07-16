@@ -4,11 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:eatery_core/eatery_core.dart';
 
 final _waiterOrdersProvider = FutureProvider.autoDispose<List<Order>>((ref) {
-  final staff = ref.watch(authSessionProvider);
+  final employee = ref.watch(authSessionProvider);
   final repo = ref.read(orderRepositoryProvider);
-  if (staff == null) return [];
+  if (employee == null) return [];
   final all = repo.getAllOrders();
-  return all.where((o) => o.staffId == staff.id).toList();
+  return all.where((o) => o.employeeId == employee.id).toList();
 });
 
 class WaiterOrdersPage extends ConsumerStatefulWidget {
@@ -46,11 +46,13 @@ class _WaiterOrdersPageState extends ConsumerState<WaiterOrdersPage> {
   @override
   Widget build(BuildContext context) {
     final orders = ref.watch(_waiterOrdersProvider);
-    final staff = ref.watch(authSessionProvider);
+    final employee = ref.watch(authSessionProvider);
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(staff != null ? "${staff.name}'s Orders" : 'My Orders'),
+        title: Text(
+          employee != null ? "${employee.name}'s Orders" : 'My Orders',
+        ),
         actions: const [SyncStatusChip()],
       ),
       body: orders.when(
@@ -104,8 +106,8 @@ class _OrderCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final staff = ref.watch(authSessionProvider);
-    final isWaiter = staff?.type == StaffType.waiter;
+    final employee = ref.watch(authSessionProvider);
+    final isWaiter = employee?.type == EmployeeRole.waiter;
     final currencySymbol =
         ref.read(companyProvider.notifier).currency?.symbol ?? '';
     final canEdit =
@@ -121,7 +123,7 @@ class _OrderCard extends ConsumerWidget {
       trailing: canEdit
           ? PopupMenuButton<String>(
               onSelected: (value) =>
-                  _handleAction(context, ref, value, order, staff),
+                  _handleAction(context, ref, value, order, employee),
               itemBuilder: (_) => [
                 if (order.status == OrderStatus.pending)
                   const PopupMenuItem(
@@ -155,12 +157,12 @@ class _OrderCard extends ConsumerWidget {
     WidgetRef ref,
     String value,
     Order order,
-    Staff? staff,
+    Employee? employee,
   ) {
     if (value == 'edit') {
       context.pushNamed('editOrder', extra: order);
     } else if (value == 'void') {
-      _showVoidDialog(context, ref, order, staff);
+      _showVoidDialog(context, ref, order, employee);
     }
   }
 
@@ -168,7 +170,7 @@ class _OrderCard extends ConsumerWidget {
     BuildContext context,
     WidgetRef ref,
     Order order,
-    Staff? staff,
+    Employee? employee,
   ) {
     final reasonController = TextEditingController();
     showDialog(
@@ -211,7 +213,7 @@ class _OrderCard extends ConsumerWidget {
                   order.copyWith(
                     status: OrderStatus.voided,
                     voidReason: reason,
-                    voidedBy: staff?.name,
+                    voidedBy: employee?.name,
                     voidedAt: now,
                     updatedAt: now,
                   ),
@@ -221,7 +223,7 @@ class _OrderCard extends ConsumerWidget {
                     orderId: order.id!,
                     fromStatus: order.status.id,
                     toStatus: OrderStatus.voided.id,
-                    changedByStaffId: staff?.id,
+                    changedByEmployeeId: employee?.id,
                     changedAt: now,
                   ),
                 );
@@ -231,7 +233,7 @@ class _OrderCard extends ConsumerWidget {
                   VoidLogEntry(
                     orderId: order.id!,
                     voidedAt: now,
-                    voidedBy: staff?.name ?? '',
+                    voidedBy: employee?.name ?? '',
                     reasonCode: 'WAITER_VOID',
                     reasonDescription: reason,
                     amount: order.grandTotal,

@@ -22,7 +22,7 @@ _DiningTable _$DiningTableFromJson(Map<String, dynamic> json) => _DiningTable(
   shape: (json['shape'] as num?)?.toInt() ?? 0,
   width: (json['width'] as num?)?.toDouble(),
   height: (json['height'] as num?)?.toDouble(),
-  staffId: (json['staffId'] as num?)?.toInt(),
+  employeeId: (json['employeeId'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$DiningTableToJson(_DiningTable instance) =>
@@ -40,7 +40,7 @@ Map<String, dynamic> _$DiningTableToJson(_DiningTable instance) =>
       'shape': instance.shape,
       'width': instance.width,
       'height': instance.height,
-      'staffId': instance.staffId,
+      'employeeId': instance.employeeId,
     };
 
 const _$DiningTableStatusEnumMap = {
