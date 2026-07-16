@@ -9,7 +9,9 @@ part of 'order.dart';
 _Order _$OrderFromJson(Map<String, dynamic> json) => _Order(
   id: (json['id'] as num?)?.toInt(),
   customerPhone: json['customerPhone'] as String?,
+  customerId: (json['customerId'] as num?)?.toInt(),
   employeeId: (json['employeeId'] as num?)?.toInt(),
+  companyId: (json['companyId'] as num?)?.toInt(),
   createdAt: epochFromJson((json['createdAt'] as num).toInt()),
   updatedAt: epochFromJsonNullable((json['updatedAt'] as num?)?.toInt()),
   totalQuantity: (json['totalQuantity'] as num).toInt(),
@@ -32,7 +34,9 @@ _Order _$OrderFromJson(Map<String, dynamic> json) => _Order(
 Map<String, dynamic> _$OrderToJson(_Order instance) => <String, dynamic>{
   'id': instance.id,
   'customerPhone': instance.customerPhone,
+  'customerId': instance.customerId,
   'employeeId': instance.employeeId,
+  'companyId': instance.companyId,
   'createdAt': epochToJson(instance.createdAt),
   'updatedAt': epochToJsonNullable(instance.updatedAt),
   'totalQuantity': instance.totalQuantity,

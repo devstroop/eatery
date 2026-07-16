@@ -33,6 +33,7 @@ void main() {
         address: '123 Main St',
         taxation: Taxation.gst,
         currencyCode: 'INR',
+        createdAt: DateTime.now(),
       );
       await repo.saveCompany(c);
       expect(c.id, 1);
@@ -52,6 +53,7 @@ void main() {
           phone: '000',
           address: 'Old St',
           taxation: Taxation.none,
+          createdAt: DateTime.now(),
         ),
       );
 
@@ -62,6 +64,7 @@ void main() {
           phone: '111',
           address: 'New St',
           taxation: Taxation.vat,
+          createdAt: DateTime.now(),
         ),
       );
 

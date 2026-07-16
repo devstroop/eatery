@@ -198,6 +198,8 @@ extension CompanyDtoX on CompanyDto {
     currencyCode: currencyCode,
     salesTaxNumber: salesTaxNumber,
     foodLicenseNo: foodLicenseNo,
+    // DTO does not carry createdAt — use now() as best-effort.
+    createdAt: DateTime.now(),
   );
 }
 

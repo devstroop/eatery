@@ -19,6 +19,8 @@ _Company _$CompanyFromJson(Map<String, dynamic> json) => _Company(
   salesTaxNumber: json['taxLicNo'] as String?,
   subscriptionId: (json['subscriptionId'] as num?)?.toInt(),
   adminEmployeeId: (json['adminEmployeeId'] as num?)?.toInt(),
+  createdAt: epochFromJson((json['createdAt'] as num).toInt()),
+  updatedAt: epochFromJsonNullable((json['updatedAt'] as num?)?.toInt()),
 );
 
 Map<String, dynamic> _$CompanyToJson(_Company instance) => <String, dynamic>{
@@ -34,6 +36,8 @@ Map<String, dynamic> _$CompanyToJson(_Company instance) => <String, dynamic>{
   'taxLicNo': instance.salesTaxNumber,
   'subscriptionId': instance.subscriptionId,
   'adminEmployeeId': instance.adminEmployeeId,
+  'createdAt': epochToJson(instance.createdAt),
+  'updatedAt': epochToJsonNullable(instance.updatedAt),
 };
 
 const _$TaxationEnumMap = {Taxation.none: -1, Taxation.gst: 0, Taxation.vat: 1};

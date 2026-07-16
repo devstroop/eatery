@@ -17,9 +17,9 @@ class SqliteOrderRepository implements OrderRepository {
   final EateryStore _store;
 
   static const _orderColumns =
-      'customerPhone, createdAt, updatedAt, totalQuantity, subTotal, '
+      'customerPhone, customerId, createdAt, updatedAt, totalQuantity, subTotal, '
       'discountTotal, taxTotal, finalTotal, roundOff, grandTotal, paidTotal, '
-      'type, status, voidReason, voidedBy, voidedAt, employeeId';
+      'type, status, voidReason, voidedBy, voidedAt, employeeId, companyId';
 
   static const _orderProductColumns =
       'orderId, productId, productName, quantity, price, subTotal, '
@@ -60,6 +60,7 @@ class SqliteOrderRepository implements OrderRepository {
     final m = order.toMap();
     final values = <Object?>[
       m['customerPhone'],
+      m['customerId'],
       m['createdAt'],
       m['updatedAt'],
       m['totalQuantity'],
@@ -76,6 +77,7 @@ class SqliteOrderRepository implements OrderRepository {
       m['voidedBy'],
       m['voidedAt'],
       m['employeeId'],
+      m['companyId'],
     ];
 
     final int id;
@@ -83,16 +85,16 @@ class SqliteOrderRepository implements OrderRepository {
       id = order.id!;
       _store.execute(
         'UPDATE orders SET '
-        'customerPhone=?, createdAt=?, updatedAt=?, totalQuantity=?, '
+        'customerPhone=?, customerId=?, createdAt=?, updatedAt=?, totalQuantity=?, '
         'subTotal=?, discountTotal=?, taxTotal=?, finalTotal=?, roundOff=?, '
         'grandTotal=?, paidTotal=?, type=?, status=?, voidReason=?, '
-        'voidedBy=?, voidedAt=?, employeeId=? WHERE id=?',
+        'voidedBy=?, voidedAt=?, employeeId=?, companyId=? WHERE id=?',
         [...values, id],
       );
     } else {
       _store.execute(
         'INSERT INTO orders ($_orderColumns) '
-        'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
+        'VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)',
         values,
       );
       id = _store.queryScalar('SELECT last_insert_rowid()') as int;

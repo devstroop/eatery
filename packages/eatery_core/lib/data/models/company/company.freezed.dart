@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Company {
 
- int? get id; String? get logo; String get name; String get email; String get phone; String get address; Taxation get taxation; String? get currencyCode;@JsonKey(name: 'foodLicNo') String? get foodLicenseNo;@JsonKey(name: 'taxLicNo') String? get salesTaxNumber; int? get subscriptionId; int? get adminEmployeeId;
+ int? get id; String? get logo; String get name; String get email; String get phone; String get address; Taxation get taxation; String? get currencyCode;@JsonKey(name: 'foodLicNo') String? get foodLicenseNo;@JsonKey(name: 'taxLicNo') String? get salesTaxNumber; int? get subscriptionId; int? get adminEmployeeId;@JsonKey(fromJson: epochFromJson, toJson: epochToJson) DateTime get createdAt;@JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) DateTime? get updatedAt;
 /// Create a copy of Company
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $CompanyCopyWith<Company> get copyWith => _$CompanyCopyWithImpl<Company>(this as
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Company&&(identical(other.id, id) || other.id == id)&&(identical(other.logo, logo) || other.logo == logo)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.address, address) || other.address == address)&&(identical(other.taxation, taxation) || other.taxation == taxation)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.foodLicenseNo, foodLicenseNo) || other.foodLicenseNo == foodLicenseNo)&&(identical(other.salesTaxNumber, salesTaxNumber) || other.salesTaxNumber == salesTaxNumber)&&(identical(other.subscriptionId, subscriptionId) || other.subscriptionId == subscriptionId)&&(identical(other.adminEmployeeId, adminEmployeeId) || other.adminEmployeeId == adminEmployeeId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Company&&(identical(other.id, id) || other.id == id)&&(identical(other.logo, logo) || other.logo == logo)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.address, address) || other.address == address)&&(identical(other.taxation, taxation) || other.taxation == taxation)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.foodLicenseNo, foodLicenseNo) || other.foodLicenseNo == foodLicenseNo)&&(identical(other.salesTaxNumber, salesTaxNumber) || other.salesTaxNumber == salesTaxNumber)&&(identical(other.subscriptionId, subscriptionId) || other.subscriptionId == subscriptionId)&&(identical(other.adminEmployeeId, adminEmployeeId) || other.adminEmployeeId == adminEmployeeId)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,logo,name,email,phone,address,taxation,currencyCode,foodLicenseNo,salesTaxNumber,subscriptionId,adminEmployeeId);
+int get hashCode => Object.hash(runtimeType,id,logo,name,email,phone,address,taxation,currencyCode,foodLicenseNo,salesTaxNumber,subscriptionId,adminEmployeeId,createdAt,updatedAt);
 
 @override
 String toString() {
-  return 'Company(id: $id, logo: $logo, name: $name, email: $email, phone: $phone, address: $address, taxation: $taxation, currencyCode: $currencyCode, foodLicenseNo: $foodLicenseNo, salesTaxNumber: $salesTaxNumber, subscriptionId: $subscriptionId, adminEmployeeId: $adminEmployeeId)';
+  return 'Company(id: $id, logo: $logo, name: $name, email: $email, phone: $phone, address: $address, taxation: $taxation, currencyCode: $currencyCode, foodLicenseNo: $foodLicenseNo, salesTaxNumber: $salesTaxNumber, subscriptionId: $subscriptionId, adminEmployeeId: $adminEmployeeId, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $CompanyCopyWith<$Res>  {
   factory $CompanyCopyWith(Company value, $Res Function(Company) _then) = _$CompanyCopyWithImpl;
 @useResult
 $Res call({
- int? id, String? logo, String name, String email, String phone, String address, Taxation taxation, String? currencyCode,@JsonKey(name: 'foodLicNo') String? foodLicenseNo,@JsonKey(name: 'taxLicNo') String? salesTaxNumber, int? subscriptionId, int? adminEmployeeId
+ int? id, String? logo, String name, String email, String phone, String address, Taxation taxation, String? currencyCode,@JsonKey(name: 'foodLicNo') String? foodLicenseNo,@JsonKey(name: 'taxLicNo') String? salesTaxNumber, int? subscriptionId, int? adminEmployeeId,@JsonKey(fromJson: epochFromJson, toJson: epochToJson) DateTime createdAt,@JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) DateTime? updatedAt
 });
 
 
@@ -65,7 +65,7 @@ class _$CompanyCopyWithImpl<$Res>
 
 /// Create a copy of Company
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? logo = freezed,Object? name = null,Object? email = null,Object? phone = null,Object? address = null,Object? taxation = null,Object? currencyCode = freezed,Object? foodLicenseNo = freezed,Object? salesTaxNumber = freezed,Object? subscriptionId = freezed,Object? adminEmployeeId = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? logo = freezed,Object? name = null,Object? email = null,Object? phone = null,Object? address = null,Object? taxation = null,Object? currencyCode = freezed,Object? foodLicenseNo = freezed,Object? salesTaxNumber = freezed,Object? subscriptionId = freezed,Object? adminEmployeeId = freezed,Object? createdAt = null,Object? updatedAt = freezed,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,logo: freezed == logo ? _self.logo : logo // ignore: cast_nullable_to_non_nullable
@@ -79,7 +79,9 @@ as String?,foodLicenseNo: freezed == foodLicenseNo ? _self.foodLicenseNo : foodL
 as String?,salesTaxNumber: freezed == salesTaxNumber ? _self.salesTaxNumber : salesTaxNumber // ignore: cast_nullable_to_non_nullable
 as String?,subscriptionId: freezed == subscriptionId ? _self.subscriptionId : subscriptionId // ignore: cast_nullable_to_non_nullable
 as int?,adminEmployeeId: freezed == adminEmployeeId ? _self.adminEmployeeId : adminEmployeeId // ignore: cast_nullable_to_non_nullable
-as int?,
+as int?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 
@@ -164,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String? logo,  String name,  String email,  String phone,  String address,  Taxation taxation,  String? currencyCode, @JsonKey(name: 'foodLicNo')  String? foodLicenseNo, @JsonKey(name: 'taxLicNo')  String? salesTaxNumber,  int? subscriptionId,  int? adminEmployeeId)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String? logo,  String name,  String email,  String phone,  String address,  Taxation taxation,  String? currencyCode, @JsonKey(name: 'foodLicNo')  String? foodLicenseNo, @JsonKey(name: 'taxLicNo')  String? salesTaxNumber,  int? subscriptionId,  int? adminEmployeeId, @JsonKey(fromJson: epochFromJson, toJson: epochToJson)  DateTime createdAt, @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)  DateTime? updatedAt)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Company() when $default != null:
-return $default(_that.id,_that.logo,_that.name,_that.email,_that.phone,_that.address,_that.taxation,_that.currencyCode,_that.foodLicenseNo,_that.salesTaxNumber,_that.subscriptionId,_that.adminEmployeeId);case _:
+return $default(_that.id,_that.logo,_that.name,_that.email,_that.phone,_that.address,_that.taxation,_that.currencyCode,_that.foodLicenseNo,_that.salesTaxNumber,_that.subscriptionId,_that.adminEmployeeId,_that.createdAt,_that.updatedAt);case _:
   return orElse();
 
 }
@@ -185,10 +187,10 @@ return $default(_that.id,_that.logo,_that.name,_that.email,_that.phone,_that.add
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String? logo,  String name,  String email,  String phone,  String address,  Taxation taxation,  String? currencyCode, @JsonKey(name: 'foodLicNo')  String? foodLicenseNo, @JsonKey(name: 'taxLicNo')  String? salesTaxNumber,  int? subscriptionId,  int? adminEmployeeId)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String? logo,  String name,  String email,  String phone,  String address,  Taxation taxation,  String? currencyCode, @JsonKey(name: 'foodLicNo')  String? foodLicenseNo, @JsonKey(name: 'taxLicNo')  String? salesTaxNumber,  int? subscriptionId,  int? adminEmployeeId, @JsonKey(fromJson: epochFromJson, toJson: epochToJson)  DateTime createdAt, @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)  DateTime? updatedAt)  $default,) {final _that = this;
 switch (_that) {
 case _Company():
-return $default(_that.id,_that.logo,_that.name,_that.email,_that.phone,_that.address,_that.taxation,_that.currencyCode,_that.foodLicenseNo,_that.salesTaxNumber,_that.subscriptionId,_that.adminEmployeeId);case _:
+return $default(_that.id,_that.logo,_that.name,_that.email,_that.phone,_that.address,_that.taxation,_that.currencyCode,_that.foodLicenseNo,_that.salesTaxNumber,_that.subscriptionId,_that.adminEmployeeId,_that.createdAt,_that.updatedAt);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -205,10 +207,10 @@ return $default(_that.id,_that.logo,_that.name,_that.email,_that.phone,_that.add
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String? logo,  String name,  String email,  String phone,  String address,  Taxation taxation,  String? currencyCode, @JsonKey(name: 'foodLicNo')  String? foodLicenseNo, @JsonKey(name: 'taxLicNo')  String? salesTaxNumber,  int? subscriptionId,  int? adminEmployeeId)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String? logo,  String name,  String email,  String phone,  String address,  Taxation taxation,  String? currencyCode, @JsonKey(name: 'foodLicNo')  String? foodLicenseNo, @JsonKey(name: 'taxLicNo')  String? salesTaxNumber,  int? subscriptionId,  int? adminEmployeeId, @JsonKey(fromJson: epochFromJson, toJson: epochToJson)  DateTime createdAt, @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)  DateTime? updatedAt)?  $default,) {final _that = this;
 switch (_that) {
 case _Company() when $default != null:
-return $default(_that.id,_that.logo,_that.name,_that.email,_that.phone,_that.address,_that.taxation,_that.currencyCode,_that.foodLicenseNo,_that.salesTaxNumber,_that.subscriptionId,_that.adminEmployeeId);case _:
+return $default(_that.id,_that.logo,_that.name,_that.email,_that.phone,_that.address,_that.taxation,_that.currencyCode,_that.foodLicenseNo,_that.salesTaxNumber,_that.subscriptionId,_that.adminEmployeeId,_that.createdAt,_that.updatedAt);case _:
   return null;
 
 }
@@ -220,7 +222,7 @@ return $default(_that.id,_that.logo,_that.name,_that.email,_that.phone,_that.add
 @JsonSerializable()
 
 class _Company implements Company {
-  const _Company({this.id = 1, this.logo, required this.name, required this.email, required this.phone, required this.address, required this.taxation, this.currencyCode, @JsonKey(name: 'foodLicNo') this.foodLicenseNo, @JsonKey(name: 'taxLicNo') this.salesTaxNumber, this.subscriptionId, this.adminEmployeeId});
+  const _Company({this.id = 1, this.logo, required this.name, required this.email, required this.phone, required this.address, required this.taxation, this.currencyCode, @JsonKey(name: 'foodLicNo') this.foodLicenseNo, @JsonKey(name: 'taxLicNo') this.salesTaxNumber, this.subscriptionId, this.adminEmployeeId, @JsonKey(fromJson: epochFromJson, toJson: epochToJson) required this.createdAt, @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) this.updatedAt});
   factory _Company.fromJson(Map<String, dynamic> json) => _$CompanyFromJson(json);
 
 @override@JsonKey() final  int? id;
@@ -235,6 +237,8 @@ class _Company implements Company {
 @override@JsonKey(name: 'taxLicNo') final  String? salesTaxNumber;
 @override final  int? subscriptionId;
 @override final  int? adminEmployeeId;
+@override@JsonKey(fromJson: epochFromJson, toJson: epochToJson) final  DateTime createdAt;
+@override@JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) final  DateTime? updatedAt;
 
 /// Create a copy of Company
 /// with the given fields replaced by the non-null parameter values.
@@ -249,16 +253,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Company&&(identical(other.id, id) || other.id == id)&&(identical(other.logo, logo) || other.logo == logo)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.address, address) || other.address == address)&&(identical(other.taxation, taxation) || other.taxation == taxation)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.foodLicenseNo, foodLicenseNo) || other.foodLicenseNo == foodLicenseNo)&&(identical(other.salesTaxNumber, salesTaxNumber) || other.salesTaxNumber == salesTaxNumber)&&(identical(other.subscriptionId, subscriptionId) || other.subscriptionId == subscriptionId)&&(identical(other.adminEmployeeId, adminEmployeeId) || other.adminEmployeeId == adminEmployeeId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Company&&(identical(other.id, id) || other.id == id)&&(identical(other.logo, logo) || other.logo == logo)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.address, address) || other.address == address)&&(identical(other.taxation, taxation) || other.taxation == taxation)&&(identical(other.currencyCode, currencyCode) || other.currencyCode == currencyCode)&&(identical(other.foodLicenseNo, foodLicenseNo) || other.foodLicenseNo == foodLicenseNo)&&(identical(other.salesTaxNumber, salesTaxNumber) || other.salesTaxNumber == salesTaxNumber)&&(identical(other.subscriptionId, subscriptionId) || other.subscriptionId == subscriptionId)&&(identical(other.adminEmployeeId, adminEmployeeId) || other.adminEmployeeId == adminEmployeeId)&&(identical(other.createdAt, createdAt) || other.createdAt == createdAt)&&(identical(other.updatedAt, updatedAt) || other.updatedAt == updatedAt));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,logo,name,email,phone,address,taxation,currencyCode,foodLicenseNo,salesTaxNumber,subscriptionId,adminEmployeeId);
+int get hashCode => Object.hash(runtimeType,id,logo,name,email,phone,address,taxation,currencyCode,foodLicenseNo,salesTaxNumber,subscriptionId,adminEmployeeId,createdAt,updatedAt);
 
 @override
 String toString() {
-  return 'Company(id: $id, logo: $logo, name: $name, email: $email, phone: $phone, address: $address, taxation: $taxation, currencyCode: $currencyCode, foodLicenseNo: $foodLicenseNo, salesTaxNumber: $salesTaxNumber, subscriptionId: $subscriptionId, adminEmployeeId: $adminEmployeeId)';
+  return 'Company(id: $id, logo: $logo, name: $name, email: $email, phone: $phone, address: $address, taxation: $taxation, currencyCode: $currencyCode, foodLicenseNo: $foodLicenseNo, salesTaxNumber: $salesTaxNumber, subscriptionId: $subscriptionId, adminEmployeeId: $adminEmployeeId, createdAt: $createdAt, updatedAt: $updatedAt)';
 }
 
 
@@ -269,7 +273,7 @@ abstract mixin class _$CompanyCopyWith<$Res> implements $CompanyCopyWith<$Res> {
   factory _$CompanyCopyWith(_Company value, $Res Function(_Company) _then) = __$CompanyCopyWithImpl;
 @override @useResult
 $Res call({
- int? id, String? logo, String name, String email, String phone, String address, Taxation taxation, String? currencyCode,@JsonKey(name: 'foodLicNo') String? foodLicenseNo,@JsonKey(name: 'taxLicNo') String? salesTaxNumber, int? subscriptionId, int? adminEmployeeId
+ int? id, String? logo, String name, String email, String phone, String address, Taxation taxation, String? currencyCode,@JsonKey(name: 'foodLicNo') String? foodLicenseNo,@JsonKey(name: 'taxLicNo') String? salesTaxNumber, int? subscriptionId, int? adminEmployeeId,@JsonKey(fromJson: epochFromJson, toJson: epochToJson) DateTime createdAt,@JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable) DateTime? updatedAt
 });
 
 
@@ -286,7 +290,7 @@ class __$CompanyCopyWithImpl<$Res>
 
 /// Create a copy of Company
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? logo = freezed,Object? name = null,Object? email = null,Object? phone = null,Object? address = null,Object? taxation = null,Object? currencyCode = freezed,Object? foodLicenseNo = freezed,Object? salesTaxNumber = freezed,Object? subscriptionId = freezed,Object? adminEmployeeId = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? logo = freezed,Object? name = null,Object? email = null,Object? phone = null,Object? address = null,Object? taxation = null,Object? currencyCode = freezed,Object? foodLicenseNo = freezed,Object? salesTaxNumber = freezed,Object? subscriptionId = freezed,Object? adminEmployeeId = freezed,Object? createdAt = null,Object? updatedAt = freezed,}) {
   return _then(_Company(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,logo: freezed == logo ? _self.logo : logo // ignore: cast_nullable_to_non_nullable
@@ -300,7 +304,9 @@ as String?,foodLicenseNo: freezed == foodLicenseNo ? _self.foodLicenseNo : foodL
 as String?,salesTaxNumber: freezed == salesTaxNumber ? _self.salesTaxNumber : salesTaxNumber // ignore: cast_nullable_to_non_nullable
 as String?,subscriptionId: freezed == subscriptionId ? _self.subscriptionId : subscriptionId // ignore: cast_nullable_to_non_nullable
 as int?,adminEmployeeId: freezed == adminEmployeeId ? _self.adminEmployeeId : adminEmployeeId // ignore: cast_nullable_to_non_nullable
-as int?,
+as int?,createdAt: null == createdAt ? _self.createdAt : createdAt // ignore: cast_nullable_to_non_nullable
+as DateTime,updatedAt: freezed == updatedAt ? _self.updatedAt : updatedAt // ignore: cast_nullable_to_non_nullable
+as DateTime?,
   ));
 }
 
