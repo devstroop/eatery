@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/data/database/eatery_database.dart';
+import 'package:eatery_core/data/models/eatery_db.dart';
 import 'package:eatery_core/providers/auth_session.dart';
 import 'package:eatery_core/providers/role_provider.dart';
 import 'package:eatery/pages/authentication/login.page.dart';
