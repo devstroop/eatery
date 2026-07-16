@@ -187,7 +187,7 @@ jobs:
         run: ${{ matrix.build-cmd }}
 
   build-ios:
-    name: Build iOS (no codesign)
+    name: ios
     runs-on: macos-15
     needs: [analyze, test]
     steps:

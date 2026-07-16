@@ -168,7 +168,7 @@ jobs:
           path: ${{ matrix.artifact }}
 
   build-ios:
-    name: Build iOS
+    name: ios
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v4
