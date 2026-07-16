@@ -1,4 +1,5 @@
 import 'package:eatery_core/data/models/company/taxation.dart';
+import 'package:eatery_core/data/models/converters.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'company.freezed.dart';
@@ -19,6 +20,10 @@ abstract class Company with _$Company {
     @JsonKey(name: 'taxLicNo') String? salesTaxNumber,
     int? subscriptionId,
     int? adminEmployeeId,
+    @JsonKey(fromJson: epochFromJson, toJson: epochToJson)
+    required DateTime createdAt,
+    @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)
+    DateTime? updatedAt,
   }) = _Company;
 
   factory Company.fromJson(Map<String, dynamic> json) =>
@@ -42,6 +47,8 @@ abstract class Company with _$Company {
       'taxLicNo': list.elementAt(9),
       'subscriptionId': list.elementAt(10),
       'adminEmployeeId': list.elementAt(11),
+      'createdAt': list.elementAt(12),
+      'updatedAt': list.elementAt(13),
     });
   }
 }
@@ -49,7 +56,7 @@ abstract class Company with _$Company {
 extension CompanyX on Company {
   Map<String, Object?> toMap() => toJson() as Map<String, Object?>;
 
-  Iterable<dynamic> toIterable() {
+  List<dynamic> toIterable() {
     var map = toMap();
     return [
       map['id'],
@@ -64,6 +71,8 @@ extension CompanyX on Company {
       map['taxLicNo'],
       map['subscriptionId'],
       map['adminEmployeeId'],
+      map['createdAt'],
+      map['updatedAt'],
     ];
   }
 }
