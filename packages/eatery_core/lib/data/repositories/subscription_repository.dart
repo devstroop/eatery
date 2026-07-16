@@ -36,11 +36,12 @@ class SubscriptionRepository {
   Subscription _toSub(Map<String, Object?> r) {
     SubscriptionType? st;
     final stId = r['subscriptionType'] as int?;
-    if (stId != null)
+    if (stId != null) {
       st = SubscriptionType.values.firstWhere(
         (e) => e.id == stId,
         orElse: () => SubscriptionType.individual,
       );
+    }
     return Subscription(
       purchaseCode: r['purchaseCode'] as String?,
       validFrom: r['validFrom'] != null

@@ -2,6 +2,7 @@ import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery_core/widgets/app_dialog.dart';
@@ -9,7 +10,7 @@ import 'package:eatery_core/widgets/app_dialog.dart';
 Color _pageColor = const Color(0xFFC2592F);
 
 class EditStaffPage extends ConsumerStatefulWidget {
-  const EditStaffPage({Key? key, required this.staff}) : super(key: key);
+  const EditStaffPage({super.key, required this.staff});
   final Staff staff;
 
   @override
@@ -58,6 +59,46 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
             },
           ),
       ],
+      bottomNavigationBar: BottomAppBar(
+        color: AppColors.white,
+        child: AppButton.primary(
+          onPressed: () async {
+            final isValid = _formKey.currentState!.validate();
+            if (!isValid) {
+              return;
+            }
+            _formKey.currentState!.save();
+
+            final updated = widget.staff.copyWith(
+              name: _controllerStaffName.text,
+              phone: _controllerStaffPhone.text,
+              photo: image?.filename,
+              type: staffType!,
+              isActive: isActive,
+              pin: _controllerStaffPin.text.isNotEmpty
+                  ? _controllerStaffPin.text
+                  : null,
+            );
+            try {
+              ref.read(staffRepositoryProvider).saveStaff(updated).then((id) {
+                AppDialog.showMessage(
+                  context,
+                  message: 'Staff updated successfully',
+                  type: MessageType.success,
+                  onConfirm: () => Navigator.pop(context),
+                );
+              });
+            } catch (_) {
+              AppDialog.showMessage(
+                context,
+                message: 'Failed to add staff',
+                type: MessageType.error,
+              );
+            }
+          },
+          label: 'Save',
+        ),
+      ),
       child: InkWell(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -80,27 +121,20 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
                     });
                   },
                 ),
-                SpacingStyle.defaultVerticalSpacing,
-                LabeledCustomTextFormField(
+                AppSpacing.gapMd,
+                AppFormField(
                   controller: _controllerStaffName,
                   label: 'Staff Name',
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
                   hint: 'Enter Staff Name',
                   validator: (value) => value == null || value.isEmpty
                       ? 'Please enter staff name'
                       : null,
                   focusNode: _focusNodes[0],
-                  onFieldSubmitted: (v) {
-                    _focusNodes[1].requestFocus();
-                  },
+                  focusNext: _focusNodes[1],
                 ),
-                SpacingStyle.defaultVerticalSpacing,
-                LabeledCustomTextFormField(
+                AppFormField(
                   controller: _controllerStaffPhone,
                   label: 'Phone Number',
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
                   keyboardType: TextInputType.phone,
                   hint: 'Enter Phone Number',
                   validator: (value) => value == null || value.isEmpty
@@ -111,12 +145,9 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
                     FocusScope.of(context).unfocus();
                   },
                 ),
-                SpacingStyle.defaultVerticalSpacing,
-                LabeledCustomTextFormField(
+                AppFormField(
                   controller: _controllerStaffPin,
                   label: 'PIN (4 digits)',
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
                   keyboardType: TextInputType.number,
                   obscureText: true,
                   hint: 'Enter PIN',
@@ -132,7 +163,6 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
                     return null;
                   },
                 ),
-                SpacingStyle.defaultVerticalSpacing,
                 // Drop down for staff type
                 DropdownButtonFormField(
                   decoration: InputDecoration(
@@ -173,7 +203,7 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
                       value == null ? 'Please select staff type' : null,
                 ),
 
-                SpacingStyle.defaultVerticalSpacing,
+                AppSpacing.gapMd,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -201,46 +231,6 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
               ],
             ),
           ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.white,
-        child: AppButton.primary(
-          onPressed: () async {
-            final isValid = _formKey.currentState!.validate();
-            if (!isValid) {
-              return;
-            }
-            _formKey.currentState!.save();
-
-            final updated = widget.staff.copyWith(
-              name: _controllerStaffName.text,
-              phone: _controllerStaffPhone.text,
-              photo: image?.filename,
-              type: staffType!,
-              isActive: isActive,
-              pin: _controllerStaffPin.text.isNotEmpty
-                  ? _controllerStaffPin.text
-                  : null,
-            );
-            try {
-              ref.read(staffRepositoryProvider).saveStaff(updated).then((id) {
-                AppDialog.showMessage(
-                  context,
-                  message: 'Staff updated successfully',
-                  type: MessageType.success,
-                  onConfirm: () => Navigator.pop(context),
-                );
-              });
-            } catch (_) {
-              AppDialog.showMessage(
-                context,
-                message: 'Failed to add staff',
-                type: MessageType.error,
-              );
-            }
-          },
-          label: 'Save',
         ),
       ),
     );

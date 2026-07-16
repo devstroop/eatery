@@ -3,7 +3,7 @@ import 'package:eatery_core/theme/app_colors.dart';
 
 class CustomTextFromField extends StatefulWidget {
   const CustomTextFromField({
-    Key? key,
+    super.key,
     required this.controller,
     required this.hint,
     this.obscureText = false,
@@ -24,7 +24,7 @@ class CustomTextFromField extends StatefulWidget {
     this.focusNode,
     this.textInputAction,
     this.onChanged,
-  }) : super(key: key);
+  });
 
   final TextEditingController? controller;
   final String hint;

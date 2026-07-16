@@ -2,7 +2,7 @@ import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 
 class HelpBottomSheet extends StatelessWidget {
-  const HelpBottomSheet({Key? key}) : super(key: key);
+  const HelpBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class HelpBottomSheet extends StatelessWidget {
           child: ListView(
             shrinkWrap: true,
             children: [
-              const Center(child: BottomViewGrip()),
+              const Center(child: AppBottomSheetGrip()),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

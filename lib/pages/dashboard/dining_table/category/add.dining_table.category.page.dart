@@ -8,7 +8,7 @@ import 'package:eatery_core/widgets/app_dialog.dart';
 Color _pageColor = AppColors.menuCategories;
 
 class AddDiningTableCategoryPage extends ConsumerStatefulWidget {
-  const AddDiningTableCategoryPage({Key? key}) : super(key: key);
+  const AddDiningTableCategoryPage({super.key});
 
   @override
   ConsumerState<AddDiningTableCategoryPage> createState() =>
@@ -37,50 +37,6 @@ class _AddDiningTableCategoryPageState
             },
           ),
       ],
-      child: InkWell(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              children: [
-                LabeledCustomTextFormField(
-                  keyboardType: TextInputType.text,
-                  controller: _controllerCategoryName,
-                  label: 'Category Name',
-                  hint: 'eg. Terrace',
-                  obscureText: false,
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
-                  focusNode: _focusNodes[0],
-                  onFieldSubmitted: (v) {
-                    _focusNodes[1].requestFocus();
-                  },
-                ),
-                const SizedBox(height: 6.0),
-                LabeledCustomTextFormField(
-                  keyboardType: TextInputType.text,
-                  controller: _controllerCategoryDescription,
-                  label: 'Description',
-                  hint: 'eg. Terrace',
-                  obscureText: false,
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
-                  multiline: true,
-                  focusNode: _focusNodes[1],
-                  onFieldSubmitted: (v) {
-                    FocusScope.of(context).unfocus();
-                  },
-                ),
-                const SizedBox(height: 6.0),
-              ],
-            ),
-          ),
-        ),
-      ),
       bottomNavigationBar: BottomAppBar(
         color: AppColors.white,
         child: AppButton.primary(
@@ -103,6 +59,37 @@ class _AddDiningTableCategoryPageState
             ).then((value) => Navigator.pop(this.context, diningTableCategory));
           },
           label: 'Save',
+        ),
+      ),
+      child: InkWell(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              children: [
+                AppFormField(
+                  label: 'Category Name',
+                  hint: 'eg. Terrace',
+                  controller: _controllerCategoryName,
+                  focusNext: _focusNodes[1],
+                ),
+                AppFormField(
+                  label: 'Description',
+                  hint: 'eg. Terrace',
+                  controller: _controllerCategoryDescription,
+                  multiline: true,
+                  focusNode: _focusNodes[1],
+                  onFieldSubmitted: (v) {
+                    FocusScope.of(context).unfocus();
+                  },
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

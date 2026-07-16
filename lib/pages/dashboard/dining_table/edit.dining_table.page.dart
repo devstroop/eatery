@@ -9,8 +9,7 @@ import 'package:eatery_core/widgets/app_dialog.dart';
 Color _pageColor = AppColors.menuCategories;
 
 class EditDiningTablePage extends ConsumerStatefulWidget {
-  const EditDiningTablePage({Key? key, required this.diningTable})
-    : super(key: key);
+  const EditDiningTablePage({super.key, required this.diningTable});
   final DiningTable diningTable;
   @override
   ConsumerState<EditDiningTablePage> createState() =>
@@ -61,115 +60,6 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
             },
           ),
       ],
-      child: InkWell(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              children: [
-                LabeledCustomTextFormField(
-                  label: 'Dining Table Name',
-                  controller: _controllerCategoryName,
-                  hint: 'eg. Table 1 ',
-                  obscureText: false,
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
-                  focusNode: _focusNodes[0],
-                  onFieldSubmitted: (v) {
-                    _focusNodes[1].requestFocus();
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter dining table name';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 12.0),
-                LabeledCustomTextFormField(
-                  label: 'Description',
-                  controller: _controllerCategoryDescription,
-                  hint: 'eg. Table description',
-                  obscureText: false,
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
-                  multiline: true,
-                  focusNode: _focusNodes[1],
-                  onFieldSubmitted: (v) {
-                    FocusScope.of(context).unfocus();
-                  },
-                ),
-                const SizedBox(height: 12.0),
-                LabeledCustomTextFormField(
-                  label: 'Capacity',
-                  controller: _controllerCapacity,
-                  hint: 'eg. 4/ 6/ 8/ 10/ etc.',
-                  obscureText: false,
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
-                  keyboardType: TextInputType.number,
-                  onFieldSubmitted: (v) {
-                    FocusScope.of(context).unfocus();
-                  },
-                ),
-                const SizedBox(height: 12.0),
-                Text(
-                  'Category',
-                  style: AppTypography.labelMedium.copyWith(
-                    color: AppColors.black600,
-                  ),
-                ),
-                Container(
-                  width: double.maxFinite,
-                  height: 60,
-                  margin: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    children: [
-                      PosCategoryWidget(
-                        active: diningTableCategory == null,
-                        label: 'None',
-                        onTap: () {
-                          setState(() {
-                            diningTableCategory = null;
-                          });
-                        },
-                      ),
-                      ...ref
-                          .read(diningTableRepositoryProvider)
-                          .getAllCategories()
-                          .map((e) {
-                            return PosCategoryWidget(
-                              active: diningTableCategory?.id == e.id,
-                              label: e.name,
-                              onTap: () {
-                                setState(() {
-                                  diningTableCategory = e;
-                                });
-                              },
-                            );
-                          }),
-                    ],
-                  ),
-                ),
-                const SizedBox(height: 12.0),
-                DiningTableStatusWidget(
-                  status: DiningTableStatus.available,
-                  onTap: () {
-                    setState(() {
-                      status = DiningTableStatus.available;
-                    });
-                  },
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
       bottomNavigationBar: BottomAppBar(
         color: AppColors.white,
         child: AppButton.primary(
@@ -211,16 +101,108 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
           label: 'Update',
         ),
       ),
+      child: InkWell(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              children: [
+                AppFormField(
+                  label: 'Dining Table Name',
+                  controller: _controllerCategoryName,
+                  hint: 'eg. Table 1 ',
+                  focusNode: _focusNodes[0],
+                  focusNext: _focusNodes[1],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter dining table name';
+                    }
+                    return null;
+                  },
+                ),
+                AppFormField(
+                  label: 'Description',
+                  controller: _controllerCategoryDescription,
+                  hint: 'eg. Table description',
+                  multiline: true,
+                  focusNode: _focusNodes[1],
+                  onFieldSubmitted: (v) {
+                    FocusScope.of(context).unfocus();
+                  },
+                ),
+                AppFormField(
+                  label: 'Capacity',
+                  controller: _controllerCapacity,
+                  hint: 'eg. 4/ 6/ 8/ 10/ etc.',
+                  keyboardType: TextInputType.number,
+                ),
+                Text(
+                  'Category',
+                  style: AppTypography.labelMedium.copyWith(
+                    color: AppColors.black600,
+                  ),
+                ),
+                Container(
+                  width: double.maxFinite,
+                  height: 60,
+                  margin: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    children: [
+                      AppCategoryChip(
+                        selected: diningTableCategory == null,
+                        label: 'None',
+                        onTap: () {
+                          setState(() {
+                            diningTableCategory = null;
+                          });
+                        },
+                      ),
+                      ...ref
+                          .read(diningTableRepositoryProvider)
+                          .getAllCategories()
+                          .map((e) {
+                            return AppCategoryChip(
+                              selected: diningTableCategory?.id == e.id,
+                              label: e.name,
+                              onTap: () {
+                                setState(() {
+                                  diningTableCategory = e;
+                                });
+                              },
+                            );
+                          }),
+                    ],
+                  ),
+                ),
+                const SizedBox(height: 12.0),
+                DiningTableStatusWidget(
+                  status: DiningTableStatus.available,
+                  onTap: () {
+                    setState(() {
+                      status = DiningTableStatus.available;
+                    });
+                  },
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
     );
   }
 }
 
 class DiningTableStatusWidget extends StatelessWidget {
   const DiningTableStatusWidget({
-    Key? key,
+    super.key,
     required this.status,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   final DiningTableStatus status;
   final VoidCallback onTap;

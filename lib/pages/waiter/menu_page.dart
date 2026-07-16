@@ -203,7 +203,7 @@ class _ProductCard extends StatelessWidget {
                           child: Image.network(
                             product.image!,
                             fit: BoxFit.cover,
-                            errorBuilder: (_, __, ___) => Icon(
+                            errorBuilder: (_, _, _) => Icon(
                               Icons.restaurant,
                               size: 48,
                               color: AppColors.primary,

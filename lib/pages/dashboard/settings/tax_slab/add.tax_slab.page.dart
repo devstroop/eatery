@@ -3,13 +3,14 @@ import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 
 final _pageColor = AppColors.primary;
 
 class AddTaxSlabSettingsPage extends ConsumerStatefulWidget {
-  const AddTaxSlabSettingsPage({Key? key}) : super(key: key);
+  const AddTaxSlabSettingsPage({super.key});
 
   @override
   ConsumerState<AddTaxSlabSettingsPage> createState() =>
@@ -62,6 +63,13 @@ class _AddTaxSlabSettingsPageState
     return AppPageShell(
       title: 'Add Tax Slab',
       color: _pageColor,
+      bottomNavigationBar: BottomAppBar(
+        child: AppButton.primary(
+          height: 48.0,
+          onPressed: _submit,
+          label: 'Save',
+        ),
+      ),
       child: InkWell(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Padding(
@@ -70,15 +78,12 @@ class _AddTaxSlabSettingsPageState
             key: _formKey,
             child: ListView(
               children: [
-                LabeledCustomTextFormField(
+                AppFormField(
                   controller: controllerSlabName,
                   label: 'Tax Slab name',
-                  themeColor: _pageColor,
                   hint: 'Enter tax slab name',
                   focusNode: focus1,
-                  onFieldSubmitted: (v) {
-                    FocusScope.of(context).requestFocus(focus2);
-                  },
+                  focusNext: focus2,
                   validator: (value) {
                     if (value!.trim().isEmpty) {
                       return 'Tax slab name cannot be blank';
@@ -87,14 +92,11 @@ class _AddTaxSlabSettingsPageState
                     }
                     return null;
                   },
-                  foregroundColor: AppColors.black600,
                 ),
-                SpacingStyle.defaultVerticalSpacing,
-                LabeledCustomTextFormField(
+                AppFormField(
                   controller: controllerTaxRate,
                   label: 'Tax Rate',
                   hint: 'Enter tax rate',
-                  themeColor: _pageColor,
                   focusNode: focus2,
                   suffix: Icon(Icons.percent, color: AppColors.white600),
                   keyboardType: const TextInputType.numberWithOptions(
@@ -105,12 +107,7 @@ class _AddTaxSlabSettingsPageState
                       return 'Tax rate cannot be blank';
                     return null;
                   },
-                  onFieldSubmitted: (v) {
-                    FocusScope.of(context).unfocus();
-                  },
-                  foregroundColor: AppColors.black600,
                 ),
-                SpacingStyle.defaultVerticalSpacing,
                 Text(
                   'Select Tax Type',
                   style: AppTypography.labelMedium.copyWith(
@@ -136,13 +133,6 @@ class _AddTaxSlabSettingsPageState
               ],
             ),
           ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: AppButton.primary(
-          height: 48.0,
-          onPressed: _submit,
-          label: 'Save',
         ),
       ),
     );

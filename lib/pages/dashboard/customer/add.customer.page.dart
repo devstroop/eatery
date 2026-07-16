@@ -3,14 +3,14 @@ import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 
 Color _pageColor = AppColors.primary;
 
 class AddCustomerPage extends ConsumerStatefulWidget {
-  const AddCustomerPage({Key? key, this.addressRequired = false})
-    : super(key: key);
+  const AddCustomerPage({super.key, this.addressRequired = false});
   final bool addressRequired;
 
   @override
@@ -59,119 +59,6 @@ class _AddCustomerPageState extends ConsumerState<AddCustomerPage> {
             },
           ),
       ],
-      child: InkWell(
-        onTap: () => FocusScope.of(context).unfocus(),
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              children: [
-                LabeledCustomTextFormField(
-                  controller: _controllerCustomerPhone,
-                  label: 'Phone Number (*required)',
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
-                  keyboardType: TextInputType.phone,
-                  hint: 'Enter phone number',
-                  focusNode: _focusNodes[0],
-                  textInputAction: TextInputAction.next,
-                  onFieldSubmitted: (value) {
-                    _focusNodes[1].requestFocus();
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Phone number is required';
-                    } else if (ref
-                            .read(customerRepositoryProvider)
-                            .getCustomerByPhone(value) !=
-                        null) {
-                      return 'Phone number already exists';
-                    }
-                    return null;
-                  },
-                ),
-                SpacingStyle.defaultVerticalSpacing,
-                LabeledCustomTextFormField(
-                  controller: _controllerCustomerName,
-                  label: 'Customer Name',
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
-                  hint: 'Enter customer name',
-                  textInputAction: TextInputAction.next,
-                  focusNode: _focusNodes[1],
-                  onFieldSubmitted: (value) {
-                    _focusNodes[2].requestFocus();
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Customer name is required';
-                    }
-                    return null;
-                  },
-                ),
-                SpacingStyle.defaultVerticalSpacing,
-                LabeledCustomTextFormField(
-                  controller: _controllerCustomerAddress,
-                  label: 'Address',
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
-                  keyboardType: TextInputType.streetAddress,
-                  hint: 'Enter full address',
-                  multiline: true,
-                  focusNode: _focusNodes[3],
-                  onFieldSubmitted: (value) {
-                    _focusNodes[4].requestFocus();
-                  },
-                  validator: (value) {
-                    if (widget.addressRequired) {
-                      if (value == null || value.isEmpty) {
-                        return 'Address is required';
-                      }
-                    }
-                    return null;
-                  },
-                ),
-                SpacingStyle.defaultVerticalSpacing,
-                LabeledCustomTextFormField(
-                  controller: _controllerCustomerLandmark,
-                  label: 'Landmark (Optional)',
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
-                  keyboardType: TextInputType.text,
-                  hint: 'Enter landmark',
-                  focusNode: _focusNodes[4],
-                  onFieldSubmitted: (value) {
-                    _focusNodes[4].unfocus();
-                  },
-                ),
-                SpacingStyle.defaultVerticalSpacing,
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Checkbox(
-                      value: isActive,
-                      activeColor: _pageColor,
-                      onChanged: (value) {
-                        setState(() {
-                          isActive = value ?? false;
-                        });
-                      },
-                    ),
-                    const SizedBox(width: 6.0),
-                    Text(
-                      'Active',
-                      style: AppTypography.bodyLarge.copyWith(
-                        color: AppColors.black600,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
       bottomNavigationBar: BottomAppBar(
         child: AppButton.primary(
           onPressed: () async {
@@ -207,6 +94,98 @@ class _AddCustomerPageState extends ConsumerState<AddCustomerPage> {
                 });
           },
           label: 'Save',
+        ),
+      ),
+      child: InkWell(
+        onTap: () => FocusScope.of(context).unfocus(),
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              children: [
+                AppFormField(
+                  controller: _controllerCustomerPhone,
+                  label: 'Phone Number (*required)',
+                  keyboardType: TextInputType.phone,
+                  hint: 'Enter phone number',
+                  focusNode: _focusNodes[0],
+                  focusNext: _focusNodes[1],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Phone number is required';
+                    } else if (ref
+                            .read(customerRepositoryProvider)
+                            .getCustomerByPhone(value) !=
+                        null) {
+                      return 'Phone number already exists';
+                    }
+                    return null;
+                  },
+                ),
+                AppFormField(
+                  controller: _controllerCustomerName,
+                  label: 'Customer Name',
+                  hint: 'Enter customer name',
+                  focusNode: _focusNodes[1],
+                  focusNext: _focusNodes[2],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Customer name is required';
+                    }
+                    return null;
+                  },
+                ),
+                AppFormField(
+                  controller: _controllerCustomerAddress,
+                  label: 'Address',
+                  keyboardType: TextInputType.streetAddress,
+                  hint: 'Enter full address',
+                  multiline: true,
+                  focusNode: _focusNodes[2],
+                  focusNext: _focusNodes[3],
+                  validator: (value) {
+                    if (widget.addressRequired) {
+                      if (value == null || value.isEmpty) {
+                        return 'Address is required';
+                      }
+                    }
+                    return null;
+                  },
+                ),
+                AppFormField(
+                  controller: _controllerCustomerLandmark,
+                  label: 'Landmark (Optional)',
+                  hint: 'Enter landmark',
+                  focusNode: _focusNodes[3],
+                  onFieldSubmitted: (value) {
+                    _focusNodes[3].unfocus();
+                  },
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Checkbox(
+                      value: isActive,
+                      activeColor: _pageColor,
+                      onChanged: (value) {
+                        setState(() {
+                          isActive = value ?? false;
+                        });
+                      },
+                    ),
+                    const SizedBox(width: 6.0),
+                    Text(
+                      'Active',
+                      style: AppTypography.bodyLarge.copyWith(
+                        color: AppColors.black600,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

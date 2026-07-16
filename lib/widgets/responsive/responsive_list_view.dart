@@ -58,7 +58,7 @@ class ResponsiveListView extends StatelessWidget {
     return ListView.separated(
       padding: const EdgeInsets.symmetric(vertical: 8),
       itemCount: itemCount,
-      separatorBuilder: separator ?? (_, __) => const Divider(height: 1),
+      separatorBuilder: separator ?? (_, _) => const Divider(height: 1),
       itemBuilder: itemBuilder,
     );
   }

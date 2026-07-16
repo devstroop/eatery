@@ -93,8 +93,6 @@ eatery/
 │   ├── plan/                # Roadmaps, audits
 │   └── decisions/           # Architecture Decision Records
 ├── assets/                  # Images, Lottie, icons, SQLite schema
-├── ISSUES.md                # Phase 1 migration tracker (completed)
-└── PHASE2.md                # Phase 2 feature tracker (in progress)
 ```
 
 ---
@@ -103,13 +101,12 @@ eatery/
 
 | Link | Audience |
 |------|----------|
-| [Architecture Overview](docs/guides/architecture-overview.md) | Developers starting out |
-| [Single-App Architecture](docs/architecture/single-app-architecture.md) | Technical deep-dive |
 | [Getting Started](docs/guides/getting-started.md) | New contributors |
-| [Product Requirements](docs/product/index.md) | Product / stakeholders |
-| [Technical Specs](docs/architecture/index.md) | Engineering team |
-| [Development Guide](docs/development/setup.md) | Contributors |
-| [Phase 2 Roadmap](PHASE2.md) | Current work tracker |
+| [Architecture Overview](docs/guides/architecture-overview.md) | Developers starting out |
+| [Architecture Index](docs/architecture/index.md) | Design tokens, component library, ADRs, specs |
+| [Reconstruction History](docs/development/reconstruction-history.md) | Full Phase 1-7 evolution timeline |
+| [Product Requirements](docs/product/index.md) | PRDs, personas, feature roadmap |
+| [Development Guide](docs/development/setup.md) | Build, CI, testing |
 
 ---
 

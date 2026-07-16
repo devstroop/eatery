@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class SettingPage extends ConsumerStatefulWidget {
-  const SettingPage({Key? key}) : super(key: key);
+  const SettingPage({super.key});
   @override
   ConsumerState<SettingPage> createState() => _SettingPageState();
 }
@@ -31,11 +31,11 @@ class _SettingPageState extends ConsumerState<SettingPage> {
         scrollDirection: Axis.vertical,
         shrinkWrap: true,
         children: [
-          MenuTile(
-            prefixIcon: Icons.business,
+          AppMenuTile(
+            leading: Icons.business,
             title: 'Company',
             subtitle: 'Manage Company Profile',
-            postfixIcon: Icons.chevron_right,
+            trailing: Icons.chevron_right,
             color: getThemeColor(),
             onTap: () {
               GoRouter.of(
@@ -43,67 +43,67 @@ class _SettingPageState extends ConsumerState<SettingPage> {
               ).pushNamed('companySettings').then((_) => setState(() {}));
             },
           ),
-          MenuTile(
-            prefixIcon: Icons.attach_money,
+          AppMenuTile(
+            leading: Icons.attach_money,
             title: 'Currency and Region',
             subtitle: 'Manage Currency and Region Settings',
-            postfixIcon: Icons.chevron_right,
+            trailing: Icons.chevron_right,
             color: getThemeColor(),
             onTap: () => GoRouter.of(context).pushNamed('currencyRegion'),
           ),
-          MenuTile(
-            prefixIcon: Icons.percent,
+          AppMenuTile(
+            leading: Icons.percent,
             title: 'Tax',
             subtitle: 'Manage Tax Slabs',
-            postfixIcon: Icons.chevron_right,
+            trailing: Icons.chevron_right,
             color: getThemeColor(),
             onTap: () => GoRouter.of(context).pushNamed('taxSlabs'),
           ),
-          MenuTile(
-            prefixIcon: Icons.tune,
+          AppMenuTile(
+            leading: Icons.tune,
             title: 'Modifiers',
             subtitle: 'Product customization options',
-            postfixIcon: Icons.chevron_right,
+            trailing: Icons.chevron_right,
             color: getThemeColor(),
             onTap: () => GoRouter.of(
               context,
             ).pushNamed('modifierGroups').then((_) => setState(() {})),
           ),
-          MenuTile(
-            prefixIcon: Icons.business,
+          AppMenuTile(
+            leading: Icons.business,
             title: 'Suppliers',
             subtitle: 'Manage vendors',
-            postfixIcon: Icons.chevron_right,
+            trailing: Icons.chevron_right,
             color: getThemeColor(),
             onTap: () => GoRouter.of(
               context,
             ).pushNamed('suppliers').then((_) => setState(() {})),
           ),
-          MenuTile(
-            prefixIcon: Icons.receipt_long,
+          AppMenuTile(
+            leading: Icons.receipt_long,
             title: 'Purchase Orders',
             subtitle: 'Inventory procurement',
-            postfixIcon: Icons.chevron_right,
+            trailing: Icons.chevron_right,
             color: getThemeColor(),
             onTap: () => GoRouter.of(
               context,
             ).pushNamed('purchaseOrders').then((_) => setState(() {})),
           ),
-          MenuTile(
-            prefixIcon: Icons.local_offer,
+          AppMenuTile(
+            leading: Icons.local_offer,
             title: 'Discounts',
             subtitle: 'Promotions & discount rules',
-            postfixIcon: Icons.chevron_right,
+            trailing: Icons.chevron_right,
             color: getThemeColor(),
             onTap: () => GoRouter.of(
               context,
             ).pushNamed('discounts').then((_) => setState(() {})),
           ),
-          MenuTile(
-            prefixIcon: Icons.print,
+          AppMenuTile(
+            leading: Icons.print,
             title: 'Printer',
             subtitle: 'Manage Printing Devices',
-            postfixIcon: Icons.chevron_right,
+            trailing: Icons.chevron_right,
             color: getThemeColor(),
             onTap: () => GoRouter.of(
               context,
@@ -122,11 +122,11 @@ class _SettingPageState extends ConsumerState<SettingPage> {
                 ),
               ),
             ),
-            MenuTile(
-              prefixIcon: Icons.storage,
+            AppMenuTile(
+              leading: Icons.storage,
               title: 'Load Sample Data',
               subtitle: 'Populate DB with demo data',
-              postfixIcon: Icons.download,
+              trailing: Icons.download,
               color: Colors.orange,
               onTap: () async {
                 await SeedData.load(ref.read(eateryStoreProvider));
@@ -137,11 +137,11 @@ class _SettingPageState extends ConsumerState<SettingPage> {
                 }
               },
             ),
-            MenuTile(
-              prefixIcon: Icons.bug_report,
+            AppMenuTile(
+              leading: Icons.bug_report,
               title: 'Database Inspector',
               subtitle: 'View and manage DB contents',
-              postfixIcon: Icons.chevron_right,
+              trailing: Icons.chevron_right,
               color: Colors.orange,
               onTap: () => GoRouter.of(context).pushNamed('databaseInspector'),
             ),

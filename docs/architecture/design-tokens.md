@@ -155,6 +155,157 @@ AppShadows.lg  // (0, 4), blur 16, 20% black — floating elements, modals
 AppShadows.none
 ```
 
+### Component-Specific Shadows
+
+```dart
+AppShadows.cardElevated  // (0, 4), blur 6, spread 1 — ProductCard, elevated containers
+AppShadows.notification  // (0, 2), blur 4 — notification cards
+```
+
+## Component-Specific Tokens (Phase 6)
+
+Every atomic component resolves its visual properties through these tokens. Components never contain raw `Color(0x...)` or `EdgeInsets.all(N)` — see [ADR-004](../decisions/004-zero-raw-visual-values.md).
+
+### Button Tokens
+
+```dart
+// Colors
+AppColors.buttonFilledPrimaryBg/Fg        // primary / white
+AppColors.buttonFilledSecondaryBg/Fg      // grey100 / grey900
+AppColors.buttonFilledDestructiveBg/Fg    // destructive / white
+AppColors.buttonOutlinedPrimaryBorder/Fg  // primary / primary
+AppColors.buttonOutlinedSecondaryBorder/Fg // grey300 / grey700
+AppColors.buttonOutlinedDestructiveBorder/Fg // destructive / destructive
+AppColors.buttonGhostFg/Bg               // grey700 / transparent
+AppColors.buttonDisabledOpacity           // 0.5
+
+// Spacing
+AppSpacing.buttonHeightSm/Md/Lg          // 36 / 48 / 56
+AppSpacing.buttonRadius                  // radiusLg (12)
+AppSpacing.buttonPaddingSm               // EdgeInsets(16,8)
+AppSpacing.buttonPaddingMd               // EdgeInsets(24,12)
+AppSpacing.buttonPaddingLg               // EdgeInsets(32,16)
+
+// Typography
+AppTypography.buttonLabelSm              // labelLarge
+AppTypography.buttonLabelMd              // 16px w600
+AppTypography.buttonLabelLg              // 18px w600
+```
+
+### TextField Tokens
+
+```dart
+AppColors.fieldFill         // muted (grey100)
+AppColors.fieldBorder       // grey300
+AppColors.fieldFocusBorder  // primary
+AppColors.fieldErrorBorder  // error
+AppColors.fieldHint         // grey400
+AppColors.fieldLabel        // grey600
+AppColors.fieldText         // foreground (grey900)
+
+AppSpacing.fieldRadius     // radiusLg (12)
+AppSpacing.fieldLabelGap   // xs (4)
+
+AppTypography.fieldLabel   // labelMedium
+AppTypography.fieldValue   // bodyMedium
+```
+
+### Card Tokens
+
+```dart
+AppColors.cardBg               // white
+AppColors.cardBorder           // grey200
+AppColors.cardSelectedBorder   // secondary2
+AppColors.cardUnselectedBorder // grey400
+
+AppSpacing.cardRadius          // radiusLg (12)
+```
+
+### Notification & Banner Tokens
+
+```dart
+AppColors.notificationBg       // #1C1F22 (dark)
+AppColors.notificationShadow   // #43000000
+
+AppSpacing.notificationHeight  // 70
+AppSpacing.notificationRadius  // radiusMd (8)
+```
+
+### Other Component Tokens
+
+```dart
+// Category Chip
+AppColors.categoryChipActiveBg/Fg     // grey700 / white
+AppColors.categoryChipInactiveBg/Fg   // white / grey700
+
+// SelectCard
+AppColors.selectCardRadioOuter           // secondary2
+AppColors.selectCardRadioInner           // white
+AppColors.selectCardRadioUnselectedBorder // #D1D7D7
+
+// MenuTile
+AppColors.menuTileFg/MenuTileSubtitleFg/MenuTileTrailingFg
+
+// Badge
+AppColors.badgeWarningBg    // #C8905C
+AppSpacing.badgePadding     // EdgeInsets.all(6)
+AppTypography.badgeLabel    // 10px w500
+
+// Bottom Sheet
+AppColors.bottomSheetGrip   // grey400
+AppColors.bottomSheetBg     // background
+
+// Icon
+AppSpacing.iconSizeSm/Md/Lg // 16 / 24 / 32
+AppSpacing.iconGapSm/Md/Lg  // 6 / 8 / 12
+```
+
+## Domain Tokens (Phase 7)
+
+Domain-level tokens for status colors, timeline indicators, and multi-step forms. See [ADR-006](../decisions/006-domain-molecule-cohesion.md).
+
+### Order Status Colors
+
+```dart
+AppColors.statusPending   = warning   // yellow
+AppColors.statusPreparing = info      // blue
+AppColors.statusReady     = success   // green
+AppColors.statusServed    = #009688   // teal
+AppColors.statusCompleted = grey500   // grey
+AppColors.statusVoided    = error     // red
+```
+
+Resolution path: `OrderStatus` enum → `OrderStatus.colorFor()` → `AppColors.status*` tokens. No role hardcodes its own status colors.
+
+### Timeline
+
+```dart
+AppColors.timelineLine         // grey300 (connector strokes)
+AppSpacing.timelineGap         // spacing between steps
+AppSpacing.timelineDotSize     // 12px dots
+AppTypography.timelineLabel    // bodySmall
+AppTypography.timelineSublabel // labelSmall
+```
+
+### Multi-Step Form
+
+```dart
+AppColors.stepActive     // primary
+AppColors.stepInactive   // grey300
+AppColors.stepCompleted  // success
+
+AppSpacing.stepIndicatorGap
+AppSpacing.stepDotSize
+AppTypography.stepLabel  // labelSmall
+```
+
+### Order Card (per context)
+
+```dart
+AppTypography.orderCardTitle/Subtitle/Status  // role-appropriate sizes
+AppSpacing.orderCardHeight*                    // per-context heights
+```
+
 ## AppTheme Builder
 
 `packages/eatery_core/lib/theme/app_theme.dart`:

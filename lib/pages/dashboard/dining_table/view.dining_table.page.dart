@@ -8,8 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class ViewDiningTablePage extends ConsumerStatefulWidget {
-  const ViewDiningTablePage({Key? key, required this.diningTable})
-    : super(key: key);
+  const ViewDiningTablePage({super.key, required this.diningTable});
   final DiningTable diningTable;
 
   @override

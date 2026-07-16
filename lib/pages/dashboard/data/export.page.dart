@@ -48,20 +48,22 @@ class _ExportPageState extends ConsumerState<ExportPage> {
       if (dir != null) {
         final file = File("$dir/eatery_export.json");
         await file.writeAsString(json);
-        if (mounted)
+        if (mounted) {
           AppDialog.showMessage(
             this.context,
             message: "Exported to ${file.path}",
             type: MessageType.success,
           );
+        }
       }
     } catch (e) {
-      if (mounted)
+      if (mounted) {
         AppDialog.showMessage(
           this.context,
           message: "Export failed: $e",
           type: MessageType.error,
         );
+      }
     } finally {
       if (mounted) setState(() => _exporting = false);
     }
@@ -104,10 +106,11 @@ class _ExportPageState extends ConsumerState<ExportPage> {
               value: _selected.contains(t),
               onChanged: (v) {
                 setState(() {
-                  if (v == true)
+                  if (v == true) {
                     _selected.add(t);
-                  else
+                  } else {
                     _selected.remove(t);
+                  }
                 });
               },
             ),

@@ -127,3 +127,56 @@ a40a318 (origin/master) Update (pre-reconstruction)
 The critical memory bug was that `LibraryImage.image` called `Image.file(file).image` which decoded images at full camera resolution (~30MB each). In a product GridView with ~50 visible thumbnails, this consumed ~1.5GB for visible images alone — and Flutter's image cache kept accumulating them on scroll until OOM at ~12GB.
 
 **Fix:** `ResizeImage.resizeIfNeeded(200, 200, FileImage(file))` on all image loading paths. Each thumbnail now decodes to ~60KB.
+
+---
+
+## Phase 1-7: Evolution into a Design System
+
+After the initial reconstruction, the codebase underwent 7 planned phases to achieve full architectural cohesion, test coverage, and visual consistency.
+
+### Phase 1 — Single-App Unification
+Merged 4 Melos sub-apps (Admin, Waiter, KDS, Display) into one Flutter binary with RBAC-protected routing. Deleted the `apps/` directory. Added role picker screen, `RoleShell` dispatcher, role-based root redirect, and route permission map. Extended PIN login to waiter and chef roles.
+
+### Phase 2 — Feature Completion & Hardening
+Built out the Waiter (real order submission, history view, table sync), KDS (live auto-refresh, station filtering, Start/Done transitions), and Display (reactive grid, kiosk-optimized layout) UIs. Hardened sync with offline queue resilience (max 10,000 depth, per-message batch limit). CI pipeline created.
+
+### Phase 3 — Native Store Hardening
+Comprehensive audit of the Zig/SQLite layer. Added WAL checkpoint on read, VACUUM/optimize API, compile-time FK enforcement, schema parity with `schema.sql`, backup/restore viadart:ffi, isolation provider for background writes.
+
+### Phase 4 — Waiter App & Production Hardening
+Real BLE KOT printing (`flutter_blue_plus`), waiter order edit/void with audit log, KDS sound chime (`audioplayers`), occupancy toggle, sync listeners, Lottie animations, empty-state guidance, DB export, floor plan canvas (`CustomPainter`), test suite (7 new waiter feature tests).
+
+### Phase 5 — Admin Reporting, KDS Polish & Code Quality
+Dashboard charts (`fl_chart`: revenue line, order bar, payment pie), low-stock alerts, KDS item-level status toggle, KDS idle alert (30s → yellow flash), Display auto-scroll + station sections. Code quality sweep: 114 warnings → 0. Dynamic currency from `companyProvider`.
+
+### Phase 6 — Component Tokenization & Design System
+Eliminated ~100 hardcoded visual values across 12 legacy components. Built ~80 design tokens across `AppColors`, `AppSpacing`, `AppTypography`, `AppShadows`. Introduced `AppVariant` × `AppSemantic` × `AppSize` component model (inspired by Radzen Blazor). Rebuilt 8 atomic widgets as tokenized components. Deleted 18 legacy widget files. Adopted shadcn/ui semantic token conventions (`background`, `foreground`, `muted`, `border`, `ring`, `destructive`).
+
+### Phase 7 — Molecular Tokenization & Domain Cohesion
+Built domain molecules: `AppOrderCard` (one widget, four role contexts — replacing ~400 lines of duplicated code), `AppStatusTimeline` (order history visualization), `AppMultiStepForm` (step indicator shell — replacing ~900 lines of Body1–Body6 scaffolding), `AppNotificationBanner` (overlay-based alerts — replacing 17 ad-hoc snackbar call sites), `AppFormField` (label+field+spacing molecule — migrating 66 call sites across 23 files). Fixed `OrderStatus` to resolve colors via tokens instead of raw `Colors.orange`/`Colors.blue`.
+
+## Current State (Post-Phase 7)
+
+| Metric | Value |
+|--------|-------|
+| `flutter analyze` errors | 0 |
+| Root tests | 81/81 |
+| Core package tests | 51/51 |
+| Platform builds | Android, iOS, macOS, Linux, Windows |
+| Design tokens | ~120 in 4 files |
+| Tokenized widgets | 22 in `eatery_core/lib/widgets/` |
+| Legacy components | 1 remaining (`CustomTextFromField` — used by bottom sheets) |
+| Legacy form fields | 0 in page files (Body1 in `create_company` only — dead code) |
+| RBAC roles | 4 (admin, waiter, kds, display) |
+| Repositories | 8 (all SQLite via Zig FFI) |
+| ADRs | 6 formal decision records |
+
+## Related
+
+- [Migration Patterns](migration-patterns.md) — strangler fig methodology and active migration status
+- [ADR-001: Riverpod over Provider](../decisions/001-riverpod-over-provider.md)
+- [ADR-002: SQLite over Hive](../decisions/002-sqlite-over-hive.md)
+- [ADR-003: Zig for Native Code](../decisions/003-zig-for-native.md)
+- [ADR-004: Zero Raw Visual Values](../decisions/004-zero-raw-visual-values.md)
+- [ADR-005: Variant × Semantic × Size](../decisions/005-variant-semantic-size.md)
+- [ADR-006: Domain Molecule Cohesion](../decisions/006-domain-molecule-cohesion.md)

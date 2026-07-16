@@ -12,7 +12,7 @@ import 'package:eatery_core/providers/company_provider.dart';
 import 'package:eatery_core/providers/database_provider.dart';
 
 class ViewCustomer extends ConsumerStatefulWidget {
-  ViewCustomer({super.key, required this.customer});
+  const ViewCustomer({super.key, required this.customer});
 
   final Customer customer;
 
@@ -338,7 +338,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                _loyaltyStat('${loyalty.points.toStringAsFixed(0)}', 'Points'),
+                _loyaltyStat(loyalty.points.toStringAsFixed(0), 'Points'),
                 _loyaltyStat('${loyalty.totalVisits}', 'Visits'),
                 _loyaltyStat(
                   '\$${loyalty.totalSpent.toStringAsFixed(0)}',

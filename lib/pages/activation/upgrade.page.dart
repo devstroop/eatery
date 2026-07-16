@@ -1,12 +1,13 @@
 import 'package:eatery_core/utils/device_id.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final _pageColor = AppColors.secondary2;
 
 class UpgradePage extends ConsumerStatefulWidget {
-  const UpgradePage({Key? key, required this.company}) : super(key: key);
+  const UpgradePage({super.key, required this.company});
   final Company? company;
 
   @override
@@ -26,7 +27,7 @@ class _UpgradePageState extends ConsumerState<UpgradePage> {
     });
   }
 
-  fetchDeviceInfo() async {
+  Future<void> fetchDeviceInfo() async {
     String? deviceSerial = await getDeviceId();
     setState(() {
       this.deviceSerial = deviceSerial;
@@ -50,7 +51,7 @@ class _UpgradePageState extends ConsumerState<UpgradePage> {
               shrinkWrap: true,
               children: [
                 const Center(
-                  child: BottomViewGrip(),
+                  child: AppBottomSheetGrip(),
                 ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -142,26 +143,27 @@ class _UpgradePageState extends ConsumerState<UpgradePage> {
               title: "Choose your subscription",
               subtitle: "Select the subscription type that suits you best",
             ),
-            SpacingStyle.defaultVerticalSpacing,
-            SpacingStyle.defaultVerticalSpacing,
+            AppSpacing.gapMd,
+            AppSpacing.gapMd,
             ...SubscriptionType.values.map((e) {
               return Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  SelectableCard(
+                  AppSelectCard(
                     header: e.label,
                     title: e.name,
                     highlights: e.highlights,
                     footer: e.description,
-                    selected: e.id == selectedSubscriptionType?.id,
-                    highlightColor: e.color,
-                    onTap: () {
+                    value: e,
+                    groupValue: selectedSubscriptionType,
+                    /*color overridden in parent*/
+                    onChanged: (v) {
                       setState(() {
-                        selectedSubscriptionType = e;
+                        selectedSubscriptionType = v;
                       });
                     },
                   ),
-                  SpacingStyle.defaultVerticalSpacing,
+                  AppSpacing.gapMd,
                 ],
               );
             }),

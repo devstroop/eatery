@@ -220,7 +220,7 @@ jobs:
             echo ""
             for dir in artifacts/*/; do
               name=$(basename "$dir")
-              if ls "$dir"/*.apk &>/dev/null || ls "$dir"/*.aab &>/dev/null || ls "$dir"/*.dmg &>/dev/null || ls "$dir"/*.exe &>/dev/null || ls "$dir"/Runner &>/dev/null || ls "$dir"/*.app &>/dev/null; then
+              if ls "$dir"/*.apk &>/dev/null || ls "$dir"/*.aab &>/dev/null || ls "$dir"/*.dmg &>/dev/null || ls "$dir"/*.exe &>/dev/null || ls "$dir"/Runner &>/dev/null || ls "$dir"/*.app &>/dev/null || ls "$dir"/eatery &>/dev/null; then
                 echo "- \`$name\`"
               fi
             done
@@ -232,14 +232,28 @@ jobs:
           cd artifacts
           for dir in */; do
             name="${dir%/}"
-            archive="$name.tar.gz"
-            tar czf "$archive" "$dir"
+            if [[ "$name" == *-windows ]]; then
+              archive="$name.zip"
+              which zip &>/dev/null || sudo apt-get install -y zip
+              zip -r "$archive" "$dir" || { echo "::error::Failed to create $archive"; exit 1; }
+            else
+              archive="$name.tar.gz"
+              tar czf "$archive" "$dir" || { echo "::error::Failed to create $archive"; exit 1; }
+            fi
             echo "Created $archive"
           done
+          echo "=== Final artifacts ==="
+          ls -lh
+          # Remove raw artifact dirs — no later steps depend on them, and
+          # removing them prevents the original bug where `files: artifacts/**/*`
+          # uploaded every individual file as a separate release asset.
+          for dir in */; do rm -rf "$dir"; done
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v3
         with:
           body_path: body.md
-          files: artifacts/*.tar.gz
+          files: |
+            artifacts/*.tar.gz
+            artifacts/*.zip
           fail_on_unmatched_files: false

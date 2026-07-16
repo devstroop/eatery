@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_spacing.dart';
+import '../theme/app_component.dart';
 import '../theme/app_typography.dart';
 
 /// Consistent text field with label, hint, and validation.
+///
+/// All visual properties derive from design tokens. No raw values.
 ///
 /// ```dart
 /// AppTextField(
@@ -30,7 +33,7 @@ class AppTextField extends StatelessWidget {
   final Widget? prefix;
   final Widget? suffix;
   final bool enabled;
-  final Color? accentColor;
+  final AppSemantic? semantic;
 
   const AppTextField({
     super.key,
@@ -50,19 +53,29 @@ class AppTextField extends StatelessWidget {
     this.prefix,
     this.suffix,
     this.enabled = true,
-    this.accentColor,
+    this.semantic,
   });
+
+  Color _focusBorderColor() {
+    switch (semantic) {
+      case AppSemantic.danger:
+        return AppColors.fieldErrorBorder;
+      case AppSemantic.secondary:
+        return AppColors.grey600;
+      default:
+        return AppColors.fieldFocusBorder;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
+    final focusColor = _focusBorderColor();
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          label,
-          style: AppTypography.labelMedium.copyWith(color: AppColors.grey600),
-        ),
+        Text(label, style: AppTypography.fieldLabel),
         AppSpacing.gapXs,
         TextFormField(
           controller: controller,
@@ -76,7 +89,7 @@ class AppTextField extends StatelessWidget {
           onFieldSubmitted: onFieldSubmitted,
           onChanged: onChanged,
           enabled: enabled,
-          style: AppTypography.bodyMedium,
+          style: AppTypography.fieldValue,
           decoration: InputDecoration(
             hintText: hint,
             prefixIcon: prefix,
@@ -84,23 +97,20 @@ class AppTextField extends StatelessWidget {
             filled: true,
             fillColor: enabled ? AppColors.white : AppColors.grey100,
             border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.grey300),
+              borderRadius: BorderRadius.circular(AppSpacing.fieldRadius),
+              borderSide: const BorderSide(color: AppColors.fieldBorder),
             ),
             enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.grey300),
+              borderRadius: BorderRadius.circular(AppSpacing.fieldRadius),
+              borderSide: const BorderSide(color: AppColors.fieldBorder),
             ),
             focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                color: accentColor ?? AppColors.primary,
-                width: 2,
-              ),
+              borderRadius: BorderRadius.circular(AppSpacing.fieldRadius),
+              borderSide: BorderSide(color: focusColor, width: 2),
             ),
             errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: AppColors.error),
+              borderRadius: BorderRadius.circular(AppSpacing.fieldRadius),
+              borderSide: const BorderSide(color: AppColors.fieldErrorBorder),
             ),
             contentPadding: const EdgeInsets.symmetric(
               horizontal: 16,

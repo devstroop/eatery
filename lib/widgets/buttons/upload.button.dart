@@ -3,14 +3,14 @@ import 'package:eatery_core/theme/app_colors.dart';
 
 class UploadButton extends StatefulWidget {
   const UploadButton({
-    Key? key,
+    super.key,
     this.libraryImage,
     this.onChanged,
     this.primaryColor = const Color(0xFF30A8CF),
     this.secondaryColor = const Color(0xFF2F2F2F),
     this.title,
     this.label,
-  }) : super(key: key);
+  });
   final LibraryImage? libraryImage;
   final Function(LibraryImage? libraryImage)? onChanged;
   final Color primaryColor;

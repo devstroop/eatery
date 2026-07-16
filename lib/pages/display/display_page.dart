@@ -33,12 +33,9 @@ class DisplayPage extends ConsumerStatefulWidget {
   ConsumerState<DisplayPage> createState() => _DisplayPageState();
 }
 
-class _DisplayPageState extends ConsumerState<DisplayPage>
-    with SingleTickerProviderStateMixin {
+class _DisplayPageState extends ConsumerState<DisplayPage> {
   Timer? _refreshTimer;
   Timer? _scrollTimer;
-  late AnimationController _pulseController;
-  late Animation<double> _pulseAnimation;
   final ScrollController _scrollController = ScrollController();
   _SectionMode _sectionMode = _SectionMode.none;
   int _scrollPage = 0;
@@ -46,13 +43,6 @@ class _DisplayPageState extends ConsumerState<DisplayPage>
   @override
   void initState() {
     super.initState();
-    _pulseController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 1500),
-    )..repeat(reverse: true);
-    _pulseAnimation = Tween<double>(begin: 1.0, end: 1.05).animate(
-      CurvedAnimation(parent: _pulseController, curve: Curves.easeInOut),
-    );
 
     ref.listenManual(syncStatusProvider, (_, status) {
       if (status != null && status.pendingEntryCount >= 0) {
@@ -100,7 +90,6 @@ class _DisplayPageState extends ConsumerState<DisplayPage>
     _refreshTimer?.cancel();
     _scrollTimer?.cancel();
     _scrollController.dispose();
-    _pulseController.dispose();
     super.dispose();
   }
 
@@ -183,9 +172,20 @@ class _DisplayPageState extends ConsumerState<DisplayPage>
         childAspectRatio: 1.6,
       ),
       itemCount: orders.length,
-      itemBuilder: (context, index) => _OrderStatusCard(
+      itemBuilder: (context, index) => AppOrderCard(
         order: orders[index],
-        pulseAnimation: _pulseAnimation,
+        context: OrderCardContext.display,
+        displayLeading: orders[index].status == OrderStatus.pending
+            ? SizedBox(
+                width: 24,
+                height: 24,
+                child: Lottie.asset(
+                  'assets/lottie/105511-fireworks.json',
+                  width: 24,
+                  height: 24,
+                ),
+              )
+            : null,
       ),
     );
   }
@@ -204,7 +204,7 @@ class _DisplayPageState extends ConsumerState<DisplayPage>
           return names.isNotEmpty ? names.join(', ') : 'General';
         },
         loading: () => 'General',
-        error: (_, __) => 'General',
+        error: (_, _) => 'General',
       );
       stationMap.putIfAbsent(stationName, () => []);
       stationMap[stationName]!.add(order);
@@ -236,162 +236,26 @@ class _DisplayPageState extends ConsumerState<DisplayPage>
                 childAspectRatio: 1.6,
               ),
               itemCount: entry.value.length,
-              itemBuilder: (context, index) => _OrderStatusCard(
+              itemBuilder: (context, index) => AppOrderCard(
                 order: entry.value[index],
-                pulseAnimation: _pulseAnimation,
+                context: OrderCardContext.display,
+                displayLeading: entry.value[index].status == OrderStatus.pending
+                    ? SizedBox(
+                        width: 24,
+                        height: 24,
+                        child: Lottie.asset(
+                          'assets/lottie/105511-fireworks.json',
+                          width: 24,
+                          height: 24,
+                        ),
+                      )
+                    : null,
               ),
             ),
             const SizedBox(height: 24),
           ],
         );
       }).toList(),
-    );
-  }
-}
-
-class _OrderStatusCard extends ConsumerWidget {
-  final Order order;
-  final Animation<double> pulseAnimation;
-
-  const _OrderStatusCard({required this.order, required this.pulseAnimation});
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    final products = ref.watch(_orderProductsProvider(order.id!));
-    final elapsed = DateTime.now().difference(order.createdAt);
-
-    final isPreparing = order.status == OrderStatus.preparing;
-
-    return AnimatedBuilder(
-      animation: pulseAnimation,
-      builder: (context, child) => Transform.scale(
-        scale: isPreparing ? pulseAnimation.value : 1.0,
-        child: child,
-      ),
-      child: Card(
-        elevation: 2,
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                children: [
-                  if (order.status == OrderStatus.pending)
-                    SizedBox(
-                      width: 24,
-                      height: 24,
-                      child: Lottie.asset(
-                        'assets/lottie/105511-fireworks.json',
-                        width: 24,
-                        height: 24,
-                      ),
-                    )
-                  else
-                    Container(
-                      width: 14,
-                      height: 14,
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: order.status == OrderStatus.preparing
-                            ? AppColors.warning
-                            : AppColors.info,
-                      ),
-                    ),
-                  const SizedBox(width: 12),
-                  Expanded(
-                    child: Text(
-                      'Order #${order.id}',
-                      style: AppTypography.titleLarge.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 8,
-                      vertical: 4,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColors.grey100,
-                      borderRadius: BorderRadius.circular(4),
-                    ),
-                    child: Text(
-                      _formatDuration(elapsed),
-                      style: AppTypography.bodySmall.copyWith(
-                        color: AppColors.grey600,
-                        fontFamily: 'monospace',
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              Expanded(
-                child: products.when(
-                  data: (items) => Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: items
-                        .map(
-                          (p) => Padding(
-                            padding: const EdgeInsets.only(bottom: 4),
-                            child: Text(
-                              '${p.productName} x${p.quantity}',
-                              style: AppTypography.bodyLarge,
-                            ),
-                          ),
-                        )
-                        .toList(),
-                  ),
-                  loading: () => const SizedBox.shrink(),
-                  error: (_, __) => const SizedBox.shrink(),
-                ),
-              ),
-              Align(
-                alignment: Alignment.centerRight,
-                child: _StatusBadge(status: order.status),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  String _formatDuration(Duration d) {
-    final min = d.inMinutes;
-    final sec = d.inSeconds % 60;
-    return '${min.toString().padLeft(2, '0')}:${sec.toString().padLeft(2, '0')}';
-  }
-}
-
-class _StatusBadge extends StatelessWidget {
-  final OrderStatus status;
-
-  const _StatusBadge({required this.status});
-
-  @override
-  Widget build(BuildContext context) {
-    final (label, color) = switch (status) {
-      OrderStatus.pending => ('Preparing', AppColors.warning),
-      OrderStatus.preparing => ('Almost ready', AppColors.info),
-      OrderStatus.completed => ('Ready!', AppColors.success),
-      _ => ('Unknown', AppColors.grey500),
-    };
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: color,
-          fontWeight: FontWeight.bold,
-          fontSize: 16,
-        ),
-      ),
     );
   }
 }

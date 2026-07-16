@@ -1,8 +1,8 @@
 # Routing
 
-## GoRouter Setup (Target: Single-App with RBAC)
+## GoRouter Setup (Single-App with RBAC)
 
-> **Status:** The current router in `lib/core/router/app_router.dart` is admin-only with simple auth redirect. The RBAC guard and merged routes are planned — see [ISSUES.md](../../ISSUES.md).
+> **Status:** Complete (Phase 1). The unified router handles all four roles with RBAC redirect guards, route permission map, and role-based root dispatch. See [Single-App Architecture](single-app-architecture.md) and [Reconstruction History](../development/reconstruction-history.md).
 
 A single unified `GoRouter` handles all four roles. The router is created by `createAppRouter()` in `lib/core/router/app_router.dart` and includes:
 
@@ -66,7 +66,7 @@ GoRouter(
 
 ### Current Route Table (Admin)
 
-The existing admin router has the following routes. In the unified router, routes from waiter/KDS/display sub-apps are absorbed (see [ISSUES.md](../../ISSUES.md) issues 07-09).
+The existing admin router has the following routes. In the unified router, routes from waiter/KDS/display sub-apps have been absorbed (Phase 1, issues 07-09).
 
 | Name | Path | Page |
 |------|------|------|

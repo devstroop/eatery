@@ -2,6 +2,7 @@ import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/company_provider.dart';
@@ -10,7 +11,7 @@ import 'package:go_router/go_router.dart';
 final _pageColor = AppColors.primary;
 
 class ShowCompanyPage extends ConsumerStatefulWidget {
-  const ShowCompanyPage({Key? key}) : super(key: key);
+  const ShowCompanyPage({super.key});
 
   @override
   ConsumerState<ShowCompanyPage> createState() => _ShowCompanyPageState();
@@ -32,7 +33,7 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
         bottomRight: Radius.circular(0),
       ),
     ),
-    builder: (context) => UploadImageBottomSheet(context, (pickedImagePath) {
+    builder: (context) => UploadImageBottomSheet((pickedImagePath) {
       /*company!.logo = pickedImagePath;
         widget.database.companyDao.updateEntity(company!);
         showSnackBar(context, 'Successfully updated');
@@ -95,8 +96,8 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
             shrinkWrap: true,
             scrollDirection: Axis.vertical,
             children: [
-              SpacingStyle.defaultVerticalSpacing,
-              SpacingStyle.defaultVerticalSpacing,
+              AppSpacing.gapMd,
+              AppSpacing.gapMd,
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -126,7 +127,7 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
                 ],
               ),
               //
-              SpacingStyle.defaultVerticalSpacing,
+              AppSpacing.gapMd,
               Container(
                 padding: const EdgeInsets.all(16.0),
                 margin: const EdgeInsets.all(16.0),
@@ -251,7 +252,7 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
     );
   }
 
-  _onDeleteCompanyPressed(BuildContext context) {
+  void _onDeleteCompanyPressed(BuildContext context) {
     final TextEditingController securePinController = TextEditingController();
     Navigator.pop(context);
 

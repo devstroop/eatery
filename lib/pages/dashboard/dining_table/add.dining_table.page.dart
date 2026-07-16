@@ -9,7 +9,7 @@ import 'package:eatery_core/widgets/app_dialog.dart';
 Color _pageColor = AppColors.menuCategories;
 
 class AddDiningTablePage extends ConsumerStatefulWidget {
-  const AddDiningTablePage({Key? key}) : super(key: key);
+  const AddDiningTablePage({super.key});
 
   @override
   ConsumerState<AddDiningTablePage> createState() => _AddDiningTablePageState();
@@ -41,6 +41,42 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
             },
           ),
       ],
+      bottomNavigationBar: BottomAppBar(
+        child: AppButton.primary(
+          onPressed: () async {
+            if (!_formKey.currentState!.validate()) {
+              return;
+            }
+            _formKey.currentState!.save();
+            DiningTable diningTable = DiningTable(
+              name: _controllerCategoryName.text,
+              description: _controllerCategoryDescription.text,
+              categoryId: diningTableCategory?.id,
+              capacity: int.parse(_controllerCapacity.text),
+            );
+            ref
+                .read(diningTableRepositoryProvider)
+                .saveTable(diningTable)
+                .then((value) {
+                  AppDialog.showMessage(
+                    context,
+                    message: 'Dining Table created successfully',
+                    type: MessageType.success,
+                    onConfirm: () => Navigator.pop(context),
+                  );
+                })
+                .onError((error, stackTrace) {
+                  debugPrint(error.toString());
+                  AppDialog.showMessage(
+                    context,
+                    message: 'Failed to create Dining Table',
+                    type: MessageType.error,
+                  );
+                });
+          },
+          label: 'Save',
+        ),
+      ),
       child: InkWell(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -51,15 +87,13 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
             key: _formKey,
             child: ListView(
               children: [
-                LabeledCustomTextFormField(
+                AppFormField(
                   label: 'Dining Table Name',
                   controller: _controllerCategoryName,
                   hint:
                       'eg. Table ${ref.read(diningTableRepositoryProvider).getAllTables().length + 1}',
-                  obscureText: false,
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
                   focusNode: _focusNodes[0],
+                  focusNext: _focusNodes[1],
                   suffix: _controllerCategoryName.text.isNotEmpty
                       ? IconButton(
                           icon: const Icon(Icons.clear),
@@ -82,38 +116,23 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
                             });
                           },
                         ),
-                  onFieldSubmitted: (v) {
-                    _focusNodes[1].requestFocus();
-                  },
                 ),
-                const SizedBox(height: 12.0),
-                LabeledCustomTextFormField(
+                AppFormField(
                   label: 'Description',
                   controller: _controllerCategoryDescription,
                   hint: 'eg. Regular/ VIP/ Family/ etc.',
-                  obscureText: false,
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
                   multiline: true,
                   focusNode: _focusNodes[1],
                   onFieldSubmitted: (v) {
                     FocusScope.of(context).unfocus();
                   },
                 ),
-                const SizedBox(height: 12.0),
-                LabeledCustomTextFormField(
+                AppFormField(
                   label: 'Capacity',
                   controller: _controllerCapacity,
                   hint: 'eg. 4/ 6/ 8/ 10/ etc.',
-                  obscureText: false,
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
                   keyboardType: TextInputType.number,
-                  onFieldSubmitted: (v) {
-                    FocusScope.of(context).unfocus();
-                  },
                 ),
-                const SizedBox(height: 12.0),
                 Text(
                   'Category',
                   style: AppTypography.labelMedium.copyWith(
@@ -127,8 +146,8 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      PosCategoryWidget(
-                        active: diningTableCategory == null,
+                      AppCategoryChip(
+                        selected: diningTableCategory == null,
                         label: 'None',
                         onTap: () {
                           setState(() {
@@ -140,8 +159,8 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
                           .read(diningTableRepositoryProvider)
                           .getAllCategories()
                           .map((e) {
-                            return PosCategoryWidget(
-                              active: diningTableCategory?.id == e.id,
+                            return AppCategoryChip(
+                              selected: diningTableCategory?.id == e.id,
                               label: e.name,
                               onTap: () {
                                 setState(() {
@@ -200,42 +219,6 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
               ],
             ),
           ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: AppButton.primary(
-          onPressed: () async {
-            if (!_formKey.currentState!.validate()) {
-              return;
-            }
-            _formKey.currentState!.save();
-            DiningTable diningTable = DiningTable(
-              name: _controllerCategoryName.text,
-              description: _controllerCategoryDescription.text,
-              categoryId: diningTableCategory?.id,
-              capacity: int.parse(_controllerCapacity.text),
-            );
-            ref
-                .read(diningTableRepositoryProvider)
-                .saveTable(diningTable)
-                .then((value) {
-                  AppDialog.showMessage(
-                    context,
-                    message: 'Dining Table created successfully',
-                    type: MessageType.success,
-                    onConfirm: () => Navigator.pop(context),
-                  );
-                })
-                .onError((error, stackTrace) {
-                  debugPrint(error.toString());
-                  AppDialog.showMessage(
-                    context,
-                    message: 'Failed to create Dining Table',
-                    type: MessageType.error,
-                  );
-                });
-          },
-          label: 'Save',
         ),
       ),
     );

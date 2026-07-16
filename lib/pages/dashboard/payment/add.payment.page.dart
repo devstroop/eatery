@@ -11,7 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 Color _pageColor = AppColors.menuCategories;
 
 class AddPaymentPage extends ConsumerStatefulWidget {
-  const AddPaymentPage({Key? key, this.order}) : super(key: key);
+  const AddPaymentPage({super.key, this.order});
   final Order? order;
 
   @override
@@ -53,6 +53,95 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
             },
           ),
       ],
+      bottomNavigationBar: BottomAppBar(
+        child: AppButton.primary(
+          label: 'Save Payment',
+          onPressed: () {
+            if (order == null) {
+              AppDialog.showMessage(
+                context,
+                message: 'Please select an order',
+                type: MessageType.error,
+              );
+              return;
+            }
+            final o = order!;
+
+            if (_formKey.currentState!.validate()) {
+              final payment = Payment(
+                amount: double.parse(_controllerAmount.text),
+                reference: _controllerReference.text,
+                mode: paymentMode,
+                attachment: image?.filename,
+                orderId: o.id,
+                date: DateTime.now(),
+              );
+              ref
+                  .read(paymentRepositoryProvider)
+                  .savePayment(payment)
+                  .then(
+                    (value) => AppDialog.showMessage(
+                      context,
+                      message: 'Payment saved successfully',
+                      type: MessageType.success,
+                      onConfirm: () async {
+                        var diningTable = ref
+                            .read(diningTableRepositoryProvider)
+                            .getAllTables()
+                            .where((element) => element.orderId == order?.id)
+                            .firstOrNull;
+                        if (diningTable != null) {
+                          await ref
+                              .read(diningTableRepositoryProvider)
+                              .saveTable(
+                                diningTable.copyWith(
+                                  status: DiningTableStatus.available,
+                                  orderId: null,
+                                  customerPhone: null,
+                                ),
+                              );
+                        }
+
+                        final newPaidTotal =
+                            (o.paidTotal ?? 0) +
+                            double.parse(_controllerAmount.text);
+                        final isFullyPaid = newPaidTotal >= o.grandTotal;
+                        var updatedOrder = o.copyWith(paidTotal: newPaidTotal);
+                        if (isFullyPaid && o.status == OrderStatus.pending) {
+                          final now = DateTime.now();
+                          updatedOrder = updatedOrder.copyWith(
+                            status: OrderStatus.completed,
+                            updatedAt: now,
+                          );
+                          ref
+                              .read(orderRepositoryProvider)
+                              .recordStatusTransition(
+                                OrderStatusHistory(
+                                  orderId: o.id!,
+                                  fromStatus: OrderStatus.pending.id,
+                                  toStatus: OrderStatus.completed.id,
+                                  changedAt: now,
+                                ),
+                              );
+                        }
+                        ref
+                            .read(orderRepositoryProvider)
+                            .saveOrder(updatedOrder)
+                            .then((value) => Navigator.pop(context));
+                      },
+                    ),
+                  )
+                  .onError(
+                    (error, stackTrace) => AppDialog.showMessage(
+                      context,
+                      message: 'Error saving payment',
+                      type: MessageType.error,
+                    ),
+                  );
+            }
+          },
+        ),
+      ),
       child: InkWell(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -206,95 +295,6 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
               ],
             ),
           ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: AppButton.primary(
-          label: 'Save Payment',
-          onPressed: () {
-            if (order == null) {
-              AppDialog.showMessage(
-                context,
-                message: 'Please select an order',
-                type: MessageType.error,
-              );
-              return;
-            }
-            final o = order!;
-
-            if (_formKey.currentState!.validate()) {
-              final payment = Payment(
-                amount: double.parse(_controllerAmount.text),
-                reference: _controllerReference.text,
-                mode: paymentMode,
-                attachment: image?.filename,
-                orderId: o.id,
-                date: DateTime.now(),
-              );
-              ref
-                  .read(paymentRepositoryProvider)
-                  .savePayment(payment)
-                  .then(
-                    (value) => AppDialog.showMessage(
-                      context,
-                      message: 'Payment saved successfully',
-                      type: MessageType.success,
-                      onConfirm: () async {
-                        var diningTable = ref
-                            .read(diningTableRepositoryProvider)
-                            .getAllTables()
-                            .where((element) => element.orderId == order?.id)
-                            .firstOrNull;
-                        if (diningTable != null) {
-                          await ref
-                              .read(diningTableRepositoryProvider)
-                              .saveTable(
-                                diningTable.copyWith(
-                                  status: DiningTableStatus.available,
-                                  orderId: null,
-                                  customerPhone: null,
-                                ),
-                              );
-                        }
-
-                        final newPaidTotal =
-                            (o.paidTotal ?? 0) +
-                            double.parse(_controllerAmount.text);
-                        final isFullyPaid = newPaidTotal >= o.grandTotal;
-                        var updatedOrder = o.copyWith(paidTotal: newPaidTotal);
-                        if (isFullyPaid && o.status == OrderStatus.pending) {
-                          final now = DateTime.now();
-                          updatedOrder = updatedOrder.copyWith(
-                            status: OrderStatus.completed,
-                            updatedAt: now,
-                          );
-                          ref
-                              .read(orderRepositoryProvider)
-                              .recordStatusTransition(
-                                OrderStatusHistory(
-                                  orderId: o.id!,
-                                  fromStatus: OrderStatus.pending.id,
-                                  toStatus: OrderStatus.completed.id,
-                                  changedAt: now,
-                                ),
-                              );
-                        }
-                        ref
-                            .read(orderRepositoryProvider)
-                            .saveOrder(updatedOrder)
-                            .then((value) => Navigator.pop(context));
-                      },
-                    ),
-                  )
-                  .onError(
-                    (error, stackTrace) => AppDialog.showMessage(
-                      context,
-                      message: 'Error saving payment',
-                      type: MessageType.error,
-                    ),
-                  );
-            }
-          },
         ),
       ),
     );

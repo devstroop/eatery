@@ -10,7 +10,7 @@ import 'package:eatery_core/widgets/app_dialog.dart';
 Color _pageColor = AppColors.secondary;
 
 class AddKitchenDish extends ConsumerStatefulWidget {
-  const AddKitchenDish({Key? key}) : super(key: key);
+  const AddKitchenDish({super.key});
 
   @override
   ConsumerState<AddKitchenDish> createState() => _AddKitchenDishState();
@@ -71,6 +71,49 @@ class _AddKitchenDishState extends ConsumerState<AddKitchenDish> {
             },
           ),
       ],
+      bottomNavigationBar: BottomAppBar(
+        color: AppColors.white,
+        child: AppButton.primary(
+          onPressed: () async {
+            final isValid = _formKey.currentState!.validate();
+            if (!isValid) {
+              return;
+            }
+            _formKey.currentState!.save();
+
+            Product product = Product(
+              name: _controllerName.text,
+              categoryId: selectedCategory?.id,
+              description: _controllerDescription.text,
+              image: image?.filename,
+              mrpPrice: _controllerMRP.text.toDouble() ?? 0.0,
+              salePrice: _controllerSalePrice.text.toDouble(),
+              taxSlabId: selectedTaxSlab?.id,
+              foodType: selectedFoodType,
+              type: ProductType.kitchenDish,
+              isActive: true,
+            );
+            await ref
+                .read(productRepositoryProvider)
+                .saveProduct(product)
+                .then((value) {
+                  AppDialog.showMessage(
+                    this.context,
+                    message: 'Product added successfully',
+                    type: MessageType.success,
+                  ).whenComplete(() => Navigator.pop(this.context));
+                })
+                .onError((error, stackTrace) {
+                  AppDialog.showMessage(
+                    this.context,
+                    message: 'Failed to add product',
+                    type: MessageType.error,
+                  );
+                });
+          },
+          label: 'Save',
+        ),
+      ),
       child: InkWell(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -94,13 +137,11 @@ class _AddKitchenDishState extends ConsumerState<AddKitchenDish> {
                   },
                 ),
                 const SizedBox(height: 6.0),
-                LabeledCustomTextFormField(
+                AppFormField(
                   label: 'Name',
                   hint: 'Enter product name',
                   focusNode: _focusNodes[0],
-                  onFieldSubmitted: (v) {
-                    FocusScope.of(context).requestFocus(_focusNodes[1]);
-                  },
+                  focusNext: _focusNodes[1],
                   validator: (value) {
                     if (value!.trim().isEmpty) {
                       return 'Name cannot be blank';
@@ -115,23 +156,17 @@ class _AddKitchenDishState extends ConsumerState<AddKitchenDish> {
                     }
                     return null;
                   },
-                  foregroundColor: AppColors.black600,
-                  themeColor: _pageColor,
                   controller: _controllerName,
                 ),
-                const SizedBox(height: 6.0),
                 Row(
                   children: [
                     Flexible(
-                      child: LabeledCustomTextFormField(
+                      child: AppFormField(
                         label: 'MRP (Max. retail price)',
                         prefix: const Icon(Icons.currency_rupee, size: 14),
                         hint: '0.00',
-                        themeColor: _pageColor,
                         focusNode: _focusNodes[1],
-                        onFieldSubmitted: (v) {
-                          FocusScope.of(context).requestFocus(_focusNodes[2]);
-                        },
+                        focusNext: _focusNodes[2],
                         validator: (value) {
                           if (value!.trim().isEmpty) {
                             return 'Price cannot be blank';
@@ -139,21 +174,16 @@ class _AddKitchenDishState extends ConsumerState<AddKitchenDish> {
                           return null;
                         },
                         keyboardType: TextInputType.number,
-                        foregroundColor: AppColors.black600,
                         controller: _controllerMRP,
                       ),
                     ),
                     const SizedBox(width: 12.0),
                     Flexible(
-                      child: LabeledCustomTextFormField(
+                      child: AppFormField(
                         label: 'Sale Price',
                         prefix: const Icon(Icons.currency_rupee, size: 14),
                         hint: '0.00',
-                        themeColor: _pageColor,
                         focusNode: _focusNodes[2],
-                        onFieldSubmitted: (v) {
-                          FocusScope.of(context).unfocus();
-                        },
                         validator: (value) {
                           if (value!.trim().isEmpty) {
                             return 'Price cannot be blank';
@@ -161,13 +191,14 @@ class _AddKitchenDishState extends ConsumerState<AddKitchenDish> {
                           return null;
                         },
                         keyboardType: TextInputType.number,
-                        foregroundColor: AppColors.black600,
                         controller: _controllerSalePrice,
+                        onFieldSubmitted: (v) {
+                          FocusScope.of(this.context).unfocus();
+                        },
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 6.0),
                 Text(
                   'Select Food Type',
                   style: AppTypography.bodyMedium.copyWith(
@@ -283,7 +314,7 @@ class _AddKitchenDishState extends ConsumerState<AddKitchenDish> {
                   ),
                 ),
                 const SizedBox(height: 6.0),
-                LabeledCustomTextFormField(
+                AppFormField(
                   label: 'Description',
                   hint: 'Enter product description',
                   multiline: true,
@@ -291,56 +322,11 @@ class _AddKitchenDishState extends ConsumerState<AddKitchenDish> {
                   onFieldSubmitted: (v) {
                     FocusScope.of(context).unfocus();
                   },
-                  foregroundColor: AppColors.black600,
-                  themeColor: _pageColor,
                   controller: _controllerDescription,
                 ),
               ],
             ),
           ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.white,
-        child: AppButton.primary(
-          onPressed: () async {
-            final isValid = _formKey.currentState!.validate();
-            if (!isValid) {
-              return;
-            }
-            _formKey.currentState!.save();
-
-            Product product = Product(
-              name: _controllerName.text,
-              categoryId: selectedCategory?.id,
-              description: _controllerDescription.text,
-              image: image?.filename,
-              mrpPrice: _controllerMRP.text.toDouble() ?? 0.0,
-              salePrice: _controllerSalePrice.text.toDouble(),
-              taxSlabId: selectedTaxSlab?.id,
-              foodType: selectedFoodType,
-              type: ProductType.kitchenDish,
-              isActive: true,
-            );
-            await ref
-                .read(productRepositoryProvider)
-                .saveProduct(product)
-                .then((value) {
-                  AppDialog.showMessage(
-                    this.context,
-                    message: 'Product added successfully',
-                    type: MessageType.success,
-                  ).whenComplete(() => Navigator.pop(this.context));
-                })
-                .onError((error, stackTrace) {
-                  AppDialog.showMessage(
-                    this.context,
-                    message: 'Failed to add product',
-                    type: MessageType.error,
-                  );
-                });
-          },
-          label: 'Save',
         ),
       ),
     );

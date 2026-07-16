@@ -26,6 +26,20 @@ abstract final class AppColors {
   static const Color error = Color(0xFFEF6850);
   static const Color info = Color(0xFF2F5EC2);
 
+  // ── Order status tokens ────────────────────────────────────────
+  /// Maps to [OrderStatus.colorFor] — single source of truth for
+  /// status badge colors across KDS, Waiter, Display, and Admin.
+  static const Color statusPending = warning;
+  static const Color statusPreparing = info;
+  static const Color statusReady = success;
+  static const Color statusServed = Color(0xFF009688);
+  static const Color statusCompleted = grey500;
+  static const Color statusVoided = error;
+
+  // ── Timeline tokens ─────────────────────────────────────────────
+  /// Line color for [AppStatusTimeline] connector strokes.
+  static const Color timelineLine = grey300;
+
   // ── Menu tile colors ──────────────────────────────────────────
   static const Color menuPrimary = Color(0xFF30A8CF);
   static const Color menuCategories = Color(0xFFD98049);
@@ -67,6 +81,76 @@ abstract final class AppColors {
   static const Color ring = primary;
   static const Color destructive = Color(0xFFEF6850);
   static const Color destructiveForeground = white;
+
+  // ── Button tokens ──────────────────────────────────────────────
+  // Filled variant
+  static const Color buttonFilledPrimaryBg = primary;
+  static const Color buttonFilledPrimaryFg = white;
+  static const Color buttonFilledSecondaryBg = grey100;
+  static const Color buttonFilledSecondaryFg = grey900;
+  static const Color buttonFilledDestructiveBg = destructive;
+  static const Color buttonFilledDestructiveFg = destructiveForeground;
+
+  // Outlined variant
+  static const Color buttonOutlinedPrimaryBorder = primary;
+  static const Color buttonOutlinedPrimaryFg = primary;
+  static const Color buttonOutlinedSecondaryBorder = grey300;
+  static const Color buttonOutlinedSecondaryFg = grey700;
+  static const Color buttonOutlinedDestructiveBorder = destructive;
+  static const Color buttonOutlinedDestructiveFg = destructive;
+
+  // Ghost variant
+  static const Color buttonGhostFg = grey700;
+  static const Color buttonGhostBg = Colors.transparent;
+
+  // Disabled
+  static const double buttonDisabledOpacity = 0.5;
+
+  // ── TextField tokens ──────────────────────────────────────────
+  static const Color fieldFill = muted;
+  static const Color fieldBorder = grey300;
+  static const Color fieldFocusBorder = primary;
+  static const Color fieldErrorBorder = error;
+  static const Color fieldHint = grey400;
+  static const Color fieldLabel = grey600;
+  static const Color fieldText = foreground;
+
+  // ── Card tokens ───────────────────────────────────────────────
+  static const Color cardBg = white;
+  static const Color cardBorder = grey200;
+  static const Color cardSelectedBorder = secondary2;
+  static const Color cardUnselectedBorder = grey400;
+
+  // ── SelectCard tokens ─────────────────────────────────────────
+  static const Color selectCardRadioOuter = secondary2;
+  static const Color selectCardRadioInner = white;
+  static const Color selectCardRadioUnselectedBorder = Color(0xFFD1D7D7);
+
+  // ── MenuTile tokens ───────────────────────────────────────────
+  static const Color menuTileFg = grey600;
+  static const Color menuTileSubtitleFg = grey700;
+  static const Color menuTileTrailingFg = grey400;
+
+  // ── BottomSheet tokens ───────────────────────────────────────
+  static const Color bottomSheetGrip = grey400;
+  static const Color bottomSheetBg = background;
+
+  // ── Notification tokens ──────────────────────────────────────
+  static const Color notificationBg = Color(0xFF1C1F22);
+  static const Color notificationShadow = Color(0x43000000);
+
+  // ── Badge tokens ─────────────────────────────────────────────
+  static const Color badgeWarningBg = Color(0xFFC8905C);
+
+  // ── Category chip tokens ────────────────────────────────────
+  static const Color categoryChipActiveBg = grey700;
+  static const Color categoryChipActiveFg = white;
+  static const Color categoryChipInactiveBg = white;
+  static const Color categoryChipInactiveFg = grey700;
+
+  // ── Shadow base colors ───────────────────────────────────────
+  static const Color shadowBase = Color(0x2F000000);
+  static const Color shadowDark = Color(0x43000000);
 
   // ── Legacy aliases (temporary — remove after full migration) ──
   static Color get white900 => grey100;

@@ -236,7 +236,7 @@ class EateryStore implements EateryStoreInterface {
       caseSensitive: false,
     );
     if (sql.contains(literal)) {
-      return sql.replaceFirstMapped(literal, (_) => '') + ' LIMIT $limit';
+      return '${sql.replaceFirstMapped(literal, (_) => '')} LIMIT $limit';
     }
     // 2. Leave parameterized LIMIT alone to avoid bind-param mismatch.
     final paramLimit = RegExp(

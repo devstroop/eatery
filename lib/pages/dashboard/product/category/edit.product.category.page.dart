@@ -8,8 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 Color _pageColor = AppColors.menuCategories;
 
 class EditProductCategoryPage extends ConsumerStatefulWidget {
-  const EditProductCategoryPage({Key? key, required this.category})
-    : super(key: key);
+  const EditProductCategoryPage({super.key, required this.category});
   final ProductCategory category;
 
   @override
@@ -50,58 +49,6 @@ class _EditProductCategoryPageState
             },
           ),
       ],
-      child: InkWell(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: ListView(
-            children: [
-              const SizedBox(height: 12.0),
-              UploadButton(
-                label: 'Product Category Image',
-                primaryColor: _pageColor,
-                secondaryColor: AppColors.black600,
-                libraryImage: pickedLibraryImage,
-                onChanged: (libraryImage) {
-                  setState(() {
-                    pickedLibraryImage = libraryImage;
-                  });
-                },
-              ),
-              const SizedBox(height: 6.0),
-              LabeledCustomTextFormField(
-                label: 'Category Name',
-                controller: _controllerCategoryName,
-                hint: 'eg. Starters',
-                obscureText: false,
-                themeColor: _pageColor,
-                foregroundColor: AppColors.black600,
-                focusNode: _focusNodes[0],
-                onFieldSubmitted: (v) {
-                  _focusNodes[1].requestFocus();
-                },
-              ),
-              const SizedBox(height: 6.0),
-              LabeledCustomTextFormField(
-                label: 'Description',
-                controller: _controllerDescription,
-                hint: 'eg. Starters are the best',
-                obscureText: false,
-                themeColor: _pageColor,
-                foregroundColor: AppColors.black600,
-                multiline: true,
-                focusNode: _focusNodes[1],
-                onFieldSubmitted: (v) {
-                  FocusScope.of(context).unfocus();
-                },
-              ),
-              const SizedBox(height: 6.0),
-            ],
-          ),
-        ),
-      ),
       bottomNavigationBar: BottomAppBar(
         color: AppColors.white,
         child: AppButton.primary(
@@ -128,6 +75,48 @@ class _EditProductCategoryPageState
             }
           },
           label: 'Update',
+        ),
+      ),
+      child: InkWell(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: ListView(
+            children: [
+              const SizedBox(height: 12.0),
+              UploadButton(
+                label: 'Product Category Image',
+                primaryColor: _pageColor,
+                secondaryColor: AppColors.black600,
+                libraryImage: pickedLibraryImage,
+                onChanged: (libraryImage) {
+                  setState(() {
+                    pickedLibraryImage = libraryImage;
+                  });
+                },
+              ),
+              const SizedBox(height: 6.0),
+              AppFormField(
+                label: 'Category Name',
+                controller: _controllerCategoryName,
+                hint: 'eg. Starters',
+                focusNode: _focusNodes[0],
+                focusNext: _focusNodes[1],
+              ),
+              AppFormField(
+                label: 'Description',
+                controller: _controllerDescription,
+                hint: 'eg. Starters are the best',
+                multiline: true,
+                focusNode: _focusNodes[1],
+                onFieldSubmitted: (v) {
+                  FocusScope.of(context).unfocus();
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

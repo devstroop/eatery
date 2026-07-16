@@ -11,12 +11,6 @@ final _waiterOrdersProvider = FutureProvider.autoDispose<List<Order>>((ref) {
   return all.where((o) => o.staffId == staff.id).toList();
 });
 
-final _waiterOrderProductsProvider =
-    FutureProvider.family<List<OrderProduct>, int>((ref, orderId) {
-      final repo = ref.read(orderRepositoryProvider);
-      return repo.getOrderProducts(orderId);
-    });
-
 class WaiterOrdersPage extends ConsumerStatefulWidget {
   const WaiterOrdersPage({super.key});
 
@@ -32,6 +26,20 @@ class _WaiterOrdersPageState extends ConsumerState<WaiterOrdersPage> {
       if (status != null && status.pendingEntryCount >= 0) {
         ref.invalidate(_waiterOrdersProvider);
       }
+    });
+    // Show banner on order list changes
+    ref.listenManual(_waiterOrdersProvider, (prev, next) {
+      next.whenData((orders) {
+        if (prev != null && mounted) {
+          AppNotificationBanner.show(
+            context,
+            type: NotificationType.orderStatusChanged,
+            message: 'Orders updated',
+            subtitle: '${orders.length} order(s)',
+            autoDismiss: const Duration(seconds: 4),
+          );
+        }
+      });
     });
   }
 
@@ -96,7 +104,6 @@ class _OrderCard extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final products = ref.watch(_waiterOrderProductsProvider(order.id!));
     final staff = ref.watch(authSessionProvider);
     final isWaiter = staff?.type == StaffType.waiter;
     final currencySymbol =
@@ -106,111 +113,41 @@ class _OrderCard extends ConsumerWidget {
         (order.status == OrderStatus.pending ||
             order.status == OrderStatus.preparing);
 
-    return Card(
-      margin: const EdgeInsets.only(bottom: 12),
-      child: InkWell(
-        onTap: () => context.pushNamed('viewOrder', extra: order),
-        borderRadius: BorderRadius.circular(12),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Row(
-            children: [
-              Container(
-                width: 48,
-                height: 48,
-                decoration: BoxDecoration(
-                  color: _statusColor(order.status).withValues(alpha: 0.12),
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Icon(Icons.receipt, color: _statusColor(order.status)),
-              ),
-              const SizedBox(width: 16),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Order #${order.id}',
-                      style: AppTypography.titleMedium,
+    return AppOrderCard(
+      order: order,
+      context: OrderCardContext.waiter,
+      currencySymbol: currencySymbol,
+      onTap: () => context.pushNamed('viewOrder', extra: order),
+      trailing: canEdit
+          ? PopupMenuButton<String>(
+              onSelected: (value) =>
+                  _handleAction(context, ref, value, order, staff),
+              itemBuilder: (_) => [
+                if (order.status == OrderStatus.pending)
+                  const PopupMenuItem(
+                    value: 'edit',
+                    child: ListTile(
+                      leading: Icon(Icons.edit, size: 20),
+                      title: Text('Edit'),
+                      dense: true,
+                      contentPadding: EdgeInsets.zero,
                     ),
-                    const SizedBox(height: 4),
-                    products.when(
-                      data: (items) => Text(
-                        '${items.length} item${items.length == 1 ? '' : 's'}',
-                        style: AppTypography.bodyMedium.copyWith(
-                          color: AppColors.grey600,
-                        ),
-                      ),
-                      loading: () => const SizedBox.shrink(),
-                      error: (_, __) => const SizedBox.shrink(),
+                  ),
+                if (order.status == OrderStatus.pending ||
+                    order.status == OrderStatus.preparing)
+                  const PopupMenuItem(
+                    value: 'void',
+                    child: ListTile(
+                      leading: Icon(Icons.cancel, size: 20, color: Colors.red),
+                      title: Text('Void', style: TextStyle(color: Colors.red)),
+                      dense: true,
+                      contentPadding: EdgeInsets.zero,
                     ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '$currencySymbol${order.grandTotal.toStringAsFixed(2)}',
-                      style: AppTypography.titleSmall.copyWith(
-                        color: AppColors.primary,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              _StatusBadge(status: order.status),
-              if (canEdit) ...[
-                const SizedBox(width: 4),
-                PopupMenuButton<String>(
-                  onSelected: (value) =>
-                      _handleAction(context, ref, value, order, staff),
-                  itemBuilder: (_) => [
-                    if (order.status == OrderStatus.pending)
-                      const PopupMenuItem(
-                        value: 'edit',
-                        child: ListTile(
-                          leading: Icon(Icons.edit, size: 20),
-                          title: Text('Edit'),
-                          dense: true,
-                          contentPadding: EdgeInsets.zero,
-                        ),
-                      ),
-                    if (order.status == OrderStatus.pending ||
-                        order.status == OrderStatus.preparing)
-                      const PopupMenuItem(
-                        value: 'void',
-                        child: ListTile(
-                          leading: Icon(
-                            Icons.cancel,
-                            size: 20,
-                            color: Colors.red,
-                          ),
-                          title: Text(
-                            'Void',
-                            style: TextStyle(color: Colors.red),
-                          ),
-                          dense: true,
-                          contentPadding: EdgeInsets.zero,
-                        ),
-                      ),
-                  ],
-                ),
+                  ),
               ],
-            ],
-          ),
-        ),
-      ),
+            )
+          : null,
     );
-  }
-
-  Color _statusColor(OrderStatus status) {
-    switch (status) {
-      case OrderStatus.pending:
-        return AppColors.warning;
-      case OrderStatus.preparing:
-        return AppColors.info;
-      case OrderStatus.completed:
-        return AppColors.success;
-      default:
-        return AppColors.grey500;
-    }
   }
 
   void _handleAction(
@@ -316,38 +253,6 @@ class _OrderCard extends ConsumerWidget {
             child: const Text('Void Order'),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _StatusBadge extends StatelessWidget {
-  final OrderStatus status;
-
-  const _StatusBadge({required this.status});
-
-  @override
-  Widget build(BuildContext context) {
-    final (label, color) = switch (status) {
-      OrderStatus.pending => ('Pending', AppColors.warning),
-      OrderStatus.preparing => ('Preparing', AppColors.info),
-      OrderStatus.completed => ('Completed', AppColors.success),
-      OrderStatus.voided => ('Voided', AppColors.error),
-      _ => ('Unknown', AppColors.grey500),
-    };
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: color.withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Text(
-        label,
-        style: TextStyle(
-          color: color,
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-        ),
       ),
     );
   }

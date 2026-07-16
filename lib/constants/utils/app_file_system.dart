@@ -61,7 +61,7 @@ class AppFileSystem {
         child: ListView(
           shrinkWrap: true,
           children: [
-            const Center(child: BottomViewGrip()),
+            const Center(child: AppBottomSheetGrip()),
             const Row(
               children: [
                 SizedBox(width: 12),
@@ -118,12 +118,10 @@ class AppFileSystem {
                   children: [
                     Flexible(
                       flex: 1,
-                      child: SecondaryButton(
-                        color: AppColors.black500,
-                        borderColor: AppColors.white600,
-                        text: 'Camera',
+                      child: AppButton.secondary(
+                        label: 'Camera',
                         height: 50.0,
-                        onTap: () async {
+                        onPressed: () async {
                           final ImagePicker picker = ImagePicker();
                           final XFile? photo = await picker.pickImage(
                             source: ImageSource.camera,
@@ -131,14 +129,14 @@ class AppFileSystem {
 
                           if (photo != null) {
                             if (!(Directory(
-                              '${(await Directory(AppFileSystem.baseDir)).path}/images',
+                              '${(Directory(AppFileSystem.baseDir)).path}/images',
                             )).existsSync()) {
                               await Directory(
-                                '${(await Directory(AppFileSystem.baseDir)).path}/images',
+                                '${(Directory(AppFileSystem.baseDir)).path}/images',
                               ).create(recursive: true);
                             }
                             String path =
-                                '${'${(await Directory(AppFileSystem.baseDir)).path}/images'}/${getRandomString(32)}.${photo.name.split('.').last}';
+                                '${'${(Directory(AppFileSystem.baseDir)).path}/images'}/${getRandomString(32)}.${photo.name.split('.').last}';
                             photo.saveTo(path);
                             pickedImage = path;
                             Navigator.pop(context);
@@ -160,14 +158,14 @@ class AppFileSystem {
 
                         if (photo != null) {
                           if (!(Directory(
-                            '${(await Directory(AppFileSystem.baseDir)).path}/images',
+                            '${(Directory(AppFileSystem.baseDir)).path}/images',
                           )).existsSync()) {
                             await Directory(
-                              '${(await Directory(AppFileSystem.baseDir)).path}/images',
+                              '${(Directory(AppFileSystem.baseDir)).path}/images',
                             ).create(recursive: true);
                           }
                           String path =
-                              '${'${(await Directory(AppFileSystem.baseDir)).path}/images'}/${getRandomString(32)}.${photo.name.split('.').last}';
+                              '${'${(Directory(AppFileSystem.baseDir)).path}/images'}/${getRandomString(32)}.${photo.name.split('.').last}';
                           photo.saveTo(path);
                           pickedImage = path;
                           Navigator.pop(context);

@@ -1,6 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/database_provider.dart';
-import 'package:eatery_core/data/database/native/eatery_store.dart';
 import 'package:eatery_core/data/database/native/schema_migrator.dart';
 
 /// Reads the device role from the SQLite [app_config] table.

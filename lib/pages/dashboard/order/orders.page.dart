@@ -1,10 +1,9 @@
 import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery_core/theme/app_colors.dart';
-import 'package:eatery_core/widgets/widgets.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery_core/providers/company_provider.dart';
-import 'package:intl/intl.dart';
+import 'package:eatery_core/widgets/widgets.dart';
 import 'package:eatery/references.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -12,7 +11,7 @@ import 'package:go_router/go_router.dart';
 final Color _pageColor = AppColors.warning;
 
 class OrdersPage extends ConsumerStatefulWidget {
-  const OrdersPage({Key? key}) : super(key: key);
+  const OrdersPage({super.key});
 
   @override
   ConsumerState<OrdersPage> createState() => _OrdersPageState();
@@ -143,60 +142,11 @@ class _OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: ListTile(
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              '${currencySymbol}${order.finalTotal.toStringAsFixed(2)}',
-              style: AppTypography.headlineSmall,
-            ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-              decoration: BoxDecoration(
-                border: Border.all(color: Color(order.type.color!)),
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Text(
-                order.type.description!,
-                style: AppTypography.labelLarge.copyWith(
-                  color: Color(order.type.color!),
-                ),
-              ),
-            ),
-          ],
-        ),
-        subtitle: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('Date: ${DateFormat.yMMMd().format(order.createdAt)}'),
-            Text('Customer Phone: ${order.customerPhone ?? 'N/A'}'),
-            Text('Total Quantity: ${order.totalQuantity}'),
-            Text(
-              'Sub Total: ${currencySymbol}${order.subTotal.toStringAsFixed(2)}',
-            ),
-            Text(
-              'Discount: ${currencySymbol}${order.discountTotal.toStringAsFixed(2)}',
-            ),
-            Text('Tax: ${currencySymbol}${order.taxTotal.toStringAsFixed(2)}'),
-            Text(
-              'Round Off: ${currencySymbol}${order.roundOff.toStringAsFixed(2)}',
-            ),
-            Text(
-              'Grand Total: ${currencySymbol}${order.grandTotal.toStringAsFixed(2)}',
-            ),
-            if (order.paidTotal != null)
-              Text(
-                'Paid Total: ${currencySymbol}${order.paidTotal!.toStringAsFixed(2)}',
-              ),
-          ],
-        ),
-        onTap: () {
-          GoRouter.of(context).pushNamed('viewOrder', extra: order);
-        },
-      ),
+    return AppOrderCard(
+      order: order,
+      context: OrderCardContext.admin,
+      currencySymbol: currencySymbol,
+      onTap: () => GoRouter.of(context).pushNamed('viewOrder', extra: order),
     );
   }
 }

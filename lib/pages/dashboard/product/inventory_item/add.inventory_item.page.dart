@@ -10,7 +10,7 @@ import 'package:eatery_core/widgets/app_dialog.dart';
 Color _pageColor = AppColors.menuInventory;
 
 class AddInventoryItem extends ConsumerStatefulWidget {
-  const AddInventoryItem({Key? key}) : super(key: key);
+  const AddInventoryItem({super.key});
 
   @override
   ConsumerState<AddInventoryItem> createState() => _AddInventoryItemState();
@@ -63,8 +63,8 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
             },
           ),
       ],
-      child: buildBody(),
       bottomNavigationBar: buildBottomAppBar(),
+      child: buildBody(),
     );
   }
 
@@ -140,13 +140,12 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
   }
 
   Widget buildNameTextField() {
-    return LabeledCustomTextFormField(
+    return AppFormField(
       label: 'Name',
       hint: 'Enter product name',
-      foregroundColor: AppColors.black600,
-      themeColor: _pageColor,
       controller: _controllerName,
       focusNode: _focusNodes[0],
+      focusNext: _focusNodes[1],
       validator: (value) {
         if (value?.trim().isEmpty ?? true) {
           return 'Name cannot be blank';
@@ -161,9 +160,6 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
         }
         return null;
       },
-      onFieldSubmitted: (v) {
-        FocusScope.of(this.context).requestFocus(_focusNodes[1]);
-      },
     );
   }
 
@@ -172,36 +168,30 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
       mainAxisSize: MainAxisSize.min,
       children: [
         Flexible(
-          child: LabeledCustomTextFormField(
+          child: AppFormField(
             label: 'MRP (Max. retail price)',
             prefix: const Icon(Icons.currency_rupee, size: 14),
             hint: '0.00',
-            themeColor: _pageColor,
             validator: (value) => validatePriceField(value),
             keyboardType: TextInputType.number,
-            foregroundColor: AppColors.black600,
             controller: _controllerMRP,
             focusNode: _focusNodes[1],
-            onFieldSubmitted: (v) {
-              FocusScope.of(this.context).requestFocus(_focusNodes[2]);
-            },
+            focusNext: _focusNodes[2],
           ),
         ),
         const SizedBox(width: 12.0),
         Flexible(
-          child: LabeledCustomTextFormField(
+          child: AppFormField(
             label: 'Sale Price',
             prefix: const Icon(Icons.currency_rupee, size: 14),
             hint: '0.00',
-            themeColor: _pageColor,
             focusNode: _focusNodes[2],
+            validator: (value) => validatePriceField(value),
+            keyboardType: TextInputType.number,
+            controller: _controllerSalePrice,
             onFieldSubmitted: (v) {
               FocusScope.of(this.context).unfocus();
             },
-            validator: (value) => validatePriceField(value),
-            keyboardType: TextInputType.number,
-            foregroundColor: AppColors.black600,
-            controller: _controllerSalePrice,
           ),
         ),
       ],
@@ -278,7 +268,7 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
   }
 
   Widget buildDescriptionTextField() {
-    return LabeledCustomTextFormField(
+    return AppFormField(
       label: 'Description',
       hint: 'Enter product description',
       multiline: true,
@@ -286,8 +276,6 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
       onFieldSubmitted: (v) {
         FocusScope.of(this.context).unfocus();
       },
-      foregroundColor: AppColors.black600,
-      themeColor: _pageColor,
       controller: _controllerDescription,
     );
   }

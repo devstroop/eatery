@@ -10,7 +10,7 @@ import 'package:go_router/go_router.dart';
 Color _pageColor = AppColors.error;
 
 class DiningTablesPage extends ConsumerStatefulWidget {
-  const DiningTablesPage({Key? key}) : super(key: key);
+  const DiningTablesPage({super.key});
 
   @override
   ConsumerState<DiningTablesPage> createState() => _DiningTablesPageState();
@@ -142,8 +142,7 @@ class _DiningTablesPageState extends ConsumerState<DiningTablesPage> {
                               },
                             ),
                           );
-                        })
-                        .toList(),
+                        }),
                   ],
                 ),
               ),

@@ -1,6 +1,6 @@
-# Single-App Architecture (Target)
+# Single-App Architecture
 
-> **Status:** Planned — see [ISSUES.md](../../ISSUES.md) for the 28-issue migration tracker.
+> **Status:** Complete (Phase 1). All 28 issues resolved. The `apps/` directory is deleted. Single binary dispatches UI by device role at runtime. See [Reconstruction History](../development/reconstruction-history.md) for the full migration timeline.
 
 ## Overview
 
@@ -223,4 +223,4 @@ If the unified app breaks production:
 2. `melos bootstrap` — reinstalls sub-app dependencies
 3. Rebuild and redeploy each sub-app individually
 
-The `pre-unification` tag should be created before deleting `apps/` (issue 16 in [ISSUES.md](../../ISSUES.md)).
+The `pre-unification` tag was created before deleting `apps/` (Phase 1, issue 16).

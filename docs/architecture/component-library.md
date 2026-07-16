@@ -177,11 +177,11 @@ Status indicator showing sync connection state (connected/disconnected/syncing).
 |--------|-------------|
 | `PrimaryButton` | `AppButton.primary()` |
 | `SecondaryButton` | `AppButton.secondary()` |
-| `LabeledCustomTextFormField` | `AppTextField` |
-| `CustomTextFromField` | `AppTextField` |
+| `LabeledCustomTextFormField` | `AppFormField` |
+| `CustomTextFromField` | `AppFormField` (or `AppTextField` for standalone) |
 | `showMessageDialog()` | `AppDialog.show()` |
 | `showConfirmationDialog()` | `AppDialog.show(destructive: true)` |
-| `MenuCard` / `MenuTile` | `AppCard` |
+| `MenuCard` / `MenuTile` | `AppMenuTile` |
 | `SearchTextField` | `AppSearchField` |
 | `ToggleSwitch` | Flutter's `Switch` |
 
@@ -189,9 +189,117 @@ Status indicator showing sync connection state (connected/disconnected/syncing).
 
 | Component | Status |
 |-----------|--------|
-| `BottomViewGrip` | Kept (draggable handle for bottom sheets) |
-| `MenuTile` | Replaced by `AppCard` |
-| `ProductCard` | Not yet replaced |
-| `SelectableCard` | Not yet replaced |
-| `PosCategoryWidget` | Not yet replaced |
-| `PosOrderTypeSelectionButton` | Not yet replaced |
+| `BottomViewGrip` | Replaced by `AppBottomSheetGrip` |
+| `MenuTile` | Replaced by `AppMenuTile` |
+| `ProductCard` | Replaced by `AppProductCard` |
+| `SelectableCard` | Replaced by `AppSelectCard` |
+| `PosCategoryWidget` | Replaced by `AppCategoryChip` |
+| `PosOrderTypeSelectionButton` | Replaced by `AppButton.ghost()` |
+| `NotificationWidget` | Replaced by `AppNotification` |
+| `LabeledCustomTextFormField` | Replaced by `AppFormField` (Phase 7) |
+| `CustomTextFromField` | Replaced by `AppFormField` (Phase 7) |
+
+---
+
+## Domain Molecules (Phase 7)
+
+Multi-atom compositions that express a single restaurant business concept. See [ADR-006](../decisions/006-domain-molecule-cohesion.md).
+
+### AppOrderCard (`packages/eatery_core/lib/widgets/app_order_card.dart`)
+
+One widget, four role contexts. Replaces four independent implementations (~400 lines → ~200 lines).
+
+```dart
+enum OrderCardContext { kds, waiter, display, admin }
+
+AppOrderCard(
+  order: order,
+  context: OrderCardContext.kds,
+  currencySymbol: '\$',
+  onStart: () => repo.startOrder(order),
+  onComplete: () => repo.completeOrder(order),
+)
+```
+
+| Context | Layout | Actions | Animations |
+|---|---|---|---|
+| `kds` | Large card, prominent status, elapsed timer | Start / Done | None |
+| `waiter` | Compact card, status + total | Tap for detail, PopupMenu (edit/void) | Fade on complete |
+| `display` | Grid card, customer-facing text | None | Lottie burst on new, pulse on preparing |
+| `admin` | List tile, full detail column | Edit / Void / Print | None |
+
+**Status colors resolved via** `OrderStatus.colorFor(status)` → `AppColors.status*` tokens. All four contexts share the same color resolution.
+
+### AppStatusTimeline (`packages/eatery_core/lib/widgets/app_status_timeline.dart`)
+
+Vertical timeline visualizing `OrderStatusHistory` transitions.
+
+```dart
+AppStatusTimeline(
+  transitions: order.statusHistory,
+  staffNames: {1: 'Alice', 2: 'Bob'},  // optional staff name resolution
+)
+```
+
+Each step: colored dot → status transition label → timestamp → staff name → void reason (if applicable). Consumes `AppColors.status*` for dots, `AppColors.timelineLine` for connectors.
+
+### AppMultiStepForm (`packages/eatery_core/lib/widgets/app_multistep_form.dart`)
+
+Step indicator + content area + back/next button shell. Replaces the Body1–Body6 pattern in `CreateCompanyPage`.
+
+```dart
+AppMultiStepForm(
+  steps: const ['Company', 'Auth', 'Taxation', 'Tax Reg', 'Currency', 'Plan'],
+  currentStep: index,
+  hiddenSteps: {3},  // skip Tax Reg when taxation is "No Tax"
+  onStepChanged: (i) => setState(() => index = i),
+  onNext: () => _advance(),
+  onSubmit: () => _submit(),
+  onBack: index > 0 ? () => setState(() => index--) : null,
+  child: bodies[index],
+)
+```
+
+Features:
+- Variable-length step arrays (`hiddenSteps: Set<int>`)
+- Color-coded dots (active=primary, completed=success, inactive=grey300)
+- Checkmark on completed steps
+- Back/Next/Submit button row
+
+### AppNotificationBanner (`packages/eatery_core/lib/widgets/app_notification_banner.dart`)
+
+Slide-down overlay banner — no Scaffold dependency. Usable from any role at any depth.
+
+```dart
+AppNotificationBanner.show(
+  context,
+  type: NotificationType.orderReady,
+  message: 'Order #42 — Table 3 is ready!',
+  onTap: () => router.pushNamed('viewOrder'),
+  autoDismiss: Duration(seconds: 5),
+)
+```
+
+Uses `Overlay.insert()` internally. Status-colored left border (`AppColors.status*`). Auto-dismiss with slide-up animation. Replace 17 ad-hoc `ScaffoldMessenger.showSnackBar` call sites.
+
+### AppFormField (`packages/eatery_core/lib/widgets/app_form_field.dart`)
+
+Label + field + spacing molecule. Replaces `LabeledCustomTextFormField` across all CRUD forms. See [Form Patterns Guide](../guides/form-patterns.md).
+
+```dart
+AppFormField(
+  label: 'Customer Name',
+  hint: 'Enter full name',
+  controller: _controllerName,
+  focusNode: _focusNodes[0],
+  focusNext: _focusNodes[1],    // ← replaces manual onFieldSubmitted focus chaining
+  validator: (v) => v!.isEmpty ? 'Required' : null,
+)
+```
+
+**Before (legacy):** `LabeledCustomTextFormField(label, hint, themeColor, foregroundColor, focusNode, onFieldSubmitted: (v) => focusNodes[N+1].requestFocus(), ...)`  
+**After (tokenized):** `AppFormField(label, hint, controller, focusNode, focusNext)`
+
+Internal spacing: `AppSpacing.fieldLabelGap` above field, `AppSpacing.md` below field. No external `SizedBox` / `AppSpacing` widgets needed between consecutive `AppFormField`s.
+
+## Tokenized Atoms (Phase 6)

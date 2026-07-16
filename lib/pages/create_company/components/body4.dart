@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 
 class Body4 extends StatelessWidget {
   final Color themeColor;
@@ -11,7 +12,7 @@ class Body4 extends StatelessWidget {
   final GlobalKey<FormState> formKey;
   final Function(GlobalKey<FormState> formKey)? callbackFormKey;
   Body4({
-    Key? key,
+    super.key,
     required this.themeColor,
     required this.taxation,
     required this.taxNoController,
@@ -21,7 +22,7 @@ class Body4 extends StatelessWidget {
     required this.taxType,
     required this.formKey,
     this.callbackFormKey,
-  }) : super(key: key);
+  });
 
   final focus1 = FocusNode();
   final focus2 = FocusNode();
@@ -40,8 +41,8 @@ class Body4 extends StatelessWidget {
               title: "Registration info (optional)",
               subtitle: "Help us to know more about your business",
             ),
-            SpacingStyle.defaultVerticalSpacing,
-            SpacingStyle.defaultVerticalSpacing,
+            AppSpacing.gapMd,
+            AppSpacing.gapMd,
             CustomTextFromField(
               themeColor: themeColor,
               keyboardType: TextInputType.text,
@@ -64,7 +65,7 @@ class Body4 extends StatelessWidget {
                 return null;
               },
             ),
-            SpacingStyle.defaultVerticalSpacing,
+            AppSpacing.gapMd,
             CustomTextFromField(
               themeColor: themeColor,
               keyboardType: TextInputType.number,
@@ -89,7 +90,7 @@ class Body4 extends StatelessWidget {
                 return null;
               },
             ),
-            SpacingStyle.defaultVerticalSpacing,
+            AppSpacing.gapMd,
             // Row(
             //   crossAxisAlignment: CrossAxisAlignment.end,
             //   mainAxisSize: MainAxisSize.max,
@@ -121,7 +122,7 @@ class Body4 extends StatelessWidget {
             //         },
             //       ),
             //     ),
-            //     SpacingStyle.defaultHorizontalSpacing,
+            //     AppSpacing.gapSm,
             //     // SizedBox(
             //     //   child: ToggleSwitch(
             //     //     onChange: onTaxTypeChanged,

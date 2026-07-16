@@ -61,7 +61,7 @@ class _PaymentsPageState extends ConsumerState<PaymentsPage> {
           ? ResponsiveListView(
               itemCount: payments.length,
               childAspectRatio: 4.0,
-              separator: (_, __) => const SizedBox.shrink(),
+              separator: (_, _) => const SizedBox.shrink(),
               itemBuilder: (context, index) {
                 final payment = payments[index];
                 return Card(

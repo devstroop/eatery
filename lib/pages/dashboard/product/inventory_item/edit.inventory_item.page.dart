@@ -10,8 +10,7 @@ import 'package:eatery_core/widgets/app_dialog.dart';
 Color _pageColor = AppColors.menuInventory;
 
 class EditInventoryItemPage extends ConsumerStatefulWidget {
-  const EditInventoryItemPage({Key? key, required this.product})
-    : super(key: key);
+  const EditInventoryItemPage({super.key, required this.product});
   final Product product;
   @override
   ConsumerState<EditInventoryItemPage> createState() =>
@@ -84,6 +83,47 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
             },
           ),
       ],
+      bottomNavigationBar: BottomAppBar(
+        color: AppColors.white,
+        child: AppButton.primary(
+          onPressed: () async {
+            final isValid = _formKey.currentState!.validate();
+            if (!isValid) {
+              return;
+            }
+            _formKey.currentState!.save();
+
+            final repo = ref.read(productRepositoryProvider);
+            final updated = widget.product.copyWith(
+              image: image?.filename,
+              name: _controllerName.text,
+              mrpPrice: _controllerMRP.text.toDouble() ?? 0,
+              salePrice: _controllerSalePrice.text.toDouble(),
+              foodType: selectedFoodType,
+              taxSlabId: selectedTaxSlab?.id,
+              categoryId: selectedCategory?.id,
+              description: _controllerDescription.text,
+            );
+            await repo
+                .saveProduct(updated)
+                .then((value) {
+                  AppDialog.showMessage(
+                    this.context,
+                    message: 'Product updated successfully',
+                    type: MessageType.success,
+                  ).whenComplete(() => Navigator.pop(this.context));
+                })
+                .onError((error, stackTrace) {
+                  AppDialog.showMessage(
+                    this.context,
+                    message: 'Failed to update product',
+                    type: MessageType.error,
+                  );
+                });
+          },
+          label: 'Save',
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Form(
@@ -103,10 +143,11 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
                 },
               ),
               const SizedBox(height: 6.0),
-              LabeledCustomTextFormField(
+              AppFormField(
                 label: 'Name',
                 hint: 'Enter product name',
                 focusNode: _focusNodes[0],
+                focusNext: _focusNodes[1],
                 validator: (value) {
                   if (value!.trim().isEmpty) {
                     return 'Name cannot be blank';
@@ -124,26 +165,17 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
                   }
                   return null;
                 },
-                onFieldSubmitted: (v) {
-                  FocusScope.of(context).requestFocus(_focusNodes[1]);
-                },
-                foregroundColor: AppColors.black600,
-                themeColor: _pageColor,
                 controller: _controllerName,
               ),
-              const SizedBox(height: 6.0),
               Row(
                 children: [
                   Flexible(
-                    child: LabeledCustomTextFormField(
+                    child: AppFormField(
                       label: 'MRP (Max. retail price)',
                       prefix: const Icon(Icons.currency_rupee, size: 14),
                       hint: '0.00',
-                      themeColor: _pageColor,
                       focusNode: _focusNodes[1],
-                      onFieldSubmitted: (v) {
-                        FocusScope.of(context).requestFocus(_focusNodes[2]);
-                      },
+                      focusNext: _focusNodes[2],
                       validator: (value) {
                         if (value!.trim().isEmpty) {
                           return 'Price cannot be blank';
@@ -151,21 +183,17 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
                         return null;
                       },
                       keyboardType: TextInputType.number,
-                      foregroundColor: AppColors.black600,
                       controller: _controllerMRP,
                     ),
                   ),
                   const SizedBox(width: 12.0),
                   Flexible(
-                    child: LabeledCustomTextFormField(
+                    child: AppFormField(
                       label: 'Sale Price',
                       prefix: const Icon(Icons.currency_rupee, size: 14),
                       hint: '0.00',
-                      themeColor: _pageColor,
                       focusNode: _focusNodes[2],
-                      onFieldSubmitted: (v) {
-                        FocusScope.of(context).requestFocus(_focusNodes[3]);
-                      },
+                      focusNext: _focusNodes[3],
                       validator: (value) {
                         if (value!.trim().isEmpty) {
                           return 'Price cannot be blank';
@@ -173,13 +201,11 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
                         return null;
                       },
                       keyboardType: TextInputType.number,
-                      foregroundColor: AppColors.black600,
                       controller: _controllerSalePrice,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 6.0),
 
               Text(
                 'Select Food Type',
@@ -293,7 +319,7 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
                 ),
               ),
               const SizedBox(height: 6.0),
-              LabeledCustomTextFormField(
+              AppFormField(
                 label: 'Description',
                 hint: 'Enter product description',
                 multiline: true,
@@ -301,53 +327,10 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
                 onFieldSubmitted: (v) {
                   FocusScope.of(context).unfocus();
                 },
-                foregroundColor: AppColors.black600,
-                themeColor: _pageColor,
                 controller: _controllerDescription,
               ),
             ],
           ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.white,
-        child: AppButton.primary(
-          onPressed: () async {
-            final isValid = _formKey.currentState!.validate();
-            if (!isValid) {
-              return;
-            }
-            _formKey.currentState!.save();
-
-            final repo = ref.read(productRepositoryProvider);
-            final updated = widget.product.copyWith(
-              image: image?.filename,
-              name: _controllerName.text,
-              mrpPrice: _controllerMRP.text.toDouble() ?? 0,
-              salePrice: _controllerSalePrice.text.toDouble(),
-              foodType: selectedFoodType,
-              taxSlabId: selectedTaxSlab?.id,
-              categoryId: selectedCategory?.id,
-              description: _controllerDescription.text,
-            );
-            await repo
-                .saveProduct(updated)
-                .then((value) {
-                  AppDialog.showMessage(
-                    this.context,
-                    message: 'Product updated successfully',
-                    type: MessageType.success,
-                  ).whenComplete(() => Navigator.pop(this.context));
-                })
-                .onError((error, stackTrace) {
-                  AppDialog.showMessage(
-                    this.context,
-                    message: 'Failed to update product',
-                    type: MessageType.error,
-                  );
-                });
-          },
-          label: 'Save',
         ),
       ),
     );

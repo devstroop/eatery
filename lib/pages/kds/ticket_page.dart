@@ -83,6 +83,15 @@ class _TicketPageState extends ConsumerState<TicketPage>
         final count = orders.length;
         if (_hasInitialData && count > _previousOrderCount) {
           _playChime();
+          if (context.mounted) {
+            AppNotificationBanner.show(
+              context,
+              type: NotificationType.orderReady,
+              message: 'New order arrived!',
+              subtitle: '${count - _previousOrderCount} order(s) pending',
+              autoDismiss: const Duration(seconds: 5),
+            );
+          }
           if (_isIdle) {
             _idleAlertController.forward().then((_) {
               _idleAlertController.reverse();
@@ -151,7 +160,7 @@ class _TicketPageState extends ConsumerState<TicketPage>
                     ref.read(_selectedStationProvider.notifier).state = id,
               ),
               loading: () => const SizedBox(height: 48),
-              error: (_, __) => const SizedBox(height: 48),
+              error: (_, _) => const SizedBox(height: 48),
             ),
             // Order grid
             Expanded(
@@ -165,7 +174,7 @@ class _TicketPageState extends ConsumerState<TicketPage>
                         data: (items) =>
                             items.any((p) => p.stationId == selectedStation),
                         loading: () => false,
-                        error: (_, __) => false,
+                        error: (_, _) => false,
                       );
                     }).toList();
                   }
@@ -357,7 +366,7 @@ class _TicketCard extends ConsumerWidget {
         ),
       ),
       loading: () => const SizedBox.shrink(),
-      error: (_, __) => const SizedBox.shrink(),
+      error: (_, _) => const SizedBox.shrink(),
     );
   }
 }
@@ -431,9 +440,9 @@ class _StatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (label, color) = switch (status) {
-      OrderStatus.pending => ('Pending', AppColors.warning),
-      OrderStatus.preparing => ('Preparing', AppColors.info),
-      _ => ('Unknown', AppColors.grey500),
+      OrderStatus.pending => ('Pending', OrderStatus.colorFor(status)),
+      OrderStatus.preparing => ('Preparing', OrderStatus.colorFor(status)),
+      _ => ('Unknown', OrderStatus.colorFor(status)),
     };
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),

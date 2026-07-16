@@ -5,8 +5,6 @@ import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/extensions/string_ext.dart';
-import 'package:eatery_core/widgets/app_dialog.dart';
-import 'package:eatery_core/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 

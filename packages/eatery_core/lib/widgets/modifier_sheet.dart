@@ -141,15 +141,17 @@ class _ModifierSheetState extends ConsumerState<ModifierSheet> {
                                 setState(() {
                                   if (v == true) {
                                     if (group.maxSelect > 0 &&
-                                        selectedIds.length >= group.maxSelect)
+                                        selectedIds.length >= group.maxSelect) {
                                       return;
+                                    }
                                     _selected[group.id!] = [
                                       ...selectedIds,
                                       m.id!,
                                     ];
                                   } else {
-                                    if (selectedIds.length <= group.minSelect)
+                                    if (selectedIds.length <= group.minSelect) {
                                       return;
+                                    }
                                     _selected[group.id!] = selectedIds
                                         .where((id) => id != m.id)
                                         .toList();

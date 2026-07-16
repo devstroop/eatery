@@ -11,7 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class ViewOrderPage extends ConsumerStatefulWidget {
-  const ViewOrderPage({Key? key, required this.order}) : super(key: key);
+  const ViewOrderPage({super.key, required this.order});
   final Order order;
 
   @override
@@ -24,9 +24,12 @@ class _ViewOrderPageState extends ConsumerState<ViewOrderPage> {
   @override
   void initState() {
     super.initState();
-    _items = ref
-        .read(orderRepositoryProvider)
-        .getOrderProducts(widget.order.id ?? 0);
+    final orderId = widget.order.id;
+    if (orderId != null) {
+      _items = ref.read(orderRepositoryProvider).getOrderProducts(orderId);
+    } else {
+      _items = [];
+    }
   }
 
   @override
@@ -127,9 +130,21 @@ class _ViewOrderPageState extends ConsumerState<ViewOrderPage> {
                   ),
                 ),
               ),
+            if (widget.order.id != null) _buildStatusTimeline(widget.order.id!),
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildStatusTimeline(int orderId) {
+    final history = ref
+        .watch(orderRepositoryProvider)
+        .getStatusHistory(orderId);
+    if (history.isEmpty) return const SizedBox.shrink();
+    return Padding(
+      padding: const EdgeInsets.only(top: 16),
+      child: AppStatusTimeline(transitions: history),
     );
   }
 

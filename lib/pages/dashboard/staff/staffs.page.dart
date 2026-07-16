@@ -12,7 +12,7 @@ import 'package:go_router/go_router.dart';
 Color _pageColor = const Color(0xFFC2592F);
 
 class StaffsPage extends ConsumerStatefulWidget {
-  const StaffsPage({Key? key}) : super(key: key);
+  const StaffsPage({super.key});
 
   @override
   ConsumerState<StaffsPage> createState() => _StaffsPageState();

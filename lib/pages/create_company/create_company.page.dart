@@ -1,6 +1,7 @@
 import 'package:eatery_core/utils/responsive.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/data/sync/mutation_hook.dart';
 import 'package:eatery_core/providers/database_provider.dart';
@@ -10,7 +11,7 @@ import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 
 class CreateCompanyPage extends ConsumerStatefulWidget {
-  const CreateCompanyPage({Key? key}) : super(key: key);
+  const CreateCompanyPage({super.key});
 
   @override
   ConsumerState<CreateCompanyPage> createState() => _CreateCompanyPageState();
@@ -148,166 +149,18 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
     GlobalKey<FormState>(),
     GlobalKey<FormState>(),
   ];
-  List<Widget> bottomAppBars() {
-    final taxed = taxation != Taxation.none;
-    return [
-      // Body1 nav
-      CreateCompanyBottomAppBar(
-        formKey: formKeys[0],
-        index: 1,
-        themeColor: themeColor,
-        title: 'Next',
-        callback: (index) {
-          setState(() {
-            viewIndex++;
-          });
-        },
-      ),
-      // Body2 nav
-      CreateCompanyBottomAppBar(
-        formKey: formKeys[1],
-        index: 2,
-        themeColor: themeColor,
-        title: 'Next',
-        callback: (index) {
-          setState(() {
-            viewIndex++;
-          });
-        },
-      ),
-      // Body3 nav (taxation selection)
-      CreateCompanyBottomAppBar(
-        formKey: formKeys[2],
-        index: 3,
-        themeColor: themeColor,
-        title: 'Next',
-        callback: (index) {
-          setState(() {
-            viewIndex++;
-          });
-        },
-      ),
-      // Body4 nav (tax registration) — only present when taxed
-      if (taxed)
-        CreateCompanyBottomAppBar(
-          formKey: formKeys[3],
-          index: 4,
-          themeColor: themeColor,
-          callback: (index) {
-            setState(() {
-              viewIndex++;
-            });
-          },
-          title: 'Next',
-        ),
-      // Body5 nav (currency)
-      CreateCompanyBottomAppBar(
-        formKey: taxed ? formKeys[4] : formKeys[3],
-        index: 5,
-        themeColor: themeColor,
-        callback: (index) {
-          setState(() {
-            viewIndex++;
-          });
-        },
-        title: 'Next',
-      ),
-      // Body6 nav (subscription) — final submit
-      CreateCompanyBottomAppBar(
-        title: 'Continue',
-        formKey: taxed ? formKeys[5] : formKeys[4],
-        index: 6,
-        themeColor: themeColor,
-        callback: (index) async {
-          try {
-            // Subscription
-            Subscription subscription = Subscription(
-              purchaseCode: purchaseCode,
-              validFrom: validFrom,
-              validTill: validTill,
-              subscriptionType: subscriptionType,
-            );
-            await ref.read(subscriptionRepositoryProvider).save(subscription);
-
-            KCurrency? kCurrency;
-            if (currency != null) {
-              kCurrency = KCurrency(
-                name: currency!.name,
-                code: currency!.code,
-                symbol: currency!.symbol,
-                flag: currency!.flag,
-                decimalDigits: currency!.decimalDigits,
-                number: currency!.number,
-                namePlural: currency!.namePlural,
-                thousandsSeparator: currency!.thousandsSeparator,
-                spaceBetweenAmountAndSymbol:
-                    currency!.spaceBetweenAmountAndSymbol,
-                decimalSeparator: currency!.decimalSeparator,
-                symbolOnLeft: currency!.symbolOnLeft,
-              );
-              ref.read(eateryStoreProvider).execute(
-                'INSERT INTO currency (code, name, symbol, flag, number, decimal_digits, name_plural, symbol_on_left, decimal_separator, thousands_separator, space_between_amount_and_symbol) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
-                [
-                  kCurrency.code,
-                  kCurrency.name,
-                  kCurrency.symbol,
-                  kCurrency.flag,
-                  kCurrency.number,
-                  kCurrency.decimalDigits,
-                  kCurrency.namePlural,
-                  kCurrency.symbolOnLeft ? 1 : 0,
-                  kCurrency.decimalSeparator,
-                  kCurrency.thousandsSeparator,
-                  kCurrency.spaceBetweenAmountAndSymbol ? 1 : 0,
-                ],
-              );
-              notifyMutation('currency', 0, 'save', kCurrency.toMap());
-            }
-            // COMPANY
-            Company company = Company(
-              name: _controllerRestaurantName.text,
-              logo: libraryImageLogo?.filename,
-              email: _controllerEmailAddress.text,
-              phone: _controllerPhoneNumber.text,
-              address: _controllerAddress.text,
-              password: _controllerPassword.text,
-              taxation: taxation,
-              foodLicenseNo: _controllerFoodLicNo.text,
-              salesTaxNumber: _controllerTaxLicNo.text,
-              subscriptionId: subscription.id,
-              currencyCode: kCurrency?.code,
-            );
-            ref.read(companyRepositoryProvider).saveCompany(company);
-            Navigator.of(this.context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                builder: (BuildContext context) =>
-                    const CreateCompanyResultPage(),
-              ),
-              (route) => false,
-            );
-            debugPrint('Company Added');
-          } catch (e) {
-            AppDialog.showMessage(
-              this.context,
-              message: e.toString(),
-              type: MessageType.error,
-            );
-          }
-        },
-      ),
-    ];
-  }
 
   @override
   Widget build(BuildContext context) {
     final isDesktop = Responsive.isDesktop(context);
+    final taxed = taxation != Taxation.none;
 
-    // Clamp viewIndex — the step count changes when taxation toggles
-    // between "none" (5 steps) and taxed (6 steps). This prevents a
-    // RangeError if the list shrinks while on a later step.
-    final steps = bodies();
-    if (viewIndex >= steps.length) {
-      viewIndex = steps.length - 1;
+    final bodyWidgets = bodies();
+    final lastVisibleIndex = bodyWidgets.length - 1;
+
+    // Clamp viewIndex — the step count changes when taxation toggles.
+    if (viewIndex > lastVisibleIndex) {
+      viewIndex = lastVisibleIndex;
     }
 
     return Scaffold(
@@ -318,47 +171,126 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
         leading: viewIndex != 0
             ? IconButton(
                 icon: Icon(Icons.arrow_back, color: themeColor),
-                onPressed: () {
-                  setState(() => viewIndex--);
-                },
+                onPressed: () => setState(() => viewIndex--),
               )
             : null,
-        actions: [
-          Container(
-            margin: const EdgeInsets.only(right: 12.0),
-            child: Center(
-              child: Text(
-                'Step ${viewIndex + 1}/${steps.length}',
-                style: AppTypography.bodyMedium.copyWith(
-                  color: AppColors.black600,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
-      body: isDesktop
-          ? Align(
-              alignment: Alignment.topCenter,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(maxWidth: 640),
-                child: Padding(
-                  padding: SpacingStyle.defaultPadding,
-                  child: steps[viewIndex],
+      body: AppMultiStepForm(
+        steps: const [
+          'Company',
+          'Auth',
+          'Taxation',
+          'Tax Reg',
+          'Currency',
+          'Plan',
+        ],
+        currentStep: viewIndex,
+        hiddenSteps: taxed ? {} : {3}, // skip Tax Reg when no tax
+        onStepChanged: (i) => setState(() => viewIndex = i),
+        onNext: viewIndex < lastVisibleIndex
+            ? () {
+                final idx = viewIndex;
+                if (idx >= 0 &&
+                    idx < formKeys.length &&
+                    formKeys[idx].currentState != null) {
+                  if (!formKeys[idx].currentState!.validate()) return;
+                }
+                setState(() => viewIndex++);
+              }
+            : null,
+        onSubmit: () => _submitForm(),
+        onBack: viewIndex > 0 ? () => setState(() => viewIndex--) : null,
+        nextLabel: viewIndex == lastVisibleIndex ? 'Continue' : 'Next',
+        isNextEnabled: true,
+        activeColor: themeColor,
+        child: isDesktop
+            ? Align(
+                alignment: Alignment.topCenter,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 640),
+                  child: bodyWidgets[viewIndex],
                 ),
-              ),
-            )
-          : Padding(
-              padding: SpacingStyle.defaultPadding,
-              child: steps[viewIndex],
-            ),
-      bottomNavigationBar: isDesktop
-          ? ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 640),
-              child: bottomAppBars()[viewIndex],
-            )
-          : bottomAppBars()[viewIndex],
+              )
+            : bodyWidgets[viewIndex],
+      ),
     );
+  }
+
+  Future<void> _submitForm() async {
+    try {
+      final taxed = taxation != Taxation.none;
+      final lastKey = taxed ? formKeys[5] : formKeys[4];
+      if (lastKey.currentState != null && !lastKey.currentState!.validate()) {
+        return;
+      }
+
+      Subscription subscription = Subscription(
+        purchaseCode: purchaseCode,
+        validFrom: validFrom,
+        validTill: validTill,
+        subscriptionType: subscriptionType,
+      );
+      await ref.read(subscriptionRepositoryProvider).save(subscription);
+
+      KCurrency? kCurrency;
+      if (currency != null) {
+        kCurrency = KCurrency(
+          name: currency!.name,
+          code: currency!.code,
+          symbol: currency!.symbol,
+          flag: currency!.flag,
+          decimalDigits: currency!.decimalDigits,
+          number: currency!.number,
+          namePlural: currency!.namePlural,
+          thousandsSeparator: currency!.thousandsSeparator,
+          spaceBetweenAmountAndSymbol: currency!.spaceBetweenAmountAndSymbol,
+          decimalSeparator: currency!.decimalSeparator,
+          symbolOnLeft: currency!.symbolOnLeft,
+        );
+        ref.read(eateryStoreProvider).execute(
+          'INSERT INTO currency (code, name, symbol, flag, number, decimal_digits, name_plural, symbol_on_left, decimal_separator, thousands_separator, space_between_amount_and_symbol) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
+          [
+            kCurrency.code,
+            kCurrency.name,
+            kCurrency.symbol,
+            kCurrency.flag,
+            kCurrency.number,
+            kCurrency.decimalDigits,
+            kCurrency.namePlural,
+            kCurrency.symbolOnLeft ? 1 : 0,
+            kCurrency.decimalSeparator,
+            kCurrency.thousandsSeparator,
+            kCurrency.spaceBetweenAmountAndSymbol ? 1 : 0,
+          ],
+        );
+        notifyMutation('currency', 0, 'save', kCurrency.toMap());
+      }
+      Company company = Company(
+        name: _controllerRestaurantName.text,
+        logo: libraryImageLogo?.filename,
+        email: _controllerEmailAddress.text,
+        phone: _controllerPhoneNumber.text,
+        address: _controllerAddress.text,
+        password: _controllerPassword.text,
+        taxation: taxation,
+        foodLicenseNo: _controllerFoodLicNo.text,
+        salesTaxNumber: _controllerTaxLicNo.text,
+        subscriptionId: subscription.id,
+        currencyCode: kCurrency?.code,
+      );
+      ref.read(companyRepositoryProvider).saveCompany(company);
+      if (!mounted) return;
+      Navigator.of(this.context).pushAndRemoveUntil(
+        MaterialPageRoute(builder: (_) => const CreateCompanyResultPage()),
+        (route) => false,
+      );
+    } catch (e) {
+      if (!mounted) return;
+      AppDialog.showMessage(
+        this.context,
+        message: e.toString(),
+        type: MessageType.error,
+      );
+    }
   }
 }

@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class CalculatorPage extends ConsumerStatefulWidget {
-  const CalculatorPage({Key? key}) : super(key: key);
+  const CalculatorPage({super.key});
 
   @override
   _CalculatorPageState createState() => _CalculatorPageState();
@@ -135,10 +135,10 @@ class _CalculatorPageState extends ConsumerState<CalculatorPage> {
       ),
       child: TextButton(
         style: ButtonStyle(
-          padding: MaterialStateProperty.all<EdgeInsetsGeometry>(
+          padding: WidgetStateProperty.all<EdgeInsetsGeometry>(
             const EdgeInsets.all(8),
           ),
-          backgroundColor: MaterialStateProperty.all<Color?>(null),
+          backgroundColor: WidgetStateProperty.all<Color?>(null),
         ),
         onPressed: onPressed,
         child: Text(

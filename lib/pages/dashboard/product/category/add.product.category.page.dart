@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 Color _pageColor = AppColors.menuCategories;
 
 class AddProductCategoryPage extends ConsumerStatefulWidget {
-  const AddProductCategoryPage({Key? key}) : super(key: key);
+  const AddProductCategoryPage({super.key});
 
   @override
   ConsumerState<AddProductCategoryPage> createState() =>
@@ -21,7 +21,7 @@ class _AddProductCategoryPageState
   final TextEditingController _controllerCategoryName = TextEditingController();
   final TextEditingController _controllerCategoryDescription =
       TextEditingController();
-  List<FocusNode> _focusNodes = [FocusNode(), FocusNode()];
+  final List<FocusNode> _focusNodes = [FocusNode(), FocusNode()];
 
   @override
   Widget build(BuildContext context) {
@@ -37,57 +37,6 @@ class _AddProductCategoryPageState
             },
           ),
       ],
-      child: InkWell(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: ListView(
-            children: [
-              const SizedBox(height: 12.0),
-              UploadButton(
-                label: 'Product Category Image',
-                primaryColor: _pageColor,
-                secondaryColor: AppColors.black600,
-                libraryImage: pickedLibraryImage,
-                onChanged: (pickedImagePath) {
-                  setState(() {
-                    pickedLibraryImage = pickedImagePath;
-                  });
-                },
-              ),
-              const SizedBox(height: 6.0),
-              LabeledCustomTextFormField(
-                label: 'Category Name',
-                hint: 'Enter product category name',
-                // Write a hint for category name field
-                foregroundColor: AppColors.black600,
-                themeColor: _pageColor,
-                controller: _controllerCategoryName,
-                focusNode: _focusNodes[0],
-                onFieldSubmitted: (v) {
-                  _focusNodes[1].requestFocus();
-                },
-              ),
-              const SizedBox(height: 6.0),
-              LabeledCustomTextFormField(
-                label: 'Description',
-                foregroundColor: AppColors.black600,
-                themeColor: _pageColor,
-                controller: _controllerCategoryDescription,
-                multiline: true,
-                hint: 'Enter product category description',
-                focusNode: _focusNodes[1],
-                onFieldSubmitted: (v) {
-                  FocusScope.of(context).unfocus();
-                },
-              ),
-              const SizedBox(height: 6.0),
-            ],
-          ),
-        ),
-      ),
       bottomNavigationBar: BottomAppBar(
         color: AppColors.white,
         child: AppButton.primary(
@@ -117,6 +66,48 @@ class _AddProductCategoryPageState
                 });
           },
           label: 'Save',
+        ),
+      ),
+      child: InkWell(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: ListView(
+            children: [
+              const SizedBox(height: 12.0),
+              UploadButton(
+                label: 'Product Category Image',
+                primaryColor: _pageColor,
+                secondaryColor: AppColors.black600,
+                libraryImage: pickedLibraryImage,
+                onChanged: (pickedImagePath) {
+                  setState(() {
+                    pickedLibraryImage = pickedImagePath;
+                  });
+                },
+              ),
+              const SizedBox(height: 6.0),
+              AppFormField(
+                label: 'Category Name',
+                hint: 'Enter product category name',
+                controller: _controllerCategoryName,
+                focusNode: _focusNodes[0],
+                focusNext: _focusNodes[1],
+              ),
+              AppFormField(
+                label: 'Description',
+                controller: _controllerCategoryDescription,
+                multiline: true,
+                hint: 'Enter product category description',
+                focusNode: _focusNodes[1],
+                onFieldSubmitted: (v) {
+                  FocusScope.of(context).unfocus();
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

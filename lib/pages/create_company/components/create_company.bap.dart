@@ -11,13 +11,13 @@ class CreateCompanyBottomAppBar extends StatelessWidget {
   final GlobalKey<FormState> formKey;
 
   const CreateCompanyBottomAppBar({
-    Key? key,
+    super.key,
     required this.themeColor,
     this.callback,
     this.index,
     required this.title,
     required this.formKey,
-  }) : super(key: key);
+  });
 
   void _submit() {
     final isValid = formKey.currentState?.validate() ?? false;

@@ -1,6 +1,12 @@
 # PRD 03 — Feature Requirements by Phase
 
 > ✅ = Complete  |  ➡️ = In Progress  |  ☐ = Not Started
+>
+> **Note:** Product phases differ from execution phases. Execution phases (`ISSUES.md`, `PHASE2.md`–`PHASE7.md`) tracked codebase transformation (unification, tokenization, molecular cohesion). Product phases track feature delivery. The mapping:
+> - Product Phase 4 (Waiter App) = Execution Phase 4
+> - Product Phase 5 (KDS) = Execution Phase 2 + Phase 4
+> - Product Phase 6 (Display) = Execution Phase 2 + Phase 4
+> - Product Phase 7 (Admin Gaps) = Execution Phases 4-7
 
 ## Phase 0 — Foundation: Core Extraction ✅
 
@@ -83,17 +89,19 @@
 | Auto-scroll | Timer-driven scrolling through orders on a loop |
 | Configurable sections | Toggle grouping by station |
 
-## Phase 7 — Admin Gaps ➡️
+## Phase 7 — Admin Gaps ✅
+
+> **Note:** Admin gaps were resolved in execution Phases 4-7 (Waiter hardening, Admin reporting, Component tokenization, Molecular cohesion).
 
 | Feature | Description |
 |---------|-------------|
 | Z-Report | End-of-day sales report with totals by payment mode, tax collected |
 | X-Report | Mid-day sales snapshot |
 | Daily summary | Date range picker, show total sales, orders, average ticket |
-| Dashboard charts | Revenue trend line, order volume bar, payment mode pie |
+| Dashboard charts | Revenue trend line, order volume bar, payment mode pie ✅ |
 | Stock counts | `Product.stockQuantity` (schema exists, UI in progress) |
-| Low-stock alerts | Visual indicator when stock < threshold in POS & inventory |
-| Dynamic currency | Currency symbol reads from company config (not hardcoded) |
+| Low-stock alerts | Visual indicator when stock < threshold in POS & inventory ✅ |
+| Dynamic currency | Currency symbol reads from company config (not hardcoded) ✅ |
 | Purchase orders | Create PO, receive stock, adjust inventory |
 
 ## Phase 8 — Cloud Sync ☐

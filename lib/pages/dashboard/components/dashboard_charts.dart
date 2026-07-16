@@ -129,7 +129,7 @@ class _RevenueLineChart extends StatelessWidget {
                       isStrokeCapRound: true,
                       dotData: FlDotData(
                         show: true,
-                        getDotPainter: (_, __, ___, ____) => FlDotCirclePainter(
+                        getDotPainter: (_, _, _, _) => FlDotCirclePainter(
                           radius: 4,
                           color: AppColors.primary,
                           strokeWidth: 2,

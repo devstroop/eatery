@@ -13,7 +13,7 @@ import '../search_product.delegate.dart';
 Color _pageColor = AppColors.secondary;
 
 class KitchenPage extends ConsumerStatefulWidget {
-  const KitchenPage({Key? key}) : super(key: key);
+  const KitchenPage({super.key});
 
   @override
   ConsumerState<KitchenPage> createState() => _KitchenPageState();
@@ -98,6 +98,17 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
           },
         ),
       ],
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: _pageColor,
+        foregroundColor: AppColors.white,
+        icon: const Icon(Icons.add),
+        label: const Text('Add Kitchen Dish'),
+        onPressed: () async {
+          GoRouter.of(
+            context,
+          ).pushNamed('addKitchenDish').then((_) => setState(() {}));
+        },
+      ),
       child: Column(
         children: [
           SizedBox(
@@ -397,17 +408,6 @@ class _KitchenPageState extends ConsumerState<KitchenPage> {
                   ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: _pageColor,
-        foregroundColor: AppColors.white,
-        icon: const Icon(Icons.add),
-        label: const Text('Add Kitchen Dish'),
-        onPressed: () async {
-          GoRouter.of(
-            context,
-          ).pushNamed('addKitchenDish').then((_) => setState(() {}));
-        },
       ),
     );
   }

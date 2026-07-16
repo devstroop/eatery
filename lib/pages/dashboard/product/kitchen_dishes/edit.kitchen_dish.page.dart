@@ -10,8 +10,7 @@ import 'package:eatery_core/widgets/app_dialog.dart';
 Color _pageColor = AppColors.secondary;
 
 class EditKitchenDishPage extends ConsumerStatefulWidget {
-  const EditKitchenDishPage({Key? key, required this.product})
-    : super(key: key);
+  const EditKitchenDishPage({super.key, required this.product});
   final Product product;
   @override
   ConsumerState<EditKitchenDishPage> createState() =>
@@ -86,6 +85,47 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
             },
           ),
       ],
+      bottomNavigationBar: BottomAppBar(
+        color: AppColors.white,
+        child: AppButton.primary(
+          onPressed: () async {
+            final isValid = _formKey.currentState!.validate();
+            if (!isValid) {
+              return;
+            }
+            _formKey.currentState!.save();
+
+            final updated = widget.product.copyWith(
+              image: image?.filename,
+              name: _controllerName.text,
+              mrpPrice: _controllerMRP.text.toDouble() ?? 0,
+              salePrice: _controllerSalePrice.text.toDouble(),
+              foodType: selectedFoodType,
+              taxSlabId: selectedTaxSlab?.id,
+              categoryId: selectedCategory?.id,
+              description: _controllerDescription.text,
+            );
+            await ref
+                .read(productRepositoryProvider)
+                .saveProduct(updated)
+                .then((value) {
+                  AppDialog.showMessage(
+                    this.context,
+                    message: 'Product updated successfully',
+                    type: MessageType.success,
+                  ).whenComplete(() => Navigator.pop(this.context));
+                })
+                .onError((error, stackTrace) {
+                  AppDialog.showMessage(
+                    this.context,
+                    message: 'Failed to update product',
+                    type: MessageType.error,
+                  );
+                });
+          },
+          label: 'Save',
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Form(
@@ -105,10 +145,11 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
                 },
               ),
               const SizedBox(height: 6.0),
-              LabeledCustomTextFormField(
+              AppFormField(
                 label: 'Name',
                 hint: 'Enter product name',
                 focusNode: _focusNodes[0],
+                focusNext: _focusNodes[1],
                 validator: (value) {
                   if (value!.trim().isEmpty) {
                     return 'Name cannot be blank';
@@ -126,26 +167,17 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
                   }
                   return null;
                 },
-                onFieldSubmitted: (v) {
-                  _focusNodes[1].requestFocus();
-                },
-                foregroundColor: AppColors.black600,
-                themeColor: _pageColor,
                 controller: _controllerName,
               ),
-              const SizedBox(height: 6.0),
               Row(
                 children: [
                   Flexible(
-                    child: LabeledCustomTextFormField(
+                    child: AppFormField(
                       label: 'MRP (Max. retail price)',
                       prefix: const Icon(Icons.currency_rupee, size: 14),
                       hint: '0.00',
-                      themeColor: _pageColor,
                       focusNode: _focusNodes[1],
-                      onFieldSubmitted: (v) {
-                        _focusNodes[2].requestFocus();
-                      },
+                      focusNext: _focusNodes[2],
                       validator: (value) {
                         if (value!.trim().isEmpty) {
                           return 'Price cannot be blank';
@@ -153,21 +185,17 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
                         return null;
                       },
                       keyboardType: TextInputType.number,
-                      foregroundColor: AppColors.black600,
                       controller: _controllerMRP,
                     ),
                   ),
                   const SizedBox(width: 12.0),
                   Flexible(
-                    child: LabeledCustomTextFormField(
+                    child: AppFormField(
                       label: 'Sale Price',
                       prefix: const Icon(Icons.currency_rupee, size: 14),
                       hint: '0.00',
-                      themeColor: _pageColor,
                       focusNode: _focusNodes[2],
-                      onFieldSubmitted: (v) {
-                        _focusNodes[3].requestFocus();
-                      },
+                      focusNext: _focusNodes[3],
                       validator: (value) {
                         if (value!.trim().isEmpty) {
                           return 'Price cannot be blank';
@@ -175,13 +203,11 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
                         return null;
                       },
                       keyboardType: TextInputType.number,
-                      foregroundColor: AppColors.black600,
                       controller: _controllerSalePrice,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 6.0),
               Text(
                 'Select Food Type',
                 style: AppTypography.bodyMedium.copyWith(
@@ -301,7 +327,7 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
                 ),
               ),
               const SizedBox(height: 6.0),
-              LabeledCustomTextFormField(
+              AppFormField(
                 label: 'Description',
                 hint: 'Enter product description',
                 multiline: true,
@@ -309,53 +335,10 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
                 onFieldSubmitted: (v) {
                   FocusScope.of(context).unfocus();
                 },
-                foregroundColor: AppColors.black600,
-                themeColor: _pageColor,
                 controller: _controllerDescription,
               ),
             ],
           ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.white,
-        child: AppButton.primary(
-          onPressed: () async {
-            final isValid = _formKey.currentState!.validate();
-            if (!isValid) {
-              return;
-            }
-            _formKey.currentState!.save();
-
-            final updated = widget.product.copyWith(
-              image: image?.filename,
-              name: _controllerName.text,
-              mrpPrice: _controllerMRP.text.toDouble() ?? 0,
-              salePrice: _controllerSalePrice.text.toDouble(),
-              foodType: selectedFoodType,
-              taxSlabId: selectedTaxSlab?.id,
-              categoryId: selectedCategory?.id,
-              description: _controllerDescription.text,
-            );
-            await ref
-                .read(productRepositoryProvider)
-                .saveProduct(updated)
-                .then((value) {
-                  AppDialog.showMessage(
-                    this.context,
-                    message: 'Product updated successfully',
-                    type: MessageType.success,
-                  ).whenComplete(() => Navigator.pop(this.context));
-                })
-                .onError((error, stackTrace) {
-                  AppDialog.showMessage(
-                    this.context,
-                    message: 'Failed to update product',
-                    type: MessageType.error,
-                  );
-                });
-          },
-          label: 'Save',
         ),
       ),
     );

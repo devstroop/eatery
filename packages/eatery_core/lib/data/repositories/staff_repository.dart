@@ -53,11 +53,12 @@ class StaffRepository {
       _db.query('SELECT id FROM staff WHERE phone=?', [phone]).isNotEmpty;
   Future<void> clearAll() async => _db.execute('DELETE FROM staff');
   Future<void> addAll(List<Staff> list) async {
-    for (final s in list)
+    for (final s in list) {
       _db.execute(
         'INSERT INTO staff (name,photo,phone,type,isActive,pin) VALUES (?,?,?,?,?,?)',
         [s.name, s.photo, s.phone, s.type.id, s.isActive ? 1 : 0, s.pin],
       );
+    }
   }
 
   Staff _toStaff(Map<String, Object?> r) => Staff(

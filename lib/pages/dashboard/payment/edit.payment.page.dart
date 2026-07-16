@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 Color _pageColor = AppColors.menuCategories;
 
 class EditPaymentPage extends ConsumerStatefulWidget {
-  const EditPaymentPage({Key? key, required this.payment}) : super(key: key);
+  const EditPaymentPage({super.key, required this.payment});
   final Payment payment;
 
   @override

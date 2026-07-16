@@ -1,5 +1,6 @@
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 
 // ignore: must_be_immutable
 class Body1 extends StatelessWidget {
@@ -13,7 +14,7 @@ class Body1 extends StatelessWidget {
   final LibraryImage? selectedLibraryImage;
   final Function(GlobalKey<FormState> formKey)? callbackFormKey;
   Body1({
-    Key? key,
+    super.key,
     required this.onChanged,
     required this.pageColor,
     required this.restaurantNameController,
@@ -23,7 +24,7 @@ class Body1 extends StatelessWidget {
     this.selectedLibraryImage,
     required this.formKey,
     this.callbackFormKey,
-  }) : super(key: key);
+  });
 
   List<FocusNode> focusNodes = [
     FocusNode(),
@@ -47,8 +48,8 @@ class Body1 extends StatelessWidget {
               title: "Create new company",
               subtitle: "Let's create an account with us",
             ),
-            SpacingStyle.defaultVerticalSpacing,
-            SpacingStyle.defaultVerticalSpacing,
+            AppSpacing.gapMd,
+            AppSpacing.gapMd,
             UploadButton(
               label: 'Restaurant Logo',
               primaryColor: pageColor,
@@ -56,7 +57,7 @@ class Body1 extends StatelessWidget {
               libraryImage: selectedLibraryImage,
               onChanged: onChanged,
             ),
-            SpacingStyle.defaultVerticalSpacing,
+            AppSpacing.gapMd,
             CustomTextFromField(
               themeColor: pageColor,
               keyboardType: TextInputType.name,
@@ -76,7 +77,7 @@ class Body1 extends StatelessWidget {
                 return null;
               },
             ),
-            SpacingStyle.defaultVerticalSpacing,
+            AppSpacing.gapMd,
             CustomTextFromField(
               themeColor: pageColor,
               keyboardType: TextInputType.emailAddress,
@@ -97,7 +98,7 @@ class Body1 extends StatelessWidget {
                 return null;
               },
             ),
-            SpacingStyle.defaultVerticalSpacing,
+            AppSpacing.gapMd,
             CustomTextFromField(
               themeColor: pageColor,
               keyboardType: TextInputType.phone,
@@ -120,7 +121,7 @@ class Body1 extends StatelessWidget {
                 return null;
               },
             ),
-            SpacingStyle.defaultVerticalSpacing,
+            AppSpacing.gapMd,
             LabeledCustomTextFormField(
               themeColor: pageColor,
               foregroundColor: AppColors.black600,

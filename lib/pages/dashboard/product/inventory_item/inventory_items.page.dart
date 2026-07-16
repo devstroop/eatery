@@ -13,7 +13,7 @@ import 'package:go_router/go_router.dart';
 Color _pageColor = AppColors.menuInventory;
 
 class InventoryItemsPage extends ConsumerStatefulWidget {
-  const InventoryItemsPage({Key? key}) : super(key: key);
+  const InventoryItemsPage({super.key});
 
   @override
   ConsumerState<InventoryItemsPage> createState() => _InventoryItemsPageState();
@@ -60,6 +60,17 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
           },
         ),
       ],
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: _pageColor,
+        foregroundColor: AppColors.white,
+        icon: const Icon(Icons.add),
+        label: const Text('Add Inventory Item'),
+        onPressed: () async {
+          GoRouter.of(
+            context,
+          ).pushNamed('addInventoryItem').then((_) => setState(() {}));
+        },
+      ),
       child: Column(
         children: [
           SizedBox(
@@ -401,17 +412,6 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
             ),
           ),
         ],
-      ),
-      floatingActionButton: FloatingActionButton.extended(
-        backgroundColor: _pageColor,
-        foregroundColor: AppColors.white,
-        icon: const Icon(Icons.add),
-        label: const Text('Add Inventory Item'),
-        onPressed: () async {
-          GoRouter.of(
-            context,
-          ).pushNamed('addInventoryItem').then((_) => setState(() {}));
-        },
       ),
     );
   }

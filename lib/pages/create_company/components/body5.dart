@@ -1,5 +1,6 @@
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Body5 extends ConsumerStatefulWidget {
@@ -9,13 +10,13 @@ class Body5 extends ConsumerStatefulWidget {
   final GlobalKey<FormState> formKey;
   final Function(GlobalKey<FormState> formKey)? callbackFormKey;
   const Body5({
-    Key? key,
+    super.key,
     required this.themeColor,
     required this.callback,
     this.currency,
     required this.formKey,
     this.callbackFormKey,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<Body5> createState() => _Body5State();
@@ -49,7 +50,7 @@ class _Body5State extends ConsumerState<Body5> {
               title: "Region and Currency",
               subtitle: "Select the default currency as per region",
             ),
-            SpacingStyle.defaultVerticalSpacing,
+            AppSpacing.gapMd,
             InkWell(
               onTap: () => showCurrencyPicker(
                 context: context,

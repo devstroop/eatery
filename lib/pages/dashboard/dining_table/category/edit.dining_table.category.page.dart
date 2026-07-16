@@ -8,8 +8,7 @@ import 'package:eatery_core/widgets/app_dialog.dart';
 Color _pageColor = AppColors.menuCategories;
 
 class EditDiningTableCategoryPage extends ConsumerStatefulWidget {
-  const EditDiningTableCategoryPage({Key? key, required this.category})
-    : super(key: key);
+  const EditDiningTableCategoryPage({super.key, required this.category});
   final DiningTableCategory category;
 
   @override
@@ -50,56 +49,6 @@ class _EditDiningTableCategoryPageState
             },
           ),
       ],
-      child: InkWell(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Form(
-            key: _formKey,
-            child: ListView(
-              children: [
-                LabeledCustomTextFormField(
-                  keyboardType: TextInputType.text,
-                  controller: _controllerCategoryName,
-                  label: 'Category Name',
-                  hint: 'eg. Terrace',
-                  obscureText: false,
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
-                  focusNode: _focusNodes[0],
-                  onFieldSubmitted: (v) {
-                    _focusNodes[1].requestFocus();
-                  },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter category name';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 6.0),
-                LabeledCustomTextFormField(
-                  keyboardType: TextInputType.text,
-                  controller: _controllerCategoryDescription,
-                  label: 'Description',
-                  hint: 'eg. Terrace',
-                  obscureText: false,
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
-                  multiline: true,
-                  focusNode: _focusNodes[1],
-                  onFieldSubmitted: (v) {
-                    _focusNodes[1].unfocus();
-                  },
-                ),
-                const SizedBox(height: 6.0),
-              ],
-            ),
-          ),
-        ),
-      ),
       bottomNavigationBar: BottomAppBar(
         color: AppColors.white,
         child: AppButton.primary(
@@ -131,6 +80,44 @@ class _EditDiningTableCategoryPageState
                 );
           },
           label: 'Update',
+        ),
+      ),
+      child: InkWell(
+        onTap: () {
+          FocusScope.of(context).unfocus();
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(12.0),
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              children: [
+                AppFormField(
+                  controller: _controllerCategoryName,
+                  label: 'Category Name',
+                  hint: 'eg. Terrace',
+                  focusNode: _focusNodes[0],
+                  focusNext: _focusNodes[1],
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter category name';
+                    }
+                    return null;
+                  },
+                ),
+                AppFormField(
+                  controller: _controllerCategoryDescription,
+                  label: 'Description',
+                  hint: 'eg. Terrace',
+                  multiline: true,
+                  focusNode: _focusNodes[1],
+                  onFieldSubmitted: (v) {
+                    _focusNodes[1].unfocus();
+                  },
+                ),
+              ],
+            ),
+          ),
         ),
       ),
     );

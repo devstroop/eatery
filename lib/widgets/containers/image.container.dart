@@ -3,7 +3,7 @@ import 'package:eatery_core/theme/app_colors.dart';
 
 class ImageContainer extends StatelessWidget {
   const ImageContainer({
-    Key? key,
+    super.key,
     this.height,
     this.width,
     required this.onTap,
@@ -11,7 +11,7 @@ class ImageContainer extends StatelessWidget {
     this.onLongPress,
     this.label,
     this.fit = BoxFit.cover,
-  }) : super(key: key);
+  });
   final double? height;
   final double? width;
   final VoidCallback onTap;
