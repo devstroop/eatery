@@ -56,6 +56,7 @@ CREATE INDEX IF NOT EXISTS idx_customer_phone ON customer(phone);
 CREATE TABLE IF NOT EXISTS orders (
   id            INTEGER PRIMARY KEY AUTOINCREMENT,
   customerPhone TEXT,
+  customerId    INTEGER,
   createdAt     INTEGER NOT NULL,
   updatedAt     INTEGER,
   totalQuantity INTEGER NOT NULL,
@@ -71,7 +72,8 @@ CREATE TABLE IF NOT EXISTS orders (
   voidReason    TEXT,
   voidedBy      TEXT,
   voidedAt      INTEGER,
-  employeeId       INTEGER
+  employeeId    INTEGER REFERENCES employee(id) ON DELETE SET NULL,
+  companyId     INTEGER REFERENCES company(id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS order_product (
@@ -165,7 +167,9 @@ CREATE TABLE IF NOT EXISTS company (
   salesTaxNumber TEXT,
   foodLicenseNo  TEXT,
   subscriptionId INTEGER,
-  adminEmployeeId   INTEGER
+  adminEmployeeId   INTEGER,
+  createdAt      INTEGER NOT NULL,
+  updatedAt      INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS currency (
