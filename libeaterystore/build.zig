@@ -60,6 +60,13 @@ pub fn build(b: *std.Build) void {
         }),
     });
     configure(b, shared_lib, &sqlite_flags, target_os, is_android, target_arch, enable_encryption);
+    // Shared libraries need linkLibC — the dynamic linker resolves libc
+    // symbols at runtime. Static libraries skip linkLibC because they are
+    // just object archives; the final executable or shared library that
+    // links against the archive provides libc. Calling linkLibC on a
+    // cross-compiled static lib would resolve against the host's libc,
+    // pulling in unwanted host symbols (as seen with macOS → iOS builds).
+    shared_lib.linkLibC();
     if (target_os == .macos) {
         shared_lib.headerpad_max_install_names = true;
     }
@@ -89,11 +96,11 @@ pub fn build(b: *std.Build) void {
     b.installArtifact(shared_lib);
 }
 
-/// Attach the SQLite backend (plain or SQLCipher), which SDK/NDK include paths
-/// are needed, and finally link libc. linkLibC provides both libc headers
-/// (needed for compiling C source code like the SQLite amalgamation) and the
-/// libc library dependency (resolved at final link time — benign for static
-/// libs since the linker omits unused symbols from archives).
+/// Attach the SQLite backend (plain or SQLCipher) and SDK/NDK include paths.
+/// Does NOT call linkLibC — that must be done on the caller side for
+/// dynamic/shared libraries (which need libc linked). Static libraries skip
+/// linkLibC because they are object archives — libc linking is handled by
+/// the final executable or shared library that consumes the archive.
 fn configure(
     b: *std.Build,
     lib: *std.Build.Step.Compile,
@@ -146,18 +153,16 @@ fn configure(
     if (target_os == .ios) {
         setupIosSdk(b, lib);
     }
-    lib.linkLibC();
 }
 
-/// Resolve the iOS SDK include and library paths. Checks `IOS_SDK_PATH` env var
-/// first (set by CI workflows via `xcrun`), then falls back to the standard
-/// Xcode location. Sets both include and library paths so linkLibC (called by
-/// configure()) can find iOS platform headers and libc .tbd files.
+/// Resolve the iOS SDK include path. Checks `IOS_SDK_PATH` env var first
+/// (set by CI workflows via `xcrun`), then falls back to the standard Xcode
+/// location. Only adds include paths — static libraries don't need libc
+/// linking, so no library paths are needed.
 fn setupIosSdk(b: *std.Build, lib: *std.Build.Step.Compile) void {
     const sdk_root = std.process.getEnvVarOwned(b.allocator, "IOS_SDK_PATH") catch
         "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk";
     lib.addSystemIncludePath(.{ .cwd_relative = b.fmt("{s}/usr/include", .{sdk_root}) });
-    lib.addLibraryPath(.{ .cwd_relative = b.fmt("{s}/usr/lib", .{sdk_root}) });
 }
 
 /// Configure the Android NDK sysroot (bionic libc headers, arch libs and CRT
