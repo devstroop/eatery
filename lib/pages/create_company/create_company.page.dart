@@ -286,6 +286,7 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
         subscriptionId: subscription.id,
         currencyCode: kCurrency?.code,
         adminEmployeeId: adminEmployeeId,
+        createdAt: DateTime.now(),
       );
       ref.read(companyRepositoryProvider).saveCompany(company);
       if (!mounted) return;
