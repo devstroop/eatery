@@ -41,10 +41,10 @@ export 'dining_table/dining_table_status.dart';
 export 'tax/tax_slab.dart';
 export 'tax/tax_type.dart';
 
-// Staff
-export 'staff/staff.dart';
-export 'staff/staff_type.dart';
-export 'staff/pin_hash.dart';
+// Employee
+export 'employee/employee.dart';
+export 'employee/employee_role.dart';
+export 'employee/pin_hash.dart';
 
 // Payment
 export 'payment/payment.dart';

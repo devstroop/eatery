@@ -1,31 +1,32 @@
 import 'package:eatery_core/data/models/eatery_db.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
-part 'staff.freezed.dart';
-part 'staff.g.dart';
+part 'employee.freezed.dart';
+part 'employee.g.dart';
 
 @freezed
-abstract class Staff with _$Staff {
-  const factory Staff({
+abstract class Employee with _$Employee {
+  const factory Employee({
     int? id,
     required String name,
     String? photo,
     String? phone,
     String? pin,
-    @Default(StaffType.waiter) StaffType type,
+    @Default(EmployeeRole.waiter) EmployeeRole type,
     @Default(true) bool isActive,
-  }) = _Staff;
+  }) = _Employee;
 
-  factory Staff.fromJson(Map<String, dynamic> json) => _$StaffFromJson(json);
+  factory Employee.fromJson(Map<String, dynamic> json) =>
+      _$EmployeeFromJson(json);
 
-  static Staff fromMap(Map<String, dynamic> map) => Staff.fromJson(map);
+  static Employee fromMap(Map<String, dynamic> map) => Employee.fromJson(map);
 }
 
-extension StaffX on Staff {
+extension EmployeeX on Employee {
   Map<String, Object?> toMap() => toJson() as Map<String, Object?>;
 
-  static Staff fromIterable(Iterable<dynamic> row) {
-    return Staff.fromMap({
+  static Employee fromIterable(Iterable<dynamic> row) {
+    return Employee.fromMap({
       'id': row.elementAt(0),
       'name': row.elementAt(1),
       'photo': row.elementAt(2),

@@ -7,7 +7,7 @@ part 'time_entry.g.dart';
 abstract class TimeEntry with _$TimeEntry {
   const factory TimeEntry({
     int? id,
-    required int staffId,
+    required int employeeId,
     int? shiftId,
     @JsonKey(fromJson: epochFromJson, toJson: epochToJson)
     required DateTime clockIn,

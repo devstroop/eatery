@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$DiningTable {
 
- int? get id; String get name; String? get description; int? get orderId; int? get categoryId; int get capacity; DiningTableStatus get status; String? get customerPhone; double? get posX; double? get posY; int get shape; double? get width; double? get height; int? get staffId;
+ int? get id; String get name; String? get description; int? get orderId; int? get categoryId; int get capacity; DiningTableStatus get status; String? get customerPhone; double? get posX; double? get posY; int get shape; double? get width; double? get height; int? get employeeId;
 /// Create a copy of DiningTable
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $DiningTableCopyWith<DiningTable> get copyWith => _$DiningTableCopyWithImpl<Dini
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is DiningTable&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.orderId, orderId) || other.orderId == orderId)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.capacity, capacity) || other.capacity == capacity)&&(identical(other.status, status) || other.status == status)&&(identical(other.customerPhone, customerPhone) || other.customerPhone == customerPhone)&&(identical(other.posX, posX) || other.posX == posX)&&(identical(other.posY, posY) || other.posY == posY)&&(identical(other.shape, shape) || other.shape == shape)&&(identical(other.width, width) || other.width == width)&&(identical(other.height, height) || other.height == height)&&(identical(other.staffId, staffId) || other.staffId == staffId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is DiningTable&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.orderId, orderId) || other.orderId == orderId)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.capacity, capacity) || other.capacity == capacity)&&(identical(other.status, status) || other.status == status)&&(identical(other.customerPhone, customerPhone) || other.customerPhone == customerPhone)&&(identical(other.posX, posX) || other.posX == posX)&&(identical(other.posY, posY) || other.posY == posY)&&(identical(other.shape, shape) || other.shape == shape)&&(identical(other.width, width) || other.width == width)&&(identical(other.height, height) || other.height == height)&&(identical(other.employeeId, employeeId) || other.employeeId == employeeId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,description,orderId,categoryId,capacity,status,customerPhone,posX,posY,shape,width,height,staffId);
+int get hashCode => Object.hash(runtimeType,id,name,description,orderId,categoryId,capacity,status,customerPhone,posX,posY,shape,width,height,employeeId);
 
 @override
 String toString() {
-  return 'DiningTable(id: $id, name: $name, description: $description, orderId: $orderId, categoryId: $categoryId, capacity: $capacity, status: $status, customerPhone: $customerPhone, posX: $posX, posY: $posY, shape: $shape, width: $width, height: $height, staffId: $staffId)';
+  return 'DiningTable(id: $id, name: $name, description: $description, orderId: $orderId, categoryId: $categoryId, capacity: $capacity, status: $status, customerPhone: $customerPhone, posX: $posX, posY: $posY, shape: $shape, width: $width, height: $height, employeeId: $employeeId)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $DiningTableCopyWith<$Res>  {
   factory $DiningTableCopyWith(DiningTable value, $Res Function(DiningTable) _then) = _$DiningTableCopyWithImpl;
 @useResult
 $Res call({
- int? id, String name, String? description, int? orderId, int? categoryId, int capacity, DiningTableStatus status, String? customerPhone, double? posX, double? posY, int shape, double? width, double? height, int? staffId
+ int? id, String name, String? description, int? orderId, int? categoryId, int capacity, DiningTableStatus status, String? customerPhone, double? posX, double? posY, int shape, double? width, double? height, int? employeeId
 });
 
 
@@ -65,7 +65,7 @@ class _$DiningTableCopyWithImpl<$Res>
 
 /// Create a copy of DiningTable
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = null,Object? description = freezed,Object? orderId = freezed,Object? categoryId = freezed,Object? capacity = null,Object? status = null,Object? customerPhone = freezed,Object? posX = freezed,Object? posY = freezed,Object? shape = null,Object? width = freezed,Object? height = freezed,Object? staffId = freezed,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = null,Object? description = freezed,Object? orderId = freezed,Object? categoryId = freezed,Object? capacity = null,Object? status = null,Object? customerPhone = freezed,Object? posX = freezed,Object? posY = freezed,Object? shape = null,Object? width = freezed,Object? height = freezed,Object? employeeId = freezed,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -80,7 +80,7 @@ as double?,posY: freezed == posY ? _self.posY : posY // ignore: cast_nullable_to
 as double?,shape: null == shape ? _self.shape : shape // ignore: cast_nullable_to_non_nullable
 as int,width: freezed == width ? _self.width : width // ignore: cast_nullable_to_non_nullable
 as double?,height: freezed == height ? _self.height : height // ignore: cast_nullable_to_non_nullable
-as double?,staffId: freezed == staffId ? _self.staffId : staffId // ignore: cast_nullable_to_non_nullable
+as double?,employeeId: freezed == employeeId ? _self.employeeId : employeeId // ignore: cast_nullable_to_non_nullable
 as int?,
   ));
 }
@@ -166,10 +166,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String name,  String? description,  int? orderId,  int? categoryId,  int capacity,  DiningTableStatus status,  String? customerPhone,  double? posX,  double? posY,  int shape,  double? width,  double? height,  int? staffId)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String name,  String? description,  int? orderId,  int? categoryId,  int capacity,  DiningTableStatus status,  String? customerPhone,  double? posX,  double? posY,  int shape,  double? width,  double? height,  int? employeeId)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _DiningTable() when $default != null:
-return $default(_that.id,_that.name,_that.description,_that.orderId,_that.categoryId,_that.capacity,_that.status,_that.customerPhone,_that.posX,_that.posY,_that.shape,_that.width,_that.height,_that.staffId);case _:
+return $default(_that.id,_that.name,_that.description,_that.orderId,_that.categoryId,_that.capacity,_that.status,_that.customerPhone,_that.posX,_that.posY,_that.shape,_that.width,_that.height,_that.employeeId);case _:
   return orElse();
 
 }
@@ -187,10 +187,10 @@ return $default(_that.id,_that.name,_that.description,_that.orderId,_that.catego
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String name,  String? description,  int? orderId,  int? categoryId,  int capacity,  DiningTableStatus status,  String? customerPhone,  double? posX,  double? posY,  int shape,  double? width,  double? height,  int? staffId)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String name,  String? description,  int? orderId,  int? categoryId,  int capacity,  DiningTableStatus status,  String? customerPhone,  double? posX,  double? posY,  int shape,  double? width,  double? height,  int? employeeId)  $default,) {final _that = this;
 switch (_that) {
 case _DiningTable():
-return $default(_that.id,_that.name,_that.description,_that.orderId,_that.categoryId,_that.capacity,_that.status,_that.customerPhone,_that.posX,_that.posY,_that.shape,_that.width,_that.height,_that.staffId);case _:
+return $default(_that.id,_that.name,_that.description,_that.orderId,_that.categoryId,_that.capacity,_that.status,_that.customerPhone,_that.posX,_that.posY,_that.shape,_that.width,_that.height,_that.employeeId);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -207,10 +207,10 @@ return $default(_that.id,_that.name,_that.description,_that.orderId,_that.catego
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String name,  String? description,  int? orderId,  int? categoryId,  int capacity,  DiningTableStatus status,  String? customerPhone,  double? posX,  double? posY,  int shape,  double? width,  double? height,  int? staffId)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String name,  String? description,  int? orderId,  int? categoryId,  int capacity,  DiningTableStatus status,  String? customerPhone,  double? posX,  double? posY,  int shape,  double? width,  double? height,  int? employeeId)?  $default,) {final _that = this;
 switch (_that) {
 case _DiningTable() when $default != null:
-return $default(_that.id,_that.name,_that.description,_that.orderId,_that.categoryId,_that.capacity,_that.status,_that.customerPhone,_that.posX,_that.posY,_that.shape,_that.width,_that.height,_that.staffId);case _:
+return $default(_that.id,_that.name,_that.description,_that.orderId,_that.categoryId,_that.capacity,_that.status,_that.customerPhone,_that.posX,_that.posY,_that.shape,_that.width,_that.height,_that.employeeId);case _:
   return null;
 
 }
@@ -222,7 +222,7 @@ return $default(_that.id,_that.name,_that.description,_that.orderId,_that.catego
 @JsonSerializable()
 
 class _DiningTable implements DiningTable {
-  const _DiningTable({this.id, required this.name, this.description, this.orderId, this.categoryId, this.capacity = 0, this.status = DiningTableStatus.available, this.customerPhone, this.posX, this.posY, this.shape = 0, this.width, this.height, this.staffId});
+  const _DiningTable({this.id, required this.name, this.description, this.orderId, this.categoryId, this.capacity = 0, this.status = DiningTableStatus.available, this.customerPhone, this.posX, this.posY, this.shape = 0, this.width, this.height, this.employeeId});
   factory _DiningTable.fromJson(Map<String, dynamic> json) => _$DiningTableFromJson(json);
 
 @override final  int? id;
@@ -238,7 +238,7 @@ class _DiningTable implements DiningTable {
 @override@JsonKey() final  int shape;
 @override final  double? width;
 @override final  double? height;
-@override final  int? staffId;
+@override final  int? employeeId;
 
 /// Create a copy of DiningTable
 /// with the given fields replaced by the non-null parameter values.
@@ -253,16 +253,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DiningTable&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.orderId, orderId) || other.orderId == orderId)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.capacity, capacity) || other.capacity == capacity)&&(identical(other.status, status) || other.status == status)&&(identical(other.customerPhone, customerPhone) || other.customerPhone == customerPhone)&&(identical(other.posX, posX) || other.posX == posX)&&(identical(other.posY, posY) || other.posY == posY)&&(identical(other.shape, shape) || other.shape == shape)&&(identical(other.width, width) || other.width == width)&&(identical(other.height, height) || other.height == height)&&(identical(other.staffId, staffId) || other.staffId == staffId));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _DiningTable&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.orderId, orderId) || other.orderId == orderId)&&(identical(other.categoryId, categoryId) || other.categoryId == categoryId)&&(identical(other.capacity, capacity) || other.capacity == capacity)&&(identical(other.status, status) || other.status == status)&&(identical(other.customerPhone, customerPhone) || other.customerPhone == customerPhone)&&(identical(other.posX, posX) || other.posX == posX)&&(identical(other.posY, posY) || other.posY == posY)&&(identical(other.shape, shape) || other.shape == shape)&&(identical(other.width, width) || other.width == width)&&(identical(other.height, height) || other.height == height)&&(identical(other.employeeId, employeeId) || other.employeeId == employeeId));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,description,orderId,categoryId,capacity,status,customerPhone,posX,posY,shape,width,height,staffId);
+int get hashCode => Object.hash(runtimeType,id,name,description,orderId,categoryId,capacity,status,customerPhone,posX,posY,shape,width,height,employeeId);
 
 @override
 String toString() {
-  return 'DiningTable(id: $id, name: $name, description: $description, orderId: $orderId, categoryId: $categoryId, capacity: $capacity, status: $status, customerPhone: $customerPhone, posX: $posX, posY: $posY, shape: $shape, width: $width, height: $height, staffId: $staffId)';
+  return 'DiningTable(id: $id, name: $name, description: $description, orderId: $orderId, categoryId: $categoryId, capacity: $capacity, status: $status, customerPhone: $customerPhone, posX: $posX, posY: $posY, shape: $shape, width: $width, height: $height, employeeId: $employeeId)';
 }
 
 
@@ -273,7 +273,7 @@ abstract mixin class _$DiningTableCopyWith<$Res> implements $DiningTableCopyWith
   factory _$DiningTableCopyWith(_DiningTable value, $Res Function(_DiningTable) _then) = __$DiningTableCopyWithImpl;
 @override @useResult
 $Res call({
- int? id, String name, String? description, int? orderId, int? categoryId, int capacity, DiningTableStatus status, String? customerPhone, double? posX, double? posY, int shape, double? width, double? height, int? staffId
+ int? id, String name, String? description, int? orderId, int? categoryId, int capacity, DiningTableStatus status, String? customerPhone, double? posX, double? posY, int shape, double? width, double? height, int? employeeId
 });
 
 
@@ -290,7 +290,7 @@ class __$DiningTableCopyWithImpl<$Res>
 
 /// Create a copy of DiningTable
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = null,Object? description = freezed,Object? orderId = freezed,Object? categoryId = freezed,Object? capacity = null,Object? status = null,Object? customerPhone = freezed,Object? posX = freezed,Object? posY = freezed,Object? shape = null,Object? width = freezed,Object? height = freezed,Object? staffId = freezed,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = null,Object? description = freezed,Object? orderId = freezed,Object? categoryId = freezed,Object? capacity = null,Object? status = null,Object? customerPhone = freezed,Object? posX = freezed,Object? posY = freezed,Object? shape = null,Object? width = freezed,Object? height = freezed,Object? employeeId = freezed,}) {
   return _then(_DiningTable(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
@@ -305,7 +305,7 @@ as double?,posY: freezed == posY ? _self.posY : posY // ignore: cast_nullable_to
 as double?,shape: null == shape ? _self.shape : shape // ignore: cast_nullable_to_non_nullable
 as int,width: freezed == width ? _self.width : width // ignore: cast_nullable_to_non_nullable
 as double?,height: freezed == height ? _self.height : height // ignore: cast_nullable_to_non_nullable
-as double?,staffId: freezed == staffId ? _self.staffId : staffId // ignore: cast_nullable_to_non_nullable
+as double?,employeeId: freezed == employeeId ? _self.employeeId : employeeId // ignore: cast_nullable_to_non_nullable
 as int?,
   ));
 }

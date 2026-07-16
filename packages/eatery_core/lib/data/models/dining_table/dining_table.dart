@@ -20,7 +20,7 @@ abstract class DiningTable with _$DiningTable {
     @Default(0) int shape,
     double? width,
     double? height,
-    int? staffId,
+    int? employeeId,
   }) = _DiningTable;
 
   factory DiningTable.fromJson(Map<String, dynamic> json) =>
@@ -45,7 +45,7 @@ abstract class DiningTable with _$DiningTable {
       'shape': map['shape'] ?? 0,
       'width': map['width'],
       'height': map['height'],
-      'staffId': map['staffId'],
+      'employeeId': map['employeeId'],
     });
   }
 
@@ -64,7 +64,7 @@ abstract class DiningTable with _$DiningTable {
       'shape': row.elementAt(10),
       'width': row.elementAt(11),
       'height': row.elementAt(12),
-      'staffId': row.elementAt(13),
+      'employeeId': row.elementAt(13),
     });
   }
 }
@@ -85,7 +85,7 @@ extension DiningTableX on DiningTable {
       'shape': shape,
       'width': width,
       'height': height,
-      'staffId': staffId,
+      'employeeId': employeeId,
     };
   }
 
@@ -103,7 +103,7 @@ extension DiningTableX on DiningTable {
       shape,
       width,
       height,
-      staffId,
+      employeeId,
     ];
   }
 }
