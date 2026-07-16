@@ -44,6 +44,7 @@ export 'tax/tax_type.dart';
 // Staff
 export 'staff/staff.dart';
 export 'staff/staff_type.dart';
+export 'staff/pin_hash.dart';
 
 // Payment
 export 'payment/payment.dart';
