@@ -448,7 +448,7 @@ class _DataManagementPageState extends ConsumerState<DataManagementPage> {
           final msg = '❌ Error downloading ${element['name']}: $e';
           logs.add(msg);
           pd.update(msg: msg);
-          return DiningTableCategory(name: element['name']);
+          return DiningTableCategory(name: element['name'], isActive: true);
         }
       });
       _clearTable('dining_table_category', 'dining_table_category');
