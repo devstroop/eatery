@@ -32,9 +32,9 @@ class ShiftRepository {
   Future<void> clockIn(TimeEntry te) async {
     final m = te.toMap();
     _store.execute(
-      'INSERT INTO time_entry (staffId,shiftId,clockIn,breakStart,breakEnd,note,createdAt) VALUES (?,?,?,?,?,?,?)',
+      'INSERT INTO time_entry (employeeId,shiftId,clockIn,breakStart,breakEnd,note,createdAt) VALUES (?,?,?,?,?,?,?)',
       [
-        m['staffId'],
+        m['employeeId'],
         m['shiftId'],
         m['clockIn'],
         m['breakStart'],
@@ -52,14 +52,14 @@ class ShiftRepository {
     ]);
   }
 
-  List<TimeEntry> getTodaysEntries(int staffId) {
+  List<TimeEntry> getTodaysEntries(int employeeId) {
     final start = DateTime.now()
         .subtract(const Duration(hours: 24))
         .millisecondsSinceEpoch;
     return _store
         .query(
-          'SELECT * FROM time_entry WHERE staffId = ? AND clockIn > ? ORDER BY clockIn',
-          [staffId, start],
+          'SELECT * FROM time_entry WHERE employeeId = ? AND clockIn > ? ORDER BY clockIn',
+          [employeeId, start],
         )
         .map(TimeEntry.fromMap)
         .toList();

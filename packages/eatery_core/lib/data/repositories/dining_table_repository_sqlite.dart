@@ -19,7 +19,7 @@ class SqliteDiningTableRepository implements DiningTableRepository {
 
   static const _tableColumns =
       'name, categoryId, description, orderId, capacity, status, customerPhone, '
-      'posX, posY, shape, width, height, staffId';
+      'posX, posY, shape, width, height, employeeId';
   static const _categoryColumns = 'name, description, isActive';
 
   // ---------------------------------------------------------------------------
@@ -72,7 +72,7 @@ class SqliteDiningTableRepository implements DiningTableRepository {
       table.shape,
       table.width,
       table.height,
-      table.staffId,
+      table.employeeId,
     ];
 
     final int id;
@@ -81,7 +81,7 @@ class SqliteDiningTableRepository implements DiningTableRepository {
       _store.execute(
         'UPDATE dining_table SET name=?, categoryId=?, description=?, '
         'orderId=?, capacity=?, status=?, customerPhone=?, '
-        'posX=?, posY=?, shape=?, width=?, height=?, staffId=? WHERE id=?',
+        'posX=?, posY=?, shape=?, width=?, height=?, employeeId=? WHERE id=?',
         [...values, id],
       );
     } else {
@@ -172,7 +172,7 @@ class SqliteDiningTableRepository implements DiningTableRepository {
       shape: row['shape'] as int? ?? 0,
       width: (row['width'] as num?)?.toDouble(),
       height: (row['height'] as num?)?.toDouble(),
-      staffId: row['staffId'] as int?,
+      employeeId: row['employeeId'] as int?,
     );
   }
 

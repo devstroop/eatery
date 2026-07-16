@@ -26,14 +26,16 @@ class SqliteCompanyRepository implements CompanyRepository {
   @override
   Future<void> saveCompany(Company company) async {
     final m = company.toMap();
-    final id = company.id ??
-        (_store.queryScalar('SELECT COALESCE(MAX(id), 0) + 1 FROM company') as int);
+    final id =
+        company.id ??
+        (_store.queryScalar('SELECT COALESCE(MAX(id), 0) + 1 FROM company')
+            as int);
     _store.execute(
       '''
       INSERT OR REPLACE INTO company
         (id, logo, name, email, phone, address, edition,
          currencyCode, salesTaxNumber, foodLicenseNo, subscriptionId,
-         adminStaffId)
+         adminEmployeeId)
       VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
     ''',
       [
@@ -48,7 +50,7 @@ class SqliteCompanyRepository implements CompanyRepository {
         m['salesTaxNumber'],
         m['foodLicenseNo'],
         m['subscriptionId'],
-        m['adminStaffId'],
+        m['adminEmployeeId'],
       ],
     );
     company = company.copyWith(id: id);
@@ -119,7 +121,7 @@ class SqliteCompanyRepository implements CompanyRepository {
       salesTaxNumber: row['salesTaxNumber'] as String?,
       foodLicenseNo: row['foodLicenseNo'] as String?,
       subscriptionId: row['subscriptionId'] as int?,
-      adminStaffId: row['adminStaffId'] as int?,
+      adminEmployeeId: row['adminEmployeeId'] as int?,
       id: row['id'] as int,
     );
   }
