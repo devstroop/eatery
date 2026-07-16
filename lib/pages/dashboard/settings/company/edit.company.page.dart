@@ -1,8 +1,10 @@
+import 'package:currency_picker/currency_picker.dart';
 import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/constants/validators/email_validator.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:eatery_core/theme/app_spacing.dart';
+import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/company_provider.dart';
@@ -31,9 +33,10 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
     // company = await CompanyLoader(widget.database).load(context);
     setState(() {
       selectedLogo = LibraryImage(company!.logo);
+      selectedTaxation = company!.taxation;
+      selectedCurrencyCode = company!.currencyCode;
       _controllerCompanyName.text = company!.name;
       _controllerEmail.text = company!.email;
-      _controllerPhone.text = company!.phone;
       _controllerPhone.text = company!.phone;
       _controllerAddress.text = company!.address;
       _controllerSalesTaxNo.text = company!.salesTaxNumber ?? '';
@@ -42,6 +45,8 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
   }
 
   LibraryImage? selectedLogo;
+  Taxation selectedTaxation = Taxation.none;
+  String? selectedCurrencyCode;
 
   final TextEditingController _controllerCompanyName = TextEditingController();
   final TextEditingController _controllerEmail = TextEditingController();
@@ -76,6 +81,9 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                     address: _controllerAddress.text,
                     foodLicenseNo: _controllerFoodLicNo.text,
                     salesTaxNumber: _controllerSalesTaxNo.text,
+                    logo: selectedLogo?.filename,
+                    taxation: selectedTaxation,
+                    currencyCode: selectedCurrencyCode ?? company!.currencyCode,
                   );
 
                   // Update the company in the database
@@ -174,19 +182,76 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                       return null;
                     },
                   ),
+                  AppSpacing.gapMd,
+                  DropdownButtonFormField<Taxation>(
+                    value: selectedTaxation,
+                    decoration: const InputDecoration(
+                      labelText: 'Taxation',
+                      border: OutlineInputBorder(),
+                    ),
+                    items: Taxation.values.map((t) => DropdownMenuItem(
+                      value: t,
+                      child: Text(t.name),
+                    )).toList(),
+                    onChanged: (v) {
+                      if (v != null && v != selectedTaxation) {
+                        _controllerSalesTaxNo.clear();
+                        _controllerFoodLicNo.clear();
+                        setState(() => selectedTaxation = v);
+                      }
+                    },
+                  ),
+                  AppSpacing.gapMd,
+                  InkWell(
+                    onTap: () => showCurrencyPicker(
+                      context: context,
+                      showSearchField: true,
+                      showFlag: true,
+                      showCurrencyName: true,
+                      showCurrencyCode: true,
+                      favorite: const ['INR'],
+                      physics: const BouncingScrollPhysics(),
+                      useRootNavigator: true,
+                      onSelect: (currency) {
+                        setState(() => selectedCurrencyCode = currency.code);
+                      },
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 16,
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(6),
+                        border: Border.all(color: AppColors.grey400, width: 1),
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Currency',
+                            style: AppTypography.bodyMedium,
+                          ),
+                          const Spacer(),
+                          Text(
+                            selectedCurrencyCode ?? 'Not Selected',
+                            style: AppTypography.titleMedium,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  AppSpacing.gapMd,
                   AppFormField(
                     keyboardType: TextInputType.text,
                     controller: _controllerSalesTaxNo,
-                    label:
-                        '${Taxation.values.singleWhere((element) => element.id == company?.taxation.id).name} License No',
-                    hint:
-                        'Enter ${Taxation.values.singleWhere((element) => element.id == company?.taxation.id).name} license number...',
+                    label: '${selectedTaxation.name} License No',
+                    hint: 'Enter ${selectedTaxation.name} license number...',
                     focusNode: focus5,
                     focusNext: focus6,
                     validator: (value) {
                       if (value!.trim().isNotEmpty &&
                           value.trim().length < 10) {
-                        return '${Taxation.values.singleWhere((element) => element.id == company?.taxation.id).name} license number is not valid';
+                        return '${selectedTaxation.name} license number is not valid';
                       }
                       return null;
                     },
@@ -194,10 +259,8 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                   AppFormField(
                     keyboardType: TextInputType.text,
                     controller: _controllerFoodLicNo,
-                    label:
-                        '${Taxation.values.singleWhere((element) => element.id == company?.taxation.id) == Taxation.gst ? 'FSSAI' : 'Food'} License No',
-                    hint:
-                        'Enter ${Taxation.values.singleWhere((element) => element.id == company?.taxation.id) == Taxation.gst ? 'FSSAI' : 'Food'} license number...',
+                    label: '${selectedTaxation == Taxation.gst ? 'FSSAI' : 'Food'} License No',
+                    hint: 'Enter ${selectedTaxation == Taxation.gst ? 'FSSAI' : 'Food'} license number...',
                     focusNode: focus6,
                     focusNext: focus7,
                     validator: (value) {
@@ -205,7 +268,7 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                           (value.trim().length <
                               10 /* ||
                               !value.trim().isNumericOnly*/ )) {
-                        return '${Taxation.values.singleWhere((element) => element.id == company?.taxation.id) == Taxation.gst ? 'FSSAI' : 'Food'} license number is not valid';
+                        return '${selectedTaxation == Taxation.gst ? 'FSSAI' : 'Food'} license number is not valid';
                       }
                       return null;
                     },
