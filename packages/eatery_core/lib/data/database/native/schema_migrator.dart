@@ -102,6 +102,7 @@ class SchemaMigrator {
     _migrationV10,
     _migrationV11,
     _migrationV12,
+    _migrationV13,
   ];
 
   /// v1: Auth & order lifecycle fields.
@@ -400,6 +401,20 @@ class SchemaMigrator {
     _addColumn(store, 'employee', 'email', 'TEXT');
     _addColumn(store, 'employee', 'pinUpdatedAt', 'INTEGER');
     _addColumn(store, 'employee', 'lastLoginAt', 'INTEGER');
+  }
+
+  /// v13: Company timestamps + orders FK columns.
+  ///
+  /// Adds `createdAt`/`updatedAt` to `company` (S19), `companyId` to `orders`
+  /// (S21), and `customerId` FK to `orders` (S11).
+  static void _migrationV13(EateryStore store) {
+    // S19: Company timestamps
+    _addColumn(store, 'company', 'createdAt', 'INTEGER NOT NULL DEFAULT 0');
+    _addColumn(store, 'company', 'updatedAt', 'INTEGER');
+
+    // S21 + S11: Orders FK columns
+    _addColumn(store, 'orders', 'customerId', 'INTEGER');
+    _addColumn(store, 'orders', 'companyId', 'INTEGER');
   }
 
   /// Runs [sql] and ignores "no such column" errors that occur when the old
