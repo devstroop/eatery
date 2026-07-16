@@ -587,11 +587,11 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
 
 /// Role-based access control redirect guard.
 ///
-/// Checks (1) role is set, (2) auth for staff roles, (3) route permissions.
+/// Checks (1) role is set, (2) auth for employee roles, (3) route permissions.
 String? _rbacRedirect(BuildContext context, GoRouterState state) {
   final container = ProviderScope.containerOf(context, listen: false);
   final role = container.read(roleProvider);
-  final authStaff = container.read(authSessionProvider);
+  final authEmployee = container.read(authSessionProvider);
   final routeName = state.name;
   final location = state.matchedLocation;
 
@@ -623,8 +623,8 @@ String? _rbacRedirect(BuildContext context, GoRouterState state) {
     return null; // allow
   }
 
-  // 4. Staff roles (admin, waiter) — must be authenticated.
-  if (authStaff == null) {
+  // 4. Employee roles (admin, waiter) — must be authenticated.
+  if (authEmployee == null) {
     if (routeName == 'login' || routeName == 'mainScreen') return null;
     return '/login';
   }

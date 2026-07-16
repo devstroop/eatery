@@ -188,7 +188,7 @@ class _AddEmployeePageState extends ConsumerState<AddEmployeePage> {
                       borderSide: BorderSide(width: 2, color: AppColors.error),
                     ),
                   ),
-                  hint: const Text('Select Staff Type'),
+                    hint: const Text('Select Employee Role'),
                   value: employeeType,
                   items: [
                     ...EmployeeRole.values.map(
