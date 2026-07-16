@@ -104,18 +104,13 @@ class _AddCustomerPageState extends ConsumerState<AddCustomerPage> {
             key: _formKey,
             child: ListView(
               children: [
-                LabeledCustomTextFormField(
+                AppFormField(
                   controller: _controllerCustomerPhone,
                   label: 'Phone Number (*required)',
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
                   keyboardType: TextInputType.phone,
                   hint: 'Enter phone number',
                   focusNode: _focusNodes[0],
-                  textInputAction: TextInputAction.next,
-                  onFieldSubmitted: (value) {
-                    _focusNodes[1].requestFocus();
-                  },
+                  focusNext: _focusNodes[1],
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Phone number is required';
@@ -128,18 +123,12 @@ class _AddCustomerPageState extends ConsumerState<AddCustomerPage> {
                     return null;
                   },
                 ),
-                AppSpacing.gapMd,
-                LabeledCustomTextFormField(
+                AppFormField(
                   controller: _controllerCustomerName,
                   label: 'Customer Name',
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
                   hint: 'Enter customer name',
-                  textInputAction: TextInputAction.next,
                   focusNode: _focusNodes[1],
-                  onFieldSubmitted: (value) {
-                    _focusNodes[2].requestFocus();
-                  },
+                  focusNext: _focusNodes[2],
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Customer name is required';
@@ -147,19 +136,14 @@ class _AddCustomerPageState extends ConsumerState<AddCustomerPage> {
                     return null;
                   },
                 ),
-                AppSpacing.gapMd,
-                LabeledCustomTextFormField(
+                AppFormField(
                   controller: _controllerCustomerAddress,
                   label: 'Address',
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
                   keyboardType: TextInputType.streetAddress,
                   hint: 'Enter full address',
                   multiline: true,
-                  focusNode: _focusNodes[3],
-                  onFieldSubmitted: (value) {
-                    _focusNodes[4].requestFocus();
-                  },
+                  focusNode: _focusNodes[2],
+                  focusNext: _focusNodes[3],
                   validator: (value) {
                     if (widget.addressRequired) {
                       if (value == null || value.isEmpty) {
@@ -169,20 +153,15 @@ class _AddCustomerPageState extends ConsumerState<AddCustomerPage> {
                     return null;
                   },
                 ),
-                AppSpacing.gapMd,
-                LabeledCustomTextFormField(
+                AppFormField(
                   controller: _controllerCustomerLandmark,
                   label: 'Landmark (Optional)',
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
-                  keyboardType: TextInputType.text,
                   hint: 'Enter landmark',
-                  focusNode: _focusNodes[4],
+                  focusNode: _focusNodes[3],
                   onFieldSubmitted: (value) {
-                    _focusNodes[4].unfocus();
+                    _focusNodes[3].unfocus();
                   },
                 ),
-                AppSpacing.gapMd,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [

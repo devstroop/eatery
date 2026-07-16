@@ -71,35 +71,22 @@ class _AddDiningTableCategoryPageState
             key: _formKey,
             child: ListView(
               children: [
-                LabeledCustomTextFormField(
-                  keyboardType: TextInputType.text,
-                  controller: _controllerCategoryName,
+                AppFormField(
                   label: 'Category Name',
                   hint: 'eg. Terrace',
-                  obscureText: false,
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
-                  focusNode: _focusNodes[0],
-                  onFieldSubmitted: (v) {
-                    _focusNodes[1].requestFocus();
-                  },
+                  controller: _controllerCategoryName,
+                  focusNext: _focusNodes[1],
                 ),
-                const SizedBox(height: 6.0),
-                LabeledCustomTextFormField(
-                  keyboardType: TextInputType.text,
-                  controller: _controllerCategoryDescription,
+                AppFormField(
                   label: 'Description',
                   hint: 'eg. Terrace',
-                  obscureText: false,
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
+                  controller: _controllerCategoryDescription,
                   multiline: true,
                   focusNode: _focusNodes[1],
                   onFieldSubmitted: (v) {
                     FocusScope.of(context).unfocus();
                   },
                 ),
-                const SizedBox(height: 6.0),
               ],
             ),
           ),
