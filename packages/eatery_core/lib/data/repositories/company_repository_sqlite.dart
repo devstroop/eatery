@@ -33,7 +33,7 @@ class SqliteCompanyRepository implements CompanyRepository {
     _store.execute(
       '''
       INSERT OR REPLACE INTO company
-        (id, logo, name, email, phone, address, edition,
+        (id, logo, name, email, phone, address, taxation,
          currencyCode, salesTaxNumber, foodLicenseNo, subscriptionId,
          adminEmployeeId)
       VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
@@ -45,7 +45,7 @@ class SqliteCompanyRepository implements CompanyRepository {
         m['email'],
         m['phone'],
         m['address'],
-        m['edition'],
+        m['taxation'],
         m['currencyCode'],
         m['salesTaxNumber'],
         m['foodLicenseNo'],

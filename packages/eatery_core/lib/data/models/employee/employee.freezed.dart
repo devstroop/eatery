@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$Employee {
 
- int? get id; String get name; String? get photo; String? get phone; String? get pin; EmployeeRole get type; bool get isActive;
+ int? get id; String get name; String? get email; String? get photo; String? get phone; String? get pin; int? get pinUpdatedAt; int? get lastLoginAt; EmployeeRole get type; bool get isActive;
 /// Create a copy of Employee
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $EmployeeCopyWith<Employee> get copyWith => _$EmployeeCopyWithImpl<Employee>(thi
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is Employee&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.photo, photo) || other.photo == photo)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.pin, pin) || other.pin == pin)&&(identical(other.type, type) || other.type == type)&&(identical(other.isActive, isActive) || other.isActive == isActive));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is Employee&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.photo, photo) || other.photo == photo)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.pin, pin) || other.pin == pin)&&(identical(other.pinUpdatedAt, pinUpdatedAt) || other.pinUpdatedAt == pinUpdatedAt)&&(identical(other.lastLoginAt, lastLoginAt) || other.lastLoginAt == lastLoginAt)&&(identical(other.type, type) || other.type == type)&&(identical(other.isActive, isActive) || other.isActive == isActive));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,photo,phone,pin,type,isActive);
+int get hashCode => Object.hash(runtimeType,id,name,email,photo,phone,pin,pinUpdatedAt,lastLoginAt,type,isActive);
 
 @override
 String toString() {
-  return 'Employee(id: $id, name: $name, photo: $photo, phone: $phone, pin: $pin, type: $type, isActive: $isActive)';
+  return 'Employee(id: $id, name: $name, email: $email, photo: $photo, phone: $phone, pin: $pin, pinUpdatedAt: $pinUpdatedAt, lastLoginAt: $lastLoginAt, type: $type, isActive: $isActive)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $EmployeeCopyWith<$Res>  {
   factory $EmployeeCopyWith(Employee value, $Res Function(Employee) _then) = _$EmployeeCopyWithImpl;
 @useResult
 $Res call({
- int? id, String name, String? photo, String? phone, String? pin, EmployeeRole type, bool isActive
+ int? id, String name, String? email, String? photo, String? phone, String? pin, int? pinUpdatedAt, int? lastLoginAt, EmployeeRole type, bool isActive
 });
 
 
@@ -65,14 +65,17 @@ class _$EmployeeCopyWithImpl<$Res>
 
 /// Create a copy of Employee
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = null,Object? photo = freezed,Object? phone = freezed,Object? pin = freezed,Object? type = null,Object? isActive = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = freezed,Object? name = null,Object? email = freezed,Object? photo = freezed,Object? phone = freezed,Object? pin = freezed,Object? pinUpdatedAt = freezed,Object? lastLoginAt = freezed,Object? type = null,Object? isActive = null,}) {
   return _then(_self.copyWith(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,photo: freezed == photo ? _self.photo : photo // ignore: cast_nullable_to_non_nullable
+as String,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String?,photo: freezed == photo ? _self.photo : photo // ignore: cast_nullable_to_non_nullable
 as String?,phone: freezed == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
 as String?,pin: freezed == pin ? _self.pin : pin // ignore: cast_nullable_to_non_nullable
-as String?,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String?,pinUpdatedAt: freezed == pinUpdatedAt ? _self.pinUpdatedAt : pinUpdatedAt // ignore: cast_nullable_to_non_nullable
+as int?,lastLoginAt: freezed == lastLoginAt ? _self.lastLoginAt : lastLoginAt // ignore: cast_nullable_to_non_nullable
+as int?,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as EmployeeRole,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
@@ -159,10 +162,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String name,  String? photo,  String? phone,  String? pin,  EmployeeRole type,  bool isActive)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int? id,  String name,  String? email,  String? photo,  String? phone,  String? pin,  int? pinUpdatedAt,  int? lastLoginAt,  EmployeeRole type,  bool isActive)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _Employee() when $default != null:
-return $default(_that.id,_that.name,_that.photo,_that.phone,_that.pin,_that.type,_that.isActive);case _:
+return $default(_that.id,_that.name,_that.email,_that.photo,_that.phone,_that.pin,_that.pinUpdatedAt,_that.lastLoginAt,_that.type,_that.isActive);case _:
   return orElse();
 
 }
@@ -180,10 +183,10 @@ return $default(_that.id,_that.name,_that.photo,_that.phone,_that.pin,_that.type
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String name,  String? photo,  String? phone,  String? pin,  EmployeeRole type,  bool isActive)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int? id,  String name,  String? email,  String? photo,  String? phone,  String? pin,  int? pinUpdatedAt,  int? lastLoginAt,  EmployeeRole type,  bool isActive)  $default,) {final _that = this;
 switch (_that) {
 case _Employee():
-return $default(_that.id,_that.name,_that.photo,_that.phone,_that.pin,_that.type,_that.isActive);case _:
+return $default(_that.id,_that.name,_that.email,_that.photo,_that.phone,_that.pin,_that.pinUpdatedAt,_that.lastLoginAt,_that.type,_that.isActive);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -200,10 +203,10 @@ return $default(_that.id,_that.name,_that.photo,_that.phone,_that.pin,_that.type
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String name,  String? photo,  String? phone,  String? pin,  EmployeeRole type,  bool isActive)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int? id,  String name,  String? email,  String? photo,  String? phone,  String? pin,  int? pinUpdatedAt,  int? lastLoginAt,  EmployeeRole type,  bool isActive)?  $default,) {final _that = this;
 switch (_that) {
 case _Employee() when $default != null:
-return $default(_that.id,_that.name,_that.photo,_that.phone,_that.pin,_that.type,_that.isActive);case _:
+return $default(_that.id,_that.name,_that.email,_that.photo,_that.phone,_that.pin,_that.pinUpdatedAt,_that.lastLoginAt,_that.type,_that.isActive);case _:
   return null;
 
 }
@@ -215,14 +218,17 @@ return $default(_that.id,_that.name,_that.photo,_that.phone,_that.pin,_that.type
 @JsonSerializable()
 
 class _Employee implements Employee {
-  const _Employee({this.id, required this.name, this.photo, this.phone, this.pin, this.type = EmployeeRole.waiter, this.isActive = true});
+  const _Employee({this.id, required this.name, this.email, this.photo, this.phone, this.pin, this.pinUpdatedAt, this.lastLoginAt, this.type = EmployeeRole.waiter, this.isActive = true});
   factory _Employee.fromJson(Map<String, dynamic> json) => _$EmployeeFromJson(json);
 
 @override final  int? id;
 @override final  String name;
+@override final  String? email;
 @override final  String? photo;
 @override final  String? phone;
 @override final  String? pin;
+@override final  int? pinUpdatedAt;
+@override final  int? lastLoginAt;
 @override@JsonKey() final  EmployeeRole type;
 @override@JsonKey() final  bool isActive;
 
@@ -239,16 +245,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Employee&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.photo, photo) || other.photo == photo)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.pin, pin) || other.pin == pin)&&(identical(other.type, type) || other.type == type)&&(identical(other.isActive, isActive) || other.isActive == isActive));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _Employee&&(identical(other.id, id) || other.id == id)&&(identical(other.name, name) || other.name == name)&&(identical(other.email, email) || other.email == email)&&(identical(other.photo, photo) || other.photo == photo)&&(identical(other.phone, phone) || other.phone == phone)&&(identical(other.pin, pin) || other.pin == pin)&&(identical(other.pinUpdatedAt, pinUpdatedAt) || other.pinUpdatedAt == pinUpdatedAt)&&(identical(other.lastLoginAt, lastLoginAt) || other.lastLoginAt == lastLoginAt)&&(identical(other.type, type) || other.type == type)&&(identical(other.isActive, isActive) || other.isActive == isActive));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,id,name,photo,phone,pin,type,isActive);
+int get hashCode => Object.hash(runtimeType,id,name,email,photo,phone,pin,pinUpdatedAt,lastLoginAt,type,isActive);
 
 @override
 String toString() {
-  return 'Employee(id: $id, name: $name, photo: $photo, phone: $phone, pin: $pin, type: $type, isActive: $isActive)';
+  return 'Employee(id: $id, name: $name, email: $email, photo: $photo, phone: $phone, pin: $pin, pinUpdatedAt: $pinUpdatedAt, lastLoginAt: $lastLoginAt, type: $type, isActive: $isActive)';
 }
 
 
@@ -259,7 +265,7 @@ abstract mixin class _$EmployeeCopyWith<$Res> implements $EmployeeCopyWith<$Res>
   factory _$EmployeeCopyWith(_Employee value, $Res Function(_Employee) _then) = __$EmployeeCopyWithImpl;
 @override @useResult
 $Res call({
- int? id, String name, String? photo, String? phone, String? pin, EmployeeRole type, bool isActive
+ int? id, String name, String? email, String? photo, String? phone, String? pin, int? pinUpdatedAt, int? lastLoginAt, EmployeeRole type, bool isActive
 });
 
 
@@ -276,14 +282,17 @@ class __$EmployeeCopyWithImpl<$Res>
 
 /// Create a copy of Employee
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = null,Object? photo = freezed,Object? phone = freezed,Object? pin = freezed,Object? type = null,Object? isActive = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = freezed,Object? name = null,Object? email = freezed,Object? photo = freezed,Object? phone = freezed,Object? pin = freezed,Object? pinUpdatedAt = freezed,Object? lastLoginAt = freezed,Object? type = null,Object? isActive = null,}) {
   return _then(_Employee(
 id: freezed == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int?,name: null == name ? _self.name : name // ignore: cast_nullable_to_non_nullable
-as String,photo: freezed == photo ? _self.photo : photo // ignore: cast_nullable_to_non_nullable
+as String,email: freezed == email ? _self.email : email // ignore: cast_nullable_to_non_nullable
+as String?,photo: freezed == photo ? _self.photo : photo // ignore: cast_nullable_to_non_nullable
 as String?,phone: freezed == phone ? _self.phone : phone // ignore: cast_nullable_to_non_nullable
 as String?,pin: freezed == pin ? _self.pin : pin // ignore: cast_nullable_to_non_nullable
-as String?,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
+as String?,pinUpdatedAt: freezed == pinUpdatedAt ? _self.pinUpdatedAt : pinUpdatedAt // ignore: cast_nullable_to_non_nullable
+as int?,lastLoginAt: freezed == lastLoginAt ? _self.lastLoginAt : lastLoginAt // ignore: cast_nullable_to_non_nullable
+as int?,type: null == type ? _self.type : type // ignore: cast_nullable_to_non_nullable
 as EmployeeRole,isActive: null == isActive ? _self.isActive : isActive // ignore: cast_nullable_to_non_nullable
 as bool,
   ));
