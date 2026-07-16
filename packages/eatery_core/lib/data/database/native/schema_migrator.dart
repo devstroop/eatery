@@ -96,6 +96,7 @@ class SchemaMigrator {
     _migrationV7,
     _migrationV8,
     _migrationV9,
+    _migrationV10,
   ];
 
   /// v1: Auth & order lifecycle fields.
@@ -253,6 +254,64 @@ class SchemaMigrator {
     store.execute(
       "CREATE TABLE IF NOT EXISTS loyalty_transaction (id INTEGER PRIMARY KEY AUTOINCREMENT, customerId INTEGER NOT NULL REFERENCES customer(id), points REAL NOT NULL, type INTEGER NOT NULL, referenceId INTEGER, description TEXT, createdAt INTEGER NOT NULL)",
     );
+  }
+
+  /// v10: Schema Hardening — missing indices fixing S02-S09, S17.
+  ///
+  /// S01 default change (0→1) is applied in schema.sql for fresh DBs only.
+  /// Existing DBs retain the old DEFAULT 0, but all Dart code paths that
+  /// insert into `dining_table_category` explicitly set `isActive` — verified
+  /// at runtime by `dining_table_repository_sqlite.dart:saveCategory()` which
+  /// always writes `category.isActive ? 1 : 0`. No UPDATE needed for existing
+  /// rows.
+  static void _migrationV10(EateryStore store) {
+    store.transaction(() {
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_orders_staff ON orders(staffId)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_orders_created ON orders(createdAt)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_reservation_datetime ON reservation(dateTime)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_reservation_table ON reservation(diningTableId)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_time_entry_staff ON time_entry(staffId)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_expense_date ON expense(expenseDate)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_stock_adj_product ON stock_adjustment(productId)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_order_discount_order ON order_discount(orderId)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_customer_loyalty_customer ON customer_loyalty(customerId)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_loyalty_transaction_customer ON loyalty_transaction(customerId)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_supplier_phone ON supplier(phone)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_purchase_order_supplier ON purchase_order(supplierId)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_purchase_order_status ON purchase_order(status)",
+      );
+      store.execute(
+        "CREATE INDEX IF NOT EXISTS idx_purchase_order_item_po ON purchase_order_item(purchaseOrderId)",
+      );
+    });
   }
 
   /// Safely adds a column if it doesn't already exist.

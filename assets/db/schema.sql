@@ -94,6 +94,9 @@ CREATE TABLE IF NOT EXISTS order_product (
 );
 
 CREATE INDEX IF NOT EXISTS idx_orders_customer ON orders(customerPhone);
+CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status);
+CREATE INDEX IF NOT EXISTS idx_orders_staff ON orders(staffId);
+CREATE INDEX IF NOT EXISTS idx_orders_created ON orders(createdAt);
 CREATE INDEX IF NOT EXISTS idx_order_product_order ON order_product(orderId);
 
 CREATE TABLE IF NOT EXISTS payment (
@@ -124,7 +127,7 @@ CREATE TABLE IF NOT EXISTS dining_table_category (
   id          INTEGER PRIMARY KEY AUTOINCREMENT,
   name        TEXT NOT NULL,
   description TEXT,
-  isActive    INTEGER NOT NULL DEFAULT 0
+  isActive    INTEGER NOT NULL DEFAULT 1
 );
 
 CREATE TABLE IF NOT EXISTS dining_table (
@@ -356,6 +359,8 @@ CREATE TABLE IF NOT EXISTS order_discount (
   createdAt   INTEGER NOT NULL
 );
 
+CREATE INDEX IF NOT EXISTS idx_order_discount_order ON order_discount(orderId);
+
 CREATE TABLE IF NOT EXISTS shift (
   id          INTEGER PRIMARY KEY AUTOINCREMENT,
   name        TEXT NOT NULL,
@@ -375,6 +380,8 @@ CREATE TABLE IF NOT EXISTS time_entry (
   note        TEXT,
   createdAt   INTEGER NOT NULL
 );
+
+CREATE INDEX IF NOT EXISTS idx_time_entry_staff ON time_entry(staffId);
 
 CREATE TABLE IF NOT EXISTS business_hours (
   id          INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -412,6 +419,8 @@ CREATE TABLE IF NOT EXISTS expense (
   createdAt     INTEGER NOT NULL
 );
 
+CREATE INDEX IF NOT EXISTS idx_expense_date ON expense(expenseDate);
+
 CREATE TABLE IF NOT EXISTS reservation (
   id              INTEGER PRIMARY KEY AUTOINCREMENT,
   customerName    TEXT NOT NULL,
@@ -427,6 +436,9 @@ CREATE TABLE IF NOT EXISTS reservation (
   updatedAt       INTEGER
 );
 
+CREATE INDEX IF NOT EXISTS idx_reservation_datetime ON reservation(dateTime);
+CREATE INDEX IF NOT EXISTS idx_reservation_table ON reservation(diningTableId);
+
 CREATE TABLE IF NOT EXISTS customer_loyalty (
   id            INTEGER PRIMARY KEY AUTOINCREMENT,
   customerId    INTEGER NOT NULL REFERENCES customer(id),
@@ -439,6 +451,8 @@ CREATE TABLE IF NOT EXISTS customer_loyalty (
   updatedAt     INTEGER
 );
 
+CREATE INDEX IF NOT EXISTS idx_customer_loyalty_customer ON customer_loyalty(customerId);
+
 CREATE TABLE IF NOT EXISTS loyalty_transaction (
   id            INTEGER PRIMARY KEY AUTOINCREMENT,
   customerId    INTEGER NOT NULL REFERENCES customer(id),
@@ -448,6 +462,8 @@ CREATE TABLE IF NOT EXISTS loyalty_transaction (
   description   TEXT,
   createdAt     INTEGER NOT NULL
 );
+
+CREATE INDEX IF NOT EXISTS idx_loyalty_transaction_customer ON loyalty_transaction(customerId);
 
 CREATE TABLE IF NOT EXISTS supplier (
   id            INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -461,6 +477,8 @@ CREATE TABLE IF NOT EXISTS supplier (
   createdAt     INTEGER NOT NULL,
   updatedAt     INTEGER
 );
+
+CREATE INDEX IF NOT EXISTS idx_supplier_phone ON supplier(phone);
 
 CREATE TABLE IF NOT EXISTS purchase_order (
   id              INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -476,6 +494,9 @@ CREATE TABLE IF NOT EXISTS purchase_order (
   updatedAt       INTEGER
 );
 
+CREATE INDEX IF NOT EXISTS idx_purchase_order_supplier ON purchase_order(supplierId);
+CREATE INDEX IF NOT EXISTS idx_purchase_order_status ON purchase_order(status);
+
 CREATE TABLE IF NOT EXISTS purchase_order_item (
   id                INTEGER PRIMARY KEY AUTOINCREMENT,
   purchaseOrderId   INTEGER NOT NULL REFERENCES purchase_order(id) ON DELETE CASCADE,
@@ -485,6 +506,8 @@ CREATE TABLE IF NOT EXISTS purchase_order_item (
   totalPrice        REAL NOT NULL,
   receivedQty       REAL DEFAULT 0
 );
+
+CREATE INDEX IF NOT EXISTS idx_purchase_order_item_po ON purchase_order_item(purchaseOrderId);
 
 CREATE TABLE IF NOT EXISTS stock_adjustment (
   id            INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -496,3 +519,5 @@ CREATE TABLE IF NOT EXISTS stock_adjustment (
   createdBy     INTEGER REFERENCES staff(id),
   createdAt     INTEGER NOT NULL
 );
+
+CREATE INDEX IF NOT EXISTS idx_stock_adj_product ON stock_adjustment(productId);
