@@ -143,10 +143,11 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
                 },
               ),
               const SizedBox(height: 6.0),
-              LabeledCustomTextFormField(
+              AppFormField(
                 label: 'Name',
                 hint: 'Enter product name',
                 focusNode: _focusNodes[0],
+                focusNext: _focusNodes[1],
                 validator: (value) {
                   if (value!.trim().isEmpty) {
                     return 'Name cannot be blank';
@@ -164,26 +165,17 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
                   }
                   return null;
                 },
-                onFieldSubmitted: (v) {
-                  FocusScope.of(context).requestFocus(_focusNodes[1]);
-                },
-                foregroundColor: AppColors.black600,
-                themeColor: _pageColor,
                 controller: _controllerName,
               ),
-              const SizedBox(height: 6.0),
               Row(
                 children: [
                   Flexible(
-                    child: LabeledCustomTextFormField(
+                    child: AppFormField(
                       label: 'MRP (Max. retail price)',
                       prefix: const Icon(Icons.currency_rupee, size: 14),
                       hint: '0.00',
-                      themeColor: _pageColor,
                       focusNode: _focusNodes[1],
-                      onFieldSubmitted: (v) {
-                        FocusScope.of(context).requestFocus(_focusNodes[2]);
-                      },
+                      focusNext: _focusNodes[2],
                       validator: (value) {
                         if (value!.trim().isEmpty) {
                           return 'Price cannot be blank';
@@ -191,21 +183,17 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
                         return null;
                       },
                       keyboardType: TextInputType.number,
-                      foregroundColor: AppColors.black600,
                       controller: _controllerMRP,
                     ),
                   ),
                   const SizedBox(width: 12.0),
                   Flexible(
-                    child: LabeledCustomTextFormField(
+                    child: AppFormField(
                       label: 'Sale Price',
                       prefix: const Icon(Icons.currency_rupee, size: 14),
                       hint: '0.00',
-                      themeColor: _pageColor,
                       focusNode: _focusNodes[2],
-                      onFieldSubmitted: (v) {
-                        FocusScope.of(context).requestFocus(_focusNodes[3]);
-                      },
+                      focusNext: _focusNodes[3],
                       validator: (value) {
                         if (value!.trim().isEmpty) {
                           return 'Price cannot be blank';
@@ -213,13 +201,11 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
                         return null;
                       },
                       keyboardType: TextInputType.number,
-                      foregroundColor: AppColors.black600,
                       controller: _controllerSalePrice,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 6.0),
 
               Text(
                 'Select Food Type',
@@ -333,7 +319,7 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
                 ),
               ),
               const SizedBox(height: 6.0),
-              LabeledCustomTextFormField(
+              AppFormField(
                 label: 'Description',
                 hint: 'Enter product description',
                 multiline: true,
@@ -341,8 +327,6 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
                 onFieldSubmitted: (v) {
                   FocusScope.of(context).unfocus();
                 },
-                foregroundColor: AppColors.black600,
-                themeColor: _pageColor,
                 controller: _controllerDescription,
               ),
             ],

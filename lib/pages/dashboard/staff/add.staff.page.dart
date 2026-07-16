@@ -106,11 +106,9 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                   },
                 ),
                 AppSpacing.gapMd,
-                LabeledCustomTextFormField(
+                AppFormField(
                   controller: _controllerStaffName,
                   label: 'Staff Name',
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
                   hint: 'Enter Staff Name',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -127,16 +125,11 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                     return null;
                   },
                   focusNode: _focusNodes[0],
-                  onFieldSubmitted: (v) {
-                    _focusNodes[1].requestFocus();
-                  },
+                  focusNext: _focusNodes[1],
                 ),
-                AppSpacing.gapMd,
-                LabeledCustomTextFormField(
+                AppFormField(
                   controller: _controllerStaffPhone,
                   label: 'Phone Number',
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
                   keyboardType: TextInputType.phone,
                   hint: 'Enter Phone Number',
                   validator: (value) {
@@ -154,12 +147,9 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                     FocusScope.of(context).unfocus();
                   },
                 ),
-                AppSpacing.gapMd,
-                LabeledCustomTextFormField(
+                AppFormField(
                   controller: _controllerStaffPin,
                   label: 'PIN (4 digits)',
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
                   keyboardType: TextInputType.number,
                   obscureText: true,
                   hint: 'Enter PIN',
@@ -172,7 +162,6 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                     return null;
                   },
                 ),
-                AppSpacing.gapMd,
                 AppSpacing.gapMd,
                 // Drop down for staff type
                 DropdownButtonFormField(

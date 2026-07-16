@@ -89,23 +89,15 @@ class _AddProductCategoryPageState
                 },
               ),
               const SizedBox(height: 6.0),
-              LabeledCustomTextFormField(
+              AppFormField(
                 label: 'Category Name',
                 hint: 'Enter product category name',
-                // Write a hint for category name field
-                foregroundColor: AppColors.black600,
-                themeColor: _pageColor,
                 controller: _controllerCategoryName,
                 focusNode: _focusNodes[0],
-                onFieldSubmitted: (v) {
-                  _focusNodes[1].requestFocus();
-                },
+                focusNext: _focusNodes[1],
               ),
-              const SizedBox(height: 6.0),
-              LabeledCustomTextFormField(
+              AppFormField(
                 label: 'Description',
-                foregroundColor: AppColors.black600,
-                themeColor: _pageColor,
                 controller: _controllerCategoryDescription,
                 multiline: true,
                 hint: 'Enter product category description',
@@ -114,7 +106,6 @@ class _AddProductCategoryPageState
                   FocusScope.of(context).unfocus();
                 },
               ),
-              const SizedBox(height: 6.0),
             ],
           ),
         ),

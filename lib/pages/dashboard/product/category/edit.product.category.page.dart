@@ -98,33 +98,23 @@ class _EditProductCategoryPageState
                 },
               ),
               const SizedBox(height: 6.0),
-              LabeledCustomTextFormField(
+              AppFormField(
                 label: 'Category Name',
                 controller: _controllerCategoryName,
                 hint: 'eg. Starters',
-                obscureText: false,
-                themeColor: _pageColor,
-                foregroundColor: AppColors.black600,
                 focusNode: _focusNodes[0],
-                onFieldSubmitted: (v) {
-                  _focusNodes[1].requestFocus();
-                },
+                focusNext: _focusNodes[1],
               ),
-              const SizedBox(height: 6.0),
-              LabeledCustomTextFormField(
+              AppFormField(
                 label: 'Description',
                 controller: _controllerDescription,
                 hint: 'eg. Starters are the best',
-                obscureText: false,
-                themeColor: _pageColor,
-                foregroundColor: AppColors.black600,
                 multiline: true,
                 focusNode: _focusNodes[1],
                 onFieldSubmitted: (v) {
                   FocusScope.of(context).unfocus();
                 },
               ),
-              const SizedBox(height: 6.0),
             ],
           ),
         ),

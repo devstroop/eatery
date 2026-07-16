@@ -1,5 +1,6 @@
 import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery/constants/validators/email_validator.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/widgets/app_dialog.dart';
@@ -111,18 +112,13 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                   ),
                   AppSpacing.gapMd,
                   AppSpacing.gapMd,
-                  LabeledCustomTextFormField(
-                    themeColor: _pageColor,
-                    foregroundColor: AppColors.black600,
+                  AppFormField(
                     keyboardType: TextInputType.name,
                     controller: _controllerCompanyName,
                     focusNode: focus1,
                     label: 'Company name',
                     hint: 'Enter company name...',
-                    textInputAction: TextInputAction.next,
-                    onFieldSubmitted: (v) {
-                      FocusScope.of(context).requestFocus(focus2);
-                    },
+                    focusNext: focus2,
                     validator: (value) {
                       if (value!.trim().isEmpty) {
                         return 'Company name cannot be blank';
@@ -130,19 +126,13 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                       return null;
                     },
                   ),
-                  AppSpacing.gapMd,
-                  LabeledCustomTextFormField(
-                    themeColor: _pageColor,
-                    foregroundColor: AppColors.black600,
+                  AppFormField(
                     keyboardType: TextInputType.emailAddress,
                     controller: _controllerEmail,
                     label: 'Email address',
                     hint: 'Enter email address...',
                     focusNode: focus2,
-                    textInputAction: TextInputAction.next,
-                    onFieldSubmitted: (v) {
-                      FocusScope.of(context).requestFocus(focus3);
-                    },
+                    focusNext: focus3,
                     validator: (value) {
                       if (value!.trim().isEmpty) {
                         return 'Email cannot be blank';
@@ -153,19 +143,13 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                       return null;
                     },
                   ),
-                  AppSpacing.gapMd,
-                  LabeledCustomTextFormField(
-                    themeColor: _pageColor,
-                    foregroundColor: AppColors.black600,
+                  AppFormField(
                     keyboardType: TextInputType.phone,
                     controller: _controllerPhone,
                     label: 'Phone no',
                     hint: 'Enter phone no...',
                     focusNode: focus3,
-                    textInputAction: TextInputAction.next,
-                    onFieldSubmitted: (v) {
-                      FocusScope.of(context).requestFocus(focus4);
-                    },
+                    focusNext: focus4,
                     validator: (value) {
                       if (value!.trim().isEmpty) {
                         return 'Phone number cannot be blank';
@@ -176,15 +160,12 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                       return null;
                     },
                   ),
-                  AppSpacing.gapMd,
-                  LabeledCustomTextFormField(
-                    themeColor: _pageColor,
-                    foregroundColor: AppColors.black600,
+                  AppFormField(
                     controller: _controllerAddress,
                     label: 'Address',
                     hint: 'Enter address...',
                     focusNode: focus4,
-                    textInputAction: TextInputAction.next,
+                    focusNext: focus5,
                     multiline: true,
                     validator: (value) {
                       if (value!.trim().isEmpty) {
@@ -192,14 +173,8 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                       }
                       return null;
                     },
-                    onFieldSubmitted: (v) {
-                      FocusScope.of(context).requestFocus(focus5);
-                    },
                   ),
-                  AppSpacing.gapMd,
-                  LabeledCustomTextFormField(
-                    themeColor: _pageColor,
-                    foregroundColor: AppColors.black600,
+                  AppFormField(
                     keyboardType: TextInputType.text,
                     controller: _controllerSalesTaxNo,
                     label:
@@ -207,10 +182,7 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                     hint:
                         'Enter ${Taxation.values.singleWhere((element) => element.id == company?.taxation.id).name} license number...',
                     focusNode: focus5,
-                    textInputAction: TextInputAction.next,
-                    onFieldSubmitted: (v) {
-                      FocusScope.of(context).requestFocus(focus6);
-                    },
+                    focusNext: focus6,
                     validator: (value) {
                       if (value!.trim().isNotEmpty &&
                           value.trim().length < 10) {
@@ -219,10 +191,7 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                       return null;
                     },
                   ),
-                  AppSpacing.gapMd,
-                  LabeledCustomTextFormField(
-                    themeColor: _pageColor,
-                    foregroundColor: AppColors.black600,
+                  AppFormField(
                     keyboardType: TextInputType.text,
                     controller: _controllerFoodLicNo,
                     label:
@@ -230,10 +199,7 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                     hint:
                         'Enter ${Taxation.values.singleWhere((element) => element.id == company?.taxation.id) == Taxation.gst ? 'FSSAI' : 'Food'} license number...',
                     focusNode: focus6,
-                    textInputAction: TextInputAction.next,
-                    onFieldSubmitted: (v) {
-                      FocusScope.of(context).requestFocus(focus7);
-                    },
+                    focusNext: focus7,
                     validator: (value) {
                       if (value!.trim().isNotEmpty &&
                           (value.trim().length <

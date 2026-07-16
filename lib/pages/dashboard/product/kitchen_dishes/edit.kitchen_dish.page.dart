@@ -145,10 +145,11 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
                 },
               ),
               const SizedBox(height: 6.0),
-              LabeledCustomTextFormField(
+              AppFormField(
                 label: 'Name',
                 hint: 'Enter product name',
                 focusNode: _focusNodes[0],
+                focusNext: _focusNodes[1],
                 validator: (value) {
                   if (value!.trim().isEmpty) {
                     return 'Name cannot be blank';
@@ -166,26 +167,17 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
                   }
                   return null;
                 },
-                onFieldSubmitted: (v) {
-                  _focusNodes[1].requestFocus();
-                },
-                foregroundColor: AppColors.black600,
-                themeColor: _pageColor,
                 controller: _controllerName,
               ),
-              const SizedBox(height: 6.0),
               Row(
                 children: [
                   Flexible(
-                    child: LabeledCustomTextFormField(
+                    child: AppFormField(
                       label: 'MRP (Max. retail price)',
                       prefix: const Icon(Icons.currency_rupee, size: 14),
                       hint: '0.00',
-                      themeColor: _pageColor,
                       focusNode: _focusNodes[1],
-                      onFieldSubmitted: (v) {
-                        _focusNodes[2].requestFocus();
-                      },
+                      focusNext: _focusNodes[2],
                       validator: (value) {
                         if (value!.trim().isEmpty) {
                           return 'Price cannot be blank';
@@ -193,21 +185,17 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
                         return null;
                       },
                       keyboardType: TextInputType.number,
-                      foregroundColor: AppColors.black600,
                       controller: _controllerMRP,
                     ),
                   ),
                   const SizedBox(width: 12.0),
                   Flexible(
-                    child: LabeledCustomTextFormField(
+                    child: AppFormField(
                       label: 'Sale Price',
                       prefix: const Icon(Icons.currency_rupee, size: 14),
                       hint: '0.00',
-                      themeColor: _pageColor,
                       focusNode: _focusNodes[2],
-                      onFieldSubmitted: (v) {
-                        _focusNodes[3].requestFocus();
-                      },
+                      focusNext: _focusNodes[3],
                       validator: (value) {
                         if (value!.trim().isEmpty) {
                           return 'Price cannot be blank';
@@ -215,13 +203,11 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
                         return null;
                       },
                       keyboardType: TextInputType.number,
-                      foregroundColor: AppColors.black600,
                       controller: _controllerSalePrice,
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 6.0),
               Text(
                 'Select Food Type',
                 style: AppTypography.bodyMedium.copyWith(
@@ -341,7 +327,7 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
                 ),
               ),
               const SizedBox(height: 6.0),
-              LabeledCustomTextFormField(
+              AppFormField(
                 label: 'Description',
                 hint: 'Enter product description',
                 multiline: true,
@@ -349,8 +335,6 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
                 onFieldSubmitted: (v) {
                   FocusScope.of(context).unfocus();
                 },
-                foregroundColor: AppColors.black600,
-                themeColor: _pageColor,
                 controller: _controllerDescription,
               ),
             ],

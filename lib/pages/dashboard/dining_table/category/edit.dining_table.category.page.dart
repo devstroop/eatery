@@ -92,18 +92,12 @@ class _EditDiningTableCategoryPageState
             key: _formKey,
             child: ListView(
               children: [
-                LabeledCustomTextFormField(
-                  keyboardType: TextInputType.text,
+                AppFormField(
                   controller: _controllerCategoryName,
                   label: 'Category Name',
                   hint: 'eg. Terrace',
-                  obscureText: false,
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
                   focusNode: _focusNodes[0],
-                  onFieldSubmitted: (v) {
-                    _focusNodes[1].requestFocus();
-                  },
+                  focusNext: _focusNodes[1],
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter category name';
@@ -111,22 +105,16 @@ class _EditDiningTableCategoryPageState
                     return null;
                   },
                 ),
-                const SizedBox(height: 6.0),
-                LabeledCustomTextFormField(
-                  keyboardType: TextInputType.text,
+                AppFormField(
                   controller: _controllerCategoryDescription,
                   label: 'Description',
                   hint: 'eg. Terrace',
-                  obscureText: false,
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
                   multiline: true,
                   focusNode: _focusNodes[1],
                   onFieldSubmitted: (v) {
                     _focusNodes[1].unfocus();
                   },
                 ),
-                const SizedBox(height: 6.0),
               ],
             ),
           ),

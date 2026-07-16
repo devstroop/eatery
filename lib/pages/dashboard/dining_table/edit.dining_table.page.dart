@@ -111,17 +111,12 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
             key: _formKey,
             child: ListView(
               children: [
-                LabeledCustomTextFormField(
+                AppFormField(
                   label: 'Dining Table Name',
                   controller: _controllerCategoryName,
                   hint: 'eg. Table 1 ',
-                  obscureText: false,
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
                   focusNode: _focusNodes[0],
-                  onFieldSubmitted: (v) {
-                    _focusNodes[1].requestFocus();
-                  },
+                  focusNext: _focusNodes[1],
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter dining table name';
@@ -129,34 +124,22 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
                     return null;
                   },
                 ),
-                const SizedBox(height: 12.0),
-                LabeledCustomTextFormField(
+                AppFormField(
                   label: 'Description',
                   controller: _controllerCategoryDescription,
                   hint: 'eg. Table description',
-                  obscureText: false,
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
                   multiline: true,
                   focusNode: _focusNodes[1],
                   onFieldSubmitted: (v) {
                     FocusScope.of(context).unfocus();
                   },
                 ),
-                const SizedBox(height: 12.0),
-                LabeledCustomTextFormField(
+                AppFormField(
                   label: 'Capacity',
                   controller: _controllerCapacity,
                   hint: 'eg. 4/ 6/ 8/ 10/ etc.',
-                  obscureText: false,
-                  themeColor: _pageColor,
-                  foregroundColor: AppColors.black600,
                   keyboardType: TextInputType.number,
-                  onFieldSubmitted: (v) {
-                    FocusScope.of(context).unfocus();
-                  },
                 ),
-                const SizedBox(height: 12.0),
                 Text(
                   'Category',
                   style: AppTypography.labelMedium.copyWith(

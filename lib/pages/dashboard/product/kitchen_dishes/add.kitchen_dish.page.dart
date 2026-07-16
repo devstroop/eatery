@@ -137,13 +137,11 @@ class _AddKitchenDishState extends ConsumerState<AddKitchenDish> {
                   },
                 ),
                 const SizedBox(height: 6.0),
-                LabeledCustomTextFormField(
+                AppFormField(
                   label: 'Name',
                   hint: 'Enter product name',
                   focusNode: _focusNodes[0],
-                  onFieldSubmitted: (v) {
-                    FocusScope.of(context).requestFocus(_focusNodes[1]);
-                  },
+                  focusNext: _focusNodes[1],
                   validator: (value) {
                     if (value!.trim().isEmpty) {
                       return 'Name cannot be blank';
@@ -158,23 +156,17 @@ class _AddKitchenDishState extends ConsumerState<AddKitchenDish> {
                     }
                     return null;
                   },
-                  foregroundColor: AppColors.black600,
-                  themeColor: _pageColor,
                   controller: _controllerName,
                 ),
-                const SizedBox(height: 6.0),
                 Row(
                   children: [
                     Flexible(
-                      child: LabeledCustomTextFormField(
+                      child: AppFormField(
                         label: 'MRP (Max. retail price)',
                         prefix: const Icon(Icons.currency_rupee, size: 14),
                         hint: '0.00',
-                        themeColor: _pageColor,
                         focusNode: _focusNodes[1],
-                        onFieldSubmitted: (v) {
-                          FocusScope.of(context).requestFocus(_focusNodes[2]);
-                        },
+                        focusNext: _focusNodes[2],
                         validator: (value) {
                           if (value!.trim().isEmpty) {
                             return 'Price cannot be blank';
@@ -182,21 +174,16 @@ class _AddKitchenDishState extends ConsumerState<AddKitchenDish> {
                           return null;
                         },
                         keyboardType: TextInputType.number,
-                        foregroundColor: AppColors.black600,
                         controller: _controllerMRP,
                       ),
                     ),
                     const SizedBox(width: 12.0),
                     Flexible(
-                      child: LabeledCustomTextFormField(
+                      child: AppFormField(
                         label: 'Sale Price',
                         prefix: const Icon(Icons.currency_rupee, size: 14),
                         hint: '0.00',
-                        themeColor: _pageColor,
                         focusNode: _focusNodes[2],
-                        onFieldSubmitted: (v) {
-                          FocusScope.of(context).unfocus();
-                        },
                         validator: (value) {
                           if (value!.trim().isEmpty) {
                             return 'Price cannot be blank';
@@ -204,13 +191,14 @@ class _AddKitchenDishState extends ConsumerState<AddKitchenDish> {
                           return null;
                         },
                         keyboardType: TextInputType.number,
-                        foregroundColor: AppColors.black600,
                         controller: _controllerSalePrice,
+                        onFieldSubmitted: (v) {
+                          FocusScope.of(this.context).unfocus();
+                        },
                       ),
                     ),
                   ],
                 ),
-                const SizedBox(height: 6.0),
                 Text(
                   'Select Food Type',
                   style: AppTypography.bodyMedium.copyWith(
@@ -326,7 +314,7 @@ class _AddKitchenDishState extends ConsumerState<AddKitchenDish> {
                   ),
                 ),
                 const SizedBox(height: 6.0),
-                LabeledCustomTextFormField(
+                AppFormField(
                   label: 'Description',
                   hint: 'Enter product description',
                   multiline: true,
@@ -334,8 +322,6 @@ class _AddKitchenDishState extends ConsumerState<AddKitchenDish> {
                   onFieldSubmitted: (v) {
                     FocusScope.of(context).unfocus();
                   },
-                  foregroundColor: AppColors.black600,
-                  themeColor: _pageColor,
                   controller: _controllerDescription,
                 ),
               ],

@@ -78,15 +78,12 @@ class _AddTaxSlabSettingsPageState
             key: _formKey,
             child: ListView(
               children: [
-                LabeledCustomTextFormField(
+                AppFormField(
                   controller: controllerSlabName,
                   label: 'Tax Slab name',
-                  themeColor: _pageColor,
                   hint: 'Enter tax slab name',
                   focusNode: focus1,
-                  onFieldSubmitted: (v) {
-                    FocusScope.of(context).requestFocus(focus2);
-                  },
+                  focusNext: focus2,
                   validator: (value) {
                     if (value!.trim().isEmpty) {
                       return 'Tax slab name cannot be blank';
@@ -95,14 +92,11 @@ class _AddTaxSlabSettingsPageState
                     }
                     return null;
                   },
-                  foregroundColor: AppColors.black600,
                 ),
-                AppSpacing.gapMd,
-                LabeledCustomTextFormField(
+                AppFormField(
                   controller: controllerTaxRate,
                   label: 'Tax Rate',
                   hint: 'Enter tax rate',
-                  themeColor: _pageColor,
                   focusNode: focus2,
                   suffix: Icon(Icons.percent, color: AppColors.white600),
                   keyboardType: const TextInputType.numberWithOptions(
@@ -113,12 +107,7 @@ class _AddTaxSlabSettingsPageState
                       return 'Tax rate cannot be blank';
                     return null;
                   },
-                  onFieldSubmitted: (v) {
-                    FocusScope.of(context).unfocus();
-                  },
-                  foregroundColor: AppColors.black600,
                 ),
-                AppSpacing.gapMd,
                 Text(
                   'Select Tax Type',
                   style: AppTypography.labelMedium.copyWith(
