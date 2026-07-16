@@ -11,14 +11,14 @@ import 'package:go_router/go_router.dart';
 
 Color _pageColor = const Color(0xFFC2592F);
 
-class StaffsPage extends ConsumerStatefulWidget {
-  const StaffsPage({super.key});
+class EmployeesPage extends ConsumerStatefulWidget {
+  const EmployeesPage({super.key});
 
   @override
-  ConsumerState<StaffsPage> createState() => _StaffsPageState();
+  ConsumerState<EmployeesPage> createState() => _EmployeesPageState();
 }
 
-class _StaffsPageState extends ConsumerState<StaffsPage> {
+class _EmployeesPageState extends ConsumerState<EmployeesPage> {
   @override
   void initState() {
     super.initState();
@@ -27,9 +27,11 @@ class _StaffsPageState extends ConsumerState<StaffsPage> {
   final List<FocusNode> _focusNodes = [FocusNode(), FocusNode()];
   @override
   Widget build(BuildContext context) {
-    List<Staff> staffs = ref.read(staffRepositoryProvider).getAllStaff();
+    List<Employee> employees = ref
+        .read(employeeRepositoryProvider)
+        .getAllEmployees();
     return AppPageShell(
-      title: 'Staffs',
+      title: 'Employees',
       color: _pageColor,
       actions: [
         if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
@@ -43,21 +45,21 @@ class _StaffsPageState extends ConsumerState<StaffsPage> {
       floatingActionButton: FloatingActionButton.extended(
         backgroundColor: _pageColor,
         foregroundColor: AppColors.white,
-        label: const Text('Add Staff'),
+        label: const Text('Add Employee'),
         icon: const Icon(Icons.add),
         onPressed: () {
           GoRouter.of(
             context,
-          ).pushNamed('addStaff').then((_) => setState(() {}));
+          ).pushNamed('addEmployee').then((_) => setState(() {}));
         },
       ),
-      child: staffs.isNotEmpty
+      child: employees.isNotEmpty
           ? ResponsiveListView(
-              itemCount: staffs.length,
+              itemCount: employees.length,
               childAspectRatio: 3.5,
               itemBuilder: (context, index) {
-                final e = staffs[index];
-                return _StaffCard(staff: e, pageColor: _pageColor);
+                final e = employees[index];
+                return _EmployeeCard(employee: e, pageColor: _pageColor);
               },
             )
           : Center(
@@ -69,13 +71,13 @@ class _StaffsPageState extends ConsumerState<StaffsPage> {
                     Icon(Icons.person, size: 64),
                     AppSpacing.gapLg,
                     Text(
-                      'No Staffs',
+                      'No Employees',
                       style: AppTypography.headlineSmall.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     Text(
-                      'Add a staff to get started',
+                      'Add an employee to get started',
                       style: AppTypography.bodyLarge,
                     ),
                   ],
@@ -86,21 +88,21 @@ class _StaffsPageState extends ConsumerState<StaffsPage> {
   }
 }
 
-/// Desktop-friendly card wrapper for a staff list item.
-class _StaffCard extends ConsumerStatefulWidget {
-  final Staff staff;
+/// Desktop-friendly card wrapper for an employee list item.
+class _EmployeeCard extends ConsumerStatefulWidget {
+  final Employee employee;
   final Color pageColor;
 
-  const _StaffCard({required this.staff, required this.pageColor});
+  const _EmployeeCard({required this.employee, required this.pageColor});
 
   @override
-  ConsumerState<_StaffCard> createState() => _StaffCardState();
+  ConsumerState<_EmployeeCard> createState() => _EmployeeCardState();
 }
 
-class _StaffCardState extends ConsumerState<_StaffCard> {
+class _EmployeeCardState extends ConsumerState<_EmployeeCard> {
   @override
   Widget build(BuildContext context) {
-    final s = widget.staff;
+    final s = widget.employee;
     final isDesktop = Responsive.isDesktop(context);
     return Card(
       margin: EdgeInsets.symmetric(horizontal: isDesktop ? 4 : 0, vertical: 2),
@@ -120,9 +122,9 @@ class _StaffCardState extends ConsumerState<_StaffCard> {
             IconButton(
               icon: Icon(Icons.edit, color: widget.pageColor),
               onPressed: () {
-                GoRouter.of(
-                  context,
-                ).pushNamed('editStaff', extra: s).then((_) => setState(() {}));
+                GoRouter.of(context)
+                    .pushNamed('editEmployee', extra: s)
+                    .then((_) => setState(() {}));
               },
             ),
             IconButton(
@@ -132,9 +134,9 @@ class _StaffCardState extends ConsumerState<_StaffCard> {
                   context: context,
                   builder: (context) {
                     return AlertDialog(
-                      title: const Text('Delete Staff'),
+                      title: const Text('Delete Employee'),
                       content: const Text(
-                        'Are you sure you want to delete this Staff?',
+                        'Are you sure you want to delete this Employee?',
                       ),
                       actions: [
                         TextButton(
@@ -144,8 +146,8 @@ class _StaffCardState extends ConsumerState<_StaffCard> {
                         TextButton(
                           onPressed: () {
                             ref
-                                .read(staffRepositoryProvider)
-                                .deleteStaff(s.id!)
+                                .read(employeeRepositoryProvider)
+                                .deleteEmployee(s.id!)
                                 .whenComplete(() {
                                   Navigator.pop(context);
                                   setState(() {});

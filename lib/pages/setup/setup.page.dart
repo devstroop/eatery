@@ -35,18 +35,18 @@ class _SetupPageState extends ConsumerState<SetupPage> {
     try {
       final store = ref.read(eateryStoreProvider);
 
-      // Create admin staff
+      // Create admin employee
       final hashedPin = hashPin(_pinCtrl.text.trim());
       store.execute(
-        'INSERT INTO staff (name, pin, type, isActive) VALUES (?,?,?,?)',
+        'INSERT INTO employee (name, pin, type, isActive) VALUES (?,?,?,?)',
         [_nameCtrl.text.trim(), hashedPin, 4, 1],
       );
-      final staffId = store.queryScalar('SELECT last_insert_rowid()') as int;
+      final employeeId = store.queryScalar('SELECT last_insert_rowid()') as int;
 
       // Create company with default values
       store.execute(
-        'INSERT INTO company (name, taxation, adminStaffId) VALUES (?,?,?)',
-        ['My Restaurant', -1, staffId],
+        'INSERT INTO company (name, taxation, adminEmployeeId) VALUES (?,?,?)',
+        ['My Restaurant', -1, employeeId],
       );
 
       if (mounted) {

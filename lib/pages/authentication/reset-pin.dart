@@ -30,18 +30,18 @@ class _ResetPinScreenState extends ConsumerState<ResetPinScreen> {
     super.dispose();
   }
 
-  void _lookupStaff() {
+  void _lookupEmployee() {
     final loginId = _loginIdController.text.trim();
     if (loginId.isEmpty) return;
 
     final store = ref.read(eateryStoreProvider);
-    var staff = _findByPhone(store, loginId);
-    staff ??= _findByName(store, loginId);
+    var employee = _findByPhone(store, loginId);
+    employee ??= _findByName(store, loginId);
 
-    if (staff == null) {
+    if (employee == null) {
       AppDialog.showMessage(
         this.context,
-        message: 'No staff found with that ID or phone',
+        message: 'No employee found with that ID or phone',
         type: MessageType.error,
       );
       return;
@@ -58,7 +58,7 @@ class _ResetPinScreenState extends ConsumerState<ResetPinScreen> {
     final store = ref.read(eateryStoreProvider);
 
     store.execute(
-      'UPDATE staff SET pin = ? WHERE phone = ? OR lower(trim(name)) = ?',
+      'UPDATE employee SET pin = ? WHERE phone = ? OR lower(trim(name)) = ?',
       [newPin, loginId, loginId.toLowerCase().trim()],
     );
 
@@ -92,19 +92,22 @@ class _ResetPinScreenState extends ConsumerState<ResetPinScreen> {
                 ),
                 AppSpacing.gapSm,
                 Text(
-                  'Enter your staff ID or phone number.',
+                  'Enter your employee ID or phone number.',
                   style: AppTypography.bodyMedium,
                 ),
                 AppSpacing.gapXl,
                 CustomTextFromField(
                   controller: _loginIdController,
-                  label: 'Staff ID or Phone',
+                  label: 'Employee ID or Phone',
                   hint: 'Enter phone or name...',
                   validator: (v) =>
                       v == null || v.trim().isEmpty ? 'Required' : null,
                 ),
                 AppSpacing.gapXl,
-                AppButton.primary(label: 'Continue', onPressed: _lookupStaff),
+                AppButton.primary(
+                  label: 'Continue',
+                  onPressed: _lookupEmployee,
+                ),
               ],
               if (_showPinForm) ...[
                 Text('Set new PIN', style: AppTypography.headlineSmall),
@@ -151,18 +154,18 @@ class _ResetPinScreenState extends ConsumerState<ResetPinScreen> {
     );
   }
 
-  Staff? _findByPhone(EateryStore store, String phone) {
-    final rows = store.query('SELECT * FROM staff WHERE phone = ? LIMIT 1', [
+  Employee? _findByPhone(EateryStore store, String phone) {
+    final rows = store.query('SELECT * FROM employee WHERE phone = ? LIMIT 1', [
       phone,
     ]);
-    return rows.isEmpty ? null : Staff.fromMap(rows.first);
+    return rows.isEmpty ? null : Employee.fromMap(rows.first);
   }
 
-  Staff? _findByName(EateryStore store, String name) {
+  Employee? _findByName(EateryStore store, String name) {
     final rows = store.query(
-      'SELECT * FROM staff WHERE lower(trim(name)) = ? LIMIT 1',
+      'SELECT * FROM employee WHERE lower(trim(name)) = ? LIMIT 1',
       [name.toLowerCase().trim()],
     );
-    return rows.isEmpty ? null : Staff.fromMap(rows.first);
+    return rows.isEmpty ? null : Employee.fromMap(rows.first);
   }
 }

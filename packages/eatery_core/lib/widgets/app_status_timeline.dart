@@ -15,13 +15,13 @@ class AppStatusTimeline extends StatelessWidget {
   /// The status transitions to display, in chronological order.
   final List<OrderStatusHistory> transitions;
 
-  /// Optional map of staffId → displayName for resolving staff names.
-  final Map<int, String>? staffNames;
+  /// Optional map of employeeId → displayName for resolving staff names.
+  final Map<int, String>? employeeNames;
 
   const AppStatusTimeline({
     super.key,
     required this.transitions,
-    this.staffNames,
+    this.employeeNames,
   });
 
   @override
@@ -46,7 +46,7 @@ class AppStatusTimeline extends StatelessWidget {
           return _TimelineStep(
             entry: entry,
             isLast: isLast,
-            staffNames: staffNames,
+            employeeNames: employeeNames,
           );
         }),
       ],
@@ -57,12 +57,12 @@ class AppStatusTimeline extends StatelessWidget {
 class _TimelineStep extends StatelessWidget {
   final OrderStatusHistory entry;
   final bool isLast;
-  final Map<int, String>? staffNames;
+  final Map<int, String>? employeeNames;
 
   const _TimelineStep({
     required this.entry,
     required this.isLast,
-    this.staffNames,
+    this.employeeNames,
   });
 
   @override
@@ -71,9 +71,9 @@ class _TimelineStep extends StatelessWidget {
     final toStatus = OrderStatus.fromId(entry.toStatus);
     final dotColor = OrderStatus.colorFor(toStatus);
     final formattedTime = _formatTimestamp(entry.changedAt);
-    final changedBy = entry.changedByStaffId;
+    final changedBy = entry.changedByEmployeeId;
     final staffName = changedBy != null
-        ? (staffNames?[changedBy] ?? 'Staff #$changedBy')
+        ? (employeeNames?[changedBy] ?? 'Employee #$changedBy')
         : null;
 
     return IntrinsicHeight(

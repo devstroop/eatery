@@ -43,35 +43,35 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     if (!isValid) return;
 
     final store = ref.read(eateryStoreProvider);
-    final staff = authenticateStaff(
+    final employee = authenticateEmployee(
       store,
       _controllerLoginId.text.trim(),
       _controllerPin.text.trim(),
     );
 
-    if (staff != null) {
-      ref.read(authSessionProvider.notifier).state = staff;
-      // Sync device role to match the logged-in staff type so RBAC
+    if (employee != null) {
+      ref.read(authSessionProvider.notifier).state = employee;
+      // Sync device role to match the logged-in employee type so RBAC
       // permissions align with what the user is allowed to do.
       final roleNotifier = ref.read(roleProvider.notifier);
-      switch (staff.type) {
-        case StaffType.admin:
+      switch (employee.type) {
+        case EmployeeRole.admin:
           roleNotifier.setRole('admin');
-        case StaffType.waiter:
+        case EmployeeRole.waiter:
           roleNotifier.setRole('waiter');
-        case StaffType.chef:
+        case EmployeeRole.chef:
           roleNotifier.setRole('kds');
         default:
           roleNotifier.setRole('admin');
       }
       // Navigate to the role-appropriate home.
       final ctx = context as BuildContext;
-      switch (staff.type) {
-        case StaffType.admin:
+      switch (employee.type) {
+        case EmployeeRole.admin:
           GoRouter.of(ctx).goNamed('dashboard');
-        case StaffType.waiter:
+        case EmployeeRole.waiter:
           GoRouter.of(ctx).goNamed('tables');
-        case StaffType.chef:
+        case EmployeeRole.chef:
           GoRouter.of(ctx).goNamed('kds');
         default:
           GoRouter.of(ctx).goNamed('dashboard');
@@ -248,7 +248,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                     CustomTextFromField(
                       themeColor: themeColor,
                       controller: _controllerLoginId,
-                      label: 'Staff ID or Phone',
+                      label: 'Employee ID or Phone',
                       hint: 'Enter phone or name...',
                       textInputAction: TextInputAction.next,
                       validator: (value) {

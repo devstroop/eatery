@@ -47,9 +47,9 @@ import 'package:eatery/pages/dashboard/settings/tax_slab/tax_slabs.page.dart';
 import 'package:eatery/pages/dashboard/settings/tax_slab/add.tax_slab.page.dart';
 import 'package:eatery/pages/dashboard/settings/tax_slab/edit.tax_slab.page.dart';
 import 'package:eatery/pages/dashboard/settings/currency_region/view.currency_region.page.dart';
-import 'package:eatery/pages/dashboard/staff/staffs.page.dart';
-import 'package:eatery/pages/dashboard/staff/add.staff.page.dart';
-import 'package:eatery/pages/dashboard/staff/edit.staff.page.dart';
+import 'package:eatery/pages/dashboard/employees/employees.page.dart';
+import 'package:eatery/pages/dashboard/employees/add.employee.page.dart';
+import 'package:eatery/pages/dashboard/employees/edit.employee.page.dart';
 import 'package:eatery/pages/setup/setup.page.dart';
 import 'package:eatery/pages/dashboard/help/help.page.dart';
 import 'package:eatery/pages/dashboard/reports/reports.page.dart';
@@ -521,21 +521,21 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
         },
       ),
       GoRoute(
-        name: 'staffs',
-        path: '/staffs',
-        builder: (context, state) => const StaffsPage(),
+        name: 'employees',
+        path: '/employees',
+        builder: (context, state) => const EmployeesPage(),
       ),
       GoRoute(
-        name: 'addStaff',
-        path: '/staffs/add',
-        builder: (context, state) => const AddStaffPage(),
+        name: 'addEmployee',
+        path: '/employees/add',
+        builder: (context, state) => const AddEmployeePage(),
       ),
       GoRoute(
-        name: 'editStaff',
-        path: '/staffs/edit',
+        name: 'editEmployee',
+        path: '/employees/edit',
         builder: (context, state) {
-          final staff = state.extra as dynamic;
-          return EditStaffPage(staff: staff);
+          final employee = state.extra as dynamic;
+          return EditEmployeePage(employee: employee);
         },
       ),
       GoRoute(

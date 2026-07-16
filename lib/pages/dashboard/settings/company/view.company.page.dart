@@ -298,11 +298,11 @@ class _ShowCompanyPageState extends ConsumerState<ShowCompanyPage> {
 
               final company = ref.read(companyProvider);
               final store = ref.read(eateryStoreProvider);
-              final adminPin = company?.adminStaffId != null
-                  ? store.queryScalar(
-                      'SELECT pin FROM staff WHERE id = ?',
-                      [company!.adminStaffId],
-                    ) as String?
+              final adminPin = company?.adminEmployeeId != null
+                  ? store.queryScalar('SELECT pin FROM employee WHERE id = ?', [
+                          company!.adminEmployeeId,
+                        ])
+                        as String?
                   : null;
               if (adminPin == null ||
                   !verifyPin(securePinController.text, adminPin)) {

@@ -268,10 +268,11 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
       final store = ref.read(eateryStoreProvider);
       final hashedPin = hashPin(_controllerPassword.text.trim());
       store.execute(
-        'INSERT INTO staff (name, pin, type, isActive) VALUES (?,?,?,?)',
+        'INSERT INTO employee (name, pin, type, isActive) VALUES (?,?,?,?)',
         [_controllerRestaurantName.text.trim(), hashedPin, 4, 1],
       );
-      final adminStaffId = store.queryScalar('SELECT last_insert_rowid()') as int;
+      final adminEmployeeId =
+          store.queryScalar('SELECT last_insert_rowid()') as int;
 
       Company company = Company(
         name: _controllerRestaurantName.text,
@@ -284,7 +285,7 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
         salesTaxNumber: _controllerTaxLicNo.text,
         subscriptionId: subscription.id,
         currencyCode: kCurrency?.code,
-        adminStaffId: adminStaffId,
+        adminEmployeeId: adminEmployeeId,
       );
       ref.read(companyRepositoryProvider).saveCompany(company);
       if (!mounted) return;

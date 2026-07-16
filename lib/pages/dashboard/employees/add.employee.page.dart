@@ -9,46 +9,30 @@ import 'package:eatery_core/widgets/app_dialog.dart';
 
 Color _pageColor = const Color(0xFFC2592F);
 
-class EditStaffPage extends ConsumerStatefulWidget {
-  const EditStaffPage({super.key, required this.staff});
-  final Staff staff;
+class AddEmployeePage extends ConsumerStatefulWidget {
+  const AddEmployeePage({super.key});
 
   @override
-  ConsumerState<EditStaffPage> createState() => _EditStaffPageState();
+  ConsumerState<AddEmployeePage> createState() => _AddEmployeePageState();
 }
 
-class _EditStaffPageState extends ConsumerState<EditStaffPage> {
+class _AddEmployeePageState extends ConsumerState<AddEmployeePage> {
   LibraryImage? image;
   bool isActive = true;
-  final TextEditingController _controllerStaffName = TextEditingController();
-  final TextEditingController _controllerStaffPhone = TextEditingController();
-  final TextEditingController _controllerStaffPin = TextEditingController();
-  StaffType? staffType;
+  final TextEditingController _controllerEmployeeName = TextEditingController();
+  final TextEditingController _controllerEmployeePhone =
+      TextEditingController();
+  final TextEditingController _controllerEmployeePin = TextEditingController();
+  EmployeeRole? employeeType;
   final _formKey = GlobalKey<FormState>();
 
   final List<FocusNode> _focusNodes = [FocusNode(), FocusNode()];
 
   @override
-  initState() {
-    super.initState();
-    Future.delayed(Duration.zero, () {
-      setState(() {
-        _controllerStaffName.text = widget.staff.name;
-        _controllerStaffPhone.text = widget.staff.phone ?? '';
-        _controllerStaffPin.text = widget.staff.pin ?? '';
-        staffType = widget.staff.type;
-        isActive = widget.staff.isActive;
-        image = LibraryImage(widget.staff.photo ?? '');
-
-        debugPrint('image: ${image?.filename}');
-      });
-    });
-  }
-
-  @override
   Widget build(BuildContext context) {
+    debugPrint('image: ${image?.absolutePath}');
     return AppPageShell(
-      title: 'Edit Staff',
+      title: 'Add Employee',
       color: _pageColor,
       actions: [
         if (_focusNodes[0].hasFocus || _focusNodes[1].hasFocus)
@@ -68,33 +52,34 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
               return;
             }
             _formKey.currentState!.save();
-
-            final updated = widget.staff.copyWith(
-              name: _controllerStaffName.text,
-              phone: _controllerStaffPhone.text,
+            final employee = Employee(
+              name: _controllerEmployeeName.text,
+              phone: _controllerEmployeePhone.text,
               photo: image?.filename,
-              type: staffType!,
               isActive: isActive,
-              pin: _controllerStaffPin.text.isNotEmpty
-                  ? _controllerStaffPin.text
+              type: employeeType!,
+              pin: _controllerEmployeePin.text.isNotEmpty
+                  ? _controllerEmployeePin.text
                   : null,
             );
-            try {
-              ref.read(staffRepositoryProvider).saveStaff(updated).then((id) {
-                AppDialog.showMessage(
-                  context,
-                  message: 'Staff updated successfully',
-                  type: MessageType.success,
-                  onConfirm: () => Navigator.pop(context),
+            ref
+                .read(employeeRepositoryProvider)
+                .saveEmployee(employee)
+                .then(
+                  (value) => AppDialog.showMessage(
+                    context,
+                    message: 'Employee has been added successfully',
+                    type: MessageType.success,
+                    onConfirm: () => Navigator.pop(context),
+                  ),
+                )
+                .onError(
+                  (error, stackTrace) => AppDialog.showMessage(
+                    context,
+                    message: 'Something went wrong',
+                    type: MessageType.error,
+                  ),
                 );
-              });
-            } catch (_) {
-              AppDialog.showMessage(
-                context,
-                message: 'Failed to add staff',
-                type: MessageType.error,
-              );
-            }
           },
           label: 'Save',
         ),
@@ -110,63 +95,79 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
             child: ListView(
               children: [
                 UploadButton(
-                  label: 'Staff Photo',
+                  label: 'Employee Photo',
                   primaryColor: _pageColor,
                   secondaryColor: AppColors.black600,
                   libraryImage: image,
                   onChanged: (image) {
-                    debugPrint(image?.filename ?? '');
                     setState(() {
+                      debugPrint('image: ${image?.absolutePath}');
                       this.image = image;
                     });
                   },
                 ),
                 AppSpacing.gapMd,
                 AppFormField(
-                  controller: _controllerStaffName,
-                  label: 'Staff Name',
-                  hint: 'Enter Staff Name',
-                  validator: (value) => value == null || value.isEmpty
-                      ? 'Please enter staff name'
-                      : null,
+                  controller: _controllerEmployeeName,
+                  label: 'Employee Name',
+                  hint: 'Enter Employee Name',
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Enter Employee Name';
+                    }
+                    if (value.length < 3) {
+                      return 'Employee Name must be at least 3 characters';
+                    }
+                    if (ref
+                        .read(employeeRepositoryProvider)
+                        .isEmployeeNameTaken(value)) {
+                      return 'Employee Name already exists';
+                    }
+                    return null;
+                  },
                   focusNode: _focusNodes[0],
                   focusNext: _focusNodes[1],
                 ),
                 AppFormField(
-                  controller: _controllerStaffPhone,
+                  controller: _controllerEmployeePhone,
                   label: 'Phone Number',
                   keyboardType: TextInputType.phone,
                   hint: 'Enter Phone Number',
-                  validator: (value) => value == null || value.isEmpty
-                      ? 'Please enter phone number'
-                      : null,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Enter Phone Number';
+                    } else if (ref
+                        .read(employeeRepositoryProvider)
+                        .isEmployeePhoneTaken(value)) {
+                      return 'Phone Number already exists';
+                    }
+                    return null;
+                  },
                   focusNode: _focusNodes[1],
                   onFieldSubmitted: (v) {
                     FocusScope.of(context).unfocus();
                   },
                 ),
                 AppFormField(
-                  controller: _controllerStaffPin,
+                  controller: _controllerEmployeePin,
                   label: 'PIN (4 digits)',
                   keyboardType: TextInputType.number,
                   obscureText: true,
                   hint: 'Enter PIN',
                   validator: (value) {
-                    if (value != null && value.isNotEmpty && value.length < 4) {
-                      return 'Minimum 4 digits';
-                    }
-                    if (value != null &&
-                        value.isNotEmpty &&
-                        !RegExp(r'^\d{4,}$').hasMatch(value)) {
+                    if (value == null || value.isEmpty) return 'Enter PIN';
+                    if (value.length < 4) return 'Minimum 4 digits';
+                    if (!RegExp(r'^\d{4,}$').hasMatch(value)) {
                       return 'Numbers only';
                     }
                     return null;
                   },
                 ),
-                // Drop down for staff type
+                AppSpacing.gapMd,
+                // Drop down for employee role
                 DropdownButtonFormField(
                   decoration: InputDecoration(
-                    labelText: 'Staff Type',
+                    labelText: 'Employee Role',
                     labelStyle: AppTypography.bodyMedium.copyWith(
                       color: AppColors.black600,
                     ),
@@ -188,19 +189,19 @@ class _EditStaffPageState extends ConsumerState<EditStaffPage> {
                     ),
                   ),
                   hint: const Text('Select Staff Type'),
-                  value: staffType,
+                  value: employeeType,
                   items: [
-                    ...StaffType.values.map(
+                    ...EmployeeRole.values.map(
                       (e) => DropdownMenuItem(value: e, child: Text(e.name)),
                     ),
                   ],
                   onChanged: (value) {
                     setState(() {
-                      staffType = value;
+                      employeeType = value;
                     });
                   },
                   validator: (value) =>
-                      value == null ? 'Please select staff type' : null,
+                      value == null ? 'Please select employee role' : null,
                 ),
 
                 AppSpacing.gapMd,

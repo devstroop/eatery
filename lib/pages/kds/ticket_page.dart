@@ -393,7 +393,7 @@ class _StatusActionButton extends ConsumerWidget {
       child: ElevatedButton(
         onPressed: () async {
           final repo = ref.read(orderRepositoryProvider);
-          final staff = ref.read(authSessionProvider);
+          final employee = ref.read(authSessionProvider);
           final oid = order.id;
           if (oid == null) return;
           try {
@@ -404,7 +404,7 @@ class _StatusActionButton extends ConsumerWidget {
                 orderId: oid,
                 fromStatus: order.status.id,
                 toStatus: nextStatus.id,
-                changedByStaffId: staff?.id,
+                changedByEmployeeId: employee?.id,
                 changedAt: DateTime.now(),
               ),
             );

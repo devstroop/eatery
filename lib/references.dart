@@ -116,10 +116,10 @@ export './pages/dashboard/payment/view.payment.page.dart';
 export './pages/dashboard/payment/edit.payment.page.dart';
 export './pages/dashboard/payment/search.payment.delegate.dart';
 
-// Staff
-export './pages/dashboard/staff/staffs.page.dart';
-export './pages/dashboard/staff/add.staff.page.dart';
-export './pages/dashboard/staff/edit.staff.page.dart';
+// Employees
+export './pages/dashboard/employees/employees.page.dart';
+export './pages/dashboard/employees/add.employee.page.dart';
+export './pages/dashboard/employees/edit.employee.page.dart';
 // Help
 export './pages/dashboard/help/help.page.dart';
 // Import Export
