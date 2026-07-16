@@ -20,6 +20,7 @@ export 'app_select_card.dart';
 export 'app_text_field.dart';
 export 'app_dialog.dart';
 export 'app_empty_state.dart';
+export 'app_error_boundary.dart';
 export 'app_form_field.dart';
 export 'app_page_shell.dart';
 export 'app_search_field.dart';
