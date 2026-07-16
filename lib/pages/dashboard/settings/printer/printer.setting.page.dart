@@ -16,7 +16,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Mobile: discovers Bluetooth ESC/POS printers and saves them.
 /// Desktop: shows guidance for WiFi/Ethernet network printers.
 class PrinterSettingsPage extends ConsumerStatefulWidget {
-  const PrinterSettingsPage({Key? key}) : super(key: key);
+  const PrinterSettingsPage({super.key});
 
   @override
   ConsumerState<PrinterSettingsPage> createState() =>

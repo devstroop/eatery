@@ -8,7 +8,7 @@
 /// Device discovery uses BLE (compatible with most modern thermal printers
 /// such as Star, Epson, Bixolon, etc.). Data is written to the first
 /// discoverable writable characteristic.
-library flutter_bluetooth_adapter;
+library;
 
 import 'dart:async';
 import 'package:flutter/foundation.dart' show debugPrint;

@@ -151,7 +151,7 @@ class _TicketPageState extends ConsumerState<TicketPage>
                     ref.read(_selectedStationProvider.notifier).state = id,
               ),
               loading: () => const SizedBox(height: 48),
-              error: (_, __) => const SizedBox(height: 48),
+              error: (_, _) => const SizedBox(height: 48),
             ),
             // Order grid
             Expanded(
@@ -165,7 +165,7 @@ class _TicketPageState extends ConsumerState<TicketPage>
                         data: (items) =>
                             items.any((p) => p.stationId == selectedStation),
                         loading: () => false,
-                        error: (_, __) => false,
+                        error: (_, _) => false,
                       );
                     }).toList();
                   }
@@ -357,7 +357,7 @@ class _TicketCard extends ConsumerWidget {
         ),
       ),
       loading: () => const SizedBox.shrink(),
-      error: (_, __) => const SizedBox.shrink(),
+      error: (_, _) => const SizedBox.shrink(),
     );
   }
 }

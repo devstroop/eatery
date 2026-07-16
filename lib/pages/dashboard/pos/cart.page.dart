@@ -53,6 +53,143 @@ class _CartPageState extends ConsumerState<CartPage> {
           },
         ),
       ],
+      bottomNavigationBar: ref.read(cartProvider).cart.isNotEmpty
+          ? BottomAppBar(
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Payable Amount',
+                          style: TextStyle(
+                            fontWeight: FontWeight.normal,
+                            fontSize: 12,
+                          ),
+                        ),
+                        Text(
+                          '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${OrderFunction.calculatePayable(ref.read(cartProvider).cartProducts) + (ref.read(cartProvider).activeOrder?.grandTotal ?? 0)}',
+                          style: const TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 18,
+                          ),
+                        ),
+                        const Text(
+                          'includes all taxes and other charges',
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 7,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      final repo = DiscountRepository(
+                        ref.read(eateryStoreProvider),
+                      );
+                      final discounts = repo.getActiveDiscounts();
+                      if (discounts.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('No active discounts available'),
+                          ),
+                        );
+                        return;
+                      }
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (_) => Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Padding(
+                              padding: EdgeInsets.all(16),
+                              child: Text(
+                                'Apply Discount',
+                                style: TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            ...discounts.map(
+                              (d) => ListTile(
+                                title: Text(d.name),
+                                subtitle: Text(
+                                  d.type == 0
+                                      ? '${d.value}% off'
+                                      : d.type == 1
+                                      ? '\$${d.value} off'
+                                      : 'BOGO',
+                                ),
+                                trailing: _activeDiscount?.id == d.id
+                                    ? const Icon(
+                                        Icons.check_circle,
+                                        color: Colors.green,
+                                      )
+                                    : null,
+                                onTap: () {
+                                  Navigator.pop(context);
+                                  setState(() => _activeDiscount = d);
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('${d.name} applied'),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    },
+                    child: Text(
+                      _activeDiscount != null
+                          ? 'Remove Discount'
+                          : 'Apply Discount',
+                    ),
+                  ),
+                  if (_activeDiscount != null)
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _activeDiscount!.name,
+                            style: const TextStyle(
+                              fontSize: 9,
+                              color: Colors.green,
+                            ),
+                          ),
+                          Text(
+                            _activeDiscount!.type == 0
+                                ? '-${_activeDiscount!.value}%'
+                                : '-\$${_activeDiscount!.value}',
+                            style: const TextStyle(
+                              fontSize: 11,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  AppButton.primary(
+                    label: 'Checkout',
+                    onPressed: () => placeOrder(
+                      context,
+                      ref.read(cartProvider).cart,
+                      ref.read(cartProvider).activeCustomer,
+                      _activeDiscount,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : null,
       child: ref.read(cartProvider).cart.isNotEmpty
           ? ListView(
               padding: const EdgeInsets.symmetric(vertical: 8),
@@ -441,147 +578,10 @@ class _CartPageState extends ConsumerState<CartPage> {
                 ],
               ),
             ),
-      bottomNavigationBar: ref.read(cartProvider).cart.isNotEmpty
-          ? BottomAppBar(
-              child: Row(
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          'Payable Amount',
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 12,
-                          ),
-                        ),
-                        Text(
-                          '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${OrderFunction.calculatePayable(ref.read(cartProvider).cartProducts) + (ref.read(cartProvider).activeOrder?.grandTotal ?? 0)}',
-                          style: const TextStyle(
-                            fontWeight: FontWeight.bold,
-                            fontSize: 18,
-                          ),
-                        ),
-                        const Text(
-                          'includes all taxes and other charges',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 7,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  TextButton(
-                    onPressed: () {
-                      final repo = DiscountRepository(
-                        ref.read(eateryStoreProvider),
-                      );
-                      final discounts = repo.getActiveDiscounts();
-                      if (discounts.isEmpty) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('No active discounts available'),
-                          ),
-                        );
-                        return;
-                      }
-                      showModalBottomSheet(
-                        context: context,
-                        builder: (_) => Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Padding(
-                              padding: EdgeInsets.all(16),
-                              child: Text(
-                                'Apply Discount',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            ...discounts.map(
-                              (d) => ListTile(
-                                title: Text(d.name),
-                                subtitle: Text(
-                                  d.type == 0
-                                      ? '${d.value}% off'
-                                      : d.type == 1
-                                      ? '\$${d.value} off'
-                                      : 'BOGO',
-                                ),
-                                trailing: _activeDiscount?.id == d.id
-                                    ? const Icon(
-                                        Icons.check_circle,
-                                        color: Colors.green,
-                                      )
-                                    : null,
-                                onTap: () {
-                                  Navigator.pop(context);
-                                  setState(() => _activeDiscount = d);
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                    SnackBar(
-                                      content: Text('${d.name} applied'),
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                    child: Text(
-                      _activeDiscount != null
-                          ? 'Remove Discount'
-                          : 'Apply Discount',
-                    ),
-                  ),
-                  if (_activeDiscount != null)
-                    Padding(
-                      padding: const EdgeInsets.only(right: 8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            _activeDiscount!.name,
-                            style: const TextStyle(
-                              fontSize: 9,
-                              color: Colors.green,
-                            ),
-                          ),
-                          Text(
-                            _activeDiscount!.type == 0
-                                ? '-${_activeDiscount!.value}%'
-                                : '-\$${_activeDiscount!.value}',
-                            style: const TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.green,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  AppButton.primary(
-                    label: 'Checkout',
-                    onPressed: () => placeOrder(
-                      context,
-                      ref.read(cartProvider).cart,
-                      ref.read(cartProvider).activeCustomer,
-                      _activeDiscount,
-                    ),
-                  ),
-                ],
-              ),
-            )
-          : null,
     );
   }
 
-  placeOrder(
+  Future<void> placeOrder(
     BuildContext context,
     Map<int, CartItem> cart,
     Customer? customer,

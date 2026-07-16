@@ -2,6 +2,7 @@ import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery_core/widgets/app_dialog.dart';
@@ -9,7 +10,7 @@ import 'package:eatery_core/widgets/app_dialog.dart';
 Color _pageColor = const Color(0xFFC2592F);
 
 class AddStaffPage extends ConsumerStatefulWidget {
-  const AddStaffPage({Key? key}) : super(key: key);
+  const AddStaffPage({super.key});
 
   @override
   ConsumerState<AddStaffPage> createState() => _AddStaffPageState();
@@ -41,6 +42,47 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
             },
           ),
       ],
+      bottomNavigationBar: BottomAppBar(
+        color: AppColors.white,
+        child: AppButton.primary(
+          onPressed: () async {
+            final isValid = _formKey.currentState!.validate();
+            if (!isValid) {
+              return;
+            }
+            _formKey.currentState!.save();
+            final staff = Staff(
+              name: _controllerStaffName.text,
+              phone: _controllerStaffPhone.text,
+              photo: image?.filename,
+              isActive: isActive,
+              type: staffType!,
+              pin: _controllerStaffPin.text.isNotEmpty
+                  ? _controllerStaffPin.text
+                  : null,
+            );
+            ref
+                .read(staffRepositoryProvider)
+                .saveStaff(staff)
+                .then(
+                  (value) => AppDialog.showMessage(
+                    context,
+                    message: 'Staff has been added successfully',
+                    type: MessageType.success,
+                    onConfirm: () => Navigator.pop(context),
+                  ),
+                )
+                .onError(
+                  (error, stackTrace) => AppDialog.showMessage(
+                    context,
+                    message: 'Something went wrong',
+                    type: MessageType.error,
+                  ),
+                );
+          },
+          label: 'Save',
+        ),
+      ),
       child: InkWell(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -63,7 +105,7 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                     });
                   },
                 ),
-                SpacingStyle.defaultVerticalSpacing,
+                AppSpacing.gapMd,
                 LabeledCustomTextFormField(
                   controller: _controllerStaffName,
                   label: 'Staff Name',
@@ -89,7 +131,7 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                     _focusNodes[1].requestFocus();
                   },
                 ),
-                SpacingStyle.defaultVerticalSpacing,
+                AppSpacing.gapMd,
                 LabeledCustomTextFormField(
                   controller: _controllerStaffPhone,
                   label: 'Phone Number',
@@ -112,7 +154,7 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                     FocusScope.of(context).unfocus();
                   },
                 ),
-                SpacingStyle.defaultVerticalSpacing,
+                AppSpacing.gapMd,
                 LabeledCustomTextFormField(
                   controller: _controllerStaffPin,
                   label: 'PIN (4 digits)',
@@ -130,8 +172,8 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                     return null;
                   },
                 ),
-                SpacingStyle.defaultVerticalSpacing,
-                SpacingStyle.defaultVerticalSpacing,
+                AppSpacing.gapMd,
+                AppSpacing.gapMd,
                 // Drop down for staff type
                 DropdownButtonFormField(
                   decoration: InputDecoration(
@@ -172,7 +214,7 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
                       value == null ? 'Please select staff type' : null,
                 ),
 
-                SpacingStyle.defaultVerticalSpacing,
+                AppSpacing.gapMd,
                 Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
@@ -200,47 +242,6 @@ class _AddStaffPageState extends ConsumerState<AddStaffPage> {
               ],
             ),
           ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.white,
-        child: AppButton.primary(
-          onPressed: () async {
-            final isValid = _formKey.currentState!.validate();
-            if (!isValid) {
-              return;
-            }
-            _formKey.currentState!.save();
-            final staff = Staff(
-              name: _controllerStaffName.text,
-              phone: _controllerStaffPhone.text,
-              photo: image?.filename,
-              isActive: isActive,
-              type: staffType!,
-              pin: _controllerStaffPin.text.isNotEmpty
-                  ? _controllerStaffPin.text
-                  : null,
-            );
-            ref
-                .read(staffRepositoryProvider)
-                .saveStaff(staff)
-                .then(
-                  (value) => AppDialog.showMessage(
-                    context,
-                    message: 'Staff has been added successfully',
-                    type: MessageType.success,
-                    onConfirm: () => Navigator.pop(context),
-                  ),
-                )
-                .onError(
-                  (error, stackTrace) => AppDialog.showMessage(
-                    context,
-                    message: 'Something went wrong',
-                    type: MessageType.error,
-                  ),
-                );
-          },
-          label: 'Save',
         ),
       ),
     );

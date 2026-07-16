@@ -8,7 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 Color _pageColor = AppColors.menuCategories;
 
 class AddProductCategoryPage extends ConsumerStatefulWidget {
-  const AddProductCategoryPage({Key? key}) : super(key: key);
+  const AddProductCategoryPage({super.key});
 
   @override
   ConsumerState<AddProductCategoryPage> createState() =>
@@ -21,7 +21,7 @@ class _AddProductCategoryPageState
   final TextEditingController _controllerCategoryName = TextEditingController();
   final TextEditingController _controllerCategoryDescription =
       TextEditingController();
-  List<FocusNode> _focusNodes = [FocusNode(), FocusNode()];
+  final List<FocusNode> _focusNodes = [FocusNode(), FocusNode()];
 
   @override
   Widget build(BuildContext context) {
@@ -37,6 +37,37 @@ class _AddProductCategoryPageState
             },
           ),
       ],
+      bottomNavigationBar: BottomAppBar(
+        color: AppColors.white,
+        child: AppButton.primary(
+          onPressed: () async {
+            final repo = ref.read(productRepositoryProvider);
+            await repo
+                .saveCategory(
+                  ProductCategory(
+                    name: _controllerCategoryName.text,
+                    description: _controllerCategoryDescription.text,
+                    image: pickedLibraryImage?.filename,
+                  ),
+                )
+                .then((response) {
+                  AppDialog.showMessage(
+                    context,
+                    message: 'Category created successfully',
+                    type: MessageType.success,
+                  ).then((value) => Navigator.pop(context));
+                })
+                .onError((error, stackTrace) {
+                  AppDialog.showMessage(
+                    context,
+                    message: error.toString(),
+                    type: MessageType.error,
+                  );
+                });
+          },
+          label: 'Save',
+        ),
+      ),
       child: InkWell(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -86,37 +117,6 @@ class _AddProductCategoryPageState
               const SizedBox(height: 6.0),
             ],
           ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.white,
-        child: AppButton.primary(
-          onPressed: () async {
-            final repo = ref.read(productRepositoryProvider);
-            await repo
-                .saveCategory(
-                  ProductCategory(
-                    name: _controllerCategoryName.text,
-                    description: _controllerCategoryDescription.text,
-                    image: pickedLibraryImage?.filename,
-                  ),
-                )
-                .then((response) {
-                  AppDialog.showMessage(
-                    context,
-                    message: 'Category created successfully',
-                    type: MessageType.success,
-                  ).then((value) => Navigator.pop(context));
-                })
-                .onError((error, stackTrace) {
-                  AppDialog.showMessage(
-                    context,
-                    message: error.toString(),
-                    type: MessageType.error,
-                  );
-                });
-          },
-          label: 'Save',
         ),
       ),
     );

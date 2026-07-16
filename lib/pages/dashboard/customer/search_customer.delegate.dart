@@ -1,5 +1,4 @@
 import 'package:eatery_core/theme/app_typography.dart';
-import 'dart:ui';
 
 import 'package:eatery/references.dart';
 import 'package:go_router/go_router.dart';

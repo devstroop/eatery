@@ -2,6 +2,7 @@ import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:go_router/go_router.dart';
@@ -9,7 +10,7 @@ import 'package:go_router/go_router.dart';
 Color _pageColor = AppColors.primary;
 
 class TaxSlabsSettingsPage extends ConsumerStatefulWidget {
-  const TaxSlabsSettingsPage({Key? key}) : super(key: key);
+  const TaxSlabsSettingsPage({super.key});
 
   @override
   ConsumerState<TaxSlabsSettingsPage> createState() =>
@@ -41,6 +42,15 @@ class _TaxSlabsSettingsPageState extends ConsumerState<TaxSlabsSettingsPage> {
     return AppPageShell(
       title: 'Tax Slab Settings',
       color: _pageColor,
+      floatingActionButton: FloatingActionButton.extended(
+        onPressed: () => GoRouter.of(
+          context,
+        ).pushNamed('addTaxSlab').then((_) => setState(() {})),
+        backgroundColor: _pageColor,
+        foregroundColor: AppColors.white,
+        icon: const Icon(Icons.add),
+        label: const Text('Add Tax Slab'),
+      ),
       child: taxSlabs.isNotEmpty
           ? ListView(
               children: [
@@ -77,7 +87,7 @@ class _TaxSlabsSettingsPageState extends ConsumerState<TaxSlabsSettingsPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.percent, size: 64),
-                    SpacingStyle.defaultVerticalSpacing,
+                    AppSpacing.gapMd,
                     Text(
                       'No Tax Slabs Found',
                       style: AppTypography.headlineSmall.copyWith(
@@ -92,15 +102,6 @@ class _TaxSlabsSettingsPageState extends ConsumerState<TaxSlabsSettingsPage> {
                 ),
               ),
             ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () => GoRouter.of(
-          context,
-        ).pushNamed('addTaxSlab').then((_) => setState(() {})),
-        backgroundColor: _pageColor,
-        foregroundColor: AppColors.white,
-        icon: const Icon(Icons.add),
-        label: const Text('Add Tax Slab'),
-      ),
     );
   }
 }

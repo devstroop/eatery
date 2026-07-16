@@ -8,7 +8,7 @@ import 'package:eatery_core/widgets/app_dialog.dart';
 Color _pageColor = AppColors.menuCategories;
 
 class AddDiningTableCategoryPage extends ConsumerStatefulWidget {
-  const AddDiningTableCategoryPage({Key? key}) : super(key: key);
+  const AddDiningTableCategoryPage({super.key});
 
   @override
   ConsumerState<AddDiningTableCategoryPage> createState() =>
@@ -37,6 +37,30 @@ class _AddDiningTableCategoryPageState
             },
           ),
       ],
+      bottomNavigationBar: BottomAppBar(
+        color: AppColors.white,
+        child: AppButton.primary(
+          onPressed: () async {
+            if (!_formKey.currentState!.validate()) {
+              return;
+            }
+            DiningTableCategory diningTableCategory = DiningTableCategory(
+              name: _controllerCategoryName.text,
+              description: _controllerCategoryDescription.text,
+              isActive: true,
+            );
+            ref
+                .read(diningTableRepositoryProvider)
+                .saveCategory(diningTableCategory);
+            AppDialog.showMessage(
+              context,
+              message: 'Dining table category added successfully',
+              type: MessageType.success,
+            ).then((value) => Navigator.pop(this.context, diningTableCategory));
+          },
+          label: 'Save',
+        ),
+      ),
       child: InkWell(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -79,30 +103,6 @@ class _AddDiningTableCategoryPageState
               ],
             ),
           ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.white,
-        child: AppButton.primary(
-          onPressed: () async {
-            if (!_formKey.currentState!.validate()) {
-              return;
-            }
-            DiningTableCategory diningTableCategory = DiningTableCategory(
-              name: _controllerCategoryName.text,
-              description: _controllerCategoryDescription.text,
-              isActive: true,
-            );
-            ref
-                .read(diningTableRepositoryProvider)
-                .saveCategory(diningTableCategory);
-            AppDialog.showMessage(
-              context,
-              message: 'Dining table category added successfully',
-              type: MessageType.success,
-            ).then((value) => Navigator.pop(this.context, diningTableCategory));
-          },
-          label: 'Save',
         ),
       ),
     );

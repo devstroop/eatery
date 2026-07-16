@@ -155,7 +155,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
     );
   }
 
-  invoicePreview(BuildContext context) {
+  RepaintBoundary invoicePreview(BuildContext context) {
     final currency = ref.read(companyProvider.notifier).currency?.symbol ?? '';
     final company = ref.read(companyProvider);
     final customer = ref
@@ -271,7 +271,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                       child: Align(
                         alignment: Alignment.centerRight,
                         child: Text(
-                          '${currency}${product.subTotal.toPrecision(2)}',
+                          '$currency${product.subTotal.toPrecision(2)}',
                           style: AppTypography.bodySmall,
                         ),
                       ),
@@ -289,7 +289,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                 ),
                 Text(
-                  '${currency}${widget.order.subTotal.toPrecision(2)}',
+                  '$currency${widget.order.subTotal.toPrecision(2)}',
                   style: AppTypography.bodySmall,
                 ),
               ],
@@ -302,7 +302,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                 ),
                 Text(
-                  '${currency}${widget.order.taxTotal.toPrecision(2)}',
+                  '$currency${widget.order.taxTotal.toPrecision(2)}',
                   style: AppTypography.bodySmall,
                 ),
               ],
@@ -315,7 +315,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                 ),
                 Text(
-                  '${currency}${widget.order.finalTotal.toPrecision(2)}',
+                  '$currency${widget.order.finalTotal.toPrecision(2)}',
                   style: AppTypography.bodySmall,
                 ),
               ],
@@ -329,7 +329,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                   style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
                 ),
                 Text(
-                  '${widget.order.roundOff > 0 ? '+' : '-'} ${currency}${widget.order.roundOff.toPrecision(2).abs()}',
+                  '${widget.order.roundOff > 0 ? '+' : '-'} $currency${widget.order.roundOff.toPrecision(2).abs()}',
                   style: AppTypography.bodySmall,
                 ),
               ],
@@ -342,7 +342,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
                 ),
                 Text(
-                  '${currency}${widget.order.grandTotal.toPrecision(2)}',
+                  '$currency${widget.order.grandTotal.toPrecision(2)}',
                   style: AppTypography.titleMedium.copyWith(
                     fontWeight: FontWeight.bold,
                   ),
@@ -355,7 +355,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
     );
   }
 
-  kotPreview(BuildContext context) {
+  RepaintBoundary kotPreview(BuildContext context) {
     final company = ref.read(companyProvider);
     final customer = ref
         .read(customerRepositoryProvider)
@@ -500,7 +500,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
     }
   }
 
-  share(BuildContext context, GlobalKey key) async {
+  Future<void> share(BuildContext context, GlobalKey key) async {
     final dir = await getTemporaryDirectory();
     final path =
         '$dir/${getRandomString(5) + getRandomString(5) + getRandomString(5)}.png';

@@ -204,7 +204,7 @@ class _DisplayPageState extends ConsumerState<DisplayPage>
           return names.isNotEmpty ? names.join(', ') : 'General';
         },
         loading: () => 'General',
-        error: (_, __) => 'General',
+        error: (_, _) => 'General',
       );
       stationMap.putIfAbsent(stationName, () => []);
       stationMap[stationName]!.add(order);
@@ -344,7 +344,7 @@ class _OrderStatusCard extends ConsumerWidget {
                         .toList(),
                   ),
                   loading: () => const SizedBox.shrink(),
-                  error: (_, __) => const SizedBox.shrink(),
+                  error: (_, _) => const SizedBox.shrink(),
                 ),
               ),
               Align(

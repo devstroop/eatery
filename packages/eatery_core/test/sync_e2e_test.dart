@@ -29,7 +29,7 @@ void main() {
   late SyncCoordinator hostCoord;
   late SyncCoordinator leafCoord;
 
-  int _pickPort() =>
+  int pickPort() =>
       25000 + DateTime.now().millisecondsSinceEpoch.remainder(5000).abs();
 
   setUp(() async {
@@ -38,7 +38,7 @@ void main() {
     leafStore = EateryStore.open('${tmpDir.path}/leaf.db');
     initEaterySchema(hostStore, _testSchema);
     initEaterySchema(leafStore, _testSchema);
-    port = _pickPort();
+    port = pickPort();
   });
 
   tearDown(() async {
@@ -55,7 +55,7 @@ void main() {
     tmpDir.deleteSync(recursive: true);
   });
 
-  Future<bool> _hostReady() async {
+  Future<bool> hostReady() async {
     try {
       final sock = await Socket.connect(
         'localhost',
@@ -69,15 +69,16 @@ void main() {
     }
   }
 
-  Future<bool> _waitForConnected({
+  Future<bool> waitForConnected({
     Duration timeout = const Duration(seconds: 10),
   }) async {
     final deadline = DateTime.now().add(timeout);
     while (DateTime.now().isBefore(deadline)) {
       try {
         if (leafCoord.syncService.status.connectionState ==
-            HostConnectionState.connected)
+            HostConnectionState.connected) {
           return true;
+        }
       } catch (_) {}
       await Future.delayed(const Duration(milliseconds: 200));
     }
@@ -91,7 +92,7 @@ void main() {
       isHost: true,
       port: port,
     );
-    await Future.doWhile(() async => !(await _hostReady()));
+    await Future.doWhile(() async => !(await hostReady()));
     await Future.delayed(const Duration(milliseconds: 100));
 
     leafCoord = SyncCoordinator(
@@ -108,7 +109,7 @@ void main() {
   Future<void> waitForReplication({
     Duration timeout = const Duration(seconds: 8),
   }) async {
-    final connected = await _waitForConnected(timeout: timeout);
+    final connected = await waitForConnected(timeout: timeout);
     expect(connected, isTrue, reason: 'leaf should connect to host');
     await Future.delayed(const Duration(seconds: 5));
   }
@@ -227,7 +228,7 @@ void main() {
     );
 
     // Wait for reconnect + push cycle.
-    final connected = await _waitForConnected(
+    final connected = await waitForConnected(
       timeout: const Duration(seconds: 12),
     );
     expect(connected, isTrue, reason: 'leaf should reconnect to host');

@@ -1,5 +1,6 @@
 import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery_core/utils/responsive.dart';
 import 'package:eatery_core/extensions/double_ext.dart';
 import 'package:eatery_core/widgets/modifier_sheet.dart';
@@ -15,7 +16,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class PointOfSalePage extends ConsumerStatefulWidget {
-  const PointOfSalePage({Key? key}) : super(key: key);
+  const PointOfSalePage({super.key});
 
   @override
   ConsumerState<PointOfSalePage> createState() => _PointOfSalePageState();
@@ -561,8 +562,8 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            PosOrderTypeSelectionButton(
-              onTap: () {
+            AppButton.ghost(
+              onPressed: () {
                 _showOrderTypeSelection().then((value) {
                   // TODO: Postpone logic not yet implemented. This is a known
                   // feature gap — when the active order is not new,
@@ -575,18 +576,17 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                   }
                 });
               },
-              icon: Icon(
-                session.activeOrderType == OrderType.dine
-                    ? Icons.dinner_dining
-                    : session.activeOrderType == OrderType.delivery
-                    ? Icons.delivery_dining
-                    : Icons.takeout_dining,
-                color: Color(
-                  session.activeOrderType?.color ?? AppColors.black600.value,
-                ),
+              icon: session.activeOrderType == OrderType.dine
+                  ? Icons.dinner_dining
+                  : session.activeOrderType == OrderType.delivery
+                  ? Icons.delivery_dining
+                  : Icons.takeout_dining,
+              trailingIcon: Icon(
+                Icons.arrow_drop_up,
+                color: pageColor,
+                size: 24,
               ),
-              themeColor: pageColor,
-              text: session.activeOrderType?.name ?? 'Select order type',
+              label: session.activeOrderType?.name ?? 'Select order type',
             ),
             // Cart Information with total price
             if (session.activeCustomer != null)
@@ -741,15 +741,58 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                 crossAxisCount;
             final height = width * 4 / 3;
             final stock = product.id != null ? stockMap[product.id] : null;
-            return ProductCard(
-              product: product,
+            final currencySymbol =
+                ref.read(companyProvider.notifier).currency?.symbol ?? '';
+            final mrpPrice = product.mrpPrice.toString();
+            final salePrice = product.salePrice?.toString();
+            final showMrpStrike = salePrice != null && salePrice != mrpPrice;
+            return AppProductCard(
+              name: product.name,
+              description: product.description,
+              salePrice: salePrice,
+              mrpPrice: showMrpStrike ? mrpPrice : null,
+              currencySymbol: currencySymbol,
+              isActive: product.isActive,
+              image: Container(
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: LibraryImage(
+                      product.image ?? '',
+                      defaultImage: 'assets/images/no-picture.png',
+                    ).image,
+                    fit: product.type == ProductType.inventoryItem
+                        ? BoxFit.contain
+                        : BoxFit.cover,
+                  ),
+                ),
+              ),
+              badge: FoodTypeBadge(
+                foodType: product.foodType,
+                backgroundColor: AppColors.white,
+              ),
+              stockBadge: (stock?.isLowStock ?? false)
+                  ? Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 2,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColors.error,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        'Stock: ${stock!.quantity.toStringAsFixed(0)}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    )
+                  : null,
               width: width,
               height: height,
               themeColor: pageColor,
-              currencySymbol:
-                  ref.read(companyProvider.notifier).currency?.symbol ?? '',
-              lowStockWarning: stock?.isLowStock ?? false,
-              stockQuantity: stock?.quantity,
               onAdd: () {
                 setState(() {
                   _addWithModifiers(product);
@@ -867,7 +910,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
     builder: (context) => ListView(
       shrinkWrap: true,
       children: [
-        const Center(child: BottomViewGrip()),
+        const Center(child: AppBottomSheetGrip()),
         Padding(
           padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
           child: Text(
@@ -882,24 +925,51 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
         for (var orderType in OrderType.values)
           Padding(
             padding: const EdgeInsets.fromLTRB(12, 4, 12, 8),
-            child: SpecialButton(
-              icon: Icon(
-                orderType == OrderType.dine
-                    ? Icons.dinner_dining
-                    : orderType == OrderType.delivery
-                    ? Icons.delivery_dining
-                    : Icons.takeout_dining,
-                color: AppColors.white,
-              ),
-              text: orderType.name!,
-              color: Color(orderType.color!),
-              foreColor: AppColors.white,
+            child: InkWell(
               onTap: () {
                 setState(() {
-                  // this.orderType = orderType;
                   Navigator.of(context).pop(orderType);
                 });
               },
+              child: Container(
+                height: AppSpacing.buttonHeightMd,
+                decoration: BoxDecoration(
+                  color: Color(orderType.color!),
+                  borderRadius: BorderRadius.circular(AppSpacing.buttonRadius),
+                ),
+                padding: AppSpacing.buttonPadding,
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: AppSpacing.iconSizeMd,
+                      width: AppSpacing.iconSizeMd,
+                      child: Icon(
+                        orderType == OrderType.dine
+                            ? Icons.dinner_dining
+                            : orderType == OrderType.delivery
+                            ? Icons.delivery_dining
+                            : Icons.takeout_dining,
+                        color: AppColors.white,
+                        size: AppSpacing.iconSizeMd,
+                      ),
+                    ),
+                    SizedBox(width: AppSpacing.iconGapMd),
+                    Text(
+                      orderType.name ?? '',
+                      style: AppTypography.buttonLabelMd.copyWith(
+                        color: AppColors.white,
+                      ),
+                    ),
+                    Spacer(),
+                    Icon(
+                      Icons.chevron_right,
+                      color: AppColors.white,
+                      size: AppSpacing.iconSizeMd,
+                    ),
+                  ],
+                ),
+              ),
             ),
           ),
         const SizedBox(height: 20.0),
@@ -914,11 +984,11 @@ class PosCartInformation extends StatelessWidget {
   final List<Product> cart;
 
   const PosCartInformation({
-    Key? key,
+    super.key,
     required this.onTap,
     required this.themeColor,
     required this.cart,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

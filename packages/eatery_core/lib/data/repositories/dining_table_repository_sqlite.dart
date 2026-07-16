@@ -105,11 +105,13 @@ class SqliteDiningTableRepository implements DiningTableRepository {
   /// Note: the original [DiningTableRepository] does not expose a category
   /// repository directly; these helpers exist because the SQLite schema owns
   /// both tables and pages need to render category names.
+  @override
   List<DiningTableCategory> getAllCategories() => _store
       .query('SELECT * FROM dining_table_category')
       .map(DiningTableCategory.fromMap)
       .toList();
 
+  @override
   DiningTableCategory? getCategoryById(int id) {
     final rows = _store.query(
       'SELECT * FROM dining_table_category WHERE id = ?',
@@ -118,6 +120,7 @@ class SqliteDiningTableRepository implements DiningTableRepository {
     return rows.isEmpty ? null : DiningTableCategory.fromMap(rows.first);
   }
 
+  @override
   Future<int> saveCategory(DiningTableCategory category) async {
     final values = <Object?>[
       category.name,

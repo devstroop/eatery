@@ -11,7 +11,7 @@ import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 
 class ViewOrderPage extends ConsumerStatefulWidget {
-  const ViewOrderPage({Key? key, required this.order}) : super(key: key);
+  const ViewOrderPage({super.key, required this.order});
   final Order order;
 
   @override

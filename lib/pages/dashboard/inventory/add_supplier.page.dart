@@ -44,8 +44,9 @@ class _AddSupplierPageState extends ConsumerState<AddSupplierPage> {
       _emailCtrl,
       _addrCtrl,
       _gstCtrl,
-    ])
+    ]) {
       c.dispose();
+    }
     super.dispose();
   }
 

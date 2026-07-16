@@ -1,7 +1,4 @@
-import 'dart:io';
-import 'package:eatery/constants/utils/app_file_system.dart';
 import 'package:eatery/references.dart';
-import 'package:flutter/material.dart';
 import 'package:mime/mime.dart';
 import 'package:path/path.dart' as path;
 import 'package:http/http.dart' as http;

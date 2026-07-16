@@ -17,8 +17,9 @@ class OrderFunction {
   static double calculateProductPriceWithoutTax(Product product) {
     final basePrice = product.salePrice ?? product.mrpPrice;
     final s = _getTaxSlab(product.taxSlabId);
-    if (s != null && s.type == TaxType.inclusive)
+    if (s != null && s.type == TaxType.inclusive) {
       return (basePrice / (1 + s.rate / 100)).toPrecision(2);
+    }
     return basePrice.toPrecision(2);
   }
 
@@ -50,9 +51,9 @@ class OrderFunction {
     for (final p in cart) {
       final s = _getTaxSlab(p.taxSlabId);
       if (s != null) {
-        if (s.type == TaxType.exclusive)
+        if (s.type == TaxType.exclusive) {
           tax += (p.salePrice ?? p.mrpPrice) * (s.rate / 100);
-        else if (s.type == TaxType.inclusive)
+        } else if (s.type == TaxType.inclusive)
           tax +=
               (p.salePrice ?? p.mrpPrice) - calculateProductPriceWithoutTax(p);
       }
@@ -71,10 +72,12 @@ class OrderFunction {
   static double? calculateProductTaxAmount(Product p) {
     final s = _getTaxSlab(p.taxSlabId);
     if (s != null) {
-      if (s.type == TaxType.exclusive)
+      if (s.type == TaxType.exclusive) {
         return (p.salePrice ?? p.mrpPrice) * (s.rate / 100);
-      if (s.type == TaxType.inclusive)
+      }
+      if (s.type == TaxType.inclusive) {
         return (p.salePrice ?? p.mrpPrice) - calculateProductPriceWithoutTax(p);
+      }
     }
     return null;
   }

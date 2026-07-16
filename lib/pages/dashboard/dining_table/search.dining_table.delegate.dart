@@ -78,103 +78,97 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
             style: AppTypography.bodyMedium.copyWith(color: AppColors.grey600),
           ),
         ),
-        ...diningTables
-            .map(
-              (e) => ListTile(
-                onTap: () {
-                  callback(e);
-                  close(context, e);
-                },
-                leading: Container(
+        ...diningTables.map(
+          (e) => ListTile(
+            onTap: () {
+              callback(e);
+              close(context, e);
+            },
+            leading: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+              decoration: BoxDecoration(
+                color: AppColors.grey300,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    e.name.split(' ').last[0].toUpperCase(),
+                    style: AppTypography.titleLarge.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.grey600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            title: Text(
+              e.name,
+              style: AppTypography.titleMedium.copyWith(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            subtitle: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (e.description != null && e.description!.trim().isNotEmpty)
+                  Text(e.description!.trim()),
+                Text(
+                  '${e.capacity} seats',
+                  style: AppTypography.titleLarge.copyWith(
+                    fontWeight: FontWeight.bold,
+                    color: AppColors.grey600,
+                  ),
+                ),
+              ],
+            ),
+            trailing: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Container(
                   padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
+                    horizontal: 6,
+                    vertical: 3,
                   ),
                   decoration: BoxDecoration(
-                    color: AppColors.grey300,
-                    borderRadius: BorderRadius.circular(8),
+                    color: e.status == DiningTableStatus.available
+                        ? Colors.green
+                        : e.status == DiningTableStatus.occupied
+                        ? AppColors.error
+                        : Colors.blueAccent,
+                    borderRadius: BorderRadius.circular(12),
                   ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        e.name.split(' ').last[0].toUpperCase(),
-                        style: AppTypography.titleLarge.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.grey600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                title: Text(
-                  e.name,
-                  style: AppTypography.titleMedium.copyWith(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                subtitle: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    if (e.description != null &&
-                        e.description!.trim().isNotEmpty)
-                      Text(e.description!.trim()),
-                    Text(
-                      '${e.capacity} seats',
-                      style: AppTypography.titleLarge.copyWith(
-                        fontWeight: FontWeight.bold,
-                        color: AppColors.grey600,
-                      ),
+                  child: Text(
+                    e.status.name,
+                    style: AppTypography.labelSmall.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.white,
                     ),
-                  ],
+                  ),
                 ),
-                trailing: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6,
-                        vertical: 3,
-                      ),
-                      decoration: BoxDecoration(
-                        color: e.status == DiningTableStatus.available
-                            ? Colors.green
-                            : e.status == DiningTableStatus.occupied
-                            ? AppColors.error
-                            : Colors.blueAccent,
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                      child: Text(
-                        e.status.name,
-                        style: AppTypography.labelSmall.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.white,
-                        ),
-                      ),
+                if (e.orderId != null)
+                  Text(
+                    'Order #${e.orderId}',
+                    style: AppTypography.labelSmall.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.black800,
                     ),
-                    if (e.orderId != null)
-                      Text(
-                        'Order #${e.orderId}',
-                        style: AppTypography.labelSmall.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.black800,
-                        ),
-                      ),
-                    if (e.orderId != null)
-                      Text(
-                        'Due $currencySymbol${orders.where((element) => element.id == e.orderId).firstOrNull?.grandTotal.toPrecision(2)}',
-                        style: AppTypography.labelSmall.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.error,
-                        ),
-                      ),
-                  ],
-                ),
-              ),
-            )
-            .toList(),
+                  ),
+                if (e.orderId != null)
+                  Text(
+                    'Due $currencySymbol${orders.where((element) => element.id == e.orderId).firstOrNull?.grandTotal.toPrecision(2)}',
+                    style: AppTypography.labelSmall.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.error,
+                    ),
+                  ),
+              ],
+            ),
+          ),
+        ),
       ],
     );
   }
@@ -193,37 +187,35 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
             style: AppTypography.bodyMedium.copyWith(color: AppColors.grey600),
           ),
         ),
-        ...diningTables
-            .map(
-              (e) => ListTile(
-                onTap: () {
-                  callback(e);
-                  close(context, e);
-                },
-                leading: Container(
-                  height: 40,
-                  width: 40,
-                  decoration: BoxDecoration(
-                    color: AppColors.grey300,
-                    borderRadius: BorderRadius.circular(8),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        e.name.split(' ').last.toUpperCase()[0],
-                        style: AppTypography.titleLarge.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.grey600,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                title: Text(e.name),
+        ...diningTables.map(
+          (e) => ListTile(
+            onTap: () {
+              callback(e);
+              close(context, e);
+            },
+            leading: Container(
+              height: 40,
+              width: 40,
+              decoration: BoxDecoration(
+                color: AppColors.grey300,
+                borderRadius: BorderRadius.circular(8),
               ),
-            )
-            .toList(),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    e.name.split(' ').last.toUpperCase()[0],
+                    style: AppTypography.titleLarge.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.grey600,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            title: Text(e.name),
+          ),
+        ),
       ],
     );
   }

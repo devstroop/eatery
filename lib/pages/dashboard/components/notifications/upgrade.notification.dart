@@ -8,8 +8,7 @@ class UpgradeNotification extends ConsumerStatefulWidget {
   final Company? company;
   final double? width;
   final EdgeInsets? margin;
-  const UpgradeNotification({Key? key, this.company, this.width, this.margin})
-    : super(key: key);
+  const UpgradeNotification({super.key, this.company, this.width, this.margin});
 
   @override
   ConsumerState<UpgradeNotification> createState() =>
@@ -25,7 +24,7 @@ class _UpgradeNotificationState extends ConsumerState<UpgradeNotification> {
             margin: widget.margin,
             width: widget.width,
             padding: const EdgeInsetsDirectional.fromSTEB(0, 16, 0, 0),
-            child: NotificationWidget(
+            child: AppNotification(
               message: 'Activate License',
               header: "Upgrade",
               leading: const Icon(

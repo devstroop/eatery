@@ -1,5 +1,4 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:eatery_core/data/models/converters.dart';
 part 'shift.freezed.dart';
 part 'shift.g.dart';
 

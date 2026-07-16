@@ -3,14 +3,14 @@ import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 
 final _pageColor = AppColors.primary;
 
 class EditTaxSlabSettingsPage extends ConsumerStatefulWidget {
-  const EditTaxSlabSettingsPage({Key? key, required this.taxSlab})
-    : super(key: key);
+  const EditTaxSlabSettingsPage({super.key, required this.taxSlab});
   final TaxSlab taxSlab;
 
   @override
@@ -109,6 +109,13 @@ class _EditTaxSlabSettingsPageState
           },
         ),
       ],
+      bottomNavigationBar: BottomAppBar(
+        child: AppButton.primary(
+          height: 48.0,
+          onPressed: _submit,
+          label: 'Update',
+        ),
+      ),
       child: InkWell(
         onTap: () => FocusScope.of(context).unfocus(),
         child: Padding(
@@ -136,7 +143,7 @@ class _EditTaxSlabSettingsPageState
                   },
                   foregroundColor: AppColors.black600,
                 ),
-                SpacingStyle.defaultVerticalSpacing,
+                AppSpacing.gapMd,
                 LabeledCustomTextFormField(
                   controller: controllerTaxRate,
                   label: 'Tax Slab Rate',
@@ -157,7 +164,7 @@ class _EditTaxSlabSettingsPageState
                   },
                   foregroundColor: AppColors.black600,
                 ),
-                SpacingStyle.defaultVerticalSpacing,
+                AppSpacing.gapMd,
                 Text(
                   'Select Tax Type',
                   style: AppTypography.labelMedium.copyWith(
@@ -183,13 +190,6 @@ class _EditTaxSlabSettingsPageState
               ],
             ),
           ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: AppButton.primary(
-          height: 48.0,
-          onPressed: _submit,
-          label: 'Update',
         ),
       ),
     );

@@ -1,5 +1,4 @@
 import 'package:eatery_core/data/models/converters.dart';
-import 'package:eatery_core/data/models/order/order_status.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'order_status_history.freezed.dart';

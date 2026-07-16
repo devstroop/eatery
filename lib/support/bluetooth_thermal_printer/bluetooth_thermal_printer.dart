@@ -1,4 +1,4 @@
-library bluetooth_thermal_printer;
+library;
 
 export './src/enums/print_result.type.dart';
 export './src/models/bluetooth_printer.model.dart';

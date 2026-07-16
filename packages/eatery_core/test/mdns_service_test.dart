@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:typed_data';
 
 import 'package:eatery_core/data/sync/mdns_service.dart';
 import 'package:flutter_test/flutter_test.dart';

@@ -5,7 +5,6 @@ import 'package:eatery_core/data/repositories/company_repository_sqlite.dart';
 import 'package:eatery_core/data/models/eatery_db.dart';
 import 'package:eatery_core/providers/auth_session.dart';
 import 'package:eatery_core/providers/role_provider.dart';
-import 'package:eatery_core/data/models/product/product.dart';
 import 'package:eatery/pages/authentication/login.page.dart';
 import 'package:eatery/pages/dashboard/pos/views/kProduct.view.dart';
 import 'package:eatery/pages/main.screen.dart';

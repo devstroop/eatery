@@ -1,5 +1,6 @@
 import 'package:eatery_core/extensions/string_ext.dart';
 import 'package:eatery/references.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 
 class Body2 extends StatelessWidget {
   final Color themeColor;
@@ -9,13 +10,13 @@ class Body2 extends StatelessWidget {
   final Function(GlobalKey<FormState> formKey)? callbackFormKey;
 
   Body2({
-    Key? key,
+    super.key,
     required this.themeColor,
     required this.passwordController,
     required this.confirmPasswordController,
     required this.formKey,
     this.callbackFormKey,
-  }) : super(key: key);
+  });
 
   final List<FocusNode> focusNodes = [FocusNode(), FocusNode()];
 
@@ -34,8 +35,8 @@ class Body2 extends StatelessWidget {
               title: "Setup PIN",
               subtitle: "Secure account with login PIN",
             ),
-            SpacingStyle.defaultVerticalSpacing,
-            SpacingStyle.defaultVerticalSpacing,
+            AppSpacing.gapMd,
+            AppSpacing.gapMd,
             CustomTextFromField(
               themeColor: themeColor,
               keyboardType: TextInputType.number,
@@ -57,7 +58,7 @@ class Body2 extends StatelessWidget {
                 return null;
               },
             ),
-            SpacingStyle.defaultVerticalSpacing,
+            AppSpacing.gapMd,
             CustomTextFromField(
               themeColor: themeColor,
               keyboardType: TextInputType.number,

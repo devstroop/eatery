@@ -1,12 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/data/models/eatery_db.dart';
-import 'package:eatery_core/providers/database_provider.dart';
-import 'package:eatery_core/data/repositories/order_repository.dart';
-import 'package:eatery_core/data/repositories/product_repository.dart';
-import 'package:eatery_core/data/repositories/customer_repository.dart';
-import 'package:eatery_core/data/repositories/tax_repository.dart';
-import 'package:eatery_core/data/repositories/dining_table_repository.dart';
-import 'package:eatery_core/providers/order_provider.dart';
 
 /// A cart line item with quantity tracking.
 class CartItem {

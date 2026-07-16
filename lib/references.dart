@@ -11,7 +11,7 @@ export 'package:devdart_windows_hdsn/devdart_windows_hdsn.dart';
 export 'package:devdart_windows_hdsn/drive.dart';
 // External refs by devstroop (*deprecated — moved to local equivalents)
 export './widgets/titles/page_title.dart';
-export 'package:eatery_core/widgets/app_button.dart';
+export 'package:eatery_core/widgets/widgets.dart';
 // Integrated packages
 export './support/bluetooth_thermal_printer/bluetooth_thermal_printer.dart';
 // External packages
@@ -41,8 +41,6 @@ export 'package:fast_cached_network_image/fast_cached_network_image.dart';
 // Google packages
 export 'package:googleapis_auth/auth_io.dart';
 // Internal references
-export './constants/style/color_style.dart';
-export './constants/style/spacing_style.dart';
 export './constants/validators/gstin_validator.dart';
 export './constants/utils/app_file_system.dart';
 // Internal references
@@ -54,19 +52,10 @@ export './widgets/badges/foodType.badge.dart';
 export './widgets/switches/toggle.switch.dart';
 
 // Internal references
-export './components/bottom_view_grip.dart';
-export './components/secondary_button.dart';
 export './components/custom_text_from_field.dart';
-export './components/selectable_card.dart';
 export './components/bottomsheets/forgot_password_bottomsheet.dart';
 export './components/bottomsheets/upgrade_to_access_bottomsheet.dart';
 export './components/labeled_custom_text_from_field.dart';
-export './components/notification_widget.dart';
-export './components/pos_category_widget.dart';
-export './components/menu_tile.dart';
-export './components/pos_order_type_selection_button.dart';
-export './components/special_button.dart';
-export './components/product_card.dart';
 export './components/bottomsheets/upload_image_bottomsheet.dart';
 export './components/bottomsheets/help_bottom_sheet.dart';
 // Internal references

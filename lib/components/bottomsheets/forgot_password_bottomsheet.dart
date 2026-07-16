@@ -1,19 +1,19 @@
 import 'package:eatery_core/extensions/string_ext.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
+import 'package:eatery_core/theme/app_typography.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 
 class ForgotPasswordBottomSheet extends ConsumerStatefulWidget {
-  final BuildContext context;
   final Color themeColor;
   final Function(Company? company) callback;
-  const ForgotPasswordBottomSheet(
-    this.context, {
-    Key? key,
+  const ForgotPasswordBottomSheet({
+    super.key,
     required this.themeColor,
     required this.callback,
-  }) : super(key: key);
+  });
 
   @override
   ConsumerState<ForgotPasswordBottomSheet> createState() =>
@@ -58,9 +58,9 @@ class _ForgotPasswordBottomSheetState
       builder: (context, state) {
         return Padding(
           padding: EdgeInsets.fromLTRB(
-            16,
-            16,
-            16,
+            AppSpacing.lg,
+            AppSpacing.lg,
+            AppSpacing.lg,
             MediaQuery.of(context).viewInsets.bottom,
           ),
           child: Form(
@@ -68,7 +68,7 @@ class _ForgotPasswordBottomSheetState
             child: ListView(
               shrinkWrap: true,
               children: [
-                const Center(child: BottomViewGrip()),
+                const Center(child: AppBottomSheetGrip()),
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -77,23 +77,17 @@ class _ForgotPasswordBottomSheetState
                       children: [
                         Text(
                           'Forgot password?',
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: AppTypography.headlineSmall,
                         ),
                         Text(
                           'Reset and get the access back',
-                          style: TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w400,
-                          ),
+                          style: AppTypography.bodyMedium,
                         ),
                       ],
                     ),
                   ],
                 ),
-                const SizedBox(height: 16.0),
+                AppSpacing.gapLg,
                 if (!verified)
                   CustomTextFromField(
                     themeColor: widget.themeColor,
@@ -113,8 +107,9 @@ class _ForgotPasswordBottomSheetState
                       color: AppColors.white600,
                     ),
                     validator: (value) {
-                      if (value!.isEmpty)
+                      if (value!.isEmpty) {
                         return 'Purchase code cannot be blank';
+                      }
                       return null;
                     },
                     onChanged: (value) {
@@ -151,13 +146,14 @@ class _ForgotPasswordBottomSheetState
                     },
                     validator: (value) {
                       if (value!.trim().isEmpty) return 'Pin cannot be blank';
-                      if (!value.trim().isNumericOnly)
+                      if (!value.trim().isNumericOnly) {
                         return 'Invalid character';
+                      }
                       if (value.trim().length < 4) return 'Less secured pin';
                       return null;
                     },
                   ),
-                if (verified) SpacingStyle.defaultVerticalSpacing,
+                if (verified) AppSpacing.gapMd,
                 if (verified)
                   CustomTextFromField(
                     themeColor: widget.themeColor,
@@ -183,14 +179,14 @@ class _ForgotPasswordBottomSheetState
                       FocusScope.of(context).unfocus();
                     },
                   ),
-                if (verified) SpacingStyle.defaultVerticalSpacing,
+                if (verified) AppSpacing.gapMd,
                 if (verified)
                   Row(
                     children: [
                       AppButton.primary(onPressed: _submit, label: 'Reset'),
                     ],
                   ),
-                const SizedBox(height: 20.0),
+                AppSpacing.gapXl,
               ],
             ),
           ),

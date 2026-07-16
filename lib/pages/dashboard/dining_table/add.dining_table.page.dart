@@ -9,7 +9,7 @@ import 'package:eatery_core/widgets/app_dialog.dart';
 Color _pageColor = AppColors.menuCategories;
 
 class AddDiningTablePage extends ConsumerStatefulWidget {
-  const AddDiningTablePage({Key? key}) : super(key: key);
+  const AddDiningTablePage({super.key});
 
   @override
   ConsumerState<AddDiningTablePage> createState() => _AddDiningTablePageState();
@@ -41,6 +41,42 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
             },
           ),
       ],
+      bottomNavigationBar: BottomAppBar(
+        child: AppButton.primary(
+          onPressed: () async {
+            if (!_formKey.currentState!.validate()) {
+              return;
+            }
+            _formKey.currentState!.save();
+            DiningTable diningTable = DiningTable(
+              name: _controllerCategoryName.text,
+              description: _controllerCategoryDescription.text,
+              categoryId: diningTableCategory?.id,
+              capacity: int.parse(_controllerCapacity.text),
+            );
+            ref
+                .read(diningTableRepositoryProvider)
+                .saveTable(diningTable)
+                .then((value) {
+                  AppDialog.showMessage(
+                    context,
+                    message: 'Dining Table created successfully',
+                    type: MessageType.success,
+                    onConfirm: () => Navigator.pop(context),
+                  );
+                })
+                .onError((error, stackTrace) {
+                  debugPrint(error.toString());
+                  AppDialog.showMessage(
+                    context,
+                    message: 'Failed to create Dining Table',
+                    type: MessageType.error,
+                  );
+                });
+          },
+          label: 'Save',
+        ),
+      ),
       child: InkWell(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -127,8 +163,8 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      PosCategoryWidget(
-                        active: diningTableCategory == null,
+                      AppCategoryChip(
+                        selected: diningTableCategory == null,
                         label: 'None',
                         onTap: () {
                           setState(() {
@@ -140,8 +176,8 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
                           .read(diningTableRepositoryProvider)
                           .getAllCategories()
                           .map((e) {
-                            return PosCategoryWidget(
-                              active: diningTableCategory?.id == e.id,
+                            return AppCategoryChip(
+                              selected: diningTableCategory?.id == e.id,
                               label: e.name,
                               onTap: () {
                                 setState(() {
@@ -200,42 +236,6 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
               ],
             ),
           ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        child: AppButton.primary(
-          onPressed: () async {
-            if (!_formKey.currentState!.validate()) {
-              return;
-            }
-            _formKey.currentState!.save();
-            DiningTable diningTable = DiningTable(
-              name: _controllerCategoryName.text,
-              description: _controllerCategoryDescription.text,
-              categoryId: diningTableCategory?.id,
-              capacity: int.parse(_controllerCapacity.text),
-            );
-            ref
-                .read(diningTableRepositoryProvider)
-                .saveTable(diningTable)
-                .then((value) {
-                  AppDialog.showMessage(
-                    context,
-                    message: 'Dining Table created successfully',
-                    type: MessageType.success,
-                    onConfirm: () => Navigator.pop(context),
-                  );
-                })
-                .onError((error, stackTrace) {
-                  debugPrint(error.toString());
-                  AppDialog.showMessage(
-                    context,
-                    message: 'Failed to create Dining Table',
-                    type: MessageType.error,
-                  );
-                });
-          },
-          label: 'Save',
         ),
       ),
     );

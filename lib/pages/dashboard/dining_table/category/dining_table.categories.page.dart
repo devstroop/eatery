@@ -10,7 +10,7 @@ import 'package:go_router/go_router.dart';
 Color _pageColor = AppColors.menuCategories;
 
 class DiningTableCategoriesPage extends ConsumerStatefulWidget {
-  const DiningTableCategoriesPage({Key? key}) : super(key: key);
+  const DiningTableCategoriesPage({super.key});
 
   @override
   ConsumerState<DiningTableCategoriesPage> createState() =>

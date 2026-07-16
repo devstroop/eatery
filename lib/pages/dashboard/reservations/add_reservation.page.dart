@@ -148,7 +148,7 @@ class _AddReservationPageState extends ConsumerState<AddReservationPage> {
                     context: context,
                     initialTime: TimeOfDay.fromDateTime(_dateTime),
                   );
-                  if (tm != null)
+                  if (tm != null) {
                     setState(
                       () => _dateTime = DateTime(
                         dt.year,
@@ -158,6 +158,7 @@ class _AddReservationPageState extends ConsumerState<AddReservationPage> {
                         tm.minute,
                       ),
                     );
+                  }
                 },
               ),
               const SizedBox(height: 12),
@@ -166,7 +167,7 @@ class _AddReservationPageState extends ConsumerState<AddReservationPage> {
                   labelText: "Table",
                   border: OutlineInputBorder(),
                 ),
-                value: _tableId,
+                initialValue: _tableId,
                 items: [
                   const DropdownMenuItem(
                     value: null,
@@ -193,7 +194,7 @@ class _AddReservationPageState extends ConsumerState<AddReservationPage> {
                   labelText: "Status",
                   border: OutlineInputBorder(),
                 ),
-                value: _status,
+                initialValue: _status,
                 items: const [
                   DropdownMenuItem(value: 0, child: Text("Pending")),
                   DropdownMenuItem(value: 1, child: Text("Confirmed")),

@@ -10,8 +10,7 @@ import 'package:eatery_core/widgets/app_dialog.dart';
 Color _pageColor = AppColors.menuInventory;
 
 class EditInventoryItemPage extends ConsumerStatefulWidget {
-  const EditInventoryItemPage({Key? key, required this.product})
-    : super(key: key);
+  const EditInventoryItemPage({super.key, required this.product});
   final Product product;
   @override
   ConsumerState<EditInventoryItemPage> createState() =>
@@ -84,6 +83,47 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
             },
           ),
       ],
+      bottomNavigationBar: BottomAppBar(
+        color: AppColors.white,
+        child: AppButton.primary(
+          onPressed: () async {
+            final isValid = _formKey.currentState!.validate();
+            if (!isValid) {
+              return;
+            }
+            _formKey.currentState!.save();
+
+            final repo = ref.read(productRepositoryProvider);
+            final updated = widget.product.copyWith(
+              image: image?.filename,
+              name: _controllerName.text,
+              mrpPrice: _controllerMRP.text.toDouble() ?? 0,
+              salePrice: _controllerSalePrice.text.toDouble(),
+              foodType: selectedFoodType,
+              taxSlabId: selectedTaxSlab?.id,
+              categoryId: selectedCategory?.id,
+              description: _controllerDescription.text,
+            );
+            await repo
+                .saveProduct(updated)
+                .then((value) {
+                  AppDialog.showMessage(
+                    this.context,
+                    message: 'Product updated successfully',
+                    type: MessageType.success,
+                  ).whenComplete(() => Navigator.pop(this.context));
+                })
+                .onError((error, stackTrace) {
+                  AppDialog.showMessage(
+                    this.context,
+                    message: 'Failed to update product',
+                    type: MessageType.error,
+                  );
+                });
+          },
+          label: 'Save',
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Form(
@@ -307,47 +347,6 @@ class _EditInventoryItemPageState extends ConsumerState<EditInventoryItemPage> {
               ),
             ],
           ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.white,
-        child: AppButton.primary(
-          onPressed: () async {
-            final isValid = _formKey.currentState!.validate();
-            if (!isValid) {
-              return;
-            }
-            _formKey.currentState!.save();
-
-            final repo = ref.read(productRepositoryProvider);
-            final updated = widget.product.copyWith(
-              image: image?.filename,
-              name: _controllerName.text,
-              mrpPrice: _controllerMRP.text.toDouble() ?? 0,
-              salePrice: _controllerSalePrice.text.toDouble(),
-              foodType: selectedFoodType,
-              taxSlabId: selectedTaxSlab?.id,
-              categoryId: selectedCategory?.id,
-              description: _controllerDescription.text,
-            );
-            await repo
-                .saveProduct(updated)
-                .then((value) {
-                  AppDialog.showMessage(
-                    this.context,
-                    message: 'Product updated successfully',
-                    type: MessageType.success,
-                  ).whenComplete(() => Navigator.pop(this.context));
-                })
-                .onError((error, stackTrace) {
-                  AppDialog.showMessage(
-                    this.context,
-                    message: 'Failed to update product',
-                    type: MessageType.error,
-                  );
-                });
-          },
-          label: 'Save',
         ),
       ),
     );

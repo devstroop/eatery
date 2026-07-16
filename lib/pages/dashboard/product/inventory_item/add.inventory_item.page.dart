@@ -10,7 +10,7 @@ import 'package:eatery_core/widgets/app_dialog.dart';
 Color _pageColor = AppColors.menuInventory;
 
 class AddInventoryItem extends ConsumerStatefulWidget {
-  const AddInventoryItem({Key? key}) : super(key: key);
+  const AddInventoryItem({super.key});
 
   @override
   ConsumerState<AddInventoryItem> createState() => _AddInventoryItemState();
@@ -63,8 +63,8 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
             },
           ),
       ],
-      child: buildBody(),
       bottomNavigationBar: buildBottomAppBar(),
+      child: buildBody(),
     );
   }
 

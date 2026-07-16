@@ -85,7 +85,7 @@ class _AddDiscountPageState extends ConsumerState<AddDiscountPage> {
                   labelText: "Type",
                   border: OutlineInputBorder(),
                 ),
-                value: _type,
+                initialValue: _type,
                 items: const [
                   DropdownMenuItem(value: 0, child: Text("Percentage (%)")),
                   DropdownMenuItem(value: 1, child: Text("Fixed Amount")),

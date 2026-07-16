@@ -2,13 +2,14 @@ import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/data/sync/mutation_hook.dart';
 import 'package:eatery_core/providers/database_provider.dart';
 import 'package:eatery_core/providers/company_provider.dart';
 
 class ShowCurrencyRegionPage extends ConsumerStatefulWidget {
-  const ShowCurrencyRegionPage({Key? key}) : super(key: key);
+  const ShowCurrencyRegionPage({super.key});
 
   @override
   ConsumerState<ShowCurrencyRegionPage> createState() =>
@@ -44,77 +45,6 @@ class _ShowCurrencyRegionPageState
     return AppPageShell(
       title: 'Region and Currency',
       color: themeColor,
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: formKey,
-          child: ListView(
-            scrollDirection: Axis.vertical,
-            children: [
-              const PageTitle(
-                title: "Region and Currency",
-                subtitle: "Select the default currency as per region",
-              ),
-              SpacingStyle.defaultVerticalSpacing,
-              InkWell(
-                onTap: () => showCurrencyPicker(
-                  context: context,
-                  showSearchField: false,
-                  showFlag: true,
-                  showCurrencyName: true,
-                  showCurrencyCode: true,
-                  // currencyFilter: const ['INR', 'AED'],
-                  theme: CurrencyPickerThemeData(
-                    bottomSheetHeight:
-                        MediaQuery.of(context).size.height * 4 / 5,
-                  ),
-                  onSelect: _onCurrencySelected,
-                ),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(6),
-                    border: Border.all(color: themeColor, width: 2),
-                  ),
-                  child: ListTile(
-                    leading: selectedCurrency != null
-                        ? Column(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                CurrencyUtils.currencyToEmoji(
-                                  selectedCurrency!,
-                                ),
-                                style: AppTypography.headlineLarge.copyWith(
-                                  fontWeight: FontWeight.w400,
-                                ),
-                              ),
-                            ],
-                          )
-                        : null,
-                    trailing: selectedCurrency != null
-                        ? Text(
-                            selectedCurrency!.symbol,
-                            style: AppTypography.titleLarge.copyWith(
-                              fontWeight: FontWeight.w400,
-                            ),
-                          )
-                        : null,
-                    title: Text(
-                      selectedCurrency != null
-                          ? selectedCurrency!.code
-                          : 'Not Selected',
-                    ),
-                    subtitle: selectedCurrency != null
-                        ? Text(selectedCurrency!.name)
-                        : null,
-                  ),
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
       bottomNavigationBar: BottomAppBar(
         child: AppButton.primary(
           label: 'Save',
@@ -173,6 +103,77 @@ class _ShowCurrencyRegionPageState
               }
             }
           },
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Form(
+          key: formKey,
+          child: ListView(
+            scrollDirection: Axis.vertical,
+            children: [
+              const PageTitle(
+                title: "Region and Currency",
+                subtitle: "Select the default currency as per region",
+              ),
+              AppSpacing.gapMd,
+              InkWell(
+                onTap: () => showCurrencyPicker(
+                  context: context,
+                  showSearchField: false,
+                  showFlag: true,
+                  showCurrencyName: true,
+                  showCurrencyCode: true,
+                  // currencyFilter: const ['INR', 'AED'],
+                  theme: CurrencyPickerThemeData(
+                    bottomSheetHeight:
+                        MediaQuery.of(context).size.height * 4 / 5,
+                  ),
+                  onSelect: _onCurrencySelected,
+                ),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(6),
+                    border: Border.all(color: themeColor, width: 2),
+                  ),
+                  child: ListTile(
+                    leading: selectedCurrency != null
+                        ? Column(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                CurrencyUtils.currencyToEmoji(
+                                  selectedCurrency!,
+                                ),
+                                style: AppTypography.headlineLarge.copyWith(
+                                  fontWeight: FontWeight.w400,
+                                ),
+                              ),
+                            ],
+                          )
+                        : null,
+                    trailing: selectedCurrency != null
+                        ? Text(
+                            selectedCurrency!.symbol,
+                            style: AppTypography.titleLarge.copyWith(
+                              fontWeight: FontWeight.w400,
+                            ),
+                          )
+                        : null,
+                    title: Text(
+                      selectedCurrency != null
+                          ? selectedCurrency!.code
+                          : 'Not Selected',
+                    ),
+                    subtitle: selectedCurrency != null
+                        ? Text(selectedCurrency!.name)
+                        : null,
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

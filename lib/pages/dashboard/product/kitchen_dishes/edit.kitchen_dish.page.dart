@@ -10,8 +10,7 @@ import 'package:eatery_core/widgets/app_dialog.dart';
 Color _pageColor = AppColors.secondary;
 
 class EditKitchenDishPage extends ConsumerStatefulWidget {
-  const EditKitchenDishPage({Key? key, required this.product})
-    : super(key: key);
+  const EditKitchenDishPage({super.key, required this.product});
   final Product product;
   @override
   ConsumerState<EditKitchenDishPage> createState() =>
@@ -86,6 +85,47 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
             },
           ),
       ],
+      bottomNavigationBar: BottomAppBar(
+        color: AppColors.white,
+        child: AppButton.primary(
+          onPressed: () async {
+            final isValid = _formKey.currentState!.validate();
+            if (!isValid) {
+              return;
+            }
+            _formKey.currentState!.save();
+
+            final updated = widget.product.copyWith(
+              image: image?.filename,
+              name: _controllerName.text,
+              mrpPrice: _controllerMRP.text.toDouble() ?? 0,
+              salePrice: _controllerSalePrice.text.toDouble(),
+              foodType: selectedFoodType,
+              taxSlabId: selectedTaxSlab?.id,
+              categoryId: selectedCategory?.id,
+              description: _controllerDescription.text,
+            );
+            await ref
+                .read(productRepositoryProvider)
+                .saveProduct(updated)
+                .then((value) {
+                  AppDialog.showMessage(
+                    this.context,
+                    message: 'Product updated successfully',
+                    type: MessageType.success,
+                  ).whenComplete(() => Navigator.pop(this.context));
+                })
+                .onError((error, stackTrace) {
+                  AppDialog.showMessage(
+                    this.context,
+                    message: 'Failed to update product',
+                    type: MessageType.error,
+                  );
+                });
+          },
+          label: 'Save',
+        ),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
         child: Form(
@@ -315,47 +355,6 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
               ),
             ],
           ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.white,
-        child: AppButton.primary(
-          onPressed: () async {
-            final isValid = _formKey.currentState!.validate();
-            if (!isValid) {
-              return;
-            }
-            _formKey.currentState!.save();
-
-            final updated = widget.product.copyWith(
-              image: image?.filename,
-              name: _controllerName.text,
-              mrpPrice: _controllerMRP.text.toDouble() ?? 0,
-              salePrice: _controllerSalePrice.text.toDouble(),
-              foodType: selectedFoodType,
-              taxSlabId: selectedTaxSlab?.id,
-              categoryId: selectedCategory?.id,
-              description: _controllerDescription.text,
-            );
-            await ref
-                .read(productRepositoryProvider)
-                .saveProduct(updated)
-                .then((value) {
-                  AppDialog.showMessage(
-                    this.context,
-                    message: 'Product updated successfully',
-                    type: MessageType.success,
-                  ).whenComplete(() => Navigator.pop(this.context));
-                })
-                .onError((error, stackTrace) {
-                  AppDialog.showMessage(
-                    this.context,
-                    message: 'Failed to update product',
-                    type: MessageType.error,
-                  );
-                });
-          },
-          label: 'Save',
         ),
       ),
     );

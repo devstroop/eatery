@@ -8,8 +8,7 @@ import 'package:eatery_core/widgets/app_dialog.dart';
 Color _pageColor = AppColors.menuCategories;
 
 class EditDiningTableCategoryPage extends ConsumerStatefulWidget {
-  const EditDiningTableCategoryPage({Key? key, required this.category})
-    : super(key: key);
+  const EditDiningTableCategoryPage({super.key, required this.category});
   final DiningTableCategory category;
 
   @override
@@ -50,6 +49,39 @@ class _EditDiningTableCategoryPageState
             },
           ),
       ],
+      bottomNavigationBar: BottomAppBar(
+        color: AppColors.white,
+        child: AppButton.primary(
+          onPressed: () async {
+            if (!_formKey.currentState!.validate()) {
+              return;
+            }
+            _formKey.currentState!.save();
+            final updated = widget.category.copyWith(
+              name: _controllerCategoryName.text,
+              description: _controllerCategoryDescription.text,
+            );
+            final repo = ref.read(diningTableRepositoryProvider) as dynamic;
+            repo
+                .saveCategory(updated)
+                .then(
+                  (value) => AppDialog.showMessage(
+                    context,
+                    message: 'Updated successfully',
+                    type: MessageType.success,
+                  ).then((value) => Navigator.pop(this.context)),
+                )
+                .onError(
+                  (error, stackTrace) => AppDialog.showMessage(
+                    context,
+                    message: 'Can\'t update',
+                    type: MessageType.error,
+                  ),
+                );
+          },
+          label: 'Update',
+        ),
+      ),
       child: InkWell(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -98,39 +130,6 @@ class _EditDiningTableCategoryPageState
               ],
             ),
           ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.white,
-        child: AppButton.primary(
-          onPressed: () async {
-            if (!_formKey.currentState!.validate()) {
-              return;
-            }
-            _formKey.currentState!.save();
-            final updated = widget.category.copyWith(
-              name: _controllerCategoryName.text,
-              description: _controllerCategoryDescription.text,
-            );
-            final repo = ref.read(diningTableRepositoryProvider) as dynamic;
-            repo
-                .saveCategory(updated)
-                .then(
-                  (value) => AppDialog.showMessage(
-                    context,
-                    message: 'Updated successfully',
-                    type: MessageType.success,
-                  ).then((value) => Navigator.pop(this.context)),
-                )
-                .onError(
-                  (error, stackTrace) => AppDialog.showMessage(
-                    context,
-                    message: 'Can\'t update',
-                    type: MessageType.error,
-                  ),
-                );
-          },
-          label: 'Update',
         ),
       ),
     );

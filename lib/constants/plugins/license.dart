@@ -4,7 +4,7 @@ class License {
   DateTime? validFrom;
   DateTime? validTill;
 
-  validate(Function(DateTime? validFrom, DateTime? validTill)? callback) {
+  void validate(Function(DateTime? validFrom, DateTime? validTill)? callback) {
     if (purchaseCode == "12345678") {
       validFrom = DateTime.now();
       validTill = DateTime.now().add(const Duration(days: 365));

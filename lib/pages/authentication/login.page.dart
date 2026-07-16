@@ -15,7 +15,7 @@ import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:go_router/go_router.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+  const LoginPage({super.key});
 
   @override
   ConsumerState<LoginPage> createState() => _LoginPageState();
@@ -276,10 +276,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
                         _submit();
                       },
                       validator: (value) {
-                        if (value == null || value.trim().isEmpty)
+                        if (value == null || value.trim().isEmpty) {
                           return 'PIN cannot be blank';
-                        if (!value.trim().isNumericOnly)
+                        }
+                        if (!value.trim().isNumericOnly) {
                           return 'Invalid character';
+                        }
                         return null;
                       },
                     ),

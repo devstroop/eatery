@@ -14,7 +14,7 @@ import 'package:http/http.dart' as http;
 final _pageColor = AppColors.menuCategories;
 
 class DataManagementPage extends ConsumerStatefulWidget {
-  const DataManagementPage({Key? key}) : super(key: key);
+  const DataManagementPage({super.key});
 
   @override
   ConsumerState<DataManagementPage> createState() => _DataManagementPageState();

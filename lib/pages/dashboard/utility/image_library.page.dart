@@ -8,8 +8,7 @@ class ImageLibraryPage extends ConsumerStatefulWidget {
   final BuildContext context;
   final Function(LibraryImage? libraryImage) action;
 
-  const ImageLibraryPage(this.context, this.action, {Key? key})
-    : super(key: key);
+  const ImageLibraryPage(this.context, this.action, {super.key});
 
   @override
   ConsumerState<ImageLibraryPage> createState() => _ImageLibraryPageState();
@@ -271,7 +270,7 @@ class _ImageLibraryPageState extends ConsumerState<ImageLibraryPage> {
     );
   }
 
-  onLinkAttachPressed(
+  void onLinkAttachPressed(
     BuildContext context, {
     String? link,
     Function(String)? callback,

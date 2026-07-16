@@ -1,6 +1,7 @@
 import 'package:eatery_core/utils/responsive.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/data/sync/mutation_hook.dart';
 import 'package:eatery_core/providers/database_provider.dart';
@@ -10,7 +11,7 @@ import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 
 class CreateCompanyPage extends ConsumerStatefulWidget {
-  const CreateCompanyPage({Key? key}) : super(key: key);
+  const CreateCompanyPage({super.key});
 
   @override
   ConsumerState<CreateCompanyPage> createState() => _CreateCompanyPageState();
@@ -344,13 +345,13 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 640),
                 child: Padding(
-                  padding: SpacingStyle.defaultPadding,
+                  padding: EdgeInsets.all(AppSpacing.md),
                   child: steps[viewIndex],
                 ),
               ),
             )
           : Padding(
-              padding: SpacingStyle.defaultPadding,
+              padding: EdgeInsets.all(AppSpacing.md),
               child: steps[viewIndex],
             ),
       bottomNavigationBar: isDesktop

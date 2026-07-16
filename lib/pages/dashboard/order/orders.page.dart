@@ -12,7 +12,7 @@ import 'package:go_router/go_router.dart';
 final Color _pageColor = AppColors.warning;
 
 class OrdersPage extends ConsumerStatefulWidget {
-  const OrdersPage({Key? key}) : super(key: key);
+  const OrdersPage({super.key});
 
   @override
   ConsumerState<OrdersPage> createState() => _OrdersPageState();
@@ -150,7 +150,7 @@ class _OrderCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              '${currencySymbol}${order.finalTotal.toStringAsFixed(2)}',
+              '$currencySymbol${order.finalTotal.toStringAsFixed(2)}',
               style: AppTypography.headlineSmall,
             ),
             Container(
@@ -175,21 +175,21 @@ class _OrderCard extends StatelessWidget {
             Text('Customer Phone: ${order.customerPhone ?? 'N/A'}'),
             Text('Total Quantity: ${order.totalQuantity}'),
             Text(
-              'Sub Total: ${currencySymbol}${order.subTotal.toStringAsFixed(2)}',
+              'Sub Total: $currencySymbol${order.subTotal.toStringAsFixed(2)}',
             ),
             Text(
-              'Discount: ${currencySymbol}${order.discountTotal.toStringAsFixed(2)}',
+              'Discount: $currencySymbol${order.discountTotal.toStringAsFixed(2)}',
             ),
-            Text('Tax: ${currencySymbol}${order.taxTotal.toStringAsFixed(2)}'),
+            Text('Tax: $currencySymbol${order.taxTotal.toStringAsFixed(2)}'),
             Text(
-              'Round Off: ${currencySymbol}${order.roundOff.toStringAsFixed(2)}',
+              'Round Off: $currencySymbol${order.roundOff.toStringAsFixed(2)}',
             ),
             Text(
-              'Grand Total: ${currencySymbol}${order.grandTotal.toStringAsFixed(2)}',
+              'Grand Total: $currencySymbol${order.grandTotal.toStringAsFixed(2)}',
             ),
             if (order.paidTotal != null)
               Text(
-                'Paid Total: ${currencySymbol}${order.paidTotal!.toStringAsFixed(2)}',
+                'Paid Total: $currencySymbol${order.paidTotal!.toStringAsFixed(2)}',
               ),
           ],
         ),

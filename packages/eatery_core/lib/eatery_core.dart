@@ -1,4 +1,4 @@
-library eatery_core;
+library;
 
 /// Models
 export 'data/models/eatery_db.dart';

@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/data/models/eatery_db.dart';
 import 'package:eatery_core/data/database/native/eatery_store.dart';
-import 'package:eatery_core/providers/database_provider.dart';
 
 /// Tracks the currently authenticated staff member.
 ///

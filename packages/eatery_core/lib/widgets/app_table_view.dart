@@ -101,8 +101,9 @@ class _DesktopTable extends StatelessWidget {
               child: DataTable(
                 headingRowColor: WidgetStateProperty.all(AppColors.grey50),
                 dataRowColor: WidgetStateProperty.resolveWith((states) {
-                  if (states.contains(WidgetState.hovered))
+                  if (states.contains(WidgetState.hovered)) {
                     return AppColors.grey50;
+                  }
                   return AppColors.white;
                 }),
                 columnSpacing: AppSpacing.xl,
@@ -182,7 +183,7 @@ class _MobileCardList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        if (header != null) header!,
+        ?header,
         Expanded(
           child: ListView.builder(
             padding: const EdgeInsets.all(AppSpacing.sm),

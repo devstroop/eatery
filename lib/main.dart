@@ -149,7 +149,7 @@ Future<void> startSync(WidgetRef ref) async {
 /// Role-aware entry widget that reads the device role and renders
 /// the appropriate shell.
 class RoleShell extends ConsumerStatefulWidget {
-  const RoleShell({Key? key}) : super(key: key);
+  const RoleShell({super.key});
 
   @override
   ConsumerState<RoleShell> createState() => _RoleShellState();

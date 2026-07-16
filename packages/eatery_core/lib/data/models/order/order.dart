@@ -1,6 +1,5 @@
 import 'package:eatery_core/data/models/eatery_db.dart';
 import 'package:eatery_core/data/models/converters.dart';
-import 'package:eatery_core/data/models/order/order_status.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'order.freezed.dart';

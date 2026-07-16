@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:eatery_core/data/database/native/eatery_store_isolate.dart';
 import 'package:eatery_core/data/models/eatery_db.dart';
 

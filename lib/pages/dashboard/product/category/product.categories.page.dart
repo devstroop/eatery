@@ -10,7 +10,7 @@ import 'package:go_router/go_router.dart';
 Color _pageColor = AppColors.menuCategories;
 
 class ProductCategoriesPage extends ConsumerStatefulWidget {
-  const ProductCategoriesPage({Key? key}) : super(key: key);
+  const ProductCategoriesPage({super.key});
 
   @override
   ConsumerState<ProductCategoriesPage> createState() =>
@@ -133,7 +133,7 @@ class _ProductCategoriesPageState extends ConsumerState<ProductCategoriesPage> {
     );
   }
 
-  _onCategoryDelete(BuildContext context, ProductCategory category) {
+  void _onCategoryDelete(BuildContext context, ProductCategory category) {
     final repo = ref.read(productRepositoryProvider);
     Navigator.pop(context);
     showDialog(

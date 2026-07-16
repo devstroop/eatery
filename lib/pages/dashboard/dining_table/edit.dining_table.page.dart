@@ -9,8 +9,7 @@ import 'package:eatery_core/widgets/app_dialog.dart';
 Color _pageColor = AppColors.menuCategories;
 
 class EditDiningTablePage extends ConsumerStatefulWidget {
-  const EditDiningTablePage({Key? key, required this.diningTable})
-    : super(key: key);
+  const EditDiningTablePage({super.key, required this.diningTable});
   final DiningTable diningTable;
   @override
   ConsumerState<EditDiningTablePage> createState() =>
@@ -61,6 +60,47 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
             },
           ),
       ],
+      bottomNavigationBar: BottomAppBar(
+        color: AppColors.white,
+        child: AppButton.primary(
+          onPressed: () async {
+            if (!_formKey.currentState!.validate()) {
+              return;
+            }
+
+            DiningTable diningTable = ref
+                .read(diningTableRepositoryProvider)
+                .getTableById(widget.diningTable.id!)!;
+
+            diningTable = diningTable.copyWith(
+              name: _controllerCategoryName.text,
+              description: _controllerCategoryDescription.text,
+              categoryId: diningTableCategory?.id,
+              status: status,
+              capacity: int.parse(_controllerCapacity.text),
+            );
+
+            await ref
+                .read(diningTableRepositoryProvider)
+                .saveTable(diningTable)
+                .then((value) {
+                  AppDialog.showMessage(
+                    context,
+                    message: 'Successfully updated',
+                    type: MessageType.success,
+                  ).then((value) => Navigator.of(this.context).pop());
+                })
+                .onError((error, stackTrace) {
+                  AppDialog.showMessage(
+                    context,
+                    message: 'Failed to update',
+                    type: MessageType.error,
+                  );
+                });
+          },
+          label: 'Update',
+        ),
+      ),
       child: InkWell(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -130,8 +170,8 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
                   child: ListView(
                     scrollDirection: Axis.horizontal,
                     children: [
-                      PosCategoryWidget(
-                        active: diningTableCategory == null,
+                      AppCategoryChip(
+                        selected: diningTableCategory == null,
                         label: 'None',
                         onTap: () {
                           setState(() {
@@ -143,8 +183,8 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
                           .read(diningTableRepositoryProvider)
                           .getAllCategories()
                           .map((e) {
-                            return PosCategoryWidget(
-                              active: diningTableCategory?.id == e.id,
+                            return AppCategoryChip(
+                              selected: diningTableCategory?.id == e.id,
                               label: e.name,
                               onTap: () {
                                 setState(() {
@@ -170,57 +210,16 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
           ),
         ),
       ),
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.white,
-        child: AppButton.primary(
-          onPressed: () async {
-            if (!_formKey.currentState!.validate()) {
-              return;
-            }
-
-            DiningTable diningTable = ref
-                .read(diningTableRepositoryProvider)
-                .getTableById(widget.diningTable.id!)!;
-
-            diningTable = diningTable.copyWith(
-              name: _controllerCategoryName.text,
-              description: _controllerCategoryDescription.text,
-              categoryId: diningTableCategory?.id,
-              status: status,
-              capacity: int.parse(_controllerCapacity.text),
-            );
-
-            await ref
-                .read(diningTableRepositoryProvider)
-                .saveTable(diningTable)
-                .then((value) {
-                  AppDialog.showMessage(
-                    context,
-                    message: 'Successfully updated',
-                    type: MessageType.success,
-                  ).then((value) => Navigator.of(this.context).pop());
-                })
-                .onError((error, stackTrace) {
-                  AppDialog.showMessage(
-                    context,
-                    message: 'Failed to update',
-                    type: MessageType.error,
-                  );
-                });
-          },
-          label: 'Update',
-        ),
-      ),
     );
   }
 }
 
 class DiningTableStatusWidget extends StatelessWidget {
   const DiningTableStatusWidget({
-    Key? key,
+    super.key,
     required this.status,
     required this.onTap,
-  }) : super(key: key);
+  });
 
   final DiningTableStatus status;
   final VoidCallback onTap;

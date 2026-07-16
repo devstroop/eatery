@@ -97,8 +97,9 @@ void _txn(
 ) {
   try {
     store.execute('BEGIN IMMEDIATE');
-    for (final c in cmds)
+    for (final c in cmds) {
       store.execute(c['sql'] as String, c['params'] as List<Object?>?);
+    }
     store.execute('COMMIT');
     ok('ok');
   } catch (e) {

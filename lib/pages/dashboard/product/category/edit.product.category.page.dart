@@ -8,8 +8,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 Color _pageColor = AppColors.menuCategories;
 
 class EditProductCategoryPage extends ConsumerStatefulWidget {
-  const EditProductCategoryPage({Key? key, required this.category})
-    : super(key: key);
+  const EditProductCategoryPage({super.key, required this.category});
   final ProductCategory category;
 
   @override
@@ -50,6 +49,34 @@ class _EditProductCategoryPageState
             },
           ),
       ],
+      bottomNavigationBar: BottomAppBar(
+        color: AppColors.white,
+        child: AppButton.primary(
+          onPressed: () async {
+            try {
+              final updated = widget.category.copyWith(
+                name: _controllerCategoryName.text.trim(),
+                description: _controllerDescription.text.trim(),
+                image: pickedLibraryImage?.filename,
+              );
+              final repo = ref.read(productRepositoryProvider);
+              await repo.saveCategory(updated);
+              AppDialog.showMessage(
+                context,
+                message: 'Updated successfully',
+                type: MessageType.success,
+              ).then((value) => Navigator.pop(context));
+            } catch (_) {
+              AppDialog.showMessage(
+                context,
+                message: 'Failed to update',
+                type: MessageType.error,
+              );
+            }
+          },
+          label: 'Update',
+        ),
+      ),
       child: InkWell(
         onTap: () {
           FocusScope.of(context).unfocus();
@@ -100,34 +127,6 @@ class _EditProductCategoryPageState
               const SizedBox(height: 6.0),
             ],
           ),
-        ),
-      ),
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.white,
-        child: AppButton.primary(
-          onPressed: () async {
-            try {
-              final updated = widget.category.copyWith(
-                name: _controllerCategoryName.text.trim(),
-                description: _controllerDescription.text.trim(),
-                image: pickedLibraryImage?.filename,
-              );
-              final repo = ref.read(productRepositoryProvider);
-              await repo.saveCategory(updated);
-              AppDialog.showMessage(
-                context,
-                message: 'Updated successfully',
-                type: MessageType.success,
-              ).then((value) => Navigator.pop(context));
-            } catch (_) {
-              AppDialog.showMessage(
-                context,
-                message: 'Failed to update',
-                type: MessageType.error,
-              );
-            }
-          },
-          label: 'Update',
         ),
       ),
     );

@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 class CreateCompanyResultPage extends ConsumerStatefulWidget {
-  const CreateCompanyResultPage({Key? key}) : super(key: key);
+  const CreateCompanyResultPage({super.key});
 
   @override
   ConsumerState<CreateCompanyResultPage> createState() =>

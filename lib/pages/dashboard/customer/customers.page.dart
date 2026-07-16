@@ -13,7 +13,7 @@ import 'package:eatery_core/providers/order_provider.dart';
 Color _pageColor = AppColors.primary;
 
 class CustomersPage extends ConsumerStatefulWidget {
-  const CustomersPage({Key? key}) : super(key: key);
+  const CustomersPage({super.key});
 
   @override
   ConsumerState<CustomersPage> createState() => _CustomersPageState();
