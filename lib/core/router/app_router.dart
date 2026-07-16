@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/data/database/eatery_database.dart';
-import 'package:eatery_core/data/repositories/company_repository_sqlite.dart';
-import 'package:eatery_core/data/models/eatery_db.dart';
 import 'package:eatery_core/providers/auth_session.dart';
 import 'package:eatery_core/providers/role_provider.dart';
 import 'package:eatery/pages/authentication/login.page.dart';
@@ -115,17 +113,8 @@ const _roleHome = <String, String>{
 };
 
 GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
-  String? password;
-  try {
-    final repo = SqliteCompanyRepository(
-      store: store ?? EateryStore.open(':memory:'),
-    );
-    password = repo.getCurrentCompany()?.password;
-  } catch (_) {}
   final router = GoRouter(
-    initialLocation: db.hasCompany
-        ? (password != null ? '/login' : '/dashboard')
-        : '/',
+    initialLocation: db.hasCompany ? '/login' : '/',
     routes: [
       // ── Public / onboarding routes ──────────────────────────────
       GoRoute(
