@@ -10,10 +10,11 @@ Future<String?> getDeviceId() async {
   try {
     if (Platform.isMacOS) {
       // On macOS, use the hardware UUID from I/O registry
-      final result = await Process.run(
-        'ioreg',
-        ['-rd1', '-c', 'IOPlatformExpertDevice'],
-      );
+      final result = await Process.run('ioreg', [
+        '-rd1',
+        '-c',
+        'IOPlatformExpertDevice',
+      ]);
       if (result.exitCode == 0) {
         for (final line in (result.stdout as String).split('\n')) {
           if (line.contains('IOPlatformUUID')) {
@@ -30,10 +31,7 @@ Future<String?> getDeviceId() async {
         }
       }
     } else if (Platform.isWindows) {
-      final result = await Process.run(
-        'wmic',
-        ['csproduct', 'get', 'UUID'],
-      );
+      final result = await Process.run('wmic', ['csproduct', 'get', 'UUID']);
       if (result.exitCode == 0) {
         final lines = (result.stdout as String).split('\n');
         if (lines.length >= 2) return lines[1].trim();

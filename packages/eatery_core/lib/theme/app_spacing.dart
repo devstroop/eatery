@@ -63,46 +63,57 @@ abstract final class AppSpacing {
   static const double buttonHeightSm = 36;
   static const double buttonHeightMd = 48;
   static const double buttonHeightLg = 56;
-  static const double buttonRadius   = radiusLg;
+  static const double buttonRadius = radiusLg;
 
-  static const EdgeInsets buttonPaddingSm
-      = EdgeInsets.symmetric(horizontal: 16, vertical: 8);
-  static const EdgeInsets buttonPaddingLg
-      = EdgeInsets.symmetric(horizontal: 32, vertical: 16);
+  static const EdgeInsets buttonPaddingSm = EdgeInsets.symmetric(
+    horizontal: 16,
+    vertical: 8,
+  );
+  static const EdgeInsets buttonPaddingLg = EdgeInsets.symmetric(
+    horizontal: 32,
+    vertical: 16,
+  );
 
   // ── Icon ───────────────────────────────────────────────────────
   static const double iconSizeSm = 16;
   static const double iconSizeMd = 24;
   static const double iconSizeLg = 32;
-  static const double iconGapSm  = 6;
-  static const double iconGapMd  = 8;
-  static const double iconGapLg  = 12;
+  static const double iconGapSm = 6;
+  static const double iconGapMd = 8;
+  static const double iconGapLg = 12;
 
   // ── Card ───────────────────────────────────────────────────────
   static const double cardRadius = radiusLg;
 
   // ── SelectCard ─────────────────────────────────────────────────
-  static const double selectCardRadius      = 6;
-  static const double selectCardRadioSize   = 24;
-  static const double selectCardRadioInner  = 10;
+  static const double selectCardRadius = 6;
+  static const double selectCardRadioSize = 24;
+  static const double selectCardRadioInner = 10;
   static const double selectCardRadioOffset = 7;
 
   // ── TextField ──────────────────────────────────────────────────
-  static const double fieldRadius   = radiusLg;
+  static const double fieldRadius = radiusLg;
   static const double fieldLabelGap = xs;
 
   // ── BottomSheet grip ───────────────────────────────────────────
-  static const double bottomSheetGripWidth  = 60;
+  static const double bottomSheetGripWidth = 60;
   static const double bottomSheetGripHeight = 5;
   static const double bottomSheetGripRadius = 2;
-  static const EdgeInsets bottomSheetGripMargin
-      = EdgeInsets.fromLTRB(0, 8, 0, 16);
+  static const EdgeInsets bottomSheetGripMargin = EdgeInsets.fromLTRB(
+    0,
+    8,
+    0,
+    16,
+  );
 
   // ── Category chip ──────────────────────────────────────────────
-  static const EdgeInsets categoryChipPadding
-      = EdgeInsets.symmetric(horizontal: 8);
-  static const EdgeInsets categoryChipImagePadding
-      = EdgeInsets.symmetric(vertical: 6, horizontal: 6);
+  static const EdgeInsets categoryChipPadding = EdgeInsets.symmetric(
+    horizontal: 8,
+  );
+  static const EdgeInsets categoryChipImagePadding = EdgeInsets.symmetric(
+    vertical: 6,
+    horizontal: 6,
+  );
   static const double categoryChipRadius = radiusLg;
 
   // ── Notification ───────────────────────────────────────────────
@@ -116,13 +127,13 @@ abstract final class AppSpacing {
   static const double orderTypeButtonGap = 6;
 
   // ── Product card ───────────────────────────────────────────────
-  static const double cardGapY          = 9;
-  static const double cardBadgeOffset   = 12;
+  static const double cardGapY = 9;
+  static const double cardBadgeOffset = 12;
   static const double productCardRadius = 6;
   static const double productCardMargin = 9;
   static const double productCardInfoPad = 6;
   static const double productCardIconSize = 18;
-  static const double productCardCartHSym  = 1;
-  static const double productCardCartVSym  = 0.5;
-  static const double productCardQtyGap    = 4;
+  static const double productCardCartHSym = 1;
+  static const double productCardCartVSym = 0.5;
+  static const double productCardQtyGap = 4;
 }

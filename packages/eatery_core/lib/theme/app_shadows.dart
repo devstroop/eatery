@@ -38,10 +38,6 @@ abstract final class AppShadows {
 
   /// Notification card
   static const List<BoxShadow> notification = [
-    BoxShadow(
-      color: AppColors.shadowDark,
-      blurRadius: 4,
-      offset: Offset(0, 2),
-    ),
+    BoxShadow(color: AppColors.shadowDark, blurRadius: 4, offset: Offset(0, 2)),
   ];
 }

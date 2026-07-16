@@ -104,38 +104,58 @@ abstract final class AppTypography {
   // ── Component-specific tokens ─────────────────────────────────
   /// Button labels
   static const TextStyle buttonLabelSm = labelLarge;
-  static const TextStyle buttonLabelMd
-      = TextStyle(fontSize: 16, fontWeight: FontWeight.w600);
-  static const TextStyle buttonLabelLg
-      = TextStyle(fontSize: 18, fontWeight: FontWeight.w600);
+  static const TextStyle buttonLabelMd = TextStyle(
+    fontSize: 16,
+    fontWeight: FontWeight.w600,
+  );
+  static const TextStyle buttonLabelLg = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+  );
 
   /// Form fields
   static const TextStyle fieldLabel = labelMedium;
   static const TextStyle fieldValue = bodyMedium;
 
   /// Selectable card
-  static const TextStyle selectCardHeader    = bodyMedium;
-  static const TextStyle selectCardTitle
-      = TextStyle(fontSize: 18, fontWeight: FontWeight.bold);
+  static const TextStyle selectCardHeader = bodyMedium;
+  static const TextStyle selectCardTitle = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.bold,
+  );
   static const TextStyle selectCardHighlight = bodySmall;
 
   /// Order-type button label
-  static const TextStyle orderTypeButton
-      = TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: AppColors.grey800);
+  static const TextStyle orderTypeButton = TextStyle(
+    fontSize: 18,
+    fontWeight: FontWeight.w600,
+    color: AppColors.grey800,
+  );
 
   /// Badge label
-  static const TextStyle badgeLabel
-      = TextStyle(fontSize: 10, fontWeight: FontWeight.w500);
+  static const TextStyle badgeLabel = TextStyle(
+    fontSize: 10,
+    fontWeight: FontWeight.w500,
+  );
 
   /// Product card
-  static const TextStyle productCardName
-      = TextStyle(fontSize: 12, fontWeight: FontWeight.w600);
-  static const TextStyle productCardDesc
-      = TextStyle(fontSize: 10, fontWeight: FontWeight.w400);
-  static const TextStyle productCardPrice
-      = TextStyle(fontSize: 12, fontWeight: FontWeight.bold);
-  static const TextStyle productCardPriceStrike
-      = TextStyle(fontSize: 10, fontWeight: FontWeight.w600, decoration: TextDecoration.lineThrough);
+  static const TextStyle productCardName = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.w600,
+  );
+  static const TextStyle productCardDesc = TextStyle(
+    fontSize: 10,
+    fontWeight: FontWeight.w400,
+  );
+  static const TextStyle productCardPrice = TextStyle(
+    fontSize: 12,
+    fontWeight: FontWeight.bold,
+  );
+  static const TextStyle productCardPriceStrike = TextStyle(
+    fontSize: 10,
+    fontWeight: FontWeight.w600,
+    decoration: TextDecoration.lineThrough,
+  );
 
   // ── Responsive helpers ─────────────────────────────────────────
   /// For screen-width dependent sizing, use `Responsive.headlineSize(context)`

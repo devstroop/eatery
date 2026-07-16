@@ -31,8 +31,12 @@ class AppCategoryChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bg = selected ? AppColors.categoryChipActiveBg : AppColors.categoryChipInactiveBg;
-    final fg = selected ? AppColors.categoryChipActiveFg : AppColors.categoryChipInactiveFg;
+    final bg = selected
+        ? AppColors.categoryChipActiveBg
+        : AppColors.categoryChipInactiveBg;
+    final fg = selected
+        ? AppColors.categoryChipActiveFg
+        : AppColors.categoryChipInactiveFg;
 
     return Padding(
       padding: const EdgeInsets.only(bottom: 6, right: 12),
@@ -47,7 +51,9 @@ class AppCategoryChip extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               color: bg,
-              borderRadius: BorderRadius.circular(AppSpacing.categoryChipRadius),
+              borderRadius: BorderRadius.circular(
+                AppSpacing.categoryChipRadius,
+              ),
               border: Border.all(color: bg, width: 1),
             ),
             alignment: Alignment.center,

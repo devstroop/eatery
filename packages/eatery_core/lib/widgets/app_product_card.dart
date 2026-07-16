@@ -59,7 +59,9 @@ class AppProductCard extends StatelessWidget {
         children: [
           Container(
             foregroundDecoration: inactiveOverlay,
-            margin: EdgeInsets.symmetric(horizontal: AppSpacing.productCardMargin),
+            margin: EdgeInsets.symmetric(
+              horizontal: AppSpacing.productCardMargin,
+            ),
             decoration: BoxDecoration(
               boxShadow: AppShadows.cardElevated,
               borderRadius: cardRadius,
@@ -80,14 +82,22 @@ class AppProductCard extends StatelessWidget {
                             decoration: BoxDecoration(
                               color: AppColors.white,
                               borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(AppSpacing.productCardRadius),
-                                topRight: Radius.circular(AppSpacing.productCardRadius),
+                                topLeft: Radius.circular(
+                                  AppSpacing.productCardRadius,
+                                ),
+                                topRight: Radius.circular(
+                                  AppSpacing.productCardRadius,
+                                ),
                               ),
                             ),
                             child: ClipRRect(
                               borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(AppSpacing.productCardRadius),
-                                topRight: Radius.circular(AppSpacing.productCardRadius),
+                                topLeft: Radius.circular(
+                                  AppSpacing.productCardRadius,
+                                ),
+                                topRight: Radius.circular(
+                                  AppSpacing.productCardRadius,
+                                ),
                               ),
                               child: image,
                             ),
@@ -119,9 +129,11 @@ class AppProductCard extends StatelessWidget {
   }
 
   Widget _buildInfoSection() {
-    final hasPriceRow = (salePrice != null || mrpPrice != null) &&
+    final hasPriceRow =
+        (salePrice != null || mrpPrice != null) &&
         (onAdd != null || onRemove != null);
-    final showMrpStrike = salePrice != null && mrpPrice != null && salePrice != mrpPrice;
+    final showMrpStrike =
+        salePrice != null && mrpPrice != null && salePrice != mrpPrice;
 
     return Container(
       padding: EdgeInsets.all(AppSpacing.productCardInfoPad),
@@ -222,7 +234,11 @@ class AppProductCard extends StatelessWidget {
             if (cartQuantity > 0)
               InkWell(
                 onTap: onRemove,
-                child: Icon(Icons.remove, color: themeColor, size: AppSpacing.productCardIconSize),
+                child: Icon(
+                  Icons.remove,
+                  color: themeColor,
+                  size: AppSpacing.productCardIconSize,
+                ),
               ),
             if (cartQuantity > 0)
               Padding(
@@ -232,12 +248,18 @@ class AppProductCard extends StatelessWidget {
                 ),
                 child: Text(
                   cartQuantity.toString(),
-                  style: AppTypography.labelSmall.copyWith(fontWeight: FontWeight.w600),
+                  style: AppTypography.labelSmall.copyWith(
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
               ),
             InkWell(
               onTap: onAdd,
-              child: Icon(Icons.add, color: themeColor, size: AppSpacing.productCardIconSize),
+              child: Icon(
+                Icons.add,
+                color: themeColor,
+                size: AppSpacing.productCardIconSize,
+              ),
             ),
           ],
         ),

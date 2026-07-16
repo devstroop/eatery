@@ -189,10 +189,12 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                       labelText: 'Taxation',
                       border: OutlineInputBorder(),
                     ),
-                    items: Taxation.values.map((t) => DropdownMenuItem(
-                      value: t,
-                      child: Text(t.name),
-                    )).toList(),
+                    items: Taxation.values
+                        .map(
+                          (t) =>
+                              DropdownMenuItem(value: t, child: Text(t.name)),
+                        )
+                        .toList(),
                     onChanged: (v) {
                       if (v != null && v != selectedTaxation) {
                         _controllerSalesTaxNo.clear();
@@ -227,10 +229,7 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                       ),
                       child: Row(
                         children: [
-                          Text(
-                            'Currency',
-                            style: AppTypography.bodyMedium,
-                          ),
+                          Text('Currency', style: AppTypography.bodyMedium),
                           const Spacer(),
                           Text(
                             selectedCurrencyCode ?? 'Not Selected',
@@ -259,8 +258,10 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
                   AppFormField(
                     keyboardType: TextInputType.text,
                     controller: _controllerFoodLicNo,
-                    label: '${selectedTaxation == Taxation.gst ? 'FSSAI' : 'Food'} License No',
-                    hint: 'Enter ${selectedTaxation == Taxation.gst ? 'FSSAI' : 'Food'} license number...',
+                    label:
+                        '${selectedTaxation == Taxation.gst ? 'FSSAI' : 'Food'} License No',
+                    hint:
+                        'Enter ${selectedTaxation == Taxation.gst ? 'FSSAI' : 'Food'} license number...',
                     focusNode: focus6,
                     focusNext: focus7,
                     validator: (value) {
