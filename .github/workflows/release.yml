@@ -102,7 +102,6 @@ jobs:
           LIB_TYPE="${{ matrix.native-lib-type || 'shared-lib' }}"
 
           if [ "${{ matrix.target }}" = "ios" ]; then
-          if [ "${{ matrix.target }}" = "ios" ]; then
             # iOS: cross-compile static library for aarch64.
             # Set IOS_SDK_PATH so setupIosSdk() in build.zig can find SDK
             # headers (no linkLibC needed for static libraries).
