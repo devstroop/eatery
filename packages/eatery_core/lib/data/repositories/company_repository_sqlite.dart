@@ -25,35 +25,75 @@ class SqliteCompanyRepository implements CompanyRepository {
 
   @override
   Future<void> saveCompany(Company company) async {
+    final now = DateTime.now().millisecondsSinceEpoch;
     final m = company.toMap();
+
+    // Company is a singleton — the model defaults id to 1 (@Default(1)).
+    // Check DB existence rather than relying on id nullability to
+    // distinguish INSERT vs UPDATE.
+    final exists =
+        company.id != null &&
+        _store.queryScalar('SELECT 1 FROM company WHERE id = ?', [
+              company.id,
+            ]) !=
+            null;
     final id =
         company.id ??
         (_store.queryScalar('SELECT COALESCE(MAX(id), 0) + 1 FROM company')
             as int);
-    _store.execute(
-      '''
-      INSERT OR REPLACE INTO company
-        (id, logo, name, email, phone, address, taxation,
-         currencyCode, salesTaxNumber, foodLicenseNo, subscriptionId,
-         adminEmployeeId)
-      VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
-    ''',
-      [
-        id,
-        m['logo'],
-        m['name'],
-        m['email'],
-        m['phone'],
-        m['address'],
-        m['taxation'],
-        m['currencyCode'],
-        m['salesTaxNumber'],
-        m['foodLicenseNo'],
-        m['subscriptionId'],
-        m['adminEmployeeId'],
-      ],
-    );
-    company = company.copyWith(id: id);
+
+    if (exists) {
+      _store.execute(
+        '''
+        UPDATE company SET
+          logo=?, name=?, email=?, phone=?, address=?, taxation=?,
+          currencyCode=?, salesTaxNumber=?, foodLicenseNo=?,
+          subscriptionId=?, adminEmployeeId=?, updatedAt=?
+        WHERE id=?
+      ''',
+        [
+          m['logo'],
+          m['name'],
+          m['email'],
+          m['phone'],
+          m['address'],
+          m['taxation'],
+          m['currencyCode'],
+          m['salesTaxNumber'],
+          m['foodLicenseNo'],
+          m['subscriptionId'],
+          m['adminEmployeeId'],
+          now,
+          id,
+        ],
+      );
+    } else {
+      _store.execute(
+        '''
+        INSERT INTO company
+          (id, logo, name, email, phone, address, taxation,
+           currencyCode, salesTaxNumber, foodLicenseNo, subscriptionId,
+           adminEmployeeId, createdAt, updatedAt)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+      ''',
+        [
+          id,
+          m['logo'],
+          m['name'],
+          m['email'],
+          m['phone'],
+          m['address'],
+          m['taxation'],
+          m['currencyCode'],
+          m['salesTaxNumber'],
+          m['foodLicenseNo'],
+          m['subscriptionId'],
+          m['adminEmployeeId'],
+          m['createdAt'] ?? now,
+          now,
+        ],
+      );
+    }
     notifyMutation('company', id, 'save', company.toMap());
   }
 
@@ -123,6 +163,10 @@ class SqliteCompanyRepository implements CompanyRepository {
       subscriptionId: row['subscriptionId'] as int?,
       adminEmployeeId: row['adminEmployeeId'] as int?,
       id: row['id'] as int,
+      createdAt: DateTime.fromMillisecondsSinceEpoch(row['createdAt'] as int),
+      updatedAt: row['updatedAt'] != null
+          ? DateTime.fromMillisecondsSinceEpoch(row['updatedAt'] as int)
+          : null,
     );
   }
 
