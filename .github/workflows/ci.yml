@@ -186,7 +186,7 @@ jobs:
       - name: Build ${{ matrix.target }}
         run: ${{ matrix.build-cmd }}
 
-  build-ios:
+  ios:
     name: ios
     runs-on: macos-15
     needs: [analyze, test]
