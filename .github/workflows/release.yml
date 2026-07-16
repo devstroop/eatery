@@ -1,81 +1,56 @@
-name: Eatery CI
+name: Eatery Release
 
 on:
   push:
-    branches: [master, dev]
-  pull_request:
-    branches: [master]
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Release version (e.g. 1.0.0)"
+        required: true
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
-  cancel-in-progress: true
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
 
 env:
   ZIG_VERSION: "0.15.2"
 
 jobs:
-  analyze:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.41.x'
-          channel: 'stable'
-
-      - name: Get dependencies
-        run: flutter pub get
-
-      - name: Analyze
-        run: flutter analyze --no-fatal-infos --no-fatal-warnings lib/
-
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: subosito/flutter-action@v2
-        with:
-          flutter-version: '3.41.x'
-          channel: 'stable'
-
-      - name: Get dependencies
-        run: flutter pub get
-
-      - uses: ./.github/actions/setup-zig
-        with:
-          version: ${{ env.ZIG_VERSION }}
-
-      - name: Build native library
-        run: cd libeaterystore && zig build shared-lib && cd ..
-
-      - name: Run all tests
-        run: flutter test
-
-      - name: Run core package tests
-        run: flutter test packages/eatery_core/test/
-
   build:
-    name: ${{ matrix.target }}
-    needs: [analyze, test]
     strategy:
       fail-fast: false
       matrix:
         include:
           - target: android
             os: ubuntu-latest
-            build-cmd: flutter build apk --debug
+            build-cmd: flutter build apk --release
+            artifact: build/app/outputs/flutter-apk/app-release.apk
+            artifact-name: eatery-android
+            build-native: true
+          - target: android-appbundle
+            os: ubuntu-latest
+            build-cmd: flutter build appbundle --release
+            artifact: build/app/outputs/bundle/release/app-release.aab
+            artifact-name: eatery-android-aab
             build-native: true
           - target: linux
             os: ubuntu-latest
-            build-cmd: flutter build linux --debug
+            build-cmd: flutter build linux --release
+            artifact: build/linux/x64/release/bundle/
+            artifact-name: eatery-linux
             build-native: true
           - target: macos
             os: macos-15
-            build-cmd: flutter build macos --debug
+            build-cmd: flutter build macos --release
+            artifact: build/macos/Build/Products/Release/
+            artifact-name: eatery-macos
             build-native: true
           - target: windows
             os: windows-latest
-            build-cmd: flutter build windows --debug
+            build-cmd: flutter build windows --release
+            artifact: build/windows/x64/runner/Release/
+            artifact-name: eatery-windows
             build-native: true
     runs-on: ${{ matrix.os }}
     steps:
@@ -186,10 +161,15 @@ jobs:
       - name: Build ${{ matrix.target }}
         run: ${{ matrix.build-cmd }}
 
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact-name }}
+          path: ${{ matrix.artifact }}
+
   build-ios:
     name: ios
     runs-on: macos-15
-    needs: [analyze, test]
     steps:
       - uses: actions/checkout@v4
 
@@ -211,4 +191,41 @@ jobs:
         run: flutter pub get
 
       - name: Build
-        run: flutter build ios --no-codesign
+        run: flutter build ios --release --no-codesign
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: eatery-ios
+          path: build/ios/iphoneos/
+
+  release:
+    needs: [build, build-ios]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+
+      - name: Generate release body
+        run: |
+          {
+            echo "## Release ${{ github.ref_name }}"
+            echo ""
+            echo "### Downloads"
+            echo ""
+            for dir in artifacts/*/; do
+              name=$(basename "$dir")
+              echo "- \`$name\`"
+            done
+          } > body.md
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: body.md
+          files: artifacts/**/*

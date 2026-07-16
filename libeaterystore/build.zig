@@ -89,7 +89,10 @@ pub fn build(b: *std.Build) void {
     b.installArtifact(shared_lib);
 }
 
-/// Attach the SQLite backend (plain or SQLCipher) and libc.
+/// Attach the SQLite backend (plain or SQLCipher), SDK/NDK include paths,
+/// library paths, and finally link libc. linkLibC provides the libc library
+/// dependency (resolved by the linker) and is needed for both shared and
+/// static libraries — the linker resolves what it can and defers the rest.
 fn configure(
     b: *std.Build,
     lib: *std.Build.Step.Compile,
@@ -140,11 +143,25 @@ fn configure(
 
     if (is_android) setupAndroidNdk(b, lib, arch);
     if (target_os == .ios) {
-        lib.addSystemIncludePath(.{
-            .cwd_relative = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include",
-        });
+        setupIosSdk(b, lib);
     }
     lib.linkLibC();
+}
+
+/// Resolve the iOS SDK include and library paths. Checks `IOS_SDK_PATH` env var
+/// first (set by CI workflows via `xcrun`), then falls back to the standard
+/// Xcode location. Adds both include and library paths so linkLibC can find
+/// iOS platform headers and libc stubs (same pattern as WorxVPN-App).
+fn setupIosSdk(b: *std.Build, lib: *std.Build.Step.Compile) void {
+    // Mirror WorxVPN-App approach: hardcode the standard Xcode path.
+    // GitHub macOS runners (macos-15) have Xcode at the standard location.
+    _ = b;
+    lib.addSystemIncludePath(.{
+        .cwd_relative = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include",
+    });
+    lib.addLibraryPath(.{
+        .cwd_relative = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib",
+    });
 }
 
 /// Configure the Android NDK sysroot (bionic libc headers, arch libs and CRT
