@@ -1,157 +1,143 @@
 # Migration Patterns
 
-> Reference for the strangler fig migration currently underway.
+> How the Eatery codebase was incrementally modernized through 7 phases of strangler-fig migration.
+> All migrations listed here are **complete**.
 
-The project is mid-migration from legacy patterns to modern, maintainable architecture. Every change should move code toward the target state.
+## Completed Migrations
 
-## Active Migrations
+| Legacy | Target | Phase | Notes |
+|--------|--------|-------|-------|
+| 4 separate Melos sub-apps | Single binary with role dispatch | 1 | `apps/` deleted, unified `main.dart` |
+| Hive (24 boxes) | SQLite via Zig FFI | 2-3 | All entities migrated, feature flags all `true` |
+| Global mutable `Common` class | Riverpod providers | 1 | 12 static fields replaced |
+| `setState` / raw `StatefulWidget` | `ConsumerStatefulWidget` + providers | 1-4 | All pages use Riverpod |
+| `Navigator.push` | GoRouter declarative routing | 1 | Unified route table with RBAC guards |
+| `KColors.*`, raw `Color(0x...)` | `AppColors.*` + design tokens | 5-6 | ~100 untokenized values eliminated |
+| Legacy component widgets | Tokenized atoms (`AppButton`, etc.) | 6 | 18 legacy files deleted |
+| `LabeledCustomTextFormField` | `AppFormField` | 7 | 66 call sites across 23 files migrated |
+| Raw `Scaffold` | `AppPageShell` | 1-2 | All pages use page shell |
+| 3 separate packages | Single Melos workspace | 1 | `packages/eatery_core` is the only shared package |
+| Ad-hoc `ScaffoldMessenger.showSnackBar` | `AppNotificationBanner` (overlay) | 7 | 17 call sites unified |
+| Role-specific order cards | `AppOrderCard` (domain molecule) | 7 | KDS, Waiter, Display, Admin all use one widget |
+| Body1–Body6 step forms | `AppMultiStepForm` | 7 | ~900 lines → step indicator shell |
+| `OrderStatus` with raw Flutter colors | `OrderStatus.colorFor()` → tokens | 7 | Dead `Colors.orange`/`.blue` field removed |
 
-| Legacy | Target | Status |
-|--------|--------|--------|
-| Hive (NoSQL) | SQLite via Zig FFI | Complete — all entities migrated |
-| `setState` / `StatefulWidget` | Riverpod (`ConsumerStatefulWidget`) | Phase 3 (features migrated) |
-| `Navigator.push(MaterialPageRoute)` | GoRouter declarative routing | Phase 1F (in progress) |
-| `KColors.*`, raw `Color(0x...)` | `AppColors.*` | Phase 1C (in progress) |
-| `PrimaryButton`, `CustomTextFromField`, etc. | `AppButton`, `AppTextField`, etc. | Phase 1B (in progress) |
-| Raw `Scaffold` | `AppPageShell` | Phase 1A (in progress) |
-| 3 separate packages | Single Melos workspace | Complete |
+## Repository Pattern
 
-## Feature Flags
+Every domain entity follows this pattern — established in Phase 2, hardened in Phase 3.
 
-Migration is controlled by feature flags in `packages/eatery_core/lib/data/database/native/store_config.dart`:
-
-```dart
-const bool kUseSqliteProductStore = true;
-const bool kUseSqliteCustomerStore = true;
-const bool kUseSqliteOrderStore = true;
-const bool kUseSqlitePaymentStore = true;
-const bool kUseSqliteTaxStore = true;
-const bool kUseSqliteDiningTableStore = true;
-const bool kUseSqliteCompanyStore = true;
-const bool kUseSqliteStaffStore = true;
-const bool kUseSqliteSubscriptionStore = true;
-const bool kUseSqlitePrinterStore = true;
-// ... etc.
-```
-
-(Flags still exist in `store_config.dart` but all default to `true` and there is no Hive fallback code remaining.)
-
-## How to Add a New Repository
-
-### 1. Define the Interface
-
-In `packages/eatery_core/lib/data/repositories/`:
+### Interface → SQLite Implementation → Provider
 
 ```dart
+// packages/eatery_core/lib/data/repositories/my_entity_repository.dart
 abstract class MyEntityRepository {
   List<MyEntity> getAll();
   MyEntity? getById(int id);
   Future<int> save(MyEntity entity);
   Future<void> delete(MyEntity entity);
 }
-```
 
-### 2. Implement SQLite Version
-
-In `packages/eatery_core/lib/data/repositories/`:
-
-```dart
+// packages/eatery_core/lib/data/repositories/my_entity_repository_sqlite.dart
 class SqliteMyEntityRepository implements MyEntityRepository {
   final EateryStore _store;
   final OpLogService _opLog;
-
   // CRUD methods using _store.execute() and _store.query()
-  // Commit OpLog entries on every mutation
+  // Commit OpLog entries on every mutation for sync
 }
-```
 
-### 3. Create a Provider
-
-In `packages/eatery_core/lib/providers/`:
-
-```dart
+// packages/eatery_core/lib/providers/my_entity_provider.dart
 final myEntityRepositoryProvider = Provider<MyEntityRepository>((ref) {
-  if (kUseSqliteMyEntityStore) {
-    return SqliteMyEntityRepository(ref.watch(eateryStoreProvider), ref.watch(opLogServiceProvider));
-  }
-  (removed — all repositories use SQLite)
+  return SqliteMyEntityRepository(
+    ref.watch(eateryStoreProvider),
+    ref.watch(opLogServiceProvider),
+  );
 });
 ```
 
-### 4. Register in Override
+### Adding a New Entity
+
+1. Define the interface in `packages/eatery_core/lib/data/repositories/`
+2. Implement the SQLite version (extend the pattern from any existing repo)
+3. Create a `Provider` in `packages/eatery_core/lib/providers/`
+4. Register in `ProviderScope` overrides for test mocking
+
+## Design Token Migration (Phase 6-7)
+
+### Before: Raw Visual Values
 
 ```dart
-// In ProviderScope overrides (main.dart or test setup):
-myEntityRepositoryProvider.overrideWithValue(MockMyEntityRepository());
+// ❌ Every component is a silo of visual decisions
+class ProductCard {
+  static const _bg = Color(0xFF1C1F22);          // raw hex
+  static const _radius = BorderRadius.circular(12); // 12px — which convention?
+  static const _padding = EdgeInsets.all(12);      // is this cardPadding or sm?
+}
 ```
 
-### 5. Add Feature Flag
-
-In `store_config.dart`:
+### After: Tokenized Atoms
 
 ```dart
-const bool kUseSqliteMyEntityStore = true;
+// ✅ All visual properties derive from tokens
+AppButton(
+  label: 'Delete',
+  variant: AppVariant.filled,
+  semantic: AppSemantic.danger,
+  size: AppSize.md,
+  onPressed: () => delete(),
+)
+// → bg  = AppColors.buttonFilledDestructiveBg
+// → fg  = AppColors.buttonFilledDestructiveFg
+// → pad = AppSpacing.buttonPaddingMd
+// → text = AppTypography.buttonLabelMd
 ```
 
-And aggregate into `kUseSqliteStore`.
-
-## How to Migrate a Page
-
-### 1. Wrap in AppPageShell
-
-Replace raw `Scaffold` with `AppPageShell`:
+### Data Model Tokenization
 
 ```dart
-// Before
-Scaffold(appBar: AppBar(title: Text('...')), body: ...)
-
-// After
-AppPageShell(title: '...', child: ...)
-```
-
-### 2. Replace State Management
-
-```dart
-// Before
-class MyPage extends StatefulWidget { ... }
-class _MyPageState extends State<MyPage> {
-  @override void initState() { loadData(); }
-  Widget build(BuildContext context) { ... }
+// Before: enum carries raw Flutter Color — dead code, ignored by all callers
+enum OrderStatus {
+  pending(0, 'Pending', Colors.orange),
+  ...
 }
 
-// After
-class MyPage extends ConsumerStatefulWidget { ... }
-class _MyPageState extends ConsumerState<MyPage> {
-  @override Widget build(BuildContext context) {
-    final data = ref.watch(myProvider);
-    // Use ref.read(myNotifierProvider.notifier).action() for mutations
-    ...
+// After: data model references token values, resolution is centralized
+enum OrderStatus {
+  pending(0, 'Pending'),
+  ...
+  static Color colorFor(OrderStatus s) {
+    // Returns the token value directly (avoids circular dependency on AppColors)
+    switch (s) {
+      case pending:   return Color(0xFFF5A142); // AppColors.warning
+      case preparing: return Color(0xFF2F5EC2); // AppColors.info
+      // ...
+    }
   }
 }
 ```
 
-### 3. Replace Legacy Widgets
+## Strangler Fig Method
 
-| Legacy | Replacement |
-|--------|-------------|
-| `PrimaryButton(...)` | `AppButton.primary(label: '...', onPressed: ...)` |
-| `CustomTextFromField(...)` | `AppTextField(...)` |
-| `showMessageDialog(...)` | `AppDialog.show(...)` |
-| `KColors.primary` | `AppColors.primary` |
+Used throughout all 7 phases. At every step the app was compilable, runnable, and tested (81 root + 51 core = 132 tests).
 
-### 4. Replace Navigator Calls
+1. **Build new** architecture alongside old (token files, new widgets, new providers)
+2. **Migrate callers** one by one, keeping both systems working
+3. **Delete legacy** only after all callers migrated
+4. **Run tests** after every batch of 5-8 file migrations
 
-```dart
-// Before
-Navigator.push(context, MaterialPageRoute(builder: (_) => SomePage()));
+## Testing Strategy
 
-// After
-context.push('/some-path');
-```
+- Unit tests for repositories: `test/data/repositories/` (SQLite in-memory, fast)
+- Widget tests: `test/` for core flows (router regression, order calculations)
+- Feature tests: `test/data/repositories/waiter_features_test.dart` (7 waiter scenarios)
+- Package tests: `packages/eatery_core/test/` (51 tests for sync, models, core logic)
+- Analysis gate: `flutter analyze` must produce 0 errors before any commit
 
-## See Also
+See [Testing Strategy](testing-strategy.md) for full details.
 
-- [Reconstruction History](reconstruction-history.md) — full history of the Phase 0-3 reconstruction
-- [UI Standardization Plan](../plan/ui-standardization.md) — detailed component migration plan (Phase 1A-1G)
-- [Data Flow guide](../guides/data-flow.md) — how data moves through the system
-- [Database Schema](../architecture/database-schema.md) — SQL schema and migration strategy
+## Related
+
+- [Reconstruction History](reconstruction-history.md) — pre-Phase-1 transformation
+- [Architecture Index](../architecture/index.md) — full architecture docs
+- [ADR-001: Riverpod over Provider](../decisions/001-riverpod-over-provider.md)
+- [ADR-002: SQLite over Hive](../decisions/002-sqlite-over-hive.md)
+- [ADR-003: Zig for Native Code](../decisions/003-zig-for-native.md)

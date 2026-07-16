@@ -1,8 +1,8 @@
 # Repository Structure
 
-## Directory Layout (Target)
+## Directory Layout
 
-> **Status:** The single-app architecture migration is complete. The `apps/` directory has been deleted. Role-specific pages live in `lib/pages/{waiter,kds,display}/`. See [ISSUES.md](../../ISSUES.md).
+> **Status:** The single-app architecture migration is complete (Phase 1). The `apps/` directory has been deleted. Role-specific pages live in `lib/pages/{waiter,kds,display}/`. See [Reconstruction History](../development/reconstruction-history.md) for the full migration timeline.
 
 ```
 eatery/
@@ -148,4 +148,4 @@ import 'package:eatery/pages/dashboard/dashboard.page.dart';
 
 ## Migration Note
 
-The four previously-separate sub-apps (`apps/eatery_waiter/`, `apps/eatery_kds/`, `apps/eatery_display/`) are being merged into the root `lib/` directory as `lib/pages/{waiter,kds,display}/`. The `apps/` directory will be deleted after migration. This change is tracked in [ISSUES.md](../../ISSUES.md).
+The four previously-separate sub-apps (`apps/eatery_waiter/`, `apps/eatery_kds/`, `apps/eatery_display/`) were merged into the root `lib/` directory as `lib/pages/{waiter,kds,display}/`. The `apps/` directory has been deleted. See [Single-App Architecture](single-app-architecture.md) for the RBAC routing design.

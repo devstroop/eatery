@@ -1,7 +1,6 @@
 # Single-App Role Overview
 
-> **Status:** Planned migration — see [ISSUES.md](../../ISSUES.md).  
-> The four previously-separate apps (Admin, Waiter, KDS, Display) are merging into a single Flutter binary with role-based UI dispatch.
+> **Status:** Complete (Phase 1). The four previously-separate apps (Admin, Waiter, KDS, Display) are now a single Flutter binary with role-based UI dispatch. See [Single-App Architecture](../architecture/single-app-architecture.md) and [Reconstruction History](../development/reconstruction-history.md).
 
 Eatery runs as a **single Flutter binary** that presents four distinct UIs depending on the device's configured role. The same APK/IPA installed on every device behaves differently based on a first-launch role picker. All roles share a common core (`packages/eatery_core`) and a unified GoRouter with role-based access control.
 
@@ -125,4 +124,4 @@ The single app depends on `eatery_core` for all shared code. `packages/eatery_co
 | KDS | In progress | Ticket page exists. Order station routing planned. |
 | Display | In progress | Display page exists. Read-only order status view working. |
 
-The migration from 4 separate Melos sub-apps to a single binary is tracked in [ISSUES.md](../../ISSUES.md). See [Single-App Architecture](../architecture/single-app-architecture.md) for the full architectural specification.
+The migration from 4 separate Melos sub-apps to a single binary was completed in Phase 1. See [Single-App Architecture](../architecture/single-app-architecture.md) for the full architectural specification.
