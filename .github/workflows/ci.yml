@@ -77,17 +77,6 @@ jobs:
             os: windows-latest
             build-cmd: flutter build windows --debug
             build-native: true
-          - target: ios
-            os: macos-latest
-            build-cmd: flutter build ios --no-codesign
-            # iOS: build native static library via cross-compilation.
-            # GitHub macOS runners include Xcode with the iOS SDK.
-            # setupIosSdk() in build.zig reads IOS_SDK_PATH and adds the
-            # SDK's /usr/include for headers. linkLibC is NOT called for
-            # static libraries — they're object archives; the final
-            # executable handles libc linking.
-            build-native: true
-            native-lib-type: static-lib
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
@@ -124,15 +113,7 @@ jobs:
           cd libeaterystore
           LIB_TYPE="${{ matrix.native-lib-type || 'shared-lib' }}"
 
-          if [ "${{ matrix.target }}" = "ios" ]; then
-            # iOS: cross-compile static library for aarch64.
-            # Set IOS_SDK_PATH so setupIosSdk() in build.zig can find SDK
-            # headers (no linkLibC needed for static libraries).
-            export IOS_SDK_PATH="$(xcrun --sdk iphoneos --show-sdk-path)"
-            echo "::debug::IOS_SDK_PATH=$IOS_SDK_PATH"
-            zig build "$LIB_TYPE" -Dtarget=aarch64-ios
-
-          elif [ "${{ matrix.target }}" = "android" ] || [ "${{ matrix.target }}" = "android-appbundle" ]; then
+          if [ "${{ matrix.target }}" = "android" ] || [ "${{ matrix.target }}" = "android-appbundle" ]; then
             # Android: build shared lib for all 4 ABIs and place in jniLibs
             resolve_ndk() {
               if [ -n "${ANDROID_NDK_HOME:-}" ] && [ -d "$ANDROID_NDK_HOME" ]; then
@@ -204,3 +185,30 @@ jobs:
 
       - name: Build ${{ matrix.target }}
         run: ${{ matrix.build-cmd }}
+
+  build-ios:
+    name: Build iOS (no codesign)
+    runs-on: macos-15
+    needs: [analyze, test]
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.41.x'
+          channel: 'stable'
+
+      - uses: ./.github/actions/setup-zig
+        with:
+          version: ${{ env.ZIG_VERSION }}
+
+      - name: Build libeaterystore (iOS static lib)
+        run: |
+          cd libeaterystore
+          zig build static-lib -Dtarget=aarch64-ios --release=fast
+
+      - name: Get dependencies
+        run: flutter pub get
+
+      - name: Build
+        run: flutter build ios --no-codesign

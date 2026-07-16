@@ -153,10 +153,15 @@ fn configure(
 /// Xcode location. Adds both include and library paths so linkLibC can find
 /// iOS platform headers and libc stubs (same pattern as WorxVPN-App).
 fn setupIosSdk(b: *std.Build, lib: *std.Build.Step.Compile) void {
-    const sdk_root = std.process.getEnvVarOwned(b.allocator, "IOS_SDK_PATH") catch
-        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk";
-    lib.addSystemIncludePath(.{ .cwd_relative = b.fmt("{s}/usr/include", .{sdk_root}) });
-    lib.addLibraryPath(.{ .cwd_relative = b.fmt("{s}/usr/lib", .{sdk_root}) });
+    // Mirror WorxVPN-App approach: hardcode the standard Xcode path.
+    // GitHub macOS runners (macos-15) have Xcode at the standard location.
+    _ = b;
+    lib.addSystemIncludePath(.{
+        .cwd_relative = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include",
+    });
+    lib.addLibraryPath(.{
+        .cwd_relative = "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/lib",
+    });
 }
 
 /// Configure the Android NDK sysroot (bionic libc headers, arch libs and CRT
