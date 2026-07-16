@@ -36,9 +36,10 @@ class _SetupPageState extends ConsumerState<SetupPage> {
       final store = ref.read(eateryStoreProvider);
 
       // Create admin staff
+      final hashedPin = hashPin(_pinCtrl.text.trim());
       store.execute(
         'INSERT INTO staff (name, pin, type, isActive) VALUES (?,?,?,?)',
-        [_nameCtrl.text.trim(), _pinCtrl.text, 4, 1],
+        [_nameCtrl.text.trim(), hashedPin, 4, 1],
       );
       final staffId = store.queryScalar('SELECT last_insert_rowid()') as int;
 
