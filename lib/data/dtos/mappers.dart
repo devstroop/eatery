@@ -194,7 +194,6 @@ extension CompanyDtoX on CompanyDto {
     email: email,
     phone: phone,
     address: address,
-    password: '',
     taxation: Taxation.none,
     currencyCode: currencyCode,
     salesTaxNumber: salesTaxNumber,
