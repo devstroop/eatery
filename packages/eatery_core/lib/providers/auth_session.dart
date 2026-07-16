@@ -12,14 +12,21 @@ final authSessionProvider = StateProvider<Employee?>((ref) => null);
 /// Supports both SHA-256 hashed PINs and legacy plaintext PINs for
 /// backward compatibility. All new PIN insertions should hash first.
 ///
-/// Returns the matching [Employee] on success, null on failure.
+/// Updates [lastLoginAt] on success. Returns the matching [Employee], or null
+/// on failure.
 Employee? authenticateEmployee(EateryStore store, String loginId, String pin) {
   var employee = _findByPhone(store, loginId);
   employee ??= _findByName(store, loginId);
   if (employee == null) return null;
   if (employee.pin == null) return null;
-  if (verifyPin(pin, employee.pin!)) return employee;
-  return null;
+  if (!verifyPin(pin, employee.pin!)) return null;
+
+  final now = DateTime.now().millisecondsSinceEpoch;
+  store.execute(
+    'UPDATE employee SET lastLoginAt = ? WHERE id = ?',
+    [now, employee.id],
+  );
+  return employee.copyWith(lastLoginAt: now);
 }
 
 Employee? _findByPhone(EateryStore store, String phone) {
