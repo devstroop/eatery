@@ -122,9 +122,12 @@ class SqliteEmployeeRepository implements EmployeeRepository {
     );
     return Employee(
       name: row['name'] as String,
+      email: row['email'] as String?,
       photo: row['photo'] as String?,
       phone: row['phone'] as String?,
       pin: row['pin'] as String?,
+      pinUpdatedAt: row['pinUpdatedAt'] as int?,
+      lastLoginAt: row['lastLoginAt'] as int?,
       type: type,
       isActive: (row['isActive'] as int) == 1,
       id: row['id'] as int,
