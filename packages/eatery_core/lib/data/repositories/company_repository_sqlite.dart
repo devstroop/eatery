@@ -102,11 +102,11 @@ class SqliteCompanyRepository implements CompanyRepository {
   // ── Mappers ──────────────────────────────────────────────────────────────
 
   Company _toCompany(Map<String, Object?> row) {
-    final editionIdx = row['edition'] as int;
+    final taxationIdx = row['taxation'] as int;
     // Taxation enum: none=-1, gst=0, vat=1. Map via id, with fallback.
     Taxation taxation;
     try {
-      taxation = Taxation.values.firstWhere((e) => e.id == editionIdx);
+      taxation = Taxation.values.firstWhere((e) => e.id == taxationIdx);
     } catch (_) {
       taxation = Taxation.none;
     }

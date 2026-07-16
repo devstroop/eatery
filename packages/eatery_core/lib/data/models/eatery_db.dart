@@ -23,7 +23,7 @@ export 'subscription/subscription_type.dart';
 
 // Company
 export 'company/company.dart';
-export 'company/edition.dart';
+export 'company/taxation.dart';
 export 'company/k_currency.dart';
 
 // Config

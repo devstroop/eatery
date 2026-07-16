@@ -101,6 +101,7 @@ class SchemaMigrator {
     _migrationV9,
     _migrationV10,
     _migrationV11,
+    _migrationV12,
   ];
 
   /// v1: Auth & order lifecycle fields.
@@ -375,6 +376,30 @@ class SchemaMigrator {
         'CREATE INDEX IF NOT EXISTS idx_time_entry_employee ON time_entry(employeeId)',
       );
     });
+  }
+
+  /// v12: Rename `company.edition` → `company.taxation`.
+  ///
+  /// Aligns the SQL column name with the Dart `Taxation` enum, completing the
+  /// Edition→Taxation rename (N01-N04). Uses `_addColumn` + data copy for
+  /// compatibility with SQLite < 3.25.0.
+  ///
+  /// Also defensively ensures `employee.email`, `pinUpdatedAt` and `lastLoginAt`
+  /// exist — they were added by v1 (on the `staff` table) and carried over by
+  /// the v11 `ALTER TABLE RENAME TO employee`. In practice every migrated DB
+  /// already has them; this catch-all handles any schema that somehow bypassed
+  /// v1 (e.g. a fresh schema.sql that predated those columns but had
+  /// `eatery_schema.dart` already setting latestVersion).
+  static void _migrationV12(EateryStore store) {
+    // Company: edition → taxation (old column intentionally left in place;
+    // DROP COLUMN requires SQLite 3.35.0+).
+    _addColumn(store, 'company', 'taxation', 'INTEGER NOT NULL DEFAULT 0');
+    _execOrIgnore(store, 'UPDATE company SET taxation = edition');
+
+    // Employee audit fields (defensive — already present via v1 + v11 chain).
+    _addColumn(store, 'employee', 'email', 'TEXT');
+    _addColumn(store, 'employee', 'pinUpdatedAt', 'INTEGER');
+    _addColumn(store, 'employee', 'lastLoginAt', 'INTEGER');
   }
 
   /// Runs [sql] and ignores "no such column" errors that occur when the old

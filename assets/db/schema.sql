@@ -160,7 +160,7 @@ CREATE TABLE IF NOT EXISTS company (
   phone          TEXT NOT NULL,
   address        TEXT NOT NULL,
   password       TEXT,
-  edition        INTEGER NOT NULL,
+  taxation       INTEGER NOT NULL,
   currencyCode   TEXT,
   salesTaxNumber TEXT,
   foodLicenseNo  TEXT,

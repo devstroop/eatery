@@ -11,7 +11,7 @@ class SqliteEmployeeRepository implements EmployeeRepository {
 
   final EateryStore _store;
 
-  static const _columns = 'name, photo, phone, type, isActive, pin';
+  static const _columns = 'name, email, photo, phone, pin, pinUpdatedAt, lastLoginAt, type, isActive';
 
   @override
   List<Employee> getAllEmployees() =>
@@ -36,23 +36,26 @@ class SqliteEmployeeRepository implements EmployeeRepository {
   Future<int> saveEmployee(Employee employee) async {
     final values = <Object?>[
       employee.name,
+      employee.email,
       employee.photo,
       employee.phone,
+      employee.pin,
+      employee.pinUpdatedAt,
+      employee.lastLoginAt,
       employee.type.id,
       employee.isActive ? 1 : 0,
-      employee.pin,
     ];
 
     final int id;
     if (employee.id != null && _exists(employee.id!)) {
       id = employee.id!;
       _store.execute(
-        'UPDATE employee SET name=?, photo=?, phone=?, type=?, isActive=?, pin=? WHERE id=?',
+        'UPDATE employee SET name=?, email=?, photo=?, phone=?, pin=?, pinUpdatedAt=?, lastLoginAt=?, type=?, isActive=? WHERE id=?',
         [...values, id],
       );
     } else {
       _store.execute(
-        'INSERT INTO employee ($_columns) VALUES (?,?,?,?,?,?)',
+        'INSERT INTO employee ($_columns) VALUES (?,?,?,?,?,?,?,?,?)',
         values,
       );
       id = _store.queryScalar('SELECT last_insert_rowid()') as int;
@@ -94,13 +97,16 @@ class SqliteEmployeeRepository implements EmployeeRepository {
   @override
   Future<void> addAll(Iterable<Employee> employeeList) async {
     for (final s in employeeList) {
-      _store.execute('INSERT INTO employee ($_columns) VALUES (?,?,?,?,?,?)', [
+      _store.execute('INSERT INTO employee ($_columns) VALUES (?,?,?,?,?,?,?,?,?)', [
         s.name,
+        s.email,
         s.photo,
         s.phone,
+        s.pin,
+        s.pinUpdatedAt,
+        s.lastLoginAt,
         s.type.id,
         s.isActive ? 1 : 0,
-        s.pin,
       ]);
       final id = _store.queryScalar('SELECT last_insert_rowid()') as int;
       notifyMutation('employee', id, 'save', s.toMap());

@@ -1,4 +1,4 @@
-import 'package:eatery_core/data/models/company/edition.dart';
+import 'package:eatery_core/data/models/company/taxation.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'company.freezed.dart';
@@ -34,7 +34,7 @@ abstract class Company with _$Company {
       'email': list.elementAt(3),
       'phone': list.elementAt(4),
       'address': list.elementAt(5),
-      'edition': Taxation.values.singleWhere(
+      'taxation': Taxation.values.singleWhere(
         (element) => element.id == list.elementAt(6),
       ),
       'currencyCode': list.elementAt(7),
@@ -47,16 +47,7 @@ abstract class Company with _$Company {
 }
 
 extension CompanyX on Company {
-  Map<String, Object?> toMap() {
-    final m = toJson() as Map<String, Object?>;
-    // The SQL column is 'edition' but the Dart field is 'taxation'.
-    // Only rename when there's no collision to avoid silently overwriting
-    // an existing 'edition' key.
-    if (m.containsKey('taxation') && !m.containsKey('edition')) {
-      m['edition'] = m.remove('taxation');
-    }
-    return m;
-  }
+  Map<String, Object?> toMap() => toJson() as Map<String, Object?>;
 
   Iterable<dynamic> toIterable() {
     var map = toMap();
@@ -67,7 +58,7 @@ extension CompanyX on Company {
       map['email'],
       map['phone'],
       map['address'],
-      map['edition'],
+      map['taxation'],
       map['currencyCode'],
       map['foodLicNo'],
       map['taxLicNo'],
