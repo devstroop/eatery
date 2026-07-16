@@ -83,6 +83,15 @@ class _TicketPageState extends ConsumerState<TicketPage>
         final count = orders.length;
         if (_hasInitialData && count > _previousOrderCount) {
           _playChime();
+          if (context.mounted) {
+            AppNotificationBanner.show(
+              context,
+              type: NotificationType.orderReady,
+              message: 'New order arrived!',
+              subtitle: '${count - _previousOrderCount} order(s) pending',
+              autoDismiss: const Duration(seconds: 5),
+            );
+          }
           if (_isIdle) {
             _idleAlertController.forward().then((_) {
               _idleAlertController.reverse();
@@ -431,9 +440,9 @@ class _StatusBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final (label, color) = switch (status) {
-      OrderStatus.pending => ('Pending', AppColors.warning),
-      OrderStatus.preparing => ('Preparing', AppColors.info),
-      _ => ('Unknown', AppColors.grey500),
+      OrderStatus.pending => ('Pending', OrderStatus.colorFor(status)),
+      OrderStatus.preparing => ('Preparing', OrderStatus.colorFor(status)),
+      _ => ('Unknown', OrderStatus.colorFor(status)),
     };
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
