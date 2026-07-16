@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'app_colors.dart';
 
 /// Single source of truth for ALL shadows in the app.
 ///
@@ -23,4 +24,24 @@ abstract final class AppShadows {
 
   /// No shadow
   static const List<BoxShadow> none = [];
+
+  // ── Component-specific shadows ─────────────────────────────────
+  /// Elevated card (ProductCard, etc.)
+  static const List<BoxShadow> cardElevated = [
+    BoxShadow(
+      color: AppColors.shadowBase,
+      blurRadius: 6,
+      offset: Offset(0, 4),
+      spreadRadius: 1,
+    ),
+  ];
+
+  /// Notification card
+  static const List<BoxShadow> notification = [
+    BoxShadow(
+      color: AppColors.shadowDark,
+      blurRadius: 4,
+      offset: Offset(0, 2),
+    ),
+  ];
 }
