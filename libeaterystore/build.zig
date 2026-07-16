@@ -89,7 +89,11 @@ pub fn build(b: *std.Build) void {
     b.installArtifact(shared_lib);
 }
 
-/// Attach the SQLite backend (plain or SQLCipher) and libc.
+/// Attach the SQLite backend (plain or SQLCipher), which SDK/NDK include paths
+/// are needed, and finally link libc. linkLibC provides both libc headers
+/// (needed for compiling C source code like the SQLite amalgamation) and the
+/// libc library dependency (resolved at final link time — benign for static
+/// libs since the linker omits unused symbols from archives).
 fn configure(
     b: *std.Build,
     lib: *std.Build.Step.Compile,
@@ -145,13 +149,15 @@ fn configure(
     lib.linkLibC();
 }
 
-/// Resolve the iOS SDK path. Checks `IOS_SDK_PATH` env var first (set by
-/// CI workflows), then falls back to the standard Xcode location.
+/// Resolve the iOS SDK include and library paths. Checks `IOS_SDK_PATH` env var
+/// first (set by CI workflows via `xcrun`), then falls back to the standard
+/// Xcode location. Sets both include and library paths so linkLibC (called by
+/// configure()) can find iOS platform headers and libc .tbd files.
 fn setupIosSdk(b: *std.Build, lib: *std.Build.Step.Compile) void {
-    const env_path = std.process.getEnvVarOwned(b.allocator, "IOS_SDK_PATH") catch null;
-    const sdk_path = env_path orelse
-        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk/usr/include";
-    lib.addSystemIncludePath(.{ .cwd_relative = sdk_path });
+    const sdk_root = std.process.getEnvVarOwned(b.allocator, "IOS_SDK_PATH") catch
+        "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS.sdk";
+    lib.addSystemIncludePath(.{ .cwd_relative = b.fmt("{s}/usr/include", .{sdk_root}) });
+    lib.addLibraryPath(.{ .cwd_relative = b.fmt("{s}/usr/lib", .{sdk_root}) });
 }
 
 /// Configure the Android NDK sysroot (bionic libc headers, arch libs and CRT

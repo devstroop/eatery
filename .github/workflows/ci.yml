@@ -80,6 +80,11 @@ jobs:
           - target: ios
             os: macos-latest
             build-cmd: flutter build ios --no-codesign
+            # iOS: build native static library via cross-compilation.
+            # GitHub macOS runners include Xcode with the iOS SDK.
+            # setupIosSdk() in build.zig reads IOS_SDK_PATH from the env
+            # and adds both include and library paths so linkLibC (called by
+            # configure() for all targets) can find iOS platform files.
             build-native: true
             native-lib-type: static-lib
     runs-on: ${{ matrix.os }}
@@ -119,9 +124,10 @@ jobs:
           LIB_TYPE="${{ matrix.native-lib-type || 'shared-lib' }}"
 
           if [ "${{ matrix.target }}" = "ios" ]; then
-            # iOS: cross-compile static library for aarch64
-            # Resolve SDK path via xcrun and pass to build.zig via env var
-            export IOS_SDK_PATH="$(xcrun --sdk iphoneos --show-sdk-path)/usr/include"
+            # iOS: cross-compile static library for aarch64.
+            # Set IOS_SDK_PATH so setupIosSdk() in build.zig can find SDK
+            # headers and libc .tbd files for linkLibC.
+            export IOS_SDK_PATH="$(xcrun --sdk iphoneos --show-sdk-path)"
             echo "::debug::IOS_SDK_PATH=$IOS_SDK_PATH"
             zig build "$LIB_TYPE" -Dtarget=aarch64-ios
 
