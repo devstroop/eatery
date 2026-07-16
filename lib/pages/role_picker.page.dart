@@ -167,7 +167,7 @@ class _RoleCard extends ConsumerWidget {
     ref.read(roleProvider.notifier).setRole(role.value);
     switch (role) {
       case DeviceRole.admin:
-        context.goNamed('login');
+        context.goNamed('setup');
       case DeviceRole.kds:
         context.goNamed('kds');
       case DeviceRole.display:
