@@ -56,16 +56,16 @@ C01-C06, C13 are resolved. Remaining:
 
 ## Staff → Employee Rename
 
-Mechanical rename across ~41 files. Schema: `staff` table → `employee`, all 10 FK columns renamed. Dart: `Staff` → `Employee`, `StaffType` → `EmployeeRole`. See `docs/architecture/auth-session.md` for auth implications.
+E01-E03, E06 resolved. E04, E05, E07 remaining.
 
 | # | Priority | Scope |
 |---|----------|-------|
-| **E01** | 🔴 P0 | Schema: rename `staff` table → `employee`, update 10 FK columns |
-| **E02** | 🔴 P0 | Dart model: `Staff` → `Employee` (~97 refs, ~27 files) |
-| **E03** | 🔴 P0 | Enum: `StaffType` → `EmployeeRole` |
+| **E01** | 🟢 Fixed | Schema: `staff` → `employee` table + all 6 FK `REFERENCES` clauses updated in `schema.sql`; 3 FK column renames (`staffId`→`employeeId`, `adminStaffId`→`adminEmployeeId`, `changedByStaffId`→`changedByEmployeeId`); migration v11 handles existing DBs via `ALTER TABLE RENAME` + `RENAME COLUMN`. |
+| **E02** | 🟢 Fixed | Dart model: `Staff` → `Employee` across ~37 files (models, repositories, providers, widgets, pages, tests). |
+| **E03** | 🟢 Fixed | Enum: `StaffType` → `EmployeeRole` with all references updated. |
 | **E04** | 🟡 P1 | Add `email` to Dart model (exists in SQL, missing in Dart) |
 | **E05** | 🟡 P1 | Add `pinUpdatedAt`, `lastLoginAt` to Dart model |
-| **E06** | 🟡 P1 | Rename pages: `staffs` → `employees`, route `/staffs` → `/employees` |
+| **E06** | 🟢 Fixed | Pages directory: `staff/` → `employees/`, files renamed (`staffs.page`→`employees.page`, `add.staff.page`→`add.employee.page`, `edit.staff.page`→`edit.employee.page`); routes `/staffs` → `/employees`. |
 | **E07** | 🟠 P2 | Add `EmployeeRole.manager` enum value |
 
 ---

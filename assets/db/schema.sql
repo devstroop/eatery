@@ -71,7 +71,7 @@ CREATE TABLE IF NOT EXISTS orders (
   voidReason    TEXT,
   voidedBy      TEXT,
   voidedAt      INTEGER,
-  staffId       INTEGER
+  employeeId       INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS order_product (
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS order_product (
 
 CREATE INDEX IF NOT EXISTS idx_orders_customer ON orders(customerPhone);
 CREATE INDEX IF NOT EXISTS idx_orders_status ON orders(status);
-CREATE INDEX IF NOT EXISTS idx_orders_staff ON orders(staffId);
+CREATE INDEX IF NOT EXISTS idx_orders_employee ON orders(employeeId);
 CREATE INDEX IF NOT EXISTS idx_orders_created ON orders(createdAt);
 CREATE INDEX IF NOT EXISTS idx_order_product_order ON order_product(orderId);
 
@@ -144,7 +144,7 @@ CREATE TABLE IF NOT EXISTS dining_table (
   shape         INTEGER DEFAULT 0,
   width         REAL,
   height        REAL,
-  staffId       INTEGER
+  employeeId       INTEGER
 );
 
 CREATE INDEX IF NOT EXISTS idx_dining_table_category ON dining_table(categoryId);
@@ -165,7 +165,7 @@ CREATE TABLE IF NOT EXISTS company (
   salesTaxNumber TEXT,
   foodLicenseNo  TEXT,
   subscriptionId INTEGER,
-  adminStaffId   INTEGER
+  adminEmployeeId   INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS currency (
@@ -182,7 +182,7 @@ CREATE TABLE IF NOT EXISTS currency (
   space_between_amount_and_symbol INTEGER NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS staff (
+CREATE TABLE IF NOT EXISTS employee (
   id             INTEGER PRIMARY KEY AUTOINCREMENT,
   name           TEXT NOT NULL,
   email          TEXT,
@@ -276,7 +276,7 @@ CREATE TABLE IF NOT EXISTS order_status_history (
   orderId          INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
   fromStatus       INTEGER NOT NULL,
   toStatus         INTEGER NOT NULL,
-  changedByStaffId INTEGER,
+  changedByEmployeeId INTEGER,
   changedAt        INTEGER NOT NULL,
   reason           TEXT
 );
@@ -355,7 +355,7 @@ CREATE TABLE IF NOT EXISTS order_discount (
   type        INTEGER NOT NULL,
   value       REAL NOT NULL,
   amount      REAL NOT NULL,
-  appliedBy   INTEGER REFERENCES staff(id),
+  appliedBy   INTEGER REFERENCES employee(id),
   createdAt   INTEGER NOT NULL
 );
 
@@ -371,7 +371,7 @@ CREATE TABLE IF NOT EXISTS shift (
 
 CREATE TABLE IF NOT EXISTS time_entry (
   id          INTEGER PRIMARY KEY AUTOINCREMENT,
-  staffId     INTEGER NOT NULL REFERENCES staff(id),
+  employeeId     INTEGER NOT NULL REFERENCES employee(id),
   shiftId     INTEGER REFERENCES shift(id),
   clockIn     INTEGER NOT NULL,
   clockOut    INTEGER,
@@ -381,7 +381,7 @@ CREATE TABLE IF NOT EXISTS time_entry (
   createdAt   INTEGER NOT NULL
 );
 
-CREATE INDEX IF NOT EXISTS idx_time_entry_staff ON time_entry(staffId);
+CREATE INDEX IF NOT EXISTS idx_time_entry_employee ON time_entry(employeeId);
 
 CREATE TABLE IF NOT EXISTS business_hours (
   id          INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -415,7 +415,7 @@ CREATE TABLE IF NOT EXISTS expense (
   paymentMode   INTEGER NOT NULL DEFAULT 0,
   reference     TEXT,
   receipt       TEXT,
-  createdBy     INTEGER REFERENCES staff(id),
+  createdBy     INTEGER REFERENCES employee(id),
   createdAt     INTEGER NOT NULL
 );
 
@@ -431,7 +431,7 @@ CREATE TABLE IF NOT EXISTS reservation (
   duration        INTEGER DEFAULT 60,
   status          INTEGER NOT NULL DEFAULT 0,
   note            TEXT,
-  createdBy       INTEGER REFERENCES staff(id),
+  createdBy       INTEGER REFERENCES employee(id),
   createdAt       INTEGER NOT NULL,
   updatedAt       INTEGER
 );
@@ -489,7 +489,7 @@ CREATE TABLE IF NOT EXISTS purchase_order (
   status          INTEGER NOT NULL DEFAULT 0,
   totalAmount     REAL NOT NULL DEFAULT 0,
   notes           TEXT,
-  createdBy       INTEGER REFERENCES staff(id),
+  createdBy       INTEGER REFERENCES employee(id),
   createdAt       INTEGER NOT NULL,
   updatedAt       INTEGER
 );
@@ -516,7 +516,7 @@ CREATE TABLE IF NOT EXISTS stock_adjustment (
   reason        TEXT NOT NULL,
   referenceId   INTEGER,
   notes         TEXT,
-  createdBy     INTEGER REFERENCES staff(id),
+  createdBy     INTEGER REFERENCES employee(id),
   createdAt     INTEGER NOT NULL
 );
 

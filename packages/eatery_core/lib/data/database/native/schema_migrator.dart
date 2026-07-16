@@ -85,6 +85,9 @@ class SchemaMigrator {
     debugPrint('SchemaMigrator: migrated to version $latest');
   }
 
+  /// The total number of migrations (latest schema version).
+  static int get latestVersion => _migrations.length;
+
   /// List of migration functions, indexed by version (0 = first migration).
   static const _migrations = <void Function(EateryStore)>[
     _migrationV1,
@@ -97,6 +100,7 @@ class SchemaMigrator {
     _migrationV8,
     _migrationV9,
     _migrationV10,
+    _migrationV11,
   ];
 
   /// v1: Auth & order lifecycle fields.
@@ -312,6 +316,75 @@ class SchemaMigrator {
         "CREATE INDEX IF NOT EXISTS idx_purchase_order_item_po ON purchase_order_item(purchaseOrderId)",
       );
     });
+  }
+
+  /// v11: Staff → Employee rename.
+  ///
+  /// Renames the `staff` table to `employee` — SQLite auto-updates all FK
+  /// references (`REFERENCES staff(id)` → `REFERENCES employee(id)`) in the
+  /// `sqlite_master` schema during the rename, including columns whose names
+  /// were unchanged (e.g. `createdBy`, `appliedBy`).
+  ///
+  /// Column renames use `_addColumn` + data copy instead of `RENAME COLUMN`
+  /// for compatibility with SQLite < 3.25.0.
+  static void _migrationV11(EateryStore store) {
+    store.transaction(() {
+      // Rename the table. SQLite rewrites all FK REFERENCES in other tables'
+      // CREATE statements to point to `employee`.
+      store.execute('ALTER TABLE staff RENAME TO employee');
+
+      // Rename FK columns by adding the new column and copying data.
+      // Old columns remain (unused) — no DROP COLUMN needed, which would
+      // require SQLite 3.35.0+.
+
+      // orders.staffId → employeeId (v2)
+      _addColumn(store, 'orders', 'employeeId', 'INTEGER');
+      _execOrIgnore(store, 'UPDATE orders SET employeeId = staffId');
+
+      // dining_table.staffId → employeeId
+      _addColumn(store, 'dining_table', 'employeeId', 'INTEGER');
+      _execOrIgnore(store, 'UPDATE dining_table SET employeeId = staffId');
+
+      // time_entry.staffId → employeeId (v5)
+      _addColumn(store, 'time_entry', 'employeeId', 'INTEGER');
+      _execOrIgnore(store, 'UPDATE time_entry SET employeeId = staffId');
+
+      // company.adminStaffId → adminEmployeeId (v1)
+      _addColumn(store, 'company', 'adminEmployeeId', 'INTEGER');
+      _execOrIgnore(store, 'UPDATE company SET adminEmployeeId = adminStaffId');
+
+      // order_status_history.changedByStaffId → changedByEmployeeId (v1)
+      _addColumn(
+        store,
+        'order_status_history',
+        'changedByEmployeeId',
+        'INTEGER',
+      );
+      _execOrIgnore(
+        store,
+        'UPDATE order_status_history SET changedByEmployeeId = changedByStaffId',
+      );
+
+      // Recreate indexes with new names (SQLite cannot rename indexes).
+      store.execute('DROP INDEX IF EXISTS idx_orders_staff');
+      store.execute(
+        'CREATE INDEX IF NOT EXISTS idx_orders_employee ON orders(employeeId)',
+      );
+      store.execute('DROP INDEX IF EXISTS idx_time_entry_staff');
+      store.execute(
+        'CREATE INDEX IF NOT EXISTS idx_time_entry_employee ON time_entry(employeeId)',
+      );
+    });
+  }
+
+  /// Runs [sql] and ignores "no such column" errors that occur when the old
+  /// column doesn't exist (e.g. on re-run or in test schemas).
+  static void _execOrIgnore(EateryStore store, String sql) {
+    try {
+      store.execute(sql);
+    } catch (_) {
+      // Column may not exist — safe to ignore.
+    }
   }
 
   /// Safely adds a column if it doesn't already exist.

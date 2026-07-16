@@ -8,9 +8,9 @@ class SeedData {
     final existing = store.queryScalar('SELECT COUNT(*) FROM product');
     if (existing is int && existing > 0) return;
 
-    // Create admin staff with PIN 1234
+    // Create admin employee with PIN 1234
     store.execute(
-      'INSERT INTO staff (name, phone, pin, type, isActive) VALUES (?,?,?,?,?)',
+      'INSERT INTO employee (name, phone, pin, type, isActive) VALUES (?,?,?,?,?)',
       ['Admin', 'admin', '1234', 4, 1],
     );
 
@@ -88,13 +88,13 @@ class SeedData {
       0,
     ]);
 
-    // Staff
+    // Employees
     store.execute(
-      'INSERT INTO staff (name, phone, pin, type, isActive) VALUES (?,?,?,?,?)',
+      'INSERT INTO employee (name, phone, pin, type, isActive) VALUES (?,?,?,?,?)',
       ['Waiter 1', '555-0101', '1111', 0, 1],
     );
     store.execute(
-      'INSERT INTO staff (name, phone, pin, type, isActive) VALUES (?,?,?,?,?)',
+      'INSERT INTO employee (name, phone, pin, type, isActive) VALUES (?,?,?,?,?)',
       ['Chef 1', '555-0102', '2222', 1, 1],
     );
 
