@@ -40,4 +40,5 @@ const _$EmployeeRoleEnumMap = {
   EmployeeRole.driver: 2,
   EmployeeRole.other: 3,
   EmployeeRole.admin: 4,
+  EmployeeRole.manager: 5,
 };

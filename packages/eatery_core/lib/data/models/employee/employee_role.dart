@@ -12,6 +12,8 @@ enum EmployeeRole {
   other,
   @JsonValue(4)
   admin,
+  @JsonValue(5)
+  manager,
 }
 
 extension EmployeeRoleExtension on EmployeeRole {
@@ -27,6 +29,8 @@ extension EmployeeRoleExtension on EmployeeRole {
         return 3;
       case EmployeeRole.admin:
         return 4;
+      case EmployeeRole.manager:
+        return 5;
     }
   }
 
@@ -42,6 +46,8 @@ extension EmployeeRoleExtension on EmployeeRole {
         return 'Other';
       case EmployeeRole.admin:
         return 'Admin';
+      case EmployeeRole.manager:
+        return 'Manager';
     }
   }
 }
