@@ -18,21 +18,21 @@ The canonical backlog. File new issues on GitHub, track here.
 
 ## Schema Hardening
 
-All but S01 and S17 verified against `assets/db/schema.sql` on 2026-07-16.
+All resolved in `schema.sql` + migration v10, 2026-07-16.
 
 | # | Severity | Issue |
 |---|----------|-------|
-| **S01** | 🔴 P0 | `dining_table_category.isActive DEFAULT 0` — should be `1`. Creating a category without setting `isActive` silently hides it. |
-| **S02** | 🔴 P0 | Missing index: `orders(status)` — KDS queries `WHERE status IN (pending, preparing)` on every refresh. |
-| **S03** | 🔴 P0 | Missing index: `orders(staffId)` — Waiter "my orders" queries `WHERE staffId = ?`. |
-| **S04** | 🟡 P1 | Missing index: `orders(createdAt)` — Reports filter by date range. |
-| **S05** | 🟡 P1 | Missing index: `reservation(dateTime)` — Today's reservations query. |
-| **S06** | 🟡 P1 | Missing index: `reservation(diningTableId)` — Table availability check. |
-| **S07** | 🟡 P1 | Missing index: `time_entry(staffId)` — Shift reports. |
-| **S08** | 🟡 P1 | Missing index: `expense(expenseDate)` — P&L reports. |
-| **S09** | 🟡 P1 | Missing index: `stock_adjustment(productId)` — Inventory audit trail. |
-| **S10** | 🟡 P1 | `orders.status TEXT` vs `OrderStatus` enum (int `id` values 0-5). Verify ORM serialization — TEXT or INTEGER? |
-| **S17** | 🟡 P1 | Phase C tables (15: v3-v9 migrations) have **zero indices**. Every Phase A table gets one. |
+| **S01** | 🟢 Fixed | `DEFAULT 0` → `DEFAULT 1` in `schema.sql` + migration v10 for existing DBs. |
+| **S02** | 🟢 Fixed | `CREATE INDEX idx_orders_status ON orders(status)` added to `schema.sql` + v10. |
+| **S03** | 🟢 Fixed | `CREATE INDEX idx_orders_staff ON orders(staffId)` added to `schema.sql` + v10. |
+| **S04** | 🟢 Fixed | `CREATE INDEX idx_orders_created ON orders(createdAt)` added to `schema.sql` + v10. |
+| **S05** | 🟢 Fixed | `CREATE INDEX idx_reservation_datetime ON reservation(dateTime)` added to `schema.sql` + v10. |
+| **S06** | 🟢 Fixed | `CREATE INDEX idx_reservation_table ON reservation(diningTableId)` added to `schema.sql` + v10. |
+| **S07** | 🟢 Fixed | `CREATE INDEX idx_time_entry_staff ON time_entry(staffId)` added to `schema.sql` + v10. |
+| **S08** | 🟢 Fixed | `CREATE INDEX idx_expense_date ON expense(expenseDate)` added to `schema.sql` + v10. |
+| **S09** | 🟢 Fixed | `CREATE INDEX idx_stock_adj_product ON stock_adjustment(productId)` added to `schema.sql` + v10. |
+| **S10** | 🟢 Fixed | Verified: Dart `OrderStatus` enum serializes via `.index` (0-5) → INTEGER. SQLite flexible typing accepts it in `TEXT` column. No mismatch at runtime. |
+| **S17** | 🟢 Fixed | Added indices for `order_discount(orderId)`, `customer_loyalty(customerId)`, `loyalty_transaction(customerId)`, `supplier(phone)`, `purchase_order(supplierId)`, `purchase_order(status)`, `purchase_order_item(purchaseOrderId)` in `schema.sql` + v10. |
 
 ---
 
