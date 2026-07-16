@@ -167,7 +167,7 @@ jobs:
           name: ${{ matrix.artifact-name }}
           path: ${{ matrix.artifact }}
 
-  build-ios:
+  ios:
     name: ios
     runs-on: macos-15
     steps:
@@ -200,7 +200,7 @@ jobs:
           path: build/ios/iphoneos/
 
   release:
-    needs: [build, build-ios]
+    needs: [build, ios]
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -220,12 +220,26 @@ jobs:
             echo ""
             for dir in artifacts/*/; do
               name=$(basename "$dir")
-              echo "- \`$name\`"
+              if ls "$dir"/*.apk &>/dev/null || ls "$dir"/*.aab &>/dev/null || ls "$dir"/*.dmg &>/dev/null || ls "$dir"/*.exe &>/dev/null || ls "$dir"/Runner &>/dev/null || ls "$dir"/*.app &>/dev/null; then
+                echo "- \`$name\`"
+              fi
             done
           } > body.md
 
+      - name: Create per-platform archives
+        shell: bash
+        run: |
+          cd artifacts
+          for dir in */; do
+            name="${dir%/}"
+            archive="$name.tar.gz"
+            tar czf "$archive" "$dir"
+            echo "Created $archive"
+          done
+
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           body_path: body.md
-          files: artifacts/**/*
+          files: artifacts/*.tar.gz
+          fail_on_unmatched_files: false
