@@ -50,7 +50,6 @@ class SqliteOrderRepository implements OrderRepository {
       (_store.queryScalar('SELECT COUNT(*) FROM orders') as int?) ?? 0;
 
   @override
-  @override
   Order? getOrderById(int id) {
     final rows = _store.query('SELECT * FROM orders WHERE id = ?', [id]);
     return rows.isEmpty ? null : Order.fromMap(rows.first);

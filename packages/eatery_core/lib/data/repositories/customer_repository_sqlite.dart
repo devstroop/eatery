@@ -32,7 +32,6 @@ class SqliteCustomerRepository implements CustomerRepository {
       'lastOrderAt';
 
   @override
-  @override
   List<Customer> getAllCustomers() => _store
       .query('SELECT * FROM customer LIMIT 100')
       .map(Customer.fromMap)
@@ -51,7 +50,6 @@ class SqliteCustomerRepository implements CustomerRepository {
   int getCustomerCount() =>
       (_store.queryScalar('SELECT COUNT(*) FROM customer') as int?) ?? 0;
 
-  @override
   @override
   Customer? getCustomerByPhone(String phone) {
     final rows = _store.query(
