@@ -26,29 +26,33 @@ class SqliteCompanyRepository implements CompanyRepository {
   @override
   Future<void> saveCompany(Company company) async {
     final m = company.toMap();
+    final id = company.id ??
+        (_store.queryScalar('SELECT COALESCE(MAX(id), 0) + 1 FROM company') as int);
     _store.execute(
       '''
       INSERT OR REPLACE INTO company
-        (id, logo, name, email, phone, address, password, edition,
-         currencyCode, salesTaxNumber, foodLicenseNo, subscriptionId)
-      VALUES (1,?,?,?,?,?,?,?,?,?,?,?)
+        (id, logo, name, email, phone, address, edition,
+         currencyCode, salesTaxNumber, foodLicenseNo, subscriptionId,
+         adminStaffId)
+      VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
     ''',
       [
+        id,
         m['logo'],
         m['name'],
         m['email'],
         m['phone'],
         m['address'],
-        m['password'],
         m['edition'],
         m['currencyCode'],
         m['salesTaxNumber'],
         m['foodLicenseNo'],
         m['subscriptionId'],
+        m['adminStaffId'],
       ],
     );
-    company = company.copyWith(id: 1);
-    notifyMutation('company', 1, 'save', company.toMap());
+    company = company.copyWith(id: id);
+    notifyMutation('company', id, 'save', company.toMap());
   }
 
   // ── Currencies ───────────────────────────────────────────────────────────
@@ -110,12 +114,12 @@ class SqliteCompanyRepository implements CompanyRepository {
       email: row['email'] as String,
       phone: row['phone'] as String,
       address: row['address'] as String,
-      password: row['password'] as String?,
       taxation: taxation,
       currencyCode: row['currencyCode'] as String?,
       salesTaxNumber: row['salesTaxNumber'] as String?,
       foodLicenseNo: row['foodLicenseNo'] as String?,
       subscriptionId: row['subscriptionId'] as int?,
+      adminStaffId: row['adminStaffId'] as int?,
       id: row['id'] as int,
     );
   }

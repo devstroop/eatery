@@ -13,12 +13,12 @@ abstract class Company with _$Company {
     required String email,
     required String phone,
     required String address,
-    String? password,
     required Taxation taxation,
     String? currencyCode,
     @JsonKey(name: 'foodLicNo') String? foodLicenseNo,
     @JsonKey(name: 'taxLicNo') String? salesTaxNumber,
     int? subscriptionId,
+    int? adminStaffId,
   }) = _Company;
 
   factory Company.fromJson(Map<String, dynamic> json) =>
@@ -34,14 +34,14 @@ abstract class Company with _$Company {
       'email': list.elementAt(3),
       'phone': list.elementAt(4),
       'address': list.elementAt(5),
-      'password': list.elementAt(6),
       'edition': Taxation.values.singleWhere(
-        (element) => element.id == list.elementAt(7),
+        (element) => element.id == list.elementAt(6),
       ),
-      'currencyCode': list.elementAt(8),
-      'foodLicNo': list.elementAt(9),
-      'taxLicNo': list.elementAt(10),
-      'subscriptionId': list.elementAt(11),
+      'currencyCode': list.elementAt(7),
+      'foodLicNo': list.elementAt(8),
+      'taxLicNo': list.elementAt(9),
+      'subscriptionId': list.elementAt(10),
+      'adminStaffId': list.elementAt(11),
     });
   }
 }
@@ -67,12 +67,12 @@ extension CompanyX on Company {
       map['email'],
       map['phone'],
       map['address'],
-      map['password'],
       map['edition'],
       map['currencyCode'],
       map['foodLicNo'],
       map['taxLicNo'],
       map['subscriptionId'],
+      map['adminStaffId'],
     ];
   }
 }

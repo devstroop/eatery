@@ -13,12 +13,12 @@ _Company _$CompanyFromJson(Map<String, dynamic> json) => _Company(
   email: json['email'] as String,
   phone: json['phone'] as String,
   address: json['address'] as String,
-  password: json['password'] as String?,
   taxation: $enumDecode(_$TaxationEnumMap, json['taxation']),
   currencyCode: json['currencyCode'] as String?,
   foodLicenseNo: json['foodLicNo'] as String?,
   salesTaxNumber: json['taxLicNo'] as String?,
   subscriptionId: (json['subscriptionId'] as num?)?.toInt(),
+  adminStaffId: (json['adminStaffId'] as num?)?.toInt(),
 );
 
 Map<String, dynamic> _$CompanyToJson(_Company instance) => <String, dynamic>{
@@ -28,12 +28,12 @@ Map<String, dynamic> _$CompanyToJson(_Company instance) => <String, dynamic>{
   'email': instance.email,
   'phone': instance.phone,
   'address': instance.address,
-  'password': instance.password,
   'taxation': _$TaxationEnumMap[instance.taxation]!,
   'currencyCode': instance.currencyCode,
   'foodLicNo': instance.foodLicenseNo,
   'taxLicNo': instance.salesTaxNumber,
   'subscriptionId': instance.subscriptionId,
+  'adminStaffId': instance.adminStaffId,
 };
 
 const _$TaxationEnumMap = {Taxation.none: -1, Taxation.gst: 0, Taxation.vat: 1};
