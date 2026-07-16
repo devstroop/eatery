@@ -1,6 +1,15 @@
 # Issues & Technical Debt Tracker
 
-**Global Status:** Phase 1 (28/28 ✅) | Company (0/14) | Employee Rename (0/7) | Schema Audit (1/17 🟢 S10 done) | Company Table Audit (0/11) | **Total: 29/77 ✅**
+**Global Status:** Phase 1 (28/28 ✅) | Company (3/14 ✅) | Employee Rename (0/7) | Schema Audit (1/17) | Company Table (0/11) | Edition→Taxation (0/4) | Cross-Cutting (0/40) | **Total: 32/121 ✅**
+
+## Active Review Findings — 2026-07-16
+
+> **Test gap:** 13 test files for 392 source files (30:1 ratio) — zero widget, migration, or integration tests
+> **Security:** Plaintext company password + plaintext staff PIN comparison
+> **Deps:** `gbk_codec` (Chinese encoding — dead dep?), `rxdart` (unused?), 40+ deps total
+> **CI:** No iOS build, no coverage, `--no-fatal-infos` masks 300 issues
+> **i18n:** Zero localization infrastructure for an Indian POS
+> **Arch:** `pos.page.dart` at 1047 lines, `references.dart` barrel 154+ exports, 67 raw `Color(0x...)` remain
 
 ---
 
@@ -57,9 +66,9 @@
 
 | # | Issue | Severity | Description | Files |
 |---|-------|----------|-------------|-------|
-| **C01** | `adminStaffId` missing from Dart model | 🔴 P0 | SQL column `adminStaffId` exists in `company` table and `setup.page.dart` writes it, but the Dart `Company` model has no such field in its `@freezed` factory. The `saveCompany` INSERT also omits it. `schema_migrator.dart` and `onboarding-redesign.md` both reference this field. *(Same issue as S18 below — C01 is the canonical entry.)* | `packages/eatery_core/lib/data/models/company/company.dart`, `packages/eatery_core/lib/data/repositories/company_repository_sqlite.dart` |
-| **C02** | `company.password` is a security anti-pattern | 🔴 P0 | The Company model stores a plaintext password. Industry standard: Company has NO password. Staff have PINs (hashed). This field is used in `app_router.dart:123` to decide the initial route (`password != null ? '/login' : '/dashboard'`), in `login.page.dart` to display company info, and in `create_company.page.dart` to collect it from users. `setup.page.dart` already omits it — the rest of the app needs to follow. *(Same issue as S28 below — C02 is the canonical entry.)* | `company.dart`, `company_repository_sqlite.dart`, `app_router.dart`, `login.page.dart`, `create_company.page.dart`, `edit.company.page.dart` |
-| **C03** | `company.id = 1` hardcoded in saveCompany | 🔴 P0 | `saveCompany()` at line 33 uses `VALUES (1,?...` and then `company.copyWith(id: 1)`. This makes multi-outlet structurally impossible. Even for a single restaurant, hardcoding the PK is fragile. Use `company.id ?? (await getNextId())`. | `packages/eatery_core/lib/data/repositories/company_repository_sqlite.dart` |
+| **C01** | `adminStaffId` missing from Dart model | ✅ Fixed | Added `int? adminStaffId` to `Company` freezed factory, `fromIterable`, `toIterable`. Updated `saveCompany` INSERT and `_toCompany` mapper. `create_company.page.dart` now creates an admin staff and links via `adminStaffId`. | `company.dart`, `company_repository_sqlite.dart`, `create_company.page.dart` |
+| **C02** | `company.password` is a security anti-pattern | ✅ Fixed | Removed `password` from `Company` freezed factory, `fromIterable`, `toIterable`, and `_toCompany` mapper. Removed from `saveCompany` INSERT. `create_company.page.dart` now uses the password as admin staff PIN instead of storing it on the company. `app_router.dart` changed from `password != null ? '/login' : '/dashboard'` to always go to `'/login'` when company exists. `view.company.page.dart` verifies delete PIN against staff table instead of `company.password`. *(Same issue as S28 below — C02 is the canonical entry.)* | `company.dart`, `company_repository_sqlite.dart`, `app_router.dart`, `create_company.page.dart`, `view.company.page.dart` |
+| **C03** | `company.id = 1` hardcoded in saveCompany | ✅ Fixed | Replaced `VALUES (1,...)` with `VALUES (?,...)` using `company.id ?? (SELECT COALESCE(MAX(id), 0) + 1 FROM company)`. `company.copyWith(id: 1)` → `company.copyWith(id: id)`. `notifyMutation` now uses dynamic `id` instead of hardcoded `1`. | `company_repository_sqlite.dart` |
 | **C04** | Logo cannot be saved after creation | 🟡 P1 | `edit.company.page.dart` has a `UploadButton` for logo and a `selectedLogo` field, but `saveCompany` via `copyWith` never includes `logo`. The `logo` field is set to `libraryImageLogo?.filename` only in `create_company._submitForm()`. After creation, the logo is permanently frozen. | `edit.company.page.dart` |
 | **C05** | Taxation, currency, subscription — not editable | 🟡 P1 | The edit page shows these as read-only labels (or skips them entirely). `taxation` is an enum that can't be changed after creation. `currencyCode` has no UI element in the edit page. `subscriptionId` is never shown or editable. Users who picked "No Tax" during onboarding cannot enable GST later without deleting and recreating the company. | `edit.company.page.dart` |
 | **C06** | Phone controller assigned twice in edit page | 🟡 P1 | `edit.company.page.dart` lines 35-36: `debugPrint(_controllerPhone.text = company!.phone);` appears twice. Dead code from a bad merge. | `lib/pages/dashboard/settings/company/edit.company.page.dart` |
@@ -96,10 +105,10 @@ C14 (onboarding checklist) → after C13
 ## Recommended Fix Order
 
 ```
-Week 1 — Critical (P0):  C01 → C02 → C03
-Week 2 — Edit page (P1): C04 → C05 → C06 → C13
-Week 3 — ERP parity (P2): C08 → C09 → C07
-Week 4 — Polish (P3):    C14 → C10 → C11 → C12
+✅ Week 1 — Critical (P0):  C01 → C02 → C03 (all done)
+Week 2 — Edit page (P1):    C04 → C05 → C06 → C13
+Week 3 — ERP parity (P2):   C08 → C09 → C07
+Week 4 — Polish (P3):       C14 → C10 → C11 → C12
 ```
 
 ## Industry Comparison Summary
@@ -412,3 +421,215 @@ S21 is new (orders FK explosion post Employee rename)
 S22-S28 extend C07-C12 (missing ERP columns on company)
 S20 depends on C03 (stop hardcoding company.id=1) before companyId FKs make sense
 ```
+
+---
+
+# Edition → Taxation Naming Gap
+
+> **Date:** 2026-07-16
+> **Finding:** The SQL column `company.edition`, the Dart file `edition.dart`, and the extension on `FoodType` named `EditionExtension` are all artifacts of an original project design where `Edition` meant "plan tier" (free/basic/pro/enterprise). The column was later repurposed to store tax regime (GST/VAT/None). The Dart enum was correctly renamed to `Taxation`, but the SQL column, filename, and cross-contaminated extensions were never cleaned up. A `toMap()` hack bridges the gap.
+
+## Current State — One Concept, Three Names
+
+```
+Location                  Name Used              Actual Meaning
+─────────────────────────────────────────────────────────────────────
+SQL column                edition INTEGER         tax regime (GST/VAT/None)
+Dart enum (correct)       Taxation                tax regime (GST/VAT/None)
+Dart filename (wrong)     edition.dart            holds enum Taxation ← MISMATCH
+Extension (correct)       NatureOfTaxExtension    "nature of tax"      ← correct
+toMap() hack (wrong)      m['edition'] = ...      translates Taxation → edition ← BAND-AID
+FoodType extension        EditionExtension        Veg/NonVeg enum      ← CONTAMINATED
+```
+
+## The `toMap()` Hack — Admission of Guilt
+
+```dart
+// company.dart line 52-56
+Map<String, Object?> toMap() {
+  final m = toJson() as Map<String, Object?>;
+  // The SQL column is 'edition' but the Dart field is 'taxation'.
+  if (m.containsKey('taxation') && !m.containsKey('edition')) {
+    m['edition'] = m.remove('taxation');  // rename on the fly
+  }
+  return m;
+}
+```
+
+This code exists solely because the SQL column was never renamed. It's a runtime translation layer that would disappear if the column was named `taxation`.
+
+## Blast Radius
+
+| Location | Issue |
+|---|---|
+| `company.edition` SQL column | Should be `taxation` |
+| `company.dart:1` | `import 'edition.dart'` → should be `taxation.dart` |
+| `edition.dart` filename | Contains enum `Taxation` — file should be `taxation.dart` |
+| `company.dart:52-56` | `toMap()` hack — can be deleted after column rename |
+| `company.dart:37` | `fromIterable` reads `'edition'` key → should read `'taxation'` |
+| `food_type.dart:12` | `extension EditionExtension on FoodType` — should be `FoodTypeExtension` |
+| `eatery_db.dart:26` | `export 'company/edition.dart'` → should be `company/taxation.dart` |
+| `seed_data.dart:19` | Writes to `edition` column directly |
+| `schema_migrator.dart` | Column rename migration needed |
+| `company_repository_sqlite.dart:34,46` | SELECT/INSERT uses `edition` column name |
+| `body4.dart:89` | Commented-out code uses `Edition.gst` |
+
+## Already Flagged (in Previous Audits)
+
+```
+docs/plan/schema-audit.md:  edition → "confusing name (means taxation)"
+docs/plan/schema-audit.md:  "Rename to taxation to match model"
+docs/plan/issue-inventory.md DB1: "Company.taxation field vs company.edition column"
+```
+
+This has been a known issue through at least 3 audit cycles but never fixed.
+
+## Issue Table
+
+| # | Severity | Issue |
+|---|----------|-------|
+| **N01** | 🔴 P0 | Rename SQL column `company.edition` → `company.taxation`. Add migration. Remove `toMap()` hack. |
+| **N02** | 🔴 P0 | Rename Dart file `edition.dart` → `taxation.dart`. Update import in `company.dart` and barrel exports in `eatery_db.dart`. |
+| **N03** | 🟡 P1 | Rename `FoodType.EditionExtension` → `FoodType.FoodTypeExtension`. It's a Veg/NonVeg enum — has nothing to do with editions. |
+| **N04** | 🟡 P1 | Audit and rename all remaining references: `seed_data.dart` writes to `edition`, `repository_sqlite.dart` reads/writes `edition`, `fromIterable()` reads key `'edition'`. |
+
+## Fix Checklist
+
+```
+Step 1: ALTER TABLE company RENAME COLUMN edition TO taxation (schema migration)
+Step 2: Rename file edition.dart → taxation.dart
+Step 3: Update import in company.dart (line 1)
+Step 4: Update barrel export in eatery_db.dart (line 26)
+Step 5: Replace m['edition'] → m['taxation'] in company.dart toMap(), fromIterable()
+Step 6: DELETE the m['edition'] = m.remove('taxation') hack
+Step 7: Replace 'edition' → 'taxation' in company_repository_sqlite.dart (SELECT + INSERT)
+Step 8: Replace 'edition' → 'taxation' in seed_data.dart
+Step 9: Rename Extension EditionExtension → FoodTypeExtension in food_type.dart
+Step 10: Clean up commented-out Edition.gst references in body4.dart
+Step 11: flutter analyze + flutter test (verify no 'edition' references remain)
+```
+
+## What Edition SHOULD Be (Future)
+
+If a real "software edition" concept is needed later (plan tier: free/basic/pro/enterprise), it should be stored in a `subscription` table with `planTier` / `featureSet`, NOT in the `company` table. The `company.taxation` column is exclusively for GST/VAT/None.
+
+---
+
+# Global Project Review — Cross-Cutting Concerns
+
+> **Date:** 2026-07-16
+> **Scope:** Testing, tooling, security, dependencies, i18n, CI/CD, documentation, developer experience, architecture
+> **Stats:** 403 Dart source files | 13 test files (30:1 ratio) | 47 docs | 49 schema tables | 40+ direct deps | 6 ADRs | 4 CI platforms | 29 Zig files
+
+## 1. Testing — Critical Gap
+
+| Metric | Current | Industry Baseline | Gap |
+|---|---|---|---|
+| Source files | 392 source | — | — |
+| Test files | **13** | 50+ for this size | 🔴 |
+| Source:test ratio | **30:1** | 3:1 to 5:1 | 🔴 |
+| Widget tests | **0** | Every reusable widget | 🔴 |
+| UI/integration tests | **0** | Login + create-order flow | 🟡 |
+| Golden tests | **0** | Tokenized design system | 🟡 |
+| Large-dataset tests | **0** | 1000+ row queries | 🟠 |
+| Migration tests | **0** | Every schema change | 🔴 |
+
+| # | Severity | Issue |
+|---|----------|-------|
+| **T01** | 🔴 P0 | Zero widget tests. 27 reusable widgets in `eatery_core/lib/widgets/`. ADR-006 says "one widget per domain concept" but no automated check verifies all 4 role contexts render. |
+| **T02** | 🔴 P0 | Zero schema migration tests. `SchemaMigrator` adds columns, creates tables, and will soon rename `edition→taxation` and `staff→employee`. No test verifies any migration. |
+| **T03** | 🟡 P1 | Test isolation is missing. All test files share one in-memory SQLite store. One polluting test breaks downstream. Each suite should `setUp` a fresh store. |
+| **T04** | 🟡 P1 | Test data is tiny. No test uses >10 rows. Real POS has 1000+ orders. Add `seed_large_dataset.dart` and one 1000-order query test. |
+| **T05** | 🟠 P2 | Zero golden tests for the design system (ADR-004, ADR-005). Token changes have no visual regression catch. |
+| **T06** | 🟠 P2 | `AppVariant × AppSemantic × AppSize` matrix (ADR-005) has zero smoke tests. |
+| **T07** | 🟠 P2 | No integration test for setup→login→dashboard flow — the most critical user journey. |
+| **T08** | 🟠 P2 | No accessibility/semantics tree tests for KDS, Waiter, Display modes. |
+
+## 2. Linting & Static Analysis
+
+| # | Severity | Issue |
+|---|----------|-------|
+| **L01** | 🟡 P1 | `analysis_options.yaml` uses default `flutter_lints` — the least strict rule set. Missing: `always_declare_return_types`, `unawaited_futures`, `require_trailing_commas`, `prefer_const_constructors`, `prefer_single_quotes`. |
+| **L02** | 🟡 P1 | Only 1 `// ignore:` in entire codebase — suggests lints are too permissive, not that code is perfect. |
+| **L03** | 🟠 P2 | No `dart_code_metrics` for complexity/coupling detection. |
+
+## 3. Dependencies — Questionable & Unused
+
+| # | Severity | Issue |
+|---|----------|-------|
+| **D01** | 🔴 P0 | `gbk_codec: ^0.4.0` — Chinese character encoding. Eatery is an English/Indian POS. Dead dep or hidden usage. Verify with `grep -r gbk_codec lib/`. |
+| **D02** | 🟡 P1 | `rxdart: ^0.28.0` — Reactive Extensions. Project uses Riverpod everywhere. Remove if no explicit import. |
+| **D03** | 🟡 P1 | `hex: ^0.2.0` — `dart:convert` has hex since Dart 2.18. Replace or remove. |
+| **D04** | 🟡 P1 | 40+ deps. Overlaps: `fluttertoast` + `sn_progress_dialog` (notifications), `file_picker` + `image_picker` (file handling). Consolidate. |
+| **D05** | 🟠 P2 | `encrypt: ^5.0.3` — should be for PIN hashing. If PIN is plaintext (X02), this dep is unused for its intended purpose. |
+| **D06** | 🔵 P3 | `devdart_windows_hdsn: ^0.0.2` — unmaintained. Replace with Zig platform channel for device fingerprinting. |
+
+## 4. Security
+
+| # | Severity | Issue |
+|---|----------|-------|
+| **X01** | 🔴 P0 | `company.password` plaintext in SQLite. `saveCompany()` INSERT includes `m['password']` directly. See C02. |
+| **X02** | 🔴 P0 | `staff.pin` plaintext comparison: `staff.pin == pin` in `authenticateStaff()`. No bcrypt/scrypt, no salt, no constant-time compare. |
+| **X03** | 🟡 P1 | No rate limiting on PIN attempts. 4-digit PIN is brute-forceable offline against SQLite. |
+| **X04** | 🟠 P2 | `app_router.dart:123` checks `company.password != null` to decide route — leaks information. |
+
+## 5. CI/CD & DevOps
+
+| # | Severity | Issue |
+|---|----------|-------|
+| **CI01** | 🟡 P1 | CI builds all 4 platforms on every `dev` push. Expensive. Build `android+linux` always; `macos+windows` only on PR to `master`. |
+| **CI02** | 🟡 P1 | `flutter analyze --no-fatal-infos --no-fatal-warnings` masks ~300 issues. Remove flags when warning count reaches zero. |
+| **CI03** | 🟡 P1 | No iOS build in CI. iPads are the #1 restaurant POS hardware. |
+| **CI04** | 🟠 P2 | No `--coverage` + upload step. Zero visibility into coverage. |
+| **CI05** | 🟠 P2 | No caching of Zig native build output. Rebuilds from scratch every CI job. |
+| **CI06** | 🔵 P3 | `ZIG_VERSION: "0.15.2"` in CI. User memory has 0.16 API changes documented. Sync needed. |
+| **CI07** | 🔵 P3 | `web/` directory exists but no web build in CI. Either remove or add. |
+
+## 6. Internationalization
+
+| # | Severity | Issue |
+|---|----------|-------|
+| **I01** | 🟠 P2 | Zero i18n infrastructure. All strings hardcoded English. `intl` installed but only used for `DateFormat`, not message localization. |
+| **I02** | 🟠 P2 | Currency display uses `$symbol${amount}` — symbol position varies by locale (₹500 vs 500€). No `NumberFormat.currency()`. |
+
+## 7. Architecture & Code Organization
+
+| # | Severity | Issue |
+|---|----------|-------|
+| **A01** | 🟡 P1 | `pos.page.dart` is 1,047 lines. Split into: `pos_screen.dart`, `category_bar.dart`, `product_grid.dart`, `cart_panel.dart`. |
+| **A02** | 🟡 P1 | 67 raw `Color(0x...)` remain in `lib/` despite ADR-004. Most in `dashboard.page.dart` (16 raw colors). |
+| **A03** | 🟡 P1 | `references.dart` exports 154+ files. Single file change invalidates all importers. Split into focused barrels. |
+| **A04** | 🟠 P2 | `flutter analyze` reports ~300 issues. Same count pre-Phase-5. No trend toward zero. |
+
+## 8. Documentation Hygiene
+
+| # | Severity | Issue |
+|---|----------|-------|
+| **DOC01** | 🟡 P1 | `docs/plan/issue-inventory.md` — 106-item audit, many resolved. Archive or merge into ISSUES.md. |
+| **DOC02** | 🟡 P1 | `docs/plan/schema-audit.md` — partial implementation. Says "planned" for things now in ISSUES.md as S18/S20/N01-N04. |
+| **DOC03** | 🟡 P1 | `docs/plan/onboarding-redesign.md` — describes 2-field setup. `setup.page.dart` implements it but the doc doesn't acknowledge partial completion. |
+| **DOC04** | 🟠 P2 | No ADR for: sync protocol choice, SQLite-over-Firebase, single-app unification. |
+
+## 9. Developer Experience
+
+| # | Severity | Issue |
+|---|----------|-------|
+| **DX01** | 🟡 P1 | No `.vscode/launch.json` checked in. Developers manually configure `--dart-define=role=...`. |
+| **DX02** | 🟡 P1 | No pre-commit hooks (`lefthook`, `husky`). Format-on-save is manual. |
+| **DX03** | 🟠 P2 | `melos.yaml` was removed. Clean up `melos_eatery.iml` and `melos:` script remnants in `pubspec.yaml`. |
+
+## 10. Platform & Native
+
+| # | Severity | Issue |
+|---|----------|-------|
+| **P01** | 🟡 P1 | iOS not in CI. iPads are the most common restaurant POS device in India. |
+| **P02** | 🟠 P2 | 61 Swift/Kotlin files across `ios/`/`macos/`/`android/`. Mostly plugin-generated. Audit for custom platform channels beyond Zig FFI. |
+| **P03** | 🟠 P2 | Android NDK vs Zig cross-compilation target mismatch risk. Verify `ndkVersion` in `build.gradle`. |
+
+## Recommended Priority (Cross-Cutting)
+
+```
+Immediate:  T01, T02, D01, X01/X02 document-as-debt
+Week 1-2:   L01, T03, A01, D02-D04, DOC01-DOC03
+Week 3-4:   T04, T05, I01, CI03, A03
+Month 2+:   CI04, X03, I02, DX01-DX03, P01-P03
