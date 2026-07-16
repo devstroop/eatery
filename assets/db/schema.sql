@@ -169,7 +169,25 @@ CREATE TABLE IF NOT EXISTS company (
   subscriptionId INTEGER,
   adminEmployeeId   INTEGER,
   createdAt      INTEGER NOT NULL,
-  updatedAt      INTEGER
+  updatedAt      INTEGER,
+  addressLine1   TEXT,
+  addressLine2   TEXT,
+  city           TEXT,
+  state          TEXT,
+  pincode        TEXT,
+  country        TEXT DEFAULT 'IN',
+  invoicePrefix  TEXT,
+  nextInvoiceNo  INTEGER DEFAULT 1,
+  invoiceTerms   TEXT,
+  invoiceFooter  TEXT,
+  legalName      TEXT,
+  displayName    TEXT,
+  businessType   TEXT,
+  pan            TEXT,
+  website        TEXT,
+  timezone       TEXT,
+  defaultLanguage TEXT DEFAULT 'en',
+  defaultOrderType INTEGER
 );
 
 CREATE TABLE IF NOT EXISTS currency (

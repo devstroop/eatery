@@ -48,7 +48,12 @@ class SqliteCompanyRepository implements CompanyRepository {
         UPDATE company SET
           logo=?, name=?, email=?, phone=?, address=?, taxation=?,
           currencyCode=?, salesTaxNumber=?, foodLicenseNo=?,
-          subscriptionId=?, adminEmployeeId=?, updatedAt=?
+          subscriptionId=?, adminEmployeeId=?, updatedAt=?,
+          addressLine1=?, addressLine2=?, city=?, state=?, pincode=?,
+          country=?, invoicePrefix=?, nextInvoiceNo=?, invoiceTerms=?,
+          invoiceFooter=?, legalName=?, displayName=?, businessType=?,
+          pan=?, website=?, timezone=?, defaultLanguage=?,
+          defaultOrderType=?
         WHERE id=?
       ''',
         [
@@ -64,6 +69,24 @@ class SqliteCompanyRepository implements CompanyRepository {
           m['subscriptionId'],
           m['adminEmployeeId'],
           now,
+          m['addressLine1'],
+          m['addressLine2'],
+          m['city'],
+          m['state'],
+          m['pincode'],
+          m['country'],
+          m['invoicePrefix'],
+          m['nextInvoiceNo'],
+          m['invoiceTerms'],
+          m['invoiceFooter'],
+          m['legalName'],
+          m['displayName'],
+          m['businessType'],
+          m['pan'],
+          m['website'],
+          m['timezone'],
+          m['defaultLanguage'],
+          m['defaultOrderType'],
           id,
         ],
       );
@@ -73,8 +96,14 @@ class SqliteCompanyRepository implements CompanyRepository {
         INSERT INTO company
           (id, logo, name, email, phone, address, taxation,
            currencyCode, salesTaxNumber, foodLicenseNo, subscriptionId,
-           adminEmployeeId, createdAt, updatedAt)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+           adminEmployeeId, createdAt, updatedAt,
+           addressLine1, addressLine2, city, state, pincode, country,
+           invoicePrefix, nextInvoiceNo, invoiceTerms, invoiceFooter,
+           legalName, displayName, businessType, pan, website,
+           timezone, defaultLanguage, defaultOrderType)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,
+                ?,?,?,?,?,?,?,?,?,?,
+                ?,?,?,?,?,?,?,?)
       ''',
         [
           id,
@@ -91,6 +120,24 @@ class SqliteCompanyRepository implements CompanyRepository {
           m['adminEmployeeId'],
           m['createdAt'] ?? now,
           now,
+          m['addressLine1'],
+          m['addressLine2'],
+          m['city'],
+          m['state'],
+          m['pincode'],
+          m['country'],
+          m['invoicePrefix'],
+          m['nextInvoiceNo'],
+          m['invoiceTerms'],
+          m['invoiceFooter'],
+          m['legalName'],
+          m['displayName'],
+          m['businessType'],
+          m['pan'],
+          m['website'],
+          m['timezone'],
+          m['defaultLanguage'],
+          m['defaultOrderType'],
         ],
       );
     }
@@ -167,6 +214,24 @@ class SqliteCompanyRepository implements CompanyRepository {
       updatedAt: row['updatedAt'] != null
           ? DateTime.fromMillisecondsSinceEpoch(row['updatedAt'] as int)
           : null,
+      addressLine1: row['addressLine1'] as String?,
+      addressLine2: row['addressLine2'] as String?,
+      city: row['city'] as String?,
+      state: row['state'] as String?,
+      pincode: row['pincode'] as String?,
+      country: row['country'] as String? ?? 'IN',
+      invoicePrefix: row['invoicePrefix'] as String?,
+      nextInvoiceNo: row['nextInvoiceNo'] as int? ?? 1,
+      invoiceTerms: row['invoiceTerms'] as String?,
+      invoiceFooter: row['invoiceFooter'] as String?,
+      legalName: row['legalName'] as String?,
+      displayName: row['displayName'] as String?,
+      businessType: row['businessType'] as String?,
+      pan: row['pan'] as String?,
+      website: row['website'] as String?,
+      timezone: row['timezone'] as String?,
+      defaultLanguage: row['defaultLanguage'] as String? ?? 'en',
+      defaultOrderType: row['defaultOrderType'] as int?,
     );
   }
 

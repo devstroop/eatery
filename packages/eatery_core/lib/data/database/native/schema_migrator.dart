@@ -103,6 +103,8 @@ class SchemaMigrator {
     _migrationV11,
     _migrationV12,
     _migrationV13,
+    _migrationV14,
+    _migrationV15,
   ];
 
   /// v1: Auth & order lifecycle fields.
@@ -415,6 +417,41 @@ class SchemaMigrator {
     // S21 + S11: Orders FK columns
     _addColumn(store, 'orders', 'customerId', 'INTEGER');
     _addColumn(store, 'orders', 'companyId', 'INTEGER');
+  }
+
+  /// v14: Company structured address + invoice config (#135, #136).
+  ///
+  /// Adds address components (`addressLine1`, `city`, `state`, etc.) and
+  /// invoice settings (`invoicePrefix`, `nextInvoiceNo`, etc.) to `company`.
+  static void _migrationV14(EateryStore store) {
+    // #135: Structured address
+    _addColumn(store, 'company', 'addressLine1', 'TEXT');
+    _addColumn(store, 'company', 'addressLine2', 'TEXT');
+    _addColumn(store, 'company', 'city', 'TEXT');
+    _addColumn(store, 'company', 'state', 'TEXT');
+    _addColumn(store, 'company', 'pincode', 'TEXT');
+    _addColumn(store, 'company', 'country', "TEXT DEFAULT 'IN'");
+
+    // #136: Invoice config
+    _addColumn(store, 'company', 'invoicePrefix', 'TEXT');
+    _addColumn(store, 'company', 'nextInvoiceNo', 'INTEGER DEFAULT 1');
+    _addColumn(store, 'company', 'invoiceTerms', 'TEXT');
+    _addColumn(store, 'company', 'invoiceFooter', 'TEXT');
+  }
+
+  /// v15: Company business identity + ops config (#137, #138).
+  static void _migrationV15(EateryStore store) {
+    // #137: Business identity
+    _addColumn(store, 'company', 'legalName', 'TEXT');
+    _addColumn(store, 'company', 'displayName', 'TEXT');
+    _addColumn(store, 'company', 'businessType', 'TEXT');
+    _addColumn(store, 'company', 'pan', 'TEXT');
+    _addColumn(store, 'company', 'website', 'TEXT');
+
+    // #138: Operations config
+    _addColumn(store, 'company', 'timezone', 'TEXT');
+    _addColumn(store, 'company', 'defaultLanguage', "TEXT DEFAULT 'en'");
+    _addColumn(store, 'company', 'defaultOrderType', 'INTEGER');
   }
 
   /// Runs [sql] and ignores "no such column" errors that occur when the old
