@@ -9,14 +9,17 @@ final authSessionProvider = StateProvider<Staff?>((ref) => null);
 
 /// Verifies a staff member's PIN against the stored hash.
 ///
+/// Supports both SHA-256 hashed PINs and legacy plaintext PINs for
+/// backward compatibility. All new PIN insertions should hash first.
+///
 /// Returns the matching [Staff] on success, null on failure.
 Staff? authenticateStaff(EateryStore store, String loginId, String pin) {
-  // Try phone match first, then name match.
   var staff = _findByPhone(store, loginId);
   staff ??= _findByName(store, loginId);
   if (staff == null) return null;
-  if (staff.pin == null || staff.pin != pin) return null;
-  return staff;
+  if (staff.pin == null) return null;
+  if (verifyPin(pin, staff.pin!)) return staff;
+  return null;
 }
 
 Staff? _findByPhone(EateryStore store, String phone) {
