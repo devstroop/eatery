@@ -265,18 +265,26 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
         );
         notifyMutation('currency', 0, 'save', kCurrency.toMap());
       }
+      final store = ref.read(eateryStoreProvider);
+      final hashedPin = hashPin(_controllerPassword.text.trim());
+      store.execute(
+        'INSERT INTO staff (name, pin, type, isActive) VALUES (?,?,?,?)',
+        [_controllerRestaurantName.text.trim(), hashedPin, 4, 1],
+      );
+      final adminStaffId = store.queryScalar('SELECT last_insert_rowid()') as int;
+
       Company company = Company(
         name: _controllerRestaurantName.text,
         logo: libraryImageLogo?.filename,
         email: _controllerEmailAddress.text,
         phone: _controllerPhoneNumber.text,
         address: _controllerAddress.text,
-        password: _controllerPassword.text,
         taxation: taxation,
         foodLicenseNo: _controllerFoodLicNo.text,
         salesTaxNumber: _controllerTaxLicNo.text,
         subscriptionId: subscription.id,
         currencyCode: kCurrency?.code,
+        adminStaffId: adminStaffId,
       );
       ref.read(companyRepositoryProvider).saveCompany(company);
       if (!mounted) return;
