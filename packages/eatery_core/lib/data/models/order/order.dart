@@ -17,7 +17,9 @@ abstract class Order with _$Order {
   const factory Order({
     int? id,
     String? customerPhone,
+    int? customerId,
     int? employeeId,
+    int? companyId,
     @JsonKey(fromJson: epochFromJson, toJson: epochToJson)
     required DateTime createdAt,
     @JsonKey(fromJson: epochFromJsonNullable, toJson: epochToJsonNullable)
@@ -56,22 +58,24 @@ extension OrderX on Order {
     return Order.fromMap({
       'id': row.elementAt(0),
       'customerPhone': row.elementAt(1),
-      'createdAt': row.elementAt(2),
-      'updatedAt': row.elementAt(3),
-      'totalQuantity': row.elementAt(4),
-      'subTotal': row.elementAt(5),
-      'discountTotal': row.elementAt(6),
-      'taxTotal': row.elementAt(7),
-      'finalTotal': row.elementAt(8),
-      'roundOff': row.elementAt(9),
-      'grandTotal': row.elementAt(10),
-      'paidTotal': row.elementAt(11),
-      'type': row.elementAt(12),
-      'status': row.elementAt(13),
-      'voidReason': row.elementAt(14),
-      'voidedBy': row.elementAt(15),
-      'voidedAt': row.elementAt(16),
-      'employeeId': row.elementAt(17),
+      'customerId': row.elementAt(2),
+      'employeeId': row.elementAt(3),
+      'companyId': row.elementAt(4),
+      'createdAt': row.elementAt(5),
+      'updatedAt': row.elementAt(6),
+      'totalQuantity': row.elementAt(7),
+      'subTotal': row.elementAt(8),
+      'discountTotal': row.elementAt(9),
+      'taxTotal': row.elementAt(10),
+      'finalTotal': row.elementAt(11),
+      'roundOff': row.elementAt(12),
+      'grandTotal': row.elementAt(13),
+      'paidTotal': row.elementAt(14),
+      'type': row.elementAt(15),
+      'status': row.elementAt(16),
+      'voidReason': row.elementAt(17),
+      'voidedBy': row.elementAt(18),
+      'voidedAt': row.elementAt(19),
     });
   }
 
@@ -80,6 +84,9 @@ extension OrderX on Order {
     return [
       map['id'],
       map['customerPhone'],
+      map['customerId'],
+      map['employeeId'],
+      map['companyId'],
       map['createdAt'],
       map['updatedAt'],
       map['totalQuantity'],
@@ -95,7 +102,6 @@ extension OrderX on Order {
       map['voidReason'],
       map['voidedBy'],
       map['voidedAt'],
-      map['employeeId'],
     ];
   }
 }
