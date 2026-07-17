@@ -1,6 +1,6 @@
 # Routing & RBAC
 
-Single `GoRouter` in `lib/core/router/app_router.dart`. ~50 routes across 4 roles.
+Single `GoRouter` in `lib/core/router/app_router.dart`. ~76 routes across 3 device roles + 1 sub-role.
 
 ## Role Dispatch
 
@@ -8,27 +8,40 @@ On first launch, `device_role` is null → shown `RolePickerPage`. Once set, per
 
 ## RBAC Permission Map
 
+Two distinct role systems exist in the codebase:
+
+1. **Device roles** (`DeviceRole` enum in `role_picker.page.dart`): `admin`, `kds`, `display` — chosen once at first launch, determines the UI shell.
+2. **RBAC roles** (`roleProvider`): `admin`, `waiter`, `kds`, `display` — used by the router guard. `waiter` is a sub-role of the `admin` device, set after PIN login.
+
 ```dart
 const _rolePermissions = {
   'admin':   {'*'},                                          // all routes
   'waiter':  {'tables', 'menu', 'cart', 'waiterOrders',
               'orders', 'viewOrder', 'orderConfirmation',
               'orderPrint', 'customers', 'viewCustomer',
-              'login', 'logout'},
-  'kds':     {'kds', 'viewOrder', 'orderConfirmation'},
-  'display': {'display', 'viewOrder'},
+              'login', 'logout', 'resetPin', 'mainScreen'},
+  'kds':     {'kds', 'viewOrder', 'orderConfirmation', 'rolePicker'},
+  'display': {'display', 'viewOrder', 'rolePicker'},
 };
 ```
 
 ## Redirect Logic
 
+The `_rbacRedirect` function in `app_router.dart` applies these checks in order:
+
 ```
-1. No role → /role-picker
-2. Kiosk (kds/display) → no auth, block unpermitted → redirect to role home
-3. Staff (admin/waiter) → must be authenticated → /login if not
-4. Admin wildcard '*' → allow all
-5. Others → check permissions → redirect to role home if blocked
+1. No role set -> /role-picker (except public routes below)
+2. Public routes accessible to ALL roles regardless of permissions:
+     rolePicker, login, mainScreen, setup, createCompany, resetPin
+3. Root "/" redirects to role home
+4. Kiosk (kds/display) -> no auth required, block unpermitted -> redirect to role home
+5. Staff (admin/waiter) -> must be authenticated -> /login if not
+6. Already authenticated on /login -> redirect to role home
+7. Admin wildcard '*' -> allow all
+8. Others -> check permissions -> redirect to role home if blocked
 ```
+
+Public routes (`/role-picker`, `/login`, `/`, `/setup`, `/create-company`, `/reset-pin`) are always accessible — no authentication or permission check is applied.
 
 ## Role Home Routes
 
@@ -81,12 +94,24 @@ const _rolePermissions = {
 
 ### Waiter (subset shared with admin)
 
+Waiter has access to these routes via the permission map — some are shared with the admin route table.
+
 | Name | Path | Page |
 |------|------|------|
 | `tables` | `/tables` | `TablePage` |
 | `menu` | `/menu` | `MenuPage` |
 | `cart` | `/cart` | `CartPage` (waiter) |
 | `waiterOrders` | `/waiter-orders` | `WaiterOrdersPage` |
+| `orders` | `/orders` | `OrdersPage` |
+| `viewOrder` | `/orders/view` | `ViewOrderPage` |
+| `orderConfirmation` | `/order-confirmation` | `OrderConfirmationPage` |
+| `orderPrint` | `/order-print` | `OrderPrintPage` |
+| `customers` | `/customers` | `CustomersPage` |
+| `viewCustomer` | `/customers/view` | `ViewCustomerPage` |
+| `login` | `/login` | `LoginPage` |
+| `logout` | `/logout` | `LogoutPage` |
+| `resetPin` | `/reset-pin` | `ResetPinScreen` |
+| `mainScreen` | `/` | `MainScreen` |
 
 ### Kiosk
 
@@ -94,6 +119,9 @@ const _rolePermissions = {
 |------|------|------|
 | `kds` | `/kds` | `TicketPage` (KDS) |
 | `display` | `/display` | `DisplayPage` |
+| `viewOrder` | `/orders/view` | `ViewOrderPage` |
+| `orderConfirmation` | `/order-confirmation` | `OrderConfirmationPage` (kds only) |
+| `rolePicker` | `/role-picker` | `RolePickerPage` |
 
 ## Navigation Patterns
 
