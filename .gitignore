@@ -30,6 +30,8 @@
 .pub-cache/
 .pub/
 /build/
+pubspec.lock
+ios/Podfile.lock
 
 # Web related
 lib/generated_plugin_registrant.dart
@@ -45,22 +47,14 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
-# custom
-/.flutter-plugins
-/.flutter-plugins-dependencies
-/.dart_tool
-/ios/Podfile.lock
-/pubspec.lock
-ios/Podfile.lock
-.dart_tool 3/flutter_build/d8d009d718601037ea3e2a8e5e7b65a7/debug_unpack_ios.stamp
+# Gradle
+.gradle/
 
-# Ignore Gradle project-specific cache directory
-.gradle
-
-# Ignore Gradle build output directory
-build
-macos/Flutter/GeneratedPluginRegistrant.swift
+# Generated files (platform-specific)
 macos/Flutter/GeneratedPluginRegistrant.swift
 windows/flutter/generated_plugin_registrant.cc
 windows/flutter/generated_plugin_registrant.h
 windows/flutter/generated_plugins.cmake
+
+# Zig build output (libeaterystore)
+zig-out/
