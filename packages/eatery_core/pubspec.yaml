@@ -4,7 +4,7 @@ description: "Eatery shared core: models, database, sync, theme"
 version: 0.1.0
 
 environment:
-  sdk: ^3.11.3
+  sdk: ^3.11.0
   flutter: ">=3.41.0"
 
 dependencies:
