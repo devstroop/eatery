@@ -101,8 +101,8 @@ const _rolePermissions = <String, Set<String>>{
     'resetPin',
     'mainScreen',
   },
-  'kds': {'kds', 'viewOrder', 'orderConfirmation'},
-  'display': {'display', 'viewOrder'},
+  'kds': {'kds', 'viewOrder', 'orderConfirmation', 'rolePicker'},
+  'display': {'display', 'viewOrder', 'rolePicker'},
 };
 
 /// The home route for each role (used as redirect target on unauthorized).

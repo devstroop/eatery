@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/eatery_core.dart';
+import 'package:go_router/go_router.dart';
 import 'package:audioplayers/audioplayers.dart';
 
 final _stationsProvider = FutureProvider<List<KdsStation>>((ref) {
@@ -146,6 +147,14 @@ class _TicketPageState extends ConsumerState<TicketPage>
             IconButton(
               icon: const Icon(Icons.settings),
               onPressed: () => SyncHostSettingsSheet.show(context),
+            ),
+            IconButton(
+              icon: const Icon(Icons.swap_horiz),
+              tooltip: 'Switch Role',
+              onPressed: () {
+                ref.read(roleProvider.notifier).clearRole();
+                context.goNamed('rolePicker');
+              },
             ),
           ],
         ),

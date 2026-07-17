@@ -58,3 +58,4 @@ windows/flutter/generated_plugins.cmake
 
 # Zig build output (libeaterystore)
 zig-out/
+*.pdb

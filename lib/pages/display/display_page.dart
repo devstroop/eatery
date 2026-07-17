@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/eatery_core.dart';
+import 'package:go_router/go_router.dart';
 import 'package:lottie/lottie.dart';
 
 final _liveOrdersProvider = FutureProvider.autoDispose<List<Order>>((ref) {
@@ -128,6 +129,14 @@ class _DisplayPageState extends ConsumerState<DisplayPage> {
           IconButton(
             icon: const Icon(Icons.settings),
             onPressed: () => SyncHostSettingsSheet.show(context),
+          ),
+          IconButton(
+            icon: const Icon(Icons.swap_horiz),
+            tooltip: 'Switch Role',
+            onPressed: () {
+              ref.read(roleProvider.notifier).clearRole();
+              context.goNamed('rolePicker');
+            },
           ),
         ],
       ),

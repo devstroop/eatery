@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/database_provider.dart';
 import 'package:eatery_core/data/sync/sync_coordinator.dart';
@@ -28,10 +29,14 @@ final syncInitProvider = Provider.family<void, SyncConfig>((ref, config) {
     host: config.hostAddress,
     port: config.port,
     onStatusChange: (status) {
-      ref.read(syncStatusProvider.notifier).state = status;
+      scheduleMicrotask(() {
+        ref.read(syncStatusProvider.notifier).state = status;
+      });
     },
   );
-  ref.read(syncCoordinatorProvider.notifier).state = coordinator;
+  scheduleMicrotask(() {
+    ref.read(syncCoordinatorProvider.notifier).state = coordinator;
+  });
   ref.onDispose(() {
     coordinator.dispose();
     ref.read(syncStatusProvider.notifier).state = null;
