@@ -20,6 +20,26 @@ add_executable(${BINARY_NAME} WIN32
 # that need different build settings.
 apply_standard_settings(${BINARY_NAME})
 
+# Add preprocessor definitions for the build version.
+# Each macro is only defined when the corresponding CMake variable has a
+# non-empty value, so that Runner.rc can fall back to safe defaults
+# (1,0,0,0 / "1.0.0") when version information is unavailable.
+if(DEFINED FLUTTER_VERSION AND NOT FLUTTER_VERSION STREQUAL "")
+  target_compile_definitions(${BINARY_NAME} PRIVATE "FLUTTER_VERSION=\"${FLUTTER_VERSION}\"")
+endif()
+if(DEFINED FLUTTER_VERSION_MAJOR AND NOT FLUTTER_VERSION_MAJOR STREQUAL "")
+  target_compile_definitions(${BINARY_NAME} PRIVATE "FLUTTER_VERSION_MAJOR=${FLUTTER_VERSION_MAJOR}")
+endif()
+if(DEFINED FLUTTER_VERSION_MINOR AND NOT FLUTTER_VERSION_MINOR STREQUAL "")
+  target_compile_definitions(${BINARY_NAME} PRIVATE "FLUTTER_VERSION_MINOR=${FLUTTER_VERSION_MINOR}")
+endif()
+if(DEFINED FLUTTER_VERSION_PATCH AND NOT FLUTTER_VERSION_PATCH STREQUAL "")
+  target_compile_definitions(${BINARY_NAME} PRIVATE "FLUTTER_VERSION_PATCH=${FLUTTER_VERSION_PATCH}")
+endif()
+if(DEFINED FLUTTER_VERSION_BUILD AND NOT FLUTTER_VERSION_BUILD STREQUAL "")
+  target_compile_definitions(${BINARY_NAME} PRIVATE "FLUTTER_VERSION_BUILD=${FLUTTER_VERSION_BUILD}")
+endif()
+
 # Disable Windows macros that collide with C++ standard library functions.
 target_compile_definitions(${BINARY_NAME} PRIVATE "NOMINMAX")
 
