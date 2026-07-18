@@ -1,6 +1,7 @@
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:eatery_core/theme/app_spacing.dart';
+import 'package:eatery_core/theme/app_typography.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Body5 extends ConsumerStatefulWidget {
@@ -89,7 +90,7 @@ class _Body5State extends ConsumerState<Body5> {
                           children: [
                             Text(
                               CurrencyUtils.currencyToEmoji(selectedCurrency!),
-                              style: const TextStyle(fontSize: 32),
+                              style: AppTypography.displayLarge,
                             ),
                           ],
                         )
@@ -97,7 +98,7 @@ class _Body5State extends ConsumerState<Body5> {
                   trailing: selectedCurrency != null
                       ? Text(
                           selectedCurrency!.symbol,
-                          style: const TextStyle(fontSize: 18),
+                          style: AppTypography.titleMedium,
                         )
                       : null,
                   title: Text(

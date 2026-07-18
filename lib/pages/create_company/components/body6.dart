@@ -1,7 +1,6 @@
 import 'package:eatery_core/utils/device_id.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_spacing.dart';
-import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class Body6 extends ConsumerStatefulWidget {
@@ -122,7 +121,7 @@ class _Body6State extends ConsumerState<Body6> {
     deviceSerial ??= 'Undefined';
     Clipboard.setData(ClipboardData(text: deviceSerial)).whenComplete(() {
       AppDialog.showMessage(
-        this.context,
+        context,
         message: 'Device ID copied to clipboard',
         type: MessageType.success,
       );

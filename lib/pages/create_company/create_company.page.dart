@@ -1,14 +1,11 @@
 import 'package:eatery_core/utils/responsive.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
-import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/data/sync/mutation_hook.dart';
 import 'package:eatery_core/providers/database_provider.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery_core/providers/company_provider.dart';
-import 'package:eatery_core/widgets/app_dialog.dart';
-import 'package:eatery_core/theme/app_typography.dart';
 
 class CreateCompanyPage extends ConsumerStatefulWidget {
   const CreateCompanyPage({super.key});
@@ -290,14 +287,14 @@ class _CreateCompanyPageState extends ConsumerState<CreateCompanyPage> {
       );
       ref.read(companyRepositoryProvider).saveCompany(company);
       if (!mounted) return;
-      Navigator.of(this.context).pushAndRemoveUntil(
+      Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => const CreateCompanyResultPage()),
         (route) => false,
       );
     } catch (e) {
       if (!mounted) return;
       AppDialog.showMessage(
-        this.context,
+        context,
         message: e.toString(),
         type: MessageType.error,
       );
