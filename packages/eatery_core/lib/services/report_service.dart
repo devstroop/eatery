@@ -132,7 +132,7 @@ class ReportService {
     List<int> statuses,
   ) async {
     if (statuses.isEmpty) {
-      throw ArgumentError('statuses must not be empty �� produces invalid SQL');
+      throw ArgumentError('statuses must not be empty — produces invalid SQL');
     }
     final placeholders = statuses.map((_) => '?').join(', ');
     final result = await _store.queryScalar(

@@ -230,7 +230,7 @@ class EateryStore implements EateryStoreInterface {
     // `SELECT ... LIMIT 5 -- comment` can be matched. Do NOT strip -- from
     // every line — that would corrupt string literals containing '--'.
     sql = sql.replaceFirst(RegExp(r'\s*--[^\n]*$'), '').trim();
-    // 1. Try to replace a literal LIMIT <int> (�� OFFSET <int>).
+    // 1. Try to replace a literal LIMIT <int> (... OFFSET <int>).
     final literal = RegExp(
       r'\s+LIMIT\s+\d+(\s+OFFSET\s+\d+)?\s*;?\s*$',
       caseSensitive: false,
