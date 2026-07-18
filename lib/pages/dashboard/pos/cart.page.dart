@@ -2,8 +2,6 @@ import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:eatery_core/extensions/double_ext.dart';
-import 'package:eatery_core/widgets/app_dialog.dart';
-import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery/functions/order.function.dart';
 import 'package:eatery_core/providers/cart_provider.dart';
 import 'package:eatery_core/providers/company_provider.dart';
@@ -63,24 +61,17 @@ class _CartPageState extends ConsumerState<CartPage> {
                       children: [
                         const Text(
                           'Payable Amount',
-                          style: TextStyle(
-                            fontWeight: FontWeight.normal,
-                            fontSize: 12,
-                          ),
+                          style: AppTypography.labelSmall,
                         ),
                         Text(
                           '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${OrderFunction.calculatePayable(ref.read(cartProvider).cartProducts) + (ref.read(cartProvider).activeOrder?.grandTotal ?? 0)}',
-                          style: const TextStyle(
+                          style: AppTypography.titleLarge.copyWith(
                             fontWeight: FontWeight.bold,
-                            fontSize: 18,
                           ),
                         ),
                         const Text(
                           'includes all taxes and other charges',
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 7,
-                          ),
+                          style: AppTypography.labelSmall,
                         ),
                       ],
                     ),
@@ -108,10 +99,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                               padding: EdgeInsets.all(16),
                               child: Text(
                                 'Apply Discount',
-                                style: TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                                style: AppTypography.titleLarge,
                               ),
                             ),
                             ...discounts.map(
@@ -127,7 +115,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                                 trailing: _activeDiscount?.id == d.id
                                     ? const Icon(
                                         Icons.check_circle,
-                                        color: Colors.green,
+                                        color: AppColors.success,
                                       )
                                     : null,
                                 onTap: () {
@@ -159,19 +147,16 @@ class _CartPageState extends ConsumerState<CartPage> {
                         children: [
                           Text(
                             _activeDiscount!.name,
-                            style: const TextStyle(
-                              fontSize: 9,
-                              color: Colors.green,
+                            style: AppTypography.bodySmall.copyWith(
+                              color: AppColors.success,
                             ),
                           ),
                           Text(
                             _activeDiscount!.type == 0
                                 ? '-${_activeDiscount!.value}%'
                                 : '-\$${_activeDiscount!.value}',
-                            style: const TextStyle(
-                              fontSize: 11,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.green,
+                            style: AppTypography.labelMedium.copyWith(
+                              color: AppColors.success,
                             ),
                           ),
                         ],
@@ -271,10 +256,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                                               .read(cartProvider.notifier)
                                               .cartQuantity(product)
                                               .toString(),
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 14,
-                                          ),
+                                          style: AppTypography.titleSmall,
                                         ),
                                       )
                                     : Container(),
@@ -320,10 +302,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                                 if (taxSlab != null) {
                                   return Text(
                                     '+ TAX: ${taxSlab.rate}%',
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w400,
-                                      fontSize: 7,
-                                    ),
+                                    style: AppTypography.labelSmall,
                                   );
                                 }
                                 return const SizedBox.shrink();
@@ -334,18 +313,12 @@ class _CartPageState extends ConsumerState<CartPage> {
                               children: [
                                 const Text(
                                   'Amount:',
-                                  style: TextStyle(
-                                    fontWeight: FontWeight.normal,
-                                    fontSize: 14,
-                                  ),
+                                  style: AppTypography.bodyMedium,
                                 ),
                                 const SizedBox(width: 4),
                                 Text(
                                   '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${(ref.read(cartProvider.notifier).cartQuantity(product) * (product.salePrice ?? product.mrpPrice)).toStringAsFixed(2)}',
-                                  style: const TextStyle(
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                  ),
+                                  style: AppTypography.bodyMedium,
                                 ),
                               ],
                             ),
@@ -372,7 +345,7 @@ class _CartPageState extends ConsumerState<CartPage> {
                       ),
                     ],
                     border: Border.all(
-                      color: Colors.grey.withOpacity(0.2),
+                      color: AppColors.grey300.withOpacity(0.2),
                       width: 1,
                     ),
                   ),
@@ -497,17 +470,13 @@ class _CartPageState extends ConsumerState<CartPage> {
                             const Expanded(
                               child: Text(
                                 'Grand Total',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 18,
-                                ),
+                                style: AppTypography.titleLarge,
                               ),
                             ),
                             Text(
                               '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${OrderFunction.calculatePayable(ref.read(cartProvider).cartProducts)}',
-                              style: const TextStyle(
+                              style: AppTypography.titleLarge.copyWith(
                                 fontWeight: FontWeight.bold,
-                                fontSize: 18,
                               ),
                             ),
                           ],
@@ -562,18 +531,20 @@ class _CartPageState extends ConsumerState<CartPage> {
                 ),
               ],
             )
-          : const Center(
+          : Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
                     Icons.remove_shopping_cart_outlined,
                     size: 100,
-                    color: Colors.grey,
+                    color: AppColors.grey400,
                   ),
                   Text(
                     'Cart is empty',
-                    style: TextStyle(color: Colors.grey, fontSize: 18),
+                    style: AppTypography.titleLarge.copyWith(
+                      color: AppColors.grey500,
+                    ),
                   ),
                 ],
               ),

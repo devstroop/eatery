@@ -3,8 +3,6 @@ import 'package:eatery_core/theme/app_colors.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery_core/utils/responsive.dart';
 import 'package:eatery_core/extensions/double_ext.dart';
-import 'package:eatery_core/widgets/modifier_sheet.dart';
-import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:eatery_core/providers/product_provider.dart';
 import 'package:eatery_core/providers/company_provider.dart';
 import 'package:eatery_core/providers/order_provider.dart';
@@ -41,7 +39,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
     if (ref.read(cartProvider).activeOrderType == OrderType.dine &&
         ref.read(cartProvider).activeDiningTable == null) {
       await showSearch(
-        context: this.context,
+        context: context,
         delegate: SearchDiningTableDelegate(
           ref.read(diningTableRepositoryProvider).getAllTables(),
           (table) async {
@@ -60,7 +58,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
     Customer? customer;
     if (ref.read(cartProvider).activeCustomer == null) {
       await showSearch(
-        context: this.context,
+        context: context,
         delegate: SearchCustomerDelegate(
           ref.read(customerRepositoryProvider).getAllCustomers(),
           (customer) {
@@ -86,7 +84,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
     try {
       final orderType = await initOrderType();
       if (orderType == null) {
-        if (mounted) Navigator.pop(this.context);
+        if (mounted) Navigator.pop(context);
         return;
       }
       setState(() {
@@ -96,7 +94,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
       if (ref.read(cartProvider).activeOrderType == OrderType.dine) {
         final diningTable = await initDiningTableIfDine();
         if (diningTable == null) {
-          if (mounted) Navigator.pop(this.context);
+          if (mounted) Navigator.pop(context);
           return;
         }
         setState(() {
@@ -125,17 +123,13 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
         });
       }
 
-      final customer = await initCustomerIfNull();
-      setState(() {
-        if (customer != null) {
-          ref.read(cartProvider.notifier).setCustomer(customer);
-        }
-      });
+      // Customer is optional — user can assign via the header chip later.
+      // No longer blocking init with a mandatory customer search dialog.
     } catch (e) {
       debugPrint('POS init error: $e');
       if (mounted) {
         ScaffoldMessenger.of(
-          this.context,
+          context,
         ).showSnackBar(SnackBar(content: Text('Failed to initialize POS: $e')));
       }
     }
@@ -149,7 +143,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
       ref.read(cartProvider.notifier).addToCart(product);
     } else {
       showModalBottomSheet(
-        context: this.context,
+        context: context,
         isScrollControlled: true,
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
@@ -159,7 +153,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
           groups: modGroups,
           onConfirm: () {
             ref.read(cartProvider.notifier).addToCart(product);
-            Navigator.pop(this.context);
+            Navigator.pop(context);
           },
         ),
       );
@@ -318,14 +312,18 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                                 ),
                                 TextButton(
                                   child: const Text('Discard'),
-                                  onPressed: () {
+                                  onPressed: () async {
                                     Navigator.pop(context);
-                                    setState(() {
+                                    // Pop POS page first to ensure navigation
+                                    // succeeds before clearing cart data.
+                                    final popped = await Navigator.maybePop(
+                                      context,
+                                    );
+                                    if (popped) {
                                       ref
                                           .read(cartProvider.notifier)
                                           .clearCart();
-                                    });
-                                    Navigator.pop(context);
+                                    }
                                   },
                                 ),
                               ],
@@ -344,7 +342,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
           preferredSize: const Size.fromHeight(48),
           child: Container(
             height: 54,
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
             decoration: BoxDecoration(color: pageColor),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -396,29 +394,21 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                           if (session.activeCustomer?.phone != null)
                             Text(
                               session.activeCustomer?.phone ?? '',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.normal,
+                              style: AppTypography.labelSmall.copyWith(
                                 color: AppColors.white,
                               ),
                             ),
                           if (session.activeCustomer?.name != null)
                             Text(
                               session.activeCustomer?.name ?? 'NA',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
+                              style: AppTypography.titleSmall.copyWith(
                                 color: AppColors.white,
                               ),
                             ),
                           if (session.activeCustomer == null)
                             const Text(
                               'Select Customer',
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.bold,
-                                color: AppColors.white,
-                              ),
+                              style: AppTypography.titleSmall,
                             ),
                         ],
                       ),
@@ -428,7 +418,8 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                 if (session.activeOrderType == OrderType.dine)
                   InkWell(
                     onTap: () {
-                      if (session.activeDiningTable?.orderId == null) {
+                      final orderId = session.activeDiningTable?.orderId;
+                      if (orderId == null) {
                         AppDialog.showMessage(
                           this.context,
                           message: 'No active order for this table',
@@ -438,7 +429,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                       }
                       final tableOrder = ref
                           .read(orderRepositoryProvider)
-                          .getOrderById(session.activeDiningTable!.orderId!);
+                          .getOrderById(orderId);
                       if (tableOrder != null) {
                         GoRouter.of(context)
                             .pushNamed('viewOrder', extra: tableOrder)
@@ -449,12 +440,10 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
+                        Text(
                           'Outstanding',
                           textAlign: TextAlign.end,
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.normal,
+                          style: AppTypography.labelSmall.copyWith(
                             color: AppColors.white,
                           ),
                         ),
@@ -462,9 +451,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                         Text(
                           '${ref.read(companyProvider.notifier).currency?.symbol ?? ''}${session.activeOrder?.grandTotal.toPrecision(2) ?? '0.00'}',
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                          style: AppTypography.titleMedium.copyWith(
                             color: AppColors.white,
                           ),
                         ),
@@ -512,12 +499,10 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        const Text(
+                        Text(
                           'Dining Table',
                           textAlign: TextAlign.end,
-                          style: TextStyle(
-                            fontSize: 10,
-                            fontWeight: FontWeight.normal,
+                          style: AppTypography.labelSmall.copyWith(
                             color: AppColors.white,
                           ),
                         ),
@@ -525,9 +510,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                         Text(
                           session.activeDiningTable?.name ?? '~',
                           overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                          style: AppTypography.titleMedium.copyWith(
                             color: AppColors.white,
                           ),
                         ),
@@ -610,7 +593,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
   ) {
     return ListView(
       controller: _scrollControllerCategories,
-      padding: const EdgeInsets.all(6.0),
+      padding: const EdgeInsets.all(AppSpacing.sm),
       children: [
         CircularCategoryPOSWidget(
           margin: const EdgeInsets.only(bottom: 6),
@@ -626,7 +609,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
         ),
         ...allCategories.map((each) {
           return CircularCategoryPOSWidget(
-            margin: const EdgeInsets.only(bottom: 6),
+            margin: const EdgeInsets.only(bottom: AppSpacing.xs),
             image: LibraryImage(
               each.image,
               defaultImage: 'assets/images/category.png',
@@ -654,12 +637,15 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
       height: 72,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.sm,
+          vertical: AppSpacing.xs,
+        ),
         itemCount: allCategories.length + 1,
         itemBuilder: (context, index) {
           if (index == 0) {
             return CircularCategoryPOSWidget(
-              margin: const EdgeInsets.only(right: 6),
+              margin: const EdgeInsets.only(right: AppSpacing.xs),
               image: const AssetImage('assets/icons/all.png'),
               themeColor: pageColor,
               selected: selectedProductCategory?.id == null,
@@ -712,15 +698,14 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                 height: 100,
               ),
               AppSpacing.gapLg,
-              const Text(
-                'No dish found',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              const Text(
+              const Text('No dish found', style: AppTypography.titleLarge),
+              Text(
                 'Add a dish to get started',
-                style: TextStyle(fontSize: 16, color: AppColors.grey600),
+                style: AppTypography.bodyLarge.copyWith(
+                  color: AppColors.grey600,
+                ),
               ),
-              SizedBox(height: 48),
+              SizedBox(height: AppSpacing.xxl),
             ],
           ),
         ),
@@ -772,9 +757,9 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
               ),
               stockBadge: (stock?.isLowStock ?? false)
                   ? Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 6,
-                        vertical: 2,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: AppSpacing.xs,
+                        vertical: AppSpacing.xs,
                       ),
                       decoration: BoxDecoration(
                         color: AppColors.error,
@@ -782,10 +767,8 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
                       ),
                       child: Text(
                         'Stock: ${stock!.quantity.toStringAsFixed(0)}',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 10,
-                          fontWeight: FontWeight.bold,
+                        style: AppTypography.labelSmall.copyWith(
+                          color: AppColors.white,
                         ),
                       ),
                     )
@@ -876,7 +859,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
         bottomRight: Radius.circular(0),
       ),
     ),
-    context: this.context,
+    context: context,
     builder: (context) => KProductView(
       product: product,
       onAddToCart: () {
@@ -906,21 +889,14 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
         bottomRight: Radius.circular(0),
       ),
     ),
-    context: this.context,
+    context: context,
     builder: (context) => ListView(
       shrinkWrap: true,
       children: [
         const Center(child: AppBottomSheetGrip()),
         Padding(
           padding: const EdgeInsets.fromLTRB(16.0, 12.0, 16.0, 12.0),
-          child: Text(
-            'Select an order type',
-            style: TextStyle(
-              fontSize: 18.0,
-              fontWeight: FontWeight.w600,
-              color: AppColors.black600,
-            ),
-          ),
+          child: Text('Select an order type', style: AppTypography.titleLarge),
         ),
         for (var orderType in OrderType.values)
           Padding(
@@ -972,7 +948,7 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
               ),
             ),
           ),
-        const SizedBox(height: 20.0),
+        const SizedBox(height: AppSpacing.xl),
       ],
     ),
   );
@@ -995,7 +971,10 @@ class PosCartInformation extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        padding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.sm,
+        ),
         decoration: BoxDecoration(
           color: themeColor,
           borderRadius: const BorderRadius.only(
@@ -1010,13 +989,9 @@ class PosCartInformation extends StatelessWidget {
           children: [
             const Icon(Icons.shopping_cart, color: AppColors.white),
             AppSpacing.gapSm,
-            const Text(
+            Text(
               'Cart',
-              style: TextStyle(
-                color: AppColors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-              ),
+              style: AppTypography.titleMedium.copyWith(color: AppColors.white),
             ),
             AppSpacing.gapSm,
             Container(
@@ -1031,11 +1006,7 @@ class PosCartInformation extends StatelessWidget {
               child: Center(
                 child: Text(
                   cart.length.toString(),
-                  style: const TextStyle(
-                    color: AppColors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.bold,
-                  ),
+                  style: AppTypography.titleMedium,
                 ),
               ),
             ),
