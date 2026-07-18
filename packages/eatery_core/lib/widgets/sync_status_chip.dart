@@ -15,10 +15,13 @@ class SyncStatusChip extends ConsumerWidget {
     if (status == null) return const SizedBox.shrink();
 
     final (color, label) = switch (status.connectionState) {
-      HostConnectionState.connected => (Colors.green, 'Synced'),
-      HostConnectionState.connecting => (Colors.orange, 'Connecting…'),
-      HostConnectionState.reconnecting => (Colors.orange, 'Reconnecting…'),
-      HostConnectionState.disconnected => (Colors.red, 'Offline'),
+      HostConnectionState.connected => (AppColors.success, 'Synced'),
+      HostConnectionState.connecting => (AppColors.warning, 'Connecting...'),
+      HostConnectionState.reconnecting => (
+        AppColors.warning,
+        'Reconnecting...',
+      ),
+      HostConnectionState.disconnected => (AppColors.error, 'Offline'),
     };
 
     final role = status.role;

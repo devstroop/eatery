@@ -43,7 +43,7 @@ class _ModifierSheetState extends ConsumerState<ModifierSheet> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: AppColors.grey300,
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -100,14 +100,16 @@ class _ModifierSheetState extends ConsumerState<ModifierSheet> {
                                     vertical: 2,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: Colors.red[50],
+                                    color: AppColors.error.withValues(
+                                      alpha: 0.1,
+                                    ),
                                     borderRadius: BorderRadius.circular(4),
                                   ),
                                   child: const Text(
                                     'Required',
                                     style: TextStyle(
                                       fontSize: 10,
-                                      color: Colors.red,
+                                      color: AppColors.error,
                                     ),
                                   ),
                                 ),
@@ -131,7 +133,7 @@ class _ModifierSheetState extends ConsumerState<ModifierSheet> {
                                   ? Text(
                                       '+${m.priceAdjust.toStringAsFixed(2)}',
                                       style: TextStyle(
-                                        color: Colors.green[700],
+                                        color: AppColors.success,
                                         fontSize: 12,
                                       ),
                                     )
@@ -179,7 +181,7 @@ class _ModifierSheetState extends ConsumerState<ModifierSheet> {
               child: ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.primary,
-                  foregroundColor: Colors.white,
+                  foregroundColor: AppColors.white,
                   padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
                 onPressed: widget.onConfirm,

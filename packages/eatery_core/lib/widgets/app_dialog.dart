@@ -37,13 +37,13 @@ extension MessageTypeExtension on MessageType {
   Color get color {
     switch (this) {
       case MessageType.success:
-        return Colors.green;
+        return AppColors.success;
       case MessageType.error:
         return AppColors.error;
       case MessageType.warning:
-        return Colors.orange;
+        return AppColors.warning;
       case MessageType.info:
-        return Colors.blue;
+        return AppColors.info;
     }
   }
 }
@@ -139,13 +139,22 @@ class AppDialog {
             },
             child: Text(cancelLabel),
           ),
-          AppButton.primary(
-            label: confirmLabel,
-            onPressed: () {
-              onConfirm?.call();
-              Navigator.pop(ctx, true);
-            },
-          ),
+          if (destructive)
+            AppButton.destructive(
+              label: confirmLabel,
+              onPressed: () {
+                onConfirm?.call();
+                Navigator.pop(ctx, true);
+              },
+            )
+          else
+            AppButton.primary(
+              label: confirmLabel,
+              onPressed: () {
+                onConfirm?.call();
+                Navigator.pop(ctx, true);
+              },
+            ),
         ],
       ),
     );

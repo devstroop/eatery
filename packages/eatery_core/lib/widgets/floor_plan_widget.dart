@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:eatery_core/data/models/eatery_db.dart';
 import 'package:eatery_core/theme/app_spacing.dart';
+import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_typography.dart';
 
 /// A scrollable floor plan that positions dining tables on a canvas
 /// using their [DiningTable.posX] / [DiningTable.posY] coordinates.
@@ -78,16 +80,20 @@ class FloorPlanWidget extends StatelessWidget {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.map, size: 64, color: Colors.grey[400]),
+                  Icon(Icons.map, size: 64, color: AppColors.grey400),
                   AppSpacing.gapLg,
                   Text(
                     'No tables positioned yet',
-                    style: TextStyle(color: Colors.grey[600], fontSize: 16),
+                    style: AppTypography.titleMedium.copyWith(
+                      color: AppColors.grey600,
+                    ),
                   ),
                   AppSpacing.gapSm,
                   Text(
                     'Edit a table to set its position on the floor plan',
-                    style: TextStyle(color: Colors.grey[500]),
+                    style: AppTypography.bodyMedium.copyWith(
+                      color: AppColors.grey500,
+                    ),
                   ),
                 ],
               ),
@@ -95,14 +101,14 @@ class FloorPlanWidget extends StatelessWidget {
           ),
         if (unpositioned.isNotEmpty)
           Container(
-            padding: const EdgeInsets.all(8),
-            color: Colors.grey[100],
+            padding: const EdgeInsets.all(AppSpacing.sm),
+            color: AppColors.grey100,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
                   'Unplaced tables (${unpositioned.length})',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
+                  style: AppTypography.labelLarge,
                 ),
                 AppSpacing.gapXs,
                 Wrap(
@@ -137,15 +143,13 @@ class _TableWidget extends StatelessWidget {
         decoration: BoxDecoration(
           color: table.status.color.withValues(alpha: 0.2),
           shape: isCircle ? BoxShape.circle : BoxShape.rectangle,
-          borderRadius: isCircle ? null : BorderRadius.circular(8),
+          borderRadius: isCircle ? null : BorderRadius.circular(AppSpacing.radiusSm),
           border: Border.all(color: table.status.color, width: 2),
         ),
         child: Center(
           child: Text(
             table.name,
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.bold,
+            style: AppTypography.labelSmall.copyWith(
               color: table.status.color,
             ),
             textAlign: TextAlign.center,
@@ -192,7 +196,7 @@ class _GridPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.grey.withValues(alpha: 0.1)
+      ..color = AppColors.grey300.withValues(alpha: 0.5)
       ..strokeWidth = 0.5;
 
     for (double x = 0; x < size.width; x += 40) {

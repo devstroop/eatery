@@ -57,13 +57,13 @@ extension DiningTableStatusExtension on DiningTableStatus {
   Color get color {
     switch (this) {
       case DiningTableStatus.available:
-        return Colors.green;
+        return AppColors.success;
       case DiningTableStatus.occupied:
-        return AppColors.error;
+        return AppColors.warning;
       case DiningTableStatus.reserved:
-        return Colors.orange;
+        return AppColors.info;
       case DiningTableStatus.inactive:
-        return Colors.grey;
+        return AppColors.grey500;
     }
   }
 }

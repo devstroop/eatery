@@ -206,7 +206,7 @@ class _StepDot extends StatelessWidget {
                 border: Border.all(color: dotColor, width: isActive ? 2.5 : 2),
               ),
               child: isCompleted
-                  ? const Icon(Icons.check, size: 8, color: Colors.white)
+                  ? const Icon(Icons.check, size: 8, color: AppColors.white)
                   : null,
             ),
             const SizedBox(height: 4),
