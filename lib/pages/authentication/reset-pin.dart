@@ -40,7 +40,7 @@ class _ResetPinScreenState extends ConsumerState<ResetPinScreen> {
 
     if (employee == null) {
       AppDialog.showMessage(
-        this.context,
+        context,
         message: 'No employee found with that ID or phone',
         type: MessageType.error,
       );
@@ -63,11 +63,11 @@ class _ResetPinScreenState extends ConsumerState<ResetPinScreen> {
     );
 
     AppDialog.showMessage(
-      this.context,
+      context,
       message: 'PIN updated successfully',
       type: MessageType.success,
     );
-    GoRouter.of(this.context).goNamed('login');
+    GoRouter.of(context).goNamed('login');
   }
 
   @override
