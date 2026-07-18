@@ -1,6 +1,7 @@
 [config]
 model = "glm-4.6"
 fallback_models = []
+custom_model_max_tokens = 32768  # required for custom models not in PR-Agent's MAX_TOKENS list
 
 [openai]
 api_base = "https://ai.cloudmagic.io/v1"
