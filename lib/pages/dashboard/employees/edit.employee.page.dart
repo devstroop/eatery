@@ -1,11 +1,9 @@
-import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/order_provider.dart';
-import 'package:eatery_core/widgets/app_dialog.dart';
 
 Color _pageColor = const Color(0xFFC2592F);
 
@@ -60,47 +58,44 @@ class _EditEmployeePageState extends ConsumerState<EditEmployeePage> {
             },
           ),
       ],
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.white,
-        child: AppButton.primary(
-          onPressed: () async {
-            final isValid = _formKey.currentState!.validate();
-            if (!isValid) {
-              return;
-            }
-            _formKey.currentState!.save();
+      bottomAction: AppButton.primary(
+        onPressed: () async {
+          final isValid = _formKey.currentState!.validate();
+          if (!isValid) {
+            return;
+          }
+          _formKey.currentState!.save();
 
-            final updated = widget.employee.copyWith(
-              name: _controllerEmployeeName.text,
-              phone: _controllerEmployeePhone.text,
-              photo: image?.filename,
-              type: employeeType!,
-              isActive: isActive,
-              pin: _controllerEmployeePin.text.isNotEmpty
-                  ? _controllerEmployeePin.text
-                  : null,
-            );
-            try {
-              ref.read(employeeRepositoryProvider).saveEmployee(updated).then((
-                id,
-              ) {
-                AppDialog.showMessage(
-                  context,
-                  message: 'Employee updated successfully',
-                  type: MessageType.success,
-                  onConfirm: () => Navigator.pop(context),
-                );
-              });
-            } catch (_) {
+          final updated = widget.employee.copyWith(
+            name: _controllerEmployeeName.text,
+            phone: _controllerEmployeePhone.text,
+            photo: image?.filename,
+            type: employeeType!,
+            isActive: isActive,
+            pin: _controllerEmployeePin.text.isNotEmpty
+                ? _controllerEmployeePin.text
+                : null,
+          );
+          try {
+            ref.read(employeeRepositoryProvider).saveEmployee(updated).then((
+              id,
+            ) {
               AppDialog.showMessage(
                 context,
-                message: 'Failed to add employee',
-                type: MessageType.error,
+                message: 'Employee updated successfully',
+                type: MessageType.success,
+                onConfirm: () => Navigator.pop(context),
               );
-            }
-          },
-          label: 'Save',
-        ),
+            });
+          } catch (_) {
+            AppDialog.showMessage(
+              context,
+              message: 'Failed to add employee',
+              type: MessageType.error,
+            );
+          }
+        },
+        label: 'Save',
       ),
       child: InkWell(
         onTap: () {

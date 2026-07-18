@@ -4,7 +4,6 @@ import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery_core/providers/company_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
-import 'package:eatery_core/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -87,12 +86,12 @@ class _PaymentsPageState extends ConsumerState<PaymentsPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.payment, size: 100, color: Colors.grey),
+                  Icon(Icons.payment, size: 100, color: AppColors.grey400),
                   Text(
                     'No payments received yet',
                     style: AppTypography.titleLarge.copyWith(
                       fontWeight: FontWeight.w400,
-                      color: Colors.grey,
+                      color: AppColors.grey500,
                     ),
                   ),
                 ],
