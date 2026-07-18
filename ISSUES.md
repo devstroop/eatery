@@ -1,4 +1,4 @@
-# Issues & Backlog
+﻿# Issues & Backlog
 
 ## GitHub Issues (30 open, 10 closed)
 
@@ -93,3 +93,135 @@ Completed. N01-N04: SQL column rename, file rename, FoodType extension fix, toMa
 
 ### Repository Gaps
 8 SQL tables lack repositories. Tracked in [#153](https://github.com/devstroop/eatery/issues/153).
+
+---
+
+## Full Application Review — Flutter DevTools MCP (2026-07-18)
+
+### Iteration 1 (Pass 7): Initial scan
+
+Connected VM: `ws://127.0.0.1:58984`. Widget tree + render tree + grep scan across 93 page files and 40+ core widget files.
+
+### Iteration 2 (Pass 8): Core Package Fixes + Validation
+
+**N01-N07 resolved** — tokenized all raw `Colors.*` in 7 core package widgets.
+
+**N08 resolved** — `reservations.page.dart` `Colors.orange`/`Colors.blue` -> `AppColors.warning`/`AppColors.info`.
+
+**N10-N13 FALSE POSITIVE** — all 4 `catch (_) {}` blocks already call `AppDialog.showMessage`. No silent catches found.
+
+### Open Issues (refined)
+
+#### P2 — Core Package (resolved in this iteration)
+
+| # | File | Fix | Status |
+|---|------|-----|--------|
+| N01 | `app_dialog.dart` | `Colors.green`/`blue`/`orange` -> `AppColors.success`/`info`/`warning` | ✅ |
+| N02 | `app_multistep_form.dart` | `Colors.white` -> `AppColors.white` | ✅ |
+| N03 | `app_notification_banner.dart` | `Colors.transparent` kept (fundamental Flutter constant) | ✅ |
+| N04 | `app_order_card.dart` | `Colors.white` -> `AppColors.white` | ✅ |
+| N05 | `app_product_card.dart` | `Colors.grey` -> `AppColors.grey500` | ✅ |
+| N06 | `modifier_sheet.dart` | 6 raw `Colors.grey`/`green`/`red` -> `AppColors` | ✅ |
+| N07 | `sync_status_chip.dart` | `Colors.green`/`orange`/`red` -> `AppColors` | ✅ |
+| N08 | `reservations.page.dart` | `Colors.orange`/`Colors.blue` -> `AppColors.warning`/`AppColors.info` | ✅ |
+
+#### P2 — Dev (low impact)
+
+| # | File | Issue |
+|---|------|-------|
+| N09 | `database_inspector.dart` | `Colors.red` for delete icons (dev tool, skipped) |
+
+#### P2 — Unresponsive POS BottomAppBars
+
+| # | Page | Issue |
+|---|------|-------|
+| N14 | `pos/cart.page.dart` | Raw `BottomAppBar` — not responsive |
+| N15 | `pos/order_confirmation.page.dart` | Raw `BottomAppBar` — not responsive |
+| N16 | `pos/pos.page.dart` | Raw `BottomAppBar` with order type switcher — not responsive |
+
+#### P3 — Async `.then()` Chains (48 files, 101 matches, tracked as #124)
+
+#### P3 — Raw TextStyle
+
+| # | Area | Issue |
+|---|------|-------|
+| N20 | `pos/pos.page.dart` | 11 raw `TextStyle(...)` instead of `AppTypography` |
+| N21 | `pos/kProduct.view.dart` | 9 raw `TextStyle(...)` instead of `AppTypography` |
+
+#### P3 — Other
+
+| # | Area | Issue |
+|---|------|-------|
+| N17 | `data_management.page.dart` | 15 silent `catch (e)` blocks with only `debugPrint` |
+| N19 | `pos.page.dart` | `TODO: Postpone logic not yet implemented` — feature gap |
+
+### Summary
+
+| Priority | Open | IDs |
+|----------|------|-----|
+| P2 | 3 | N14, N15, N16 |
+| P3 | 4 | N17, N19, N20, N21 |
+| **Total Open** | **7** | (down from 22 after validation) |
+
+### Previously Tracked
+
+- U09 — No dark mode (P3, `AppTheme.dark` stubbed)
+- ~~U10~~ — ~~No page transitions~~ — **RESOLVED** — `_slidePage()` + `CustomTransitionPage` on 6 routes
+- ~~U11~~ — ~~POS sequential init~~ — **RESOLVED** — removed blocking customer dialog
+- U18 — Raw `EdgeInsets`/`SizedBox` (P2, ~100 matches, 57 files)
+
+---
+
+## ## Full Flow Audit — Code Analysis (2026-07-18)
+
+### Bugs Found Through Static Analysis + Runtime Logs
+
+#### P0 — Crash / Data Loss (1 remaining)
+
+| # | File | Bug | Impact |
+|---|------|-----|--------|
+| **B1** | main.dart / ast_cached_network_image | Hive cache file lock contention on Windows — uncaught FileSystemException | Startup noise, second run succeeds |
+
+#### P1 — Wrong Behavior (4 remaining)
+
+| # | File | Bug |
+|---|------|-----|
+| **B5** | data_management.page.dart | 15 silent catch(e) with only debugPrint |
+| **B6** | pos.page.dart (discard) | cart.clearCart() before Navigator.pop() |
+| **B8** | pos/cart.page.dart | _submitOrder uses stale widget.order |
+| **B10** | eferences.dart | God barrel exports Windows-only devdart_windows_hdsn, dart:io |
+
+#### P2 — Code Quality / Risk (4)
+
+| # | File | Bug |
+|---|------|-----|
+| **B9** | 41 files | 150+ ! null assertions |
+| **B11** | pos.page.dart | TODO: Postpone logic — feature gap |
+| **B12** | 44 files | .then() chains instead of sync/await |
+| **B13** | 3 POS files | Raw BottomAppBar — not responsive |
+
+#### P3 — Minor (2)
+
+| # | File | Bug |
+|---|------|-----|
+| **B14** | 11 files | Non-loading CircularProgressIndicator |
+| **B15** | printer.setting.page.dart | import 'dart:io' — web-incompatible |
+
+### Fixed This Round
+
+| Bug | File | Fix |
+|-----|------|-----|
+| **B2** | eferences.dart | Removed export 'package:path/path.dart' — Context class shadowed BuildContext |
+| **B3** | pos.page.dart:437 | Double-null-assertion -> safe ?.orderId + early return |
+| **B4** | logout.page.dart | context as BuildContext -> ddPostFrameCallback |
+| **B7** | login.page.dart + pp_dialog.dart | _deleting guard + 	ry/catch + SnackBar; AppButton.destructive rendered correctly |
+
+### Bug Summary
+
+| Priority | Before | Fixed | Remaining |
+|----------|--------|-------|-----------|
+| P0 | 3 | 2 | 1 |
+| P1 | 5 | 1 | 4 |
+| P2 | 4 | 0 | 4 |
+| P3 | 3 | 0 | 2 |
+| **Total** | **15** | **4** | **11** |

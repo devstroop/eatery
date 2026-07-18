@@ -50,6 +50,7 @@ EdgeInsets.all(AppSpacing.md)            // 12px
 | Empty screen | `AppEmptyState(icon: Icons.inbox, title: 'No data')` |
 | Loading skeleton | `AppSkeleton.card()` / `AppSkeleton.line()` / `AppSkeletonList(count: 5)` |
 | Page wrapper | `AppPageShell(title: 'Products', child: ...)` |
+| Form submit button | `AppPageShell(bottomAction: AppButton.primary(...), ...)` |
 | Navigation shell | `AppAdaptiveShell(destinations: [...])` |
 | Notification | `AppNotificationBanner.show(ctx, type: ..., message: ...)` |
 
@@ -113,6 +114,19 @@ class ProductsPage extends ConsumerWidget {
     );
   }
 }
+```
+
+### Form Page Pattern
+
+Use `bottomAction` for submit buttons — renders as `BottomAppBar` on mobile, moves to `AppBar.actions` on tablet/desktop:
+
+```dart
+AppPageShell(
+  title: 'Add Product',
+  color: _pageColor,
+  bottomAction: AppButton.primary(label: 'Save', onPressed: _submit),
+  child: Form(...),
+)
 ```
 
 ## Imports
