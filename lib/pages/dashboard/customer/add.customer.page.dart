@@ -1,9 +1,6 @@
-import 'package:eatery_core/widgets/app_dialog.dart';
-import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
-import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 
@@ -59,42 +56,40 @@ class _AddCustomerPageState extends ConsumerState<AddCustomerPage> {
             },
           ),
       ],
-      bottomNavigationBar: BottomAppBar(
-        child: AppButton.primary(
-          onPressed: () async {
-            final isValid = _formKey.currentState!.validate();
-            if (!isValid) {
-              return;
-            }
-            _formKey.currentState!.save();
+      bottomAction: AppButton.primary(
+        onPressed: () async {
+          final isValid = _formKey.currentState!.validate();
+          if (!isValid) {
+            return;
+          }
+          _formKey.currentState!.save();
 
-            Customer customer = Customer(
-              name: _controllerCustomerName.text,
-              phone: _controllerCustomerPhone.text,
-              address: _controllerCustomerAddress.text,
-              landmark: _controllerCustomerLandmark.text,
-              isActive: isActive,
-            );
-            await ref
-                .read(customerRepositoryProvider)
-                .saveCustomer(customer)
-                .then((value) {
-                  AppDialog.showMessage(
-                    context,
-                    message: 'Customer added successfully',
-                    type: MessageType.success,
-                  ).then((value) => Navigator.pop(this.context, customer));
-                })
-                .onError((error, stackTrace) {
-                  AppDialog.showMessage(
-                    context,
-                    message: error.toString(),
-                    type: MessageType.error,
-                  );
-                });
-          },
-          label: 'Save',
-        ),
+          Customer customer = Customer(
+            name: _controllerCustomerName.text,
+            phone: _controllerCustomerPhone.text,
+            address: _controllerCustomerAddress.text,
+            landmark: _controllerCustomerLandmark.text,
+            isActive: isActive,
+          );
+          await ref
+              .read(customerRepositoryProvider)
+              .saveCustomer(customer)
+              .then((value) {
+                AppDialog.showMessage(
+                  context,
+                  message: 'Customer added successfully',
+                  type: MessageType.success,
+                ).then((value) => Navigator.pop(this.context, customer));
+              })
+              .onError((error, stackTrace) {
+                AppDialog.showMessage(
+                  context,
+                  message: error.toString(),
+                  type: MessageType.error,
+                );
+              });
+        },
+        label: 'Save',
       ),
       child: InkWell(
         onTap: () => FocusScope.of(context).unfocus(),

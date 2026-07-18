@@ -44,9 +44,9 @@ class DashboardCharts extends ConsumerWidget {
           _PaymentPieChart(data.$3),
         ],
       ),
-      loading: () => const SizedBox(
-        height: 300,
-        child: Center(child: CircularProgressIndicator()),
+      loading: () => const Padding(
+        padding: EdgeInsets.all(AppSpacing.md),
+        child: AppSkeleton(height: 300, borderRadius: AppSpacing.radiusLg),
       ),
       error: (e, _) => SizedBox(
         height: 100,
@@ -133,7 +133,7 @@ class _RevenueLineChart extends StatelessWidget {
                           radius: 4,
                           color: AppColors.primary,
                           strokeWidth: 2,
-                          strokeColor: Colors.white,
+                          strokeColor: AppColors.white,
                         ),
                       ),
                       belowBarData: BarAreaData(
@@ -311,8 +311,8 @@ class _PaymentPieChart extends StatelessWidget {
                             title: '${pct.toStringAsFixed(0)}%',
                             color: _modeColors[e.key] ?? AppColors.grey500,
                             radius: 60,
-                            titleStyle: const TextStyle(
-                              color: Colors.white,
+                            titleStyle: TextStyle(
+                              color: AppColors.white,
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                             ),
