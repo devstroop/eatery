@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:eatery_core/theme/app_spacing.dart';
-import 'package:eatery_core/widgets/app_dialog.dart';
 
 class UploadImageBottomSheet extends StatefulWidget {
   final Function(String? image) action;
@@ -55,13 +54,13 @@ class _UploadImageBottomSheetState extends State<UploadImageBottomSheet> {
       localPath =
           '${'${(Directory(AppFileSystem.baseDir)).path}/images'}/${getRandomString(32)}.${imageName.split('.').last}';
       final imageFile = File(localPath);
-      final BuildContext ctx = this.context;
+      final BuildContext ctx = context;
       imageFile.writeAsBytes(response.bodyBytes).then((value) {
         widget.action(localPath);
         if (mounted) Navigator.pop(ctx);
       });
     } catch (e) {
-      final BuildContext ctx = this.context;
+      final BuildContext ctx = context;
       if (mounted) Navigator.pop(ctx);
       if (mounted) {
         AppDialog.showMessage(
@@ -87,7 +86,7 @@ class _UploadImageBottomSheetState extends State<UploadImageBottomSheet> {
       await photo.saveTo(path);
     }
     widget.action(path);
-    final BuildContext ctx = this.context;
+    final BuildContext ctx = context;
     Future.delayed(Duration.zero, () {
       if (mounted) Navigator.pop(ctx);
     });
@@ -107,7 +106,7 @@ class _UploadImageBottomSheetState extends State<UploadImageBottomSheet> {
       await photo.saveTo(path);
     }
     widget.action(path);
-    final BuildContext ctx = this.context;
+    final BuildContext ctx = context;
     Future.delayed(Duration.zero, () {
       if (mounted) Navigator.pop(ctx);
     });

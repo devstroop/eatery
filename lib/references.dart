@@ -15,7 +15,8 @@ export 'package:eatery_core/widgets/widgets.dart';
 // Integrated packages
 export './support/bluetooth_thermal_printer/bluetooth_thermal_printer.dart';
 // External packages
-export 'package:path/path.dart';
+// package:path/path.dart removed — its Context class shadows Flutter's
+// BuildContext. Import directly where needed (e.g. import 'package:path/path.dart' as p;)
 export 'package:path_provider/path_provider.dart';
 export 'package:flutter_native_splash/flutter_native_splash.dart';
 export 'package:file_picker/file_picker.dart';
