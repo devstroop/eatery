@@ -1,15 +1,10 @@
-import 'package:eatery_core/widgets/app_dialog.dart';
-import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/theme/app_typography.dart';
-import 'dart:io';
 
-import 'package:eatery_core/data/models/eatery_db.dart';
 import 'package:eatery_core/providers/printer_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../../support/bluetooth_thermal_printer/flutter_bluetooth_adapter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Printer configuration page.
@@ -60,9 +55,9 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
 
   Future<void> _startScan() async {
     if (!(Platform.isAndroid || Platform.isIOS)) {
-      if (this.context.mounted) {
+      if (context.mounted) {
         AppDialog.showMessage(
-          this.context,
+          context,
           message:
               'Bluetooth scanning is only available on mobile devices.\nFor desktop, connect via WiFi/Ethernet ESC/POS.',
           type: MessageType.info,
@@ -89,9 +84,9 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
       });
       await Future.delayed(const Duration(seconds: 8));
     } catch (e) {
-      if (this.context.mounted) {
+      if (context.mounted) {
         AppDialog.showMessage(
-          this.context,
+          context,
           message: 'Scan failed: $e',
           type: MessageType.error,
         );
@@ -109,9 +104,9 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
     );
     await ref.read(printerRepositoryProvider).addPrinter(printer);
     ref.invalidate(printerListProvider);
-    if (this.context.mounted) {
+    if (context.mounted) {
       AppDialog.showMessage(
-        this.context,
+        context,
         message: 'Printer added',
         type: MessageType.success,
       );
@@ -172,7 +167,10 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
                     .toList(),
               );
             },
-            loading: () => const Center(child: CircularProgressIndicator()),
+            loading: () => Padding(
+              padding: EdgeInsets.all(AppSpacing.md),
+              child: AppSkeletonList(count: 3, itemHeight: 70),
+            ),
             error: (e, _) => Text('Error: $e'),
           ),
 
@@ -207,7 +205,10 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
                   title: Text(bp.name),
                   subtitle: Text(bp.address),
                   trailing: IconButton(
-                    icon: const Icon(Icons.add_circle, color: Colors.green),
+                    icon: const Icon(
+                      Icons.add_circle,
+                      color: AppColors.success,
+                    ),
                     onPressed: () => _addPrinter(bp.name, bp.address),
                   ),
                 ),
@@ -218,7 +219,9 @@ class _PrinterSettingsPageState extends ConsumerState<PrinterSettingsPage> {
               padding: const EdgeInsets.all(8),
               child: Text(
                 'Tap "Scan for Printers" to discover Bluetooth devices',
-                style: AppTypography.bodySmall.copyWith(color: Colors.grey),
+                style: AppTypography.bodySmall.copyWith(
+                  color: AppColors.grey500,
+                ),
               ),
             ),
 

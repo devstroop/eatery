@@ -25,7 +25,7 @@ class _ReportsPageState extends ConsumerState<ReportsPage> {
 
   Future<void> _pickDateRange() async {
     final picked = await showDateRangePicker(
-      context: this.context,
+      context: context,
       firstDate: DateTime(2020),
       lastDate: DateTime.now().add(const Duration(days: 1)),
       initialDateRange: DateTimeRange(start: _start, end: _end),
@@ -69,7 +69,7 @@ class _ReportsPageState extends ConsumerState<ReportsPage> {
       if (!mounted) return;
       setState(() => _loading = false);
       ScaffoldMessenger.of(
-        this.context,
+        context,
       ).showSnackBar(SnackBar(content: Text('Report failed: $e')));
     } finally {
       if (mounted) setState(() => _generating = false);
@@ -115,7 +115,14 @@ class _ReportsPageState extends ConsumerState<ReportsPage> {
             ],
           ),
           AppSpacing.gapXl,
-          if (_loading) const Center(child: CircularProgressIndicator()),
+          if (_loading)
+            const Padding(
+              padding: EdgeInsets.all(AppSpacing.md),
+              child: AppSkeleton(
+                height: 400,
+                borderRadius: AppSpacing.radiusLg,
+              ),
+            ),
           if (_report != null) ...[
             Card(
               child: Padding(

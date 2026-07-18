@@ -78,11 +78,11 @@ class _ReservationsPageState extends ConsumerState<ReservationsPage> {
                 : ListView(
                     children: reservations.map((r) {
                       final statusColor = switch (r.status) {
-                        0 => Colors.orange,
-                        1 => Colors.blue,
-                        2 => Colors.green,
-                        3 => Colors.grey,
-                        _ => Colors.red,
+                        0 => AppColors.warning,
+                        1 => AppColors.info,
+                        2 => AppColors.success,
+                        3 => AppColors.grey500,
+                        _ => AppColors.error,
                       };
                       return Card(
                         margin: const EdgeInsets.symmetric(
@@ -111,8 +111,8 @@ class _ReservationsPageState extends ConsumerState<ReservationsPage> {
                                 ),
                                 child: Text(
                                   _statusNames[r.status.clamp(0, 4)],
-                                  style: const TextStyle(
-                                    color: Colors.white,
+                                  style: TextStyle(
+                                    color: AppColors.white,
                                     fontSize: 10,
                                   ),
                                 ),
