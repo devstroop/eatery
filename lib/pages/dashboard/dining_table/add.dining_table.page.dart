@@ -1,10 +1,8 @@
-import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:eatery_core/widgets/app_dialog.dart';
 
 Color _pageColor = AppColors.menuCategories;
 
@@ -41,41 +39,39 @@ class _AddDiningTablePageState extends ConsumerState<AddDiningTablePage> {
             },
           ),
       ],
-      bottomNavigationBar: BottomAppBar(
-        child: AppButton.primary(
-          onPressed: () async {
-            if (!_formKey.currentState!.validate()) {
-              return;
-            }
-            _formKey.currentState!.save();
-            DiningTable diningTable = DiningTable(
-              name: _controllerCategoryName.text,
-              description: _controllerCategoryDescription.text,
-              categoryId: diningTableCategory?.id,
-              capacity: int.parse(_controllerCapacity.text),
-            );
-            ref
-                .read(diningTableRepositoryProvider)
-                .saveTable(diningTable)
-                .then((value) {
-                  AppDialog.showMessage(
-                    context,
-                    message: 'Dining Table created successfully',
-                    type: MessageType.success,
-                    onConfirm: () => Navigator.pop(context),
-                  );
-                })
-                .onError((error, stackTrace) {
-                  debugPrint(error.toString());
-                  AppDialog.showMessage(
-                    context,
-                    message: 'Failed to create Dining Table',
-                    type: MessageType.error,
-                  );
-                });
-          },
-          label: 'Save',
-        ),
+      bottomAction: AppButton.primary(
+        onPressed: () async {
+          if (!_formKey.currentState!.validate()) {
+            return;
+          }
+          _formKey.currentState!.save();
+          DiningTable diningTable = DiningTable(
+            name: _controllerCategoryName.text,
+            description: _controllerCategoryDescription.text,
+            categoryId: diningTableCategory?.id,
+            capacity: int.parse(_controllerCapacity.text),
+          );
+          ref
+              .read(diningTableRepositoryProvider)
+              .saveTable(diningTable)
+              .then((value) {
+                AppDialog.showMessage(
+                  context,
+                  message: 'Dining Table created successfully',
+                  type: MessageType.success,
+                  onConfirm: () => Navigator.pop(context),
+                );
+              })
+              .onError((error, stackTrace) {
+                debugPrint(error.toString());
+                AppDialog.showMessage(
+                  context,
+                  message: 'Failed to create Dining Table',
+                  type: MessageType.error,
+                );
+              });
+        },
+        label: 'Save',
       ),
       child: InkWell(
         onTap: () {
