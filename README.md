@@ -15,6 +15,7 @@
   <img src="https://img.shields.io/badge/platform-Android%20%7C%20iOS%20%7C%20macOS%20%7C%20Windows%20%7C%20Linux-lightgrey" alt="Platforms">
   <img src="https://img.shields.io/badge/state-Riverpod-purple" alt="Riverpod">
   <img src="https://img.shields.io/badge/db-SQLite-brightgreen" alt="Database">
+  <img src="https://img.shields.io/badge/PRs-Automated-blue?logo=github-actions" alt="PR-Agent">
 </p>
 
 ---
