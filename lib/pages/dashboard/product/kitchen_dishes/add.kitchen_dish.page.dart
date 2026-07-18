@@ -1,11 +1,9 @@
-import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/product_provider.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
-import 'package:eatery_core/widgets/app_dialog.dart';
 
 Color _pageColor = AppColors.secondary;
 
@@ -71,48 +69,45 @@ class _AddKitchenDishState extends ConsumerState<AddKitchenDish> {
             },
           ),
       ],
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.white,
-        child: AppButton.primary(
-          onPressed: () async {
-            final isValid = _formKey.currentState!.validate();
-            if (!isValid) {
-              return;
-            }
-            _formKey.currentState!.save();
+      bottomAction: AppButton.primary(
+        onPressed: () async {
+          final isValid = _formKey.currentState!.validate();
+          if (!isValid) {
+            return;
+          }
+          _formKey.currentState!.save();
 
-            Product product = Product(
-              name: _controllerName.text,
-              categoryId: selectedCategory?.id,
-              description: _controllerDescription.text,
-              image: image?.filename,
-              mrpPrice: _controllerMRP.text.toDouble() ?? 0.0,
-              salePrice: _controllerSalePrice.text.toDouble(),
-              taxSlabId: selectedTaxSlab?.id,
-              foodType: selectedFoodType,
-              type: ProductType.kitchenDish,
-              isActive: true,
-            );
-            await ref
-                .read(productRepositoryProvider)
-                .saveProduct(product)
-                .then((value) {
-                  AppDialog.showMessage(
-                    this.context,
-                    message: 'Product added successfully',
-                    type: MessageType.success,
-                  ).whenComplete(() => Navigator.pop(this.context));
-                })
-                .onError((error, stackTrace) {
-                  AppDialog.showMessage(
-                    this.context,
-                    message: 'Failed to add product',
-                    type: MessageType.error,
-                  );
-                });
-          },
-          label: 'Save',
-        ),
+          Product product = Product(
+            name: _controllerName.text,
+            categoryId: selectedCategory?.id,
+            description: _controllerDescription.text,
+            image: image?.filename,
+            mrpPrice: _controllerMRP.text.toDouble() ?? 0.0,
+            salePrice: _controllerSalePrice.text.toDouble(),
+            taxSlabId: selectedTaxSlab?.id,
+            foodType: selectedFoodType,
+            type: ProductType.kitchenDish,
+            isActive: true,
+          );
+          await ref
+              .read(productRepositoryProvider)
+              .saveProduct(product)
+              .then((value) {
+                AppDialog.showMessage(
+                  this.context,
+                  message: 'Product added successfully',
+                  type: MessageType.success,
+                ).whenComplete(() => Navigator.pop(this.context));
+              })
+              .onError((error, stackTrace) {
+                AppDialog.showMessage(
+                  this.context,
+                  message: 'Failed to add product',
+                  type: MessageType.error,
+                );
+              });
+        },
+        label: 'Save',
       ),
       child: InkWell(
         onTap: () {
@@ -145,13 +140,13 @@ class _AddKitchenDishState extends ConsumerState<AddKitchenDish> {
                   validator: (value) {
                     if (value!.trim().isEmpty) {
                       return 'Name cannot be blank';
-                    } else if (value!.length < 3) {
+                    } else if (value.length < 3) {
                       return 'Name must be at least 3 characters long';
                     } else if (value.trim().length > 50) {
                       return 'Name cannot be more than 50 characters long';
                     } else if (ref
                         .read(productRepositoryProvider)
-                        .isProductNameTaken(value!.trim())) {
+                        .isProductNameTaken(value.trim())) {
                       return 'Product with this name already exists';
                     }
                     return null;

@@ -6,8 +6,6 @@ import 'package:eatery_core/providers/company_provider.dart';
 import 'package:eatery_core/providers/stock_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
-import 'package:eatery_core/widgets/app_dialog.dart';
-import 'package:eatery_core/widgets/widgets.dart';
 import 'package:go_router/go_router.dart';
 
 Color _pageColor = AppColors.menuInventory;
@@ -263,11 +261,7 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                                   ),
                                   child: const Text(
                                     'Low Stock',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 10,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                    style: AppTypography.labelSmall,
                                   ),
                                 ),
                               ),
@@ -314,7 +308,7 @@ class _InventoryItemsPageState extends ConsumerState<InventoryItemsPage> {
                                   '${currency?.symbol ?? ''}${each.salePrice}',
                                   style: AppTypography.labelMedium.copyWith(
                                     fontWeight: FontWeight.w600,
-                                    color: Colors.green,
+                                    color: AppColors.success,
                                   ),
                                 ),
                               ],

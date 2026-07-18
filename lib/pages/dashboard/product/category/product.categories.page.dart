@@ -1,6 +1,5 @@
 import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/theme/app_typography.dart';
-import 'package:eatery_core/widgets/widgets.dart';
 import 'package:eatery_core/providers/product_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
@@ -113,12 +112,12 @@ class _ProductCategoriesPageState extends ConsumerState<ProductCategoriesPage> {
                             leading: const Icon(
                               Icons.delete,
                               size: 20,
-                              color: Colors.red,
+                              color: AppColors.error,
                             ),
                             title: Text(
                               'Delete',
                               style: AppTypography.bodyMedium.copyWith(
-                                color: Colors.red,
+                                color: AppColors.error,
                               ),
                             ),
                             contentPadding: EdgeInsets.zero,

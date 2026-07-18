@@ -1,11 +1,9 @@
-import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/product_provider.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
-import 'package:eatery_core/widgets/app_dialog.dart';
 
 Color _pageColor = AppColors.menuInventory;
 
@@ -63,7 +61,12 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
             },
           ),
       ],
-      bottomNavigationBar: buildBottomAppBar(),
+      bottomAction: AppButton.primary(
+        onPressed: () async {
+          handleSaveButton();
+        },
+        label: 'Save',
+      ),
       child: buildBody(),
     );
   }
@@ -78,7 +81,7 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
           IconButton(
             icon: const Icon(Icons.done),
             onPressed: () {
-              FocusScope.of(this.context).unfocus();
+              FocusScope.of(context).unfocus();
             },
           ),
       ],
@@ -109,18 +112,6 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
             buildDescriptionTextField(),
           ],
         ),
-      ),
-    );
-  }
-
-  BottomAppBar buildBottomAppBar() {
-    return BottomAppBar(
-      color: AppColors.white,
-      child: AppButton.primary(
-        onPressed: () async {
-          handleSaveButton();
-        },
-        label: 'Save',
       ),
     );
   }
@@ -190,7 +181,7 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
             keyboardType: TextInputType.number,
             controller: _controllerSalePrice,
             onFieldSubmitted: (v) {
-              FocusScope.of(this.context).unfocus();
+              FocusScope.of(context).unfocus();
             },
           ),
         ),
@@ -274,7 +265,7 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
       multiline: true,
       focusNode: _focusNodes[3],
       onFieldSubmitted: (v) {
-        FocusScope.of(this.context).unfocus();
+        FocusScope.of(context).unfocus();
       },
       controller: _controllerDescription,
     );
@@ -377,14 +368,14 @@ class _AddInventoryItemState extends ConsumerState<AddInventoryItem> {
         .saveProduct(product)
         .then((value) {
           AppDialog.showMessage(
-            this.context,
+            context,
             message: 'Product created successfully',
             type: MessageType.success,
-          ).whenComplete(() => Navigator.of(this.context).pop());
+          ).whenComplete(() => Navigator.of(context).pop());
         })
         .onError((error, stackTrace) {
           AppDialog.showMessage(
-            this.context,
+            context,
             message: 'Error creating product',
             type: MessageType.error,
           );
