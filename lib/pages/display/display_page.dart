@@ -142,7 +142,10 @@ class _DisplayPageState extends ConsumerState<DisplayPage> {
       ),
       body: orders.when(
         data: (list) => _buildDisplay(list, crossAxisCount),
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => Padding(
+          padding: EdgeInsets.all(AppSpacing.md),
+          child: AppSkeleton(height: 400, borderRadius: AppSpacing.radiusLg),
+        ),
         error: (e, _) => Center(child: Text('Error: $e')),
       ),
     );

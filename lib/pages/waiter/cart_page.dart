@@ -19,17 +19,18 @@ class CartPage extends ConsumerWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Cart')),
       body: session.cart.isEmpty
-          ? const Center(child: Text('Cart is empty'))
+          ? const AppEmptyState(
+              icon: Icons.shopping_cart_outlined,
+              title: 'Cart is empty',
+              subtitle: 'Add items from the menu to get started',
+            )
           : Column(
               children: [
                 if (session.activeDiningTable != null)
                   Container(
                     width: double.infinity,
                     color: AppColors.primary.withValues(alpha: 0.1),
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ),
+                    padding: AppSpacing.tilePadding,
                     child: Text(
                       'Table: ${session.activeDiningTable!.name}',
                       style: AppTypography.titleSmall,
@@ -37,7 +38,7 @@ class CartPage extends ConsumerWidget {
                   ),
                 Expanded(
                   child: ListView.builder(
-                    padding: const EdgeInsets.all(12),
+                    padding: const EdgeInsets.all(AppSpacing.md),
                     itemCount: items.length,
                     itemBuilder: (context, index) {
                       final item = items[index];
@@ -50,12 +51,14 @@ class CartPage extends ConsumerWidget {
                           title: Text(item.product.name),
                           subtitle: Text(
                             '$currencySymbol${item.unitPrice.toStringAsFixed(2)} x ${item.quantity}',
-                            style: TextStyle(color: AppColors.primary),
+                            style: AppTypography.bodySmall.copyWith(
+                              color: AppColors.primary,
+                            ),
                           ),
                           trailing: IconButton(
                             icon: const Icon(
                               Icons.remove_circle_outline,
-                              color: Colors.red,
+                              color: AppColors.error,
                             ),
                             onPressed: () => ref
                                 .read(cartProvider.notifier)
@@ -68,7 +71,7 @@ class CartPage extends ConsumerWidget {
                 ),
                 SafeArea(
                   child: Padding(
-                    padding: const EdgeInsets.all(16),
+                    padding: const EdgeInsets.all(AppSpacing.lg),
                     child: Column(
                       children: [
                         Row(
@@ -241,7 +244,7 @@ class CartPage extends ConsumerWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
           content: Text('Order submitted!'),
-          backgroundColor: Colors.green,
+          backgroundColor: AppColors.success,
         ),
       );
       GoRouter.of(context).goNamed('tables');
@@ -251,7 +254,7 @@ class CartPage extends ConsumerWidget {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Failed to submit order: $e'),
-          backgroundColor: Colors.red,
+          backgroundColor: AppColors.error,
         ),
       );
     }

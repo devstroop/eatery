@@ -48,17 +48,15 @@ class MenuPage extends ConsumerWidget {
                   right: 6,
                   top: 6,
                   child: Container(
-                    padding: const EdgeInsets.all(4),
+                    padding: const EdgeInsets.all(AppSpacing.xs),
                     decoration: const BoxDecoration(
-                      color: Colors.red,
+                      color: AppColors.error,
                       shape: BoxShape.circle,
                     ),
                     child: Text(
                       '${cart.cartTotalQuantity}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
+                      style: AppTypography.labelSmall.copyWith(
+                        color: AppColors.white,
                       ),
                     ),
                   ),
@@ -75,8 +73,8 @@ class MenuPage extends ConsumerWidget {
               child: ListView(
                 scrollDirection: Axis.horizontal,
                 padding: const EdgeInsets.symmetric(
-                  horizontal: 12,
-                  vertical: 8,
+                  horizontal: AppSpacing.md,
+                  vertical: AppSpacing.sm,
                 ),
                 children: [
                   _CategoryChip(
@@ -104,7 +102,7 @@ class MenuPage extends ConsumerWidget {
           Expanded(
             child: products.when(
               data: (list) => GridView.builder(
-                padding: const EdgeInsets.all(12),
+                padding: const EdgeInsets.all(AppSpacing.md),
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   mainAxisSpacing: 8,
@@ -130,7 +128,17 @@ class MenuPage extends ConsumerWidget {
                   );
                 },
               ),
-              loading: () => const Center(child: CircularProgressIndicator()),
+              loading: () => GridView.builder(
+                padding: const EdgeInsets.all(AppSpacing.md),
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                  childAspectRatio: 0.85,
+                ),
+                itemCount: 6,
+                itemBuilder: (_, _) => AppSkeleton.card(),
+              ),
               error: (e, _) => Center(child: Text('Error: $e')),
             ),
           ),
@@ -154,7 +162,7 @@ class _CategoryChip extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(right: 8),
+      padding: const EdgeInsets.only(right: AppSpacing.sm),
       child: FilterChip(
         label: Text(label),
         selected: selected,
@@ -190,7 +198,7 @@ class _ProductCard extends StatelessWidget {
                 ? Border.all(color: AppColors.primary, width: 2)
                 : null,
           ),
-          padding: const EdgeInsets.all(8),
+          padding: const EdgeInsets.all(AppSpacing.sm),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,

@@ -50,17 +50,17 @@ class _SetupPageState extends ConsumerState<SetupPage> {
       );
 
       if (mounted) {
-        ScaffoldMessenger.of(this.context).showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Restaurant set up! Log in with your PIN'),
           ),
         );
-        GoRouter.of(this.context).goNamed('login');
+        GoRouter.of(context).goNamed('login');
       }
     } catch (e) {
       if (mounted) {
         AppDialog.showMessage(
-          this.context,
+          context,
           message: 'Setup failed: $e',
           type: MessageType.error,
         );

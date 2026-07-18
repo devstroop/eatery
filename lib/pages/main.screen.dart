@@ -24,15 +24,15 @@ class _MainScreenState extends ConsumerState<MainScreen> {
       final store = ref.read(eateryStoreProvider);
       await SeedData.load(store);
       if (mounted) {
-        ScaffoldMessenger.of(this.context).showSnackBar(
+        ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Demo loaded! Log in with PIN 1234')),
         );
-        GoRouter.of(this.context).goNamed('login');
+        GoRouter.of(context).goNamed('login');
       }
     } catch (e) {
       if (mounted) {
         AppDialog.showMessage(
-          this.context,
+          context,
           message: 'Failed to load demo: $e',
           type: MessageType.error,
         );
@@ -44,31 +44,21 @@ class _MainScreenState extends ConsumerState<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isDesktop = Responsive.isDesktop(context);
-    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = Responsive.isMobile(context);
 
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Container(
-          margin: const EdgeInsets.only(top: 12),
-          child: Image.asset('assets/logo.png', height: 48),
-        ),
-      ),
+    return AppPageShell(
+      title: '',
+      titleWidget: Image.asset('assets/logo.png', height: 40),
+      color: AppColors.white,
+      showBack: false,
+      contentMaxWidth: 900,
       backgroundColor: AppColors.white,
-      body: Center(
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 900),
-          child: isDesktop
-              ? _buildDesktop(screenWidth)
-              : _buildMobile(screenWidth),
-        ),
-      ),
-      bottomNavigationBar: isDesktop ? null : _buildBottomBar(),
+      bottomNavigationBar: isMobile ? _buildBottomBar() : null,
+      child: isMobile ? _buildMobile() : _buildDesktop(),
     );
   }
 
-  Widget _buildDesktop(double screenWidth) {
+  Widget _buildDesktop() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 48, vertical: 24),
       child: Row(
@@ -103,11 +93,10 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                       label: 'Set up my restaurant',
                       height: 52,
                       width: 200,
-                      onPressed: () =>
-                          GoRouter.of(this.context).pushNamed('setup'),
+                      onPressed: () => GoRouter.of(context).pushNamed('setup'),
                     ),
                     AppSpacing.gapMd,
-                    AppButton.destructive(
+                    AppButton.secondary(
                       label: _loading ? 'Loading...' : 'Try Demo',
                       height: 52,
                       width: 160,
@@ -119,10 +108,9 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                 TextButton.icon(
                   icon: const Icon(Icons.restore, size: 18),
                   label: const Text('Restore from backup'),
-                  onPressed: () =>
-                      ScaffoldMessenger.of(this.context).showSnackBar(
-                        const SnackBar(content: Text('Restore coming soon')),
-                      ),
+                  onPressed: () => ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Restore coming soon')),
+                  ),
                 ),
               ],
             ),
@@ -145,7 +133,7 @@ class _MainScreenState extends ConsumerState<MainScreen> {
     );
   }
 
-  Widget _buildMobile(double screenWidth) {
+  Widget _buildMobile() {
     return Padding(
       padding: const EdgeInsets.all(24),
       child: Column(
@@ -191,12 +179,12 @@ class _MainScreenState extends ConsumerState<MainScreen> {
                 child: AppButton.primary(
                   label: 'Set up',
                   height: 50,
-                  onPressed: () => GoRouter.of(this.context).pushNamed('setup'),
+                  onPressed: () => GoRouter.of(context).pushNamed('setup'),
                 ),
               ),
               AppSpacing.gapMd,
               Expanded(
-                child: AppButton.destructive(
+                child: AppButton.secondary(
                   label: _loading ? '...' : 'Demo',
                   height: 50,
                   onPressed: _loading ? null : _loadDemo,
