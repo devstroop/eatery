@@ -125,6 +125,28 @@ class FloorPlanWidget extends StatelessWidget {
   }
 }
 
+/// Painter for the grid background.
+class _GridPainter extends CustomPainter {
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = AppColors.grey200
+      ..strokeWidth = 0.5;
+
+    const gridSize = 60.0;
+    for (double x = 0; x < size.width; x += gridSize) {
+      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
+    }
+    for (double y = 0; y < size.height; y += gridSize) {
+      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
+    }
+  }
+
+  @override
+  bool shouldRepaint(_GridPainter oldDelegate) => false;
+}
+
+/// Static table widget on the floor plan.
 class _TableWidget extends StatelessWidget {
   final DiningTable table;
   final double size;
@@ -134,37 +156,57 @@ class _TableWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isCircle = table.shape == 1;
+    final statusColor = _statusColor(table.status);
+
     return GestureDetector(
       onTap: onTap,
       child: Container(
         width: size,
         height: size,
         decoration: BoxDecoration(
-          color: table.status.color.withValues(alpha: 0.2),
-          shape: isCircle ? BoxShape.circle : BoxShape.rectangle,
-          borderRadius: isCircle ? null : BorderRadius.circular(AppSpacing.radiusSm),
-          border: Border.all(color: table.status.color, width: 2),
+          color: statusColor.withValues(alpha: 0.15),
+          borderRadius: BorderRadius.circular(8),
+          border: Border.all(color: statusColor, width: 2),
         ),
-        child: Center(
-          child: Text(
-            table.name,
-            style: AppTypography.labelSmall.copyWith(
-              color: table.status.color,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              table.name,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 11,
+                color: statusColor,
+              ),
             ),
-            textAlign: TextAlign.center,
-          ),
+            if (table.orderId != null)
+              Icon(Icons.restaurant, size: 16, color: statusColor),
+          ],
         ),
       ),
     );
   }
+
+  Color _statusColor(DiningTableStatus status) {
+    switch (status) {
+      case DiningTableStatus.available:
+        return AppColors.success;
+      case DiningTableStatus.occupied:
+        return AppColors.warning;
+      case DiningTableStatus.reserved:
+        return AppColors.info;
+      case DiningTableStatus.inactive:
+        return AppColors.grey600;
+    }
+  }
 }
 
+/// Draggable version of the table widget for edit mode.
 class _DraggableTable extends StatelessWidget {
   final DiningTable table;
   final double tableSize;
   final void Function(DiningTable table)? onTableTap;
-  final void Function(Offset newPos)? onMoved;
+  final void Function(Offset offset)? onMoved;
 
   const _DraggableTable({
     required this.table,
@@ -176,37 +218,19 @@ class _DraggableTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onPanEnd: (details) {
-        if (onMoved != null) {
-          final renderBox = context.findRenderObject() as RenderBox;
-          final localPos = renderBox.localToGlobal(Offset.zero);
-          onMoved!(localPos);
-        }
+      onPanUpdate: (details) {
+        final newPos = Offset(
+          (table.posX ?? 0) + details.delta.dx,
+          (table.posY ?? 0) + details.delta.dy,
+        );
+        onMoved?.call(newPos);
       },
+      onTap: () => onTableTap?.call(table),
       child: _TableWidget(
         table: table,
         size: tableSize,
-        onTap: onTableTap != null ? () => onTableTap!(table) : null,
+        onTap: () => onTableTap?.call(table),
       ),
     );
   }
-}
-
-class _GridPainter extends CustomPainter {
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = AppColors.grey300.withValues(alpha: 0.5)
-      ..strokeWidth = 0.5;
-
-    for (double x = 0; x < size.width; x += 40) {
-      canvas.drawLine(Offset(x, 0), Offset(x, size.height), paint);
-    }
-    for (double y = 0; y < size.height; y += 40) {
-      canvas.drawLine(Offset(0, y), Offset(size.width, y), paint);
-    }
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
