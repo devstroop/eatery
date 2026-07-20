@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:eatery_core/eatery_core.dart';
+import 'package:eatery/components/eatery_core_widgets/widgets.dart';
 
 final _categoriesProvider = FutureProvider<List<ProductCategory>>((ref) {
   final repo = ref.read(productRepositoryProvider);

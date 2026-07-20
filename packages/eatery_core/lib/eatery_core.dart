@@ -64,7 +64,7 @@ export 'data/repositories/subscription_repository_sqlite.dart';
 export 'data/repositories/tax_repository.dart';
 export 'data/repositories/tax_repository_sqlite.dart';
 
-/// Core widgets
+/// Domain-coupled widgets (providers/models dependency — migrate later)
 export 'widgets/widgets.dart';
 
 /// Utils

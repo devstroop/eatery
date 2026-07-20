@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:eatery_core/eatery_core.dart';
+import 'package:eatery/components/eatery_core_widgets/widgets.dart';
 
 final _waiterOrdersProvider = FutureProvider.autoDispose<List<Order>>((ref) {
   final employee = ref.watch(authSessionProvider);
@@ -143,8 +144,17 @@ class _OrderCard extends ConsumerWidget {
                   PopupMenuItem(
                     value: 'void',
                     child: ListTile(
-                      leading: Icon(Icons.cancel, size: 20, color: AppColors.error),
-                      title: Text('Void', style: AppTypography.bodyMedium.copyWith(color: AppColors.error)),
+                      leading: Icon(
+                        Icons.cancel,
+                        size: 20,
+                        color: AppColors.error,
+                      ),
+                      title: Text(
+                        'Void',
+                        style: AppTypography.bodyMedium.copyWith(
+                          color: AppColors.error,
+                        ),
+                      ),
                       dense: true,
                       contentPadding: EdgeInsets.zero,
                     ),

@@ -1,5 +1,5 @@
 import "package:flutter/material.dart";
-import "package:eatery_core/widgets/widgets.dart";
+import "package:eatery/components/eatery_core_widgets/widgets.dart";
 import "package:eatery_core/theme/app_typography.dart";
 import "package:eatery_core/theme/app_colors.dart";
 import "package:eatery_core/providers/database_provider.dart";
