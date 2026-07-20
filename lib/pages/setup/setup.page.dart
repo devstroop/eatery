@@ -62,9 +62,7 @@ class _SetupPageState extends ConsumerState<SetupPage> {
         name: _restaurantNameCtrl.text.trim().isEmpty
             ? 'My Restaurant'
             : _restaurantNameCtrl.text.trim(),
-        email: _emailCtrl.text.trim().isEmpty
-            ? ''
-            : _emailCtrl.text.trim(),
+        email: _emailCtrl.text.trim().isEmpty ? '' : _emailCtrl.text.trim(),
         phone: '',
         address: '',
         taxation: Taxation.none,
