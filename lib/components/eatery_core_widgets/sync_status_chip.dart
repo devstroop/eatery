@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/eatery_core.dart';
+import 'sync_host_settings_sheet.dart';
 
 /// A small chip that displays the current sync connection status.
 ///
