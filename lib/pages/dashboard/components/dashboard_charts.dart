@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/eatery_core.dart';
+import 'package:eatery/components/eatery_core_widgets/widgets.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:eatery_core/services/chart_service.dart';
 

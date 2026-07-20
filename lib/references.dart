@@ -11,7 +11,7 @@ export 'package:devdart_windows_hdsn/devdart_windows_hdsn.dart';
 export 'package:devdart_windows_hdsn/drive.dart';
 // External refs by devstroop (*deprecated — moved to local equivalents)
 export './widgets/titles/page_title.dart';
-export 'package:eatery_core/widgets/widgets.dart';
+export './components/eatery_core_widgets/widgets.dart';
 // Integrated packages
 export './support/bluetooth_thermal_printer/bluetooth_thermal_printer.dart';
 // External packages

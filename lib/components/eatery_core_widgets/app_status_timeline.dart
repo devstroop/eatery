@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../data/models/eatery_db.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_spacing.dart';
-import '../theme/app_typography.dart';
+import 'package:eatery_core/data/models/eatery_db.dart';
+import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
+import 'package:eatery_core/theme/app_typography.dart';
 
 /// A vertical timeline widget that visualizes [OrderStatusHistory] transitions.
 ///
@@ -70,11 +70,11 @@ class _TimelineStep extends StatelessWidget {
     final fromStatus = OrderStatus.fromId(entry.fromStatus);
     final toStatus = OrderStatus.fromId(entry.toStatus);
     final dotColor = OrderStatus.colorFor(toStatus);
-    final formattedTime = _formatTimestamp(entry.changedAt);
     final changedBy = entry.changedByEmployeeId;
     final staffName = changedBy != null
         ? (employeeNames?[changedBy] ?? 'Employee #$changedBy')
         : null;
+    final formattedTime = _formatTimestamp(entry.changedAt);
 
     return IntrinsicHeight(
       child: Row(
@@ -127,8 +127,8 @@ class _TimelineStep extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       staffName,
-                      style: AppTypography.labelSmall.copyWith(
-                        color: AppColors.grey600,
+                      style: AppTypography.bodySmall.copyWith(
+                        color: AppColors.grey500,
                       ),
                     ),
                   ],
@@ -137,7 +137,7 @@ class _TimelineStep extends StatelessWidget {
                     Text(
                       'Reason: ${entry.reason}',
                       style: AppTypography.bodySmall.copyWith(
-                        color: AppColors.error,
+                        color: AppColors.statusVoided,
                         fontStyle: FontStyle.italic,
                       ),
                     ),
@@ -152,19 +152,16 @@ class _TimelineStep extends StatelessWidget {
   }
 
   String _statusLabel(OrderStatus from, OrderStatus to) {
+    if (from == to && to == OrderStatus.pending) return 'Order placed';
     if (from == to) return to.name;
-    if (to == OrderStatus.voided) {
-      return '${from.name} → Voided';
-    }
     return '${from.name} → ${to.name}';
   }
 
   String _formatTimestamp(DateTime dt) {
-    final hour = dt.hour > 12 ? dt.hour - 12 : (dt.hour == 0 ? 12 : dt.hour);
-    final amPm = dt.hour >= 12 ? 'PM' : 'AM';
-    final min = dt.minute.toString().padLeft(2, '0');
-    final month = dt.month.toString().padLeft(2, '0');
+    final hour = dt.hour.toString().padLeft(2, '0');
+    final minute = dt.minute.toString().padLeft(2, '0');
     final day = dt.day.toString().padLeft(2, '0');
-    return '$month/$day $hour:$min $amPm';
+    final month = dt.month.toString().padLeft(2, '0');
+    return '$day/$month ${dt.year} $hour:$minute';
   }
 }

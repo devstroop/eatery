@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_spacing.dart';
-import '../theme/app_component.dart';
-import '../theme/app_shadows.dart';
+import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
+import 'package:eatery_core/theme/app_component.dart';
+import 'package:eatery_core/theme/app_shadows.dart';
 
 /// Consistent card with optional tap, shadow, and padding.
 ///

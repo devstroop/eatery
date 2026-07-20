@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_typography.dart';
+import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_typography.dart';
 
 /// A menu tile used in settings grids and navigation lists.
 ///

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_spacing.dart';
-import '../theme/app_shadows.dart';
-import '../theme/app_typography.dart';
+import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
+import 'package:eatery_core/theme/app_shadows.dart';
+import 'package:eatery_core/theme/app_typography.dart';
 
 class AppProductCard extends StatelessWidget {
   final Widget image;

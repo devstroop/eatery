@@ -64,9 +64,6 @@ export 'data/repositories/subscription_repository_sqlite.dart';
 export 'data/repositories/tax_repository.dart';
 export 'data/repositories/tax_repository_sqlite.dart';
 
-/// Core widgets
-export 'widgets/widgets.dart';
-
 /// Utils
 export 'utils/device_id.dart';
 export 'utils/responsive.dart';
