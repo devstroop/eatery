@@ -121,53 +121,34 @@ class _ModifierSheetState extends ConsumerState<ModifierSheet> {
                               style: AppTypography.bodySmall,
                             ),
                           const SizedBox(height: 8),
-                          ...modifiers.map((m) {
-                            final isSelected = selectedIds.contains(m.id);
+                          ...modifiers.map((mod) {
+                            final isSelected = selectedIds.contains(mod.id);
                             return CheckboxListTile(
-                              dense: true,
-                              title: Text(
-                                m.name,
-                                style: AppTypography.bodyMedium,
-                              ),
-                              subtitle: m.priceAdjust > 0
+                              title: Text(mod.name),
+                              subtitle: mod.priceAdjust > 0
                                   ? Text(
-                                      '+${m.priceAdjust.toStringAsFixed(2)}',
-                                      style: TextStyle(
-                                        color: AppColors.success,
-                                        fontSize: 12,
-                                      ),
+                                      '+${mod.priceAdjust.toStringAsFixed(2)}',
                                     )
                                   : null,
                               value: isSelected,
-                              onChanged: (v) {
+                              onChanged: (checked) {
                                 setState(() {
-                                  if (v == true) {
-                                    if (group.maxSelect > 0 &&
-                                        selectedIds.length >= group.maxSelect) {
-                                      return;
-                                    }
+                                  if (checked == true) {
                                     _selected[group.id!] = [
                                       ...selectedIds,
-                                      m.id!,
+                                      mod.id!,
                                     ];
                                   } else {
-                                    if (selectedIds.length <= group.minSelect) {
-                                      return;
-                                    }
                                     _selected[group.id!] = selectedIds
-                                        .where((id) => id != m.id)
+                                        .where((id) => id != mod.id)
                                         .toList();
                                   }
                                   _recalcCost();
                                 });
                               },
+                              controlAffinity: ListTileControlAffinity.trailing,
                             );
                           }),
-                          if (modifiers.length > 1)
-                            Text(
-                              '${selectedIds.length}/${group.maxSelect > 0 ? group.maxSelect : "any"} selected',
-                              style: AppTypography.labelSmall,
-                            ),
                         ],
                       ),
                     ),
@@ -175,19 +156,16 @@ class _ModifierSheetState extends ConsumerState<ModifierSheet> {
                 }).toList(),
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 12),
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  foregroundColor: AppColors.white,
-                  padding: const EdgeInsets.symmetric(vertical: 14),
-                ),
-                onPressed: widget.onConfirm,
-                child: Text(
-                  'Add to Order  \$${(widget.product.salePrice ?? widget.product.mrpPrice) + _extraCost}',
-                ),
+                onPressed: () {
+                  // TODO: apply modifiers to cart item
+                  widget.onConfirm();
+                  Navigator.pop(context);
+                },
+                child: const Text('Done'),
               ),
             ),
           ],
@@ -197,15 +175,14 @@ class _ModifierSheetState extends ConsumerState<ModifierSheet> {
   }
 
   void _recalcCost() {
-    _extraCost = 0;
+    double cost = 0;
     for (final entry in _selected.entries) {
-      final modifiers = ref
-          .read(modifierRepositoryProvider)
-          .getModifiers(entry.key);
-      for (final id in entry.value) {
-        final m = modifiers.where((m) => m.id == id).firstOrNull;
-        if (m != null) _extraCost += m.priceAdjust;
+      final repo = ref.read(modifierRepositoryProvider);
+      for (final modId in entry.value) {
+        final mod = repo.getModifierById(modId);
+        cost += mod?.priceAdjust ?? 0;
       }
     }
+    _extraCost = cost;
   }
 }
