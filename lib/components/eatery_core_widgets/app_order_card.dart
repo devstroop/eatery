@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../data/models/eatery_db.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_spacing.dart';
-import '../theme/app_typography.dart';
+import 'package:eatery_core/data/models/eatery_db.dart';
+import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
+import 'package:eatery_core/theme/app_typography.dart';
 
 /// The role context in which [AppOrderCard] is rendered.
 ///

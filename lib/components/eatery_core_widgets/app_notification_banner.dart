@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../theme/app_colors.dart';
-import '../theme/app_spacing.dart';
-import '../theme/app_typography.dart';
+import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_spacing.dart';
+import 'package:eatery_core/theme/app_typography.dart';
 
 /// The type of notification banner, which determines the status-colored border.
 enum NotificationType { orderReady, orderStatusChanged, syncFailed, info }
