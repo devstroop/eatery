@@ -12,6 +12,13 @@ enum DeviceRole {
     Icons.admin_panel_settings,
     AppColors.primary,
   ),
+  waiter(
+    'waiter',
+    'Waiter',
+    'Order taking & table management',
+    Icons.table_restaurant,
+    AppColors.accent,
+  ),
   kds(
     'kds',
     'Kitchen Display',
@@ -168,6 +175,8 @@ class _RoleCard extends ConsumerWidget {
     switch (role) {
       case DeviceRole.admin:
         context.goNamed('setup');
+      case DeviceRole.waiter:
+        context.goNamed('login');
       case DeviceRole.kds:
         context.goNamed('kds');
       case DeviceRole.display:

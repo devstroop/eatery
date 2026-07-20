@@ -72,18 +72,16 @@ class _ResetPinScreenState extends ConsumerState<ResetPinScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppPageShell(
+      title: 'Reset PIN',
       backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        title: const Text('Reset PIN'),
-        backgroundColor: AppColors.grey200,
-      ),
-      body: Padding(
+      contentMaxWidth: 480,
+      child: Padding(
         padding: const EdgeInsets.all(24),
         child: Form(
           key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+          child: ListView(
+            shrinkWrap: true,
             children: [
               if (!_showPinForm) ...[
                 Text(
