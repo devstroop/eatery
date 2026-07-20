@@ -159,7 +159,10 @@ class AppPageShell extends StatelessWidget {
           ? headerRow()
           : Center(
               child: ConstrainedBox(
-                constraints: BoxConstraints(maxWidth: maxW),
+                constraints: BoxConstraints(
+                  maxWidth: double.infinity,
+                ), // fixed: use double.infinity to allow full width
+                // constraints: BoxConstraints(maxWidth: maxW), // ignore: was causing layout issues on desktop
                 child: headerRow(),
               ),
             ),
