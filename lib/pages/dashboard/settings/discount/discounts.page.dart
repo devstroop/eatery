@@ -41,7 +41,7 @@ class _DiscountsPageState extends ConsumerState<DiscountsPage> {
                     SizedBox(height: 16),
                     Text(
                       "No discounts configured",
-                      style: TextStyle(fontSize: 18),
+                      style: AppTypography.titleLarge,
                     ),
                   ],
                 ),

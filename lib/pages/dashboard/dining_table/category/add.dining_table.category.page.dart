@@ -1,9 +1,7 @@
-import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:eatery_core/widgets/app_dialog.dart';
 
 Color _pageColor = AppColors.menuCategories;
 
@@ -37,29 +35,26 @@ class _AddDiningTableCategoryPageState
             },
           ),
       ],
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.white,
-        child: AppButton.primary(
-          onPressed: () async {
-            if (!_formKey.currentState!.validate()) {
-              return;
-            }
-            DiningTableCategory diningTableCategory = DiningTableCategory(
-              name: _controllerCategoryName.text,
-              description: _controllerCategoryDescription.text,
-              isActive: true,
-            );
-            ref
-                .read(diningTableRepositoryProvider)
-                .saveCategory(diningTableCategory);
-            AppDialog.showMessage(
-              context,
-              message: 'Dining table category added successfully',
-              type: MessageType.success,
-            ).then((value) => Navigator.pop(this.context, diningTableCategory));
-          },
-          label: 'Save',
-        ),
+      bottomAction: AppButton.primary(
+        onPressed: () async {
+          if (!_formKey.currentState!.validate()) {
+            return;
+          }
+          DiningTableCategory diningTableCategory = DiningTableCategory(
+            name: _controllerCategoryName.text,
+            description: _controllerCategoryDescription.text,
+            isActive: true,
+          );
+          ref
+              .read(diningTableRepositoryProvider)
+              .saveCategory(diningTableCategory);
+          AppDialog.showMessage(
+            context,
+            message: 'Dining table category added successfully',
+            type: MessageType.success,
+          ).then((value) => Navigator.pop(this.context, diningTableCategory));
+        },
+        label: 'Save',
       ),
       child: InkWell(
         onTap: () {

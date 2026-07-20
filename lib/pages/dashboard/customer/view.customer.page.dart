@@ -1,11 +1,9 @@
-import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/order_provider.dart';
-import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:eatery_core/data/repositories/loyalty_repository.dart';
 import 'package:go_router/go_router.dart';
 import 'package:eatery_core/providers/company_provider.dart';
@@ -218,7 +216,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                   children: [
                     const Text('Status'),
                     if (_customer.isActive)
-                      const Icon(Icons.check_circle, color: Colors.green),
+                      const Icon(Icons.check_circle, color: AppColors.success),
                     if (!_customer.isActive)
                       const Icon(Icons.cancel, color: AppColors.error),
                   ],
@@ -325,9 +323,7 @@ class _ViewCustomerState extends ConsumerState<ViewCustomer> {
                   ),
                   child: Text(
                     tierNames[loyalty.tier.clamp(0, 3)],
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 11,
+                    style: AppTypography.labelSmall.copyWith(
                       fontWeight: FontWeight.bold,
                     ),
                   ),

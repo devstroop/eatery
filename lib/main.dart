@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:eatery/core/router/app_router.dart';
 import 'package:eatery_core/theme/app_theme.dart';
 import 'package:eatery_core/utils/device_id.dart';
-import 'package:eatery/constants/utils/app_file_system.dart';
 import 'package:eatery_core/data/database/eatery_database.dart';
 import 'package:eatery_core/data/database/native/eatery_schema.dart';
 import 'package:eatery_core/data/database/native/eatery_store.dart';
@@ -16,7 +15,6 @@ import 'package:eatery_core/providers/database_provider.dart';
 import 'package:eatery_core/providers/role_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/functions/order.function.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 /// The native SQLite store, initialized at startup.
@@ -57,7 +55,53 @@ void main() async {
         }
       }
 
-      await setupDataAndInitDB();
+      try {
+        await setupDataAndInitDB();
+      } catch (e) {
+        // DB locked by another instance → show error UI instead of blank screen.
+        debugPrint('FATAL: $e');
+        runApp(
+          ProviderScope(
+            child: MaterialApp(
+              debugShowCheckedModeBanner: false,
+              home: Scaffold(
+                backgroundColor: const Color(0xFF111111),
+                body: Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(32),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const Icon(
+                          Icons.error_outline,
+                          size: 64,
+                          color: Colors.red,
+                        ),
+                        const SizedBox(height: 24),
+                        const Text(
+                          'Another instance of Eatery is already running.\n'
+                          'Close the other window and try again.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: Colors.white70, fontSize: 18),
+                        ),
+                        const SizedBox(height: 32),
+                        TextButton(
+                          onPressed: () {},
+                          child: const Text(
+                            'Close',
+                            style: TextStyle(color: Colors.white54),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        );
+        return;
+      }
       runApp(
         ProviderScope(
           overrides: [
@@ -106,10 +150,15 @@ Future setupDataAndInitDB() async {
     OrderFunction.init(store);
   }
 
-  await FastCachedImageConfig.init(
-    subDir: '${AppFileSystem.cacheDir}/',
-    clearCacheAfter: const Duration(days: 15),
-  );
+  try {
+    await FastCachedImageConfig.init(
+      subDir: '${AppFileSystem.cacheDir}/',
+      clearCacheAfter: const Duration(days: 15),
+    );
+  } catch (_) {
+    // Hive cache lock contention on Windows — harmless, second launch works.
+    // FileSystemException: writeFrom failed ... cachedimageskeys.lock
+  }
 }
 
 /// Starts the sync host (admin) or client (leaf) based on the device role.

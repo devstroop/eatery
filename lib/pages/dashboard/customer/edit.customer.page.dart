@@ -1,9 +1,6 @@
-import 'package:eatery_core/widgets/app_dialog.dart';
-import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
-import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 
@@ -68,48 +65,45 @@ class _EditCustomerPageState extends ConsumerState<EditCustomerPage> {
             },
           ),
       ],
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.white,
-        child: AppButton.primary(
-          onPressed: () async {
-            if (!_formKey.currentState!.validate()) {
-              return;
-            }
-            _formKey.currentState!.save();
+      bottomAction: AppButton.primary(
+        onPressed: () async {
+          if (!_formKey.currentState!.validate()) {
+            return;
+          }
+          _formKey.currentState!.save();
 
-            final customer = widget.customer.copyWith(
-              name: _controllerCustomerName.text,
-              phone: _controllerCustomerPhone.text,
-              address: _controllerCustomerAddress.text,
-              landmark: _controllerCustomerLandmark.text,
-              isActive: isActive,
-            );
-            ref
-                .read(customerRepositoryProvider)
-                .saveCustomer(customer)
-                .then(
-                  (value) => AppDialog.showMessage(
-                    context,
-                    message: 'Customer updated successfully',
-                    type: MessageType.success,
-                    onConfirm: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                )
-                .onError(
-                  (error, stackTrace) => AppDialog.showMessage(
-                    context,
-                    message: 'Error updating customer',
-                    type: MessageType.error,
-                    onConfirm: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                );
-          },
-          label: 'Save',
-        ),
+          final customer = widget.customer.copyWith(
+            name: _controllerCustomerName.text,
+            phone: _controllerCustomerPhone.text,
+            address: _controllerCustomerAddress.text,
+            landmark: _controllerCustomerLandmark.text,
+            isActive: isActive,
+          );
+          ref
+              .read(customerRepositoryProvider)
+              .saveCustomer(customer)
+              .then(
+                (value) => AppDialog.showMessage(
+                  context,
+                  message: 'Customer updated successfully',
+                  type: MessageType.success,
+                  onConfirm: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              )
+              .onError(
+                (error, stackTrace) => AppDialog.showMessage(
+                  context,
+                  message: 'Error updating customer',
+                  type: MessageType.error,
+                  onConfirm: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              );
+        },
+        label: 'Save',
       ),
       child: InkWell(
         onTap: () {

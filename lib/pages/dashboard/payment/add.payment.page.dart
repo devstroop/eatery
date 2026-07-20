@@ -1,11 +1,9 @@
-import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery_core/providers/company_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:eatery_core/theme/app_spacing.dart';
-import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 Color _pageColor = AppColors.menuCategories;
@@ -53,94 +51,92 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
             },
           ),
       ],
-      bottomNavigationBar: BottomAppBar(
-        child: AppButton.primary(
-          label: 'Save Payment',
-          onPressed: () {
-            if (order == null) {
-              AppDialog.showMessage(
-                context,
-                message: 'Please select an order',
-                type: MessageType.error,
-              );
-              return;
-            }
-            final o = order!;
+      bottomAction: AppButton.primary(
+        label: 'Save Payment',
+        onPressed: () {
+          if (order == null) {
+            AppDialog.showMessage(
+              context,
+              message: 'Please select an order',
+              type: MessageType.error,
+            );
+            return;
+          }
+          final o = order!;
 
-            if (_formKey.currentState!.validate()) {
-              final payment = Payment(
-                amount: double.parse(_controllerAmount.text),
-                reference: _controllerReference.text,
-                mode: paymentMode,
-                attachment: image?.filename,
-                orderId: o.id,
-                date: DateTime.now(),
-              );
-              ref
-                  .read(paymentRepositoryProvider)
-                  .savePayment(payment)
-                  .then(
-                    (value) => AppDialog.showMessage(
-                      context,
-                      message: 'Payment saved successfully',
-                      type: MessageType.success,
-                      onConfirm: () async {
-                        var diningTable = ref
+          if (_formKey.currentState!.validate()) {
+            final payment = Payment(
+              amount: double.parse(_controllerAmount.text),
+              reference: _controllerReference.text,
+              mode: paymentMode,
+              attachment: image?.filename,
+              orderId: o.id,
+              date: DateTime.now(),
+            );
+            ref
+                .read(paymentRepositoryProvider)
+                .savePayment(payment)
+                .then(
+                  (value) => AppDialog.showMessage(
+                    context,
+                    message: 'Payment saved successfully',
+                    type: MessageType.success,
+                    onConfirm: () async {
+                      var diningTable = ref
+                          .read(diningTableRepositoryProvider)
+                          .getAllTables()
+                          .where((element) => element.orderId == order?.id)
+                          .firstOrNull;
+                      if (diningTable != null) {
+                        await ref
                             .read(diningTableRepositoryProvider)
-                            .getAllTables()
-                            .where((element) => element.orderId == order?.id)
-                            .firstOrNull;
-                        if (diningTable != null) {
-                          await ref
-                              .read(diningTableRepositoryProvider)
-                              .saveTable(
-                                diningTable.copyWith(
-                                  status: DiningTableStatus.available,
-                                  orderId: null,
-                                  customerPhone: null,
-                                ),
-                              );
-                        }
+                            .saveTable(
+                              diningTable.copyWith(
+                                status: DiningTableStatus.available,
+                                orderId: null,
+                                customerPhone: null,
+                              ),
+                            );
+                      }
 
-                        final newPaidTotal =
-                            (o.paidTotal ?? 0) +
-                            double.parse(_controllerAmount.text);
-                        final isFullyPaid = newPaidTotal >= o.grandTotal;
-                        var updatedOrder = o.copyWith(paidTotal: newPaidTotal);
-                        if (isFullyPaid && o.status == OrderStatus.pending) {
-                          final now = DateTime.now();
-                          updatedOrder = updatedOrder.copyWith(
-                            status: OrderStatus.completed,
-                            updatedAt: now,
-                          );
-                          ref
-                              .read(orderRepositoryProvider)
-                              .recordStatusTransition(
-                                OrderStatusHistory(
-                                  orderId: o.id!,
-                                  fromStatus: OrderStatus.pending.id,
-                                  toStatus: OrderStatus.completed.id,
-                                  changedAt: now,
-                                ),
-                              );
-                        }
+                      final newPaidTotal =
+                          (o.paidTotal ?? 0) +
+                          double.parse(_controllerAmount.text);
+                      final isFullyPaid = newPaidTotal >= o.grandTotal;
+                      var updatedOrder = o.copyWith(paidTotal: newPaidTotal);
+                      if (isFullyPaid && o.status == OrderStatus.pending) {
+                        final now = DateTime.now();
+                        updatedOrder = updatedOrder.copyWith(
+                          status: OrderStatus.completed,
+                          updatedAt: now,
+                        );
                         ref
                             .read(orderRepositoryProvider)
-                            .saveOrder(updatedOrder)
-                            .then((value) => Navigator.pop(context));
-                      },
-                    ),
-                  )
-                  .onError(
-                    (error, stackTrace) => AppDialog.showMessage(
-                      context,
-                      message: 'Error saving payment',
-                      type: MessageType.error,
-                    ),
-                  );
-            }
-          },
-        ),
+                            .recordStatusTransition(
+                              OrderStatusHistory(
+                                orderId: o.id!,
+                                fromStatus: OrderStatus.pending.id,
+                                toStatus: OrderStatus.completed.id,
+                                changedAt: now,
+                              ),
+                            );
+                      }
+                      ref
+                          .read(orderRepositoryProvider)
+                          .saveOrder(updatedOrder)
+                          .then((value) => Navigator.pop(context));
+                    },
+                  ),
+                )
+                .onError(
+                  (error, stackTrace) => AppDialog.showMessage(
+                    context,
+                    message: 'Error saving payment',
+                    type: MessageType.error,
+                  ),
+                );
+          }
+        },
       ),
       child: InkWell(
         onTap: () {
@@ -211,23 +207,21 @@ class _AddPaymentPageState extends ConsumerState<AddPaymentPage> {
                               style: AppTypography.titleLarge,
                             ),
                           ),
-                          ...PaymentMode.values
-                              .map(
-                                (e) => ListTile(
-                                  leading: Visibility(
-                                    visible: paymentMode == e,
-                                    child: const Icon(
-                                      Icons.check_circle,
-                                      color: Colors.green,
-                                    ),
-                                  ),
-                                  title: Text(e.name),
-                                  onTap: () {
-                                    Navigator.pop(context, e);
-                                  },
+                          ...PaymentMode.values.map(
+                            (e) => ListTile(
+                              leading: Visibility(
+                                visible: paymentMode == e,
+                                child: const Icon(
+                                  Icons.check_circle,
+                                  color: AppColors.success,
                                 ),
-                              )
-                              .toList(),
+                              ),
+                              title: Text(e.name),
+                              onTap: () {
+                                Navigator.pop(context, e);
+                              },
+                            ),
+                          ),
                         ],
                       ),
                     );

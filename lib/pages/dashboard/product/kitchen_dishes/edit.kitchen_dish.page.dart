@@ -1,11 +1,9 @@
-import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/product_provider.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
-import 'package:eatery_core/widgets/app_dialog.dart';
 
 Color _pageColor = AppColors.secondary;
 
@@ -85,46 +83,43 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
             },
           ),
       ],
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.white,
-        child: AppButton.primary(
-          onPressed: () async {
-            final isValid = _formKey.currentState!.validate();
-            if (!isValid) {
-              return;
-            }
-            _formKey.currentState!.save();
+      bottomAction: AppButton.primary(
+        onPressed: () async {
+          final isValid = _formKey.currentState!.validate();
+          if (!isValid) {
+            return;
+          }
+          _formKey.currentState!.save();
 
-            final updated = widget.product.copyWith(
-              image: image?.filename,
-              name: _controllerName.text,
-              mrpPrice: _controllerMRP.text.toDouble() ?? 0,
-              salePrice: _controllerSalePrice.text.toDouble(),
-              foodType: selectedFoodType,
-              taxSlabId: selectedTaxSlab?.id,
-              categoryId: selectedCategory?.id,
-              description: _controllerDescription.text,
-            );
-            await ref
-                .read(productRepositoryProvider)
-                .saveProduct(updated)
-                .then((value) {
-                  AppDialog.showMessage(
-                    this.context,
-                    message: 'Product updated successfully',
-                    type: MessageType.success,
-                  ).whenComplete(() => Navigator.pop(this.context));
-                })
-                .onError((error, stackTrace) {
-                  AppDialog.showMessage(
-                    this.context,
-                    message: 'Failed to update product',
-                    type: MessageType.error,
-                  );
-                });
-          },
-          label: 'Save',
-        ),
+          final updated = widget.product.copyWith(
+            image: image?.filename,
+            name: _controllerName.text,
+            mrpPrice: _controllerMRP.text.toDouble() ?? 0,
+            salePrice: _controllerSalePrice.text.toDouble(),
+            foodType: selectedFoodType,
+            taxSlabId: selectedTaxSlab?.id,
+            categoryId: selectedCategory?.id,
+            description: _controllerDescription.text,
+          );
+          await ref
+              .read(productRepositoryProvider)
+              .saveProduct(updated)
+              .then((value) {
+                AppDialog.showMessage(
+                  this.context,
+                  message: 'Product updated successfully',
+                  type: MessageType.success,
+                ).whenComplete(() => Navigator.pop(this.context));
+              })
+              .onError((error, stackTrace) {
+                AppDialog.showMessage(
+                  this.context,
+                  message: 'Failed to update product',
+                  type: MessageType.error,
+                );
+              });
+        },
+        label: 'Save',
       ),
       child: Padding(
         padding: const EdgeInsets.all(12.0),
@@ -160,7 +155,7 @@ class _EditKitchenDishPageState extends ConsumerState<EditKitchenDishPage> {
                   } else if (ref
                       .read(productRepositoryProvider)
                       .isProductNameTaken(
-                        value!.trim(),
+                        value.trim(),
                         excludeId: widget.product.id,
                       )) {
                     return 'Product with this name already exists';

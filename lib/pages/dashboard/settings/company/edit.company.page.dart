@@ -1,11 +1,8 @@
-import 'package:currency_picker/currency_picker.dart';
-import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery/constants/validators/email_validator.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/theme/app_typography.dart';
-import 'package:eatery_core/widgets/app_dialog.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/company_provider.dart';
 
@@ -69,37 +66,34 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
         ? AppPageShell(
             title: 'Company Details',
             color: _pageColor,
-            bottomNavigationBar: BottomAppBar(
-              color: AppColors.white,
-              child: AppButton.primary(
-                label: 'Save',
-                onPressed: () async {
-                  final updated = company!.copyWith(
-                    name: _controllerCompanyName.text,
-                    email: _controllerEmail.text,
-                    phone: _controllerPhone.text,
-                    address: _controllerAddress.text,
-                    foodLicenseNo: _controllerFoodLicNo.text,
-                    salesTaxNumber: _controllerSalesTaxNo.text,
-                    logo: selectedLogo?.filename,
-                    taxation: selectedTaxation,
-                    currencyCode: selectedCurrencyCode ?? company!.currencyCode,
-                  );
+            bottomAction: AppButton.primary(
+              label: 'Save',
+              onPressed: () async {
+                final updated = company!.copyWith(
+                  name: _controllerCompanyName.text,
+                  email: _controllerEmail.text,
+                  phone: _controllerPhone.text,
+                  address: _controllerAddress.text,
+                  foodLicenseNo: _controllerFoodLicNo.text,
+                  salesTaxNumber: _controllerSalesTaxNo.text,
+                  logo: selectedLogo?.filename,
+                  taxation: selectedTaxation,
+                  currencyCode: selectedCurrencyCode ?? company!.currencyCode,
+                );
 
-                  // Update the company in the database
-                  final repo = ref.read(companyRepositoryProvider);
-                  repo.saveCompany(updated).then((value) {
-                    AppDialog.showMessage(
-                      context,
-                      message: 'Company details successfully updated',
-                      type: MessageType.success,
-                      onConfirm: () {
-                        Navigator.pop(context);
-                      },
-                    );
-                  });
-                },
-              ),
+                // Update the company in the database
+                final repo = ref.read(companyRepositoryProvider);
+                repo.saveCompany(updated).then((value) {
+                  AppDialog.showMessage(
+                    context,
+                    message: 'Company details successfully updated',
+                    type: MessageType.success,
+                    onConfirm: () {
+                      Navigator.pop(context);
+                    },
+                  );
+                });
+              },
             ),
             child: Padding(
               padding: EdgeInsets.all(AppSpacing.md),
@@ -278,6 +272,8 @@ class _EditCompanyPageState extends ConsumerState<EditCompanyPage> {
               ),
             ),
           )
-        : Center(child: CircularProgressIndicator());
+        : const Center(
+            child: AppSkeleton(width: 300, height: 400, borderRadius: 12),
+          );
   }
 }

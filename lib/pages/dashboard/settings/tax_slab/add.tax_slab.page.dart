@@ -1,9 +1,6 @@
-import 'package:eatery_core/widgets/app_dialog.dart';
-import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
-import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 
@@ -42,16 +39,16 @@ class _AddTaxSlabSettingsPageState
       await ref.read(taxRepositoryProvider).saveTaxSlab(taxSlab).whenComplete(
         () {
           AppDialog.showMessage(
-            this.context,
+            context,
             message: 'Tax slab created successfully!',
             type: MessageType.success,
-            onConfirm: () => Navigator.pop(this.context),
+            onConfirm: () => Navigator.pop(context),
           );
         },
       );
     } catch (_) {
       AppDialog.showMessage(
-        this.context,
+        context,
         message: 'Something went wrong!',
         type: MessageType.error,
       );
@@ -63,12 +60,10 @@ class _AddTaxSlabSettingsPageState
     return AppPageShell(
       title: 'Add Tax Slab',
       color: _pageColor,
-      bottomNavigationBar: BottomAppBar(
-        child: AppButton.primary(
-          height: 48.0,
-          onPressed: _submit,
-          label: 'Save',
-        ),
+      bottomAction: AppButton.primary(
+        height: 48.0,
+        onPressed: _submit,
+        label: 'Save',
       ),
       child: InkWell(
         onTap: () => FocusScope.of(context).unfocus(),
@@ -103,8 +98,9 @@ class _AddTaxSlabSettingsPageState
                     decimal: true,
                   ),
                   validator: (value) {
-                    if (value!.trim().isEmpty)
+                    if (value!.trim().isEmpty) {
                       return 'Tax rate cannot be blank';
+                    }
                     return null;
                   },
                 ),

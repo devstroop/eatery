@@ -108,7 +108,9 @@ class SearchCustomerDelegate extends SearchDelegate<Customer?> {
         )
         .toList();
     if (searchResults.isEmpty) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(
+        child: Text('No customers found', style: AppTypography.bodyMedium),
+      );
     }
     return Column(
       children: [

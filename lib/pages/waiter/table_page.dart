@@ -50,17 +50,15 @@ class _TablePageState extends ConsumerState<TablePage> {
                   right: 6,
                   top: 6,
                   child: Container(
-                    padding: const EdgeInsets.all(4),
+                    padding: const EdgeInsets.all(AppSpacing.xs),
                     decoration: const BoxDecoration(
-                      color: Colors.red,
+                      color: AppColors.error,
                       shape: BoxShape.circle,
                     ),
                     child: Text(
                       '${cart.cartTotalQuantity}',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 10,
-                        fontWeight: FontWeight.bold,
+                      style: AppTypography.labelSmall.copyWith(
+                        color: AppColors.white,
                       ),
                     ),
                   ),
@@ -109,7 +107,34 @@ class _TablePageState extends ConsumerState<TablePage> {
             },
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => Padding(
+          padding: const EdgeInsets.all(AppSpacing.md),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                children: [
+                  AppSkeleton(width: 80, height: 32, borderRadius: 16),
+                  AppSpacing.gapSm,
+                  AppSkeleton(width: 80, height: 32, borderRadius: 16),
+                ],
+              ),
+              AppSpacing.gapMd,
+              Expanded(
+                child: GridView.builder(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 4,
+                    mainAxisSpacing: 12,
+                    crossAxisSpacing: 12,
+                    childAspectRatio: 0.85,
+                  ),
+                  itemCount: 8,
+                  itemBuilder: (_, _) => AppSkeleton.card(height: 100),
+                ),
+              ),
+            ],
+          ),
+        ),
         error: (e, _) => Center(child: Text('Error: $e')),
       ),
     );
@@ -157,7 +182,7 @@ class _TableGridState extends ConsumerState<_TableGrid> {
         .toList();
 
     return Padding(
-      padding: const EdgeInsets.all(12),
+      padding: const EdgeInsets.all(AppSpacing.md),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -200,7 +225,7 @@ class _TableGridState extends ConsumerState<_TableGrid> {
                           tables: available,
                           onTableTap: widget.onTableTap,
                           onLongPress: _toggleOccupancy,
-                          color: Colors.green,
+                          color: AppColors.success,
                         ),
                       if (occupied.isNotEmpty)
                         _TableSection(
@@ -208,7 +233,7 @@ class _TableGridState extends ConsumerState<_TableGrid> {
                           tables: occupied,
                           onTableTap: widget.onTableTap,
                           onLongPress: _toggleOccupancy,
-                          color: Colors.orange,
+                          color: AppColors.warning,
                         ),
                       if (other.isNotEmpty)
                         _TableSection(
@@ -216,7 +241,7 @@ class _TableGridState extends ConsumerState<_TableGrid> {
                           tables: other,
                           onTableTap: widget.onTableTap,
                           onLongPress: _toggleOccupancy,
-                          color: Colors.grey,
+                          color: AppColors.grey500,
                         ),
                     ],
                   ),
@@ -249,12 +274,22 @@ class _FloorPlanCanvas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    const double tableWidth = 80;
+    const double tableHeight = 60;
+    const double padding = 20;
+    const double colGap = 140;
+    const double rowGap = 100;
+    final cols = (tables.length / 4).ceil().clamp(1, 4);
+    final rows = (tables.length / cols).ceil().clamp(1, 4);
+    final canvasWidth = padding * 2 + colGap * (cols - 1) + tableWidth;
+    final canvasHeight = padding * 2 + rowGap * (rows - 1) + tableHeight;
+
     return InteractiveViewer(
       minScale: 0.5,
       maxScale: 3.0,
       child: SizedBox(
-        width: 600,
-        height: 600,
+        width: canvasWidth,
+        height: canvasHeight,
         child: CustomPaint(
           painter: _FloorPlanPainter(tables: tables),
           child: Stack(
@@ -267,31 +302,26 @@ class _FloorPlanCanvas extends StatelessWidget {
                   onTap: () => onTableTap(table),
                   onLongPress: () => onLongPress(table),
                   child: Container(
-                    width: 80,
-                    height: 60,
+                    width: tableWidth,
+                    height: tableHeight,
                     decoration: BoxDecoration(
-                      color: _statusColor(table.status).withValues(alpha: 0.2),
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(
-                        color: _statusColor(table.status),
-                        width: 2,
-                      ),
+                      color: table.status.color.withValues(alpha: 0.2),
+                      borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+                      border: Border.all(color: table.status.color, width: 2),
                     ),
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
                           table.name,
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: _statusColor(table.status),
+                          style: AppTypography.labelLarge.copyWith(
+                            color: table.status.color,
                           ),
                         ),
                         Text(
                           table.status.shortName,
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: _statusColor(table.status),
+                          style: AppTypography.labelSmall.copyWith(
+                            color: table.status.color,
                           ),
                         ),
                       ],
@@ -304,19 +334,6 @@ class _FloorPlanCanvas extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  Color _statusColor(DiningTableStatus status) {
-    switch (status) {
-      case DiningTableStatus.available:
-        return Colors.green;
-      case DiningTableStatus.occupied:
-        return Colors.orange;
-      case DiningTableStatus.reserved:
-        return Colors.blue;
-      case DiningTableStatus.inactive:
-        return Colors.grey;
-    }
   }
 
   Offset _tablePosition(DiningTable table, int total) {
@@ -335,12 +352,12 @@ class _FloorPlanPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
-      ..color = Colors.grey.withValues(alpha: 0.1)
+      ..color = AppColors.grey500.withValues(alpha: 0.1)
       ..style = PaintingStyle.fill;
     canvas.drawRect(Rect.fromLTWH(0, 0, size.width, size.height), paint);
 
     final gridPaint = Paint()
-      ..color = Colors.grey.withValues(alpha: 0.15)
+      ..color = AppColors.grey500.withValues(alpha: 0.15)
       ..strokeWidth = 0.5;
     for (double x = 0; x < size.width; x += 70) {
       canvas.drawLine(Offset(x, 0), Offset(x, size.height), gridPaint);

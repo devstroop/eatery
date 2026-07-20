@@ -19,17 +19,32 @@ All support: `loading`, `icon`, `width`, `height`, `size` (sm/md/lg).
 
 ### AppPageShell
 
-Wraps every screen. Auto-constrains to 720px on desktop.
+Wraps every screen. Provides a responsive header and content area.
+
+**Responsive header** — adapts to screen size:
+- **Mobile** (< 600px): standard full-width `AppBar`
+- **Tablet / Desktop** (>= 600px): constrained to 720px, centered, with optional `subtitle`
+
+**Responsive action bar** — use `bottomAction` for form submit buttons (Save, Confirm, etc.):
+- **Mobile**: renders as a pinned `BottomAppBar` for thumb reach
+- **Tablet / Desktop**: moves into header actions (top-right)
 
 ```dart
 AppPageShell(
-  title: 'Products',
-  color: AppColors.menuCategories,  // optional app bar tint
+  title: 'Orders',
+  subtitle: '3 pending, 12 completed',   // optional — shown below title
+  color: AppColors.menuCategories,
   showBack: true,
-  actions: [IconButton(...)],
-  child: ListView(...),
+  actions: [IconButton(...)],            // always in header
+  bottomAction: AppButton.primary(       // responsive: bottom → header
+    label: 'Save',
+    onPressed: () {},
+  ),
+  child: Form(...),
 )
 ```
+
+For context info bars (not single actions), use `bottomNavigationBar` directly — it passes through to `Scaffold` on all breakpoints.
 
 ### AppAdaptiveShell
 

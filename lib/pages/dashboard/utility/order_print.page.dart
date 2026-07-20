@@ -1,4 +1,3 @@
-import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'dart:ui' as ui;
@@ -58,16 +57,10 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
             Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Row(
+                Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'KOT Preview',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
+                    Text('KOT Preview', style: AppTypography.titleLarge),
                   ],
                 ),
                 Row(
@@ -109,13 +102,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                 const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      'Invoice Preview',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
+                    Text('Invoice Preview', style: AppTypography.titleLarge),
                   ],
                 ),
                 Row(
@@ -221,13 +208,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                 ),
                 Row(
                   children: [
-                    const Text(
-                      'Address: ',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
+                    const Text('Address: ', style: AppTypography.labelSmall),
                     Text(orderAddress, style: AppTypography.labelLarge),
                   ],
                 ),
@@ -284,10 +265,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Subtotal',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
-                ),
+                const Text('Subtotal', style: AppTypography.bodySmall),
                 Text(
                   '$currency${widget.order.subTotal.toPrecision(2)}',
                   style: AppTypography.bodySmall,
@@ -297,10 +275,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Tax',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
-                ),
+                const Text('Tax', style: AppTypography.bodySmall),
                 Text(
                   '$currency${widget.order.taxTotal.toPrecision(2)}',
                   style: AppTypography.bodySmall,
@@ -310,10 +285,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Total',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
-                ),
+                const Text('Total', style: AppTypography.bodySmall),
                 Text(
                   '$currency${widget.order.finalTotal.toPrecision(2)}',
                   style: AppTypography.bodySmall,
@@ -324,10 +296,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Round off (+/-)',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w400),
-                ),
+                const Text('Round off (+/-)', style: AppTypography.bodySmall),
                 Text(
                   '${widget.order.roundOff > 0 ? '+' : '-'} $currency${widget.order.roundOff.toPrecision(2).abs()}',
                   style: AppTypography.bodySmall,
@@ -337,10 +306,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Grand Total',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                ),
+                const Text('Grand Total', style: AppTypography.bodyLarge),
                 Text(
                   '$currency${widget.order.grandTotal.toPrecision(2)}',
                   style: AppTypography.titleMedium.copyWith(
@@ -413,13 +379,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
                 ),
                 Row(
                   children: [
-                    const Text(
-                      'Address: ',
-                      style: TextStyle(
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
+                    const Text('Address: ', style: AppTypography.labelSmall),
                     Text(orderAddress, style: AppTypography.labelLarge),
                   ],
                 ),
@@ -464,10 +424,7 @@ class _OrderPrintPageState extends ConsumerState<OrderPrintPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Total Qty',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400),
-                ),
+                const Text('Total Qty', style: AppTypography.titleMedium),
                 Text(
                   '${widget.currentCart.length}',
                   style: AppTypography.titleMedium.copyWith(

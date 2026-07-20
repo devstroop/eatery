@@ -70,9 +70,9 @@ class _EditOrderPageState extends ConsumerState<EditOrderPage> {
 
     if (mounted) {
       ScaffoldMessenger.of(
-        this.context,
+        context,
       ).showSnackBar(const SnackBar(content: Text('Order updated')));
-      Navigator.pop(this.context);
+      Navigator.pop(context);
     }
   }
 

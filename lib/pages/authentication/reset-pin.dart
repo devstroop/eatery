@@ -40,7 +40,7 @@ class _ResetPinScreenState extends ConsumerState<ResetPinScreen> {
 
     if (employee == null) {
       AppDialog.showMessage(
-        this.context,
+        context,
         message: 'No employee found with that ID or phone',
         type: MessageType.error,
       );
@@ -63,27 +63,25 @@ class _ResetPinScreenState extends ConsumerState<ResetPinScreen> {
     );
 
     AppDialog.showMessage(
-      this.context,
+      context,
       message: 'PIN updated successfully',
       type: MessageType.success,
     );
-    GoRouter.of(this.context).goNamed('login');
+    GoRouter.of(context).goNamed('login');
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return AppPageShell(
+      title: 'Reset PIN',
       backgroundColor: AppColors.grey200,
-      appBar: AppBar(
-        title: const Text('Reset PIN'),
-        backgroundColor: AppColors.grey200,
-      ),
-      body: Padding(
+      contentMaxWidth: 480,
+      child: Padding(
         padding: const EdgeInsets.all(24),
         child: Form(
           key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
+          child: ListView(
+            shrinkWrap: true,
             children: [
               if (!_showPinForm) ...[
                 Text(

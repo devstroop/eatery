@@ -5,7 +5,6 @@ import 'package:eatery_core/theme/app_colors.dart';
 import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery_core/providers/company_provider.dart';
-import 'package:eatery_core/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -68,35 +67,20 @@ class _OrderConfirmationPageState extends ConsumerState<OrderConfirmationPage> {
                     if (customer != null) ...[
                       Text(
                         customer.name ?? 'Unnamed',
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        style: AppTypography.headlineSmall,
                       ),
-                      Text(
-                        customer.phone,
-                        style: const TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w400,
-                        ),
-                      ),
+                      Text(customer.phone, style: AppTypography.bodyLarge),
                     ],
                     AppSpacing.gapSm,
                     Text(
                       'Order #${widget.order.id}',
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                      ),
+                      style: AppTypography.bodyLarge,
                     ),
                     Text(
                       DateFormat(
                         'dd MMM yyyy hh:mm a',
                       ).format(widget.order.createdAt),
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w400,
-                      ),
+                      style: AppTypography.bodyLarge,
                     ),
                     AppSpacing.gapMd,
                     Divider(color: AppColors.white900),
@@ -110,26 +94,17 @@ class _OrderConfirmationPageState extends ConsumerState<OrderConfirmationPage> {
                             Expanded(
                               child: Text(
                                 item.productName,
-                                style: const TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                ),
+                                style: AppTypography.bodyLarge,
                               ),
                             ),
                             Text(
                               '${item.quantity} x $currencySymbol${item.price}',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w400,
-                              ),
+                              style: AppTypography.bodyMedium,
                             ),
                             AppSpacing.gapSm,
                             Text(
                               '$currencySymbol${item.total}',
-                              style: const TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: AppTypography.titleMedium,
                             ),
                           ],
                         ),
@@ -194,17 +169,11 @@ class _OrderConfirmationPageState extends ConsumerState<OrderConfirmationPage> {
         children: [
           Text(
             label,
-            style: TextStyle(
-              fontSize: bold ? 18 : 16,
-              fontWeight: bold ? FontWeight.bold : FontWeight.w400,
-            ),
+            style: bold ? AppTypography.titleLarge : AppTypography.bodyLarge,
           ),
           Text(
             value,
-            style: TextStyle(
-              fontSize: bold ? 18 : 16,
-              fontWeight: bold ? FontWeight.bold : FontWeight.w400,
-            ),
+            style: bold ? AppTypography.titleLarge : AppTypography.bodyLarge,
           ),
         ],
       ),

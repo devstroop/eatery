@@ -56,7 +56,7 @@ class _AddModifierGroupPageState extends ConsumerState<AddModifierGroupPage> {
       updatedAt: now,
     );
     await repo.saveGroup(group);
-    if (mounted) Navigator.pop(this.context);
+    if (mounted) Navigator.pop(context);
   }
 
   @override

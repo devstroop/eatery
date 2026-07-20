@@ -1,5 +1,3 @@
-import 'package:eatery_core/widgets/app_dialog.dart';
-import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/providers/product_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
@@ -37,36 +35,33 @@ class _AddProductCategoryPageState
             },
           ),
       ],
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.white,
-        child: AppButton.primary(
-          onPressed: () async {
-            final repo = ref.read(productRepositoryProvider);
-            await repo
-                .saveCategory(
-                  ProductCategory(
-                    name: _controllerCategoryName.text,
-                    description: _controllerCategoryDescription.text,
-                    image: pickedLibraryImage?.filename,
-                  ),
-                )
-                .then((response) {
-                  AppDialog.showMessage(
-                    context,
-                    message: 'Category created successfully',
-                    type: MessageType.success,
-                  ).then((value) => Navigator.pop(context));
-                })
-                .onError((error, stackTrace) {
-                  AppDialog.showMessage(
-                    context,
-                    message: error.toString(),
-                    type: MessageType.error,
-                  );
-                });
-          },
-          label: 'Save',
-        ),
+      bottomAction: AppButton.primary(
+        onPressed: () async {
+          final repo = ref.read(productRepositoryProvider);
+          await repo
+              .saveCategory(
+                ProductCategory(
+                  name: _controllerCategoryName.text,
+                  description: _controllerCategoryDescription.text,
+                  image: pickedLibraryImage?.filename,
+                ),
+              )
+              .then((response) {
+                AppDialog.showMessage(
+                  context,
+                  message: 'Category created successfully',
+                  type: MessageType.success,
+                ).then((value) => Navigator.pop(context));
+              })
+              .onError((error, stackTrace) {
+                AppDialog.showMessage(
+                  context,
+                  message: error.toString(),
+                  type: MessageType.error,
+                );
+              });
+        },
+        label: 'Save',
       ),
       child: InkWell(
         onTap: () {

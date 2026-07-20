@@ -101,18 +101,26 @@ abstract class MdnsService {
   /// can discover this host via [discoverHosts].
   ///
   /// Call [stopAdvertising] with the returned [Advertiser] to stop.
-  static Future<Advertiser> startAdvertising({
+  static Future<Advertiser?> startAdvertising({
     required int port,
     String? deviceName,
   }) async {
-    final socket = await RawDatagramSocket.bind(
-      InternetAddress.anyIPv4,
-      _mDnsPort,
-      reuseAddress: true,
-      reusePort: true,
-      ttl: 255,
-    );
-    socket.joinMulticast(_mDnsAddr);
+    RawDatagramSocket? socket;
+    try {
+      socket = await RawDatagramSocket.bind(
+        InternetAddress.anyIPv4,
+        _mDnsPort,
+        reuseAddress: true,
+        reusePort: !Platform.isWindows,
+        ttl: 255,
+      );
+      socket.joinMulticast(_mDnsAddr);
+    } catch (e) {
+      debugPrint('MdnsService.startAdvertising: failed ($e) — '
+          'mDNS advertising unavailable on this device');
+      socket?.close();
+      return null;
+    }
 
     final name = deviceName ?? 'eatery-admin';
     final advertiser = Advertiser(socket, name, port);

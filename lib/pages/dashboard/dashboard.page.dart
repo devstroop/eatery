@@ -160,7 +160,9 @@ class _DashboardPageState extends ConsumerState<DashboardPage> {
     final cart = ref.read(cartProvider).cart;
 
     if (company == null) {
-      return const Center(child: CircularProgressIndicator());
+      return const Center(
+        child: AppSkeleton(width: 200, height: 24, borderRadius: 4),
+      );
     }
 
     return PopScope(

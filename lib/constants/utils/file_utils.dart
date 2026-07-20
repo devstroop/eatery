@@ -1,4 +1,5 @@
 import 'package:eatery/references.dart';
+import 'package:path/path.dart' as p;
 
 Future<List<File>> pickImages() async {
   List<File> images = [];
@@ -21,7 +22,7 @@ Future<List<File>> pickImages() async {
 Future<String> baseDirectoryPath() async {
   String deviceRoot = Directory("/storage/emulated/0").path;
   String appName = 'Eatery';
-  String appRoot = join(deviceRoot, appName);
+  String appRoot = p.join(deviceRoot, appName);
   var appRootDir = Directory(appRoot);
   if (!(await appRootDir.exists())) appRootDir.create(recursive: true);
   return appRoot;

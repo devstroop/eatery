@@ -7,11 +7,11 @@ class UpgradeToAccessBottomSheet extends StatefulWidget {
   final Company? company;
   final Function(Company? company) callback;
   const UpgradeToAccessBottomSheet({
-    Key? key,
+    super.key,
     required this.themeColor,
     required this.callback,
     this.company,
-  }) : super(key: key);
+  });
 
   @override
   State<UpgradeToAccessBottomSheet> createState() =>
@@ -21,13 +21,13 @@ class UpgradeToAccessBottomSheet extends StatefulWidget {
 class _UpgradeToAccessBottomSheetState
     extends State<UpgradeToAccessBottomSheet> {
   void _upgrade() {
-    GoRouter.of(this.context).pushNamed('upgrade', extra: widget.company).then((
+    GoRouter.of(context).pushNamed('upgrade', extra: widget.company).then((
       _,
     ) async {
       setState(() {
         // DO CHANGE HERE
       });
-      if (mounted) Navigator.pop(this.context);
+      if (mounted) Navigator.pop(context);
     });
   }
 

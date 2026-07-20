@@ -12,7 +12,7 @@ import 'app_spacing.dart';
 class AppTheme {
   AppTheme._();
 
-  // ── Light theme (the only one for now) ────────────────────────
+  // ── Light theme (default) ──────────────────────────────────────
   static ThemeData get light => ThemeData(
     useMaterial3: true,
     fontFamily: null, // falls back to system font
@@ -153,4 +153,35 @@ class AppTheme {
       labelSmall: AppTypography.labelSmall,
     ),
   );
+
+  // ── Dark theme (foundation) ─────────────────────────────────────
+  // TODO(U09): Full dark mode requires migrating hardcoded AppColors
+  //            references to Theme.of(context).colorScheme throughout
+  //            all widget files. Once complete, uncomment:
+  //
+  // static ThemeData get dark => ThemeData(
+  //   useMaterial3: true,
+  //   brightness: Brightness.dark,
+  //   scaffoldBackgroundColor: Color(0xFF111111),
+  //   colorScheme: ColorScheme.dark(
+  //     primary: AppColors.primary,
+  //     secondary: AppColors.secondary,
+  //     error: AppColors.error,
+  //     surface: Color(0xFF1E1E1E),
+  //   ),
+  //   cardTheme: CardThemeData(
+  //     color: Color(0xFF1E1E1E),
+  //     elevation: 0,
+  //     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+  //   ),
+  //   appBarTheme: AppBarTheme(
+  //     backgroundColor: Color(0xFF1A1A1A),
+  //     foregroundColor: Color(0xFFE0E0E0),
+  //     elevation: 0,
+  //   ),
+  //   bottomAppBarTheme: BottomAppBarThemeData(
+  //     color: Color(0xFF1A1A1A),
+  //     elevation: 0,
+  //   ),
+  // );
 }

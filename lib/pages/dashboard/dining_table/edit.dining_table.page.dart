@@ -1,10 +1,8 @@
-import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:eatery_core/widgets/app_dialog.dart';
 
 Color _pageColor = AppColors.menuCategories;
 
@@ -60,46 +58,43 @@ class _EditDiningTablePageState extends ConsumerState<EditDiningTablePage> {
             },
           ),
       ],
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.white,
-        child: AppButton.primary(
-          onPressed: () async {
-            if (!_formKey.currentState!.validate()) {
-              return;
-            }
+      bottomAction: AppButton.primary(
+        onPressed: () async {
+          if (!_formKey.currentState!.validate()) {
+            return;
+          }
 
-            DiningTable diningTable = ref
-                .read(diningTableRepositoryProvider)
-                .getTableById(widget.diningTable.id!)!;
+          DiningTable diningTable = ref
+              .read(diningTableRepositoryProvider)
+              .getTableById(widget.diningTable.id!)!;
 
-            diningTable = diningTable.copyWith(
-              name: _controllerCategoryName.text,
-              description: _controllerCategoryDescription.text,
-              categoryId: diningTableCategory?.id,
-              status: status,
-              capacity: int.parse(_controllerCapacity.text),
-            );
+          diningTable = diningTable.copyWith(
+            name: _controllerCategoryName.text,
+            description: _controllerCategoryDescription.text,
+            categoryId: diningTableCategory?.id,
+            status: status,
+            capacity: int.parse(_controllerCapacity.text),
+          );
 
-            await ref
-                .read(diningTableRepositoryProvider)
-                .saveTable(diningTable)
-                .then((value) {
-                  AppDialog.showMessage(
-                    context,
-                    message: 'Successfully updated',
-                    type: MessageType.success,
-                  ).then((value) => Navigator.of(this.context).pop());
-                })
-                .onError((error, stackTrace) {
-                  AppDialog.showMessage(
-                    context,
-                    message: 'Failed to update',
-                    type: MessageType.error,
-                  );
-                });
-          },
-          label: 'Update',
-        ),
+          await ref
+              .read(diningTableRepositoryProvider)
+              .saveTable(diningTable)
+              .then((value) {
+                AppDialog.showMessage(
+                  context,
+                  message: 'Successfully updated',
+                  type: MessageType.success,
+                ).then((value) => Navigator.of(this.context).pop());
+              })
+              .onError((error, stackTrace) {
+                AppDialog.showMessage(
+                  context,
+                  message: 'Failed to update',
+                  type: MessageType.error,
+                );
+              });
+        },
+        label: 'Update',
       ),
       child: InkWell(
         onTap: () {

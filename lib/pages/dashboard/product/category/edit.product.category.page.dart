@@ -1,5 +1,3 @@
-import 'package:eatery_core/widgets/app_dialog.dart';
-import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/providers/product_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
@@ -49,33 +47,30 @@ class _EditProductCategoryPageState
             },
           ),
       ],
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.white,
-        child: AppButton.primary(
-          onPressed: () async {
-            try {
-              final updated = widget.category.copyWith(
-                name: _controllerCategoryName.text.trim(),
-                description: _controllerDescription.text.trim(),
-                image: pickedLibraryImage?.filename,
-              );
-              final repo = ref.read(productRepositoryProvider);
-              await repo.saveCategory(updated);
-              AppDialog.showMessage(
-                context,
-                message: 'Updated successfully',
-                type: MessageType.success,
-              ).then((value) => Navigator.pop(context));
-            } catch (_) {
-              AppDialog.showMessage(
-                context,
-                message: 'Failed to update',
-                type: MessageType.error,
-              );
-            }
-          },
-          label: 'Update',
-        ),
+      bottomAction: AppButton.primary(
+        onPressed: () async {
+          try {
+            final updated = widget.category.copyWith(
+              name: _controllerCategoryName.text.trim(),
+              description: _controllerDescription.text.trim(),
+              image: pickedLibraryImage?.filename,
+            );
+            final repo = ref.read(productRepositoryProvider);
+            await repo.saveCategory(updated);
+            AppDialog.showMessage(
+              context,
+              message: 'Updated successfully',
+              type: MessageType.success,
+            ).then((value) => Navigator.pop(context));
+          } catch (_) {
+            AppDialog.showMessage(
+              context,
+              message: 'Failed to update',
+              type: MessageType.error,
+            );
+          }
+        },
+        label: 'Update',
       ),
       child: InkWell(
         onTap: () {

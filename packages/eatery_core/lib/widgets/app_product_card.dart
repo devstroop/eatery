@@ -46,8 +46,8 @@ class AppProductCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final cardRadius = BorderRadius.circular(AppSpacing.productCardRadius);
     final inactiveOverlay = !isActive
-        ? const BoxDecoration(
-            color: Colors.grey,
+        ? BoxDecoration(
+            color: AppColors.grey500,
             backgroundBlendMode: BlendMode.saturation,
             borderRadius: BorderRadius.all(Radius.circular(6.0)),
           )

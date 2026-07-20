@@ -1,6 +1,7 @@
 import 'package:eatery_core/providers/auth_session.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
+import 'package:eatery_core/theme/app_typography.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -15,8 +16,8 @@ class _LogoutPageState extends ConsumerState<LogoutPage> {
   void initState() {
     super.initState();
     ref.read(authSessionProvider.notifier).state = null;
-    Future.delayed(Duration.zero, () {
-      GoRouter.of(context as BuildContext).goNamed('login');
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) GoRouter.of(context).goNamed('login');
     });
   }
 
@@ -36,10 +37,8 @@ class _LogoutPageState extends ConsumerState<LogoutPage> {
           ),
           Text(
             'Logging out...',
-            style: TextStyle(
+            style: AppTypography.titleLarge.copyWith(
               color: AppColors.secondary2,
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
             ),
           ),
         ],

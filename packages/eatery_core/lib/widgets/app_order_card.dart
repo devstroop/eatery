@@ -187,7 +187,7 @@ class _AppOrderCardState extends ConsumerState<AppOrderCard>
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: color,
-          foregroundColor: Colors.white,
+          foregroundColor: AppColors.white,
           padding: const EdgeInsets.symmetric(horizontal: 12),
           textStyle: const TextStyle(fontSize: 12),
         ),

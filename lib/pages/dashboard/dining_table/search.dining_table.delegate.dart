@@ -135,7 +135,7 @@ class SearchDiningTableDelegate extends SearchDelegate<DiningTable?> {
                   ),
                   decoration: BoxDecoration(
                     color: e.status == DiningTableStatus.available
-                        ? Colors.green
+                        ? AppColors.success
                         : e.status == DiningTableStatus.occupied
                         ? AppColors.error
                         : Colors.blueAccent,

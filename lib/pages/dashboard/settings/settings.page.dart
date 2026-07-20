@@ -1,4 +1,3 @@
-import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
@@ -118,7 +117,7 @@ class _SettingPageState extends ConsumerState<SettingPage> {
                 'Developer',
                 style: AppTypography.labelMedium.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: Colors.grey,
+                  color: AppColors.grey500,
                 ),
               ),
             ),

@@ -21,10 +21,10 @@ class ImportPage extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey.withOpacity(0.2)),
+              border: Border.all(color: AppColors.grey300.withOpacity(0.2)),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
+                  color: AppColors.grey300.withOpacity(0.2),
                   spreadRadius: 2,
                   blurRadius: 2,
                   offset: const Offset(0, 3),
@@ -59,10 +59,10 @@ class ImportPage extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey.withOpacity(0.2)),
+              border: Border.all(color: AppColors.grey300.withOpacity(0.2)),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
+                  color: AppColors.grey300.withOpacity(0.2),
                   spreadRadius: 2,
                   blurRadius: 2,
                   offset: const Offset(0, 3),
@@ -100,10 +100,10 @@ class ImportPage extends StatelessWidget {
             decoration: BoxDecoration(
               color: AppColors.white,
               borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: Colors.grey.withOpacity(0.2)),
+              border: Border.all(color: AppColors.grey300.withOpacity(0.2)),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.2),
+                  color: AppColors.grey300.withOpacity(0.2),
                   spreadRadius: 2,
                   blurRadius: 2,
                   offset: const Offset(0, 3),

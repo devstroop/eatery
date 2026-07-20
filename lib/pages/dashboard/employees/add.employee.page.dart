@@ -1,11 +1,9 @@
-import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:eatery_core/theme/app_spacing.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/order_provider.dart';
-import 'package:eatery_core/widgets/app_dialog.dart';
 
 Color _pageColor = const Color(0xFFC2592F);
 
@@ -43,46 +41,43 @@ class _AddEmployeePageState extends ConsumerState<AddEmployeePage> {
             },
           ),
       ],
-      bottomNavigationBar: BottomAppBar(
-        color: AppColors.white,
-        child: AppButton.primary(
-          onPressed: () async {
-            final isValid = _formKey.currentState!.validate();
-            if (!isValid) {
-              return;
-            }
-            _formKey.currentState!.save();
-            final employee = Employee(
-              name: _controllerEmployeeName.text,
-              phone: _controllerEmployeePhone.text,
-              photo: image?.filename,
-              isActive: isActive,
-              type: employeeType!,
-              pin: _controllerEmployeePin.text.isNotEmpty
-                  ? _controllerEmployeePin.text
-                  : null,
-            );
-            ref
-                .read(employeeRepositoryProvider)
-                .saveEmployee(employee)
-                .then(
-                  (value) => AppDialog.showMessage(
-                    context,
-                    message: 'Employee has been added successfully',
-                    type: MessageType.success,
-                    onConfirm: () => Navigator.pop(context),
-                  ),
-                )
-                .onError(
-                  (error, stackTrace) => AppDialog.showMessage(
-                    context,
-                    message: 'Something went wrong',
-                    type: MessageType.error,
-                  ),
-                );
-          },
-          label: 'Save',
-        ),
+      bottomAction: AppButton.primary(
+        onPressed: () async {
+          final isValid = _formKey.currentState!.validate();
+          if (!isValid) {
+            return;
+          }
+          _formKey.currentState!.save();
+          final employee = Employee(
+            name: _controllerEmployeeName.text,
+            phone: _controllerEmployeePhone.text,
+            photo: image?.filename,
+            isActive: isActive,
+            type: employeeType!,
+            pin: _controllerEmployeePin.text.isNotEmpty
+                ? _controllerEmployeePin.text
+                : null,
+          );
+          ref
+              .read(employeeRepositoryProvider)
+              .saveEmployee(employee)
+              .then(
+                (value) => AppDialog.showMessage(
+                  context,
+                  message: 'Employee has been added successfully',
+                  type: MessageType.success,
+                  onConfirm: () => Navigator.pop(context),
+                ),
+              )
+              .onError(
+                (error, stackTrace) => AppDialog.showMessage(
+                  context,
+                  message: 'Something went wrong',
+                  type: MessageType.error,
+                ),
+              );
+        },
+        label: 'Save',
       ),
       child: InkWell(
         onTap: () {
@@ -188,7 +183,7 @@ class _AddEmployeePageState extends ConsumerState<AddEmployeePage> {
                       borderSide: BorderSide(width: 2, color: AppColors.error),
                     ),
                   ),
-                    hint: const Text('Select Employee Role'),
+                  hint: const Text('Select Employee Role'),
                   value: employeeType,
                   items: [
                     ...EmployeeRole.values.map(

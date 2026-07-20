@@ -189,7 +189,10 @@ class _TicketPageState extends ConsumerState<TicketPage>
                   }
                   return _buildTicketGrid(filtered);
                 },
-                loading: () => const Center(child: CircularProgressIndicator()),
+                loading: () => Padding(
+                  padding: EdgeInsets.all(AppSpacing.md),
+                  child: AppSkeletonList(count: 5, itemHeight: 80),
+                ),
                 error: (e, _) => Center(child: Text('Error: $e')),
               ),
             ),
@@ -424,16 +427,16 @@ class _StatusActionButton extends ConsumerWidget {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: Text('Failed: $e'),
-                backgroundColor: Colors.red,
+                backgroundColor: AppColors.error,
               ),
             );
           }
         },
         style: ElevatedButton.styleFrom(
           backgroundColor: color,
-          foregroundColor: Colors.white,
+          foregroundColor: AppColors.white,
           padding: const EdgeInsets.symmetric(horizontal: 12),
-          textStyle: const TextStyle(fontSize: 12),
+          textStyle: AppTypography.buttonLabelSm,
         ),
         child: Text(label),
       ),
@@ -459,7 +462,10 @@ class _StatusBadge extends StatelessWidget {
         color: color.withValues(alpha: 0.15),
         borderRadius: BorderRadius.circular(4),
       ),
-      child: Text(label, style: TextStyle(color: color, fontSize: 12)),
+      child: Text(
+        label,
+        style: AppTypography.labelSmall.copyWith(color: color),
+      ),
     );
   }
 }

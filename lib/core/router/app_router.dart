@@ -81,6 +81,24 @@ import 'package:eatery/dev/database_inspector.dart';
 import 'package:eatery_core/data/database/native/eatery_store.dart';
 import 'package:go_router/go_router.dart';
 
+/// Wraps a child widget in a [CustomTransitionPage] with a slide+fade transition.
+/// GoRouter's Navigator manages page keys — omit `key` to avoid duplicate-key
+/// assertions when the same route is navigated to multiple times.
+Page<dynamic> _slidePage(GoRouterState state, Widget child) {
+  return CustomTransitionPage<dynamic>(
+    child: child,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      return SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(0.0, 0.08),
+          end: Offset.zero,
+        ).animate(CurvedAnimation(parent: animation, curve: Curves.easeOut)),
+        child: FadeTransition(opacity: animation, child: child),
+      );
+    },
+  );
+}
+
 // ── RBAC permission map ──────────────────────────────────────────
 /// Maps each device role to the set of route names it may access.
 const _rolePermissions = <String, Set<String>>{
@@ -131,7 +149,7 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
       GoRoute(
         name: 'login',
         path: '/login',
-        builder: (context, state) => const LoginPage(),
+        pageBuilder: (context, state) => _slidePage(state, const LoginPage()),
       ),
       GoRoute(
         name: 'mainScreen',
@@ -190,12 +208,14 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
       GoRoute(
         name: 'dashboard',
         path: '/dashboard',
-        builder: (context, state) => const DashboardPage(),
+        pageBuilder: (context, state) =>
+            _slidePage(state, const DashboardPage()),
       ),
       GoRoute(
         name: 'pos',
         path: '/pos',
-        builder: (context, state) => const PointOfSalePage(),
+        pageBuilder: (context, state) =>
+            _slidePage(state, const PointOfSalePage()),
       ),
       GoRoute(
         name: 'adminCart',
@@ -227,7 +247,7 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
       GoRoute(
         name: 'orders',
         path: '/orders',
-        builder: (context, state) => const OrdersPage(),
+        pageBuilder: (context, state) => _slidePage(state, const OrdersPage()),
       ),
       GoRoute(
         name: 'viewOrder',
@@ -274,7 +294,8 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
       GoRoute(
         name: 'customers',
         path: '/customers',
-        builder: (context, state) => const CustomersPage(),
+        pageBuilder: (context, state) =>
+            _slidePage(state, const CustomersPage()),
       ),
       GoRoute(
         name: 'addCustomer',
@@ -398,7 +419,7 @@ GoRouter createAppRouter(EateryDatabase db, {EateryStore? store}) {
       GoRoute(
         name: 'settings',
         path: '/settings',
-        builder: (context, state) => const SettingPage(),
+        pageBuilder: (context, state) => _slidePage(state, const SettingPage()),
       ),
       GoRoute(
         name: 'help',
@@ -625,7 +646,12 @@ String? _rbacRedirect(BuildContext context, GoRouterState state) {
 
   // 4. Employee roles (admin, waiter) — must be authenticated.
   if (authEmployee == null) {
-    if (routeName == 'login' || routeName == 'mainScreen') return null;
+    if (routeName == 'login' ||
+        routeName == 'mainScreen' ||
+        routeName == 'setup' ||
+        routeName == 'createCompany' ||
+        routeName == 'resetPin')
+      return null;
     return '/login';
   }
 

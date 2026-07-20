@@ -87,12 +87,15 @@ class _WaiterOrdersPageState extends ConsumerState<WaiterOrdersPage> {
             );
           }
           return ListView.builder(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(AppSpacing.lg),
             itemCount: list.length,
             itemBuilder: (context, index) => _OrderCard(order: list[index]),
           );
         },
-        loading: () => const Center(child: CircularProgressIndicator()),
+        loading: () => const Padding(
+          padding: EdgeInsets.all(AppSpacing.lg),
+          child: AppSkeletonList(count: 5, itemHeight: 80),
+        ),
         error: (e, _) => Center(child: Text('Error: $e')),
       ),
     );
@@ -137,11 +140,11 @@ class _OrderCard extends ConsumerWidget {
                   ),
                 if (order.status == OrderStatus.pending ||
                     order.status == OrderStatus.preparing)
-                  const PopupMenuItem(
+                  PopupMenuItem(
                     value: 'void',
                     child: ListTile(
-                      leading: Icon(Icons.cancel, size: 20, color: Colors.red),
-                      title: Text('Void', style: TextStyle(color: Colors.red)),
+                      leading: Icon(Icons.cancel, size: 20, color: AppColors.error),
+                      title: Text('Void', style: AppTypography.bodyMedium.copyWith(color: AppColors.error)),
                       dense: true,
                       contentPadding: EdgeInsets.zero,
                     ),
@@ -244,14 +247,14 @@ class _OrderCard extends ConsumerWidget {
                 ScaffoldMessenger.of(context).showSnackBar(
                   const SnackBar(
                     content: Text('Order voided'),
-                    backgroundColor: Colors.green,
+                    backgroundColor: AppColors.success,
                   ),
                 );
               } catch (e) {
                 debugPrint('Void failed: $e');
               }
             },
-            style: TextButton.styleFrom(foregroundColor: Colors.red),
+            style: TextButton.styleFrom(foregroundColor: AppColors.error),
             child: const Text('Void Order'),
           ),
         ],

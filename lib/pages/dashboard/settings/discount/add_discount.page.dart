@@ -1,9 +1,6 @@
-import "package:flutter/material.dart";
-import "package:eatery_core/widgets/widgets.dart";
 import "package:eatery_core/theme/app_colors.dart";
 import "package:eatery_core/theme/app_spacing.dart";
 import "package:eatery_core/providers/database_provider.dart";
-import "package:eatery_core/data/models/eatery_db.dart";
 import "package:eatery_core/data/repositories/discount_repository.dart";
 import "package:eatery/references.dart";
 import "package:flutter_riverpod/flutter_riverpod.dart";
@@ -57,7 +54,7 @@ class _AddDiscountPageState extends ConsumerState<AddDiscountPage> {
         updatedAt: DateTime.now(),
       ),
     );
-    if (mounted) Navigator.pop(this.context);
+    if (mounted) Navigator.pop(context);
   }
 
   @override

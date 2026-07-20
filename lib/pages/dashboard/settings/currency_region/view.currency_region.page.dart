@@ -1,4 +1,3 @@
-import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
@@ -45,65 +44,63 @@ class _ShowCurrencyRegionPageState
     return AppPageShell(
       title: 'Region and Currency',
       color: themeColor,
-      bottomNavigationBar: BottomAppBar(
-        child: AppButton.primary(
-          label: 'Save',
-          onPressed: () async {
-            if (formKey.currentState!.validate()) {
-              ref.read(eateryStoreProvider).execute('DELETE FROM currency');
-              KCurrency? currency = selectedCurrency != null
-                  ? KCurrency.fromMap(selectedCurrency!.toJson())
-                  : null;
-              if (currency != null) {
-                ref.read(eateryStoreProvider).execute(
-                  'INSERT INTO currency (code, name, symbol, flag, number, decimal_digits, name_plural, symbol_on_left, decimal_separator, thousands_separator, space_between_amount_and_symbol) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
-                  [
-                    currency.code,
-                    currency.name,
-                    currency.symbol,
-                    currency.flag,
-                    currency.number,
-                    currency.decimalDigits,
-                    currency.namePlural,
-                    currency.symbolOnLeft ? 1 : 0,
-                    currency.decimalSeparator,
-                    currency.thousandsSeparator,
-                    currency.spaceBetweenAmountAndSymbol ? 1 : 0,
-                  ],
-                );
-                notifyMutation('currency', 0, 'save', currency.toMap());
-              }
-              final company = ref
-                  .read(companyRepositoryProvider)
-                  .getCurrentCompany();
-              if (company != null) {
-                final updated = company.copyWith(currencyCode: currency?.code);
-                ref.read(companyRepositoryProvider).saveCompany(updated).then((
-                  _,
-                ) {
-                  setState(() {
-                    ref.read(companyProvider.notifier).setCompany(company);
-                  });
-                  showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: const Text('Success'),
-                      content: const Text('Successfully saved'),
-                      actions: [
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Text('OK'),
-                        ),
-                      ],
-                    ),
-                  ).then((value) => Navigator.pop(context));
-                });
-              }
+      bottomAction: AppButton.primary(
+        label: 'Save',
+        onPressed: () async {
+          if (formKey.currentState!.validate()) {
+            ref.read(eateryStoreProvider).execute('DELETE FROM currency');
+            KCurrency? currency = selectedCurrency != null
+                ? KCurrency.fromMap(selectedCurrency!.toJson())
+                : null;
+            if (currency != null) {
+              ref.read(eateryStoreProvider).execute(
+                'INSERT INTO currency (code, name, symbol, flag, number, decimal_digits, name_plural, symbol_on_left, decimal_separator, thousands_separator, space_between_amount_and_symbol) VALUES (?,?,?,?,?,?,?,?,?,?,?)',
+                [
+                  currency.code,
+                  currency.name,
+                  currency.symbol,
+                  currency.flag,
+                  currency.number,
+                  currency.decimalDigits,
+                  currency.namePlural,
+                  currency.symbolOnLeft ? 1 : 0,
+                  currency.decimalSeparator,
+                  currency.thousandsSeparator,
+                  currency.spaceBetweenAmountAndSymbol ? 1 : 0,
+                ],
+              );
+              notifyMutation('currency', 0, 'save', currency.toMap());
             }
-          },
-        ),
+            final company = ref
+                .read(companyRepositoryProvider)
+                .getCurrentCompany();
+            if (company != null) {
+              final updated = company.copyWith(currencyCode: currency?.code);
+              ref.read(companyRepositoryProvider).saveCompany(updated).then((
+                _,
+              ) {
+                setState(() {
+                  ref.read(companyProvider.notifier).setCompany(company);
+                });
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Success'),
+                    content: const Text('Successfully saved'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                        child: const Text('OK'),
+                      ),
+                    ],
+                  ),
+                ).then((value) => Navigator.pop(context));
+              });
+            }
+          }
+        },
       ),
       child: Padding(
         padding: const EdgeInsets.all(16.0),

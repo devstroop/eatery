@@ -1,11 +1,9 @@
-import 'package:eatery_core/widgets/app_page_shell.dart';
 import 'package:eatery_core/theme/app_typography.dart';
 import 'package:eatery_core/providers/order_provider.dart';
 import 'package:eatery_core/providers/company_provider.dart';
 import 'package:eatery/references.dart';
 import 'package:eatery_core/theme/app_colors.dart';
 import 'package:eatery_core/theme/app_spacing.dart';
-import 'package:eatery_core/widgets/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
@@ -88,7 +86,11 @@ class _ViewOrderPageState extends ConsumerState<ViewOrderPage> {
                     opacity: 0.5,
                     child: Column(
                       children: [
-                        Icon(Icons.receipt_long, size: 48, color: Colors.grey),
+                        Icon(
+                          Icons.receipt_long,
+                          size: 48,
+                          color: AppColors.grey400,
+                        ),
                         AppSpacing.gapSm,
                         Text('No items', style: AppTypography.bodyMedium),
                       ],
