@@ -29,12 +29,17 @@ abstract final class AppColors {
   // ── Order status tokens ────────────────────────────────────────
   /// Maps to [OrderStatus.colorFor] — single source of truth for
   /// status badge colors across KDS, Waiter, Display, and Admin.
-  static const Color statusPending = warning;
-  static const Color statusPreparing = info;
-  static const Color statusReady = success;
+  /// Independent constants (not aliases) to prevent drift if
+  /// semantic colors are later changed.
+  // ── [code-token] 2026-07-22 ──
+  // Action: Unwrapped status aliases → independent const Color(0xFF...)
+  // Status: done
+  static const Color statusPending = Color(0xFFF5A142);
+  static const Color statusPreparing = Color(0xFF2F5EC2);
+  static const Color statusReady = Color(0xFF4AC3A1);
   static const Color statusServed = Color(0xFF009688);
-  static const Color statusCompleted = grey500;
-  static const Color statusVoided = error;
+  static const Color statusCompleted = Color(0xFF858585);
+  static const Color statusVoided = Color(0xFFEF6850);
 
   // ── Timeline tokens ─────────────────────────────────────────────
   /// Line color for [AppStatusTimeline] connector strokes.
@@ -147,6 +152,16 @@ abstract final class AppColors {
   static const Color categoryChipActiveFg = white;
   static const Color categoryChipInactiveBg = white;
   static const Color categoryChipInactiveFg = grey700;
+
+  // ── Dark theme tokens (KDS / Display screens) ──────────────────
+  // ── [code-token] 2026-07-22 ──
+  // Action: Added dark theme tokens per design-system-strategic-plan §1.3
+  // Status: done
+  static const Color darkSurface = Color(0xFF1A1A2E);
+  static const Color darkCard = Color(0xFF16213E);
+  static const Color darkText = Color(0xFFE0E0E0);
+  static const Color darkTextMuted = Color(0xFFA0A0A0);
+  static const Color darkBorder = Color(0xFF2A2A4E);
 
   // ── Shadow base colors ───────────────────────────────────────
   static const Color shadowBase = Color(0x2F000000);

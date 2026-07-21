@@ -650,8 +650,9 @@ String? _rbacRedirect(BuildContext context, GoRouterState state) {
         routeName == 'mainScreen' ||
         routeName == 'setup' ||
         routeName == 'createCompany' ||
-        routeName == 'resetPin')
+        routeName == 'resetPin') {
       return null;
+    }
     return '/login';
   }
 

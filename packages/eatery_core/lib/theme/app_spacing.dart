@@ -45,7 +45,10 @@ abstract final class AppSpacing {
   );
 
   // ── Component padding ────────────────────────────────────────
-  static const EdgeInsets cardPadding = EdgeInsets.all(12);
+  // ── [code-token] 2026-07-22 ──
+  // Action: Fixed cardPadding 12→16 to match plan §1.4
+  // Status: done
+  static const EdgeInsets cardPadding = EdgeInsets.all(lg);
   static const EdgeInsets tilePadding = EdgeInsets.symmetric(
     horizontal: 16,
     vertical: 12,
@@ -90,6 +93,9 @@ abstract final class AppSpacing {
   static const double selectCardRadioSize = 24;
   static const double selectCardRadioInner = 10;
   static const double selectCardRadioOffset = 7;
+
+  // ── Input field ────────────────────────────────────────────────
+  static const double fieldHeight = 48;
 
   // ── TextField ──────────────────────────────────────────────────
   static const double fieldRadius = radiusLg;

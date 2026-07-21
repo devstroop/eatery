@@ -25,6 +25,8 @@ export 'data/sync/mdns_service.dart';
 export 'theme/app_colors.dart';
 export 'theme/app_shadows.dart';
 export 'theme/app_spacing.dart';
+export 'theme/app_component_sizes.dart';
+export 'theme/app_component.dart';
 export 'theme/app_typography.dart';
 export 'theme/app_theme.dart';
 
