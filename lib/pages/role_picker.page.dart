@@ -90,7 +90,7 @@ class RolePickerPage extends ConsumerWidget {
                 ],
                 AppSpacing.gapLg,
                 Text(
-                  'You can change this later in Settings.',
+                  'You can change this later.',
                   style: AppTypography.bodySmall.copyWith(
                     color: AppColors.grey500,
                   ),

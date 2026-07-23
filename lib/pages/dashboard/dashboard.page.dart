@@ -6,6 +6,7 @@ import 'package:eatery_core/theme/app_colors.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/providers/company_provider.dart';
 import 'package:eatery_core/providers/cart_provider.dart';
+import 'package:eatery_core/providers/auth_session.dart';
 import 'package:go_router/go_router.dart';
 import 'components/dashboard_charts.dart';
 

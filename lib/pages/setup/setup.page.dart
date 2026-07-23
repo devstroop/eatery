@@ -137,8 +137,14 @@ class _SetupPageState extends ConsumerState<SetupPage> {
     return AppPageShell(
       title: 'Set up your restaurant',
       backgroundColor: AppColors.grey200,
-      showBack: true,
+      showBack: false,
       contentMaxWidth: 480,
+      actions: [
+        TextButton(
+          onPressed: () => GoRouter.of(context).goNamed('rolePicker'),
+          child: const Text('Change role'),
+        ),
+      ],
       child: Padding(
         padding: const EdgeInsets.all(24),
         child: Form(

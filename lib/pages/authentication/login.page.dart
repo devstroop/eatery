@@ -266,6 +266,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           mainAxisAlignment: MainAxisAlignment.start,
           mainAxisSize: MainAxisSize.max,
           children: [
+            // Subtle brand animation
+            SizedBox(
+              height: 80,
+              width: 80,
+              child: FittedBox(
+                fit: BoxFit.contain,
+                child: Lottie.asset('assets/lottie/brand.json'),
+              ),
+            ),
             AppSpacing.gapMd,
             Column(
               crossAxisAlignment: CrossAxisAlignment.center,

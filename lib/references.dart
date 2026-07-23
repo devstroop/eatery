@@ -44,7 +44,6 @@ export 'package:googleapis_auth/auth_io.dart';
 // Internal references
 export './constants/validators/gstin_validator.dart';
 export './constants/utils/app_file_system.dart';
-// Internal references
 export './widgets/imageWidgets/leading.imageWidget.dart';
 export './widgets/labels/caption.label.dart';
 export './widgets/posWidgets/circularCategory.posWidget.dart';
