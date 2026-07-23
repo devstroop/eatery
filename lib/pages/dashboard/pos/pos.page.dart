@@ -152,8 +152,14 @@ class _PointOfSalePageState extends ConsumerState<PointOfSalePage> {
         builder: (_) => ModifierSheet(
           product: product,
           groups: modGroups,
-          onConfirm: () {
-            ref.read(cartProvider.notifier).addToCart(product);
+          onConfirm: (selected, extraCost) {
+            ref
+                .read(cartProvider.notifier)
+                .addToCart(
+                  product,
+                  modifiers: selected,
+                  modifierPrice: extraCost,
+                );
             Navigator.pop(context);
           },
         ),

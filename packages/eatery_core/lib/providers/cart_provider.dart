@@ -1,18 +1,56 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:eatery_core/data/models/eatery_db.dart';
 
+/// Generates a deterministic cart key that distinguishes modifier variants.
+String _cartKey(int productId, Map<int, List<int>> modifiers) {
+  if (modifiers.isEmpty) return 'p${productId}|';
+  final entries = modifiers.entries.toList()
+    ..sort((a, b) => a.key.compareTo(b.key));
+  final modPart = entries.map((e) => '${e.key}=${e.value.join(",")}').join("|");
+  return 'p${productId}|$modPart';
+}
+
 /// A cart line item with quantity tracking.
 class CartItem {
   final Product product;
   int quantity;
 
-  CartItem({required this.product, this.quantity = 1});
+  /// Selected modifier IDs: groupId → list of modifierId.
+  final Map<int, List<int>> modifiers;
 
-  double get unitPrice => product.salePrice ?? product.mrpPrice;
+  /// Price adjustment from selected modifiers.
+  final double modifierPrice;
+
+  /// Composite key derived from product ID and modifiers.
+  /// Uses `|` as delimiter: "p<id>|" for plain, "p<id>|mods" for variants.
+  String get cartKey {
+    final pid = product.id;
+    if (pid == null)
+      throw ArgumentError('CartItem requires non-null product.id');
+    return _cartKey(pid, modifiers);
+  }
+
+  CartItem({
+    required this.product,
+    this.quantity = 1,
+    this.modifiers = const {},
+    this.modifierPrice = 0,
+  });
+
+  double get unitPrice =>
+      (product.salePrice ?? product.mrpPrice) + modifierPrice;
   double get lineTotal => unitPrice * quantity;
 
-  CartItem copyWith({int? quantity}) =>
-      CartItem(product: product, quantity: quantity ?? this.quantity);
+  CartItem copyWith({
+    int? quantity,
+    Map<int, List<int>>? modifiers,
+    double? modifierPrice,
+  }) => CartItem(
+    product: product,
+    quantity: quantity ?? this.quantity,
+    modifiers: modifiers ?? this.modifiers,
+    modifierPrice: modifierPrice ?? this.modifierPrice,
+  );
 }
 
 /// Active POS session state.
@@ -21,7 +59,7 @@ class PosSession {
   final DiningTable? activeDiningTable;
   final Customer? activeCustomer;
   final Order? activeOrder;
-  final Map<int, CartItem> cart;
+  final Map<String, CartItem> cart;
 
   const PosSession({
     this.activeOrderType,
@@ -36,12 +74,21 @@ class PosSession {
   int get cartTotalQuantity =>
       cart.values.fold(0, (sum, e) => sum + e.quantity);
 
+  /// Whether this product (any modifier variant) is in the cart.
+  bool containsProduct(int productId) =>
+      cart.keys.any((k) => k.startsWith('p${productId}|'));
+
+  /// Total quantity of this product across all modifier variants.
+  int cartQuantity(Product product) => cart.entries
+      .where((e) => e.key.startsWith('p${product.id}|'))
+      .fold(0, (sum, e) => sum + e.value.quantity);
+
   PosSession copyWith({
     OrderType? activeOrderType,
     DiningTable? activeDiningTable,
     Customer? activeCustomer,
     Order? activeOrder,
-    Map<int, CartItem>? cart,
+    Map<String, CartItem>? cart,
     bool clearOrderType = false,
     bool clearDiningTable = false,
     bool clearCustomer = false,
@@ -73,32 +120,68 @@ class CartNotifier extends Notifier<PosSession> {
   void setCustomer(Customer c) => state = state.copyWith(activeCustomer: c);
   void setActiveOrder(Order o) => state = state.copyWith(activeOrder: o);
 
-  void addToCart(Product product) {
-    final updated = Map<int, CartItem>.from(state.cart);
-    final existing = updated[product.id];
+  void addToCart(
+    Product product, {
+    Map<int, List<int>>? modifiers,
+    double modifierPrice = 0,
+  }) {
+    final pid = product.id;
+    if (pid == null) return;
+    final mods = modifiers ?? <int, List<int>>{};
+    final key = _cartKey(pid, mods);
+    final updated = Map<String, CartItem>.from(state.cart);
+    final existing = updated[key];
     if (existing != null) {
-      updated[product.id!] = existing.copyWith(quantity: existing.quantity + 1);
+      updated[key] = existing.copyWith(
+        quantity: existing.quantity + 1,
+        modifiers: mods,
+        modifierPrice: modifierPrice,
+      );
     } else {
-      updated[product.id!] = CartItem(product: product);
+      updated[key] = CartItem(
+        product: product,
+        modifiers: mods,
+        modifierPrice: modifierPrice,
+      );
     }
     state = state.copyWith(cart: updated);
   }
 
-  void removeFromCart(Product product) {
-    final updated = Map<int, CartItem>.from(state.cart);
-    final existing = updated[product.id];
+  /// Returns the cart key for this product with no modifiers (plain entry).
+  static String plainCartKey(Product product) => _cartKey(product.id ?? 0, {});
+
+  /// Removes one unit of [product] from the cart.
+  ///
+  /// If [cartKey] is provided, removes from that specific variant.
+  /// Otherwise removes from the first matching entry (any modifier variant).
+  void removeFromCart(Product product, {String? cartKey}) {
+    final pid = product.id;
+    if (pid == null) return;
+    final updated = Map<String, CartItem>.from(state.cart);
+    final matchKey =
+        cartKey ??
+        state.cart.keys.firstWhere(
+          (k) => k.startsWith('p${pid}|'),
+          orElse: () => '',
+        );
+    if (matchKey.isEmpty) return;
+    final existing = updated[matchKey];
     if (existing == null) return;
     if (existing.quantity > 1) {
-      updated[product.id!] = existing.copyWith(quantity: existing.quantity - 1);
+      updated[matchKey] = existing.copyWith(quantity: existing.quantity - 1);
     } else {
-      updated.remove(product.id);
+      updated.remove(matchKey);
     }
     state = state.copyWith(cart: updated);
   }
 
-  /// Returns the quantity of a specific product in the cart (0 if not present).
+  /// Total quantity of this product across all modifier variants.
   int cartQuantity(Product product) {
-    return state.cart[product.id]?.quantity ?? 0;
+    final pid = product.id;
+    if (pid == null) return 0;
+    return state.cart.entries
+        .where((e) => e.key.startsWith('p${pid}|'))
+        .fold(0, (sum, e) => sum + e.value.quantity);
   }
 
   bool get hasCart => state.cart.isNotEmpty;

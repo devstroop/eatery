@@ -115,17 +115,22 @@ class MenuPage extends ConsumerWidget {
                   final product = list[index];
                   final currencySymbol =
                       ref.read(companyProvider.notifier).currency?.symbol ?? '';
+                  final plainKey = CartNotifier.plainCartKey(product);
+                  final inCart =
+                      plainKey != null && cart.cart.containsKey(plainKey);
                   return _ProductCard(
                     product: product,
                     currencySymbol: currencySymbol,
                     onTap: () {
-                      if (cart.cart.containsKey(product.id)) {
-                        ref.read(cartProvider.notifier).removeFromCart(product);
+                      if (inCart) {
+                        ref
+                            .read(cartProvider.notifier)
+                            .removeFromCart(product, cartKey: plainKey);
                       } else {
                         ref.read(cartProvider.notifier).addToCart(product);
                       }
                     },
-                    inCart: cart.cart.containsKey(product.id),
+                    inCart: inCart,
                   );
                 },
               ),

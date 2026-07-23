@@ -24,7 +24,7 @@ class OrderService {
   /// Returns the saved [Order]. Does NOT handle UI concerns
   /// (dialogs, navigation, validation).
   Future<Order> placeOrder({
-    required Map<int, cart.CartItem> cart,
+    required Map<String, cart.CartItem> cart,
     required Customer customer,
     required OrderType type,
     DiningTable? diningTable,
@@ -37,7 +37,7 @@ class OrderService {
   }
 
   Future<Order> _createNewOrder(
-    Map<int, cart.CartItem> cart,
+    Map<String, cart.CartItem> cart,
     Customer customer,
     OrderType type,
     DiningTable? diningTable,
@@ -103,7 +103,7 @@ class OrderService {
 
   Future<Order> _updateExistingOrder(
     Order existingOrder,
-    Map<int, cart.CartItem> cart,
+    Map<String, cart.CartItem> cart,
     String customerPhone,
   ) async {
     for (final entry in cart.entries) {

@@ -554,7 +554,7 @@ class _CartPageState extends ConsumerState<CartPage> {
 
   Future<void> placeOrder(
     BuildContext context,
-    Map<int, CartItem> cart,
+    Map<String, CartItem> cart,
     Customer? customer,
     Discount? discount,
   ) async {

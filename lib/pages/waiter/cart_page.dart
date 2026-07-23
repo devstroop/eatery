@@ -63,7 +63,10 @@ class CartPage extends ConsumerWidget {
                             ),
                             onPressed: () => ref
                                 .read(cartProvider.notifier)
-                                .removeFromCart(item.product),
+                                .removeFromCart(
+                                  item.product,
+                                  cartKey: item.cartKey,
+                                ),
                           ),
                         ),
                       );
